@@ -1,0 +1,7 @@
+*.pbxuser
+xcuserdata
+.DS_Store
+build/*
+result.txt
+*.orig
+Bluepill-runner/BPVersion.h

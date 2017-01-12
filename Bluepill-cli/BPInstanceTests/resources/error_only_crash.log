@@ -1,0 +1,280 @@
+--------------------------------------------------------------------------------
+Tests started: 2016-12-09 19:28:46 +0000
+--------------------------------------------------------------------------------
+objc[50776]: Class PLBuildVersion is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/AssetsLibraryServices.framework/AssetsLibraryServices (0x127789998) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/PhotoLibraryServices.framework/PhotoLibraryServices (0x1275aed38). One of the two will be used. Which one is undefined.
+Test Suite 'cad51fa' started at 2016-12-09 11:31:04.313
+Test Suite '9f288df' started at 2016-12-09 11:31:04.314
+Test Suite '9f288df' passed at 2016-12-09 11:31:04.314.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite '473c3a6' started at 2016-12-09 11:31:04.314
+Test Suite '473c3a6' passed at 2016-12-09 11:31:04.314.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite '2d25912' started at 2016-12-09 11:31:04.315
+Test Suite '2d25912' passed at 2016-12-09 11:31:04.315.
+	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
+Test Suite '5a8c081' started at 2016-12-09 11:31:04.315
+Test Suite '913ef4e' started at 2016-12-09 11:31:04.315
+objc[50776]: Class VCWeakObjectHolder is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/GameKitServices.framework/Frameworks/ViceroyTrace.framework/ViceroyTrace (0x12f1a5b60) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/GameKitServices.framework/Frameworks/AVConference.framework/AVConference (0x12f0e73c8). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryCommCenterMigration is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c4b0) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20330). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryDeviceUnlocked is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c640) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee204c0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryDatabaseMigration is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c550) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee205b0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryDeleteAll is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c5f0) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee206a0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryCallAddedBeforeUnlock is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c460) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20740). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryGizmoBootstrap is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c730) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee209c0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryDatabaseSaveError is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c5a0) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20a60). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryUninitializedDatabaseSave is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c9b0) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20ab0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryMissingCloudChangeToken is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c820) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20c90). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryDatabaseInfo is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c500) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20ce0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryTransactionLogSize is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c960) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20dd0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistorySyncOverLimit is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c910) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20e70). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistorySync is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c8c0) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20ec0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryErrorReport is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c6e0) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20f60). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryEntitlementRejection is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c690) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee20fb0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryGizmoDatabaseMigrationFailure is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c780) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee210a0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryNilUuid is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c870) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee210f0). One of the two will be used. Which one is undefined.
+objc[50776]: Class AWDCallHistoryMalformedCloudChangeToken is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c7d0) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee21190). One of the two will be used. Which one is undefined.
+Test Case '-[OSAMeTests.913ef4e test72d6c61' started.
+Test Case '-[OSAMeTests.913ef4e test72d6c61' passed (5.985 seconds).
+Test Case '-[OSAMeTests.913ef4e test065a8c2' started.
+Test Case '-[OSAMeTests.913ef4e test065a8c2' passed (6.417 seconds).
+Test Case '-[OSAMeTests.913ef4e testb23799e' started.
+Test Case '-[OSAMeTests.913ef4e testb23799e' passed (4.627 seconds).
+Test Case '-[OSAMeTests.913ef4e test4026823' started.
+Test Case '-[OSAMeTests.913ef4e test4026823' passed (4.128 seconds).
+Test Suite '913ef4e' passed at 2016-12-09 11:31:27.465.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 21.157 (23.151) seconds
+Test Suite 'ec55432' started at 2016-12-09 11:31:27.466
+Test Case '-[OSAMeTests.ec55432 test324bb6e' started.
+Test Case '-[OSAMeTests.ec55432 test324bb6e' passed (3.891 seconds).
+Test Case '-[OSAMeTests.ec55432 test3c454c6' started.
+Test Case '-[OSAMeTests.ec55432 test3c454c6' passed (5.426 seconds).
+Test Suite 'ec55432' passed at 2016-12-09 11:31:37.379.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 9.317 (9.914) seconds
+Test Suite 'a69acac' started at 2016-12-09 11:31:37.379
+Test Case '-[OSAMeTests.a69acac test1163a44' started.
+Test Case '-[OSAMeTests.a69acac test1163a44' passed (3.321 seconds).
+Test Case '-[OSAMeTests.a69acac testf8066b1' started.
+Test Case '-[OSAMeTests.a69acac testf8066b1' passed (4.322 seconds).
+Test Suite 'a69acac' passed at 2016-12-09 11:31:45.522.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 7.642 (8.143) seconds
+Test Suite '370a5f4' started at 2016-12-09 11:31:45.523
+Test Case '-[OSAMeTests.370a5f4 test201032d' started.
+Test Case '-[OSAMeTests.370a5f4 test201032d' passed (8.196 seconds).
+Test Case '-[OSAMeTests.370a5f4 test0a8b56d' started.
+Test Case '-[OSAMeTests.370a5f4 test0a8b56d' passed (7.906 seconds).
+Test Case '-[OSAMeTests.370a5f4 test0ffbd77' started.
+Test Case '-[OSAMeTests.370a5f4 test0ffbd77' passed (7.292 seconds).
+Test Case '-[OSAMeTests.370a5f4 test925c17a' started.
+Test Case '-[OSAMeTests.370a5f4 test925c17a' passed (2.996 seconds).
+Test Case '-[OSAMeTests.370a5f4 testae14cbd' started.
+        {
+        eventBody =         {
+            controlUrn = "urn:li:control:p_flagship3_notifications-prop_list";
+            header =             {
+                pageInstance =                 {
+                    pageUrn = "urn:li:page:p_flagship3_notifications";
+                    trackingId = "otmgVp+kSKGt9f/wk4SAIQ==";
+                };
+                time = 1481311936150;
+            };
+            interactionType = "SHORT_PRESS";
+            mobileHeader =             {
+                advertiserId = "";
+                appVersion = "9.7.1660-SNAPSHOT-DEBUG";
+                deviceModel = "x86_64";
+                isAdTrackingLimited = 0;
+                osName = iOS;
+                osVersion = "10.1";
+            };
+            requestHeader =             {
+                interfaceLocale = "en_US";
+                pageKey = "p_flagship3_notifications";
+            };
+        };
+        eventInfo =         {
+            appId = "com.linkedin.flagship3.p_ios";
+            eventName = ControlInteractionEvent;
+            topicName = ControlInteractionEvent;
+        };
+    },
+        {
+        eventBody =         {
+            actionCategory = VIEW;
+            controlUrn = "urn:li:control:p_flagship3_notifications-prop_list";
+            header =             {
+                environment = "";
+                guid = "";
+                memberId = 0;
+                pageInstance =                 {
+                    pageUrn = "urn:li:page:p_flagship3_notifications";
+                    trackingId = "otmgVp+kSKGt9f/wk4SAIQ==";
+                };
+                server = "";
+                service = "";
+                time = 1481311936151;
+            };
+            mobileHeader =             {
+                advertiserId = "BD69A8D7-8502-4C27-A54C-21C36EA388FD";
+                appVersion = "9.7.1660-SNAPSHOT-DEBUG";
+                deviceModel = "x86_64";
+                isAdTrackingLimited = 1;
+                osName = iOS;
+                osVersion = "10.1";
+            };
+            notification =             {
+                objectUrn = "urn:li:notificationsV2:obj0";
+                trackingId = tracking0;
+            };
+            requestHeader =             {
+                interfaceLocale = "en_US";
+                pageKey = "p_flagship3_notifications";
+                trackingCode = "p_flagship3_detail_base";
+            };
+        };
+        eventInfo =         {
+            appId = "com.linkedin.flagship3.p_ios";
+            eventName = MeNotificationActionEvent;
+            topicName = MeNotificationActionEvent;
+        };
+    },
+        {
+        eventBody =         {
+            header =             {
+                environment = "";
+                guid = "";
+                memberId = 0;
+                pageInstance =                 {
+                    pageUrn = "urn:li:page:p_flagship3_notifications";
+                    trackingId = "otmgVp+kSKGt9f/wk4SAIQ==";
+                };
+                server = "";
+                service = "";
+                time = 1481311936157;
+            };
+            mobileHeader =             {
+                advertiserId = "BD69A8D7-8502-4C27-A54C-21C36EA388FD";
+                appVersion = "9.7.1660-SNAPSHOT-DEBUG";
+                deviceModel = "x86_64";
+                isAdTrackingLimited = 1;
+                osName = iOS;
+                osVersion = "10.1";
+            };
+            notifications =             (
+                                {
+                    duration = 196;
+                    listPosition =                     {
+                        index = 1;
+                    };
+                    notification =                     {
+                        objectUrn = "urn:li:notificationsV2:obj0";
+                        trackingId = tracking0;
+                    };
+                    size =                     {
+                        height = 461;
+                        width = 359;
+                    };
+                    visibleTime = 1481311935960;
+                }
+            );
+            requestHeader =             {
+                interfaceLocale = "en_US";
+                pageKey = "p_flagship3_notifications";
+                trackingCode = "p_flagship3_detail_base";
+            };
+        };
+        eventInfo =         {
+            appId = "com.linkedin.flagship3.p_ios";
+            eventName = MeNotificationImpressionEvent;
+            topicName = MeNotificationImpressionEvent;
+        };
+    },
+        {
+        eventBody =         {
+            header =             {
+                pageInstance =                 {
+                    pageUrn = "urn:li:page:p_flagship3_notifications_props";
+                    trackingId = "9ZpI7xnTTue7LJcNEqx6HA==";
+                };
+                time = 1481311936166;
+            };
+            mobileHeader =             {
+                advertiserId = "BD69A8D7-8502-4C27-A54C-21C36EA388FD";
+                appVersion = "9.7.1660-SNAPSHOT-DEBUG";
+                deviceModel = "x86_64";
+                isAdTrackingLimited = 1;
+                osName = iOS;
+                osVersion = "10.1";
+            };
+            pageType = ajax;
+            requestHeader =             {
+                interfaceLocale = "en_US";
+                pageKey = "p_flagship3_notifications_props";
+                trackingCode = "p_flagship3_notifications";
+            };
+            trackingCode = "p_flagship3_notifications";
+            trackingInfo =             {
+                0 = "10.1";
+                1 = iOS;
+                10 = 1481311936166;
+                2 = "9.7.1660-SNAPSHOT-DEBUG";
+                4 = "x86_64";
+                5 = "en_US";
+                9 = P;
+                appVersion = "9.7.1660-SNAPSHOT-DEBUG";
+                clientTimestamp = 1481311936166;
+                deviceModel = "x86_64";
+                locale = "en_US";
+                orientation = P;
+                osName = iOS;
+                osVersion = "10.1";
+            };
+        };
+        eventInfo =         {
+            appId = "com.linkedin.flagship3.p_ios";
+            eventName = PageViewEvent;
+            topicName = PageViewEvent;
+        };
+    },
+        {
+        eventBody =         {
+            header =             {
+                pageInstance =                 {
+                    pageUrn = "urn:li:page:p_flagship3_notifications_props";
+                    trackingId = "9ZpI7xnTTue7LJcNEqx6HA==";
+                };
+                time = 1481311936172;
+            };
+            mobileHeader =             {
+                advertiserId = "BD69A8D7-8502-4C27-A54C-21C36EA388FD";
+                appVersion = "9.7.1660-SNAPSHOT-DEBUG";
+                deviceModel = "x86_64";
+                isAdTrackingLimited = 1;
+                osName = iOS;
+                osVersion = "10.1";
+            };
+            pageType = ajax;
+            requestHeader =             {
+                interfaceLocale = "en_US";
+                pageKey = "p_flagship3_notifications_prop_list";
+                trackingCode = "p_flagship3_notifications";
+            };
+            trackingCode = "p_flagship3_notifications";
+            trackingInfo =             {
+                0 = "10.1";
+                1 = iOS;
+                10 = 1481311936172;
+                2 = "9.7.1660-SNAPSHOT-DEBUG";
+                4 = "x86_64";
+                5 = "en_US";
+                9 = P;
+                appVersion = "9.7.1660-SNAPSHOT-DEBUG";
+                clientTimestamp = 1481311936172;
+                deviceModel = "x86_64";
+                locale = "en_US";
+                orientation = P;
+                osName = iOS;
+                osVersion = "10.1";
+            };
+        };
+        eventInfo =
+BP_APP_PROC_ENDED

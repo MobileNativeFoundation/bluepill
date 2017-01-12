@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="All tests" tests="3" failures="1" errors="1" time="0.002000">
+    <testsuite tests="2" failures="1" errors="1" time="0.041532" timestamp="2016-11-07T16:54:44GMT-08:00" name="BPSampleAppCrashingTests.xctest">
+        <testsuite tests="2" failures="1" errors="1" time="0.020770" timestamp="2016-11-07T16:54:44GMT-08:00" name="BPSampleAppCrashingTests">
+            <testcase classname="BPSampleAppCrashingTests" name="testAppCrash0" time="0.000000">
+            </testcase>
+            <testcase classname="BPSampleAppCrashingTests" name="testAppCrash1" time="0.000000">
+                <failure type="Failure" message="App Crashed">
+                    Unknown File:0
+                </failure>
+                <error type="Error"/>
+            </testcase>
+        </testsuite>
+    </testsuite>
+    <testsuite tests="1" failures="0" errors="0" time="0.001000" timestamp="2016-11-07T16:55:13GMT-08:00" name="BPSampleAppCrashingTests.xctest">
+        <testsuite tests="1" failures="0" errors="0" time="0.000000" timestamp="2016-11-07T16:55:13GMT-08:00" name="BPSampleAppCrashingTests">
+            <testcase classname="BPSampleAppCrashingTests" name="testAppCrash2" time="0.000000">
+            </testcase>
+        </testsuite>
+    </testsuite>
+</testsuites>

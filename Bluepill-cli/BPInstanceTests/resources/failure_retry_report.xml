@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="All tests" tests="3" failures="2" errors="0" time="0.076000">
+  <testsuite tests="3" failures="2" errors="0" time="0.075000" timestamp="2016-11-14T22:18:10GMT-08:00" name="BPAppNegativeTests.xctest">
+    <testsuite tests="3" failures="2" errors="0" time="0.075000" timestamp="2016-11-14T22:18:10GMT-08:00" name="BPAppNegativeTests">
+      <testcase classname="BPAppNegativeTests" name="testAssertFailure" time="0.000000">
+        <failure type="Failure" message="((NO) is true) failed - THIS_TEST_SHOULD_FAIL">
+/Users/khu/ios/bluepill/BPSampleApp/BPAppNegativeTests/BPAppNegativeTests.m:38
+        </failure>
+      </testcase>
+      <testcase classname="BPAppNegativeTests" name="testAssertTrue" time="0.000000">
+      </testcase>
+      <testcase classname="BPAppNegativeTests" name="testRaiseException" time="0.074000">
+        <failure type="Failure" message="failed: caught &quot;Invalid foo value&quot;, &quot;foo of 1 is invalid&quot;">
+/Users/khu/ios/bluepill/BPSampleApp/BPAppNegativeTests/BPAppNegativeTests.m:46
+        </failure>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>
+
+

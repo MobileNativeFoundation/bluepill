@@ -1,0 +1,556 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7A4FB8CB1DF89A370073F268 /* BPXCTestFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */; };
+		7A4FB8DD1DF89B1A0073F268 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */; };
+		7A4FB8DE1DF89B1A0073F268 /* BPTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */; };
+		7A6672C01E0B0BB400AC6778 /* BPXCTestFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */; };
+		7A6672C11E0B0BBC00AC6778 /* BPTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */; };
+		7A6672C21E0B0BBF00AC6778 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */; };
+		BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */; };
+		BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809EA1DBA910400D7D130 /* BPAppTests.m */; };
+		BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809ED1DBA929600D7D130 /* BPTestHelper.m */; };
+		BA1809F91DBA949600D7D130 /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */; };
+		BA1809FA1DBA949600D7D130 /* BPRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F81DB14B5F001F32A2 /* BPRunner.m */; };
+		BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
+		BA1809FC1DBA949600D7D130 /* BPBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C601DB82295000ED28C /* BPBundle.m */; };
+		BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
+		BA180A011DBA949600D7D130 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41FB1DB14C18001F32A2 /* BPConstants.m */; };
+		BA180A021DBA949600D7D130 /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C5D1DB80971000ED28C /* BPUtils.m */; };
+		BA7031881DE4ED2F008B3539 /* result1.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031831DE4ED2F008B3539 /* result1.xml */; };
+		BA7031891DE4ED2F008B3539 /* result2.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031851DE4ED2F008B3539 /* result2.xml */; };
+		BA70318A1DE4ED2F008B3539 /* result3.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031871DE4ED2F008B3539 /* result3.xml */; };
+		BA9C2DAF1DD674AD007CB967 /* BPSampleAppTests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */; };
+		BA9C2DB11DD67B66007CB967 /* testScheme.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */; };
+		BAD8484A1DBC6A83007034CF /* BPReportCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = BAD848491DBC6A83007034CF /* BPReportCollector.m */; };
+		BAD8484B1DBC6A86007034CF /* BPReportCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = BAD848491DBC6A83007034CF /* BPReportCollector.m */; };
+		BAD8484D1DBC6BA2007034CF /* BPReportCollectorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAD8484C1DBC6BA2007034CF /* BPReportCollectorTests.m */; };
+		BAEF4B381DAC539400E68294 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BAEF4B371DAC539400E68294 /* main.m */; };
+		C41C41F31DB04032001F32A2 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
+		C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F81DB14B5F001F32A2 /* BPRunner.m */; };
+		C41C41FC1DB14C18001F32A2 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41FB1DB14C18001F32A2 /* BPConstants.m */; };
+		C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E54B1DC94BB200BC80EE /* BPCLITests.m */; };
+		C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */; };
+		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
+		C4FD8C5E1DB80971000ED28C /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C5D1DB80971000ED28C /* BPUtils.m */; };
+		C4FD8C611DB82295000ED28C /* BPBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C601DB82295000ED28C /* BPBundle.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		BAEF4B321DAC539400E68294 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7A4FB8C91DF89A370073F268 /* BPXCTestFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPXCTestFile.h; sourceTree = "<group>"; };
+		7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPXCTestFile.m; sourceTree = "<group>"; };
+		7A4FB8D91DF89B1A0073F268 /* BPTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestCase.h; sourceTree = "<group>"; };
+		7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestCase.m; sourceTree = "<group>"; };
+		7A4FB8DB1DF89B1A0073F268 /* BPTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestClass.h; sourceTree = "<group>"; };
+		7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestClass.m; sourceTree = "<group>"; };
+		BA1809E01DBA8FB100D7D130 /* BluepillRunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BluepillRunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA1809E41DBA8FB100D7D130 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPRunnerTests.m; sourceTree = "<group>"; };
+		BA1809EA1DBA910400D7D130 /* BPAppTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPAppTests.m; sourceTree = "<group>"; };
+		BA1809EC1DBA929600D7D130 /* BPTestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BPTestHelper.h; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.h"; sourceTree = "<group>"; };
+		BA1809ED1DBA929600D7D130 /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BPTestHelper.m; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.m"; sourceTree = "<group>"; };
+		BA7031831DE4ED2F008B3539 /* result1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result1.xml; sourceTree = "<group>"; };
+		BA7031851DE4ED2F008B3539 /* result2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result2.xml; sourceTree = "<group>"; };
+		BA7031871DE4ED2F008B3539 /* result3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result3.xml; sourceTree = "<group>"; };
+		BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPSampleAppTests.xctest; sourceTree = "<group>"; };
+		BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = testScheme.xcscheme; sourceTree = "<group>"; };
+		BAD848481DBC6A83007034CF /* BPReportCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPReportCollector.h; sourceTree = "<group>"; };
+		BAD848491DBC6A83007034CF /* BPReportCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPReportCollector.m; sourceTree = "<group>"; };
+		BAD8484C1DBC6BA2007034CF /* BPReportCollectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPReportCollectorTests.m; sourceTree = "<group>"; };
+		BAEF4B341DAC539400E68294 /* bluepill */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bluepill; sourceTree = BUILT_PRODUCTS_DIR; };
+		BAEF4B371DAC539400E68294 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C41C41F11DB04032001F32A2 /* BPApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPApp.h; sourceTree = "<group>"; };
+		C41C41F21DB04032001F32A2 /* BPApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPApp.m; sourceTree = "<group>"; };
+		C41C41F71DB14B5F001F32A2 /* BPRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPRunner.h; sourceTree = "<group>"; };
+		C41C41F81DB14B5F001F32A2 /* BPRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPRunner.m; sourceTree = "<group>"; };
+		C41C41FA1DB14C18001F32A2 /* BPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConstants.h; sourceTree = "<group>"; };
+		C41C41FB1DB14C18001F32A2 /* BPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConstants.m; sourceTree = "<group>"; };
+		C432D41F1DDCF05400FB27D0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
+		C467E54B1DC94BB200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
+		C4FD8C4D1DB692F8000ED28C /* BPConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConfiguration.h; sourceTree = "<group>"; };
+		C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConfiguration.m; sourceTree = "<group>"; };
+		C4FD8C561DB6E09B000ED28C /* BPPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPPacker.h; sourceTree = "<group>"; };
+		C4FD8C571DB6E09B000ED28C /* BPPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPacker.m; sourceTree = "<group>"; };
+		C4FD8C5C1DB80971000ED28C /* BPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPUtils.h; sourceTree = "<group>"; };
+		C4FD8C5D1DB80971000ED28C /* BPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPUtils.m; sourceTree = "<group>"; };
+		C4FD8C5F1DB82295000ED28C /* BPBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPBundle.h; sourceTree = "<group>"; };
+		C4FD8C601DB82295000ED28C /* BPBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPBundle.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BA1809DD1DBA8FB100D7D130 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BAEF4B311DAC539400E68294 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7A4FB8C81DF899CB0073F268 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				C4FD8C4D1DB692F8000ED28C /* BPConfiguration.h */,
+				C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */,
+				7A4FB8D91DF89B1A0073F268 /* BPTestCase.h */,
+				7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */,
+				7A4FB8DB1DF89B1A0073F268 /* BPTestClass.h */,
+				7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */,
+				C4FD8C5C1DB80971000ED28C /* BPUtils.h */,
+				C4FD8C5D1DB80971000ED28C /* BPUtils.m */,
+				7A4FB8C91DF89A370073F268 /* BPXCTestFile.h */,
+				7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */,
+			);
+			name = Shared;
+			path = ../../Source/Shared;
+			sourceTree = "<group>";
+		};
+		BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */ = {
+			isa = PBXGroup;
+			children = (
+				BA9C2DAD1DD674AD007CB967 /* resources */,
+				BAD8484E1DBC8006007034CF /* simulator */,
+				BA1809EC1DBA929600D7D130 /* BPTestHelper.h */,
+				BA1809ED1DBA929600D7D130 /* BPTestHelper.m */,
+				BA1809E41DBA8FB100D7D130 /* Info.plist */,
+				BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */,
+				BA1809EA1DBA910400D7D130 /* BPAppTests.m */,
+				BAD8484C1DBC6BA2007034CF /* BPReportCollectorTests.m */,
+				C467E54B1DC94BB200BC80EE /* BPCLITests.m */,
+			);
+			path = BluepillRunnerTests;
+			sourceTree = "<group>";
+		};
+		BA7031821DE4ED2F008B3539 /* 1 */ = {
+			isa = PBXGroup;
+			children = (
+				BA7031831DE4ED2F008B3539 /* result1.xml */,
+			);
+			path = 1;
+			sourceTree = "<group>";
+		};
+		BA7031841DE4ED2F008B3539 /* 2 */ = {
+			isa = PBXGroup;
+			children = (
+				BA7031851DE4ED2F008B3539 /* result2.xml */,
+			);
+			path = 2;
+			sourceTree = "<group>";
+		};
+		BA7031861DE4ED2F008B3539 /* 3 */ = {
+			isa = PBXGroup;
+			children = (
+				BA7031871DE4ED2F008B3539 /* result3.xml */,
+			);
+			path = 3;
+			sourceTree = "<group>";
+		};
+		BA9C2DAD1DD674AD007CB967 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */,
+				BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
+		BAD8484E1DBC8006007034CF /* simulator */ = {
+			isa = PBXGroup;
+			children = (
+				BA7031821DE4ED2F008B3539 /* 1 */,
+				BA7031841DE4ED2F008B3539 /* 2 */,
+				BA7031861DE4ED2F008B3539 /* 3 */,
+			);
+			path = simulator;
+			sourceTree = "<group>";
+		};
+		BAEF4B2B1DAC539400E68294 = {
+			isa = PBXGroup;
+			children = (
+				BAEF4B361DAC539400E68294 /* Bluepill */,
+				BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */,
+				BAEF4B351DAC539400E68294 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BAEF4B351DAC539400E68294 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BAEF4B341DAC539400E68294 /* bluepill */,
+				BA1809E01DBA8FB100D7D130 /* BluepillRunnerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BAEF4B361DAC539400E68294 /* Bluepill */ = {
+			isa = PBXGroup;
+			children = (
+				7A4FB8C81DF899CB0073F268 /* Shared */,
+				C432D41F1DDCF05400FB27D0 /* BPVersion.h */,
+				BAEF4B371DAC539400E68294 /* main.m */,
+				C41C41F71DB14B5F001F32A2 /* BPRunner.h */,
+				C41C41F81DB14B5F001F32A2 /* BPRunner.m */,
+				C4FD8C561DB6E09B000ED28C /* BPPacker.h */,
+				C4FD8C571DB6E09B000ED28C /* BPPacker.m */,
+				C4FD8C5F1DB82295000ED28C /* BPBundle.h */,
+				C4FD8C601DB82295000ED28C /* BPBundle.m */,
+				C41C41F11DB04032001F32A2 /* BPApp.h */,
+				C41C41F21DB04032001F32A2 /* BPApp.m */,
+				C41C41FA1DB14C18001F32A2 /* BPConstants.h */,
+				C41C41FB1DB14C18001F32A2 /* BPConstants.m */,
+				BAD848481DBC6A83007034CF /* BPReportCollector.h */,
+				BAD848491DBC6A83007034CF /* BPReportCollector.m */,
+			);
+			name = Bluepill;
+			path = "Bluepill-runner";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BA1809DF1DBA8FB100D7D130 /* BluepillRunnerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA1809E71DBA8FB100D7D130 /* Build configuration list for PBXNativeTarget "BluepillRunnerTests" */;
+			buildPhases = (
+				BA1809DC1DBA8FB100D7D130 /* Sources */,
+				BA1809DD1DBA8FB100D7D130 /* Frameworks */,
+				BA1809DE1DBA8FB100D7D130 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BluepillRunnerTests;
+			productName = BluepillRunnerTests;
+			productReference = BA1809E01DBA8FB100D7D130 /* BluepillRunnerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		BAEF4B331DAC539400E68294 /* bluepill */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BAEF4B3B1DAC539400E68294 /* Build configuration list for PBXNativeTarget "bluepill" */;
+			buildPhases = (
+				C432D41D1DDCED6100FB27D0 /* Saving Git HEAD's SHA1 */,
+				BAEF4B301DAC539400E68294 /* Sources */,
+				BAEF4B311DAC539400E68294 /* Frameworks */,
+				BAEF4B321DAC539400E68294 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = bluepill;
+			productName = "Bluepill-runner";
+			productReference = BAEF4B341DAC539400E68294 /* bluepill */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BAEF4B2C1DAC539400E68294 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0810;
+				ORGANIZATIONNAME = LinkedIn;
+				TargetAttributes = {
+					BA1809DF1DBA8FB100D7D130 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 57Y47U492U;
+						ProvisioningStyle = Automatic;
+					};
+					BAEF4B331DAC539400E68294 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 57Y47U492U;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "Bluepill" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BAEF4B2B1DAC539400E68294;
+			productRefGroup = BAEF4B351DAC539400E68294 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BAEF4B331DAC539400E68294 /* bluepill */,
+				BA1809DF1DBA8FB100D7D130 /* BluepillRunnerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BA1809DE1DBA8FB100D7D130 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA9C2DB11DD67B66007CB967 /* testScheme.xcscheme in Resources */,
+				BA70318A1DE4ED2F008B3539 /* result3.xml in Resources */,
+				BA7031881DE4ED2F008B3539 /* result1.xml in Resources */,
+				BA9C2DAF1DD674AD007CB967 /* BPSampleAppTests.xctest in Resources */,
+				BA7031891DE4ED2F008B3539 /* result2.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C432D41D1DDCED6100FB27D0 /* Saving Git HEAD's SHA1 */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Saving Git HEAD's SHA1";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "VERSION=`git describe`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BA1809DC1DBA8FB100D7D130 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */,
+				BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */,
+				BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */,
+				BA1809FA1DBA949600D7D130 /* BPRunner.m in Sources */,
+				C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */,
+				7A6672C21E0B0BBF00AC6778 /* BPTestCase.m in Sources */,
+				BAD8484D1DBC6BA2007034CF /* BPReportCollectorTests.m in Sources */,
+				BA1809FC1DBA949600D7D130 /* BPBundle.m in Sources */,
+				BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */,
+				7A6672C01E0B0BB400AC6778 /* BPXCTestFile.m in Sources */,
+				BAD8484B1DBC6A86007034CF /* BPReportCollector.m in Sources */,
+				BA1809F91DBA949600D7D130 /* BPConfiguration.m in Sources */,
+				BA180A021DBA949600D7D130 /* BPUtils.m in Sources */,
+				BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */,
+				BA180A011DBA949600D7D130 /* BPConstants.m in Sources */,
+				7A6672C11E0B0BBC00AC6778 /* BPTestClass.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BAEF4B301DAC539400E68294 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */,
+				7A4FB8DD1DF89B1A0073F268 /* BPTestCase.m in Sources */,
+				BAEF4B381DAC539400E68294 /* main.m in Sources */,
+				C41C41FC1DB14C18001F32A2 /* BPConstants.m in Sources */,
+				C4FD8C611DB82295000ED28C /* BPBundle.m in Sources */,
+				C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */,
+				C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */,
+				BAD8484A1DBC6A83007034CF /* BPReportCollector.m in Sources */,
+				7A4FB8DE1DF89B1A0073F268 /* BPTestClass.m in Sources */,
+				C41C41F31DB04032001F32A2 /* BPApp.m in Sources */,
+				7A4FB8CB1DF89A370073F268 /* BPXCTestFile.m in Sources */,
+				C4FD8C5E1DB80971000ED28C /* BPUtils.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		BA1809E51DBA8FB100D7D130 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				INFOPLIST_FILE = BluepillRunnerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BluepillRunnerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		BA1809E61DBA8FB100D7D130 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				INFOPLIST_FILE = BluepillRunnerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BluepillRunnerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BAEF4B391DAC539400E68294 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		BAEF4B3A1DAC539400E68294 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		BAEF4B3C1DAC539400E68294 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BAEF4B3D1DAC539400E68294 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BA1809E71DBA8FB100D7D130 /* Build configuration list for PBXNativeTarget "BluepillRunnerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA1809E51DBA8FB100D7D130 /* Debug */,
+				BA1809E61DBA8FB100D7D130 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "Bluepill" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BAEF4B391DAC539400E68294 /* Debug */,
+				BAEF4B3A1DAC539400E68294 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BAEF4B3B1DAC539400E68294 /* Build configuration list for PBXNativeTarget "bluepill" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BAEF4B3C1DAC539400E68294 /* Debug */,
+				BAEF4B3D1DAC539400E68294 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BAEF4B2C1DAC539400E68294 /* Project object */;
+}

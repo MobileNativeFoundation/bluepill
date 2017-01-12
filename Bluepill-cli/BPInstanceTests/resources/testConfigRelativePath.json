@@ -1,0 +1,10 @@
+{
+    "app": "./LinkedIn.app",
+    "no-split": [
+                 "VoyagerTests"
+                 ],
+    "retries": 0,
+    "scheme-path": "./VoyagerScenarioTests4.xcscheme",
+    "output-dir": "./simulator",
+    "headless": false
+}

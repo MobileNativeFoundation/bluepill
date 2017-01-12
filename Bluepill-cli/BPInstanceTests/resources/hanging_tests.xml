@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="All tests" tests="1" failures="1" errors="1" time="0.000000">
+  <testsuite tests="1" failures="1" errors="1" time="0.000000" timestamp="2016-10-29T00:32:02GMT-07:00" name="BPSampleAppHangingTests.xctest">
+    <testsuite tests="1" failures="1" errors="1" time="0.000000" timestamp="2016-10-29T00:32:02GMT-07:00" name="BPSampleAppHangingTests">
+      <testcase classname="BPSampleAppHangingTests" name="testAppHanging" time="0.000000">
+        <failure type="Failure" message="Timed out waiting for the test to produce output. Test was aboorted.">
+(null):0
+        </failure>
+        <error type="Error"/>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>
+
