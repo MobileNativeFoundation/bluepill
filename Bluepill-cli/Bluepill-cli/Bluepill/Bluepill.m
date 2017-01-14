@@ -270,6 +270,7 @@ void onInterrupt(int ignore) {
     handler.onSuccess = ^{
         context.pid = __handler.pid;
         NEXT([__self checkProcessWithContext:context]);
+        [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Launched app with PID %d", context.pid]];
     };
 
     handler.onError = ^(NSError *error) {
@@ -291,10 +292,19 @@ void onInterrupt(int ignore) {
 
 - (void)checkProcessWithContext:(BPExecutionContext *)context {
     BOOL isRunning = [self isProcessRunningWithContext:context];
-    if (!isRunning && [context.runner isFinished]) {
-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
-        [self runnerCompletedWithContext:context];
-        return;
+    if (!isRunning) {
+        if ([context.runner isFinished]) {
+            [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
+            [self runnerCompletedWithContext:context];
+            return;
+        } else {
+            // App crashed
+            [[BPStats sharedStats] addSimulatorLaunchFailure];
+            [BPUtils printInfo:ERROR withString:@"App seems to have crashed, aborting."];
+            context.finalExitStatus = BPExitStatusAppCrashed;
+            [self deleteSimulatorWithContext:context andStatus:context.finalExitStatus];
+            return;
+        }
     }
     if (![context.runner isSimulatorRunning]) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];

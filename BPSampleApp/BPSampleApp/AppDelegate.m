@@ -20,6 +20,10 @@
     // Override point for customization after application launch.
 
     // This is a sample app for Bluepill testing.
+    if (getenv("_BP_TEST_CRASH_ON_LAUNCH")) {
+        char *p = NULL;
+        strcpy(p, "I know this will crash my app");
+    }
     return YES;
 }
 
