@@ -283,6 +283,7 @@
                 dispatch_source_cancel(source);
             });
             __block __weak SimulatorRunner *weakSelf = self;
+            weakSelf.monitor.appPID = pid;
             dispatch_source_set_cancel_handler(source, ^{
                 // Post a APPCLOSED signal to the fifo
                 [weakSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];

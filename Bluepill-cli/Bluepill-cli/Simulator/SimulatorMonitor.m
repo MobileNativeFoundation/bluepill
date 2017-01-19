@@ -204,15 +204,15 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 }
 
 - (void)stopTestsWithErrorMessage:(NSString *)message forTestName:(NSString *)testName inClass:(NSString *)testClass {
-    NSError *error = nil;
 
     // Timeout or crash on a test means we should skip it when we rerun the tests
     [self updateExecutedTestCaseList:testName inClass:testClass];
 
     if (![[self.device stateString] isEqualToString:@"Shutdown"]) {
-        [self.device terminateApplicationWithID:self.hostBundleId error:&error];
-        if (error) {
-            fprintf(stderr, "stopTests: %s\n", [[error description] UTF8String]);
+        // self.appPID can be zero when running the parsing tests
+        // since we're not actually creating a simulator and running an app.
+        if (self.appPID && (kill(self.appPID, SIGTERM) < 0)) {
+            perror("kill");
         }
     }
 
