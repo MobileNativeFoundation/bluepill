@@ -14,7 +14,6 @@
 #import "CoreSimulator.h"
 #endif
 
-
 /**
  BPConfiguration stores necessary information for Simulator Runner to run
  */

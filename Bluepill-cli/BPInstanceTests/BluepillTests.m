@@ -14,6 +14,7 @@
 #import "SimDeviceType.h"
 #import "BPUtils.h"
 #import <stdio.h>
+#import "BPConstants.h"
 
 /**
  * This test suite is the integration tests to make sure Bluepill instance is working properly
@@ -38,10 +39,10 @@
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @30;
     self.config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
-    self.config.runtime = @"iOS 10.1";
+    self.config.runtime = @BP_DEFAULT_RUNTIME;
     self.config.repeatTestsCount = @1;
     self.config.errorRetriesCount = @0;
-    self.config.deviceType = @"iPhone 6";
+    self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
     self.config.plainOutput = NO;
     self.config.jsonOutput = NO;
     self.config.headlessMode = NO;
@@ -49,7 +50,7 @@
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils quietMode:YES];
-    
+
     NSError *err;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&err];
     if (!sc) { NSLog(@"Failed to initialize SimServiceContext: %@", err); }
@@ -62,14 +63,14 @@
     }
 
     XCTAssert(self.config.simDeviceType != nil);
-    
+
     for (SimRuntime *runtime in [sc supportedRuntimes]) {
         if ([[runtime name] isEqualToString:self.config.runtime]) {
             self.config.simRuntime = runtime;
             break;
         }
     }
-    
+
     XCTAssert(self.config.simRuntime != nil);
 }
 
@@ -102,10 +103,10 @@
                                    @"BPSampleAppTests/testCase173",
                                    @"BPSampleAppTests/testCase199"
                                    ];
-    
+
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
-    
+
     NSString *textReportPath = [outputDir stringByAppendingPathComponent:@"1-BPSampleAppTests-results.txt"];
     NSString *contents = [NSString stringWithContentsOfFile:textReportPath encoding:NSUTF8StringEncoding error:nil];
     // We'll go line by line asserting we didn't run any extra testcases.
@@ -243,14 +244,6 @@
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
-}
-
-- (void)testRunWithConfigurationFile {
-    
-}
-
-- (void)testRunWithRelativePathInConfigurationFile {
-    
 }
 
 #pragma mark - Test helpers

@@ -11,10 +11,7 @@
 #import "BPUtils.h"
 #import <getopt.h>
 #import <objc/runtime.h>
-
-
-#define BP_DEFAULT_DEVICE_TYPE "iPhone 6"
-#define BP_DEFAULT_RUNTIME "iOS 10.1"
+#import "BPConstants.h"
 
 #define BP_VALUE 1 // Single value
 #define BP_LIST  2 // List value
@@ -119,7 +116,7 @@ struct BPOptions {
 
 - (void)handleOpt:(int)opt withArg:(char *)arg {
     struct BPOptions *bpo = NULL;
-    
+
     for (int i = 0; BPOptions[i].name; i++) {
         if (BPOptions[i].val == opt) {
             bpo = &BPOptions[i];
@@ -363,7 +360,7 @@ struct BPOptions {
                         }
                     }
                 }
-                
+
                 [self setValue:value forKey:[NSString stringWithUTF8String:BPOptions[i].property]];
             }
         }
@@ -479,7 +476,7 @@ struct BPOptions {
         self.junitOutput = TRUE;
         self.jsonOutput = TRUE;
     }
-    
+
     if (self.schemePath) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.schemePath isDirectory:&isdir]) {
             if (isdir) {
@@ -504,7 +501,7 @@ struct BPOptions {
                                         userInfo:@{NSLocalizedDescriptionKey: @"No scheme provided."}];
         return NO;
     }
-    
+
 // bp requires an xctest argument while `bluepill` does not.
 #ifdef BP_USE_PRIVATE_FRAMEWORKS
     if (!self.testBundlePath) {
@@ -530,7 +527,7 @@ struct BPOptions {
     if (!self.runtime) {
         self.runtime = [NSString stringWithUTF8String: BP_DEFAULT_RUNTIME];
     }
-    
+
 #ifdef BP_USE_PRIVATE_FRAMEWORKS
     // Validate we were passed a valid device and runtime
     self.simDeviceType = nil;
@@ -559,7 +556,7 @@ struct BPOptions {
         }
         return NO;
     }
-    
+
     self.simRuntime = nil;
 
     for (SimRuntime *runtime in [sc supportedRuntimes]) {

@@ -16,6 +16,7 @@
 #import "BPPacker.h"
 #import "BPBundle.h"
 #import "BPXCTestFile.h"
+#import "BPConstants.h"
 
 @interface BPRunnerTests : XCTestCase
 @property (nonatomic, strong) BPConfiguration* config;
@@ -32,11 +33,11 @@
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @30;
     self.config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
-    self.config.runtime = @"iOS 10.0";
+    self.config.runtime = @BP_DEFAULT_RUNTIME;
     self.config.repeatTestsCount = @1;
     self.config.errorRetriesCount = @0;
     self.config.failureTolerance = 0;
-    self.config.deviceType = @"iPhone 6";
+    self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
     self.config.plainOutput = NO;
     self.config.jsonOutput = NO;
     self.config.headlessMode = NO;
@@ -73,7 +74,7 @@
     }
     got = [tests sortedArrayUsingSelector:@selector(compare:)];
     XCTAssert([want isEqualToArray:got]);
-    
+
     // Let's gather all the tests and always make sure we get them all
     tests = [[NSMutableArray alloc] init];
     for (BPXCTestFile *testFile in app.testBundles) {
@@ -90,7 +91,7 @@
     XCTAssert([bundles[1].testsToSkip count] == 0);
     XCTAssert([bundles[2].testsToSkip count] == 2);
     XCTAssert([bundles[3].testsToSkip count] == 3);
-    
+
     bundles = [BPPacker packTests:app.testBundles withNoSplitList:@[]  intoBundles:4];
     // 4 unbreakable bundles (too few tests) and the big one broken into 4 bundles
     XCTAssert(bundles.count == 8);
