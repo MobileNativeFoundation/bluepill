@@ -23,7 +23,6 @@
 //- (void).cxx_destruct;
 - (BOOL)unregisterService:(id)arg1 error:(id *)arg2;
 - (BOOL)registerPort:(unsigned int)arg1 service:(id)arg2 error:(id *)arg3;
-- (struct NSDictionary *)makeRequest:(id)arg1 fields:(struct NSDictionary *)arg2;
 - (id)tvOutDisplayDescriptorState;
 - (id)mainDisplayDescriptorState;
 - (BOOL)unloadAllBundles;

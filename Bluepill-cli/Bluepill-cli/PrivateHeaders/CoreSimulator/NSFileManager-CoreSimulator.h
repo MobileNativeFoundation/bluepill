@@ -7,6 +7,7 @@
 #import "NSFileManager.h"
 
 @interface NSFileManager (CoreSimulator)
+- (BOOL)sim_copyItemAtPath:(id)arg1 toCreatedPath:(id)arg2 error:(id *)arg3;
 - (BOOL)sim_reentrantSafeCreateDirectoryAtPath:(id)arg1 withIntermediateDirectories:(BOOL)arg2 attributes:(id)arg3 error:(id *)arg4;
 @end
 

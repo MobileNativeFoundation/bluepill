@@ -4,24 +4,32 @@
 //     class-dump is Copyright (C) 1997-1998, 2000-2001, 2004-2013 by Steve Nygard.
 //
 
-@import Foundation;
+#import "NSObject.h"
 
-#import "SimDisplayDescriptorState-Protocol.h"
+#import "SimDisplayDescriptorState.h"
 
-@interface DefaultDisplayDescriptorState : NSObject <SimDisplayDescriptorState>
+@class NSString;
+
+@interface SimDisplayDefaultDescriptorState : NSObject <SimDisplayDescriptorState>
 {
+    unsigned short _displayClass;
     int _powerState;
-    int _displayClass;
     unsigned int _defaultWidthForDisplay;
     unsigned int _defaultHeightForDisplay;
 }
 
-+ (id)defaultDisplayDescriptorStateWithPowerState:(int)arg1 displayClass:(int)arg2 width:(unsigned int)arg3 height:(unsigned int)arg4;
++ (id)defaultDisplayDescriptorStateWithPowerState:(int)arg1 displayClass:(unsigned short)arg2 width:(unsigned int)arg3 height:(unsigned int)arg4;
 @property(nonatomic) unsigned int defaultHeightForDisplay; // @synthesize defaultHeightForDisplay=_defaultHeightForDisplay;
 @property(nonatomic) unsigned int defaultWidthForDisplay; // @synthesize defaultWidthForDisplay=_defaultWidthForDisplay;
 @property(nonatomic) unsigned short displayClass; // @synthesize displayClass=_displayClass;
 @property(nonatomic) int powerState; // @synthesize powerState=_powerState;
 - (id)xpcObject;
+
+// Remaining properties
+@property(readonly, copy) NSString *debugDescription;
+@property(readonly, copy) NSString *description;
+@property(readonly) unsigned long long hash;
+@property(readonly) Class superclass;
 
 @end
 

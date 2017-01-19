@@ -9,6 +9,6 @@
 @protocol SimDisplayDescriptorState <SimDeviceIOPortDescriptorState>
 @property(readonly, nonatomic) unsigned int defaultHeightForDisplay;
 @property(readonly, nonatomic) unsigned int defaultWidthForDisplay;
-@property(readonly, nonatomic) int displayClass;
+@property(readonly, nonatomic) unsigned short displayClass;
 @end
 

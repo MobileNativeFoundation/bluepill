@@ -32,7 +32,6 @@
 - (void)monitorProfilesPath:(id)arg1;
 - (void)monitorDefaultProfilePaths;
 - (id)initWithContext:(id)arg1;
-- (id)init;
 
 @end
 

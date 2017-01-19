@@ -15,7 +15,6 @@
 @property(retain, nonatomic) id data; // @synthesize data=_data;
 //- (void).cxx_destruct;
 - (id)initWithData:(id)arg1;
-- (id)init;
 
 @end
 

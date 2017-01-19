@@ -34,6 +34,7 @@
 		BAEF4B381DAC539400E68294 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BAEF4B371DAC539400E68294 /* main.m */; };
 		C41C41F31DB04032001F32A2 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
 		C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F81DB14B5F001F32A2 /* BPRunner.m */; };
+		C42A401E1E31865D00B83FCC /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16E1E30932400FCED71 /* BPConstants.m */; };
 		C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E54B1DC94BB200BC80EE /* BPCLITests.m */; };
 		C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
@@ -344,6 +345,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C42A401E1E31865D00B83FCC /* BPConstants.m in Sources */,
 				BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */,
 				BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */,
 				BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */,

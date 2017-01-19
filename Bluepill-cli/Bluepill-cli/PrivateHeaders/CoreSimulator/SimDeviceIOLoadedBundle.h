@@ -17,7 +17,7 @@
 
 + (id)loadedBundleForURL:(id)arg1;
 @property(retain, nonatomic) id <SimDeviceIOBundleInterface> bundleInterface; // @synthesize bundleInterface=_bundleInterface;
-@property(nonatomic) NSBundle *bundle; // @synthesize bundle=_bundle;
+@property(retain, nonatomic) NSBundle *bundle; // @synthesize bundle=_bundle;
 //- (void).cxx_destruct;
 - (id)initWithURL:(id)arg1;
 

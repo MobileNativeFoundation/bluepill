@@ -18,11 +18,11 @@
 
 @property(retain, nonatomic) NSObject *serverSource; // @synthesize serverSource=_serverSource;
 @property(retain, nonatomic) NSObject *serverQueue; // @synthesize serverQueue=_serverQueue;
-@property(readonly, retain, nonatomic) NSString *name; // @synthesize name=_name;
-@property(readonly, retain, nonatomic) NSMachPort *port; // @synthesize port=_port;
+@property(readonly, nonatomic) NSString *name; // @synthesize name=_name;
+@property(readonly, nonatomic) NSMachPort *port; // @synthesize port=_port;
 //- (void).cxx_destruct;
 - (id)description;
-- (id)initWithName:(id)arg1 machMessageHandler:(CDUnknownFunctionPointerType)arg2 machMessageSize:(unsigned int)arg3 error:(id *)arg4;
+- (id)initWithName:(id)arg1 machMessageHandler:(const CDUnknownFunctionPointerType)arg2 machMessageSize:(unsigned int)arg3 error:(id *)arg4;
 
 @end
 
