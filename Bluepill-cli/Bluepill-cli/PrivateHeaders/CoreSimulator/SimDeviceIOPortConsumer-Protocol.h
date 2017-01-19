@@ -4,10 +4,12 @@
 //     class-dump is Copyright (C) 1997-1998, 2000-2001, 2004-2013 by Steve Nygard.
 //
 
+#import "FoundationXPCProtocolProxyable.h"
+
 @class NSString, NSUUID;
 
-@protocol SimDeviceIOPortConsumer
-@property(readonly, retain, nonatomic) NSUUID *consumerUUID;
-@property(readonly, retain, nonatomic) NSString *consumerIdentifier;
+@protocol SimDeviceIOPortConsumer <FoundationXPCProtocolProxyable>
+@property(readonly, nonatomic) NSUUID *consumerUUID;
+@property(readonly, nonatomic) NSString *consumerIdentifier;
 @end
 

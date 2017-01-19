@@ -38,7 +38,7 @@
 @property(retain, nonatomic) NSDate *lastConnectionTime; // @synthesize lastConnectionTime=_lastConnectionTime;
 @property(retain, nonatomic) NSObject *serviceConnectionQueue; // @synthesize serviceConnectionQueue=_serviceConnectionQueue;
 @property(retain, nonatomic) NSObject<OS_xpc_object> *serviceConnection; // @synthesize serviceConnection=_serviceConnection;
-@property(copy, nonatomic) NSString *developerDir; // @synthesize developerDir=_developerDir;
+@property(retain, nonatomic) NSString *developerDir; // @synthesize developerDir=_developerDir;
 @property(nonatomic) long long connectionType; // @synthesize connectionType=_connectionType;
 //- (void).cxx_destruct;
 - (void)handleXPCEvent:(id)arg1;
@@ -62,7 +62,6 @@
 - (void)dealloc;
 - (void)connect;
 - (id)initWithDeveloperDir:(id)arg1 connectionType:(long long)arg2;
-- (id)init;
 
 @end
 

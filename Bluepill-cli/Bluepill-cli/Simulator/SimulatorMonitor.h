@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) NSString *hostBundleId;
+@property (nonatomic) pid_t appPID;
 
 /*!
  * @discussion Sets timeouts for max test runtime

@@ -20,18 +20,22 @@
     NSMutableDictionary *_devicePairsNotificationRegIDs;
     SimServiceContext *_serviceContext;
     SimDeviceNotificationManager *_notificationManager;
-    NSDictionary *_defaultCreatedDevices;
+    NSObject *_defaultCreatedDevicesQueue;
+    NSMutableDictionary *_defaultCreatedDevices;
+    NSString *_defaultCreatedLastDeveloperDir;
 }
 
 + (id)defaultSetPath;
-@property(retain, nonatomic) NSDictionary *defaultCreatedDevices; // @synthesize defaultCreatedDevices=_defaultCreatedDevices;
+@property(retain, nonatomic) NSString *defaultCreatedLastDeveloperDir; // @synthesize defaultCreatedLastDeveloperDir=_defaultCreatedLastDeveloperDir;
+@property(retain, nonatomic) NSMutableDictionary *defaultCreatedDevices; // @synthesize defaultCreatedDevices=_defaultCreatedDevices;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *defaultCreatedDevicesQueue; // @synthesize defaultCreatedDevicesQueue=_defaultCreatedDevicesQueue;
 @property(retain, nonatomic) SimDeviceNotificationManager *notificationManager; // @synthesize notificationManager=_notificationManager;
 @property(retain, nonatomic) SimServiceContext *serviceContext; // @synthesize serviceContext=_serviceContext;
 @property(retain, nonatomic) NSMutableDictionary *devicePairsNotificationRegIDs; // @synthesize devicePairsNotificationRegIDs=_devicePairsNotificationRegIDs;
 @property(retain, nonatomic) NSMutableDictionary *_devicePairsByUUID; // @synthesize _devicePairsByUUID=__devicePairsByUUID;
 @property(retain, nonatomic) NSMutableDictionary *devicesNotificationRegIDs; // @synthesize devicesNotificationRegIDs=_devicesNotificationRegIDs;
 @property(retain, nonatomic) NSMutableDictionary *_devicesByUDID; // @synthesize _devicesByUDID=__devicesByUDID;
-@property(retain, nonatomic) NSObject *devicesQueue; // @synthesize devicesQueue=_devicesQueue;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *devicesQueue; // @synthesize devicesQueue=_devicesQueue;
 @property(copy, nonatomic) NSString *setPath; // @synthesize setPath=_setPath;
 //- (void).cxx_destruct;
 - (void)handleXPCRequestUnpair:(struct NSDictionary *)arg1;
@@ -70,22 +74,22 @@
 - (void)removeDeviceAsync:(id)arg1;
 - (void)addDevice:(id)arg1;
 - (void)addDeviceAsync:(id)arg1;
-- (void)updateDefaultDevicePairingsForDeveloperDir:(id)arg1;
-- (void)updateDefaultDevicesForDeveloperDir:(id)arg1;
+- (void)_onDefaultCreatedDevicesQueue_updateDefaultDevicePairingsForDeveloperDir:(id)arg1;
+- (void)_onDefaultCreatedDevicesQueue_updateDefaultDevicesForDeveloperDir:(id)arg1;
+- (void)updateDefaultDevicesAndPairingsForDeveloperDir:(id)arg1;
 - (id)devicePairsContainingDevice:(id)arg1;
 - (id)devicePairsContainingDeviceUDID:(id)arg1;
-@property(readonly, copy) NSArray *availableDevicePairs;
-@property(readonly, copy) NSArray *devicePairs;
-@property(readonly, copy) NSDictionary *devicePairsByUUID;
-@property(readonly, copy) NSArray *availableDevices;
-@property(readonly, copy) NSArray *devices;
+@property(readonly, nonatomic) NSArray *availableDevicePairs;
+@property(readonly, nonatomic) NSArray *devicePairs;
+@property(readonly, nonatomic) NSDictionary *devicePairsByUUID;
+@property(readonly, nonatomic) NSArray *availableDevices;
+@property(readonly, nonatomic) NSArray *devices;
 - (BOOL)isDeviceInSet:(id)arg1;
-@property(readonly, copy) NSDictionary *devicesByUDID;
+@property(readonly, nonatomic) NSDictionary *devicesByUDID;
 - (id)description;
 - (void)saveToDisk;
 - (void)processDeviceSetPlist;
 - (id)initWithSetPath:(id)arg1 serviceContext:(id)arg2;
-- (id)init;
 - (BOOL)subscribeToNotificationsWithError:(id *)arg1;
 
 @end

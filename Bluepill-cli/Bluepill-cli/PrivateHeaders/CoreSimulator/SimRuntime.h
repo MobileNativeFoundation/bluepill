@@ -11,6 +11,7 @@
 @interface SimRuntime : NSObject
 {
     unsigned int _version;
+    unsigned int _equivalentIOSVersion;
     unsigned int _minHostVersion;
     unsigned int _maxHostVersion;
     unsigned int _minCoreSimulatorFrameworkVersion;
@@ -22,12 +23,12 @@
     NSString *_versionString;
     NSString *_buildVersionString;
     NSString *_platformIdentifier;
-    NSString *_platformName;
     NSDictionary *_supportedFeatures;
     NSDictionary *_supportedFeaturesConditionalOnDeviceType;
     NSDictionary *_requiredHostServices;
     NSDictionary *_forwardHostNotifications;
     NSDictionary *_forwardHostNotificationsWithState;
+    NSString *_platformName;
     NSString *_platformPath;
     NSArray *_supportedProductFamilyIDs;
     SimRuntimePairingReuirements *_pairingRequirements;
@@ -37,6 +38,7 @@
     NSDictionary *_aliases;
 }
 
++ (unsigned int)equivalentIOSVersionForVersion:(unsigned int)arg1 profile:(id)arg2 platformIdentifier:(id)arg3;
 + (id)updatedMaxCoreSimulatorVersions;
 + (id)updatedMaxHostVersions;
 @property(nonatomic) unsigned int maxCoreSimulatorFrameworkVersion; // @synthesize maxCoreSimulatorFrameworkVersion=_maxCoreSimulatorFrameworkVersion;
@@ -56,6 +58,7 @@
 @property(copy, nonatomic) NSDictionary *requiredHostServices; // @synthesize requiredHostServices=_requiredHostServices;
 @property(copy, nonatomic) NSDictionary *supportedFeaturesConditionalOnDeviceType; // @synthesize supportedFeaturesConditionalOnDeviceType=_supportedFeaturesConditionalOnDeviceType;
 @property(copy, nonatomic) NSDictionary *supportedFeatures; // @synthesize supportedFeatures=_supportedFeatures;
+@property(nonatomic) unsigned int equivalentIOSVersion; // @synthesize equivalentIOSVersion=_equivalentIOSVersion;
 @property(nonatomic) unsigned int version; // @synthesize version=_version;
 @property(copy, nonatomic) NSString *platformIdentifier; // @synthesize platformIdentifier=_platformIdentifier;
 @property(copy, nonatomic) NSString *buildVersionString; // @synthesize buildVersionString=_buildVersionString;
@@ -87,7 +90,6 @@
 - (id)description;
 - (id)initWithBundle:(id)arg1;
 - (id)initWithPath:(id)arg1;
-- (id)init;
 
 @end
 

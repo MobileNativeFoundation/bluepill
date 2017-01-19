@@ -58,12 +58,11 @@
 - (BOOL)supportsFeatureConditionally:(id)arg1;
 - (BOOL)supportsFeature:(id)arg1;
 - (id)environment;
-@property(readonly, copy, nonatomic) NSString *productFamily;
+@property(readonly, nonatomic) NSString *productFamily;
 @property(readonly, nonatomic) int productFamilyID;
 - (id)description;
 - (id)initWithBundle:(id)arg1;
 - (id)initWithPath:(id)arg1;
-- (id)init;
 
 @end
 

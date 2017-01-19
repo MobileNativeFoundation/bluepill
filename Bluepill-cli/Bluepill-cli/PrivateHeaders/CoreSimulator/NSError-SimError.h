@@ -6,11 +6,7 @@
 
 @import Foundation;
 
-@protocol OS_xpc_object;
-//@class 
-
 @interface NSError (SimError)
-+ (id)errorFromXPCData:(id)arg1;
 + (id)errorWithSimPairingTestResult:(long long)arg1;
 + (id)errorWithLaunchdError:(int)arg1 userInfo:(id)arg2;
 + (id)errorWithLaunchdError:(int)arg1 localizedDescription:(id)arg2;
@@ -18,6 +14,5 @@
 + (id)errorWithSimErrno:(int)arg1 localizedDescription:(id)arg2;
 + (id)errorWithSimErrno:(int)arg1 userInfo:(id)arg2;
 + (id)errorWithSimErrno:(int)arg1;
-@property(readonly, nonatomic) NSObject<OS_xpc_object> *xpcData;
 @end
 

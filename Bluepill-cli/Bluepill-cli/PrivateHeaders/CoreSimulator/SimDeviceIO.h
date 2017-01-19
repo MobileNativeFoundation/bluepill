@@ -7,10 +7,11 @@
 @import Foundation;
 
 #import "SimDeviceIOInterface-Protocol.h"
+#import "SimDeviceIOProtocol-Protocol.h"
 
-@class NSSet, SimDevice;
+@class NSString, SimDevice;
 
-@interface SimDeviceIO : NSObject <SimDeviceIOInterface>
+@interface SimDeviceIO : NSObject <SimDeviceIOInterface, SimDeviceIOProtocol>
 {
     SimDevice *_device;
 }
@@ -22,10 +23,15 @@
 - (void)attachConsumer:(id)arg1 toPort:(id)arg2;
 - (BOOL)unregisterService:(id)arg1 error:(id *)arg2;
 - (BOOL)registerPort:(unsigned int)arg1 service:(id)arg2 error:(id *)arg3;
-- (struct NSDictionary *)makeRequest:(id)arg1 fields:(struct NSDictionary *)arg2;
 - (id)ioPortForUUID:(id)arg1;
 - (id)ioPorts;
 - (id)initWithDevice:(id)arg1;
+
+// Remaining properties
+@property(readonly, copy) NSString *debugDescription;
+@property(readonly, copy) NSString *description;
+//@property(readonly) unsigned long long hash;
+@property(readonly) Class superclass;
 
 @end
 

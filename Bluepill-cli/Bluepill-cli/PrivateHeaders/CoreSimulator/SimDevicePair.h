@@ -66,7 +66,6 @@
 - (unsigned long long)registerNotificationHandler:(CDUnknownBlockType)arg1;
 - (void)invalidate;
 - (id)initWithUUID:(id)arg1 gizmo:(id)arg2 companion:(id)arg3 active:(BOOL)arg4 connected:(BOOL)arg5 deviceSet:(id)arg6;
-- (id)init;
 
 @end
 

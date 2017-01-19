@@ -6,12 +6,16 @@
 
 #import "SimDeviceIO.h"
 
+@class NSArray, NSMutableDictionary, NSObject;
+
 @interface SimDeviceIOClient : SimDeviceIO
 {
     NSArray *_deviceIOPorts;
     struct NSMutableDictionary *_consumerProxies;
+    NSObject<OS_dispatch_queue> *_executionQueue;
 }
 
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *executionQueue; // @synthesize executionQueue=_executionQueue;
 @property(retain, nonatomic) NSMutableDictionary *consumerProxies; // @synthesize consumerProxies=_consumerProxies;
 @property(retain, nonatomic) NSArray *deviceIOPorts; // @synthesize deviceIOPorts=_deviceIOPorts;
 //- (void).cxx_destruct;

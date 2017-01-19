@@ -9,7 +9,7 @@
 @class NSArray, NSObject;
 
 @protocol SimPasteboard <SimDeviceNotifier>
-@property(readonly, retain) NSArray *items;
+@property(readonly) NSArray *items;
 @property(readonly) unsigned long long changeCount;
 - (void)setPasteboardAsyncWithItems:(NSArray *)arg1 completionQueue:(NSObject *)arg2 completionHandler:(void (^)(unsigned long long, NSError *))arg3;
 - (unsigned long long)setPasteboardWithItems:(NSArray *)arg1 error:(id *)arg2;

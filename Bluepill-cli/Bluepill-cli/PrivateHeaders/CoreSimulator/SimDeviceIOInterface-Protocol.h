@@ -9,6 +9,5 @@
 @protocol SimDeviceIOInterface
 - (BOOL)unregisterService:(NSString *)arg1 error:(id *)arg2;
 - (BOOL)registerPort:(unsigned int)arg1 service:(NSString *)arg2 error:(id *)arg3;
-- (struct NSDictionary *)makeRequest:(NSString *)arg1 fields:(struct NSDictionary *)arg2;
 @end
 
