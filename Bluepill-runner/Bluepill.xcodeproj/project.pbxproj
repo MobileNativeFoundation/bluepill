@@ -23,6 +23,7 @@
 		BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
 		BA180A021DBA949600D7D130 /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C5D1DB80971000ED28C /* BPUtils.m */; };
 		BA53B16F1E30932400FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16E1E30932400FCED71 /* BPConstants.m */; };
+		BA53B1711E30B36300FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16E1E30932400FCED71 /* BPConstants.m */; };
 		BA7031881DE4ED2F008B3539 /* result1.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031831DE4ED2F008B3539 /* result1.xml */; };
 		BA7031891DE4ED2F008B3539 /* result2.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031851DE4ED2F008B3539 /* result2.xml */; };
 		BA70318A1DE4ED2F008B3539 /* result3.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031871DE4ED2F008B3539 /* result3.xml */; };
@@ -351,6 +352,7 @@
 				C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */,
 				7A6672C21E0B0BBF00AC6778 /* BPTestCase.m in Sources */,
 				BAD8484D1DBC6BA2007034CF /* BPReportCollectorTests.m in Sources */,
+				BA53B1711E30B36300FCED71 /* BPConstants.m in Sources */,
 				BA1809FC1DBA949600D7D130 /* BPBundle.m in Sources */,
 				BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */,
 				7A6672C01E0B0BB400AC6778 /* BPXCTestFile.m in Sources */,

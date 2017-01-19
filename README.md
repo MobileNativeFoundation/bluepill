@@ -72,7 +72,7 @@ A full list supported options are listed here.
 
 ## Requirements
 
-Latest Xcode (Xcode 8.2.1).
+Xcode 8.1+ and have iOS 10.1 runtime.
 
 ## Bulid
 
