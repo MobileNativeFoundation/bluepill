@@ -21,8 +21,9 @@
 		BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
 		BA1809FC1DBA949600D7D130 /* BPBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C601DB82295000ED28C /* BPBundle.m */; };
 		BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
-		BA180A011DBA949600D7D130 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41FB1DB14C18001F32A2 /* BPConstants.m */; };
 		BA180A021DBA949600D7D130 /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C5D1DB80971000ED28C /* BPUtils.m */; };
+		BA53B16F1E30932400FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16E1E30932400FCED71 /* BPConstants.m */; };
+		BA53B1711E30B36300FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16E1E30932400FCED71 /* BPConstants.m */; };
 		BA7031881DE4ED2F008B3539 /* result1.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031831DE4ED2F008B3539 /* result1.xml */; };
 		BA7031891DE4ED2F008B3539 /* result2.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031851DE4ED2F008B3539 /* result2.xml */; };
 		BA70318A1DE4ED2F008B3539 /* result3.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031871DE4ED2F008B3539 /* result3.xml */; };
@@ -34,7 +35,6 @@
 		BAEF4B381DAC539400E68294 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BAEF4B371DAC539400E68294 /* main.m */; };
 		C41C41F31DB04032001F32A2 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
 		C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F81DB14B5F001F32A2 /* BPRunner.m */; };
-		C41C41FC1DB14C18001F32A2 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41FB1DB14C18001F32A2 /* BPConstants.m */; };
 		C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E54B1DC94BB200BC80EE /* BPCLITests.m */; };
 		C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
@@ -67,6 +67,8 @@
 		BA1809EA1DBA910400D7D130 /* BPAppTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPAppTests.m; sourceTree = "<group>"; };
 		BA1809EC1DBA929600D7D130 /* BPTestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BPTestHelper.h; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.h"; sourceTree = "<group>"; };
 		BA1809ED1DBA929600D7D130 /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BPTestHelper.m; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.m"; sourceTree = "<group>"; };
+		BA53B16D1E30932400FCED71 /* BPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConstants.h; sourceTree = "<group>"; };
+		BA53B16E1E30932400FCED71 /* BPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConstants.m; sourceTree = "<group>"; };
 		BA7031831DE4ED2F008B3539 /* result1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result1.xml; sourceTree = "<group>"; };
 		BA7031851DE4ED2F008B3539 /* result2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result2.xml; sourceTree = "<group>"; };
 		BA7031871DE4ED2F008B3539 /* result3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result3.xml; sourceTree = "<group>"; };
@@ -81,8 +83,6 @@
 		C41C41F21DB04032001F32A2 /* BPApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPApp.m; sourceTree = "<group>"; };
 		C41C41F71DB14B5F001F32A2 /* BPRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPRunner.h; sourceTree = "<group>"; };
 		C41C41F81DB14B5F001F32A2 /* BPRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPRunner.m; sourceTree = "<group>"; };
-		C41C41FA1DB14C18001F32A2 /* BPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConstants.h; sourceTree = "<group>"; };
-		C41C41FB1DB14C18001F32A2 /* BPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConstants.m; sourceTree = "<group>"; };
 		C432D41F1DDCF05400FB27D0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
 		C467E54B1DC94BB200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
 		C4FD8C4D1DB692F8000ED28C /* BPConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConfiguration.h; sourceTree = "<group>"; };
@@ -116,6 +116,8 @@
 		7A4FB8C81DF899CB0073F268 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				BA53B16D1E30932400FCED71 /* BPConstants.h */,
+				BA53B16E1E30932400FCED71 /* BPConstants.m */,
 				C4FD8C4D1DB692F8000ED28C /* BPConfiguration.h */,
 				C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */,
 				7A4FB8D91DF89B1A0073F268 /* BPTestCase.h */,
@@ -222,8 +224,6 @@
 				C4FD8C601DB82295000ED28C /* BPBundle.m */,
 				C41C41F11DB04032001F32A2 /* BPApp.h */,
 				C41C41F21DB04032001F32A2 /* BPApp.m */,
-				C41C41FA1DB14C18001F32A2 /* BPConstants.h */,
-				C41C41FB1DB14C18001F32A2 /* BPConstants.m */,
 				BAD848481DBC6A83007034CF /* BPReportCollector.h */,
 				BAD848491DBC6A83007034CF /* BPReportCollector.m */,
 			);
@@ -352,6 +352,7 @@
 				C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */,
 				7A6672C21E0B0BBF00AC6778 /* BPTestCase.m in Sources */,
 				BAD8484D1DBC6BA2007034CF /* BPReportCollectorTests.m in Sources */,
+				BA53B1711E30B36300FCED71 /* BPConstants.m in Sources */,
 				BA1809FC1DBA949600D7D130 /* BPBundle.m in Sources */,
 				BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */,
 				7A6672C01E0B0BB400AC6778 /* BPXCTestFile.m in Sources */,
@@ -359,7 +360,6 @@
 				BA1809F91DBA949600D7D130 /* BPConfiguration.m in Sources */,
 				BA180A021DBA949600D7D130 /* BPUtils.m in Sources */,
 				BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */,
-				BA180A011DBA949600D7D130 /* BPConstants.m in Sources */,
 				7A6672C11E0B0BBC00AC6778 /* BPTestClass.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -371,7 +371,6 @@
 				C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */,
 				7A4FB8DD1DF89B1A0073F268 /* BPTestCase.m in Sources */,
 				BAEF4B381DAC539400E68294 /* main.m in Sources */,
-				C41C41FC1DB14C18001F32A2 /* BPConstants.m in Sources */,
 				C4FD8C611DB82295000ED28C /* BPBundle.m in Sources */,
 				C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */,
 				C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */,
@@ -380,6 +379,7 @@
 				C41C41F31DB04032001F32A2 /* BPApp.m in Sources */,
 				7A4FB8CB1DF89A370073F268 /* BPXCTestFile.m in Sources */,
 				C4FD8C5E1DB80971000ED28C /* BPUtils.m in Sources */,
+				BA53B16F1E30932400FCED71 /* BPConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
