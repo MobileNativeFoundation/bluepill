@@ -60,6 +60,7 @@
 		BA4BCFAC1DC3FA3D00592FA4 /* crash_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFAB1DC3FA3D00592FA4 /* crash_tests.xml */; };
 		BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */; };
 		BA53B16C1E30931E00FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16B1E30931E00FCED71 /* BPConstants.m */; };
+		BA53B1701E30A0F100FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16B1E30931E00FCED71 /* BPConstants.m */; };
 		BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
 		BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DDF1DD84A72007CB967 /* fatal_tests.xml */; };
 		BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */; };
@@ -1958,6 +1959,7 @@
 				7AAE7AAF1DB7DC1E009B5549 /* BPRegexTests.m in Sources */,
 				7A7E7BB31DF20F81007928F3 /* BPApplicationLaunchHandler.m in Sources */,
 				BAD558CF1DB6DC1C00C9A5CD /* Bluepill.m in Sources */,
+				BA53B1701E30A0F100FCED71 /* BPConstants.m in Sources */,
 				BAD558D11DB6DC1C00C9A5CD /* SimulatorRunner.m in Sources */,
 				BAD558D41DB6DCB100C9A5CD /* BPReporters.m in Sources */,
 				C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */,
