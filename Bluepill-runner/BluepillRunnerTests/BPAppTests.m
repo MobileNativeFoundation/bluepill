@@ -13,6 +13,7 @@
 #import "BPApp.h"
 #import "BPXCTestFile.h"
 #import "BPUtils.h"
+#import "BPConstants.h"
 
 @interface BPAppTests : XCTestCase
 @property (nonatomic, strong) BPConfiguration* config;
@@ -29,10 +30,10 @@
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @20;
     self.config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
-    self.config.runtime = @"iOS 10.1";
+    self.config.runtime = @BP_DEFAULT_RUNTIME;
     self.config.repeatTestsCount = @1;
     self.config.errorRetriesCount = @1;
-    self.config.deviceType = @"iPhone 6";}
+    self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;}
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.

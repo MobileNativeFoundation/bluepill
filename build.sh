@@ -9,6 +9,15 @@
 
 #!/bin/bash
 
+
+default_runtime=`grep BP_DEFAULT_RUNTIME ./Source/Shared/BPConstants.h | rev | cut -d' ' -f 1| cut -c 2- | rev`
+system_contains_runtime=`xcrun simctl list runtimes | grep $default_runtime`
+
+if [[ "$system_contains_runtime" == *"$default_runtime"* ]]; then
+  echo "Your system doesn't contain latest runtime: iOS $default_runtime"
+  exit -1
+fi
+
 rm -rf build/
 set -ex
 
@@ -19,6 +28,7 @@ BPBuildScript=YES
 export BPBuildScript
 
 mkdir -p build/
+
 xcodebuild build-for-testing \
   -workspace Bluepill.xcworkspace \
   -scheme BPSampleApp \
