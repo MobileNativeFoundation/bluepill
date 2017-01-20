@@ -30,58 +30,65 @@ struct BPOptions {
     const char  *property;    // Which class property to set (via KVO)
     const char  *help;        // Help string, what the option does.
 } BPOptions[] = {
-    {'C', "repeat-count", required_argument, "1", BP_VALUE, "repeatTestsCount",
+
+    // Required argument
+    {'a', "app",      required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
+        "The path to the host application to execute (your .app)"},
+    {'c', "config",   required_argument, NULL, BP_VALUE, "configFile",
+        "Read options from the specified configuration file instead of the command line"},
+    {'d', "device",   required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
+        "On which device to run the app."},
+    {'o', "output-dir", required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
+        "Directory where to put output log files (bluepill only)."},
+    {'s', "scheme-path", required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
+        "The scheme to run tests."},
+
+    // Optional argument
+    {'C', "repeat-count", optional_argument, "1", BP_VALUE, "repeatTestsCount",
         "Number of times we'll run the entire test suite (used for stability testing)."},
+    {'N', "no-split", optional_argument, NULL, BP_LIST, "noSplit",
+        "A list of NO split test bundles"},
+    {'P', "print-config", optional_argument, "stdout", BP_VALUE, "configOutputFile",
+        "Print a configuration file suitable for passing back using the `-c` option."},
+    {'R', "error-retries", optional_argument, "4", BP_VALUE, "errorRetriesCount",
+        "Number of times we'll recover from crashes to continue running the current test suite."},
+    {'S', "stuck-timeout", optional_argument, "300", BP_VALUE, "stuckTimeout",
+        "Timeout in seconds for a test that seems stuck (no output)."},
+    {'T', "test-timeout", optional_argument, "300", BP_VALUE, "testCaseTimeout",
+        "Timeout in seconds for a test that is producing output."},
+    {'f', "failure-tolerance",   optional_argument, NO, BP_VALUE, "failureTolerance",
+        "The number of retries on any failures (app crash/test failure)."},
+    {'i', "include", optional_argument, NULL, BP_LIST, "testCasesToRun",
+        "Include a testcase in the set of tests to run."},
+    {'j', "junit-output", no_argument, "Off", BP_VALUE | BP_BOOL, "junitOutput",
+        "Print results in JUnit format."},
+    {'l', "list-tests", no_argument, NULL, BP_VALUE, "listTestsOnly",
+        "Only list tests in bundle"},
+    {'n', "num-sims", optional_argument, "4", BP_VALUE, "numSims",
+        "Number of simulators to run in parallel. (bluepill only)"},
+    {'r', "runtime",  optional_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
+        "What runtime to use."},
+    {'t', "test",     optional_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
+        "The path to the test bundle to execute (your .xctest)."},
+    {'x', "exclude", optional_argument, NULL, BP_LIST, "testCasesToSkip",
+        "Exclude a testcase in the set of tests to run."},
+    {'X', "xcode-path", optional_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
+        "Path to xcode."},
+
+    // options with no argument
     {'H', "headless", no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
         "Run in headless mode (no GUI)."},
     {'J', "json-output", no_argument, "Off", BP_VALUE | BP_BOOL, "jsonOutput",
         "Print test timing information in JSON format."},
-    {'N', "no-split", required_argument, NULL, BP_LIST, "noSplit",
-        "A list of NO split test bundles"},
-    {'P', "print-config", optional_argument, "stdout", BP_VALUE, "configOutputFile",
-     "Print a configuration file suitable for passing back using the `-c` option."},
-    {'R', "error-retries", required_argument, "4", BP_VALUE, "errorRetriesCount",
-     "Number of times we'll recover from crashes to continue running the current test suite."},
-    {'S', "stuck-timeout", required_argument, "300", BP_VALUE, "stuckTimeout",
-     "Timeout in seconds for a test that seems stuck (no output)."},
-    {'T', "test-timeout", required_argument, "300", BP_VALUE, "testCaseTimeout",
-     "Timeout in seconds for a test that is producing output."},
-    {'a', "app",      required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
-     "The path to the host application to execute (your .app)"},
-    {'c', "config",   required_argument, NULL, BP_VALUE, "configFile",
-     "Read options from the specified configuration file instead of the command line"},
-    {'d', "device",   required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
-     "On which device to run the app."},
-    {'f', "failure-tolerance",   optional_argument, NO, BP_VALUE, "failureTolerance",
-        "The number of retries on any failures (app crash/test failure)."},
     {'h', "help",     no_argument, NULL, BP_VALUE, NULL,
-     "This help."},
-    {'i', "include", required_argument, NULL, BP_LIST, "testCasesToRun",
-     "Include a testcase in the set of tests to run."},
-    {'j', "junit-output", no_argument, "Off", BP_VALUE | BP_BOOL, "junitOutput",
-     "Print results in JUnit format."},
-    {'l', "list-tests", no_argument, NULL, BP_VALUE, "listTestsOnly",
-     "Only list tests in bundle"},
-    {'n', "num-sims", required_argument, "4", BP_VALUE, "numSims",
-     "Number of simulators to run in parallel. (bluepill only)"},
-    {'o', "output-dir", required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
-     "Directory where to put output log files (bluepill only)."},
+        "This help."},
     {'p', "plain-output", no_argument, "Off", BP_VALUE | BP_BOOL, "plainOutput",
-     "Print results in plain text."},
+        "Print results in plain text."},
     {'q', "quiet", no_argument, "Off", BP_VALUE | BP_BOOL, "quiet",
         "Turn off all output except fatal errors."},
-    {'r', "runtime",  required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
-     "What runtime to use."},
-    {'s', "scheme-path", required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
-        "The scheme to run tests."},
-    {'t', "test",     required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
-     "The path to the test bundle to execute (your .xctest)."},
-    {'x', "exclude", required_argument, NULL, BP_LIST, "testCasesToSkip",
-     "Exclude a testcase in the set of tests to run."},
-    {'X', "xcode-path", optional_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
-        "Path to xcode."},
+
     // options without short-options
-    {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
+    {350, "additional-xctests", optional_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
     {0, 0, 0, 0}
 };
@@ -184,11 +191,11 @@ struct BPOptions {
     if (!self.configOutputFile || [BPUtils isStdOut:self.configOutputFile]) {
         printf("%s\n", [jsonString UTF8String]);
     } else if (![jsonString writeToFile:self.configOutputFile
-                     atomically:NO
-                       encoding:NSUTF8StringEncoding
-                                 error:&err]) {
-            fprintf(stderr, "Could not write config to file %s\nERROR: %s\n",
-                    [self.configOutputFile UTF8String], [[err localizedDescription] UTF8String]);
+                             atomically:NO
+                               encoding:NSUTF8StringEncoding
+                                  error:&err]) {
+        fprintf(stderr, "Could not write config to file %s\nERROR: %s\n",
+                [self.configOutputFile UTF8String], [[err localizedDescription] UTF8String]);
     }
 }
 
@@ -324,8 +331,8 @@ struct BPOptions {
     if (!data) return FALSE;
 
     NSDictionary *configDict = [NSJSONSerialization JSONObjectWithData:data
-                                                    options:kNilOptions
-                                                      error:error];
+                                                               options:kNilOptions
+                                                                 error:error];
     if (!configDict) return FALSE;
     for (NSString *key in configDict) {
         id value = [configDict objectForKey:key];
@@ -389,12 +396,12 @@ struct BPOptions {
             NSError *error;
             if (![self loadConfigFile:optarg withError:&error]) {
                 NSError *newError =
-                    [NSError errorWithDomain:BPErrorDomain
-                                        code:-1
-                                    userInfo:@{ NSLocalizedDescriptionKey:
-                                              [NSString stringWithFormat:@"Could not load configuration from %@\n%@",
-                                                        optarg, [error localizedDescription]]
-                                              }];
+                [NSError errorWithDomain:BPErrorDomain
+                                    code:-1
+                                userInfo:@{ NSLocalizedDescriptionKey:
+                                                [NSString stringWithFormat:@"Could not load configuration from %@\n%@",
+                                                 optarg, [error localizedDescription]]
+                                            }];
                 if (err) *err = newError;
                 return FALSE;
             }
@@ -502,7 +509,7 @@ struct BPOptions {
         return NO;
     }
 
-// bp requires an xctest argument while `bluepill` does not.
+    // bp requires an xctest argument while `bluepill` does not.
 #ifdef BP_USE_PRIVATE_FRAMEWORKS
     if (!self.testBundlePath) {
         if (err) {
