@@ -211,7 +211,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
     if (![[self.device stateString] isEqualToString:@"Shutdown"]) {
         // self.appPID can be zero when running the parsing tests
         // since we're not actually creating a simulator and running an app.
-        if (self.appPID && (kill(self.appPID, SIGTERM) < 0)) {
+        if (self.appPID && (kill(self.appPID, 0) == 0) && (kill(self.appPID, SIGTERM) < 0)) {
             perror("kill");
         }
     }
