@@ -55,7 +55,7 @@ A full list supported options are listed here.
 |:------------------:|:----------------------:|------------------------------------------------------------------------------------|:--------:|:----------------:|
 |        `app`       |           -a           | The path to the host application to execute (your .app)                            |     Y    | n/a              |
 |    `output-dir`    |           -o           | Directory where to put output log files (bluepill only)                            |     Y    | n/a              |
-|    `scheme-path`   |           -s           | The scheme to run tests                                                            |     N    | n/a              |
+|    `scheme-path`   |           -s           | The scheme to run tests                                                            |     Y    | n/a              |
 |       config       |           -c           | Read options from the specified configuration file instead of the command line     |     N    | n/a              |
 |       device       |           -d           | On which device to run the app.                                                    |     N    | iPhone 6         |
 |       exclude      |           -x           | Exclude a testcase in the set of tests to run                                      |     N    | empty            |

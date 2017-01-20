@@ -34,16 +34,16 @@ struct BPOptions {
     // Required argument
     {'a', "app",      required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
         "The path to the host application to execute (your .app)"},
-    {'c', "config",   required_argument, NULL, BP_VALUE, "configFile",
-        "Read options from the specified configuration file instead of the command line"},
-    {'d', "device",   required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
-        "On which device to run the app."},
     {'o', "output-dir", required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
         "Directory where to put output log files (bluepill only)."},
     {'s', "scheme-path", required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
 
     // Optional argument
+    {'d', "device",   optional_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
+        "On which device to run the app."},
+    {'c', "config",   optional_argument, NULL, BP_VALUE, "configFile",
+        "Read options from the specified configuration file instead of the command line"},
     {'C', "repeat-count", optional_argument, "1", BP_VALUE, "repeatTestsCount",
         "Number of times we'll run the entire test suite (used for stability testing)."},
     {'N', "no-split", optional_argument, NULL, BP_LIST, "noSplit",
