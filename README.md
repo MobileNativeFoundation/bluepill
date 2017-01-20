@@ -89,24 +89,24 @@ A full list supported options are listed here.
 Latest Xcode (Xcode 8.2.1).
 
 ## Q & A
-> Are we able to run Xcode UI Testing bundle with Bluepill
+- Are we able to run Xcode UI Testing bundle with Bluepill
 
-Unfortunately, we don't support Xcode UI Testing bundles yet and we are working on that [**help wanted**].
+  Unfortunately, we don't support Xcode UI Testing bundles yet and we are working on that [**help wanted**].
 iOS Unit Testing Bundle is the one we support, which includes [KIF](https://github.com/kif-framework/KIF) tests, [EarlGrey](https://github.com/google/EarlGrey) tests.
 
-> Easies way to get bluepill binary
+- Easies way to get Bluepill binary?
 
-Latest [release](https://github.com/linkedin/bluepill/releases/tag/v0.2.0).
+  Latest [release](https://github.com/linkedin/bluepill/releases/).
 
-> How to test bluepill in Xcode
+- How to test Bluepill in Xcode
 
-Selet BPSampleApp and build it first and you can switch back to bluepill/bluepill-cli scheme to run their tests.
+  Selet BPSampleApp scheme and build it first. Then you can switch back to `bluepill` or `bluepill-cli` scheme to run their tests.
 
-> How to get a build from source?
+- How to get Bluepill binary from source?
 
-Run `build.sh` to test and build Bluepill. The binary will be output in the ./build folder.
+  Run `build.sh` to test and build Bluepill. The binary will be output in the ./build folder.
 
-> How to test my changes?
+- How to test my changes to Bluepill?
 
-Run `build.sh`.
+  Run `build.sh`.
 
