@@ -29,6 +29,15 @@
     app.path = path;
     // read the files inside the Plugins directory
     NSString *xcTestsPath = [path stringByAppendingPathComponent:@"Plugins"];
+    if (!([[NSFileManager defaultManager] fileExistsAtPath:xcTestsPath isDirectory:&isdir]) && isdir) {
+        *error = [NSError errorWithDomain:BPErrorDomain
+                                     code:-1
+                                 userInfo:@{NSLocalizedDescriptionKey:
+                                                [NSString stringWithFormat:@"There is no 'Plugins' folder inside your app bundle at:\n"
+                                                 "%@\n"
+                                                 "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode.", path]}];
+        return nil;
+    }
     NSArray *allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:xcTestsPath
                                                                         error:error];
     if (!allFiles && *error) return nil;
