@@ -104,9 +104,9 @@ iOS Unit Testing Bundle is the one we support, which includes [KIF](https://gith
 
 - How to get Bluepill binary from source?
 
-  Run `build.sh` to test and build Bluepill. The binary will be output in the ./build folder.
+  Run `./bluepill.sh build` to test and build Bluepill. The binary will be output in the ./build folder.
 
 - How to test my changes to Bluepill?
 
-  Run `build.sh`.
+  Run `./scripts/bluepill.sh test`.
 
