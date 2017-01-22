@@ -1,4 +1,4 @@
-This is git learning
+
 ![BluepillIcon](doc/img/bluepill_text.png)
 
 [![Build Status](https://travis-ci.org/linkedin/bluepill.svg?branch=master)](https://travis-ci.org/linkedin/bluepill)
