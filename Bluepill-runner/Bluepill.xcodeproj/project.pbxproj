@@ -79,6 +79,7 @@
 		BAD8484C1DBC6BA2007034CF /* BPReportCollectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPReportCollectorTests.m; sourceTree = "<group>"; };
 		BAEF4B341DAC539400E68294 /* bluepill */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bluepill; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAEF4B371DAC539400E68294 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BAFCCA361E33595F00E33C31 /* bluepill.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = bluepill.xcconfig; sourceTree = "<group>"; };
 		C41C41F11DB04032001F32A2 /* BPApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPApp.h; sourceTree = "<group>"; };
 		C41C41F21DB04032001F32A2 /* BPApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPApp.m; sourceTree = "<group>"; };
 		C41C41F71DB14B5F001F32A2 /* BPRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPRunner.h; sourceTree = "<group>"; };
@@ -195,6 +196,7 @@
 		BAEF4B2B1DAC539400E68294 = {
 			isa = PBXGroup;
 			children = (
+				BAFCCA361E33595F00E33C31 /* bluepill.xcconfig */,
 				BAEF4B361DAC539400E68294 /* Bluepill */,
 				BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */,
 				BAEF4B351DAC539400E68294 /* Products */,
@@ -465,6 +467,7 @@
 		};
 		BAEF4B3A1DAC539400E68294 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BAFCCA361E33595F00E33C31 /* bluepill.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

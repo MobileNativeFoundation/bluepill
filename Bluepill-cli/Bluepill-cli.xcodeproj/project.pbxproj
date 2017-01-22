@@ -862,6 +862,7 @@
 		BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulatorHelperTests.m; sourceTree = "<group>"; };
 		BAB24F721DB5DFA200867756 /* BPTestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestHelper.h; sourceTree = "<group>"; };
 		BAB24F731DB5DFA200867756 /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestHelper.m; sourceTree = "<group>"; };
+		BAFCCA371E335E0300E33C31 /* bluepill-cli-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "bluepill-cli-release.xcconfig"; sourceTree = "<group>"; };
 		C41A2C701E0B2497005D9751 /* BPXCTestFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPXCTestFile.h; sourceTree = "<group>"; };
 		C41A2C711E0B2497005D9751 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPXCTestFile.m; sourceTree = "<group>"; };
 		C41A2C731E0B24E8005D9751 /* BPTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestCase.h; sourceTree = "<group>"; };
@@ -921,6 +922,7 @@
 				7A7901851D5CB679004D4325 /* main.m */,
 				BAB24F691DB5DB2300867756 /* BPInstanceTests */,
 				7A7901831D5CB679004D4325 /* Products */,
+				BAFCCA371E335E0300E33C31 /* bluepill-cli-release.xcconfig */,
 				7A79018C1D5CF113004D4325 /* bluepill-cli.xcconfig */,
 				7A79018D1D5D136F004D4325 /* Frameworks */,
 			);
@@ -2025,7 +2027,7 @@
 		};
 		7A7901881D5CB679004D4325 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A79018C1D5CF113004D4325 /* bluepill-cli.xcconfig */;
+			baseConfigurationReference = BAFCCA371E335E0300E33C31 /* bluepill-cli-release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -2085,7 +2087,6 @@
 		};
 		BAB24F6D1DB5DB2300867756 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A79018C1D5CF113004D4325 /* bluepill-cli.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
