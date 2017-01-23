@@ -88,7 +88,7 @@ struct BPOptions {
         "Only list tests in bundle"},
 
     // options without short-options
-    {350, "additional-xctests", optional_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
+    {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
     {0, 0, 0, 0}
 };
