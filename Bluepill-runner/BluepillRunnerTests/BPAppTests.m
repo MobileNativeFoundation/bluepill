@@ -43,10 +43,20 @@
 - (void)testAppWithAppBundlePathNoError {
     NSError *error;
     NSString *path = self.config.appBundlePath;
-    BPApp *app = [BPApp BPAppWithAppBundlePath:path withExtraTestBundles:nil withError:&error];
+    BPApp *app = [BPApp BPAppWithAppBundlePath:path onlyTestingBundlePath:nil withExtraTestBundles:nil withError:&error];
     XCTAssertNil(error);
     XCTAssertEqual(app.path, self.config.appBundlePath);
     XCTAssert(app.testBundles.count > 2);
+}
+
+- (void)testAppWithOnlyTestBundlePath {
+    NSError *error;
+    NSString *path = self.config.appBundlePath;
+    BPApp *app = [BPApp BPAppWithAppBundlePath:path onlyTestingBundlePath:self.config.testBundlePath withExtraTestBundles:nil withError:&error];
+    XCTAssertNil(error);
+    XCTAssertEqual(app.path, self.config.appBundlePath);
+    XCTAssert(app.testBundles.count == 1);
+    XCTAssertEqualObjects([app.testBundles[0] path], self.config.testBundlePath);
 }
 
 @end

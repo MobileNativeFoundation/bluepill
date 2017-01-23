@@ -89,6 +89,7 @@ maxprocs(void)
 }
 
 - (NSTask *)newTaskWithBundle:(BPBundle *)bundle andNumber:(NSUInteger)number andCompletionBlock:(void (^_Nonnull)(NSTask *))block {
+    NSLog(@"Bundle path: %@", bundle.path);
     BPConfiguration *cfg = [self.config mutableCopy];
     cfg.testBundlePath = bundle.path;
     cfg.testCasesToSkip = bundle.testsToSkip;
@@ -130,6 +131,7 @@ maxprocs(void)
     NSUInteger numSims = [self.config.numSims intValue];
     NSUInteger origNumSims = numSims;
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
+    NSLog(@"Test bundles: %@", self.app.testBundles);
     NSMutableArray *bundles = [BPPacker packTests:self.app.testBundles withNoSplitList:self.config.noSplit intoBundles:numSims];
     while (!bundles && numSims > 1) {
         // packTests fails if we're trying to pack < N tests into N bundles, so just reduce the number of simulators and try again

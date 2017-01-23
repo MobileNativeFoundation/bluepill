@@ -13,7 +13,7 @@
 
 @implementation BPApp
 
-+ (instancetype)BPAppWithAppBundlePath:(NSString *)path withExtraTestBundles:(NSArray *)extraTestBundles withError:(NSError *__autoreleasing *)error {
++ (instancetype)BPAppWithAppBundlePath:(NSString *)path onlyTestingBundlePath:(NSString *)onlyBundlePath withExtraTestBundles:(NSArray *)extraTestBundles withError:(NSError *__autoreleasing *)error {
     BOOL isdir;
     
     if (!path || ![[NSFileManager defaultManager] fileExistsAtPath: path isDirectory:&isdir] || !isdir) {
@@ -35,17 +35,19 @@
 
     NSMutableArray *xcTestFiles = [[NSMutableArray alloc] init];
     for (NSString *filename in allFiles) {
-        NSString *extension = [[filename pathExtension] lowercaseString];
-        if ([extension isEqualToString:@"xctest"]) {
-            NSString *bundle = [xcTestsPath stringByAppendingPathComponent:filename];
-            NSString *basename = [filename stringByDeletingPathExtension];
-            NSString *executable = [bundle stringByAppendingPathComponent:basename];
-
-            BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable
-                                                                      withError:error];
-            if (!xcTestFile) return nil;
-
-            [xcTestFiles addObject:xcTestFile];
+        if (onlyBundlePath && [[onlyBundlePath lastPathComponent] isEqual: [filename lastPathComponent]]) {
+            NSString *extension = [[filename pathExtension] lowercaseString];
+            if ([extension isEqualToString:@"xctest"]) {
+                NSString *bundle = [xcTestsPath stringByAppendingPathComponent:filename];
+                NSString *basename = [filename stringByDeletingPathExtension];
+                NSString *executable = [bundle stringByAppendingPathComponent:basename];
+                
+                BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable
+                                                                          withError:error];
+                if (!xcTestFile) return nil;
+                
+                [xcTestFiles addObject:xcTestFile];
+            }
         }
     }
     for (NSString *filename in extraTestBundles) {
