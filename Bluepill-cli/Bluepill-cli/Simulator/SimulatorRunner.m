@@ -324,4 +324,8 @@
     return ([self.monitor exitStatus]);
 }
 
+- (NSString *)UDID {
+    return [self.device.UDID UUIDString];
+}
+
 @end

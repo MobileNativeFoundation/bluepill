@@ -202,7 +202,8 @@ void onInterrupt(int ignore) {
 
     handler.beginWith = ^{
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:(__handler.error ? FAILED : INFO) withString:[@"Completed: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:(__handler.error ? FAILED : INFO)
+                withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
     };
 
     handler.onSuccess = ^{
