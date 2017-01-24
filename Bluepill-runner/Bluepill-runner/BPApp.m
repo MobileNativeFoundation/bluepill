@@ -16,7 +16,9 @@
 + (instancetype)BPAppWithAppBundlePath:(NSString *)path withExtraTestBundles:(NSArray *)extraTestBundles withError:(NSError *__autoreleasing *)error {
     BOOL isdir;
     
-    if (!path || ![[NSFileManager defaultManager] fileExistsAtPath: path isDirectory:&isdir] || !isdir) {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    if (!path || ![fm fileExistsAtPath: path isDirectory:&isdir] || !isdir) {
         if (error) {
             *error = [NSError errorWithDomain:BPErrorDomain
                                          code:-1
@@ -29,7 +31,17 @@
     app.path = path;
     // read the files inside the Plugins directory
     NSString *xcTestsPath = [path stringByAppendingPathComponent:@"Plugins"];
-    NSArray *allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:xcTestsPath
+    if (!([fm fileExistsAtPath:xcTestsPath isDirectory:&isdir]) && isdir) {
+        *error = [NSError errorWithDomain:BPErrorDomain
+                                     code:-1
+                                 userInfo:@{NSLocalizedDescriptionKey:
+                                                [NSString stringWithFormat:@"There is no 'Plugins' folder inside your app bundle at:\n"
+                                                 "%@\n"
+                                                 "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode.\n"
+                                                 "Also, if you are using XCUITest, check https://github.com/linkedin/bluepill/issues/16", path]}];
+        return nil;
+    }
+    NSArray *allFiles = [fm contentsOfDirectoryAtPath:xcTestsPath
                                                                         error:error];
     if (!allFiles && *error) return nil;
 
