@@ -25,7 +25,9 @@
  * and mutableCopyWithZone methods. Yeah, it's stupid, we should fix it.
  */
 
+@property (nonatomic, strong) NSUUID *sessionIdentifier;
 @property (nonatomic, strong) NSString *appBundlePath;
+@property (nonatomic, strong) NSString *testRunnerPath;
 @property (nonatomic, strong) NSString *testBundlePath;
 @property (nonatomic, strong) NSArray *additionalTestBundles;
 @property (nonatomic, strong) NSString *deviceType;

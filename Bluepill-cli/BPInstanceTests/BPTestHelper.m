@@ -41,6 +41,17 @@
 + (NSString *)resourceFolderPath {
     return [[NSBundle bundleForClass:[self class]] resourcePath];
 }
+
+// Return the path to the XCTRunner
++ (NSString *)sampleAppUITestRunnerPath {
+    return @"/Users/khu/Library/Developer/Xcode/DerivedData/Bluepill-bwjswhkuftgtbadtarnyppfipngt/Build/Products/Debug-iphonesimulator/BPSampleAppUITests-Runner.app/XCTRunner";
+}
+
+// Return the path to the XCTRunner
++ (NSString *)sampleAppUITestBundlePath {
+    return @"/Users/khu/Library/Developer/Xcode/DerivedData/Bluepill-bwjswhkuftgtbadtarnyppfipngt/Build/Products/Debug-iphonesimulator/BPSampleAppUITests-Runner.app/PlugIns/BPSampleAppUITests.xctest";
+}
+
 #pragma mark - Helpers
 
 + (NSString *)bpDerivedDataPath {

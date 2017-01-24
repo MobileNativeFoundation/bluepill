@@ -344,6 +344,14 @@
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
 }
 
+- (void)testRunUITest {
+    NSString *testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
+    NSString *testRunnerPath = [BPTestHelper sampleAppUITestRunnerPath];
+    self.config.testRunnerPath = testRunnerPath;
+    self.config.testBundlePath = testBundlePath;
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+}
+
 #pragma mark - Test helpers
 
 - (void)compareReportAtPath:(NSString *)first withReportAtPath:(NSString *)second {

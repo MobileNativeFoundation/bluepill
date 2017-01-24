@@ -39,6 +39,8 @@ struct BPOptions {
     {'s', "scheme-path", required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
 
+    {'u', "runner-path", required_argument, NULL, BP_VALUE | BP_PATH, "testRunnerPath",
+        "The test runner for UI tests."},
     // Optional argument
     {'d', "device",   required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
         "On which device to run the app."},
@@ -95,7 +97,6 @@ struct BPOptions {
     {0, 0, 0, 0}
 };
 
-
 @implementation BPConfiguration
 
 #pragma mark instance methods
@@ -104,10 +105,12 @@ struct BPOptions {
     return [self initWithConfigFile:nil error:nil];
 }
 
+
 - (instancetype)initWithConfigFile:(NSString *)file error:(NSError **)err {
     self = [super init];
     self.cmdLineArgs = [[NSMutableArray alloc] init];
     // set factory defaults
+    self.sessionIdentifier = [[NSUUID alloc] initWithUUIDString:@"81878B29-AF14-4F89-8370-DD5D95EC047B"];
     for (int i = 0; BPOptions[i].name; i++) {
         if (BPOptions[i].default_val) {
             [self handleOpt:BPOptions[i].val withArg:(char *)BPOptions[i].default_val];

@@ -19,6 +19,8 @@
 #import "BPExecutionContext.h"
 #import "BPHandler.h"
 #import <libproc.h>
+#import "BPTestBundleConnection.h"
+#import "BPTestDaemonConnection.h"
 
 #define NEXT(x)     { [Bluepill setDiagnosticFunction:#x from:__FUNCTION__ line:__LINE__]; CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ (x); }); }
 
@@ -63,6 +65,8 @@ void onInterrupt(int ignore) {
 
     // Save our failure tolerance because we're going to be changing this
     self.failureTolerance = self.executionConfigCopy.failureTolerance;
+
+    // Connect to test manager daemon and test bundle
 
     // Start the first attempt
     [self begin];

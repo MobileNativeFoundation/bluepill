@@ -54,6 +54,10 @@
 		BA180A091DBB00FA00D7D130 /* BPUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA180A081DBB00FA00D7D130 /* BPUtilsTests.m */; };
 		BA180A0C1DBB011200D7D130 /* testConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = BA180A0B1DBB011200D7D130 /* testConfig.json */; };
 		BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = BA180A131DBB088100D7D130 /* testScheme.xcscheme */; };
+		BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */; };
+		BA1949371E4AF82F00881887 /* BPTestBundleConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */; };
+		BA19493A1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
+		BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
 		BA34F5DE1D6D70650063B17F /* SimulatorRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34F5DD1D6D70650063B17F /* SimulatorRunner.m */; };
 		BA34F5E41D6D75E30063B17F /* SimulatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */; };
 		BA4800EA1DC2C74600026972 /* BPAppNegativeTests-results.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4800E91DC2C74600026972 /* BPAppNegativeTests-results.xml */; };
@@ -154,6 +158,10 @@
 		BA180A081DBB00FA00D7D130 /* BPUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPUtilsTests.m; sourceTree = "<group>"; };
 		BA180A0B1DBB011200D7D130 /* testConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testConfig.json; sourceTree = "<group>"; };
 		BA180A131DBB088100D7D130 /* testScheme.xcscheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = testScheme.xcscheme; sourceTree = "<group>"; };
+		BA1949341E4AF82F00881887 /* BPTestBundleConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestBundleConnection.h; sourceTree = "<group>"; };
+		BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestBundleConnection.m; sourceTree = "<group>"; };
+		BA1949381E4AF83E00881887 /* BPTestDaemonConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestDaemonConnection.h; sourceTree = "<group>"; };
+		BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestDaemonConnection.m; sourceTree = "<group>"; };
 		BA34F5DC1D6D70650063B17F /* SimulatorRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorRunner.h; sourceTree = "<group>"; };
 		BA34F5DD1D6D70650063B17F /* SimulatorRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulatorRunner.m; sourceTree = "<group>"; };
 		BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorHelper.h; sourceTree = "<group>"; };
@@ -863,6 +871,40 @@
 		BAB24F721DB5DFA200867756 /* BPTestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestHelper.h; sourceTree = "<group>"; };
 		BAB24F731DB5DFA200867756 /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestHelper.m; sourceTree = "<group>"; };
 		BAFCCA371E335E0300E33C31 /* bluepill-cli-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "bluepill-cli-release.xcconfig"; sourceTree = "<group>"; };
+		BAFCCA391E36DBA900E33C31 /* _DTXProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DTXProxy.h; sourceTree = "<group>"; };
+		BAFCCA3A1E36DBA900E33C31 /* CDStructures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDStructures.h; sourceTree = "<group>"; };
+		BAFCCA3B1E36DBA900E33C31 /* DTXAllowedRPC-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DTXAllowedRPC-Protocol.h"; sourceTree = "<group>"; };
+		BAFCCA3C1E36DBA900E33C31 /* DTXBlockCompressor-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DTXBlockCompressor-Protocol.h"; sourceTree = "<group>"; };
+		BAFCCA3D1E36DBA900E33C31 /* DTXBlockCompressorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXBlockCompressorFactory.h; sourceTree = "<group>"; };
+		BAFCCA3E1E36DBA900E33C31 /* DTXBlockCompressorLibCompression.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXBlockCompressorLibCompression.h; sourceTree = "<group>"; };
+		BAFCCA3F1E36DBA900E33C31 /* DTXChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXChannel.h; sourceTree = "<group>"; };
+		BAFCCA401E36DBA900E33C31 /* DTXConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXConnection.h; sourceTree = "<group>"; };
+		BAFCCA411E36DBA900E33C31 /* DTXConnectionRemoteReceiveQueueCalls-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DTXConnectionRemoteReceiveQueueCalls-Protocol.h"; sourceTree = "<group>"; };
+		BAFCCA421E36DBA900E33C31 /* DTXDecompressionException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXDecompressionException.h; sourceTree = "<group>"; };
+		BAFCCA431E36DBA900E33C31 /* DTXFileDescriptorTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXFileDescriptorTransport.h; sourceTree = "<group>"; };
+		BAFCCA441E36DBA900E33C31 /* DTXFoundationURLTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXFoundationURLTransport.h; sourceTree = "<group>"; };
+		BAFCCA451E36DBA900E33C31 /* DTXMachTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXMachTransport.h; sourceTree = "<group>"; };
+		BAFCCA461E36DBA900E33C31 /* DTXMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXMessage.h; sourceTree = "<group>"; };
+		BAFCCA471E36DBA900E33C31 /* DTXMessageParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXMessageParser.h; sourceTree = "<group>"; };
+		BAFCCA481E36DBA900E33C31 /* DTXMessageParsingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXMessageParsingBuffer.h; sourceTree = "<group>"; };
+		BAFCCA491E36DBA900E33C31 /* DTXMessageTransmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXMessageTransmitter.h; sourceTree = "<group>"; };
+		BAFCCA4A1E36DBA900E33C31 /* DTXMessenger-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DTXMessenger-Protocol.h"; sourceTree = "<group>"; };
+		BAFCCA4B1E36DBA900E33C31 /* DTXProxyChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXProxyChannel.h; sourceTree = "<group>"; };
+		BAFCCA4C1E36DBA900E33C31 /* DTXRateLimiter-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DTXRateLimiter-Protocol.h"; sourceTree = "<group>"; };
+		BAFCCA4D1E36DBA900E33C31 /* DTXRemoteInvocationReceipt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXRemoteInvocationReceipt.h; sourceTree = "<group>"; };
+		BAFCCA4E1E36DBA900E33C31 /* DTXResourceTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXResourceTracker.h; sourceTree = "<group>"; };
+		BAFCCA4F1E36DBA900E33C31 /* DTXSendAndWaitRateLimiter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXSendAndWaitRateLimiter.h; sourceTree = "<group>"; };
+		BAFCCA501E36DBA900E33C31 /* DTXSendAndWaitStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXSendAndWaitStats.h; sourceTree = "<group>"; };
+		BAFCCA511E36DBA900E33C31 /* DTXService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXService.h; sourceTree = "<group>"; };
+		BAFCCA521E36DBA900E33C31 /* DTXSharedMemoryTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXSharedMemoryTransport.h; sourceTree = "<group>"; };
+		BAFCCA531E36DBA900E33C31 /* DTXSocketTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXSocketTransport.h; sourceTree = "<group>"; };
+		BAFCCA541E36DBA900E33C31 /* DTXTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXTransport.h; sourceTree = "<group>"; };
+		BAFCCA581E36DBA900E33C31 /* NSURLSessionDelegate-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSessionDelegate-Protocol.h"; sourceTree = "<group>"; };
+		BAFCCA6D1E36EB5500E33C31 /* XCTestManager_IDEInterface-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTestManager_IDEInterface-Protocol.h"; sourceTree = "<group>"; };
+		BAFCCA6E1E36EB5500E33C31 /* XCTestManager_ManagerInterface-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTestManager_ManagerInterface-Protocol.h"; sourceTree = "<group>"; };
+		BAFCCA6F1E36EB5500E33C31 /* XCTestManager_TestsInterface-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTestManager_TestsInterface-Protocol.h"; sourceTree = "<group>"; };
+		BAFCCA701E37298B00E33C31 /* XCTestDriverInterface-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTestDriverInterface-Protocol.h"; sourceTree = "<group>"; };
+		BAFCCA711E37298B00E33C31 /* XCTestManager_DaemonConnectionInterface-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTestManager_DaemonConnectionInterface-Protocol.h"; sourceTree = "<group>"; };
 		C41A2C701E0B2497005D9751 /* BPXCTestFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPXCTestFile.h; sourceTree = "<group>"; };
 		C41A2C711E0B2497005D9751 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPXCTestFile.m; sourceTree = "<group>"; };
 		C41A2C731E0B24E8005D9751 /* BPTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestCase.h; sourceTree = "<group>"; };
@@ -997,6 +1039,17 @@
 			path = resources;
 			sourceTree = "<group>";
 		};
+		BA1949331E4AF7FD00881887 /* Connections */ = {
+			isa = PBXGroup;
+			children = (
+				BA1949341E4AF82F00881887 /* BPTestBundleConnection.h */,
+				BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */,
+				BA1949381E4AF83E00881887 /* BPTestDaemonConnection.h */,
+				BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */,
+			);
+			path = Connections;
+			sourceTree = "<group>";
+		};
 		BA34F5DB1D6D70300063B17F /* Simulator */ = {
 			isa = PBXGroup;
 			children = (
@@ -1013,6 +1066,11 @@
 		BA34F5E51D6D78120063B17F /* XCTest */ = {
 			isa = PBXGroup;
 			children = (
+				BAFCCA701E37298B00E33C31 /* XCTestDriverInterface-Protocol.h */,
+				BAFCCA711E37298B00E33C31 /* XCTestManager_DaemonConnectionInterface-Protocol.h */,
+				BAFCCA6D1E36EB5500E33C31 /* XCTestManager_IDEInterface-Protocol.h */,
+				BAFCCA6E1E36EB5500E33C31 /* XCTestManager_ManagerInterface-Protocol.h */,
+				BAFCCA6F1E36EB5500E33C31 /* XCTestManager_TestsInterface-Protocol.h */,
 				BA34F5E61D6D78120063B17F /* XCTestConfiguration.h */,
 			);
 			path = XCTest;
@@ -1021,6 +1079,7 @@
 		BA954F551D6D1AB3007D011D /* PrivateHeaders */ = {
 			isa = PBXGroup;
 			children = (
+				BAFCCA381E36DBA900E33C31 /* DTXConnectionServices */,
 				BA34F5E51D6D78120063B17F /* XCTest */,
 				BA954F561D6D1AB3007D011D /* CoreSimulator */,
 				BA954F861D6D1AB3007D011D /* DVTFoundation */,
@@ -1751,6 +1810,7 @@
 		BA9552171D6D1C00007D011D /* Bluepill */ = {
 			isa = PBXGroup;
 			children = (
+				BA1949331E4AF7FD00881887 /* Connections */,
 				7A4FB8CC1DF89A790073F268 /* Shared */,
 				7ACE1F6C1DD3969A00C0FA73 /* Helpers */,
 				BA9552191D6D1C00007D011D /* Reporters */,
@@ -1802,6 +1862,42 @@
 				7A4D7A801DDA5FA1001E085D /* BPTreeParserTests.m */,
 			);
 			path = BPInstanceTests;
+			sourceTree = "<group>";
+		};
+		BAFCCA381E36DBA900E33C31 /* DTXConnectionServices */ = {
+			isa = PBXGroup;
+			children = (
+				BAFCCA391E36DBA900E33C31 /* _DTXProxy.h */,
+				BAFCCA3A1E36DBA900E33C31 /* CDStructures.h */,
+				BAFCCA3B1E36DBA900E33C31 /* DTXAllowedRPC-Protocol.h */,
+				BAFCCA3C1E36DBA900E33C31 /* DTXBlockCompressor-Protocol.h */,
+				BAFCCA3D1E36DBA900E33C31 /* DTXBlockCompressorFactory.h */,
+				BAFCCA3E1E36DBA900E33C31 /* DTXBlockCompressorLibCompression.h */,
+				BAFCCA3F1E36DBA900E33C31 /* DTXChannel.h */,
+				BAFCCA401E36DBA900E33C31 /* DTXConnection.h */,
+				BAFCCA411E36DBA900E33C31 /* DTXConnectionRemoteReceiveQueueCalls-Protocol.h */,
+				BAFCCA421E36DBA900E33C31 /* DTXDecompressionException.h */,
+				BAFCCA431E36DBA900E33C31 /* DTXFileDescriptorTransport.h */,
+				BAFCCA441E36DBA900E33C31 /* DTXFoundationURLTransport.h */,
+				BAFCCA451E36DBA900E33C31 /* DTXMachTransport.h */,
+				BAFCCA461E36DBA900E33C31 /* DTXMessage.h */,
+				BAFCCA471E36DBA900E33C31 /* DTXMessageParser.h */,
+				BAFCCA481E36DBA900E33C31 /* DTXMessageParsingBuffer.h */,
+				BAFCCA491E36DBA900E33C31 /* DTXMessageTransmitter.h */,
+				BAFCCA4A1E36DBA900E33C31 /* DTXMessenger-Protocol.h */,
+				BAFCCA4B1E36DBA900E33C31 /* DTXProxyChannel.h */,
+				BAFCCA4C1E36DBA900E33C31 /* DTXRateLimiter-Protocol.h */,
+				BAFCCA4D1E36DBA900E33C31 /* DTXRemoteInvocationReceipt.h */,
+				BAFCCA4E1E36DBA900E33C31 /* DTXResourceTracker.h */,
+				BAFCCA4F1E36DBA900E33C31 /* DTXSendAndWaitRateLimiter.h */,
+				BAFCCA501E36DBA900E33C31 /* DTXSendAndWaitStats.h */,
+				BAFCCA511E36DBA900E33C31 /* DTXService.h */,
+				BAFCCA521E36DBA900E33C31 /* DTXSharedMemoryTransport.h */,
+				BAFCCA531E36DBA900E33C31 /* DTXSocketTransport.h */,
+				BAFCCA541E36DBA900E33C31 /* DTXTransport.h */,
+				BAFCCA581E36DBA900E33C31 /* NSURLSessionDelegate-Protocol.h */,
+			);
+			path = DTXConnectionServices;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1919,9 +2015,11 @@
 				BA34F5DE1D6D70650063B17F /* SimulatorRunner.m in Sources */,
 				7A7E7BB51DF2163F007928F3 /* BPHandler.m in Sources */,
 				7A564C0D1DA817DE001BCEC2 /* BPReporters.m in Sources */,
+				BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
 				7A202A411DB0066100D935E3 /* BPWriter.m in Sources */,
 				7A4933151DAD63A50060D54F /* SimulatorMonitor.m in Sources */,
 				7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */,
+				BA19493A1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
 				7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */,
 				7A4D7A861DDBB156001E085D /* BPExitStatus.m in Sources */,
 				BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */,
@@ -1939,6 +2037,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C41A2C7A1E0B4306005D9751 /* BPTestCase.m in Sources */,
+				BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
 				C41A2C7B1E0B4306005D9751 /* BPTestClass.m in Sources */,
 				C41A2C791E0B42E9005D9751 /* BPXCTestFile.m in Sources */,
 				BAD558D21DB6DC1C00C9A5CD /* SimulatorHelper.m in Sources */,
@@ -1955,6 +2054,7 @@
 				BA180A091DBB00FA00D7D130 /* BPUtilsTests.m in Sources */,
 				7A4D7A871DDBB156001E085D /* BPExitStatus.m in Sources */,
 				BA1809B81DB89B5600D7D130 /* BluepillTests.m in Sources */,
+				BA1949371E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
 				BAD558D31DB6DC1C00C9A5CD /* SimulatorMonitor.m in Sources */,
 				7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
 				BAD558D71DB6DCB100C9A5CD /* BPWriter.m in Sources */,
@@ -2093,16 +2193,6 @@
 				INFOPLIST_FILE = BPInstanceTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
-				OTHER_LDFLAGS = (
-					"-weak_framework",
-					DVTFoundation,
-					"-weak_framework",
-					DVTiPhoneSimulatorRemoteClient,
-					"-framework",
-					CoreSimulator,
-					"-weak_framework",
-					XCTest,
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

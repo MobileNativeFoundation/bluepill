@@ -89,6 +89,10 @@ A full list supported options are listed here.
 
 Latest Xcode (Xcode 8.2.1).
 
+## Acknowledgement
+
+Bluepill was inspired by [parallel iOS test](https://github.com/plu/parallel_ios_tests) and Facebook’s [xctool](https://github.com/facebook/xctool) and [FBSimulatorControl](https://github.com/facebook/FBSimulatorControl). The Bluepill icon was created by Maria Iu.
+
 ## Q & A
 - Are we able to run Xcode UI Testing bundle with Bluepill
 
