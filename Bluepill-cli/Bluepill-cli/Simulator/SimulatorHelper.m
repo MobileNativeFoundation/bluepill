@@ -55,18 +55,14 @@
         NSString *executable = [config.testBundlePath stringByAppendingPathComponent:basename];
 
         BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable withError:&error];
-        if (!xctTestFile) {
-            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to load testcases from %@", [error localizedDescription]]];
-            exit(1);
-        } else {
-            NSMutableSet *testsToSkip = [[NSMutableSet alloc] initWithArray:xctTestFile.allTestCases];
-            NSSet *testsToRun = [[NSSet alloc] initWithArray:config.testCasesToRun];
-            [testsToSkip minusSet:testsToRun];
-            if (xctConfig.testsToSkip) {
-                [testsToSkip unionSet:xctConfig.testsToSkip];
-            }
-            [xctConfig setTestsToSkip:testsToSkip];
+        NSAssert(xctTestFile != nil, @"Failed to load testcases from %@", [error localizedDescription]);
+        NSMutableSet *testsToSkip = [[NSMutableSet alloc] initWithArray:xctTestFile.allTestCases];
+        NSSet *testsToRun = [[NSSet alloc] initWithArray:config.testCasesToRun];
+        [testsToSkip minusSet:testsToRun];
+        if (xctConfig.testsToSkip) {
+            [testsToSkip unionSet:xctConfig.testsToSkip];
         }
+        [xctConfig setTestsToSkip:testsToSkip];
     }
 
     NSString *XCTestConfigurationFilename = [NSString stringWithFormat:@"%@/%@-%@",
