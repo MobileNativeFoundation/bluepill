@@ -21,11 +21,6 @@ static int volatile interrupted = 0;
 
 void onInterrupt(int ignore) {
     interrupted ++;
-    if (interrupted >=5) {
-        fprintf(stderr, "You really want to terminate, OK!\n");
-        exit(0);
-    }
-    fprintf(stderr, "Received interrupt (Ctrl-C) %d times, waiting for child processes to finish.\n", interrupted);
 }
 
 int
@@ -163,8 +158,17 @@ maxprocs(void)
     int seconds = 0;
     __block NSMutableArray *taskList = [[NSMutableArray alloc] init];
     self.nsTaskList = [[NSMutableArray alloc] init];
+    int old_interrupted = interrupted;
     while (1) {
         if (interrupted) {
+            if (interrupted >=5) {
+                [BPUtils printInfo:ERROR withString:@"You really want to terminate, OK!"];
+                exit(0);
+            }
+            if (interrupted != old_interrupted) {
+                [BPUtils printInfo:WARNING withString:[NSString stringWithFormat:@"Received interrupt (Ctrl-C) %d times, waiting for child processes to finish.", interrupted]];
+                old_interrupted = interrupted;
+            }
             [self interrupt];
         }
         if (([bundles count] == 0 && launchedTasks == 0) || (interrupted && launchedTasks == 0)) break;
