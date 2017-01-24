@@ -270,6 +270,7 @@ void onInterrupt(int ignore) {
     handler.onSuccess = ^{
         context.pid = __handler.pid;
         NEXT([__self checkProcessWithContext:context]);
+        [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Launched app with PID %d", context.pid]];
     };
 
     handler.onError = ^(NSError *error) {
@@ -291,10 +292,19 @@ void onInterrupt(int ignore) {
 
 - (void)checkProcessWithContext:(BPExecutionContext *)context {
     BOOL isRunning = [self isProcessRunningWithContext:context];
-    if (!isRunning && [context.runner isFinished]) {
-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
-        [self runnerCompletedWithContext:context];
-        return;
+    if (!isRunning) {
+        if ([context.runner isFinished]) {
+            [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
+            [self runnerCompletedWithContext:context];
+            return;
+        } else {
+            // App crashed
+            [[BPStats sharedStats] addSimulatorLaunchFailure];
+            [BPUtils printInfo:ERROR withString:@"App seems to have crashed, aborting."];
+            context.finalExitStatus = BPExitStatusAppCrashed;
+            [self deleteSimulatorWithContext:context andStatus:context.finalExitStatus];
+            return;
+        }
     }
     if (![context.runner isSimulatorRunning]) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
@@ -321,59 +331,58 @@ void onInterrupt(int ignore) {
         // This is the final retry, so we should force a calculation if we error'd
         [context.parser completedFinalRun];
     }
-
-    if (context.simulatorCrashed == NO) {
-        // Dump standard log to stdout
-        BPWriter *standardLog;
-        if (context.config.plainOutput) {
-            if (context.config.outputDirectory) {
-                NSString *fileName = [NSString stringWithFormat:@"%lu-%@-results.txt",
-                                      context.attemptNumber,
-                                      [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
-                NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
-                standardLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
-            } else {
-                standardLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationStdout];
-            }
-            [standardLog writeLine:@"%@", [context.parser generateLog:[[StandardReporter alloc] init]]];
-        }
-
-        if (context.config.junitOutput) {
-            BPWriter *junitLog;
-            if (context.config.outputDirectory) {
-                // Only single xml entry.
-                NSString *fileName = [NSString stringWithFormat:@"TEST-%@-results.xml",
-                                      [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
-                NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
-                junitLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
-            } else {
-                junitLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationStdout];
-            }
-            [junitLog removeFile];
-            [junitLog writeLine:@"%@", [context.parser generateLog:[[JUnitReporter alloc] init]]];
-        }
-
-        if (context.config.jsonOutput) {
-            BPWriter *jsonLog;
-            if (context.config.outputDirectory) {
-                NSString *fileName = [NSString stringWithFormat:@"%lu-%@-timings.json",
-                                      context.attemptNumber,
-                                      [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
-                NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
-                jsonLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
-            } else {
-                jsonLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationStdout];
-            }
-            [jsonLog writeLine:@"%@", [context.parser generateLog:[[JSONReporter alloc] init]]];
-        }
-    }
-
+    
     if (context.simulatorCrashed) {
         // If we crashed, we need to retry
         [self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCrashed];
-    } else {
-        [self deleteSimulatorWithContext:context andStatus:[context.runner exitStatus]];
+        return;
     }
+
+    // Dump standard log to stdout
+    BPWriter *standardLog;
+    if (context.config.plainOutput) {
+        if (context.config.outputDirectory) {
+            NSString *fileName = [NSString stringWithFormat:@"%lu-%@-results.txt",
+                                  context.attemptNumber,
+                                  [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
+            NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
+            standardLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
+        } else {
+            standardLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationStdout];
+        }
+        [standardLog writeLine:@"%@", [context.parser generateLog:[[StandardReporter alloc] init]]];
+    }
+
+    if (context.config.junitOutput) {
+        BPWriter *junitLog;
+        if (context.config.outputDirectory) {
+            // Only single xml entry.
+            NSString *fileName = [NSString stringWithFormat:@"TEST-%@-results.xml",
+                                  [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
+            NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
+            junitLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
+        } else {
+            junitLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationStdout];
+        }
+        [junitLog removeFile];
+        [junitLog writeLine:@"%@", [context.parser generateLog:[[JUnitReporter alloc] init]]];
+    }
+
+    if (context.config.jsonOutput) {
+        BPWriter *jsonLog;
+        if (context.config.outputDirectory) {
+            NSString *fileName = [NSString stringWithFormat:@"%lu-%@-timings.json",
+                                  context.attemptNumber,
+                                  [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
+            NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
+            jsonLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
+        } else {
+            jsonLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationStdout];
+        }
+        [jsonLog writeLine:@"%@", [context.parser generateLog:[[JSONReporter alloc] init]]];
+    }
+
+    [self deleteSimulatorWithContext:context andStatus:[context.runner exitStatus]];
 }
 
 - (void)deleteSimulatorWithContext:(BPExecutionContext *)context andStatus:(BPExitStatus)status {

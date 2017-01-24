@@ -22,10 +22,10 @@ static int volatile interrupted = 0;
 void onInterrupt(int ignore) {
     interrupted ++;
     if (interrupted >=5) {
-        fprintf(stderr, "You really want to terminate, OK!\n");
+        [BPUtils printInfo:WARNING withString:@"You really want to terminate, OK!"];
         exit(0);
     }
-    fprintf(stderr, "Received interrupt (Ctrl-C) %d times, waiting for child processes to finish.\n", interrupted);
+    [BPUtils printInfo:WARNING withString:[NSString stringWithFormat:@"Received interrupt (Ctrl-C) %d times, waiting for child processes to finish.", interrupted]];
 }
 
 int
