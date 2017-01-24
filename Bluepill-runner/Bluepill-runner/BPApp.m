@@ -13,7 +13,7 @@
 
 @implementation BPApp
 
-+ (instancetype)BPAppWithAppBundlePath:(NSString *)path withExtraTestBundles:(NSArray *)extraTestBundles withError:(NSError *__autoreleasing *)error {
++ (instancetype)BPAppWithAppBundlePath:(NSString *)path onlyTestingBundlePath:(NSString *)onlyBundlePath withExtraTestBundles:(NSArray *)extraTestBundles withError:(NSError *__autoreleasing *)error {
     BOOL isdir;
     
     NSFileManager *fm = [NSFileManager defaultManager];
@@ -47,6 +47,11 @@
 
     NSMutableArray *xcTestFiles = [[NSMutableArray alloc] init];
     for (NSString *filename in allFiles) {
+        // If `onlyBundlePath` is set and this file doesn't match, skip it
+        if (onlyBundlePath && ![[onlyBundlePath lastPathComponent] isEqual:[filename lastPathComponent]]) {
+            continue;
+        }
+        
         NSString *extension = [[filename pathExtension] lowercaseString];
         if ([extension isEqualToString:@"xctest"]) {
             NSString *bundle = [xcTestsPath stringByAppendingPathComponent:filename];

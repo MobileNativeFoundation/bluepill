@@ -58,6 +58,7 @@
 
     allTests = [[NSMutableArray alloc] init];
     BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
+                         onlyTestingBundlePath:nil
                           withExtraTestBundles:nil
                                      withError:nil];
     XCTAssert(app != nil);
@@ -148,6 +149,7 @@
     self.config.additionalTestBundles = @[additionalXctest];
 
     BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
+                         onlyTestingBundlePath:nil
                           withExtraTestBundles:self.config.additionalTestBundles
                                      withError:nil];
     XCTAssert(app != nil);
