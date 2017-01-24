@@ -35,6 +35,7 @@
 
     NSMutableArray *xcTestFiles = [[NSMutableArray alloc] init];
     for (NSString *filename in allFiles) {
+        // If `onlyBundlePath` is set and this file doesn't match, skip it
         if (onlyBundlePath && ![[onlyBundlePath lastPathComponent] isEqual:[filename lastPathComponent]]) {
             continue;
         }
@@ -44,11 +45,11 @@
             NSString *bundle = [xcTestsPath stringByAppendingPathComponent:filename];
             NSString *basename = [filename stringByDeletingPathExtension];
             NSString *executable = [bundle stringByAppendingPathComponent:basename];
-            
+
             BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable
                                                                       withError:error];
             if (!xcTestFile) return nil;
-            
+
             [xcTestFiles addObject:xcTestFile];
         }
     }
