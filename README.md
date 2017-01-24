@@ -58,10 +58,10 @@ A full list supported options are listed here.
 |    `scheme-path`   |           -s           | The scheme to run tests                                                            |     Y    | n/a              |
 |       config       |           -c           | Read options from the specified configuration file instead of the command line     |     N    | n/a              |
 |       device       |           -d           | On which device to run the app.                                                    |     N    | iPhone 6         |
-|       exclude      |           -x           | Exclude a testcase in the set of tests to run                                      |     N    | empty            |
+|       exclude      |           -x           | Exclude a testcase in the set of tests to run  (takes priority over `include`).    |     N    | empty            |
 |      headless      |           -H           | Run in headless mode (no GUI).                                                     |     N    | off              |
 |      xcode-path    |           -x           | Path to xcode.                                                                     |     N    | xcode-select -p  |
-|       include      |           -i           | Include a testcase in the set of tests to run.                                     |     N    | all tests        |
+|       include      |           -i           | Include a testcase in the set of tests to run (unless specified in `exclude`).     |     N    | all tests        |
 |     json-output    |           -J           | Print test timing information in JSON format.                                      |     N    | off              |
 |    junit-output    |           -j           | Print results in JUnit format.                                                     |     N    | true             |
 |     list-tests     |           -l           | Only list tests in bundle                                                          |     N    | false            |

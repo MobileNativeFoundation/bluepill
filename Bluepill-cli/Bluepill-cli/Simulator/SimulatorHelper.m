@@ -45,7 +45,9 @@
     [xctConfig setReportResultsToIDE:NO];
     if (config.testCasesToSkip) {
         [xctConfig setTestsToSkip:[NSSet setWithArray:config.testCasesToSkip]];
-    } else if (config.testCasesToRun) {
+    }
+    
+    if (config.testCasesToRun) {
         // According to @khu, we can't just pass the right setTestsToRun and have it work, so what we do instead
         // is get the full list of tests from the XCTest bundle, then skip everything we don't want to run.
         NSError *error;
@@ -53,15 +55,14 @@
         NSString *executable = [config.testBundlePath stringByAppendingPathComponent:basename];
 
         BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable withError:&error];
-        if (!xctTestFile) {
-            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to load testcases from %@", [error localizedDescription]]];
-            [BPUtils printInfo:WARNING withString:@"Will Run all TestCases"];
-        } else {
-            NSMutableSet *allTestCases = [[NSMutableSet alloc] initWithArray:xctTestFile.allTestCases];
-            NSSet *testsToRun = [[NSSet alloc] initWithArray:config.testCasesToRun];
-            [allTestCases minusSet:testsToRun];
-            [xctConfig setTestsToSkip:allTestCases];
+        NSAssert(xctTestFile != nil, @"Failed to load testcases from %@", [error localizedDescription]);
+        NSMutableSet *testsToSkip = [[NSMutableSet alloc] initWithArray:xctTestFile.allTestCases];
+        NSSet *testsToRun = [[NSSet alloc] initWithArray:config.testCasesToRun];
+        [testsToSkip minusSet:testsToRun];
+        if (xctConfig.testsToSkip) {
+            [testsToSkip unionSet:xctConfig.testsToSkip];
         }
+        [xctConfig setTestsToSkip:testsToSkip];
     }
 
     NSString *XCTestConfigurationFilename = [NSString stringWithFormat:@"%@/%@-%@",

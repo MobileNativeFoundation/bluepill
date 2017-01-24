@@ -121,6 +121,39 @@
     XCTAssert(found == 2); // We must have found both testcases
 }
 
+- (void)testRunningAndIgnoringCertainTestCases {
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    self.config.testBundlePath = testBundlePath;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppPassingTests", tempDir] withError:nil];
+    // NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+    self.config.junitOutput = NO;
+    self.config.plainOutput = YES;
+    self.config.errorRetriesCount = @2;
+    self.config.testCasesToRun = @[
+                                   @"BPSampleAppTests/testCase173",
+                                   @"BPSampleAppTests/testCase199"
+                                   ];
+    
+    self.config.testCasesToSkip = @[@"BPSampleAppTests/testCase173"];
+    
+    BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+    
+    NSString *textReportPath = [outputDir stringByAppendingPathComponent:@"1-BPSampleAppTests-results.txt"];
+    NSString *contents = [NSString stringWithContentsOfFile:textReportPath encoding:NSUTF8StringEncoding error:nil];
+    // We'll go line by line asserting we didn't run any extra testcases.
+    NSArray *lines = [contents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    int found = 0;
+    for (NSString *line in lines) {
+        if ([line rangeOfString:@"testCase"].location == NSNotFound) continue;
+        XCTAssert([line containsString:@"testCase199"]);
+        if ([line containsString:@"testCase199"]) found++;
+    }
+    XCTAssert(found == 1); // We must have found both testcases
+}
+
 - (void)testReportWithAppCrashingTestsSet {
     NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
