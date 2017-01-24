@@ -57,7 +57,7 @@
         BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable withError:&error];
         if (!xctTestFile) {
             [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to load testcases from %@", [error localizedDescription]]];
-            [BPUtils printInfo:WARNING withString:@"Will Run all TestCases"];
+            exit(1);
         } else {
             NSMutableSet *testsToSkip = [[NSMutableSet alloc] initWithArray:xctTestFile.allTestCases];
             NSSet *testsToRun = [[NSSet alloc] initWithArray:config.testCasesToRun];

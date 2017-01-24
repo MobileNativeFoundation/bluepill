@@ -59,7 +59,7 @@ struct BPOptions {
     {'f', "failure-tolerance",   required_argument, NO, BP_VALUE, "failureTolerance",
         "The number of retries on any failures (app crash/test failure)."},
     {'i', "include", required_argument, NULL, BP_LIST, "testCasesToRun",
-        "Include a testcase in the set of tests to run."},
+        "Include a testcase in the set of tests to run (unless specified in `exclude`)."},
     {'n', "num-sims", required_argument, "4", BP_VALUE, "numSims",
         "Number of simulators to run in parallel. (bluepill only)"},
     {'r', "runtime",  required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
@@ -67,7 +67,7 @@ struct BPOptions {
     {'t', "test",     required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
         "The path to the test bundle to execute (your .xctest)."},
     {'x', "exclude", required_argument, NULL, BP_LIST, "testCasesToSkip",
-        "Exclude a testcase in the set of tests to run."},
+        "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
     {'X', "xcode-path", required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
         "Path to xcode."},
 
