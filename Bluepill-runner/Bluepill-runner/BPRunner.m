@@ -88,10 +88,11 @@ maxprocs(void)
     return runner;
 }
 
-- (NSTask *)newTaskWithBundle:(BPBundle *)bundle andNumber:(NSUInteger)number andCompletionBlock:(void (^_Nonnull)(NSTask *))block {
+- (NSTask *)newTaskWithBundle:(BPBundle *)bundle andNumber:(NSUInteger)number andDevice:(NSString *)deviceID andCompletionBlock:(void (^_Nonnull)(NSTask *))block {
     BPConfiguration *cfg = [self.config mutableCopy];
     cfg.testBundlePath = bundle.path;
     cfg.testCasesToSkip = bundle.testsToSkip;
+    cfg.deviceID = deviceID;
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
                              NSTemporaryDirectory(),
@@ -159,6 +160,7 @@ maxprocs(void)
     int maxProcs = maxprocs();
     int seconds = 0;
     __block NSMutableArray *taskList = [[NSMutableArray alloc] init];
+    __block NSMutableArray *deviceList = [[NSMutableArray alloc] init];
     self.nsTaskList = [[NSMutableArray alloc] init];
     while (1) {
         if (interrupted) {
@@ -166,22 +168,41 @@ maxprocs(void)
         }
         if (([bundles count] == 0 && launchedTasks == 0) || (interrupted && launchedTasks == 0)) break;
         if ([bundles count] > 0 && launchedTasks < numSims && !interrupted) {
-            NSTask *task = [self newTaskWithBundle:[bundles objectAtIndex:0] andNumber:++taskNumber andCompletionBlock:^(NSTask * _Nonnull task) {
-                launchedTasks--;
-                [BPUtils printInfo:INFO withString:@"PID %d exited %d.", [task processIdentifier], [task terminationStatus]];
-                [taskList removeObject:[NSString stringWithFormat:@"%lu", taskNumber]];
-                rc = (rc || [task terminationStatus]);
+            NSString *deviceID = nil;
+            @synchronized(self) {
+            if ([deviceList count] > 0) {
+                deviceID = [deviceList objectAtIndex:0];
+                [deviceList removeObjectAtIndex:0];
+            }
+            }
+            
+            NSTask *task = [self newTaskWithBundle:[bundles objectAtIndex:0] andNumber:++taskNumber andDevice:deviceID andCompletionBlock:^(NSTask * _Nonnull task) {
+                @synchronized(self) {
+                    launchedTasks--;
+                    [BPUtils printInfo:INFO withString:@"PID %d exited %d.", [task processIdentifier], [task terminationStatus]];
+                    
+                    if (self.config.keepSimulator) {
+                        NSString *deviceID = [self readDeviceIDFile:[task processIdentifier]];
+                        if (deviceID) {
+                            [deviceList addObject:deviceID];
+                        }
+                    }
+                    [taskList removeObject:[NSString stringWithFormat:@"%lu", taskNumber]];
+                    rc = (rc || [task terminationStatus]);
+                };
             }];
             if (!task) {
                 NSLog(@"Failed to launch: %@ %@", [task launchPath], [task arguments]);
                 continue;
             }
             [task launch];
-            [taskList addObject:[NSString stringWithFormat:@"%lu", taskNumber]];
-            [self.nsTaskList addObject:task];
-            [bundles removeObjectAtIndex:0];
-            [BPUtils printInfo:INFO withString:@"Started Simulator %lu (PID %d).", taskNumber, [task processIdentifier]];
-            launchedTasks++;
+            @synchronized(self) {
+                [taskList addObject:[NSString stringWithFormat:@"%lu", taskNumber]];
+                [self.nsTaskList addObject:task];
+                [bundles removeObjectAtIndex:0];
+                [BPUtils printInfo:INFO withString:@"Started Simulator %lu (PID %d).", taskNumber, [task processIdentifier]];
+                launchedTasks++;
+            }
         }
         sleep(1);
         if (seconds % 30 == 0) {
@@ -222,4 +243,15 @@ maxprocs(void)
     [self.nsTaskList removeAllObjects];
 }
 
+- (NSString *)readDeviceIDFile:(int)pid {
+    NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d",pid];
+    NSString *tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName];
+    
+    NSError *error;
+    NSString *idStr = [NSString stringWithContentsOfFile:tempFilePath encoding:NSUTF8StringEncoding error:&error];
+    if (!idStr) {
+        [BPUtils printError:ERROR withString:@"ERROR: Failed to read the device ID file %@ with error:", tempFilePath, [error localizedDescription]];
+    }
+    return idStr;
+}
 @end

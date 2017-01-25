@@ -45,6 +45,7 @@
     __weak typeof(self) __self = self;
     [SimulatorRunner createDeviceWithConfig:self.config andName:deviceName completion:^(NSError *error, SimDevice *device) {
         __self.device = device;
+        __self.deviceID = device.UDID;
         if (!__self.device || error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion(error);
@@ -61,6 +62,21 @@
     }];
 }
 
+- (BOOL)useSimulatorWithDeviceID:(NSUUID *)deviceID {
+    self.device = [SimulatorRunner findDeviceWithConfig:self.config andDeviceID:deviceID];
+    if (self.device) {
+        if ([self.device.stateString isEqualToString:@"Booted"]) {
+            self.deviceID = self.device.UDID;
+            return YES;
+        }
+        else {
+            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice exists, but not running: %@", [deviceID UUIDString]]];
+            return NO;
+        }
+    }
+    return NO;
+}
+
 - (void)bootSimulatorWithCompletion:(void (^)(NSError *))completion {
     // Now boot it.
     if (self.config.headlessMode) {
@@ -72,6 +88,7 @@
 }
 
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion {
+    self.deviceID = nil; //clear it to make sure we won't pass it to the next bp instance
     if (self.app) {
         [self.app terminate];
         // We need to wait until the simulator has shut down.
@@ -189,6 +206,31 @@
                            completion(error, device);
                        }];
 }
+
++ (SimDevice *)findDeviceWithConfig:(BPConfiguration *)config andDeviceID:(NSUUID *)deviceID {
+    deviceID = deviceID ?: [[NSUUID alloc] initWithUUIDString:config.deviceID];
+    
+    NSError *error;
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
+    if (!sc) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        return nil;
+    }
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (!deviceSet) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        return nil;
+    }
+
+    SimDevice *device = deviceSet.devicesByUDID[deviceID];
+    if (!device) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice not found: %@", [deviceID UUIDString]]];
+        return nil;
+    }
+    
+    return device;
+ }
+
 
 + (void)bootDevice:(SimDevice *)device withCompletion:(void (^)())completion {
     NSDictionary *options = @{

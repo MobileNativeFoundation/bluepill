@@ -17,11 +17,13 @@
 @interface SimulatorRunner : NSObject
 
 @property (nonatomic, assign, readonly) BOOL needsRetry;
+@property (nonatomic, strong) NSUUID *deviceID;
 
 + (instancetype)simulatorRunnerWithConfiguration:(BPConfiguration *)config;
 
 - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion;
+- (BOOL)useSimulatorWithDeviceID:(NSUUID *)deviceID;
 
 ///*!
 // * @discussion install an app in a specified simulator

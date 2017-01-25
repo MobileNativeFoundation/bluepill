@@ -80,9 +80,13 @@ struct BPOptions {
      "Exclude a testcase in the set of tests to run."},
     {'X', "xcode-path", optional_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
         "Path to xcode."},
+    {'u', "use-simulator", required_argument, NULL, BP_VALUE, "deviceID",
+        "The device UUID of simulator to reuse."},
     // options without short-options
     {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
+    {351, "keep-simulator", no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
+        "Don't delete the simulator device after tests finish"},
     {0, 0, 0, 0}
 };
 

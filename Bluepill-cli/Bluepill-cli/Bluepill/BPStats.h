@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 
 #define CREATE_SIMULATOR(x)    [NSString stringWithFormat:@"[%lu] Create Simulator", (x)]
+#define REUSE_SIMULATOR(x)    [NSString stringWithFormat:@"[%lu] Reuse Simulator", (x)]
 #define INSTALL_APPLICATION(x) [NSString stringWithFormat:@"[%lu] Install Application", (x)]
 #define LAUNCH_APPLICATION(x)  [NSString stringWithFormat:@"[%lu] Launch Application", (x)]
 #define RUN_TESTS(x)           [NSString stringWithFormat:@"[%lu] Run Tests", (x)]

@@ -37,7 +37,7 @@
  * @return An NSTask ready to be executed via [task launch] or nil in failure.
  *
  */
-- (NSTask * _Nonnull)newTaskWithBundle:(NSArray * _Nonnull)bundle andNumber:(NSUInteger)number andCompletionBlock:(void (^_Nonnull)(NSTask * _Nonnull))block;
+- (NSTask * _Nonnull)newTaskWithBundle:(NSArray * _Nonnull)bundle andNumber:(NSUInteger)number andDevice:(NSString * _Nullable)deviceID andCompletionBlock:(void (^_Nonnull)(NSTask * _Nonnull))block;
 
 /**
  @discussion start running tests
