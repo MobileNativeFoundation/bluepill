@@ -209,7 +209,8 @@ void onInterrupt(int ignore) {
 
     handler.beginWith = ^{
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:(__handler.error ? FAILED : INFO) withString:[@"Completed: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:(__handler.error ? FAILED : INFO)
+                withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
     };
 
     handler.onSuccess = ^{
@@ -423,7 +424,8 @@ void onInterrupt(int ignore) {
         NEXT([self finishWithContext:context]);
         return;
     }
-
+    context.simulatorCreated = NO;//also use this flag to indicate the simulator will be deleted
+    
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
 
@@ -520,10 +522,9 @@ void onInterrupt(int ignore) {
 }
 
 - (void) writeDeviceIDFile {
-    NSUUID *deviceID = [self getSimlatorDeviceID];
-    if (!deviceID) return;
+    NSString *idStr = [self getSimlatorDeviceID];
+    if (!idStr || !self.context.simulatorCreated) return;
     
-    NSString *idStr = [deviceID UUIDString];
     NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d",getpid()];
     NSString *tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName];
     
@@ -540,8 +541,8 @@ void onInterrupt(int ignore) {
     return (self.exitLoop == NO);
 }
 
-- (NSUUID *)getSimlatorDeviceID {
-    return self.context.runner.deviceID;
+- (NSString *)getSimlatorDeviceID {
+    return self.context.runner.UDID;
 }
 
 int __line;

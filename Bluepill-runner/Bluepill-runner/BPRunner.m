@@ -21,11 +21,6 @@ static int volatile interrupted = 0;
 
 void onInterrupt(int ignore) {
     interrupted ++;
-    if (interrupted >=5) {
-        fprintf(stderr, "You really want to terminate, OK!\n");
-        exit(0);
-    }
-    fprintf(stderr, "Received interrupt (Ctrl-C) %d times, waiting for child processes to finish.\n", interrupted);
 }
 
 int
@@ -131,14 +126,17 @@ maxprocs(void)
     NSUInteger numSims = [self.config.numSims intValue];
     NSUInteger origNumSims = numSims;
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
-    NSMutableArray *bundles = [BPPacker packTests:self.app.testBundles withNoSplitList:self.config.noSplit intoBundles:numSims];
+    NSError *error;
+    NSMutableArray *bundles = [BPPacker packTests:self.app.testBundles withNoSplitList:self.config.noSplit intoBundles:numSims andError:&error];
     while (!bundles && numSims > 1) {
         // packTests fails if we're trying to pack < N tests into N bundles, so just reduce the number of simulators and try again
+        // treat the error as a warning and try again.
+        [BPUtils printInfo:WARNING withString:[error localizedDescription]];
         numSims--;
-        bundles = [BPPacker packTests:self.app.testBundles withNoSplitList:self.config.noSplit intoBundles:numSims];
+        bundles = [BPPacker packTests:self.app.testBundles withNoSplitList:self.config.noSplit intoBundles:numSims andError:&error];
     }
     if (!bundles) {
-        [BPUtils printInfo:ERROR withString:@"Packing failed"];
+        [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
         return 1;
     }
     if (numSims != origNumSims) {
@@ -162,8 +160,17 @@ maxprocs(void)
     __block NSMutableArray *taskList = [[NSMutableArray alloc] init];
     __block NSMutableArray *deviceList = [[NSMutableArray alloc] init];
     self.nsTaskList = [[NSMutableArray alloc] init];
+    int old_interrupted = interrupted;
     while (1) {
         if (interrupted) {
+            if (interrupted >=5) {
+                [BPUtils printInfo:ERROR withString:@"You really want to terminate, OK!"];
+                exit(0);
+            }
+            if (interrupted != old_interrupted) {
+                [BPUtils printInfo:WARNING withString:[NSString stringWithFormat:@"Received interrupt (Ctrl-C) %d times, waiting for child processes to finish.", interrupted]];
+                old_interrupted = interrupted;
+            }
             [self interrupt];
         }
         if (([bundles count] == 0 && launchedTasks == 0) || (interrupted && launchedTasks == 0)) break;

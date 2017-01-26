@@ -54,6 +54,7 @@ int main(int argc, char * argv[]) {
         }
 
         BPApp *app = [BPApp BPAppWithAppBundlePath:config.appBundlePath
+                             onlyTestingBundlePath:config.testBundlePath
                               withExtraTestBundles:config.additionalTestBundles
                                          withError:&err];
         if (!app) {

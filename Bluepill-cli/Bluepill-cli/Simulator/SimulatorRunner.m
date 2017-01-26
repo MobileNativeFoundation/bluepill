@@ -45,7 +45,6 @@
     __weak typeof(self) __self = self;
     [SimulatorRunner createDeviceWithConfig:self.config andName:deviceName completion:^(NSError *error, SimDevice *device) {
         __self.device = device;
-        __self.deviceID = device.UDID;
         if (!__self.device || error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion(error);
@@ -66,7 +65,6 @@
     self.device = [SimulatorRunner findDeviceWithConfig:self.config andDeviceID:deviceID];
     if (self.device) {
         if ([self.device.stateString isEqualToString:@"Booted"]) {
-            self.deviceID = self.device.UDID;
             return YES;
         }
         else {
@@ -88,7 +86,6 @@
 }
 
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion {
-    self.deviceID = nil; //clear it to make sure we won't pass it to the next bp instance
     if (self.app) {
         [self.app terminate];
         // We need to wait until the simulator has shut down.
@@ -364,6 +361,10 @@
 
 - (BPExitStatus)exitStatus {
     return ([self.monitor exitStatus]);
+}
+
+- (NSString *)UDID {
+    return [self.device.UDID UUIDString];
 }
 
 @end

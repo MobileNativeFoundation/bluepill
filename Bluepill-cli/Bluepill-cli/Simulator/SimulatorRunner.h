@@ -17,7 +17,8 @@
 @interface SimulatorRunner : NSObject
 
 @property (nonatomic, assign, readonly) BOOL needsRetry;
-@property (nonatomic, strong) NSUUID *deviceID;
+@property (nonatomic, readonly) NSString *UDID;
+
 
 + (instancetype)simulatorRunnerWithConfiguration:(BPConfiguration *)config;
 

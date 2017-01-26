@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSArray *testBundles;
 
 + (instancetype)BPAppWithAppBundlePath:(NSString *)path
+                 onlyTestingBundlePath:(NSString *)onlyBundlePath
                   withExtraTestBundles:(NSArray *)extraTestBundles
                              withError:(NSError **)error;
 

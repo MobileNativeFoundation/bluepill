@@ -13,4 +13,11 @@
    <FileRef
       location = "group:Bluepill-gui/Bluepill-gui.xcodeproj">
    </FileRef>
+   <Group
+      location = "group:Configurations"
+      name = "Configurations">
+      <FileRef
+         location = "group:common.xcconfig">
+      </FileRef>
+   </Group>
 </Workspace>

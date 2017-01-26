@@ -34,6 +34,20 @@
                ReferencedContainer = "container:Bluepill.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7A13E5A91DD22A3A004034BC"
+               BuildableName = "Bluepill-gui.app"
+               BlueprintName = "Bluepill-gui"
+               ReferencedContainer = "container:../Bluepill-gui/Bluepill-gui.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

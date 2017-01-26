@@ -58,6 +58,7 @@
 
     allTests = [[NSMutableArray alloc] init];
     BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
+                         onlyTestingBundlePath:nil
                           withExtraTestBundles:nil
                                      withError:nil];
     XCTAssert(app != nil);
@@ -82,7 +83,7 @@
     }
     allTests = [tests sortedArrayUsingSelector:@selector(compare:)];
     // Make sure we don't split when we don't want to
-    bundles = [BPPacker packTests:app.testBundles withNoSplitList:@[@"BPSampleAppTests"] intoBundles:4];
+    bundles = [BPPacker packTests:app.testBundles withNoSplitList:@[@"BPSampleAppTests"] intoBundles:4 andError:nil];
     // When we prevent BPSampleTests from splitting, BPSampleAppFatalErrorTests gets split in two
     want = [[want arrayByAddingObject:@"BPSampleAppFatalErrorTests"] sortedArrayUsingSelector:@selector(compare:)];
     XCTAssert(bundles.count == app.testBundles.count + 1);
@@ -92,7 +93,7 @@
     XCTAssert([bundles[2].testsToSkip count] == 2);
     XCTAssert([bundles[3].testsToSkip count] == 3);
 
-    bundles = [BPPacker packTests:app.testBundles withNoSplitList:@[]  intoBundles:4];
+    bundles = [BPPacker packTests:app.testBundles withNoSplitList:@[]  intoBundles:4 andError:nil];
     // 4 unbreakable bundles (too few tests) and the big one broken into 4 bundles
     XCTAssert(bundles.count == 8);
     // All we want to test is that we have full coverage
@@ -105,11 +106,11 @@
     XCTAssert([bundles[6].testsToSkip count] == 148);
     XCTAssert([bundles[7].testsToSkip count] == 159);
 
-    bundles = [BPPacker packTests:app.testBundles withNoSplitList:nil intoBundles:1];
+    bundles = [BPPacker packTests:app.testBundles withNoSplitList:nil intoBundles:1 andError:nil];
     // If we pack into just one bundle, we can't have less bundles than the total number of .xctest files.
     XCTAssert(bundles.count == app.testBundles.count);
 
-    bundles = [BPPacker packTests:app.testBundles withNoSplitList:nil intoBundles:16];
+    bundles = [BPPacker packTests:app.testBundles withNoSplitList:nil intoBundles:16 andError:nil];
 
     XCTAssert([bundles[0].testsToSkip count] == 0);
     XCTAssert([bundles[1].testsToSkip count] == 0);
@@ -148,11 +149,12 @@
     self.config.additionalTestBundles = @[additionalXctest];
 
     BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
+                         onlyTestingBundlePath:nil
                           withExtraTestBundles:self.config.additionalTestBundles
                                      withError:nil];
     XCTAssert(app != nil);
 
-    NSArray *bundles = [BPPacker packTests:app.testBundles withNoSplitList:@[@"BPSampleAppTests"] intoBundles:4];
+    NSArray *bundles = [BPPacker packTests:app.testBundles withNoSplitList:@[@"BPSampleAppTests"] intoBundles:4 andError:nil];
     BOOL found = false;
     for (BPBundle *bundle in bundles) {
         if ([[bundle.path lastPathComponent] isEqualToString:@"BPSampleAppTests.xctest"]) {
