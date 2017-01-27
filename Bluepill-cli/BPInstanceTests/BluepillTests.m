@@ -270,6 +270,31 @@
 
 }
 
+- (void)testRetryWithFailingTestsOnlyRetriesFailures {
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
+    // NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+    self.config.errorRetriesCount = @100;
+    self.config.junitOutput = YES;
+    self.config.failureTolerance = 1;
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusTestsFailed);
+    // Make sure all tests started on the first run
+    NSString *simulator1Path = [outputDir stringByAppendingPathComponent:@"1-simulator.log"];
+    NSString *log1 = [NSString stringWithContentsOfFile:simulator1Path encoding:NSUTF8StringEncoding error:nil];
+    XCTAssert([log1 rangeOfString:@"Test Case '-[BPAppNegativeTests testAssertFailure]' started."].location != NSNotFound);
+    XCTAssert([log1 rangeOfString:@"Test Case '-[BPAppNegativeTests testAssertTrue]' started."].location != NSNotFound);
+    XCTAssert([log1 rangeOfString:@"Test Case '-[BPAppNegativeTests testRaiseException]' started."].location != NSNotFound);
+    // Make sure only failing tests started on the second run
+    NSString *simulator2Path = [outputDir stringByAppendingPathComponent:@"2-simulator.log"];
+    NSString *log2 = [NSString stringWithContentsOfFile:simulator2Path encoding:NSUTF8StringEncoding error:nil];
+    XCTAssert([log2 rangeOfString:@"Test Case '-[BPAppNegativeTests testAssertFailure]' started."].location != NSNotFound);
+    XCTAssert([log2 rangeOfString:@"Test Case '-[BPAppNegativeTests testAssertTrue]' started."].location == NSNotFound);
+    XCTAssert([log2 rangeOfString:@"Test Case '-[BPAppNegativeTests testRaiseException]' started."].location != NSNotFound);
+}
+
 // Top level test for Bluepill instance
 - (void)testRunWithPassingTestsSet {
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
