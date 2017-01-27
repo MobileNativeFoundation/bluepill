@@ -130,7 +130,7 @@ maxprocs(void)
         [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
         return 1;
     }
-    if (bundles.count != numSims) {
+    if (bundles.count < numSims) {
         [BPUtils printInfo:WARNING
                 withString:[NSString stringWithFormat:@"Lowering number of simulators from %lu to %lu because there aren't enough tests.",
                             numSims, bundles.count]];

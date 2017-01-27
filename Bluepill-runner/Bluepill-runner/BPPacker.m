@@ -15,7 +15,11 @@
 
 @implementation BPPacker
 
-+ (NSMutableArray *)packTests:(NSArray *)xcTestFiles testCasesToRun:(NSArray *)testCasesToRun withNoSplitList:(NSArray *)noSplit intoBundles:(NSUInteger)numBundles andError:(NSError **)error {
++ (NSMutableArray *)packTests:(NSArray *)xcTestFiles
+               testCasesToRun:(NSArray *)testCasesToRun
+              withNoSplitList:(NSArray *)noSplit
+                  intoBundles:(NSUInteger)numBundles
+                     andError:(NSError **)error {
     NSArray *sortedXCTestFiles = [xcTestFiles sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         NSUInteger numTests1 = [(BPXCTestFile *)obj1 numTests];
         NSUInteger numTests2 = [(BPXCTestFile *)obj2 numTests];
@@ -35,13 +39,13 @@
     NSUInteger totalTests = 0;
     for (BPXCTestFile *xctFile in sortedXCTestFiles) {
         if (![noSplit containsObject:[xctFile name]]) {
-            NSMutableSet *testsToRun = [[NSMutableSet alloc] initWithArray:[xctFile allTestCases]];
+            NSMutableSet *bundleTestsToRun = [[NSMutableSet alloc] initWithArray:[xctFile allTestCases]];
             if (testCasesToRun) {
-                [testsToRun intersectSet:[[NSSet alloc] initWithArray:testCasesToRun]];
+                [bundleTestsToRun intersectSet:[[NSSet alloc] initWithArray:testCasesToRun]];
             }
-            if (testsToRun.count > 0) {
-                testsToRunByTestFilePath[xctFile.path] = testsToRun;
-                totalTests += testsToRun.count;
+            if (bundleTestsToRun.count > 0) {
+                testsToRunByTestFilePath[xctFile.path] = bundleTestsToRun;
+                totalTests += bundleTestsToRun.count;
             }
         }
     }
