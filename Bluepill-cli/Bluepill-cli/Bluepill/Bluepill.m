@@ -115,7 +115,7 @@ void onInterrupt(int ignore) {
     [self.context.parser completed];
     NSArray *failedTests = [self.context.parser failedTests];
     [self.context.parser cleanup];
-    if (failedTests) {
+    if (self.config.onlyRetryFailed && failedTests) {
         self.executionConfigCopy.testCasesToRun = failedTests;
     }
 
