@@ -45,7 +45,8 @@
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic, strong) NSNumber *listTestsOnly;
 @property (nonatomic) BOOL quiet;
-@property (nonatomic, strong) NSString *deviceID;
+@property (nonatomic, strong) NSString *useDeviceID;
+@property (nonatomic, strong) NSString *delDeviceID;
 @property (nonatomic) BOOL keepSimulator;
 
 // Generated fields

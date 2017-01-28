@@ -289,23 +289,23 @@
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
     XCTAssertNotNil([bp getSimlatorDeviceID]);
     
-    self.config.deviceID = [bp getSimlatorDeviceID];
-    XCTAssertNotNil(self.config.deviceID);
+    self.config.useDeviceID = [bp getSimlatorDeviceID];
+    XCTAssertNotNil(self.config.useDeviceID);
     
     self.config.keepSimulator = NO;
     
     Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode2 = [bp2 run];
     XCTAssert(exitCode2 == BPExitStatusTestsAllPassed);
-    XCTAssertEqualObjects(self.config.deviceID, [bp2 getSimlatorDeviceID]);
-    //XCTAssertNil([bp2 getSimlatorDeviceID]);
+    XCTAssertEqualObjects(self.config.useDeviceID, [bp2 getSimlatorDeviceID]);
+
 }
 
 
 - (void)testReuseSimulatorNotExist {
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
     self.config.testBundlePath = testBundlePath;
-    self.config.deviceID = @"XXXXX";
+    self.config.useDeviceID = @"XXXXX";
     
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
@@ -320,7 +320,7 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusAppCrashed);
-    //XCTAssertNil([bp getSimlatorDeviceID]);
+
 }
 
 - (void)testKeepSimulatorWithAppHaningTestsSet  {
@@ -331,7 +331,27 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusTestTimeout);
-    //XCTAssertNil([bp getSimlatorDeviceID]);
+
+}
+
+- (void)testDeleteSimulatorOnly {
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.keepSimulator = YES;
+    
+    Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode = [bp run];
+    XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+    XCTAssertNotNil([bp getSimlatorDeviceID]);
+    
+    self.config.delDeviceID = [bp getSimlatorDeviceID];
+    XCTAssertNotNil(self.config.delDeviceID);
+    
+    Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode2 = [bp2 run];
+    XCTAssert(exitCode2 == BPExitStatusSimulatorDeleted);
+    XCTAssertEqualObjects(self.config.delDeviceID, [bp2 getSimlatorDeviceID]);
+
 }
 
 - (void)testRunWithConfigurationFile {

@@ -87,7 +87,7 @@ maxprocs(void)
     BPConfiguration *cfg = [self.config mutableCopy];
     cfg.testBundlePath = bundle.path;
     cfg.testCasesToSkip = bundle.testsToSkip;
-    cfg.deviceID = deviceID;
+    cfg.useDeviceID = deviceID;
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
                              NSTemporaryDirectory(),
@@ -115,6 +115,22 @@ maxprocs(void)
         [BPUtils printInfo:INFO withString:@"Simulator %lu (PID %u) has finished with exit code %d.",
                                             number, [task processIdentifier], [task terminationStatus]];
         block(task);
+    }];
+    return task;
+}
+
+- (NSTask *)newTaskToDeleteDevice:(NSString *)deviceID andNumber:(NSUInteger)number {
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:self.bpExecutable];
+    [task setArguments:@[@"-D", deviceID]];
+    NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
+    [env addEntriesFromDictionary:[[NSProcessInfo processInfo] environment]];
+    [env setObject:[NSString stringWithFormat:@"%lu", number] forKey:@"_BP_SIM_NUM"];
+    [task setEnvironment:env];
+    
+    [task setTerminationHandler:^(NSTask * _Nonnull task) {
+        [BPUtils printInfo:INFO withString:@"Simulator %lu (PID %u) to delete device %@ has finished with exit code %d.",
+         number, [task processIdentifier], deviceID, [task terminationStatus]];
     }];
     return task;
 }
@@ -177,10 +193,10 @@ maxprocs(void)
         if ([bundles count] > 0 && launchedTasks < numSims && !interrupted) {
             NSString *deviceID = nil;
             @synchronized(self) {
-            if ([deviceList count] > 0) {
-                deviceID = [deviceList objectAtIndex:0];
-                [deviceList removeObjectAtIndex:0];
-            }
+                if ([deviceList count] > 0) {
+                    deviceID = [deviceList objectAtIndex:0];
+                    [deviceList removeObjectAtIndex:0];
+                }
             }
             
             NSTask *task = [self newTaskWithBundle:[bundles objectAtIndex:0] andNumber:++taskNumber andDevice:deviceID andCompletionBlock:^(NSTask * _Nonnull task) {
@@ -195,6 +211,7 @@ maxprocs(void)
                         }
                     }
                     [taskList removeObject:[NSString stringWithFormat:@"%lu", taskNumber]];
+                    [self.nsTaskList removeObject:task];
                     rc = (rc || [task terminationStatus]);
                 };
             }];
@@ -221,6 +238,12 @@ maxprocs(void)
         seconds += 1;
     }
 
+    for (int i=0; i<[deviceList count]; i++) {
+        NSTask *task = [self newTaskToDeleteDevice:[deviceList objectAtIndex:i] andNumber:i+1];
+        [task launch];
+        //fire & forget, DON'T WAIT
+    }
+    
     [BPUtils printInfo:INFO withString:@"All simulators have finished."];
     // Process the generated report and create 1 single junit xml file.
 

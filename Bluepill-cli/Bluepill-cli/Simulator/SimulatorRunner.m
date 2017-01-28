@@ -65,6 +65,11 @@
     self.device = [SimulatorRunner findDeviceWithConfig:self.config andDeviceID:deviceID];
     if (self.device) {
         if ([self.device.stateString isEqualToString:@"Booted"]) {
+            self.app = [SimulatorRunner findSimAppWithDevice:[deviceID UUIDString]];
+            if (!self.app && !self.config.headlessMode) {
+                [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@", [deviceID UUIDString]]];
+                return NO;
+            }
             return YES;
         }
         else {
@@ -205,7 +210,7 @@
 }
 
 + (SimDevice *)findDeviceWithConfig:(BPConfiguration *)config andDeviceID:(NSUUID *)deviceID {
-    deviceID = deviceID ?: [[NSUUID alloc] initWithUUIDString:config.deviceID];
+    deviceID = deviceID ?: [[NSUUID alloc] initWithUUIDString:config.useDeviceID];
     
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
@@ -228,6 +233,19 @@
     return device;
  }
 
++ (NSRunningApplication *)findSimAppWithDevice:(NSString *)deviceID {
+    NSString * cmd = [NSString stringWithFormat:@"ps -A |grep 'Simulator\\.app.*-CurrentDeviceUDID %@'", deviceID];
+    NSString * output = [[BPUtils runShell:cmd] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSArray *fields = [output componentsSeparatedByString: @" "];
+    if ([fields count] > 0) {
+        NSString *pidStr = [fields objectAtIndex:0];
+        int pid = [pidStr intValue];
+        NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
+        return app;
+    }
+    return nil;
+    
+}
 
 + (void)bootDevice:(SimDevice *)device withCompletion:(void (^)())completion {
     NSDictionary *options = @{

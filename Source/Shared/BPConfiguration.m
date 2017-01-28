@@ -86,8 +86,10 @@ struct BPOptions {
         "Print results in JUnit format."},
     {'l', "list-tests", no_argument, NULL, BP_VALUE, "listTestsOnly",
         "Only list tests in bundle"},
-    {'u', "use-simulator", required_argument, NULL, BP_VALUE, "deviceID",
+    {'u', "use-simulator", required_argument, NULL, BP_VALUE, "useDeviceID",
         "The device UUID of simulator to reuse."},
+    {'D', "delete-simulator", required_argument, NULL, BP_VALUE, "delDeviceID",
+        "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE."},
     
     // options without short-options
     {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
@@ -448,6 +450,10 @@ struct BPOptions {
         return NO;
     }
 
+    if (self.delDeviceID) {
+        return YES;
+    }
+    
     if (!self.appBundlePath) {
         if (err) {
             NSDictionary *errInfo = @{ NSLocalizedDescriptionKey : @"No app bundle provided." };
