@@ -333,17 +333,21 @@
     self.monitor.hostBundleId = hostBundleId;
     parser.delegate = self.monitor;
 
+    // Keep the simulator runner around through processing of the block
+    __block typeof(self) blockSelf = self;
+
     [self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid) {
+        // Save the process ID to the monitor
+        blockSelf.monitor.appPID = pid;
+
         if (error == nil) {
             dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC, pid, DISPATCH_PROC_EXIT, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
             dispatch_source_set_event_handler(source, ^{
                 dispatch_source_cancel(source);
             });
-            __block __weak SimulatorRunner *weakSelf = self;
-            weakSelf.monitor.appPID = pid;
             dispatch_source_set_cancel_handler(source, ^{
                 // Post a APPCLOSED signal to the fifo
-                [weakSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                [blockSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
             });
             dispatch_resume(source);
             self.stdOutHandle.readabilityHandler = ^(NSFileHandle *handle) {
