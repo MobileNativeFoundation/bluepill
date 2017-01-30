@@ -123,25 +123,17 @@ maxprocs(void)
     signal(SIGINT, onInterrupt);
     
     NSUInteger numSims = [self.config.numSims intValue];
-    NSUInteger origNumSims = numSims;
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
     NSError *error;
-    NSMutableArray *bundles = [BPPacker packTests:self.app.testBundles withNoSplitList:self.config.noSplit intoBundles:numSims andError:&error];
-    while (!bundles && numSims > 1) {
-        // packTests fails if we're trying to pack < N tests into N bundles, so just reduce the number of simulators and try again
-        // treat the error as a warning and try again.
-        [BPUtils printInfo:WARNING withString:[error localizedDescription]];
-        numSims--;
-        bundles = [BPPacker packTests:self.app.testBundles withNoSplitList:self.config.noSplit intoBundles:numSims andError:&error];
-    }
-    if (!bundles) {
+    NSMutableArray *bundles = [BPPacker packTests:self.app.testBundles testCasesToRun:self.config.testCasesToRun withNoSplitList:self.config.noSplit intoBundles:numSims andError:&error];
+    if (!bundles || bundles.count == 0) {
         [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
         return 1;
     }
-    if (numSims != origNumSims) {
+    if (bundles.count < numSims) {
         [BPUtils printInfo:WARNING
                 withString:[NSString stringWithFormat:@"Lowering number of simulators from %lu to %lu because there aren't enough tests.",
-                            origNumSims, numSims]];
+                            numSims, bundles.count]];
     }
     [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Running with %lu simulator%s.",
                                         (unsigned long)numSims, (numSims > 1) ? "s" : ""]];
