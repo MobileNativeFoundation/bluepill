@@ -46,8 +46,6 @@ static const NSString * const kPassed = @"passed";
 
 @property (nonatomic, assign) BOOL moveToParent;
 
-@property (nonatomic, strong) NSMutableArray *failedTestNames;
-
 @end
 
 @implementation BPTreeParser
@@ -55,7 +53,6 @@ static const NSString * const kPassed = @"passed";
 - (instancetype)initWithWriter:(BPWriter *)writer {
     self = [super init];
     if (self) {
-        self.failedTestNames = [[NSMutableArray alloc] init];
         self.line = @"";
         self.log = writer;
         [self writeHeader];
@@ -537,15 +534,8 @@ static const NSString * const kPassed = @"passed";
             } else {
                 logEntry.totalTime += caseChild.totalTime;
             }
-            if (!caseChild.passed) {
-                [self.failedTestNames addObject:[NSString stringWithFormat:@"%@/%@", caseChild.testCaseClass, caseChild.testCaseName]];
-            }
         }
     }
-}
-
-- (NSArray *)failedTests {
-    return self.failedTestNames.count > 0 ? self.failedTestNames : nil;
 }
 
 - (void)checkForDiscrepancies:(BPTestSuiteLogEntry *)logEntry {

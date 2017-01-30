@@ -98,7 +98,7 @@ void onInterrupt(int ignore) {
     NEXT([self setupExecutionWithContext:self.context]);
 }
 
-// Retry failed tests
+// Retry from the beginning (default) or failed tests only if onlyRetryFailed is true
 - (void)retry {
     // There were test failures. If our failure tolerance is 0, then we're good with that.
     if (self.failureTolerance == 0) {
@@ -107,16 +107,12 @@ void onInterrupt(int ignore) {
         self.exitLoop = YES;
         return;
     }
+    [self.context.parser cleanup];
     // Otherwise, reduce our failure tolerance count and retry
     self.failureTolerance -= 1;
-    // Also we need to get rid of our saved tests, so we can set which tests to run or run everything. Recopy config.
-    self.executionConfigCopy = [self.config copy];
-    // Get failed tests and only run those
-    [self.context.parser completed];
-    NSArray *failedTests = [self.context.parser failedTests];
-    [self.context.parser cleanup];
-    if (self.config.onlyRetryFailed && failedTests) {
-        self.executionConfigCopy.testCasesToRun = failedTests;
+    // If we're not retrying only failed tests, we need to get rid of our saved tests, so that we re-execute everything. Recopy config.
+    if (self.executionConfigCopy.onlyRetryFailed == NO) {
+        self.executionConfigCopy = [self.config copy];
     }
 
     // First increment the retry count

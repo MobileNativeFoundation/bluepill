@@ -55,7 +55,6 @@
 - (void)completed;
 - (void)completedFinalRun;
 - (void)cleanup;
-- (nullable NSArray *)failedTests;
 - (nullable NSString *)generateLog:(nonnull id<BPReporter>)reporter;
 
 @end
