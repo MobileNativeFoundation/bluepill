@@ -37,6 +37,7 @@
 @property (nonatomic) BOOL plainOutput;
 @property (nonatomic) BOOL jsonOutput;
 @property (nonatomic) NSUInteger failureTolerance;
+@property (nonatomic) BOOL onlyRetryFailed;
 @property (nonatomic, strong) NSArray *testCasesToSkip;
 @property (nonatomic, strong) NSArray *testCasesToRun;
 @property (nonatomic, strong) NSString *configOutputFile;

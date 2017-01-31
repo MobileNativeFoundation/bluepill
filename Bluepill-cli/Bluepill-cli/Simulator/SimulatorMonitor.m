@@ -122,8 +122,10 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
                                           testClass, testName];
     self.failureCount++;
 
-    // Passing or failing means that if the simulator crashes later, we shouldn't rerun this test.
-    [self updateExecutedTestCaseList:testName inClass:testClass];
+    // Passing or failing means that if the simulator crashes later, we shouldn't rerun this test. Unless we've enabled re-running failed tests.
+    if (self.config.onlyRetryFailed == NO) {
+        [self updateExecutedTestCaseList:testName inClass:testClass];
+    }
     self.previousTestName = self.currentTestName ?: self.previousTestName;
     self.previousClassName = self.currentClassName ?: self.previousClassName;
     self.currentTestName = nil;
