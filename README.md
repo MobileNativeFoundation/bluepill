@@ -60,7 +60,7 @@ A full list supported options are listed here.
 |       device       |           -d           | On which device to run the app.                                                    |     N    | iPhone 6         |
 |       exclude      |           -x           | Exclude a testcase in the set of tests to run  (takes priority over `include`).    |     N    | empty            |
 |      headless      |           -H           | Run in headless mode (no GUI).                                                     |     N    | off              |
-|      xcode-path    |           -x           | Path to xcode.                                                                     |     N    | xcode-select -p  |
+|      xcode-path    |           -X           | Path to xcode.                                                                     |     N    | xcode-select -p  |
 |       include      |           -i           | Include a testcase in the set of tests to run (unless specified in `exclude`).     |     N    | all tests        |
 |     json-output    |           -J           | Print test timing information in JSON format.                                      |     N    | off              |
 |    junit-output    |           -j           | Print results in JUnit format.                                                     |     N    | true             |
@@ -101,7 +101,7 @@ iOS Unit Testing Bundle is the one we support, which includes [KIF](https://gith
 
 - How to test Bluepill in Xcode
 
-  Selet BPSampleApp scheme and build it first. Then you can switch back to `bluepill` or `bluepill-cli` scheme to run their tests.
+  Select BPSampleApp scheme and build it first. Then you can switch back to `bluepill` or `bluepill-cli` scheme to run their tests.
 
 - How to get Bluepill binary from source?
 
