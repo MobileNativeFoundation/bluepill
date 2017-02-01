@@ -101,7 +101,7 @@ iOS Unit Testing Bundle is the one we support, which includes [KIF](https://gith
 
 - How to test Bluepill in Xcode
 
-  Selet BPSampleApp scheme and build it first. Then you can switch back to `bluepill` or `bluepill-cli` scheme to run their tests.
+  Select BPSampleApp scheme and build it first. Then you can switch back to `bluepill` or `bluepill-cli` scheme to run their tests.
 
 - How to get Bluepill binary from source?
 
