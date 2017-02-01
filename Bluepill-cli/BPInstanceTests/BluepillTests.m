@@ -78,16 +78,25 @@
     [super tearDown];
 }
 
-// This is a template to run Voyager's tests
-- (void)testVoyager {
-//    self.config.outputDirectory = @"/Users/khu/tmp/simulator";
-//    self.config.schemePath = @"/Users/khu/ios/mntf-ios-sample-app_trunk/./mntf-ios-sample-app.xcodeproj/xcshareddata/xcschemes/mntf-ios-sample-app-ui-tests.xcscheme";
-//    self.config.testCasesToRun = @[@"MNTFSampleAppUITests/testRotate", @"MNTFSampleAppUITests/testScrollToAnIndex"];
-//    self.config.appBundlePath =
-//    @"/Users/khu/ios/mntf-ios-sample-app_trunk/build/mntf-ios-sample-app/Build/Products/Debug-iphonesimulator/mntf-ios-sample-app.app";
-//    self.config.testBundlePath = @"/Users/khu/ios/mntf-ios-sample-app_trunk/build/mntf-ios-sample-app/Build/Products/Debug-iphonesimulator/mntf-ios-sample-app.app/PlugIns/mntf-ios-sample-app-UITests.xctest";
-//    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+- (void)testAppThatCrashesOnLaunch {
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.testing_CrashAppOnLaunch = YES;
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    NSLog(@"%ld", (long)exitCode);
+    XCTAssert(exitCode == BPExitStatusAppCrashed);
+    
 }
+
+- (void)testAppThatHangsOnLaunch {
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.testing_HangAppOnLaunch = YES;
+    BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
+    NSLog(@"%ld", (long)exitCode);
+    //XCTAssert(exitCode == BPExitStatusAppHung);
+}
+
 
 - (void)testRunningOnlyCertainTestcases {
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];

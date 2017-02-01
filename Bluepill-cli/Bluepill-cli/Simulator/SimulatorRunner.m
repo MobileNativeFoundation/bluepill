@@ -242,6 +242,13 @@
                                                                                                                                  config:self.config]];
     [appLaunchEnvironment addEntriesFromDictionary:argsAndEnv[@"env"]];
 
+    if (self.config.testing_CrashAppOnLaunch) {
+        appLaunchEnvironment[@"_BP_TEST_CRASH_ON_LAUNCH"] = @"YES";
+    }
+    if (self.config.testing_HangAppOnLaunch) {
+        appLaunchEnvironment[@"_BP_TEST_HANG_ON_LAUNCH"] = @"YES";
+    }
+
     // Intercept stdout, stderr and post as simulator-output events
     NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/stdout_stderr_%@", self.device.dataPath, [[self.device UDID] UUIDString]];
     NSString *simStdoutPath = [BPUtils mkstemp:stdout_stderr withError:nil];

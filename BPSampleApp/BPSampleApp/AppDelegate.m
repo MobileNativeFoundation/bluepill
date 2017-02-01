@@ -20,6 +20,17 @@
     // Override point for customization after application launch.
 
     // This is a sample app for Bluepill testing.
+    if (getenv("_BP_TEST_CRASH_ON_LAUNCH")) {
+        char *p = NULL;
+        NSLog(@"CRASHING AT USER'S REQUEST");
+        strcpy(p, "I know this will crash my app");
+    }
+    if (getenv("_BP_TEST_HANG_ON_LAUNCH")) {
+        NSLog(@"HANGING AT USER'S REQUEST");
+        while(1) {
+            sleep(10);
+        }
+    }
     return YES;
 }
 
