@@ -55,6 +55,7 @@
 // These fields are for testing.
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;
 @property (nonatomic) BOOL testing_HangAppOnLaunch;
+@property (nonatomic) BOOL testing_NoAppWillRun;
 
 // Generated fields
 @property (nonatomic, strong) NSString *xcodePath;

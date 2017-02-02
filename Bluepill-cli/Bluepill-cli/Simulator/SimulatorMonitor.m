@@ -15,6 +15,7 @@
 
 typedef NS_ENUM(NSInteger, SimulatorState) {
     Idle,
+    AppLaunched,
     Running,
     Completed
 };
@@ -172,6 +173,10 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 - (void)onOutputReceived:(NSString *)output {
     NSDate *currentTime = [NSDate date];
 
+    if (self.simulatorState == Idle) {
+        self.simulatorState = AppLaunched;
+    }
+
     self.currentOutputId++; // Increment the Output ID for this instance since we've moved on to the next bit of output
 
     __block NSUInteger previousOutputId = self.currentOutputId;
@@ -186,20 +191,24 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
                               forTestName:(__self.currentTestName ?: __self.previousTestName)
                                   inClass:(__self.currentClassName ?: __self.previousClassName)];
         __self.exitStatus = BPExitStatusAppCrashed;
-        [[BPStats sharedStats] addSimulatorCrash];
+        [[BPStats sharedStats] addApplicationCrash];
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(__self.maxTimeWithNoOutput * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (__self.currentOutputId == previousOutputId && __self.simulatorState == Running) {
+        if (__self.currentOutputId == previousOutputId && (__self.simulatorState == Running || __self.simulatorState == AppLaunched)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
             NSString *testName = (__self.currentTestName ?: __self.previousTestName);
-            [BPUtils printInfo:TIMEOUT withString:@" %10.6fs waiting for output from %@/%@",
-                                                   __self.maxTimeWithNoOutput, testClass, testName];
+            if (testClass == nil && testName == nil && (__self.simulatorState == AppLaunched || __self.simulatorState == Idle)) {
+                [BPUtils printInfo:ERROR withString:@"It appears that tests have not yet started. The test app has frozen prior to the first test."];
+            } else {
+                [BPUtils printInfo:TIMEOUT withString:@" %10.6fs waiting for output from %@/%@",
+                 __self.maxTimeWithNoOutput, testClass, testName];
+                [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
+            }
             [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aboorted."
                                   forTestName:testName
                                       inClass:testClass];
             __self.exitStatus = BPExitStatusTestTimeout;
-            [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
-            [[BPStats sharedStats] addTestBPExitStatusTestTimeout];
+            [[BPStats sharedStats] addTestOutputTimeout];
         }
     });
     self.lastOutput = currentTime;
