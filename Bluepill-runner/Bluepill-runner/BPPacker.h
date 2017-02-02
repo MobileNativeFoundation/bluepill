@@ -18,6 +18,10 @@
  * @param numBundles The number of bundles to pack the xctest files into. Note that this is a guideline, the returned number of bundles can differ from this argument.
  * @return An NSMutableArray of BPBundle's with the tests packed into bundles.
  */
-+ (NSMutableArray *)packTests:(NSArray *)xcTestFiles withNoSplitList:(NSArray *)noSplit intoBundles:(NSUInteger)numBundles andError:(NSError **)error;
++ (NSMutableArray *)packTests:(NSArray *)xcTestFiles
+               testCasesToRun:(NSArray *)testCasesToRun
+              withNoSplitList:(NSArray *)noSplit
+                  intoBundles:(NSUInteger)numBundles
+                     andError:(NSError **)error;
 
 @end

@@ -60,7 +60,7 @@ A full list supported options are listed here.
 |       device       |           -d           | On which device to run the app.                                                    |     N    | iPhone 6         |
 |       exclude      |           -x           | Exclude a testcase in the set of tests to run  (takes priority over `include`).    |     N    | empty            |
 |      headless      |           -H           | Run in headless mode (no GUI).                                                     |     N    | off              |
-|      xcode-path    |           -x           | Path to xcode.                                                                     |     N    | xcode-select -p  |
+|      xcode-path    |           -X           | Path to xcode.                                                                     |     N    | xcode-select -p  |
 |       include      |           -i           | Include a testcase in the set of tests to run (unless specified in `exclude`).     |     N    | all tests        |
 |     json-output    |           -J           | Print test timing information in JSON format.                                      |     N    | off              |
 |    junit-output    |           -j           | Print results in JUnit format.                                                     |     N    | true             |
@@ -70,6 +70,7 @@ A full list supported options are listed here.
 |    printf-config   |           -P           | Print a configuration file suitable for passing back using the `-c` option.        |     N    | n/a              |
 |    error-retries   |           -R           | Number of times we'll recover from app crashing/hanging and continue running       |     N    | 5                |
 |  failure-tolerance |           -f           | The number of retries on any failures (app crash/test failure)                     |     N    | 0                |
+|  only-retry-failed |           -F           | When `failure-tolerance` > 0, only retry tests that failed                         |     N    | false            |
 |       runtime      |           -r           | What runtime to use.                                                               |     N    | 10.2             |
 |    stuck-timeout   |           -S           | Timeout in seconds for a test that seems stuck (no output).                        |     N    | 300s             |
 |    test-timeout    |           -T           | Timeout in seconds for a test that is producing output.                            |     N    | 300s             |
@@ -100,7 +101,7 @@ iOS Unit Testing Bundle is the one we support, which includes [KIF](https://gith
 
 - How to test Bluepill in Xcode
 
-  Selet BPSampleApp scheme and build it first. Then you can switch back to `bluepill` or `bluepill-cli` scheme to run their tests.
+  Select BPSampleApp scheme and build it first. Then you can switch back to `bluepill` or `bluepill-cli` scheme to run their tests.
 
 - How to get Bluepill binary from source?
 

@@ -100,7 +100,7 @@ void onInterrupt(int ignore) {
     NEXT([self setupExecutionWithContext:self.context]);
 }
 
-// Retry from the beginning
+// Retry from the beginning (default) or failed tests only if onlyRetryFailed is true
 - (void)retry {
     // There were test failures. If our failure tolerance is 0, then we're good with that.
     if (self.failureTolerance == 0) {
@@ -112,8 +112,10 @@ void onInterrupt(int ignore) {
     [self.context.parser cleanup];
     // Otherwise, reduce our failure tolerance count and retry
     self.failureTolerance -= 1;
-    // Also we need to get rid of our saved tests, so we re-execute everything. Recopy config.
-    self.executionConfigCopy = [self.config copy];
+    // If we're not retrying only failed tests, we need to get rid of our saved tests, so that we re-execute everything. Recopy config.
+    if (self.executionConfigCopy.onlyRetryFailed == NO) {
+        self.executionConfigCopy = [self.config copy];
+    }
 
     // First increment the retry count
     self.retries += 1;
