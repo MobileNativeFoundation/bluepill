@@ -95,7 +95,7 @@ Latest Xcode (Xcode 8.2.1).
   Unfortunately, we don't support Xcode UI Testing bundles yet and we are working on that [**help wanted**].
 iOS Unit Testing Bundle is the one we support, which includes [KIF](https://github.com/kif-framework/KIF) tests, [EarlGrey](https://github.com/google/EarlGrey) tests.
 
-- Easies way to get Bluepill binary?
+- Easiest way to get Bluepill binary?
 
   Latest [release](https://github.com/linkedin/bluepill/releases/).
 
