@@ -85,7 +85,6 @@
     self.config.testing_CrashAppOnLaunch = YES;
     self.config.testing_NoAppWillRun = NO;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    NSLog(@"%ld", (long)exitCode);
     XCTAssert(exitCode == BPExitStatusAppCrashed);
 
     self.config.testing_NoAppWillRun = YES;
@@ -98,7 +97,6 @@
     self.config.testing_NoAppWillRun = NO;
     self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
-    NSLog(@"%ld", (long)exitCode);
     XCTAssert(exitCode == BPExitStatusTestTimeout);
 
     self.config.testing_NoAppWillRun = YES;

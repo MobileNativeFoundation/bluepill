@@ -326,6 +326,10 @@ void onInterrupt(int ignore) {
 }
 
 - (BOOL)isProcessRunningWithContext:(BPExecutionContext *)context {
+    if (self.config.testing_NoAppWillRun) {
+        return NO;
+    }
+    NSAssert(context.pid > 0, @"Application PID must be > 0");
     int rc = kill(context.pid, 0);
     return !(rc < 0);
 }
