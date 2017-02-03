@@ -28,6 +28,6 @@
 
 - (instancetype)init NS_UNAVAILABLE;
 
-- (NSString *)getSimlatorDeviceID;
+- (NSString *)getSimulatorDeviceID;
 
 @end

@@ -430,7 +430,9 @@ void onInterrupt(int ignore) {
         NEXT([self finishWithContext:context]);
         return;
     }
-    context.simulatorCreated = NO;//also use this flag to indicate the simulator will be deleted
+    context.simulatorCreated = NO;//also use this flag to tell writeDeviceIDFile() the simulator not avaiable
+    context.config.useDeviceID = nil; //prevent reuse this device when retry
+    self.config.useDeviceID = nil;
     
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
@@ -548,7 +550,7 @@ void onInterrupt(int ignore) {
 }
 
 - (void) writeDeviceIDFile {
-    NSString *idStr = [self getSimlatorDeviceID];
+    NSString *idStr = [self getSimulatorDeviceID];
     if (!idStr || !self.context.simulatorCreated) return;
     
     NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d",getpid()];
@@ -567,7 +569,7 @@ void onInterrupt(int ignore) {
     return (self.exitLoop == NO);
 }
 
-- (NSString *)getSimlatorDeviceID {
+- (NSString *)getSimulatorDeviceID {
     return self.context.runner.UDID;
 }
 

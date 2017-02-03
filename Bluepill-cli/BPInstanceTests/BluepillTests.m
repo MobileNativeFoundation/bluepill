@@ -331,6 +331,7 @@
 }
 
 - (void)testReuseSimulator {
+    //[BPUtils quietMode:NO];
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
     self.config.testBundlePath = testBundlePath;
     self.config.keepSimulator = YES;
@@ -338,20 +339,55 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
-    XCTAssertNotNil([bp getSimlatorDeviceID]);
+    XCTAssertNotNil([bp getSimulatorDeviceID]);
     
-    self.config.useDeviceID = [bp getSimlatorDeviceID];
+    self.config.useDeviceID = [bp getSimulatorDeviceID];
     XCTAssertNotNil(self.config.useDeviceID);
     
+    NSString *oldDeviceID = self.config.useDeviceID;
     self.config.keepSimulator = NO;
     
     Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode2 = [bp2 run];
     XCTAssert(exitCode2 == BPExitStatusTestsAllPassed);
-    XCTAssertEqualObjects(self.config.useDeviceID, [bp2 getSimlatorDeviceID]);
+    
+    XCTAssertNil(self.config.useDeviceID); //set to nil when sim is deleted
+    XCTAssertNotNil([bp2 getSimulatorDeviceID]);
+    XCTAssertEqualObjects(oldDeviceID, [bp2 getSimulatorDeviceID]);
 
 }
 
+- (void)testReuseSimulatorRetryAppCrashingTestsSet  {
+    //[BPUtils quietMode:NO];
+    
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.keepSimulator = YES;
+    
+    Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode = [bp run];
+    XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+    XCTAssertNotNil([bp getSimulatorDeviceID]);
+    
+    self.config.useDeviceID = [bp getSimulatorDeviceID];
+    XCTAssertNotNil(self.config.useDeviceID);
+    
+    NSString *oldDeviceID = self.config.useDeviceID;
+    
+    self.config.testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
+    self.config.failureTolerance = 1;
+    self.config.keepSimulator = NO;
+    self.config.errorRetriesCount = @2;
+    
+    Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode2 = [bp2 run];
+    XCTAssert(exitCode2 == BPExitStatusAppCrashed);
+    
+    XCTAssertNil(self.config.useDeviceID); //set to nil when sim is deleted
+    XCTAssertNotNil([bp2 getSimulatorDeviceID]);
+    //Specified device has been deleted due to crashed test case and a NEW sim sould be created when RETRY
+    XCTAssertNotEqualObjects(oldDeviceID, [bp2 getSimulatorDeviceID]);
+}
 
 - (void)testReuseSimulatorNotExist {
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
@@ -361,8 +397,10 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusSimulatorCreationFailed);
+    XCTAssertNil([bp getSimulatorDeviceID]);
 }
 
+//simulator shouldn't be kept in this case
 - (void)testKeepSimulatorWithAppCrashingTestsSet  {
     NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
@@ -374,6 +412,7 @@
 
 }
 
+//simulator shouldn't be kept in this case
 - (void)testKeepSimulatorWithAppHaningTestsSet  {
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
@@ -393,15 +432,15 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
-    XCTAssertNotNil([bp getSimlatorDeviceID]);
+    XCTAssertNotNil([bp getSimulatorDeviceID]);
     
-    self.config.delDeviceID = [bp getSimlatorDeviceID];
+    self.config.delDeviceID = [bp getSimulatorDeviceID];
     XCTAssertNotNil(self.config.delDeviceID);
     
     Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode2 = [bp2 run];
     XCTAssert(exitCode2 == BPExitStatusSimulatorDeleted);
-    XCTAssertEqualObjects(self.config.delDeviceID, [bp2 getSimlatorDeviceID]);
+    XCTAssertEqualObjects(self.config.delDeviceID, [bp2 getSimulatorDeviceID]);
 
 }
 
