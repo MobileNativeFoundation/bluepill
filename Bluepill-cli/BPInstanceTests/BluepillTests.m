@@ -461,14 +461,6 @@
 
 }
 
-- (void)testRunWithConfigurationFile {
-    
-}
-
-- (void)testRunWithRelativePathInConfigurationFile {
-    
-}
-
 #pragma mark - Test helpers
 
 - (void)compareReportAtPath:(NSString *)first withReportAtPath:(NSString *)second {
