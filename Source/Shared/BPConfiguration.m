@@ -97,7 +97,7 @@ struct BPOptions {
     {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
     {351, "reuse-simulator", no_argument, "Off", BP_VALUE | BP_BOOL, "reuseSimulator",
-        "Enable the feature of reusing simulators between test bundles"},
+        "Enable reusing simulators between test bundles"},
     {352, "keep-simulator", no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
         "Don't delete the simulator device after one test bundle finish. (BP INTERNAL USE ONLY). "},
     {0, 0, 0, 0}
