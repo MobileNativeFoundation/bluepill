@@ -49,6 +49,7 @@
 @property (nonatomic, strong) NSString *useDeviceID;
 @property (nonatomic, strong) NSString *delDeviceID;
 @property (nonatomic) BOOL keepSimulator;
+@property (nonatomic) BOOL reuseSimulator;
 
 // Generated fields
 @property (nonatomic, strong) NSString *xcodePath;

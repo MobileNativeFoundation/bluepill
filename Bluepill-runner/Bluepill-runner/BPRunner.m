@@ -88,6 +88,7 @@ maxprocs(void)
     cfg.testBundlePath = bundle.path;
     cfg.testCasesToSkip = bundle.testsToSkip;
     cfg.useDeviceID = deviceID;
+    cfg.keepSimulator = cfg.reuseSimulator;
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
                              NSTemporaryDirectory(),
@@ -196,7 +197,7 @@ maxprocs(void)
                     launchedTasks--;
                     [BPUtils printInfo:INFO withString:@"PID %d exited %d.", [task processIdentifier], [task terminationStatus]];
                     
-                    if (self.config.keepSimulator) {
+                    if (self.config.reuseSimulator) {
                         NSString *deviceID = [self readDeviceIDFile:[task processIdentifier]];
                         if (deviceID) {
                             [deviceList addObject:deviceID];

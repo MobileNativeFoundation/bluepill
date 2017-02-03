@@ -44,6 +44,7 @@
     self.config.junitOutput = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
+    self.config.quiet = YES;
 }
 
 - (void)tearDown {
@@ -69,6 +70,7 @@
 
 - (void)testTwoBPInstances {
     self.config.numSims = @2;
+    self.config.reuseSimulator = NO;
     
     NSError *err;
     BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
@@ -86,6 +88,7 @@
 - (void)testTwoBPInstancesTestCaseFail {
     self.config.numSims = @2;
     self.config.testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
+    self.config.reuseSimulator = NO;
     
     NSError *err;
     BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
@@ -102,7 +105,7 @@
 
 - (void)testFourBPInstancesReuseSim {
     self.config.numSims = @4;
-    self.config.keepSimulator = YES;
+    self.config.reuseSimulator = YES;
     
     NSError *err;
     BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath

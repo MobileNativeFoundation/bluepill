@@ -256,6 +256,9 @@ void onInterrupt(int ignore) {
         [BPUtils printInfo:INFO withString:[@"Completed: " stringByAppendingString:stepName]];
     }
     else {
+        context.config.useDeviceID = nil; //prevent reuse this device when RETRY
+        self.config.useDeviceID = nil;
+        
         [[BPStats sharedStats] endTimer:stepName];
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [BPUtils printError:ERROR withString:@"Failed to reuse simulator"];
@@ -431,7 +434,7 @@ void onInterrupt(int ignore) {
         return;
     }
     context.simulatorCreated = NO;//also use this flag to tell writeDeviceIDFile() the simulator not avaiable
-    context.config.useDeviceID = nil; //prevent reuse this device when retry
+    context.config.useDeviceID = nil; //prevent reuse this device when RETRY
     self.config.useDeviceID = nil;
     
     [[BPStats sharedStats] startTimer:stepName];

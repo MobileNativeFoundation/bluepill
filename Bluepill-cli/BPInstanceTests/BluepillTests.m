@@ -400,6 +400,23 @@
     XCTAssertNil([bp getSimulatorDeviceID]);
 }
 
+- (void)testReuseSimulatorNotExistWithRetry {
+    //[BPUtils quietMode:NO];
+    NSString *badDeviceID = @"XXXXX";
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.useDeviceID = badDeviceID;
+    self.config.failureTolerance = 1;
+    self.config.errorRetriesCount = @2;
+    
+    Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode = [bp run];
+    XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+    XCTAssertNil(self.config.useDeviceID); //set to nil when sim cannot be reused
+    XCTAssertNotNil([bp getSimulatorDeviceID]);
+    XCTAssertNotEqual(badDeviceID, [bp getSimulatorDeviceID]);
+}
+
 //simulator shouldn't be kept in this case
 - (void)testKeepSimulatorWithAppCrashingTestsSet  {
     NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];

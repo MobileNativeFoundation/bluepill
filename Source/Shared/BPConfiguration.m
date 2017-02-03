@@ -38,7 +38,7 @@ struct BPOptions {
         "Directory where to put output log files (bluepill only)."},
     {'s', "scheme-path", required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
-
+    
     // Optional argument
     {'d', "device",   required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
         "On which device to run the app."},
@@ -70,6 +70,10 @@ struct BPOptions {
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
     {'X', "xcode-path", required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
         "Path to xcode."},
+    {'u', "use-simulator", required_argument, NULL, BP_VALUE, "useDeviceID",
+        "The device UUID of simulator to reuse. (BP INTERNAL USE ONLY). "},
+    {'D', "delete-simulator", required_argument, NULL, BP_VALUE, "delDeviceID",
+        "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE. (BP INTERNAL USE ONLY). "},
 
     // options with no argument
     {'H', "headless", no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
@@ -88,16 +92,14 @@ struct BPOptions {
         "If `failure-tolerance` is > 0, only retry tests that failed."},
     {'l', "list-tests", no_argument, NULL, BP_VALUE, "listTestsOnly",
         "Only list tests in bundle"},
-    {'u', "use-simulator", required_argument, NULL, BP_VALUE, "useDeviceID",
-        "The device UUID of simulator to reuse."},
-    {'D', "delete-simulator", required_argument, NULL, BP_VALUE, "delDeviceID",
-        "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE."},
     
     // options without short-options
     {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
-    {351, "keep-simulator", no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
-        "Don't delete the simulator device after tests finish"},
+    {351, "reuse-simulator", no_argument, "Off", BP_VALUE | BP_BOOL, "reuseSimulator",
+        "Enable the feature of reusing simulators between test bundles"},
+    {352, "keep-simulator", no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
+        "Don't delete the simulator device after one test bundle finish. (BP INTERNAL USE ONLY). "},
     {0, 0, 0, 0}
 };
 
