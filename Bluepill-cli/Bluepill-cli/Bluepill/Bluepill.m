@@ -77,7 +77,7 @@ void onInterrupt(int ignore) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.01, NO);
     }
 
-    if (self.config.keepSimulator) [self writeDeviceIDFile];
+    if (self.config.keepSimulator) { [self writeDeviceIDFile]; }
     
     // Tests completed or interruption received, show some quick stats as we exit
     [BPUtils printInfo:INFO withString:@"Number of Executions: %lu", self.retries + 1];
@@ -253,7 +253,7 @@ void onInterrupt(int ignore) {
         NEXT([self installApplicationWithContext:context]);
         
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:INFO withString:[@"Completed: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
     }
     else {
         context.config.useDeviceID = nil; //prevent reuse this device when RETRY
@@ -449,7 +449,7 @@ void onInterrupt(int ignore) {
 
     handler.beginWith = ^{
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:(__handler.error ? FAILED : INFO) withString:[@"Completed: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:(__handler.error ? FAILED : INFO) withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
     };
 
     handler.onSuccess = ^{
@@ -552,7 +552,7 @@ void onInterrupt(int ignore) {
 
 }
 
-- (void) writeDeviceIDFile {
+- (void)writeDeviceIDFile {
     NSString *idStr = [self getSimulatorDeviceID];
     if (!idStr || !self.context.simulatorCreated) return;
     

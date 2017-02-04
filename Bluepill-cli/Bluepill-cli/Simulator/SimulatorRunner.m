@@ -243,8 +243,7 @@
         NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
         return app;
     }
-    return nil;
-    
+    return nil;    
 }
 
 + (void)bootDevice:(SimDevice *)device withCompletion:(void (^)())completion {

@@ -19,7 +19,6 @@
 @property (nonatomic, assign, readonly) BOOL needsRetry;
 @property (nonatomic, readonly) NSString *UDID;
 
-
 + (instancetype)simulatorRunnerWithConfiguration:(BPConfiguration *)config;
 
 - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;

@@ -90,7 +90,7 @@
 - (void)listBundles:(BOOL) verbose {
     for (BPXCTestFile *testFile in self.testBundles) {
         printf("%s.xctest\n", [testFile.name UTF8String]);
-        if (verbose) [testFile listTestClasses];
+        if (verbose) { [testFile listTestClasses]; }
     }
 }
 

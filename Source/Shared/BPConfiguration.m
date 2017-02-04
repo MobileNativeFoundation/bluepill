@@ -38,7 +38,7 @@ struct BPOptions {
         "Directory where to put output log files (bluepill only)."},
     {'s', "scheme-path", required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
-    
+
     // Optional argument
     {'d', "device",   required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
         "On which device to run the app."},
@@ -92,7 +92,7 @@ struct BPOptions {
         "If `failure-tolerance` is > 0, only retry tests that failed."},
     {'l', "list-tests", no_argument, NULL, BP_VALUE, "listTestsOnly",
         "Only list tests in bundle"},
-    
+
     // options without short-options
     {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
@@ -140,7 +140,7 @@ struct BPOptions {
             break;
         }
     }
-    if (bpo == NULL) [self usage:-1]; // exits
+    if (bpo == NULL) { [self usage:-1]; }// exits
     assert(bpo && bpo->name);
     if (!strcmp(bpo->name, "help")) [self usage:0];
     [self setProperty:bpo withArg:arg];
