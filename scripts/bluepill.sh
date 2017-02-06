@@ -25,6 +25,9 @@ bluepill_build()
 
 bluepill_test()
 {
+  # Dump our current diff state with master
+  git --no-pager log master..HEAD
+
   default_runtime=`grep BP_DEFAULT_RUNTIME ./Source/Shared/BPConstants.h | sed 's/.*BP_DEFAULT_RUNTIME *//;s/"//g;s/ *$//g;'`
   xcrun simctl list runtimes | grep -q "$default_runtime" || {
     echo "Your system doesn't contain latest runtime: iOS $default_runtime"
