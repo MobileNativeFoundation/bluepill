@@ -225,7 +225,7 @@
 }
 
 + (SimDevice *)findDeviceWithConfig:(BPConfiguration *)config andDeviceID:(NSUUID *)deviceID {
-    deviceID = deviceID ?: [[NSUUID alloc] initWithUUIDString:config.useDeviceID];
+    deviceID = deviceID ?: [[NSUUID alloc] initWithUUIDString:config.useSimUDID];
     
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];

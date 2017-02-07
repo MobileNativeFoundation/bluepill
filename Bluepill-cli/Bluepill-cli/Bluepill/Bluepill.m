@@ -183,9 +183,9 @@ void onInterrupt(int ignore) {
 
     context.runner = [self createSimulatorRunnerWithContext:context];
     
-    if (context.config.delDeviceID) {
+    if (context.config.deleteSimUDID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
-    } else if (context.config.useDeviceID) {
+    } else if (context.config.useSimUDID) {
         NEXT([self reuseSimulatorWithContext:context]);
     } else {
         NEXT([self createSimulatorWithContext:context]);
@@ -245,7 +245,7 @@ void onInterrupt(int ignore) {
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
     
-    if ([context.runner useSimulatorWithDeviceID: [[NSUUID alloc] initWithUUIDString:context.config.useDeviceID]]) {
+    if ([context.runner useSimulatorWithDeviceID: [[NSUUID alloc] initWithUUIDString:context.config.useSimUDID]]) {
         context.simulatorCreated = YES; //if we don't set this flag, deleteSimulatorWithContext() won't proceed
         
         NEXT([self uninstallApplicationWithContext:context]);
@@ -253,8 +253,8 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
     } else {
-        context.config.useDeviceID = nil; //prevent reuse this device when RETRY
-        self.config.useDeviceID = nil;
+        context.config.useSimUDID = nil; //prevent reuse this device when RETRY
+        self.config.useSimUDID = nil;
         
         [[BPStats sharedStats] endTimer:stepName];
         [[BPStats sharedStats] addSimulatorCreateFailure];
@@ -450,8 +450,8 @@ void onInterrupt(int ignore) {
         return;
     }
     context.simulatorCreated = NO;//also use this flag to tell writeDeviceIDFile() the simulator not avaiable
-    context.config.useDeviceID = nil; //prevent reuse this device when RETRY
-    self.config.useDeviceID = nil;
+    context.config.useSimUDID = nil; //prevent reuse this device when RETRY
+    self.config.useSimUDID = nil;
     
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
@@ -492,7 +492,7 @@ void onInterrupt(int ignore) {
 //only called when bp is running in the delete only mode
 - (void)deleteSimulatorOnlyTaskWithContext:(BPExecutionContext *)context {
     
-    if ([context.runner useSimulatorWithDeviceID: [[NSUUID alloc] initWithUUIDString:context.config.delDeviceID]]) {
+    if ([context.runner useSimulatorWithDeviceID: [[NSUUID alloc] initWithUUIDString:context.config.deleteSimUDID]]) {
         context.simulatorCreated = YES; //if we don't set this flag, deleteSimulatorWithContext() won't proceed
         
         NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorDeleted]);

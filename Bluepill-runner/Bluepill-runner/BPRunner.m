@@ -87,7 +87,7 @@ maxprocs(void)
     BPConfiguration *cfg = [self.config mutableCopy];
     cfg.testBundlePath = bundle.path;
     cfg.testCasesToSkip = bundle.testsToSkip;
-    cfg.useDeviceID = deviceID;
+    cfg.useSimUDID = deviceID;
     cfg.keepSimulator = cfg.reuseSimulator;
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
