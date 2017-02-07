@@ -23,7 +23,7 @@
 
 - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion;
-- (BOOL)useSimulatorWithDeviceID:(NSUUID *)deviceID;
+- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID;
 
 ///*!
 // * @discussion install an app in a specified simulator
