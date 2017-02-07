@@ -39,6 +39,7 @@
 //                         error:(NSError **)error;
 
 - (BOOL)installApplicationAndReturnError:(NSError **)error;
+- (BOOL)uninstallApplicationAndReturnError:(NSError **)error;
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t pid))completion;
 
 /*!

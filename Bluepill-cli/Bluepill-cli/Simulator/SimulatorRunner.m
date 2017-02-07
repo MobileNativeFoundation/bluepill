@@ -71,8 +71,7 @@
                 return NO;
             }
             return YES;
-        }
-        else {
+        } else {
             [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice exists, but not running: %@", [deviceID UUIDString]]];
             return NO;
         }
@@ -186,6 +185,22 @@
     return TRUE;
 }
 
++ (BOOL)uninstallAppWithBundleID:(NSString *)hostBundleID
+                    bundlePath:(NSString *)hostBundlePath
+                        device:(SimDevice *)device
+                         error:(NSError **)error {
+    NSString *type; //NSString type verified by debug
+    BOOL installed = [device applicationIsInstalled:hostBundleID type:&type error:error];
+    if (!installed) { return YES; }
+
+    BOOL uninstalled = [device uninstallApplication:hostBundlePath //Don't convert to NSURL
+                                    withOptions:@{kCFBundleIdentifier: hostBundleID}
+                                          error:error];
+
+    if (!uninstalled) return FALSE;
+    return TRUE;
+}
+
 + (void)createDeviceWithConfig:(BPConfiguration *)config andName:(NSString *)deviceName completion:(void (^)(NSError *, SimDevice *))completion {
     deviceName = deviceName ?: [NSString stringWithFormat:@"BP%d", getpid()];
     
@@ -281,6 +296,20 @@
                                                       device:self.device error:error];
 
     if (!installed) {
+        return NO;
+    }
+    return YES;
+}
+
+- (BOOL)uninstallApplicationAndReturnError:(NSError *__autoreleasing *)error {
+    NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
+
+    // Install the host application
+    BOOL uninstalled = [SimulatorRunner uninstallAppWithBundleID:hostBundleId
+                                                  bundlePath:self.config.appBundlePath
+                                                      device:self.device error:error];
+
+    if (!uninstalled) {
         return NO;
     }
     return YES;

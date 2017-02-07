@@ -185,11 +185,9 @@ void onInterrupt(int ignore) {
     
     if (context.config.delDeviceID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
-    }
-    else if (context.config.useDeviceID) {
+    } else if (context.config.useDeviceID) {
         NEXT([self reuseSimulatorWithContext:context]);
-    }
-    else {
+    } else {
         NEXT([self createSimulatorWithContext:context]);
     }
 }
@@ -250,12 +248,11 @@ void onInterrupt(int ignore) {
     if ([context.runner useSimulatorWithDeviceID: [[NSUUID alloc] initWithUUIDString:context.config.useDeviceID]]) {
         context.simulatorCreated = YES; //if we don't set this flag, deleteSimulatorWithContext() won't proceed
         
-        NEXT([self installApplicationWithContext:context]);
+        NEXT([self uninstallApplicationWithContext:context]);
         
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
-    }
-    else {
+    } else {
         context.config.useDeviceID = nil; //prevent reuse this device when RETRY
         self.config.useDeviceID = nil;
         
@@ -286,6 +283,26 @@ void onInterrupt(int ignore) {
         return;
     } else {
         NEXT([self launchApplicationWithContext:context]);
+    }
+}
+
+- (void)uninstallApplicationWithContext:(BPExecutionContext *)context {
+    NSString *stepName = UNINSTALL_APPLICATION(context.attemptNumber);
+    [[BPStats sharedStats] startTimer:stepName];
+    [BPUtils printInfo:INFO withString:stepName];
+
+    NSError *error = nil;
+    BOOL success = [context.runner uninstallApplicationAndReturnError:&error];
+
+    [[BPStats sharedStats] endTimer:stepName];
+    [BPUtils printInfo:(success ? INFO : FAILED) withString:[@"Completed: " stringByAppendingString:stepName]];
+
+    if (!success) {
+        [[BPStats sharedStats] addSimulatorInstallFailure];
+        [BPUtils printError:ERROR withString:@"Could not uninstall app in simulator: %@", [error localizedDescription]];
+        NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusUninstallAppFailed]);
+    } else {
+        NEXT([self installApplicationWithContext:context]);
     }
 }
 
@@ -417,8 +434,7 @@ void onInterrupt(int ignore) {
              context.runner.exitStatus == BPExitStatusTestsFailed)) {
             context.exitStatus = [context.runner exitStatus];
             NEXT([self finishWithContext:context]);
-        }
-        else {
+        } else {
             [self deleteSimulatorWithContext:context andStatus:[context.runner exitStatus]];
         }
     }
@@ -481,8 +497,7 @@ void onInterrupt(int ignore) {
         
         NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorDeleted]);
         
-    }
-    else {
+    } else {
         [BPUtils printError:ERROR withString:@"Failed to reconnect simulator"];
         context.exitStatus = BPExitStatusSimulatorCreationFailed;
         
@@ -531,6 +546,7 @@ void onInterrupt(int ignore) {
         case BPExitStatusSimulatorCreationFailed:
         case BPExitStatusSimulatorCrashed:
         case BPExitStatusInstallAppFailed:
+        case BPExitStatusUninstallAppFailed:
         case BPExitStatusLaunchAppFailed:
             NEXT([self retry]);
             return;
