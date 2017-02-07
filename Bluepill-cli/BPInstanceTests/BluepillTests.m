@@ -47,6 +47,7 @@
     self.config.jsonOutput = NO;
     self.config.headlessMode = NO;
     self.config.junitOutput = NO;
+    self.config.testing_NoAppWillRun = YES;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils quietMode:YES];
@@ -78,16 +79,29 @@
     [super tearDown];
 }
 
-// This is a template to run Voyager's tests
-- (void)testVoyager {
-//    self.config.outputDirectory = @"/Users/khu/tmp/simulator";
-//    self.config.schemePath = @"/Users/khu/ios/mntf-ios-sample-app_trunk/./mntf-ios-sample-app.xcodeproj/xcshareddata/xcschemes/mntf-ios-sample-app-ui-tests.xcscheme";
-//    self.config.testCasesToRun = @[@"MNTFSampleAppUITests/testRotate", @"MNTFSampleAppUITests/testScrollToAnIndex"];
-//    self.config.appBundlePath =
-//    @"/Users/khu/ios/mntf-ios-sample-app_trunk/build/mntf-ios-sample-app/Build/Products/Debug-iphonesimulator/mntf-ios-sample-app.app";
-//    self.config.testBundlePath = @"/Users/khu/ios/mntf-ios-sample-app_trunk/build/mntf-ios-sample-app/Build/Products/Debug-iphonesimulator/mntf-ios-sample-app.app/PlugIns/mntf-ios-sample-app-UITests.xctest";
-//    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+- (void)testAppThatCrashesOnLaunch {
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.testing_CrashAppOnLaunch = YES;
+    self.config.testing_NoAppWillRun = NO;
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusAppCrashed);
+
+    self.config.testing_NoAppWillRun = YES;
 }
+
+- (void)testAppThatHangsOnLaunch {
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.testing_HangAppOnLaunch = YES;
+    self.config.testing_NoAppWillRun = NO;
+    self.config.stuckTimeout = @3;
+    BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusTestTimeout);
+
+    self.config.testing_NoAppWillRun = YES;
+}
+
 
 - (void)testRunningOnlyCertainTestcases {
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
@@ -193,7 +207,7 @@
 }
 
 - (void)testReportWithAppHangingTestsSet {
-    self.config.stuckTimeout = @5;
+    self.config.stuckTimeout = @2;
     self.config.plainOutput = YES;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;

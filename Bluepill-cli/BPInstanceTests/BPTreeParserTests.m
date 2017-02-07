@@ -19,6 +19,8 @@
 
 @interface BPTreeParserTests : XCTestCase
 
+@property (nonatomic, strong) BPConfiguration* config;
+
 @end
 
 @implementation BPTreeParserTests
@@ -29,6 +31,8 @@
         [BPUtils quietMode:YES];
         [BPUtils enableDebugOutput:NO];
     }
+    self.config = [[BPConfiguration alloc] init];
+    self.config.testing_NoAppWillRun = YES;
 }
 
 - (void)tearDown {
@@ -53,8 +57,7 @@ BPWriter *getWriter() {
 
     BPWriter *writer = getWriter();
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
-    BPConfiguration *config = [[BPConfiguration alloc] init];
-    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:config];
+    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
 
     parser.delegate = monitor;
 
@@ -74,8 +77,7 @@ BPWriter *getWriter() {
     
     BPWriter *writer = getWriter();
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
-    BPConfiguration *config = [[BPConfiguration alloc] init];
-    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:config];
+    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
 
     parser.delegate = monitor;
 
@@ -95,8 +97,7 @@ BPWriter *getWriter() {
     
     BPWriter *writer = getWriter();
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
-    BPConfiguration *config = [[BPConfiguration alloc] init];
-    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:config];
+    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
 
     parser.delegate = monitor;
 
@@ -116,8 +117,7 @@ BPWriter *getWriter() {
     
     BPWriter *writer = getWriter();
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
-    BPConfiguration *config = [[BPConfiguration alloc] init];
-    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:config];
+    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
     monitor.maxTimeWithNoOutput = 2.0; // change the max output time to 2 seconds
 
     parser.delegate = monitor;
@@ -145,8 +145,7 @@ BPWriter *getWriter() {
     
     BPWriter *writer = getWriter();
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
-    BPConfiguration *config = [[BPConfiguration alloc] init];
-    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:config];
+    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
 
     parser.delegate = monitor;
 

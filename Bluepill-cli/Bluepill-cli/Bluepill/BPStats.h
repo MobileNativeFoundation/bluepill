@@ -36,9 +36,10 @@
 - (void)addTestFailure;
 - (void)addTestError;
 - (void)addSimulatorCrash;
+- (void)addApplicationCrash;
 - (void)addRetry;
 - (void)addTestRuntimeTimeout;
-- (void)addTestBPExitStatusTestTimeout;
+- (void)addTestOutputTimeout;
 - (void)addSimulatorCreateFailure;
 - (void)addSimulatorDeleteFailure;
 - (void)addSimulatorInstallFailure;

@@ -24,7 +24,8 @@
 @property (nonatomic, assign) NSInteger testsTotal;
 @property (nonatomic, assign) NSInteger testFailures;
 @property (nonatomic, assign) NSInteger testErrors;
-@property (nonatomic, assign) NSInteger crashes;
+@property (nonatomic, assign) NSInteger simCrashes;
+@property (nonatomic, assign) NSInteger appCrashes;
 @property (nonatomic, assign) NSInteger retries;
 @property (nonatomic, assign) NSInteger runtimeTimeout;
 @property (nonatomic, assign) NSInteger outputTimeout;
@@ -133,7 +134,11 @@
 }
 
 - (void)addSimulatorCrash {
-    self.crashes++;
+    self.simCrashes++;
+}
+
+- (void)addApplicationCrash {
+    self.appCrashes++;
 }
 
 - (void)addRetry {
@@ -144,7 +149,7 @@
     self.runtimeTimeout++;
 }
 
-- (void)addTestBPExitStatusTestTimeout {
+- (void)addTestOutputTimeout {
     self.outputTimeout++;
 }
 
@@ -188,7 +193,8 @@
     [writer writeLine:@"Timeout due to test run-time:   %d", self.runtimeTimeout];
     [writer writeLine:@"Timeout due to no output:       %d", self.outputTimeout];
     [writer writeLine:@"Retries:                        %d", self.retries];
-    [writer writeLine:@"Simulator Crashes:              %d", self.crashes];
+    [writer writeLine:@"Application Crashes:            %d", self.appCrashes];
+    [writer writeLine:@"Simulator Crashes:              %d", self.simCrashes];
     [writer writeLine:@"Simulator Creation Failures:    %d", self.simulatorCreateFailures];
     [writer writeLine:@"Simulator Deletion Failures:    %d", self.simulatorDeleteFailures];
     [writer writeLine:@"App Install Failures:           %d", self.simulatorInstallFailures];

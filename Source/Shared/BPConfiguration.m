@@ -248,6 +248,9 @@ struct BPOptions {
     newConfig.simDeviceType = self.simDeviceType;
 #endif
     newConfig.xcodePath = self.xcodePath;
+    newConfig.testing_CrashAppOnLaunch = self.testing_CrashAppOnLaunch;
+    newConfig.testing_HangAppOnLaunch = self.testing_HangAppOnLaunch;
+    newConfig.testing_NoAppWillRun = self.testing_NoAppWillRun;
 
     return newConfig;
 }

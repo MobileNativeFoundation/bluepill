@@ -20,6 +20,11 @@
 
 @interface BPConfiguration : NSObject <NSCopying>
 
+/*
+ * WARNING: Any fields you add here need to be explicitly handled in the copyWithZone
+ * and mutableCopyWithZone methods. Yeah, it's stupid, we should fix it.
+ */
+
 @property (nonatomic, strong) NSString *appBundlePath;
 @property (nonatomic, strong) NSString *testBundlePath;
 @property (nonatomic, strong) NSArray *additionalTestBundles;
@@ -46,6 +51,11 @@
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic, strong) NSNumber *listTestsOnly;
 @property (nonatomic) BOOL quiet;
+
+// These fields are for testing.
+@property (nonatomic) BOOL testing_CrashAppOnLaunch;
+@property (nonatomic) BOOL testing_HangAppOnLaunch;
+@property (nonatomic) BOOL testing_NoAppWillRun;
 
 // Generated fields
 @property (nonatomic, strong) NSString *xcodePath;
