@@ -34,6 +34,10 @@
             return @"BPExitStatusInstallAppFailed";
         case BPExitStatusInterrupted:
             return @"BPExitStatusInterrupted";
+        case BPExitStatusSimulatorDeleted:
+            return @"BPExitStatusSimulatorDeleted";
+        case BPExitStatusSimulatorReuseFailed:
+            return @"BPExitStatusSimulatorReuseFailed";
         default:
             return @"UNKNOWN_BPEXITSTATUS";
     }

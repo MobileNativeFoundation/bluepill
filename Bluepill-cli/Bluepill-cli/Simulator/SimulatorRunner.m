@@ -61,6 +61,27 @@
     }];
 }
 
+- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
+    self.device = [SimulatorRunner findDeviceWithConfig:self.config andDeviceID:deviceUDID];
+    if (self.device) {
+        if ([self.device.stateString isEqualToString:@"Booted"]) {
+            if (!self.config.headlessMode) {
+                self.app = [SimulatorRunner findSimAppWithDeviceUDID: [deviceUDID UUIDString]];
+                if (!self.app) {
+                    [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
+                                                                  [deviceUDID UUIDString]]];
+                    return NO;
+                }
+            }
+            return YES;
+        } else {
+            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]]];
+            return NO;
+        }
+    }
+    return NO;
+}
+
 - (void)bootSimulatorWithCompletion:(void (^)(NSError *))completion {
     // Now boot it.
     if (self.config.headlessMode) {
@@ -159,12 +180,18 @@
                         device:(SimDevice *)device
                          error:(NSError **)error {
 
-    BOOL installed = [device installApplication:[NSURL fileURLWithPath:hostBundlePath]
-                                    withOptions:@{kCFBundleIdentifier: hostBundleID}
-                                          error:error];
+    return [device installApplication:[NSURL fileURLWithPath:hostBundlePath]
+                          withOptions:@{kCFBundleIdentifier: hostBundleID}
+                                error:error];
+}
 
-    if (!installed) return FALSE;
-    return TRUE;
++ (BOOL)uninstallAppWithBundleID:(NSString *)hostBundleID
+                    bundlePath:(NSString *)hostBundlePath
+                        device:(SimDevice *)device
+                         error:(NSError **)error {
+    return [device uninstallApplication:hostBundleID
+                            withOptions:@{kCFBundleIdentifier: hostBundleID}
+                                  error:error];
 }
 
 + (void)createDeviceWithConfig:(BPConfiguration *)config andName:(NSString *)deviceName completion:(void (^)(NSError *, SimDevice *))completion {
@@ -188,6 +215,43 @@
                        completionHandler:^(NSError *error, SimDevice *device) {
                            completion(error, device);
                        }];
+}
+
++ (SimDevice *)findDeviceWithConfig:(BPConfiguration *)config andDeviceID:(NSUUID *)deviceID {
+    deviceID = deviceID ?: [[NSUUID alloc] initWithUUIDString:config.useSimUDID];
+    
+    NSError *error;
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
+    if (!sc) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        return nil;
+    }
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (!deviceSet) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        return nil;
+    }
+
+    SimDevice *device = deviceSet.devicesByUDID[deviceID];
+    if (!device) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice not found: %@", [deviceID UUIDString]]];
+        return nil;
+    }
+    
+    return device;
+ }
+
++ (NSRunningApplication *)findSimAppWithDeviceUDID:(NSString *)deviceUDID {
+    NSString * cmd = [NSString stringWithFormat:@"ps -A | grep 'Simulator\\.app.*-CurrentDeviceUDID %@'", deviceUDID];
+    NSString * output = [[BPUtils runShell:cmd] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSArray *fields = [output componentsSeparatedByString: @" "];
+    if ([fields count] > 0) {
+        NSString *pidStr = [fields objectAtIndex:0];
+        int pid = [pidStr intValue];
+        NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
+        return app;
+    }
+    return nil;
 }
 
 + (void)bootDevice:(SimDevice *)device withCompletion:(void (^)())completion {
@@ -228,6 +292,15 @@
         return NO;
     }
     return YES;
+}
+
+- (BOOL)uninstallApplicationAndReturnError:(NSError *__autoreleasing *)error {
+    NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
+
+    // Install the host application
+    return [SimulatorRunner uninstallAppWithBundleID:hostBundleId
+                                          bundlePath:self.config.appBundlePath
+                                              device:self.device error:error];
 }
 
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {

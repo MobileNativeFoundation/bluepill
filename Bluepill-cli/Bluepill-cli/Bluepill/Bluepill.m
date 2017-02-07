@@ -77,6 +77,8 @@ void onInterrupt(int ignore) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.01, NO);
     }
 
+    if (self.config.keepSimulator) { [self writeDeviceIDFile]; }
+    
     // Tests completed or interruption received, show some quick stats as we exit
     [BPUtils printInfo:INFO withString:@"Number of Executions: %lu", self.retries + 1];
     [BPUtils printInfo:INFO withString:@"Final Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
@@ -180,8 +182,14 @@ void onInterrupt(int ignore) {
     }
 
     context.runner = [self createSimulatorRunnerWithContext:context];
-
-    NEXT([self createSimulatorWithContext:context]);
+    
+    if (context.config.deleteSimUDID) {
+        NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
+    } else if (context.config.useSimUDID) {
+        NEXT([self reuseSimulatorWithContext:context]);
+    } else {
+        NEXT([self createSimulatorWithContext:context]);
+    }
 }
 
 - (SimulatorRunner *)createSimulatorRunnerWithContext:(BPExecutionContext *)context {
@@ -204,7 +212,7 @@ void onInterrupt(int ignore) {
 
     handler.beginWith = ^{
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:(__handler.error ? FAILED : INFO)
+        [BPUtils printInfo:(__handler.error ? ERROR : INFO)
                 withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
     };
 
@@ -223,12 +231,38 @@ void onInterrupt(int ignore) {
     handler.onTimeout = ^{
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:ERROR withString:[@"Timeout: " stringByAppendingString:stepName]];
         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
         NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
     };
 
     [context.runner createSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
+}
+
+- (void)reuseSimulatorWithContext:(BPExecutionContext *)context {
+    NSString *stepName = REUSE_SIMULATOR(context.attemptNumber);
+    
+    [[BPStats sharedStats] startTimer:stepName];
+    [BPUtils printInfo:INFO withString:stepName];
+    
+    if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.useSimUDID]]) {
+        context.simulatorCreated = YES; //if we don't set this flag, deleteSimulatorWithContext() won't proceed
+        
+        NEXT([self uninstallApplicationWithContext:context]);
+        
+        [[BPStats sharedStats] endTimer:stepName];
+        [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
+    } else {
+        context.config.useSimUDID = nil; //prevent reuse this device when RETRY
+        self.config.useSimUDID = nil;
+        
+        [[BPStats sharedStats] endTimer:stepName];
+        [[BPStats sharedStats] addSimulatorCreateFailure];
+        [BPUtils printError:ERROR withString:@"Failed to reuse simulator"];
+        context.exitStatus = BPExitStatusSimulatorCreationFailed;
+        
+        NEXT([self finishWithContext:context]);
+    }
 }
 
 - (void)installApplicationWithContext:(BPExecutionContext *)context {
@@ -240,7 +274,7 @@ void onInterrupt(int ignore) {
     BOOL success = [context.runner installApplicationAndReturnError:&error];
 
     [[BPStats sharedStats] endTimer:stepName];
-    [BPUtils printInfo:(success ? INFO : FAILED) withString:[@"Completed: " stringByAppendingString:stepName]];
+    [BPUtils printInfo:(success ? INFO : ERROR) withString:[@"Completed: " stringByAppendingString:stepName]];
 
     if (!success) {
         [[BPStats sharedStats] addSimulatorInstallFailure];
@@ -249,6 +283,26 @@ void onInterrupt(int ignore) {
         return;
     } else {
         NEXT([self launchApplicationWithContext:context]);
+    }
+}
+
+- (void)uninstallApplicationWithContext:(BPExecutionContext *)context {
+    NSString *stepName = UNINSTALL_APPLICATION(context.attemptNumber);
+    [[BPStats sharedStats] startTimer:stepName];
+    [BPUtils printInfo:INFO withString:stepName];
+
+    NSError *error = nil;
+    BOOL success = [context.runner uninstallApplicationAndReturnError:&error];
+
+    [[BPStats sharedStats] endTimer:stepName];
+    [BPUtils printInfo:(success ? INFO : ERROR) withString:[@"Completed: " stringByAppendingString:stepName]];
+
+    if (!success) {
+        [[BPStats sharedStats] addSimulatorInstallFailure];
+        [BPUtils printError:ERROR withString:@"Could not uninstall app in simulator: %@", [error localizedDescription]];
+        NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusUninstallAppFailed]);
+    } else {
+        NEXT([self installApplicationWithContext:context]);
     }
 }
 
@@ -285,7 +339,7 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] addSimulatorLaunchFailure];
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:ERROR withString:[@"Timeout: " stringByAppendingString:stepName]];
         NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
     };
 
@@ -392,8 +446,12 @@ void onInterrupt(int ignore) {
     if (context.simulatorCrashed) {
         // If we crashed, we need to retry
         [self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCrashed];
+    } else if (self.config.keepSimulator && (context.runner.exitStatus == BPExitStatusTestsAllPassed ||
+                                             context.runner.exitStatus == BPExitStatusTestsFailed)) {
+      context.exitStatus = [context.runner exitStatus];
+      NEXT([self finishWithContext:context]);
     } else {
-        [self deleteSimulatorWithContext:context andStatus:[context.runner exitStatus]];
+      [self deleteSimulatorWithContext:context andStatus:[context.runner exitStatus]];
     }
 }
 
@@ -406,7 +464,10 @@ void onInterrupt(int ignore) {
         NEXT([self finishWithContext:context]);
         return;
     }
-
+    context.simulatorCreated = NO;  //also use this flag to tell writeDeviceIDFile() the simulator not avaiable
+    context.config.useSimUDID = nil; //prevent reuse this device when RETRY
+    self.config.useSimUDID = nil;
+    
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
 
@@ -419,7 +480,7 @@ void onInterrupt(int ignore) {
 
     handler.beginWith = ^{
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:(__handler.error ? FAILED : INFO) withString:[@"Completed: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:(__handler.error ? ERROR : INFO) withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
     };
 
     handler.onSuccess = ^{
@@ -435,12 +496,28 @@ void onInterrupt(int ignore) {
     handler.onTimeout = ^{
         [[BPStats sharedStats] addSimulatorDeleteFailure];
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:FAILED
+        [BPUtils printInfo:ERROR
                 withString:[@"Timeout: " stringByAppendingString:stepName]];
         NEXT([__self finishWithContext:context]);
     };
 
     [context.runner deleteSimulatorWithCompletion:handler.defaultHandlerBlock];
+}
+
+// Only called when bp is running in the delete only mode.
+- (void)deleteSimulatorOnlyTaskWithContext:(BPExecutionContext *)context {
+    
+    if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.deleteSimUDID]]) {
+        context.simulatorCreated = YES; //if we don't set this flag, deleteSimulatorWithContext() won't proceed
+        
+        NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorDeleted]);
+        
+    } else {
+        [BPUtils printError:ERROR withString:[NSString stringWithFormat:@"Failed to reconnect to simulator %@", context.config.deleteSimUDID]];
+        context.exitStatus = BPExitStatusSimulatorReuseFailed;
+        
+        NEXT([self finishWithContext:context]);
+    }
 }
 
 /**
@@ -485,6 +562,7 @@ void onInterrupt(int ignore) {
         case BPExitStatusSimulatorCreationFailed:
         case BPExitStatusSimulatorCrashed:
         case BPExitStatusInstallAppFailed:
+        case BPExitStatusUninstallAppFailed:
         case BPExitStatusLaunchAppFailed:
             NEXT([self retry]);
             return;
@@ -498,14 +576,37 @@ void onInterrupt(int ignore) {
             context.finalExitStatus = BPExitStatusAppCrashed;
             NEXT([self proceed]);
             return;
+        case BPExitStatusSimulatorDeleted:
+        case BPExitStatusSimulatorReuseFailed:
+            self.finalExitStatus = context.exitStatus;
+            self.exitLoop = YES;
+            return;
     }
 
+}
+
+- (void)writeDeviceIDFile {
+    NSString *idStr = [self getSimulatorDeviceID];
+    if (!idStr || !self.context.simulatorCreated) return;
+    
+    NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d",getpid()];
+    NSString *tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName];
+    
+    NSError *error;
+    BOOL success = [idStr writeToFile:tempFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+    if (!success) {
+        [BPUtils printError:ERROR withString:@"ERROR: Failed to write the device ID file %@ with error:", tempFilePath, [error localizedDescription]];
+    }
 }
 
 // MARK: Helpers
 
 - (BOOL)continueRunning {
     return (self.exitLoop == NO);
+}
+
+- (NSString *)getSimulatorDeviceID {
+    return self.context.runner.UDID;
 }
 
 int __line;
