@@ -23,6 +23,7 @@
 
 - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion;
+- (BOOL)useSimulatorWithDeviceID:(NSUUID *)deviceID;
 
 ///*!
 // * @discussion install an app in a specified simulator
@@ -38,6 +39,7 @@
 //                         error:(NSError **)error;
 
 - (BOOL)installApplicationAndReturnError:(NSError **)error;
+- (BOOL)uninstallApplicationAndReturnError:(NSError **)error;
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t pid))completion;
 
 /*!

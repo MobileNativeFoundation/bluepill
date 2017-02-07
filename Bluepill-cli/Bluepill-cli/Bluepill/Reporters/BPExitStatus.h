@@ -18,7 +18,9 @@ typedef NS_ENUM(NSInteger, BPExitStatus) {
     BPExitStatusLaunchAppFailed = 5,
     BPExitStatusTestTimeout = 6,
     BPExitStatusAppCrashed = 7,
-    BPExitStatusInterrupted = 8
+    BPExitStatusInterrupted = 8,
+    BPExitStatusSimulatorDeleted = 9,
+    BPExitStatusUninstallAppFailed = 10,
 };
 
 @protocol BPExitStatusProtocl <NSObject>

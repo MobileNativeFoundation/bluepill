@@ -51,6 +51,10 @@
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic, strong) NSNumber *listTestsOnly;
 @property (nonatomic) BOOL quiet;
+@property (nonatomic, strong) NSString *useSimUDID;
+@property (nonatomic, strong) NSString *deleteSimUDID;
+@property (nonatomic) BOOL keepSimulator;
+@property (nonatomic) BOOL reuseSimulator;
 
 // These fields are for testing.
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;

@@ -70,6 +70,10 @@ struct BPOptions {
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
     {'X', "xcode-path", required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
         "Path to xcode."},
+    {'u', "simulator-udid", required_argument, NULL, BP_VALUE, "useSimUDID",
+        "Do not create a simulator but reuse the one with the UDID given. (BP INTERNAL USE ONLY). "},
+    {'D', "delete-simulator", required_argument, NULL, BP_VALUE, "deleteSimUDID",
+        "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE. (BP INTERNAL USE ONLY). "},
 
     // options with no argument
     {'H', "headless", no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
@@ -92,6 +96,10 @@ struct BPOptions {
     // options without short-options
     {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
+    {351, "reuse-simulator", no_argument, "Off", BP_VALUE | BP_BOOL, "reuseSimulator",
+        "Enable reusing simulators between test bundles"},
+    {352, "keep-simulator", no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
+        "Don't delete the simulator device after one test bundle finish. (BP INTERNAL USE ONLY). "},
     {0, 0, 0, 0}
 };
 
@@ -132,7 +140,7 @@ struct BPOptions {
             break;
         }
     }
-    if (bpo == NULL) [self usage:-1]; // exits
+    if (bpo == NULL) { [self usage:-1]; }// exits
     assert(bpo && bpo->name);
     if (!strcmp(bpo->name, "help")) [self usage:0];
     [self setProperty:bpo withArg:arg];
@@ -449,6 +457,10 @@ struct BPOptions {
         return NO;
     }
 
+    if (self.deleteSimUDID) {
+        return YES;
+    }
+    
     if (!self.appBundlePath) {
         if (err) {
             NSDictionary *errInfo = @{ NSLocalizedDescriptionKey : @"No app bundle provided." };
