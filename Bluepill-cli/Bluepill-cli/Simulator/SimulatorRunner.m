@@ -193,7 +193,7 @@
     BOOL installed = [device applicationIsInstalled:hostBundleID type:&type error:error];
     if (!installed) { return YES; }
 
-    BOOL uninstalled = [device uninstallApplication:hostBundlePath //Don't convert to NSURL
+    BOOL uninstalled = [device uninstallApplication:hostBundleID
                                     withOptions:@{kCFBundleIdentifier: hostBundleID}
                                           error:error];
 
