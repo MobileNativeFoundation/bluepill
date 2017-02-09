@@ -32,4 +32,6 @@
 // Return the path to the resource folder
 + (NSString *)resourceFolderPath;
 
+// Return the path to the bp executable
++ (NSString *)bpExecutablePath;
 @end
