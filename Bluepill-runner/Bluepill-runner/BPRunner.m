@@ -163,12 +163,20 @@ maxprocs(void)
             }
             [self interrupt];
         }
-        if (([bundles count] == 0 && launchedTasks == 0) || (interrupted && launchedTasks == 0)) break;
-        if ([bundles count] > 0 && launchedTasks < numSims && !interrupted) {
+        int noLaunchedTasks;
+        int canLaunchTask;
+        @synchronized (self) {
+            noLaunchedTasks = (launchedTasks == 0);
+            canLaunchTask = (launchedTasks < numSims);
+        }
+        if (noLaunchedTasks && (bundles.count == 0 || interrupted)) break;
+        if (bundles.count > 0 && canLaunchTask && !interrupted) {
             NSTask *task = [self newTaskWithBundle:[bundles objectAtIndex:0] andNumber:++taskNumber andCompletionBlock:^(NSTask * _Nonnull task) {
-                launchedTasks--;
+                @synchronized (self) {
+                    launchedTasks--;
+                    [taskList removeObject:[NSString stringWithFormat:@"%lu", taskNumber]];
+                }
                 [BPUtils printInfo:INFO withString:@"PID %d exited %d.", [task processIdentifier], [task terminationStatus]];
-                [taskList removeObject:[NSString stringWithFormat:@"%lu", taskNumber]];
                 rc = (rc || [task terminationStatus]);
             }];
             if (!task) {
@@ -176,16 +184,22 @@ maxprocs(void)
                 continue;
             }
             [task launch];
-            [taskList addObject:[NSString stringWithFormat:@"%lu", taskNumber]];
+            @synchronized (self) {
+                launchedTasks++;
+                [taskList addObject:[NSString stringWithFormat:@"%lu", taskNumber]];
+            }
             [self.nsTaskList addObject:task];
             [bundles removeObjectAtIndex:0];
             [BPUtils printInfo:INFO withString:@"Started Simulator %lu (PID %d).", taskNumber, [task processIdentifier]];
-            launchedTasks++;
         }
         sleep(1);
         if (seconds % 30 == 0) {
+            NSString *listString;
+            @synchronized (self) {
+                listString = [taskList componentsJoinedByString:@", "];
+            }
             [BPUtils printInfo:INFO withString:@"%lu Simulator%s still running. [%@]",
-             launchedTasks, launchedTasks == 1 ? "" : "s", [taskList componentsJoinedByString:@", "]];
+             launchedTasks, launchedTasks == 1 ? "" : "s", listString];
             [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Using %d of %d processes.", numprocs(), maxProcs]];
 
         }
