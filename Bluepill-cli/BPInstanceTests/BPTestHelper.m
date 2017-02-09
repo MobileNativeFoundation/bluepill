@@ -41,6 +41,11 @@
 + (NSString *)resourceFolderPath {
     return [[NSBundle bundleForClass:[self class]] resourcePath];
 }
+
++ (NSString *)bpExecutablePath {
+    return [[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"bp"];
+}
+
 #pragma mark - Helpers
 
 + (NSString *)bpDerivedDataPath {

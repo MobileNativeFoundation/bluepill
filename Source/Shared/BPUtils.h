@@ -42,6 +42,12 @@ typedef NS_ENUM(int, BPKind) {
 + (void)quietMode:(BOOL)enable;
 
 /*!
+ @discussion returns true if the environment variable `BPBuildScript` is set to `YES`
+ which indicates that the application is running via the build script
+ */
++ (BOOL)isBuildScript;
+
+/*!
  @discussion creates a temporary directory via mkdtemp(3)
  @param pathTemplate a path in which to create the temporary directory.
  It doesn't need to be unique since a unique identifier will be appended 

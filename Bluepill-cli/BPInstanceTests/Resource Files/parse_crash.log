@@ -21,204 +21,204 @@ objc[80620]: Class AWDCallHistoryEntitlementRejection is implemented in both /Ap
 objc[80620]: Class AWDCallHistoryGizmoDatabaseMigrationFailure is implemented in both /Applications/Xcode-8.0-gm.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12c16c780) and /Applications/Xcode-8.0-gm.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x1383c30a0). One of the two will be used. Which one is undefined.
 objc[80620]: Class AWDCallHistoryNilUuid is implemented in both /Applications/Xcode-8.0-gm.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12c16c870) and /Applications/Xcode-8.0-gm.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x1383c30f0). One of the two will be used. Which one is undefined.
 objc[80620]: Class AWDCallHistoryMalformedCloudChangeToken is implemented in both /Applications/Xcode-8.0-gm.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12c16c7d0) and /Applications/Xcode-8.0-gm.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x1383c3190). One of the two will be used. Which one is undefined.
-Test Case '-[OSAMessagingTests.bebc9a4 test7701cb5' started.
-Test Case '-[OSAMessagingTests.bebc9a4 test7701cb5' passed (9.032 seconds).
-Test Case '-[OSAMessagingTests.bebc9a4 testb228374' started.
-Test Case '-[OSAMessagingTests.bebc9a4 testb228374' passed (7.999 seconds).
-Test Case '-[OSAMessagingTests.bebc9a4 testf55b323' started.
-Test Case '-[OSAMessagingTests.bebc9a4 testf55b323' passed (6.457 seconds).
-Test Case '-[OSAMessagingTests.bebc9a4 test6e8882e' started.
-Test Case '-[OSAMessagingTests.bebc9a4 test6e8882e' passed (6.668 seconds).
-Test Case '-[OSAMessagingTests.bebc9a4 test2fffcc7' started.
-Test Case '-[OSAMessagingTests.bebc9a4 test2fffcc7' passed (10.280 seconds).
-Test Case '-[OSAMessagingTests.bebc9a4 testa4b713f' started.
-Test Case '-[OSAMessagingTests.bebc9a4 testa4b713f' passed (6.827 seconds).
-Test Case '-[OSAMessagingTests.bebc9a4 test4aadcb6' started.
-Test Case '-[OSAMessagingTests.bebc9a4 test4aadcb6' passed (6.415 seconds).
+Test Case '-[OSAMessagingTests.bebc9a4 test7701cb5]' started.
+Test Case '-[OSAMessagingTests.bebc9a4 test7701cb5]' passed (9.032 seconds).
+Test Case '-[OSAMessagingTests.bebc9a4 testb228374]' started.
+Test Case '-[OSAMessagingTests.bebc9a4 testb228374]' passed (7.999 seconds).
+Test Case '-[OSAMessagingTests.bebc9a4 testf55b323]' started.
+Test Case '-[OSAMessagingTests.bebc9a4 testf55b323]' passed (6.457 seconds).
+Test Case '-[OSAMessagingTests.bebc9a4 test6e8882e]' started.
+Test Case '-[OSAMessagingTests.bebc9a4 test6e8882e]' passed (6.668 seconds).
+Test Case '-[OSAMessagingTests.bebc9a4 test2fffcc7]' started.
+Test Case '-[OSAMessagingTests.bebc9a4 test2fffcc7]' passed (10.280 seconds).
+Test Case '-[OSAMessagingTests.bebc9a4 testa4b713f]' started.
+Test Case '-[OSAMessagingTests.bebc9a4 testa4b713f]' passed (6.827 seconds).
+Test Case '-[OSAMessagingTests.bebc9a4 test4aadcb6]' started.
+Test Case '-[OSAMessagingTests.bebc9a4 test4aadcb6]' passed (6.415 seconds).
 Test Suite 'bebc9a4' passed at 2016-11-14 12:24:47.902.
      Executed 7 tests, with 0 failures (0 unexpected) in 53.679 (55.189) seconds
 Test Suite 'a2b2236' started at 2016-11-14 12:24:47.902
-Test Case '-[OSAMessagingTests.a2b2236 test524894a' started.
-Test Case '-[OSAMessagingTests.a2b2236 test524894a' passed (10.523 seconds).
-Test Case '-[OSAMessagingTests.a2b2236 test02a14d6' started.
-Test Case '-[OSAMessagingTests.a2b2236 test02a14d6' passed (6.398 seconds).
-Test Case '-[OSAMessagingTests.a2b2236 testec59e23' started.
-Test Case '-[OSAMessagingTests.a2b2236 testec59e23' passed (7.849 seconds).
-Test Case '-[OSAMessagingTests.a2b2236 test4770ce3' started.
-Test Case '-[OSAMessagingTests.a2b2236 test4770ce3' passed (8.093 seconds).
-Test Case '-[OSAMessagingTests.a2b2236 test9ebd77b' started.
-Test Case '-[OSAMessagingTests.a2b2236 test9ebd77b' passed (5.622 seconds).
-Test Case '-[OSAMessagingTests.a2b2236 test9fec501' started.
-Test Case '-[OSAMessagingTests.a2b2236 test9fec501' passed (10.130 seconds).
-Test Case '-[OSAMessagingTests.a2b2236 test1a4e66b' started.
-Test Case '-[OSAMessagingTests.a2b2236 test1a4e66b' passed (5.747 seconds).
-Test Case '-[OSAMessagingTests.a2b2236 test22bd1bc' started.
-Test Case '-[OSAMessagingTests.a2b2236 test22bd1bc' passed (6.488 seconds).
+Test Case '-[OSAMessagingTests.a2b2236 test524894a]' started.
+Test Case '-[OSAMessagingTests.a2b2236 test524894a]' passed (10.523 seconds).
+Test Case '-[OSAMessagingTests.a2b2236 test02a14d6]' started.
+Test Case '-[OSAMessagingTests.a2b2236 test02a14d6]' passed (6.398 seconds).
+Test Case '-[OSAMessagingTests.a2b2236 testec59e23]' started.
+Test Case '-[OSAMessagingTests.a2b2236 testec59e23]' passed (7.849 seconds).
+Test Case '-[OSAMessagingTests.a2b2236 test4770ce3]' started.
+Test Case '-[OSAMessagingTests.a2b2236 test4770ce3]' passed (8.093 seconds).
+Test Case '-[OSAMessagingTests.a2b2236 test9ebd77b]' started.
+Test Case '-[OSAMessagingTests.a2b2236 test9ebd77b]' passed (5.622 seconds).
+Test Case '-[OSAMessagingTests.a2b2236 test9fec501]' started.
+Test Case '-[OSAMessagingTests.a2b2236 test9fec501]' passed (10.130 seconds).
+Test Case '-[OSAMessagingTests.a2b2236 test1a4e66b]' started.
+Test Case '-[OSAMessagingTests.a2b2236 test1a4e66b]' passed (5.747 seconds).
+Test Case '-[OSAMessagingTests.a2b2236 test22bd1bc]' started.
+Test Case '-[OSAMessagingTests.a2b2236 test22bd1bc]' passed (6.488 seconds).
 Test Suite 'a2b2236' passed at 2016-11-14 12:25:49.217.
      Executed 8 tests, with 0 failures (0 unexpected) in 60.849 (61.315) seconds
 Test Suite '62de1d1' started at 2016-11-14 12:25:49.217
-Test Case '-[OSAMessagingTests.62de1d1 test7ac7f21' started.
-Test Case '-[OSAMessagingTests.62de1d1 test7ac7f21' passed (10.220 seconds).
-Test Case '-[OSAMessagingTests.62de1d1 testde2a2fb' started.
-Test Case '-[OSAMessagingTests.62de1d1 testde2a2fb' passed (10.248 seconds).
-Test Case '-[OSAMessagingTests.62de1d1 test64a3439' started.
-Test Case '-[OSAMessagingTests.62de1d1 test64a3439' passed (9.603 seconds).
+Test Case '-[OSAMessagingTests.62de1d1 test7ac7f21]' started.
+Test Case '-[OSAMessagingTests.62de1d1 test7ac7f21]' passed (10.220 seconds).
+Test Case '-[OSAMessagingTests.62de1d1 testde2a2fb]' started.
+Test Case '-[OSAMessagingTests.62de1d1 testde2a2fb]' passed (10.248 seconds).
+Test Case '-[OSAMessagingTests.62de1d1 test64a3439]' started.
+Test Case '-[OSAMessagingTests.62de1d1 test64a3439]' passed (9.603 seconds).
 Test Suite '62de1d1' passed at 2016-11-14 12:26:19.729.
      Executed 3 tests, with 0 failures (0 unexpected) in 30.071 (30.512) seconds
 Test Suite '427eb46' started at 2016-11-14 12:26:19.729
-Test Case '-[OSAMessagingTests.427eb46 testac647ff' started.
-Test Case '-[OSAMessagingTests.427eb46 testac647ff' passed (6.762 seconds).
-Test Case '-[OSAMessagingTests.427eb46 testdebd20d' started.
-Test Case '-[OSAMessagingTests.427eb46 testdebd20d' passed (6.509 seconds).
-Test Case '-[OSAMessagingTests.427eb46 test793c81c' started.
-Test Case '-[OSAMessagingTests.427eb46 test793c81c' passed (6.218 seconds).
-Test Case '-[OSAMessagingTests.427eb46 testf3472e3' started.
-Test Case '-[OSAMessagingTests.427eb46 testf3472e3' passed (6.539 seconds).
-Test Case '-[OSAMessagingTests.427eb46 test8783ed9' started.
-Test Case '-[OSAMessagingTests.427eb46 test8783ed9' passed (6.570 seconds).
-Test Case '-[OSAMessagingTests.427eb46 test7ac7365' started.
-Test Case '-[OSAMessagingTests.427eb46 test7ac7365' passed (6.438 seconds).
-Test Case '-[OSAMessagingTests.427eb46 testc29468b' started.
-Test Case '-[OSAMessagingTests.427eb46 testc29468b' passed (6.598 seconds).
-Test Case '-[OSAMessagingTests.427eb46 test7bd0b2a' started.
-Test Case '-[OSAMessagingTests.427eb46 test7bd0b2a' passed (6.903 seconds).
+Test Case '-[OSAMessagingTests.427eb46 testac647ff]' started.
+Test Case '-[OSAMessagingTests.427eb46 testac647ff]' passed (6.762 seconds).
+Test Case '-[OSAMessagingTests.427eb46 testdebd20d]' started.
+Test Case '-[OSAMessagingTests.427eb46 testdebd20d]' passed (6.509 seconds).
+Test Case '-[OSAMessagingTests.427eb46 test793c81c]' started.
+Test Case '-[OSAMessagingTests.427eb46 test793c81c]' passed (6.218 seconds).
+Test Case '-[OSAMessagingTests.427eb46 testf3472e3]' started.
+Test Case '-[OSAMessagingTests.427eb46 testf3472e3]' passed (6.539 seconds).
+Test Case '-[OSAMessagingTests.427eb46 test8783ed9]' started.
+Test Case '-[OSAMessagingTests.427eb46 test8783ed9]' passed (6.570 seconds).
+Test Case '-[OSAMessagingTests.427eb46 test7ac7365]' started.
+Test Case '-[OSAMessagingTests.427eb46 test7ac7365]' passed (6.438 seconds).
+Test Case '-[OSAMessagingTests.427eb46 testc29468b]' started.
+Test Case '-[OSAMessagingTests.427eb46 testc29468b]' passed (6.598 seconds).
+Test Case '-[OSAMessagingTests.427eb46 test7bd0b2a]' started.
+Test Case '-[OSAMessagingTests.427eb46 test7bd0b2a]' passed (6.903 seconds).
 Test Suite '427eb46' passed at 2016-11-14 12:27:12.691.
      Executed 8 tests, with 0 failures (0 unexpected) in 52.537 (52.962) seconds
 Test Suite 'fd99a0a' started at 2016-11-14 12:27:12.691
-Test Case '-[OSAMessagingTests.fd99a0a test3826b36' started.
-Test Case '-[OSAMessagingTests.fd99a0a test3826b36' passed (4.100 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test6e8f3c8' started.
-Test Case '-[OSAMessagingTests.fd99a0a test6e8f3c8' passed (10.335 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a testda2b3b2' started.
-Test Case '-[OSAMessagingTests.fd99a0a testda2b3b2' passed (4.893 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test6d8adff' started.
-Test Case '-[OSAMessagingTests.fd99a0a test6d8adff' passed (4.219 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test5ee11b2' started.
-Test Case '-[OSAMessagingTests.fd99a0a test5ee11b2' passed (4.771 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test81a1de2' started.
-Test Case '-[OSAMessagingTests.fd99a0a test81a1de2' passed (10.704 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test4bc651e' started.
-Test Case '-[OSAMessagingTests.fd99a0a test4bc651e' passed (4.675 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test1da1de6' started.
-Test Case '-[OSAMessagingTests.fd99a0a test1da1de6' passed (5.205 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test7b55d14' started.
-Test Case '-[OSAMessagingTests.fd99a0a test7b55d14' passed (9.824 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a testb6f7fb2' started.
-Test Case '-[OSAMessagingTests.fd99a0a testb6f7fb2' passed (4.878 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test821073f' started.
-Test Case '-[OSAMessagingTests.fd99a0a test821073f' passed (4.280 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a teste05b52f' started.
-Test Case '-[OSAMessagingTests.fd99a0a teste05b52f' passed (4.602 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a testcc7d371' started.
-Test Case '-[OSAMessagingTests.fd99a0a testcc7d371' passed (5.341 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test095dea0' started.
-Test Case '-[OSAMessagingTests.fd99a0a test095dea0' passed (4.371 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test8104b27' started.
-Test Case '-[OSAMessagingTests.fd99a0a test8104b27' passed (4.197 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a test4f18791' started.
-Test Case '-[OSAMessagingTests.fd99a0a test4f18791' passed (5.054 seconds).
-Test Case '-[OSAMessagingTests.fd99a0a testaea18d4' started.
-Test Case '-[OSAMessagingTests.fd99a0a testaea18d4' passed (4.978 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test3826b36]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test3826b36]' passed (4.100 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test6e8f3c8]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test6e8f3c8]' passed (10.335 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a testda2b3b2]' started.
+Test Case '-[OSAMessagingTests.fd99a0a testda2b3b2]' passed (4.893 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test6d8adff]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test6d8adff]' passed (4.219 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test5ee11b2]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test5ee11b2]' passed (4.771 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test81a1de2]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test81a1de2]' passed (10.704 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test4bc651e]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test4bc651e]' passed (4.675 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test1da1de6]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test1da1de6]' passed (5.205 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test7b55d14]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test7b55d14]' passed (9.824 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a testb6f7fb2]' started.
+Test Case '-[OSAMessagingTests.fd99a0a testb6f7fb2]' passed (4.878 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test821073f]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test821073f]' passed (4.280 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a teste05b52f]' started.
+Test Case '-[OSAMessagingTests.fd99a0a teste05b52f]' passed (4.602 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a testcc7d371]' started.
+Test Case '-[OSAMessagingTests.fd99a0a testcc7d371]' passed (5.341 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test095dea0]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test095dea0]' passed (4.371 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test8104b27]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test8104b27]' passed (4.197 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a test4f18791]' started.
+Test Case '-[OSAMessagingTests.fd99a0a test4f18791]' passed (5.054 seconds).
+Test Case '-[OSAMessagingTests.fd99a0a testaea18d4]' started.
+Test Case '-[OSAMessagingTests.fd99a0a testaea18d4]' passed (4.978 seconds).
 Test Suite 'fd99a0a' passed at 2016-11-14 12:28:49.500.
      Executed 17 tests, with 0 failures (0 unexpected) in 96.424 (96.809) seconds
 Test Suite '6e49ef9' started at 2016-11-14 12:28:49.501
-Test Case '-[OSAMessagingTests.6e49ef9 test9f9ff7f' started.
-Test Case '-[OSAMessagingTests.6e49ef9 test9f9ff7f' passed (4.146 seconds).
-Test Case '-[OSAMessagingTests.6e49ef9 testfeeb5e5' started.
-Test Case '-[OSAMessagingTests.6e49ef9 testfeeb5e5' passed (7.575 seconds).
-Test Case '-[OSAMessagingTests.6e49ef9 test6f1e736' started.
-Test Case '-[OSAMessagingTests.6e49ef9 test6f1e736' passed (6.933 seconds).
-Test Case '-[OSAMessagingTests.6e49ef9 testd6d03f6' started.
-Test Case '-[OSAMessagingTests.6e49ef9 testd6d03f6' passed (3.938 seconds).
-Test Case '-[OSAMessagingTests.6e49ef9 test8fb0af2' started.
-Test Case '-[OSAMessagingTests.6e49ef9 test8fb0af2' passed (3.490 seconds).
-Test Case '-[OSAMessagingTests.6e49ef9 test96e0fb8' started.
-Test Case '-[OSAMessagingTests.6e49ef9 test96e0fb8' passed (3.424 seconds).
-Test Case '-[OSAMessagingTests.6e49ef9 test05e1c06' started.
-Test Case '-[OSAMessagingTests.6e49ef9 test05e1c06' passed (2.687 seconds).
-Test Case '-[OSAMessagingTests.6e49ef9 test632aaa0' started.
-Test Case '-[OSAMessagingTests.6e49ef9 test632aaa0' passed (3.970 seconds).
-Test Case '-[OSAMessagingTests.6e49ef9 test199f533' started.
-Test Case '-[OSAMessagingTests.6e49ef9 test199f533' passed (3.868 seconds).
+Test Case '-[OSAMessagingTests.6e49ef9 test9f9ff7f]' started.
+Test Case '-[OSAMessagingTests.6e49ef9 test9f9ff7f]' passed (4.146 seconds).
+Test Case '-[OSAMessagingTests.6e49ef9 testfeeb5e5]' started.
+Test Case '-[OSAMessagingTests.6e49ef9 testfeeb5e5]' passed (7.575 seconds).
+Test Case '-[OSAMessagingTests.6e49ef9 test6f1e736]' started.
+Test Case '-[OSAMessagingTests.6e49ef9 test6f1e736]' passed (6.933 seconds).
+Test Case '-[OSAMessagingTests.6e49ef9 testd6d03f6]' started.
+Test Case '-[OSAMessagingTests.6e49ef9 testd6d03f6]' passed (3.938 seconds).
+Test Case '-[OSAMessagingTests.6e49ef9 test8fb0af2]' started.
+Test Case '-[OSAMessagingTests.6e49ef9 test8fb0af2]' passed (3.490 seconds).
+Test Case '-[OSAMessagingTests.6e49ef9 test96e0fb8]' started.
+Test Case '-[OSAMessagingTests.6e49ef9 test96e0fb8]' passed (3.424 seconds).
+Test Case '-[OSAMessagingTests.6e49ef9 test05e1c06]' started.
+Test Case '-[OSAMessagingTests.6e49ef9 test05e1c06]' passed (2.687 seconds).
+Test Case '-[OSAMessagingTests.6e49ef9 test632aaa0]' started.
+Test Case '-[OSAMessagingTests.6e49ef9 test632aaa0]' passed (3.970 seconds).
+Test Case '-[OSAMessagingTests.6e49ef9 test199f533]' started.
+Test Case '-[OSAMessagingTests.6e49ef9 test199f533]' passed (3.868 seconds).
 Test Suite '6e49ef9' passed at 2016-11-14 12:29:29.896.
      Executed 9 tests, with 0 failures (0 unexpected) in 40.029 (40.395) seconds
 Test Suite '3a12c7a' started at 2016-11-14 12:29:29.896
-Test Case '-[OSAMessagingTests.3a12c7a test0bcf4d4' started.
-Test Case '-[OSAMessagingTests.3a12c7a test0bcf4d4' passed (6.447 seconds).
-Test Case '-[OSAMessagingTests.3a12c7a test39366d9' started.
-Test Case '-[OSAMessagingTests.3a12c7a test39366d9' passed (6.927 seconds).
-Test Case '-[OSAMessagingTests.3a12c7a testdebd20d' started.
-Test Case '-[OSAMessagingTests.3a12c7a testdebd20d' passed (7.370 seconds).
-Test Case '-[OSAMessagingTests.3a12c7a test03d3fbb' started.
-Test Case '-[OSAMessagingTests.3a12c7a test03d3fbb' passed (7.735 seconds).
-Test Case '-[OSAMessagingTests.3a12c7a test0423530' started.
-Test Case '-[OSAMessagingTests.3a12c7a test0423530' passed (12.732 seconds).
-Test Case '-[OSAMessagingTests.3a12c7a testd8a2b7a' started.
-Test Case '-[OSAMessagingTests.3a12c7a testd8a2b7a' passed (5.902 seconds).
-Test Case '-[OSAMessagingTests.3a12c7a test2125d84' started.
-Test Case '-[OSAMessagingTests.3a12c7a test2125d84' passed (5.720 seconds).
-Test Case '-[OSAMessagingTests.3a12c7a test752cc0a' started.
-Test Case '-[OSAMessagingTests.3a12c7a test752cc0a' passed (6.012 seconds).
-Test Case '-[OSAMessagingTests.3a12c7a test342148c' started.
-Test Case '-[OSAMessagingTests.3a12c7a test342148c' passed (7.874 seconds).
+Test Case '-[OSAMessagingTests.3a12c7a test0bcf4d4]' started.
+Test Case '-[OSAMessagingTests.3a12c7a test0bcf4d4]' passed (6.447 seconds).
+Test Case '-[OSAMessagingTests.3a12c7a test39366d9]' started.
+Test Case '-[OSAMessagingTests.3a12c7a test39366d9]' passed (6.927 seconds).
+Test Case '-[OSAMessagingTests.3a12c7a testdebd20d]' started.
+Test Case '-[OSAMessagingTests.3a12c7a testdebd20d]' passed (7.370 seconds).
+Test Case '-[OSAMessagingTests.3a12c7a test03d3fbb]' started.
+Test Case '-[OSAMessagingTests.3a12c7a test03d3fbb]' passed (7.735 seconds).
+Test Case '-[OSAMessagingTests.3a12c7a test0423530]' started.
+Test Case '-[OSAMessagingTests.3a12c7a test0423530]' passed (12.732 seconds).
+Test Case '-[OSAMessagingTests.3a12c7a testd8a2b7a]' started.
+Test Case '-[OSAMessagingTests.3a12c7a testd8a2b7a]' passed (5.902 seconds).
+Test Case '-[OSAMessagingTests.3a12c7a test2125d84]' started.
+Test Case '-[OSAMessagingTests.3a12c7a test2125d84]' passed (5.720 seconds).
+Test Case '-[OSAMessagingTests.3a12c7a test752cc0a]' started.
+Test Case '-[OSAMessagingTests.3a12c7a test752cc0a]' passed (6.012 seconds).
+Test Case '-[OSAMessagingTests.3a12c7a test342148c]' started.
+Test Case '-[OSAMessagingTests.3a12c7a test342148c]' passed (7.874 seconds).
 Test Suite '3a12c7a' passed at 2016-11-14 12:30:36.998.
      Executed 9 tests, with 0 failures (0 unexpected) in 66.719 (67.102) seconds
 Test Suite '1e50b4b' started at 2016-11-14 12:30:36.998
-Test Case '-[OSAMessagingTests.1e50b4b testac68ca5' started.
-Test Case '-[OSAMessagingTests.1e50b4b testac68ca5' passed (3.950 seconds).
-Test Case '-[OSAMessagingTests.1e50b4b test8b2d77e' started.
-Test Case '-[OSAMessagingTests.1e50b4b test8b2d77e' passed (10.614 seconds).
-Test Case '-[OSAMessagingTests.1e50b4b teste5973b6' started.
-Test Case '-[OSAMessagingTests.1e50b4b teste5973b6' passed (10.987 seconds).
-Test Case '-[OSAMessagingTests.1e50b4b test113545b' started.
-Test Case '-[OSAMessagingTests.1e50b4b test113545b' passed (5.981 seconds).
-Test Case '-[OSAMessagingTests.1e50b4b test4ec30ac' started.
-Test Case '-[OSAMessagingTests.1e50b4b test4ec30ac' passed (4.653 seconds).
-Test Case '-[OSAMessagingTests.1e50b4b testfb7ddc0' started.
-Test Case '-[OSAMessagingTests.1e50b4b testfb7ddc0' passed (4.618 seconds).
-Test Case '-[OSAMessagingTests.1e50b4b test2aae99e' started.
-Test Case '-[OSAMessagingTests.1e50b4b test2aae99e' passed (4.177 seconds).
-Test Case '-[OSAMessagingTests.1e50b4b test09d1211' started.
-Test Case '-[OSAMessagingTests.1e50b4b test09d1211' passed (4.373 seconds).
+Test Case '-[OSAMessagingTests.1e50b4b testac68ca5]' started.
+Test Case '-[OSAMessagingTests.1e50b4b testac68ca5]' passed (3.950 seconds).
+Test Case '-[OSAMessagingTests.1e50b4b test8b2d77e]' started.
+Test Case '-[OSAMessagingTests.1e50b4b test8b2d77e]' passed (10.614 seconds).
+Test Case '-[OSAMessagingTests.1e50b4b teste5973b6]' started.
+Test Case '-[OSAMessagingTests.1e50b4b teste5973b6]' passed (10.987 seconds).
+Test Case '-[OSAMessagingTests.1e50b4b test113545b]' started.
+Test Case '-[OSAMessagingTests.1e50b4b test113545b]' passed (5.981 seconds).
+Test Case '-[OSAMessagingTests.1e50b4b test4ec30ac]' started.
+Test Case '-[OSAMessagingTests.1e50b4b test4ec30ac]' passed (4.653 seconds).
+Test Case '-[OSAMessagingTests.1e50b4b testfb7ddc0]' started.
+Test Case '-[OSAMessagingTests.1e50b4b testfb7ddc0]' passed (4.618 seconds).
+Test Case '-[OSAMessagingTests.1e50b4b test2aae99e]' started.
+Test Case '-[OSAMessagingTests.1e50b4b test2aae99e]' passed (4.177 seconds).
+Test Case '-[OSAMessagingTests.1e50b4b test09d1211]' started.
+Test Case '-[OSAMessagingTests.1e50b4b test09d1211]' passed (4.373 seconds).
 Test Suite '1e50b4b' passed at 2016-11-14 12:31:26.793.
      Executed 8 tests, with 0 failures (0 unexpected) in 49.354 (49.795) seconds
 Test Suite '945202f' started at 2016-11-14 12:31:26.793
-Test Case '-[OSAMessagingTests.945202f test8f0d0de' started.
-Test Case '-[OSAMessagingTests.945202f test8f0d0de' passed (6.910 seconds).
-Test Case '-[OSAMessagingTests.945202f test793f914' started.
-Test Case '-[OSAMessagingTests.945202f test793f914' passed (7.444 seconds).
-Test Case '-[OSAMessagingTests.945202f test4ffc71a' started.
-Test Case '-[OSAMessagingTests.945202f test4ffc71a' passed (4.562 seconds).
-Test Case '-[OSAMessagingTests.945202f test308d97e' started.
-Test Case '-[OSAMessagingTests.945202f test308d97e' passed (7.036 seconds).
-Test Case '-[OSAMessagingTests.945202f test43cb2ca' started.
-Test Case '-[OSAMessagingTests.945202f test43cb2ca' passed (5.366 seconds).
-Test Case '-[OSAMessagingTests.945202f test8a6ba67' started.
-Test Case '-[OSAMessagingTests.945202f test8a6ba67' passed (6.341 seconds).
-Test Case '-[OSAMessagingTests.945202f test60a0d76' started.
-Test Case '-[OSAMessagingTests.945202f test60a0d76' passed (6.285 seconds).
-Test Case '-[OSAMessagingTests.945202f test543ade2' started.
-Test Case '-[OSAMessagingTests.945202f test543ade2' passed (8.553 seconds).
-Test Case '-[OSAMessagingTests.945202f test750dffe' started.
-Test Case '-[OSAMessagingTests.945202f test750dffe' passed (6.787 seconds).
-Test Case '-[OSAMessagingTests.945202f testc33f2d3' started.
-Test Case '-[OSAMessagingTests.945202f testc33f2d3' passed (5.778 seconds).
-Test Case '-[OSAMessagingTests.945202f test5ae5098' started.
-Test Case '-[OSAMessagingTests.945202f test5ae5098' passed (6.788 seconds).
-Test Case '-[OSAMessagingTests.945202f testcb62ae8' started.
-Test Case '-[OSAMessagingTests.945202f testcb62ae8' passed (6.267 seconds).
-Test Case '-[OSAMessagingTests.945202f test697e77b' started.
-Test Case '-[OSAMessagingTests.945202f test697e77b' passed (6.964 seconds).
-Test Case '-[OSAMessagingTests.945202f test9cb1298' started.
-Test Case '-[OSAMessagingTests.945202f test9cb1298' passed (5.651 seconds).
-Test Case '-[OSAMessagingTests.945202f testdcb6b90' started.
-Test Case '-[OSAMessagingTests.945202f testdcb6b90' passed (6.168 seconds).
+Test Case '-[OSAMessagingTests.945202f test8f0d0de]' started.
+Test Case '-[OSAMessagingTests.945202f test8f0d0de]' passed (6.910 seconds).
+Test Case '-[OSAMessagingTests.945202f test793f914]' started.
+Test Case '-[OSAMessagingTests.945202f test793f914]' passed (7.444 seconds).
+Test Case '-[OSAMessagingTests.945202f test4ffc71a]' started.
+Test Case '-[OSAMessagingTests.945202f test4ffc71a]' passed (4.562 seconds).
+Test Case '-[OSAMessagingTests.945202f test308d97e]' started.
+Test Case '-[OSAMessagingTests.945202f test308d97e]' passed (7.036 seconds).
+Test Case '-[OSAMessagingTests.945202f test43cb2ca]' started.
+Test Case '-[OSAMessagingTests.945202f test43cb2ca]' passed (5.366 seconds).
+Test Case '-[OSAMessagingTests.945202f test8a6ba67]' started.
+Test Case '-[OSAMessagingTests.945202f test8a6ba67]' passed (6.341 seconds).
+Test Case '-[OSAMessagingTests.945202f test60a0d76]' started.
+Test Case '-[OSAMessagingTests.945202f test60a0d76]' passed (6.285 seconds).
+Test Case '-[OSAMessagingTests.945202f test543ade2]' started.
+Test Case '-[OSAMessagingTests.945202f test543ade2]' passed (8.553 seconds).
+Test Case '-[OSAMessagingTests.945202f test750dffe]' started.
+Test Case '-[OSAMessagingTests.945202f test750dffe]' passed (6.787 seconds).
+Test Case '-[OSAMessagingTests.945202f testc33f2d3]' started.
+Test Case '-[OSAMessagingTests.945202f testc33f2d3]' passed (5.778 seconds).
+Test Case '-[OSAMessagingTests.945202f test5ae5098]' started.
+Test Case '-[OSAMessagingTests.945202f test5ae5098]' passed (6.788 seconds).
+Test Case '-[OSAMessagingTests.945202f testcb62ae8]' started.
+Test Case '-[OSAMessagingTests.945202f testcb62ae8]' passed (6.267 seconds).
+Test Case '-[OSAMessagingTests.945202f test697e77b]' started.
+Test Case '-[OSAMessagingTests.945202f test697e77b]' passed (6.964 seconds).
+Test Case '-[OSAMessagingTests.945202f test9cb1298]' started.
+Test Case '-[OSAMessagingTests.945202f test9cb1298]' passed (5.651 seconds).
+Test Case '-[OSAMessagingTests.945202f testdcb6b90]' started.
+Test Case '-[OSAMessagingTests.945202f testdcb6b90]' passed (6.168 seconds).
 Test Suite '945202f' passed at 2016-11-14 12:33:04.373.
      Executed 15 tests, with 0 failures (0 unexpected) in 96.900 (97.580) seconds
 Test Suite 'b51b4d2' started at 2016-11-14 12:33:04.373
-Test Case '-[OSAMessagingTests.b51b4d2 testbfed4f0' started.
-Test Case '-[OSAMessagingTests.b51b4d2 testbfed4f0' passed (7.146 seconds).
-Test Case '-[OSAMessagingTests.b51b4d2 test044ff50' started.
+Test Case '-[OSAMessagingTests.b51b4d2 testbfed4f0]' started.
+Test Case '-[OSAMessagingTests.b51b4d2 testbfed4f0]' passed (7.146 seconds).
+Test Case '-[OSAMessagingTests.b51b4d2 test044ff50]' started.
 stack trace for SIGNAL 4 (Illegal instruction: 4):
 1   libsystem_platform.dylib            0x000000012051b52a _sigtramp + 26
 2   libsystem_malloc.dylib              0x00000001203ac6ac free + 87

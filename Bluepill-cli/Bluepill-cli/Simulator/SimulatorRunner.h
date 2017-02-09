@@ -49,6 +49,8 @@
  * @discussion returns true if all execution is completed, false otherwise.
  */
 - (BOOL)isFinished;
+- (BOOL)isApplicationStarted;
+- (BOOL)didTestStart;
 - (BOOL)needsRetry;
 - (BPExitStatus)exitStatus;
 

@@ -50,6 +50,7 @@
     self.config.testing_NoAppWillRun = YES;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
+    self.config.headlessMode = YES;
     [BPUtils quietMode:YES];
 
     NSError *err;
@@ -84,6 +85,7 @@
     self.config.testBundlePath = testBundlePath;
     self.config.testing_CrashAppOnLaunch = YES;
     self.config.testing_NoAppWillRun = NO;
+    self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusAppCrashed);
 
@@ -97,7 +99,7 @@
     self.config.testing_NoAppWillRun = NO;
     self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
-    XCTAssert(exitCode == BPExitStatusTestTimeout);
+    XCTAssert(exitCode == BPExitStatusAppCrashed);
 
     self.config.testing_NoAppWillRun = YES;
 }
