@@ -29,6 +29,8 @@
 @property (nonatomic, strong) NSFileHandle *stdOutHandle;
 @property (nonatomic, strong) SimulatorMonitor *monitor;
 @property (nonatomic, assign) BOOL needsRetry;
+@property (nonatomic, assign) BOOL appProcessFinished;
+@property (nonatomic, assign) BOOL abandoned;
 
 @end
 
@@ -64,10 +66,12 @@
 - (void)bootSimulatorWithCompletion:(void (^)(NSError *))completion {
     // Now boot it.
     if (self.config.headlessMode) {
-        [SimulatorRunner bootDevice:self.device withCompletion:completion];
+        [BPUtils printInfo:INFO withString:@"Running in HEADLESS mode..."];
+        [self openSimulatorHeadlessWithCompletion:completion];
         return;
     }
     // not headless? open the simulator app.
+    [BPUtils printInfo:INFO withString:@"Running in NON-headless mode..."];
     [self openSimulatorWithCompletion:completion];
 }
 
@@ -137,21 +141,42 @@
         if (!self.app) {
             assert(error != nil);
             completion(error);
-        }
-        int attempts = 100;
-        while (attempts > 0 && ![self.device.stateString isEqualToString:@"Booted"]) {
-            [NSThread sleepForTimeInterval:0.1];
-            --attempts;
-        }
-        if (![self.device.stateString isEqualToString:@"Booted"]) {
-            [self.app terminate];
-            error = [NSError errorWithDomain:@"Simulator failed to boot" code:-1 userInfo:nil];
-            completion(error);
             return;
         }
-        completion(nil);
+        error = [SimulatorRunner waitForDeviceReady:self.device];
+        if (error) {
+            [self.app terminate];
+        }
+        completion(error);
         return;
     });
+}
+
+- (void)openSimulatorHeadlessWithCompletion:(void (^)(NSError *))completion {
+    NSDictionary *options = @{
+                              @"register-head-services" : @YES
+                              };
+    [self.device bootAsyncWithOptions:options completionHandler:^{
+        NSError *error = [SimulatorRunner waitForDeviceReady:self.device];
+        if (error) {
+            [self.app terminate];
+        }
+        completion(error);
+    }];
+}
+
++ (NSError *)waitForDeviceReady:(SimDevice *)device {
+    int attempts = 1200;
+    while (attempts > 0 && ![device.stateString isEqualToString:@"Booted"]) {
+        [NSThread sleepForTimeInterval:0.1];
+        --attempts;
+    }
+    if (![device.stateString isEqualToString:@"Booted"]) {
+        [BPUtils printInfo:ERROR withString:@"Simulator %@ failed to boot. State: %@", device.UDID.UUIDString, device.stateString];
+        return [NSError errorWithDomain:@"Simulator failed to boot" code:-1 userInfo:nil];
+    }
+    [BPUtils printInfo:INFO withString:@"Simulator %@ achieved the BOOTED state", device.UDID.UUIDString, device.stateString];
+    return nil;
 }
 
 + (BOOL)installAppWithBundleID:(NSString *)hostBundleID
@@ -188,13 +213,6 @@
                        completionHandler:^(NSError *error, SimDevice *device) {
                            completion(error, device);
                        }];
-}
-
-+ (void)bootDevice:(SimDevice *)device withCompletion:(void (^)())completion {
-    NSDictionary *options = @{
-                              @"register-head-services" : @YES
-                              };
-    [device bootAsyncWithOptions:options completionHandler:completion];
 }
 
 + (void)shutdownDevice:(SimDevice *)device withCompletion:(void (^)(NSError *error))completion {
@@ -287,9 +305,6 @@
     __block typeof(self) blockSelf = self;
 
     [self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid) {
-        // Save the process ID to the monitor
-        blockSelf.monitor.appPID = pid;
-
         if (error == nil) {
             dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC, pid, DISPATCH_PROC_EXIT, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
             dispatch_source_set_event_handler(source, ^{
@@ -297,23 +312,38 @@
             });
             dispatch_source_set_cancel_handler(source, ^{
                 // Post a APPCLOSED signal to the fifo
+                blockSelf.appProcessFinished = YES;
                 [blockSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
             });
             dispatch_resume(source);
             self.stdOutHandle.readabilityHandler = ^(NSFileHandle *handle) {
+                // This callback occurs on a background thread
                 NSData *chunk = [handle availableData];
                 [parser handleChunkData:chunk];
             };
         }
 
-        if (completion) {
-            completion(error, pid);
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Save the process ID to the monitor
+            blockSelf.monitor.appPID = pid;
+
+            if (completion) {
+                completion(error, pid);
+            }
+        });
     }];
 }
 
 - (BOOL)isFinished {
     return [self checkFinished];
+}
+
+- (BOOL)isApplicationStarted {
+    return self.appProcessFinished || [self.monitor isApplicationStarted];
+}
+
+- (BOOL)didTestStart {
+    return [self.monitor didTestsStart];
 }
 
 - (BOOL)checkFinished {

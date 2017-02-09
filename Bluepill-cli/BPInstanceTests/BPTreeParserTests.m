@@ -27,10 +27,9 @@
 
 - (void)setUp {
     [super setUp];
-    if (getenv("BPBuildScript")) {
-        [BPUtils quietMode:YES];
-        [BPUtils enableDebugOutput:NO];
-    }
+    
+    [BPUtils quietMode:[BPUtils isBuildScript]];
+    [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
     self.config = [[BPConfiguration alloc] init];
     self.config.testing_NoAppWillRun = YES;
 }
@@ -42,7 +41,7 @@
 
 BPWriter *getWriter() {
     BPWriter *writer;
-    if (getenv("BPBuildScript")) {
+    if ([BPUtils isBuildScript]) {
         NSString *tmpPath = [BPUtils mkstemp:@"out" withError:nil];
         writer = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:tmpPath];
     } else {
@@ -67,7 +66,9 @@ BPWriter *getWriter() {
     [parser completed];
     [parser completedFinalRun];
 
-    if (!getenv("BPBuildScript")) NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
+    if (![BPUtils isBuildScript]) {
+        NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
+    }
     XCTAssert(monitor.exitStatus == BPExitStatusAppCrashed);
 }
 
@@ -87,8 +88,10 @@ BPWriter *getWriter() {
     [parser completed];
     [parser completedFinalRun];
 
-    if (!getenv("BPBuildScript")) NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
-    XCTAssert(monitor.exitStatus == BPExitStatusTestsAllPassed);
+    if (![BPUtils isBuildScript]) {
+        NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
+    }
+    XCTAssert(monitor.exitStatus == BPExitStatusAppCrashed);
 }
 
 - (void)testBadFilenameParsing {
@@ -107,7 +110,9 @@ BPWriter *getWriter() {
     [parser completed];
     [parser completedFinalRun];
 
-    if (!getenv("BPBuildScript")) NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
+    if (![BPUtils isBuildScript]) {
+        NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
+    }
     XCTAssert(monitor.exitStatus == BPExitStatusAppCrashed);
 }
 
@@ -131,7 +136,7 @@ BPWriter *getWriter() {
     [parser completed];
     [parser completedFinalRun];
 
-    if (!getenv("BPBuildScript")) {
+    if (![BPUtils isBuildScript]) {
         NSLog(@"%@", [parser generateLog:[[JUnitReporter alloc] init]]);
 
         NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
@@ -155,7 +160,9 @@ BPWriter *getWriter() {
     [parser completed];
     [parser completedFinalRun];
 
-    if (!getenv("BPBuildScript")) NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
+    if (![BPUtils isBuildScript]) {
+        NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
+    }
     XCTAssert(monitor.exitStatus == BPExitStatusAppCrashed);
 }
 
