@@ -62,8 +62,8 @@ int main(int argc, char * argv[]) {
             exit(1);
         }
         if ([config.listTestsOnly integerValue] > 0) {
-            BOOL verbose = ([config.listTestsOnly integerValue] > 1) ? YES : NO;
-            [app listBundles: verbose];
+            BOOL verbose = [config.listTestsOnly integerValue] == 1;
+            [app listBundles:verbose];
             exit(0);
         }
 

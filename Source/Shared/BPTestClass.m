@@ -34,7 +34,7 @@
 
 - (void)listTestCases {
     for (BPTestCase *testCase in self.testCases) {
-        printf("    %s - %.2fs\n", [testCase.name UTF8String], [testCase.time floatValue]);
+        printf("  %s/%s\n", [self.name UTF8String], [testCase.name UTF8String]);
     }
 }
 
