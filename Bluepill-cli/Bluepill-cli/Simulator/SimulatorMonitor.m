@@ -88,10 +88,10 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 
     __weak typeof(self) __self = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.maxTestExecutionTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if ([__self.currentTestName isEqualToString:testName] && [__self.currentClassName isEqualToString:testClass] && self.simulatorState == Running) {
-            [BPUtils printInfo:TIMEOUT withString:@"%10.6fs %@/%@", self.maxTestExecutionTime, testClass, testName];
+        if ([__self.currentTestName isEqualToString:testName] && [__self.currentClassName isEqualToString:testClass] && __self.simulatorState == Running) {
+            [BPUtils printInfo:TIMEOUT withString:@"%10.6fs %@/%@", __self.maxTestExecutionTime, testClass, testName];
             [__self stopTestsWithErrorMessage:@"Test took too long to execute and was aborted." forTestName:testName inClass:testClass];
-            self.exitStatus = BPExitStatusTestTimeout;
+            __self.exitStatus = BPExitStatusTestTimeout;
             [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
             [[BPStats sharedStats] addTestRuntimeTimeout];
         }
@@ -204,10 +204,11 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
                  __self.maxTimeWithNoOutput, testClass, testName];
                 [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
             }
+            // Set exit status before stopping the tests because stopping the tests will set the SimulatorState to Completed
+            __self.exitStatus = [self didTestsStart] ? BPExitStatusTestTimeout : BPExitStatusAppCrashed;
             [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aboorted."
                                   forTestName:testName
                                       inClass:testClass];
-            __self.exitStatus = BPExitStatusTestTimeout;
             [[BPStats sharedStats] addTestOutputTimeout];
         }
     });
@@ -234,6 +235,14 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 
 - (BOOL)isExecutionComplete {
     return (self.simulatorState == Completed);
+}
+
+- (BOOL)isApplicationStarted {
+    return (self.simulatorState != Idle);
+}
+
+- (BOOL)didTestsStart {
+    return (self.simulatorState == Running || self.simulatorState == Completed);
 }
 
 @end

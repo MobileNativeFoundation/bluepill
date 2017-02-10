@@ -88,7 +88,7 @@ BPWriter *getWriter() {
     [parser completedFinalRun];
 
     if (!getenv("BPBuildScript")) NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
-    XCTAssert(monitor.exitStatus == BPExitStatusTestsAllPassed);
+    XCTAssert(monitor.exitStatus == BPExitStatusAppCrashed);
 }
 
 - (void)testBadFilenameParsing {

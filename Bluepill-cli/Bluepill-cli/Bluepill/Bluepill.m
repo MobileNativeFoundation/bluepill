@@ -313,7 +313,7 @@ void onInterrupt(int ignore) {
     // If it's not running and we passed the above checks (e.g., the tests are not yet completed)
     // then it must mean the app has crashed.
     // However, we have a short-circuit for tests because those may not actually run any app
-    if (!isRunning && context.pid > 0 && !self.config.testing_NoAppWillRun) {
+    if (!isRunning && context.pid > 0 && ![context.runner isApplicationStarted] && !self.config.testing_NoAppWillRun) {
         // The tests ended before they even got started or the process is gone for some other reason
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [BPUtils printInfo:ERROR withString:@"Application crashed before tests started!"];
@@ -331,7 +331,7 @@ void onInterrupt(int ignore) {
     }
     NSAssert(context.pid > 0, @"Application PID must be > 0");
     int rc = kill(context.pid, 0);
-    return !(rc < 0);
+    return (rc == 0);
 }
 
 - (void)runnerCompletedWithContext:(BPExecutionContext *)context {

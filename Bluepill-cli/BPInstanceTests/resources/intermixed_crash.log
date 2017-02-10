@@ -3426,3 +3426,4 @@ Test Suite '5660f04' passed at 2016-11-17 05:34:23.358.
 15  libsystem_pthread.dylib             0x000000012164f4de _pthread_wqthread + 1129
 16  libsystem_pthread.dylib             0x000000012164d341 start_wqthread + 13
 Test Suite '50d392e' started at 2016-11-17 05:34:23.358
+BP_APP_PROC_ENDED
