@@ -1,3 +1,7 @@
 language: objective-c
 osx_image: xcode8.2
-script: sh ./scripts/bluepill.sh test | xcpretty
+matrix:
+  include:
+  - env: TEST_SUITE=instance_tests
+  - env: TEST_SUITE=runner_tests
+script: sh ./scripts/bluepill.sh $TEST_SUITE | xcpretty
