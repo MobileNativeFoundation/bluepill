@@ -54,23 +54,13 @@ static BOOL quiet = NO;
     if (kind == DEBUGINFO && !printDebugInfo) {
         return;
     }
-    if (quiet) return;
+    if (quiet && kind == ERROR) return;
+    FILE *out = kind == ERROR ? stderr : stdout;
     va_list args;
     va_start(args, fmt);
     NSString *txt = [[NSString alloc] initWithFormat:fmt arguments:args];
     va_end(args);
-    [self printTo:stdout kind:kind withString:txt];
-}
-
-+ (void)printError:(BPKind)kind withString:(NSString *)fmt, ... {
-    if (kind == DEBUGINFO && !printDebugInfo) {
-        return;
-    }
-    va_list args;
-    va_start(args, fmt);
-    NSString *txt = [[NSString alloc] initWithFormat:fmt arguments:args];
-    va_end(args);
-    [self printTo:stderr kind:kind withString:txt];
+    [self printTo:out kind:kind withString:txt];
 }
 
 + (void)printTo:(FILE*)fd kind:(BPKind)kind withString:(NSString *)txt {

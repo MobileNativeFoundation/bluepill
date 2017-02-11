@@ -167,7 +167,7 @@ void onInterrupt(int ignore) {
         simulatorLogPath = tmpFileName;
         if (!tmpFileName) {
             simulatorLogPath = [NSString stringWithFormat:@"/tmp/%lu-simulator.log", context.attemptNumber];
-            [BPUtils printError:ERROR withString:@"ERROR: %@\nLeaving log in %@", [err localizedDescription], simulatorLogPath];
+            [BPUtils printInfo:ERROR withString:@"ERROR: %@\nLeaving log in %@", [err localizedDescription], simulatorLogPath];
         }
     }
 
@@ -215,7 +215,7 @@ void onInterrupt(int ignore) {
 
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] addSimulatorCreateFailure];
-        [BPUtils printError:ERROR withString:@"%@", [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"%@", [error localizedDescription]];
         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
         NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
     };
@@ -244,7 +244,7 @@ void onInterrupt(int ignore) {
 
     if (!success) {
         [[BPStats sharedStats] addSimulatorInstallFailure];
-        [BPUtils printError:ERROR withString:@"Could not install app in simulator: %@", [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"Could not install app in simulator: %@", [error localizedDescription]];
         NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
         return;
     } else {
@@ -277,7 +277,7 @@ void onInterrupt(int ignore) {
 
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
-        [BPUtils printError:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
         NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
     };
 
@@ -428,7 +428,7 @@ void onInterrupt(int ignore) {
 
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] addSimulatorDeleteFailure];
-        [BPUtils printError:ERROR withString:@"%@", [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"%@", [error localizedDescription]];
         NEXT([__self finishWithContext:context]);
     };
 

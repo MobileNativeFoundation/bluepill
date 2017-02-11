@@ -68,12 +68,6 @@ typedef NS_ENUM(int, BPKind) {
  */
 + (void)printInfo:(BPKind)kind withString:(NSString *)fmt, ...;
 
-/*!
- @discussion print a message to stderr.
- @param kind one of the levels in BPKind
- @param fmt a format string (a la printf), followed by the var args.
- */
-+ (void)printError:(BPKind)kind withString:(NSString *)fmt, ...;
 
 /*!
  @discussion a function to determine if the given file name represents
