@@ -4,4 +4,4 @@ matrix:
   include:
   - env: TEST_SUITE=instance_tests
   - env: TEST_SUITE=runner_tests
-script: sh ./scripts/bluepill.sh $TEST_SUITE | xcpretty ; (exit ${PIPESTATUS[0]})
+script: sh ./scripts/bluepill.sh $TEST_SUITE
