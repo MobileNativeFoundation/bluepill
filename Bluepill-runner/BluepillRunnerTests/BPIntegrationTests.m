@@ -44,7 +44,7 @@
     self.config.junitOutput = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    self.config.quiet = YES;
+    //self.config.quiet = YES;
 }
 
 - (void)tearDown {

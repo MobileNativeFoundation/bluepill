@@ -9,13 +9,13 @@
 
 #import <Foundation/Foundation.h>
 
-#define CREATE_SIMULATOR(x)    [NSString stringWithFormat:@"[%lu] Create Simulator", (x)]
-#define REUSE_SIMULATOR(x)    [NSString stringWithFormat:@"[%lu] Reuse Simulator", (x)]
-#define INSTALL_APPLICATION(x) [NSString stringWithFormat:@"[%lu] Install Application", (x)]
+#define CREATE_SIMULATOR(x)      [NSString stringWithFormat:@"[%lu] Create Simulator", (x)]
+#define REUSE_SIMULATOR(x)       [NSString stringWithFormat:@"[%lu] Reuse Simulator", (x)]
+#define INSTALL_APPLICATION(x)   [NSString stringWithFormat:@"[%lu] Install Application", (x)]
 #define UNINSTALL_APPLICATION(x) [NSString stringWithFormat:@"[%lu] Uninstall Application", (x)]
-#define LAUNCH_APPLICATION(x)  [NSString stringWithFormat:@"[%lu] Launch Application", (x)]
-#define RUN_TESTS(x)           [NSString stringWithFormat:@"[%lu] Run Tests", (x)]
-#define DELETE_SIMULATOR(x)    [NSString stringWithFormat:@"[%lu] Delete Simulator", (x)]
+#define LAUNCH_APPLICATION(x)    [NSString stringWithFormat:@"[%lu] Launch Application", (x)]
+#define RUN_TESTS(x)             [NSString stringWithFormat:@"[%lu] Run Tests", (x)]
+#define DELETE_SIMULATOR(x)      [NSString stringWithFormat:@"[%lu] Delete Simulator", (x)]
 
 #define ALL_TESTS              @"All Tests"
 #define TEST_CASE_FORMAT       @"[%lu] [%@/%@]"

@@ -198,7 +198,7 @@ maxprocs(void)
                     [BPUtils printInfo:INFO withString:@"PID %d exited %d.", [task processIdentifier], [task terminationStatus]];
                     
                     if (self.config.reuseSimulator) {
-                        NSString *deviceID = [self readDeviceIDFile:[task processIdentifier]];
+                        NSString *deviceID = [self readSimUDIDFile:[task processIdentifier]];
                         if (deviceID) {
                             [deviceList addObject:deviceID];
                         }
@@ -266,7 +266,7 @@ maxprocs(void)
     [self.nsTaskList removeAllObjects];
 }
 
-- (NSString *)readDeviceIDFile:(int)pid {
+- (NSString *)readSimUDIDFile:(int)pid {
     NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d",pid];
     NSString *tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName];
     

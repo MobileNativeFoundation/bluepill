@@ -77,7 +77,9 @@ void onInterrupt(int ignore) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.01, NO);
     }
 
-    if (self.config.keepSimulator) { [self writeDeviceIDFile]; }
+    if (self.config.keepSimulator) {
+        [self writeSimUDIDFile];
+    }
     
     // Tests completed or interruption received, show some quick stats as we exit
     [BPUtils printInfo:INFO withString:@"Number of Executions: %lu", self.retries + 1];
@@ -248,10 +250,10 @@ void onInterrupt(int ignore) {
     if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.useSimUDID]]) {
         context.simulatorCreated = YES; //if we don't set this flag, deleteSimulatorWithContext() won't proceed
         
-        NEXT([self uninstallApplicationWithContext:context]);
-        
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
+        [BPUtils printInfo:INFO withString:@"Completed: %@ %@", stepName, context.runner.UDID];
+
+        NEXT([self uninstallApplicationWithContext:context]);
     } else {
         context.config.useSimUDID = nil; //prevent reuse this device when RETRY
         self.config.useSimUDID = nil;
@@ -464,7 +466,7 @@ void onInterrupt(int ignore) {
         NEXT([self finishWithContext:context]);
         return;
     }
-    context.simulatorCreated = NO;  //also use this flag to tell writeDeviceIDFile() the simulator not avaiable
+    context.simulatorCreated = NO;  //also use this flag to tell writeSimUDIDFile() the simulator not avaiable
     context.config.useSimUDID = nil; //prevent reuse this device when RETRY
     self.config.useSimUDID = nil;
     
@@ -480,7 +482,7 @@ void onInterrupt(int ignore) {
 
     handler.beginWith = ^{
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:(__handler.error ? ERROR : INFO) withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
+        [BPUtils printInfo:(__handler.error ? ERROR : INFO) withString:@"Completed: %@ %@", stepName, context.runner.UDID];
     };
 
     handler.onSuccess = ^{
@@ -585,8 +587,8 @@ void onInterrupt(int ignore) {
 
 }
 
-- (void)writeDeviceIDFile {
-    NSString *idStr = [self getSimulatorDeviceID];
+- (void)writeSimUDIDFile {
+    NSString *idStr = [self getSimulatorUDID];
     if (!idStr || !self.context.simulatorCreated) return;
     
     NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d",getpid()];
@@ -605,7 +607,7 @@ void onInterrupt(int ignore) {
     return (self.exitLoop == NO);
 }
 
-- (NSString *)getSimulatorDeviceID {
+- (NSString *)getSimulatorUDID {
     return self.context.runner.UDID;
 }
 

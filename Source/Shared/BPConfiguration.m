@@ -140,7 +140,9 @@ struct BPOptions {
             break;
         }
     }
-    if (bpo == NULL) { [self usage:-1]; }// exits
+    if (bpo == NULL) {
+        [self usage:-1]; // exits
+    }
     assert(bpo && bpo->name);
     if (!strcmp(bpo->name, "help")) [self usage:0];
     [self setProperty:bpo withArg:arg];
