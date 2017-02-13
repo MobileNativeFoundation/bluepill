@@ -87,10 +87,10 @@
     return nil;
 }
 
-- (void)listBundles:(BOOL) verbose {
+- (void)listTests {
     for (BPXCTestFile *testFile in self.testBundles) {
         printf("%s.xctest\n", [testFile.name UTF8String]);
-        if (verbose) [testFile listTestClasses];
+        [testFile listTestClasses];
     }
 }
 
