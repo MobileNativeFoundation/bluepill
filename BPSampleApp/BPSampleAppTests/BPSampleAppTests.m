@@ -26,6 +26,10 @@
     [super tearDown];
 }
 
+void a_function_that_is_not_a_test() {
+    return;
+}
+
 - (void)testCase000 { XCTAssert(YES);}
 - (void)testCase001 { XCTAssert(YES);}
 - (void)testCase002 { XCTAssert(YES);}
