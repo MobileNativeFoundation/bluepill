@@ -346,11 +346,8 @@ struct BPOptions {
 
                 if (BPOptions[i].kind & BP_LIST && ![value isKindOfClass:[NSArray class]]) {
                     if (error) {
-                        *error = [NSError errorWithDomain:BPErrorDomain
-                                                     code:-1
-                                                 userInfo:@{NSLocalizedDescriptionKey:
-                                                                [NSString stringWithFormat:@"Expected type %@ for key '%@', got %@. Parsing failed.",
-                                                                 [NSArray className], key, [value className]]}];
+                        *error = [BPUtils BPError:@"Expected type %@ for key '%@', got %@. Parsing failed.",
+                                  [NSArray className], key, [value className]];
                     }
                     return NO;
                 }
@@ -389,25 +386,14 @@ struct BPOptions {
         if ([op isEqualToNumber:[NSNumber numberWithInt:'c']]) {
             if (loadedConfig) {
                 if (err) {
-                    NSError *error = [NSError errorWithDomain:BPErrorDomain
-                                                         code:-1
-                                                     userInfo:@{NSLocalizedDescriptionKey:
-                                                                    @"Only one configuration file (-c) allowed."}];
-                    *err = error;
+                    *err = [BPUtils BPError:@"Only one configuration file (-c) allowed."];
                 }
                 return FALSE;
             }
             // load the config file
             NSError *error;
             if (![self loadConfigFile:optarg withError:&error]) {
-                NSError *newError =
-                [NSError errorWithDomain:BPErrorDomain
-                                    code:-1
-                                userInfo:@{ NSLocalizedDescriptionKey:
-                                                [NSString stringWithFormat:@"Could not load configuration from %@\n%@",
-                                                 optarg, [error localizedDescription]]
-                                            }];
-                if (err) *err = newError;
+                if (err) *err = [BPUtils BPError:@"Could not load configuration from %@\n%@", optarg, [error localizedDescription]];
                 return FALSE;
             }
             loadedConfig = TRUE;
@@ -442,36 +428,34 @@ struct BPOptions {
 
     if (!self.xcodePath || [self.xcodePath isEqualToString:@""]) {
         if (err) {
-            *err = [NSError errorWithDomain:BPErrorDomain
-                                       code:-1
-                                   userInfo:@{NSLocalizedDescriptionKey: @"Could not set Xcode path!"}];
+            *err = [BPUtils BPError:@"Could not set Xcode path!"];
+        }
+        return NO;
+    }
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.xcodePath isDirectory:&isdir] || !isdir) {
+        if (err) {
+            *err = [BPUtils BPError:@"Could not find Xcode at %@", self.xcodePath];
         }
         return NO;
     }
 
     if (!self.appBundlePath) {
         if (err) {
-            NSDictionary *errInfo = @{ NSLocalizedDescriptionKey : @"No app bundle provided." };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = [BPUtils BPError:@"No app bundle provided."];
         }
         return NO;
     }
     if (![[NSFileManager defaultManager] fileExistsAtPath: self.appBundlePath isDirectory:&isdir] || !isdir) {
         if (err) {
-            NSDictionary *errInfo = @{ NSLocalizedDescriptionKey:
-                                           [NSString stringWithFormat:@"%@ not found.", self.appBundlePath] };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = [BPUtils BPError:@"%@ not found.", self.appBundlePath];
         }
         return NO;
     }
     if (self.outputDirectory) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.outputDirectory isDirectory:&isdir]) {
             if (!isdir) {
-                if (err) *err = [NSError errorWithDomain:BPErrorDomain
-                                                    code:-1
-                                                userInfo:@{ NSLocalizedDescriptionKey:
-                                                                [NSString stringWithFormat:@"%@ is not a directory.",
-                                                                 self.outputDirectory] }];
+                if (err) *err = [BPUtils BPError:@"%@ is not a directory.", self.outputDirectory];
                 return NO;
             }
         } else {
@@ -492,25 +476,15 @@ struct BPOptions {
     if (self.schemePath) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.schemePath isDirectory:&isdir]) {
             if (isdir) {
-                if (err) *err = [NSError errorWithDomain:BPErrorDomain
-                                                    code:-1
-                                                userInfo:@{ NSLocalizedDescriptionKey:
-                                                                [NSString stringWithFormat:@"%@ is a directory",
-                                                                 self.schemePath]}];
+                if (err) *err = [BPUtils BPError:@"%@ is a directory", self.schemePath];
                 return NO;
             }
         } else {
-            if (err) *err = [NSError errorWithDomain:BPErrorDomain
-                                                code:-1
-                                            userInfo:@{ NSLocalizedDescriptionKey:
-                                                            [NSString stringWithFormat:@"%@ doesn't exist",
-                                                             self.schemePath]}];
+            if (err) *err = [BPUtils BPError:@"%@ doesn't exist", self.schemePath];
             return NO;
         }
     } else {
-        if (err) *err = [NSError errorWithDomain:BPErrorDomain
-                                            code:-1
-                                        userInfo:@{NSLocalizedDescriptionKey: @"No scheme provided."}];
+        if (err) *err = [BPUtils BPError:@"No scheme provided."];
         return NO;
     }
 
@@ -518,17 +492,13 @@ struct BPOptions {
 #ifdef BP_USE_PRIVATE_FRAMEWORKS
     if (!self.testBundlePath) {
         if (err) {
-            NSString *desc = NSLocalizedString(@"No test bundle provided.", nil);
-            NSDictionary *errInfo = @{ NSLocalizedDescriptionKey : desc };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = [BPUtils BPError:@"No test bundle provided."];
         }
         return NO;
     }
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.testBundlePath isDirectory:&isdir] || !isdir) {
         if (err) {
-            NSDictionary *errInfo = @{ NSLocalizedDescriptionKey:
-                                           [NSString stringWithFormat:@"%@ not found.", self.testBundlePath] };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = [BPUtils BPError:@"%@ not found.", self.testBundlePath];
         }
         return NO;
     }
@@ -559,12 +529,10 @@ struct BPOptions {
 
     if (!self.simDeviceType) {
         if (err) {
-            NSDictionary *errInfo = @{
-                                      NSLocalizedDescriptionKey :
-                                          [ NSString stringWithFormat:@"%@ is not a valid device type.\n"
-                                           "Use `xcrun simctl list devicetypes` for a list of valid devices.",
-                                           self.deviceType] };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = [BPUtils BPError:@"%@ is not a valid device type.\n"
+                    "Use `xcrun simctl list devicetypes` for a list of valid devices.",
+                    self.deviceType];
+
         }
         return NO;
     }
@@ -580,12 +548,9 @@ struct BPOptions {
 
     if (!self.simRuntime) {
         if (err) {
-            NSDictionary *errInfo = @{
-                                      NSLocalizedDescriptionKey :
-                                          [ NSString stringWithFormat:@"%@ is not a valid runtime.\n"
-                                           "Use `xcrun simctl list runtimes` for a list of valid runtimes.",
-                                           self.runtime] };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = [BPUtils BPError:@"%@ is not a valid runtime.\n"
+                    "Use `xcrun simctl list runtimes` for a list of valid runtimes.",
+                    self.runtime];
         }
         return NO;
     }

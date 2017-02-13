@@ -86,15 +86,22 @@ static BOOL quiet = NO;
     fflush(fd);
 }
 
++ (NSError *)BPError:(NSString *)fmt, ... {
+    va_list args;
+    va_start(args, fmt);
+    NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:args];
+    va_end(args);
+    return [NSError errorWithDomain:BPErrorDomain
+                               code:-1
+                           userInfo:@{NSLocalizedDescriptionKey: msg}];
+}
+
+
 + (NSString *)mkdtemp:(NSString *)template withError:(NSError **)error {
     char *dir = strdup([[template stringByAppendingString:@"_XXXXXX"] UTF8String]);
     if (mkdtemp(dir) == NULL) {
         if (error) {
-            *error = [NSError errorWithDomain:BPErrorDomain
-                                         code:-1
-                                     userInfo:@{
-                                                NSLocalizedDescriptionKey: [NSString stringWithUTF8String:strerror(errno)]
-                                                }];
+            *error = [BPUtils BPError:@"%s", strerror(errno)];
         }
         free(dir);
         return nil;
@@ -109,10 +116,7 @@ static BOOL quiet = NO;
     int fd = mkstemp(file);
     if (fd < 0) {
         if (error) {
-            *error = [NSError errorWithDomain:BPErrorDomain
-                                         code:-1
-                                     userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithUTF8String:strerror(errno)]
-                                                 }];
+            *error = [BPUtils BPError:@"%s", strerror(errno)];
         }
         free(file);
         return nil;
@@ -178,5 +182,6 @@ static BOOL quiet = NO;
     NSData *data = [fh readDataToEndOfFile];
     return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 }
+
 
 @end

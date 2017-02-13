@@ -62,4 +62,19 @@
     XCTAssert([config.additionalTestBundles isEqualToArray:@[ @"/tmp/extra-stuff" ]]);
 }
 
+- (void)testXcodePathIsWrong {
+    NSError *err;
+    BPConfiguration *config = [[BPConfiguration alloc] init];
+    config.appBundlePath = [BPTestHelper sampleAppPath];
+    config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"testScheme.xcscheme"];
+    config.xcodePath = @"/this/is/an/invalid/path";
+    
+    BOOL result = [config processOptionsWithError:&err];
+    XCTAssert(result == TRUE);
+    
+    result = [config validateConfigWithError:&err];
+    XCTAssert(result == FALSE);
+    XCTAssert([[err localizedDescription] isEqualToString:@"Could not find Xcode at /this/is/an/invalid/path"]);
+}
+
 @end

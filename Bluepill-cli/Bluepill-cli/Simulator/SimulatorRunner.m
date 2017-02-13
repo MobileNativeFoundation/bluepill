@@ -145,7 +145,7 @@
         }
         if (![self.device.stateString isEqualToString:@"Booted"]) {
             [self.app terminate];
-            error = [NSError errorWithDomain:@"Simulator failed to boot" code:-1 userInfo:nil];
+            error = [BPUtils BPError:@"Simulator failed to boot"];
             completion(error);
             return;
         }
