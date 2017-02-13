@@ -34,6 +34,8 @@ Message Messages[] = {
     {" DEBUG  ", ANSI_COLOR_YELLOW},
 };
 
+static int bp_testing = -1;
+
 #ifdef DEBUG
 static BOOL printDebugInfo = YES;
 #else
@@ -77,10 +79,13 @@ static BOOL quiet = NO;
     Message message = Messages[kind];
     NSString *simNum = @"";
     char *s;
+    if (bp_testing < 0) {
+        bp_testing = (getenv("_BP_TEST_SUITE") != 0);
+    }
     if ((s = getenv("_BP_SIM_NUM"))) {
         simNum = [NSString stringWithFormat:@"(%s) ", s];
     }
-    if (isatty(1)) {
+    if (isatty(1) && !bp_testing) {
         fprintf(fd, "%s[%s]%s %s%s\n",
                 message.color, message.text, ANSI_COLOR_RESET, [simNum UTF8String], [txt UTF8String]);
     } else {
