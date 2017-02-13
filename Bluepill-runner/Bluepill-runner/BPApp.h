@@ -20,10 +20,9 @@
                   withExtraTestBundles:(NSArray *)extraTestBundles
                              withError:(NSError **)error;
 
-/*! @discussion Print the test bundles in the App (Basically the .xctest files inside the Plugins directory in the .app bundle)
- * @param verbose Print more information than just the name (e.g. list of tests inside the .xctest bundle file)
+/*! @discussion Print the test bundles in the App along with all of their test classes/cases (Basically the .xctest files inside the Plugins directory in the .app bundle)
  */
-- (void)listBundles:(BOOL)verbose;
+- (void)listTests;
 
 - (NSString *)testBundlePathForName:(NSString *)name;
 

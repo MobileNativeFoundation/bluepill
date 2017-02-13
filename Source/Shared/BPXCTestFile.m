@@ -100,7 +100,6 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 
 - (void)listTestClasses {
     for (BPTestClass *testClass in self.testClasses) {
-        printf("  %s\n", [testClass.name UTF8String]);
         [testClass listTestCases];
     }
 }
