@@ -23,7 +23,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 //    path = @"/Users/khu/Library/Developer/Xcode/DerivedData/voyager-aodwsnztqjhrikgifstschfgfhzf/Build/Products/Debug-iphonesimulator/LinkedIn.app/PlugIns/VoyagerFeedControlMenuTests2.xctest/VoyagerFeedControlMenuTests2";
     if (!path || ![[NSFileManager defaultManager] fileExistsAtPath: path isDirectory:&isdir] || isdir) {
         if (error) {
-            *error = [BPUtils BPError:@"Could not find test bundle at path %@.", path];
+            *error = BP_ERROR(@"Could not find test bundle at path %@.", path);
         }
         return nil;
     }
@@ -35,7 +35,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     FILE *p = popen([cmd UTF8String], "r");
     if (!p) {
         if (error) {
-            *error = [BPUtils BPError:@"Failed to load test %@.\nERROR: %s\n", path, strerror(errno)];
+            *error = BP_ERROR(@"Failed to load test %@.\nERROR: %s\n", path, strerror(errno));
         }
         return nil;
     }
@@ -63,7 +63,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     }
     if (pclose(p) == -1) {
         if (error) {
-            *error = [BPUtils BPError:@"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno)];
+            *error = BP_ERROR(@"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno));
         }
         return nil;
     }

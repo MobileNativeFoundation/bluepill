@@ -145,7 +145,7 @@
         }
         if (![self.device.stateString isEqualToString:@"Booted"]) {
             [self.app terminate];
-            error = [BPUtils BPError:@"Simulator failed to boot"];
+            error = BP_ERROR(@"Simulator failed to boot");
             completion(error);
             return;
         }

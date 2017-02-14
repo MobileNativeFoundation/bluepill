@@ -86,14 +86,15 @@ static BOOL quiet = NO;
     fflush(fd);
 }
 
-+ (NSError *)BPError:(NSString *)fmt, ... {
++ (NSError *)BPError:(const char *)function andLine:(int)line withFormat:(NSString *)fmt, ... {
     va_list args;
     va_start(args, fmt);
     NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:args];
     va_end(args);
+    NSString *error = [[NSString alloc] initWithFormat:@"%s:%d %@", function, line, msg];
     return [NSError errorWithDomain:BPErrorDomain
                                code:-1
-                           userInfo:@{NSLocalizedDescriptionKey: msg}];
+                           userInfo:@{NSLocalizedDescriptionKey: error}];
 }
 
 
@@ -101,7 +102,7 @@ static BOOL quiet = NO;
     char *dir = strdup([[template stringByAppendingString:@"_XXXXXX"] UTF8String]);
     if (mkdtemp(dir) == NULL) {
         if (error) {
-            *error = [BPUtils BPError:@"%s", strerror(errno)];
+            *error = BP_ERROR(@"%s", strerror(errno));
         }
         free(dir);
         return nil;
@@ -116,7 +117,7 @@ static BOOL quiet = NO;
     int fd = mkstemp(file);
     if (fd < 0) {
         if (error) {
-            *error = [BPUtils BPError:@"%s", strerror(errno)];
+            *error = BP_ERROR(@"%s", strerror(errno));
         }
         free(file);
         return nil;

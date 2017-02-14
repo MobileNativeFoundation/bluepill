@@ -70,9 +70,15 @@ typedef NS_ENUM(int, BPKind) {
 
 /*!
  @discussion get an NSError *
+ This is not really meant to be called, use the BP_ERROR macro below instead.
+ @param function The name of the function
+ @param line The line number
  @param fmt a format string (a la printf), followed by var args.
  */
-+ (NSError *)BPError:(NSString *)fmt, ... ;
++ (NSError *)BPError:(const char *)function andLine:(int)line withFormat:(NSString *)fmt, ... ;
+
+#define VA_ARGS(...) , ##__VA_ARGS__
+#define BP_ERROR(fmt, ...) [BPUtils BPError:__func__ andLine:__LINE__ withFormat:fmt VA_ARGS(__VA_ARGS__)]
 
 /*!
  @discussion a function to determine if the given file name represents

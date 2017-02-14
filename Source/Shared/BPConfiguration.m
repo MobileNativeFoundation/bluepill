@@ -357,8 +357,8 @@ struct BPOptions {
 
                 if (BPOptions[i].kind & BP_LIST && ![value isKindOfClass:[NSArray class]]) {
                     if (error) {
-                        *error = [BPUtils BPError:@"Expected type %@ for key '%@', got %@. Parsing failed.",
-                                  [NSArray className], key, [value className]];
+                        *error = BP_ERROR(@"Expected type %@ for key '%@', got %@. Parsing failed.",
+                                          [NSArray className], key, [value className]);
                     }
                     return NO;
                 }
@@ -397,14 +397,14 @@ struct BPOptions {
         if ([op isEqualToNumber:[NSNumber numberWithInt:'c']]) {
             if (loadedConfig) {
                 if (err) {
-                    *err = [BPUtils BPError:@"Only one configuration file (-c) allowed."];
+                    *err = BP_ERROR(@"Only one configuration file (-c) allowed.");
                 }
                 return FALSE;
             }
             // load the config file
             NSError *error;
             if (![self loadConfigFile:optarg withError:&error]) {
-                if (err) *err = [BPUtils BPError:@"Could not load configuration from %@\n%@", optarg, [error localizedDescription]];
+                if (err) *err = BP_ERROR(@"Could not load configuration from %@\n%@", optarg, [error localizedDescription]);
                 return FALSE;
             }
             loadedConfig = TRUE;
@@ -432,7 +432,7 @@ struct BPOptions {
         }
     }
     if (errors.count > 0) {
-        if (err) *err = [BPUtils BPError:[errors componentsJoinedByString:@"\n\t"]];
+        if (err) *err = BP_ERROR([errors componentsJoinedByString:@"\n\t"]);
         return FALSE;
     }
     if (printConfig) {
@@ -451,34 +451,34 @@ struct BPOptions {
 
     if (!self.xcodePath || [self.xcodePath isEqualToString:@""]) {
         if (err) {
-            *err = [BPUtils BPError:@"Could not set Xcode path!"];
+            *err = BP_ERROR(@"Could not set Xcode path!");
         }
         return NO;
     }
     
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.xcodePath isDirectory:&isdir] || !isdir) {
         if (err) {
-            *err = [BPUtils BPError:@"Could not find Xcode at %@", self.xcodePath];
+            *err = BP_ERROR(@"Could not find Xcode at %@", self.xcodePath);
         }
         return NO;
     }
 
     if (!self.appBundlePath) {
         if (err) {
-            *err = [BPUtils BPError:@"No app bundle provided."];
+            *err = BP_ERROR(@"No app bundle provided.");
         }
         return NO;
     }
     if (![[NSFileManager defaultManager] fileExistsAtPath: self.appBundlePath isDirectory:&isdir] || !isdir) {
         if (err) {
-            *err = [BPUtils BPError:@"%@ not found.", self.appBundlePath];
+            *err = BP_ERROR(@"%@ not found.", self.appBundlePath);
         }
         return NO;
     }
     if (self.outputDirectory) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.outputDirectory isDirectory:&isdir]) {
             if (!isdir) {
-                if (err) *err = [BPUtils BPError:@"%@ is not a directory.", self.outputDirectory];
+                if (err) *err = BP_ERROR(@"%@ is not a directory.", self.outputDirectory);
                 return NO;
             }
         } else {
@@ -499,15 +499,15 @@ struct BPOptions {
     if (self.schemePath) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.schemePath isDirectory:&isdir]) {
             if (isdir) {
-                if (err) *err = [BPUtils BPError:@"%@ is a directory", self.schemePath];
+                if (err) *err = BP_ERROR(@"%@ is a directory", self.schemePath);
                 return NO;
             }
         } else {
-            if (err) *err = [BPUtils BPError:@"%@ doesn't exist", self.schemePath];
+            if (err) *err = BP_ERROR(@"%@ doesn't exist", self.schemePath);
             return NO;
         }
     } else {
-        if (err) *err = [BPUtils BPError:@"No scheme provided."];
+        if (err) *err = BP_ERROR(@"No scheme provided.");
         return NO;
     }
 
@@ -515,13 +515,13 @@ struct BPOptions {
 #ifdef BP_USE_PRIVATE_FRAMEWORKS
     if (!self.testBundlePath) {
         if (err) {
-            *err = [BPUtils BPError:@"No test bundle provided."];
+            *err = BP_ERROR(@"No test bundle provided.");
         }
         return NO;
     }
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.testBundlePath isDirectory:&isdir] || !isdir) {
         if (err) {
-            *err = [BPUtils BPError:@"%@ not found.", self.testBundlePath];
+            *err = BP_ERROR(@"%@ not found.", self.testBundlePath);
         }
         return NO;
     }
@@ -552,9 +552,9 @@ struct BPOptions {
 
     if (!self.simDeviceType) {
         if (err) {
-            *err = [BPUtils BPError:@"%@ is not a valid device type.\n"
-                    "Use `xcrun simctl list devicetypes` for a list of valid devices.",
-                    self.deviceType];
+            *err = BP_ERROR(@"%@ is not a valid device type.\n"
+                            "Use `xcrun simctl list devicetypes` for a list of valid devices.",
+                            self.deviceType);
 
         }
         return NO;
@@ -571,9 +571,9 @@ struct BPOptions {
 
     if (!self.simRuntime) {
         if (err) {
-            *err = [BPUtils BPError:@"%@ is not a valid runtime.\n"
-                    "Use `xcrun simctl list runtimes` for a list of valid runtimes.",
-                    self.runtime];
+            *err = BP_ERROR(@"%@ is not a valid runtime.\n"
+                             "Use `xcrun simctl list runtimes` for a list of valid runtimes.",
+                             self.runtime);
         }
         return NO;
     }

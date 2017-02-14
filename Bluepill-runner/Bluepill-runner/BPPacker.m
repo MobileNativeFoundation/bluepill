@@ -27,8 +27,8 @@
     }];
     if (sortedXCTestFiles.count == 0) {
         if (error) {
-            *error = [BPUtils BPError:@"Found no XCTest files.\n"
-                      "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode."];
+            *error = BP_ERROR(@"Found no XCTest files.\n"
+                               "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode.");
         }
         return NULL;
     }

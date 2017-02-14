@@ -21,7 +21,7 @@
     
     if (!path || ![fm fileExistsAtPath: path isDirectory:&isdir] || !isdir) {
         if (error) {
-            *error = [BPUtils BPError:@"Could not find app bundle at %@.", path];
+            *error = BP_ERROR(@"Could not find app bundle at %@.", path);
         }
         return nil;
     }
@@ -30,10 +30,10 @@
     // read the files inside the Plugins directory
     NSString *xcTestsPath = [path stringByAppendingPathComponent:@"Plugins"];
     if (!([fm fileExistsAtPath:xcTestsPath isDirectory:&isdir]) && isdir) {
-        *error = [BPUtils BPError:@"There is no 'Plugins' folder inside your app bundle at:\n"
-                                   "%@\n"
-                                   "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode.\n"
-                                   "Also, if you are using XCUITest, check https://github.com/linkedin/bluepill/issues/16", path];
+        *error = BP_ERROR(@"There is no 'Plugins' folder inside your app bundle at:\n"
+                           "%@\n"
+                           "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode.\n"
+                           "Also, if you are using XCUITest, check https://github.com/linkedin/bluepill/issues/16", path);
         return nil;
     }
     NSArray *allFiles = [fm contentsOfDirectoryAtPath:xcTestsPath
