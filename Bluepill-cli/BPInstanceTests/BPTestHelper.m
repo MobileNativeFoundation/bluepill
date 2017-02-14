@@ -16,6 +16,11 @@
     return [[self bpDerivedDataPath] stringByAppendingString:@"/BPSampleApp.app"];
 }
 
++ (NSString *)sampleTestScheme {
+    NSString *path = @"testScheme.xcscheme";
+    return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
+}
+
 // Return the path to the sample app's xctest with 1000 test cases
 + (NSString *)sampleAppBalancingTestsBunldePath {
     return [[self sampleAppPath] stringByAppendingString:@"/Plugins/BPSampleAppTests.xctest"];

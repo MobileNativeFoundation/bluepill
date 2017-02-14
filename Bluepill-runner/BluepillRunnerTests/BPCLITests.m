@@ -29,28 +29,20 @@
 }
 
 - (void)testNoSchemeinCLI {
-    BPConfiguration *config = [[BPConfiguration alloc] init];
+    BPConfiguration *config = [[BPConfiguration alloc] initForProgram:BLUEPILL];
     NSError *err;
     BOOL result;
     
     result = [config processOptionsWithError:&err];
-    XCTAssert(result);
-    result = [config validateConfigWithError:&err];
     XCTAssert(result == FALSE);
-    XCTAssert([[err localizedDescription] isEqualToString:@"No app bundle provided."]);
-    config.appBundlePath = [BPTestHelper sampleAppPath];
-    result = [config validateConfigWithError:&err];
-    XCTAssert(result == FALSE);
-    XCTAssert([[err localizedDescription] isEqualToString:@"No scheme provided."]);
-    NSString *path = @"testScheme.xcscheme";
-    config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    result = [config validateConfigWithError:&err];
-    XCTAssert(result != FALSE);
+    XCTAssert([[err localizedDescription] containsString:@"Missing required option"]);
+    XCTAssert([[err localizedDescription] containsString:@"-a/--app"]);
+    XCTAssert([[err localizedDescription] containsString:@"-s/--scheme-path"]);
 }
 
 - (void) testAdditionalTestBundles {
     NSError *err;
-    BPConfiguration *config = [[BPConfiguration alloc] init];
+    BPConfiguration *config = [[BPConfiguration alloc] initForProgram:BLUEPILL];
     config.appBundlePath = [BPTestHelper sampleAppPath];
     NSString *path = @"testScheme.xcscheme";
     config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
@@ -64,7 +56,7 @@
 
 - (void)testXcodePathIsWrong {
     NSError *err;
-    BPConfiguration *config = [[BPConfiguration alloc] init];
+    BPConfiguration *config = [[BPConfiguration alloc] initForProgram:BLUEPILL];
     config.appBundlePath = [BPTestHelper sampleAppPath];
     config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"testScheme.xcscheme"];
     config.xcodePath = @"/this/is/an/invalid/path";

@@ -20,6 +20,9 @@
 
 @interface BPConfiguration : NSObject <NSCopying>
 
+#define BLUEPILL    1
+#define BP          2
+
 /*
  * WARNING: Any fields you add here need to be explicitly handled in the copyWithZone
  * and mutableCopyWithZone methods. Yeah, it's stupid, we should fix it.
@@ -51,6 +54,7 @@
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic, strong) NSNumber *listTestsOnly;
 @property (nonatomic) BOOL quiet;
+@property (nonatomic) int program; // one of BLUEPILL or BP
 
 // These fields are for testing.
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;
@@ -115,17 +119,27 @@
 - (BOOL)validateConfigWithError:(NSError **)err;
 
 /**
+ Create a new configuration object with default values.
+ 
+ @param program One of BLUEPILL or BP
+ 
+ @return An instance of `BPConfiguration` on success. Nil on failure.
+ */
+- (instancetype)initForProgram:(int)program;
+
+/**
  Create a new configuration object based on the given configuration file. 
  
  Note that this function only loads the configuration, it doesn't perform 
  any validation. For that, call `validateConfigWithError:`
 
  @param file The file to load (nil will init a config object with defaults)
+ @param program Which program is calling this? Bluepill or Bp
  @param err  The error in case loading the config file fails.
 
  @return An instance of `BPConfiguration` on success. Nil on failure.
  */
-- (instancetype)initWithConfigFile:(NSString *)file error:(NSError **)err;
+- (instancetype)initWithConfigFile:(NSString *)file forProgram:(int)program withError:(NSError **)err;
 
 /**
  Save a command line option for later processing.
