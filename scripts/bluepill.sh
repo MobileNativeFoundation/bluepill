@@ -31,6 +31,7 @@ done
 if [ "$found" -ne 1 ];
 then
     echo "Invalid configuration"
+    echo "Must be one of: " $configurations
     exit 1
 fi
 

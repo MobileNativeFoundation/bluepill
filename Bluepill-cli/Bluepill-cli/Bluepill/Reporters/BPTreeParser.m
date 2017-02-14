@@ -108,7 +108,7 @@ static const NSString * const kPassed = @"passed";
 
 - (void)parseLine:(nullable NSString *)line {
     [self onOutputReceived:line];
-//    NSLog(@"line - %@", line);
+    NSLog(@"line - %@", line);
     if (!line || ![line length]) {
         return;
     }

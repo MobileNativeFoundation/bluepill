@@ -36,6 +36,8 @@ Message Messages[] = {
 
 static int bp_testing = -1;
 
+#define DEBUG 1
+
 #ifdef DEBUG
 static BOOL printDebugInfo = YES;
 #else
