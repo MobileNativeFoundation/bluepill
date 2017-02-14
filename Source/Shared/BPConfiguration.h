@@ -52,7 +52,7 @@
 @property (nonatomic, strong) NSString *outputDirectory;
 @property (nonatomic) BOOL headlessMode;
 @property (nonatomic, strong) NSNumber *numSims;
-@property (nonatomic, strong) NSNumber *listTestsOnly;
+@property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
 @property (nonatomic) int program; // one of BLUEPILL or BP
 

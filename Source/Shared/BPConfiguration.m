@@ -88,7 +88,7 @@ struct BPOptions {
         "Print results in JUnit format."},
     {'F', "only-retry-failed", BLUEPILL | BP, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "onlyRetryFailed",
         "If `failure-tolerance` is > 0, only retry tests that failed."},
-    {'l', "list-tests", BLUEPILL | BP, NO, no_argument, NULL, BP_VALUE, "listTestsOnly",
+    {'l', "list-tests", BLUEPILL, NO, no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
         "Only list tests in bundle"},
 
     // options without short-options
