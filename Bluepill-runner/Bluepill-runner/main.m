@@ -29,7 +29,7 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
 
         int c;
-        BPConfiguration *config = [[BPConfiguration alloc] initForProgram:BLUEPILL];
+        BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BLUEPILL];
 
         struct option *lopts = [BPConfiguration getLongOptions];
         char *sopts = [BPConfiguration getShortOptions];

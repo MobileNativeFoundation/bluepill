@@ -30,7 +30,7 @@
 }
 
 - (void)testNoSchemeinCLI {
-    BPConfiguration *config = [[BPConfiguration alloc] initForProgram:BP];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP];
     NSError *err;
     BOOL result;
     
@@ -43,7 +43,7 @@
  }
 
 - (void)testListArguments {
-    BPConfiguration *config = [[BPConfiguration alloc] initForProgram:BP];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP];
     [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
     [config saveOpt:[NSNumber numberWithInt:'s'] withArg:[BPTestHelper sampleTestScheme]];
     [config saveOpt:[NSNumber numberWithInt:'t'] withArg:[BPTestHelper sampleAppBalancingTestsBunldePath]];

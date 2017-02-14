@@ -54,7 +54,7 @@ static BOOL quiet = NO;
     if (kind == DEBUGINFO && !printDebugInfo) {
         return;
     }
-    if (quiet && kind == ERROR) return;
+    if (quiet && kind != ERROR) return;
     FILE *out = kind == ERROR ? stderr : stdout;
     va_list args;
     va_start(args, fmt);

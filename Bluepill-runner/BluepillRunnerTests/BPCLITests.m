@@ -29,7 +29,7 @@
 }
 
 - (void)testNoSchemeinCLI {
-    BPConfiguration *config = [[BPConfiguration alloc] initForProgram:BLUEPILL];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BLUEPILL];
     NSError *err;
     BOOL result;
     
@@ -42,7 +42,7 @@
 
 - (void) testAdditionalTestBundles {
     NSError *err;
-    BPConfiguration *config = [[BPConfiguration alloc] initForProgram:BLUEPILL];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BLUEPILL];
     config.appBundlePath = [BPTestHelper sampleAppPath];
     NSString *path = @"testScheme.xcscheme";
     config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
@@ -56,7 +56,7 @@
 
 - (void)testXcodePathIsWrong {
     NSError *err;
-    BPConfiguration *config = [[BPConfiguration alloc] initForProgram:BLUEPILL];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BLUEPILL];
     config.appBundlePath = [BPTestHelper sampleAppPath];
     config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"testScheme.xcscheme"];
     config.xcodePath = @"/this/is/an/invalid/path";

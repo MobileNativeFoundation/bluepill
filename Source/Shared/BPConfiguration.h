@@ -125,7 +125,7 @@
  
  @return An instance of `BPConfiguration` on success. Nil on failure.
  */
-- (instancetype)initForProgram:(int)program;
+- (instancetype)initWithProgram:(int)program;
 
 /**
  Create a new configuration object based on the given configuration file. 

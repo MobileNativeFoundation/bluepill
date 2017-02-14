@@ -102,7 +102,7 @@ struct BPOptions {
 
 #pragma mark instance methods
 
-- (instancetype)initForProgram:(int)program {
+- (instancetype)initWithProgram:(int)program {
     return [self initWithConfigFile:nil forProgram:program withError:nil];
 }
 
@@ -246,7 +246,7 @@ struct BPOptions {
 }
 
 - (id)mutableCopyWithZone:(NSZone *)zone {
-    BPConfiguration *newConfig = [[BPConfiguration alloc] initForProgram:self.program];
+    BPConfiguration *newConfig = [[BPConfiguration alloc] initWithProgram:self.program];
     for(int i = 0; BPOptions[i].name; i++) {
         const char *name = BPOptions[i].property;
         if (!name) continue;
