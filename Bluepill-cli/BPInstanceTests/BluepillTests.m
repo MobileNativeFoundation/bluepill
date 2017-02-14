@@ -50,6 +50,7 @@
     self.config.testing_NoAppWillRun = YES;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
+    self.config.headlessMode = TRUE;
     [BPUtils quietMode:YES];
 
     NSError *err;

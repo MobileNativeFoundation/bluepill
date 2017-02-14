@@ -260,7 +260,7 @@ void onInterrupt(int ignore) {
     [[BPStats sharedStats] startTimer:RUN_TESTS(context.attemptNumber)];
 
     __weak typeof(self) __self = self;
-    BPWaitTimer *timer = [BPWaitTimer timerWithInterval:600.0];
+    BPWaitTimer *timer = [BPWaitTimer timerWithInterval:300.0];
     [timer start];
 
     BPApplicationLaunchHandler *handler = [BPApplicationLaunchHandler handlerWithTimer:timer];
