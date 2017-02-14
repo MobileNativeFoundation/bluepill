@@ -38,6 +38,12 @@ fi
 rm -rf build/
 set -ex
 
+uptime
+du -sh ~/Library/Developer/*
+ps axuw | grep -i CoreSimulator
+xcrun simctl list | grep BP
+
+
 NSUnbufferedIO=YES
 export NSUnbufferedIO
 
