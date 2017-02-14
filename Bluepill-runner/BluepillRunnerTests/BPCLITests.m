@@ -43,10 +43,8 @@
 - (void) testAdditionalTestBundles {
     NSError *err;
     BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BLUEPILL];
-    config.appBundlePath = [BPTestHelper sampleAppPath];
-    NSString *path = @"testScheme.xcscheme";
-    config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-
+    [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
+    [config saveOpt:[NSNumber numberWithInt:'s'] withArg:[BPTestHelper sampleTestScheme]];
     [config saveOpt:[NSNumber numberWithInt:350] withArg:@"/tmp/extra-stuff"];
 
     BOOL result = [config processOptionsWithError:&err];
@@ -57,9 +55,9 @@
 - (void)testXcodePathIsWrong {
     NSError *err;
     BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BLUEPILL];
-    config.appBundlePath = [BPTestHelper sampleAppPath];
-    config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"testScheme.xcscheme"];
-    config.xcodePath = @"/this/is/an/invalid/path";
+    [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
+    [config saveOpt:[NSNumber numberWithInt:'s'] withArg:[BPTestHelper sampleTestScheme]];
+    [config saveOpt:[NSNumber numberWithInt:'X'] withArg:@"/this/is/an/invalid/path"];
     
     BOOL result = [config processOptionsWithError:&err];
     XCTAssert(result == TRUE);

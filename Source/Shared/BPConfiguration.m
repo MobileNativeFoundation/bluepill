@@ -25,7 +25,8 @@ struct BPOptions {
     int         val;          // short option (e.g. -f)
     const char  *name;        // long name of the option (e.g. --foobar)
     int         program;      // BLUEPILL, BP, or both (BLUEPILL | BP)
-    int         required;     // whether the option is required or optional
+    BOOL        required;     // Whether the option is required or optional
+    BOOL        seen;         // Whether we've seen the option in processing.
     int         has_arg;      // One of: no_argument, required_argument, optional_argument
     const char  *default_val; // Default value (if option not provided)
     int         kind;         // List vs value.
@@ -34,67 +35,67 @@ struct BPOptions {
 } BPOptions[] = {
 
     // Required argument
-    {'a', "app", BLUEPILL | BP, YES, required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
+    {'a', "app", BLUEPILL | BP, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
         "The path to the host application to execute (your .app)"},
-    {'s', "scheme-path", BLUEPILL | BP, YES, required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
+    {'s', "scheme-path", BLUEPILL | BP, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
 
     // Optional argument
-    {'d', "device", BLUEPILL | BP, NO, required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
+    {'d', "device", BLUEPILL | BP, NO, NO, required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
         "On which device to run the app."},
-    {'c', "config", BLUEPILL | BP, NO, required_argument, NULL, BP_VALUE, "configFile",
+    {'c', "config", BLUEPILL | BP, NO, NO, required_argument, NULL, BP_VALUE, "configFile",
         "Read options from the specified configuration file instead of the command line"},
-    {'C', "repeat-count", BLUEPILL | BP, NO, required_argument, "1", BP_VALUE, "repeatTestsCount",
+    {'C', "repeat-count", BLUEPILL | BP, NO, NO, required_argument, "1", BP_VALUE, "repeatTestsCount",
         "Number of times we'll run the entire test suite (used for stability testing)."},
-    {'N', "no-split", BLUEPILL | BP, NO, required_argument, NULL, BP_LIST, "noSplit",
+    {'N', "no-split", BLUEPILL | BP, NO, NO, required_argument, NULL, BP_LIST, "noSplit",
         "A list of NO split test bundles"},
-    {'P', "print-config", BLUEPILL | BP, NO, required_argument, "stdout", BP_VALUE, "configOutputFile",
+    {'P', "print-config", BLUEPILL | BP, NO, NO, required_argument, "stdout", BP_VALUE, "configOutputFile",
         "Print a configuration file suitable for passing back using the `-c` option."},
-    {'R', "error-retries", BLUEPILL | BP, NO, required_argument, "4", BP_VALUE, "errorRetriesCount",
+    {'R', "error-retries", BLUEPILL | BP, NO, NO, required_argument, "4", BP_VALUE, "errorRetriesCount",
         "Number of times we'll recover from crashes to continue running the current test suite."},
-    {'S', "stuck-timeout", BLUEPILL | BP, NO, required_argument, "300", BP_VALUE, "stuckTimeout",
+    {'S', "stuck-timeout", BLUEPILL | BP, NO, NO, required_argument, "300", BP_VALUE, "stuckTimeout",
         "Timeout in seconds for a test that seems stuck (no output)."},
-    {'T', "test-timeout", BLUEPILL | BP, NO, required_argument, "300", BP_VALUE, "testCaseTimeout",
+    {'T', "test-timeout", BLUEPILL | BP, NO, NO, required_argument, "300", BP_VALUE, "testCaseTimeout",
         "Timeout in seconds for a test that is producing output."},
-    {'f', "failure-tolerance", BLUEPILL | BP, NO,   required_argument, NO, BP_VALUE, "failureTolerance",
+    {'f', "failure-tolerance", BLUEPILL | BP, NO, NO, required_argument, NO, BP_VALUE, "failureTolerance",
         "The number of retries on any failures (app crash/test failure)."},
-    {'i', "include", BLUEPILL | BP, NO, required_argument, NULL, BP_LIST, "testCasesToRun",
+    {'i', "include", BLUEPILL | BP, NO, NO, required_argument, NULL, BP_LIST, "testCasesToRun",
         "Include a testcase in the set of tests to run (unless specified in `exclude`)."},
-    {'n', "num-sims", BLUEPILL | BP, NO, required_argument, "4", BP_VALUE, "numSims",
+    {'n', "num-sims", BLUEPILL | BP, NO, NO, required_argument, "4", BP_VALUE, "numSims",
         "Number of simulators to run in parallel. (bluepill only)"},
-    {'o', "output-dir", BLUEPILL | BP, NO, required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
+    {'o', "output-dir", BLUEPILL | BP, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
         "Directory where to put output log files (bluepill only)."},
-    {'r', "runtime", BLUEPILL | BP, NO,  required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
+    {'r', "runtime", BLUEPILL | BP, NO, NO, required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
         "What runtime to use."},
-    {'t', "test", BP, YES, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
+    {'t', "test", BP, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
         "The path to the test bundle to execute (your .xctest)."},
-    {'x', "exclude", BLUEPILL | BP, NO, required_argument, NULL, BP_LIST, "testCasesToSkip",
+    {'x', "exclude", BLUEPILL | BP, NO, NO, required_argument, NULL, BP_LIST, "testCasesToSkip",
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
-    {'X', "xcode-path", BLUEPILL | BP, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
+    {'X', "xcode-path", BLUEPILL | BP, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
         "Path to xcode."},
 
     // options with no argument
-    {'H', "headless", BLUEPILL | BP, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
+    {'H', "headless", BLUEPILL | BP, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
         "Run in headless mode (no GUI)."},
-    {'J', "json-output", BLUEPILL | BP, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "jsonOutput",
+    {'J', "json-output", BLUEPILL | BP, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "jsonOutput",
         "Print test timing information in JSON format."},
-    {'h', "help", BLUEPILL | BP, NO, no_argument, NULL, BP_VALUE, NULL,
+    {'h', "help", BLUEPILL | BP, NO, NO, no_argument, NULL, BP_VALUE, NULL,
         "This help."},
-    {'p', "plain-output", BLUEPILL | BP, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "plainOutput",
+    {'p', "plain-output", BLUEPILL | BP, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "plainOutput",
         "Print results in plain text."},
-    {'q', "quiet", BLUEPILL | BP, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "quiet",
+    {'q', "quiet", BLUEPILL | BP, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "quiet",
         "Turn off all output except fatal errors."},
-    {'j', "junit-output", BLUEPILL | BP, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "junitOutput",
+    {'j', "junit-output", BLUEPILL | BP, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "junitOutput",
         "Print results in JUnit format."},
-    {'F', "only-retry-failed", BLUEPILL | BP, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "onlyRetryFailed",
+    {'F', "only-retry-failed", BLUEPILL | BP, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "onlyRetryFailed",
         "If `failure-tolerance` is > 0, only retry tests that failed."},
-    {'l', "list-tests", BLUEPILL, NO, no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
+    {'l', "list-tests", BLUEPILL, NO, NO, no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
         "Only list tests in bundle"},
 
     // options without short-options
-    {350, "additional-xctests", BLUEPILL | BP, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
+    {350, "additional-xctests", BLUEPILL | BP, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
-    {0, 0, 0, 0, 0, 0}
+    {0, 0, 0, 0, 0, 0, 0}
 };
 
 
@@ -116,6 +117,8 @@ struct BPOptions {
         if (BPOptions[i].default_val) {
             [self handleOpt:BPOptions[i].val withArg:(char *)BPOptions[i].default_val];
         }
+        // Since we're reinitializing, we haven't seen any options
+        BPOptions[i].seen = NO;
     }
     if (!file || [self loadConfigFile:file withError:err]) {
         return self;
@@ -145,7 +148,7 @@ struct BPOptions {
     }
     assert(bpo && bpo->name);
     if (!strcmp(bpo->name, "help")) [self usage:0];
-    bpo->required = NO; // we already have it so it's no longer required.
+    bpo->seen = YES;
     [self setProperty:bpo withArg:arg];
 }
 
@@ -382,6 +385,7 @@ struct BPOptions {
                 }
 
                 [self setValue:value forKey:[NSString stringWithUTF8String:BPOptions[i].property]];
+                BPOptions[i].seen = YES;
             }
         }
     }
@@ -426,7 +430,7 @@ struct BPOptions {
     // Now check we didn't miss any require options:
     NSMutableArray *errors = [[NSMutableArray alloc] init];
     for (int i = 0; BPOptions[i].name; i++) {
-        if (BPOptions[i].required) {
+        if ((self.program & BPOptions[i].program) && BPOptions[i].required && !BPOptions[i].seen) {
             [errors addObject:[NSString stringWithFormat:@"Missing required option: -%c/--%s - %s",
                                BPOptions[i].val, BPOptions[i].name, BPOptions[i].help]];
         }

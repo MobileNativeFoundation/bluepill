@@ -91,10 +91,9 @@ static BOOL quiet = NO;
     va_start(args, fmt);
     NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:args];
     va_end(args);
-    NSString *error = [[NSString alloc] initWithFormat:@"%s:%d %@", function, line, msg];
     return [NSError errorWithDomain:BPErrorDomain
                                code:-1
-                           userInfo:@{NSLocalizedDescriptionKey: error}];
+                           userInfo:@{NSLocalizedDescriptionKey: msg}];
 }
 
 
