@@ -216,8 +216,10 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 
 - (void)stopTestsWithErrorMessage:(NSString *)message forTestName:(NSString *)testName inClass:(NSString *)testClass {
 
-    // Timeout or crash on a test means we should skip it when we rerun the tests
-    [self updateExecutedTestCaseList:testName inClass:testClass];
+    // Timeout or crash on a test means we should skip it when we rerun the tests, unless we've enabled re-running failed tests
+    if (!self.config.onlyRetryFailed) {
+        [self updateExecutedTestCaseList:testName inClass:testClass];
+    }
 
     if (![[self.device stateString] isEqualToString:@"Shutdown"] && !self.config.testing_NoAppWillRun) {
         [BPUtils printInfo:ERROR withString:@"Will kill the process with appPID: %d", self.appPID];
