@@ -28,8 +28,8 @@
 - (void)setUp {
     [super setUp];
     if (getenv("BPBuildScript")) {
-        [BPUtils quietMode:YES];
-        [BPUtils enableDebugOutput:NO];
+        [BPUtils quietMode:NO];
+        [BPUtils enableDebugOutput:YES];
     }
     self.config = [[BPConfiguration alloc] init];
     self.config.testing_NoAppWillRun = YES;

@@ -9,15 +9,15 @@
 
 #import <Foundation/Foundation.h>
 
-#define CREATE_SIMULATOR(x)    [NSString stringWithFormat:@"[%lu] Create Simulator", (x)]
-#define INSTALL_APPLICATION(x) [NSString stringWithFormat:@"[%lu] Install Application", (x)]
-#define LAUNCH_APPLICATION(x)  [NSString stringWithFormat:@"[%lu] Launch Application", (x)]
-#define RUN_TESTS(x)           [NSString stringWithFormat:@"[%lu] Run Tests", (x)]
-#define DELETE_SIMULATOR(x)    [NSString stringWithFormat:@"[%lu] Delete Simulator", (x)]
+#define CREATE_SIMULATOR(x)    [NSString stringWithFormat:@"[Attempt %lu] Create Simulator", (x)]
+#define INSTALL_APPLICATION(x) [NSString stringWithFormat:@"[Attempt %lu] Install Application", (x)]
+#define LAUNCH_APPLICATION(x)  [NSString stringWithFormat:@"[Attempt %lu] Launch Application", (x)]
+#define RUN_TESTS(x)           [NSString stringWithFormat:@"[Attempt %lu] Run Tests", (x)]
+#define DELETE_SIMULATOR(x)    [NSString stringWithFormat:@"[Attempt %lu] Delete Simulator", (x)]
 
 #define ALL_TESTS              @"All Tests"
-#define TEST_CASE_FORMAT       @"[%lu] [%@/%@]"
-#define TEST_SUITE_FORMAT      @"[%lu] {[%@]}"
+#define TEST_CASE_FORMAT       @"[Attempt %lu] [%@/%@]"
+#define TEST_SUITE_FORMAT      @"[Attempt %lu] {[%@]}"
 
 @class BPWriter;
 
