@@ -139,7 +139,7 @@
 		BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */ = {
 			isa = PBXGroup;
 			children = (
-				BA9C2DAD1DD674AD007CB967 /* resources */,
+				BA9C2DAD1DD674AD007CB967 /* Resource Files */,
 				BAD8484E1DBC8006007034CF /* simulator */,
 				BA1809EC1DBA929600D7D130 /* BPTestHelper.h */,
 				BA1809ED1DBA929600D7D130 /* BPTestHelper.m */,
@@ -177,13 +177,13 @@
 			path = 3;
 			sourceTree = "<group>";
 		};
-		BA9C2DAD1DD674AD007CB967 /* resources */ = {
+		BA9C2DAD1DD674AD007CB967 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
 				BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */,
 				BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */,
 			);
-			path = resources;
+			path = "Resource Files";
 			sourceTree = "<group>";
 		};
 		BAD8484E1DBC8006007034CF /* simulator */ = {
