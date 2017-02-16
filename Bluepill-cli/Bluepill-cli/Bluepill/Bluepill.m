@@ -38,6 +38,9 @@ void onInterrupt(int ignore) {
 @property (nonatomic, assign) NSInteger failureTolerance;
 @property (nonatomic, assign) NSInteger retries;
 
+@property (nonatomic, assign) NSInteger maxCreateTries;
+@property (nonatomic, assign) NSInteger maxInstallTries;
+
 @end
 
 @implementation Bluepill
@@ -181,6 +184,7 @@ void onInterrupt(int ignore) {
 
     context.runner = [self createSimulatorRunnerWithContext:context];
 
+    self.maxCreateTries = 2;
     NEXT([self createSimulatorWithContext:context]);
 }
 
@@ -196,11 +200,12 @@ void onInterrupt(int ignore) {
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
 
-    __block int maxCreateTries = 2;
     DeleteSimulatorBlock failedCreateBlock = ^(NSError *error, BOOL success) {
         if (!success) {
-            if (--maxCreateTries > 0) {
-                NEXT([__self deleteSimulatorWithContext:context andCallback:failedCreateBlock]);
+            if (--__self.maxCreateTries > 0) {
+                NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
+                    NEXT([__self createSimulatorWithContext:context]);
+                }]);
             } else {
                 NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
             }
@@ -242,6 +247,7 @@ void onInterrupt(int ignore) {
         failedCreateBlock(nil, NO);
     };
 
+    self.maxInstallTries = 2;
     [context.runner createSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
 }
 
@@ -254,11 +260,12 @@ void onInterrupt(int ignore) {
     BOOL success = [context.runner installApplicationAndReturnError:&error];
 
     __weak typeof(self) __self = self;
-    __block int maxInstallTries = 2;
     DeleteSimulatorBlock failedInstallBlock = ^(NSError *error, BOOL success) {
         if (!success) {
-            if (--maxInstallTries > 0) {
-                NEXT([__self deleteSimulatorWithContext:context andCallback:failedInstallBlock]);
+            if (--__self.maxInstallTries > 0) {
+                NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
+                    NEXT([__self installApplicationWithContext:context]);
+                }]);
             } else {
                 NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
             }
