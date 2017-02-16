@@ -192,10 +192,21 @@ void onInterrupt(int ignore) {
     NSString *stepName = CREATE_SIMULATOR(context.attemptNumber);
     NSString *deviceName = [NSString stringWithFormat:@"BP%d-%lu", getpid(), context.attemptNumber];
 
+    __weak typeof(self) __self = self;
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
 
-    __weak typeof(self) __self = self;
+    __block int maxCreateTries = 2;
+    DeleteSimulatorBlock failedCreateBlock = ^(NSError *error, BOOL success) {
+        if (!success) {
+            if (--maxCreateTries > 0) {
+                NEXT([__self deleteSimulatorWithContext:context andCallback:failedCreateBlock]);
+            } else {
+                NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
+            }
+        }
+    };
+
     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:60.0];
     [timer start];
 
@@ -217,7 +228,7 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [BPUtils printError:ERROR withString:@"%@", [error localizedDescription]];
         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
-        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
+        failedCreateBlock(error, NO);
     };
 
     handler.onTimeout = ^{
@@ -225,7 +236,7 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
-        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
+        failedCreateBlock(nil, NO);
     };
 
     [context.runner createSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
@@ -239,13 +250,25 @@ void onInterrupt(int ignore) {
     NSError *error = nil;
     BOOL success = [context.runner installApplicationAndReturnError:&error];
 
+    __weak typeof(self) __self = self;
+    __block int maxInstallTries = 2;
+    DeleteSimulatorBlock failedInstallBlock = ^(NSError *error, BOOL success) {
+        if (!success) {
+            if (--maxInstallTries > 0) {
+                NEXT([__self deleteSimulatorWithContext:context andCallback:failedInstallBlock]);
+            } else {
+                NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
+            }
+        }
+    };
+
     [[BPStats sharedStats] endTimer:stepName];
     [BPUtils printInfo:(success ? INFO : FAILED) withString:[@"Completed: " stringByAppendingString:stepName]];
 
     if (!success) {
         [[BPStats sharedStats] addSimulatorInstallFailure];
         [BPUtils printError:ERROR withString:@"Could not install app in simulator: %@", [error localizedDescription]];
-        NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
+        failedInstallBlock(error, NO);
         return;
     } else {
         NEXT([self launchApplicationWithContext:context]);
@@ -438,6 +461,51 @@ void onInterrupt(int ignore) {
         [BPUtils printInfo:FAILED
                 withString:[@"Timeout: " stringByAppendingString:stepName]];
         NEXT([__self finishWithContext:context]);
+    };
+
+    [context.runner deleteSimulatorWithCompletion:handler.defaultHandlerBlock];
+}
+
+- (void)deleteSimulatorWithContext:(BPExecutionContext *)context andCallback:(DeleteSimulatorBlock)callback {
+    NSString *stepName = DELETE_SIMULATOR(context.attemptNumber);
+    [BPUtils printInfo:INFO withString:@"Cleaning up the simulator due to a BAD STATE"];
+
+    if (!context.simulatorCreated) {
+        // Since we didn't create the simulator, don't try to delete the simulator and just go straight to the callback
+        callback(nil, NO);
+        return;
+    }
+
+    [[BPStats sharedStats] startTimer:stepName];
+    [BPUtils printInfo:INFO withString:stepName];
+
+    BPWaitTimer *timer = [BPWaitTimer timerWithInterval:60.0];
+    [timer start];
+
+    BPDeleteSimulatorHandler *handler = [BPDeleteSimulatorHandler handlerWithTimer:timer];
+    __weak typeof(handler) __handler = handler;
+
+    handler.beginWith = ^{
+        [[BPStats sharedStats] endTimer:stepName];
+        [BPUtils printInfo:(__handler.error ? FAILED : INFO) withString:[@"Completed: " stringByAppendingString:stepName]];
+    };
+
+    handler.onSuccess = ^{
+        callback(nil, YES);
+    };
+
+    handler.onError = ^(NSError *error) {
+        [[BPStats sharedStats] addSimulatorDeleteFailure];
+        [BPUtils printError:ERROR withString:@"%@", [error localizedDescription]];
+        callback(error, NO);
+    };
+
+    handler.onTimeout = ^{
+        [[BPStats sharedStats] addSimulatorDeleteFailure];
+        [[BPStats sharedStats] endTimer:stepName];
+        [BPUtils printInfo:FAILED
+                withString:[@"Timeout: " stringByAppendingString:stepName]];
+        callback(nil, NO);
     };
 
     [context.runner deleteSimulatorWithCompletion:handler.defaultHandlerBlock];
