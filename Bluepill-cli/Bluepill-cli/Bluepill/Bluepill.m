@@ -204,6 +204,9 @@ void onInterrupt(int ignore) {
             } else {
                 NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
             }
+        } else {
+            context.simulatorCreated = YES;
+            NEXT([__self installApplicationWithContext:context]);
         }
     };
 
@@ -259,6 +262,8 @@ void onInterrupt(int ignore) {
             } else {
                 NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
             }
+        } else {
+            NEXT([self launchApplicationWithContext:context]);
         }
     };
 
