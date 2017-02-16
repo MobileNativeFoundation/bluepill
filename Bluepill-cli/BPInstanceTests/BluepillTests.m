@@ -276,7 +276,7 @@
     self.config.outputDirectory = outputDir;
     self.config.errorRetriesCount = @100;
     self.config.junitOutput = YES;
-    self.config.failureTolerance = 2;
+    self.config.failureTolerance = 1;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);
     // validate the report
@@ -294,7 +294,7 @@
     self.config.outputDirectory = outputDir;
     self.config.errorRetriesCount = @100;
     self.config.junitOutput = YES;
-    self.config.failureTolerance = 2;
+    self.config.failureTolerance = 1;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);
     // Make sure all tests started on the first run
@@ -319,7 +319,7 @@
     self.config.outputDirectory = outputDir;
     self.config.errorRetriesCount = @100;
     self.config.junitOutput = YES;
-    self.config.failureTolerance = 2;
+    self.config.failureTolerance = 1;
     self.config.onlyRetryFailed = YES;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);
