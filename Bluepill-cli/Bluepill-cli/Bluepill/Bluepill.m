@@ -194,7 +194,7 @@ void onInterrupt(int ignore) {
 
 - (void)createSimulatorWithContext:(BPExecutionContext *)context {
     NSString *stepName = CREATE_SIMULATOR(context.attemptNumber);
-    NSString *deviceName = [NSString stringWithFormat:@"BP%d-%lu", getpid(), context.attemptNumber];
+    NSString *deviceName = [NSString stringWithFormat:@"BP%d-%lu-%lu", getpid(), context.attemptNumber, self.maxCreateTries];
 
     __weak typeof(self) __self = self;
     [[BPStats sharedStats] startTimer:stepName];
@@ -264,7 +264,7 @@ void onInterrupt(int ignore) {
         if (!success) {
             if (--__self.maxInstallTries > 0) {
                 NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
-                    NEXT([__self installApplicationWithContext:context]);
+                    NEXT([__self createSimulatorWithContext:context]);
                 }]);
             } else {
                 NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
