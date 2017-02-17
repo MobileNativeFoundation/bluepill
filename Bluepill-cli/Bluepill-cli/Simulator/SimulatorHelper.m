@@ -15,9 +15,9 @@
 
 @implementation SimulatorHelper
 
-+ (NSDictionary *)appLaunchEnvironmentWith:(NSString *)hostBundleID
-                                    device:(SimDevice *)device
-                                    config:(BPConfiguration *)config {
++ (NSDictionary *)appLaunchEnvironmentWithBundleID:(NSString *)hostBundleID
+                                            device:(SimDevice *)device
+                                            config:(BPConfiguration *)config {
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:config.appBundlePath];
     NSString *testSimulatorFrameworkPath = [[hostAppExecPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
     NSString *dyldLibraryPath = [NSString stringWithFormat:@"%@:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", testSimulatorFrameworkPath, config.xcodePath];
@@ -28,19 +28,25 @@
     }
     NSString *appPath = appInfo[@"Path"];
     return @{
-             @"AppTargetLocation" : appPath,
+             @"AppTargetLocation" : hostAppExecPath,
              @"DYLD_FALLBACK_FRAMEWORK_PATH" : [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath],
              @"DTX_CONNECTION_SERVICES_PATH" : @"/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/Developer/Library/PrivateFrameworks/DTXConnectionServices.framework",
              @"DYLD_FRAMEWORK_PATH" : dyldLibraryPath,
              @"DYLD_INSERT_LIBRARIES" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/IDEBundleInjection.framework/IDEBundleInjection", config.xcodePath],
              @"DYLD_LIBRARY_PATH" : dyldLibraryPath,
              @"NSUnbufferedIO" : @YES,
+             @"OS_ACTIVITY_DT_MODE" : @YES,
              @"TestBundleLocation" : config.testBundlePath,
              @"XCInjectBundle" : config.testBundlePath,
-             @"XCInjectBundleInto" : hostAppPath,
+             @"XCInjectBundleInto" : hostAppExecPath,
              @"MNTF_TINKER_DELAY": @0.01,
+             @"XCODE_DBG_XPC_EXCLUSIONS" : @"com.apple.dt.xctestSymbolicator",
              @"XCTestConfigurationFilePath" : [SimulatorHelper testEnvironmentWithConfiguration:config],
+             @"__XCODE_BUILT_PRODUCTS_DIR_PATHS" : testSimulatorFrameworkPath,
+             @"__XPC_DYLD_FRAMEWORK_PATH" : testSimulatorFrameworkPath,
+             @"__XPC_DYLD_LIBRARY_PATH" : testSimulatorFrameworkPath,
              };
+
 }
 
 + (NSString *)testEnvironmentWithConfiguration:(BPConfiguration *)config {
@@ -65,7 +71,7 @@
     if (config.testCasesToSkip) {
         [xctConfig setTestsToSkip:[NSSet setWithArray:config.testCasesToSkip]];
     }
-    
+
     if (config.testCasesToRun) {
         // According to @khu, we can't just pass the right setTestsToRun and have it work, so what we do instead
         // is get the full list of tests from the XCTest bundle, then skip everything we don't want to run.

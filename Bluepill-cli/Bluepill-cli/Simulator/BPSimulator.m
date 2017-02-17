@@ -158,9 +158,9 @@
     // Create the environment for the host application
     NSDictionary *argsAndEnv = [BPUtils buildArgsAndEnvironmentWith:self.config.schemePath];
 
-    NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWith:hostAppExecPath
-                                                                                                                         testbundlePath:self.config.testBundlePath
-                                                                                                                                 config:self.config]];
+    NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config]];
+//                                                                                                                         testbundlePath:self.config.testBundlePath
+//                                                                                                                                 config:self.config]];
     [appLaunchEnvironment addEntriesFromDictionary:argsAndEnv[@"env"]];
 
     if (self.config.testing_CrashAppOnLaunch) {

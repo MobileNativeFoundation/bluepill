@@ -349,6 +349,7 @@
     NSString *testRunnerPath = [BPTestHelper sampleAppUITestRunnerPath];
     self.config.testRunnerPath = testRunnerPath;
     self.config.testBundlePath = testBundlePath;
+    self.config.isUITestBundle = YES;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
 }
 

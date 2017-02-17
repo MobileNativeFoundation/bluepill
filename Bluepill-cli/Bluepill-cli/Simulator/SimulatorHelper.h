@@ -20,9 +20,9 @@
  * @param config the configuration object
  * @return returns the app launch environment as a dictionary
  */
-+ (NSDictionary *)appLaunchEnvironmentWith:(NSString *)hostAppPath
-                            testbundlePath:(NSString *)testBundlePath
-                                    config:(BPConfiguration *)config;
++ (NSDictionary *)appLaunchEnvironmentWithBundleID:(NSString *)hostBundleID
+                                            device:(SimDevice *)device
+                                            config:(BPConfiguration *)config;
 
 /*!
  * @discussion get the path of the environment configuration file

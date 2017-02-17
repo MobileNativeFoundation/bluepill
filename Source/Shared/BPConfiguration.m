@@ -39,8 +39,12 @@ struct BPOptions {
     {'s', "scheme-path", required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
 
+    {'U', "is-ui-test", required_argument, NULL, BP_BOOL, "isUITestBundle",
+        "whether this bundle is UI test"},
+
     {'u', "runner-path", required_argument, NULL, BP_VALUE | BP_PATH, "testRunnerPath",
         "The test runner for UI tests."},
+
     // Optional argument
     {'d', "device",   required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
         "On which device to run the app."},
