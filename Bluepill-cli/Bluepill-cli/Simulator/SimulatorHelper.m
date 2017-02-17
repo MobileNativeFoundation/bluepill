@@ -46,20 +46,20 @@
 + (NSString *)testEnvironmentWithConfiguration:(BPConfiguration *)config {
     XCTestConfiguration *xctConfig = [[XCTestConfiguration alloc] init];
     NSString *appName = [self appNameForPath:config.testBundlePath];
-    [xctConfig setProductModuleName:appName];
-    [xctConfig setTestBundleURL:[NSURL fileURLWithPath:config.testBundlePath]];
+    xctConfig.productModuleName = appName;
+    xctConfig.testBundleURL = [NSURL fileURLWithPath:config.testBundlePath];
     xctConfig.sessionIdentifier = config.sessionIdentifier;
+    xctConfig.treatMissingBaselinesAsFailures = NO;
+    xctConfig.targetApplicationBundleID = [self bundleIdForPath:config.appBundlePath];//@"LI.BPSampleApp";
+    xctConfig.targetApplicationPath = config.appBundlePath;//@"/Users/khu/linkedin/bluepill/build/Products/Debug-iphonesimulator/BPSampleApp.app";
+    xctConfig.reportResultsToIDE = YES;
 
     if (config.isUITestBundle) {
         xctConfig.initializeForUITesting = YES;
         xctConfig.disablePerformanceMetrics = NO;
         xctConfig.reportActivities = NO;
         xctConfig.testsMustRunOnMainThread = YES;
-        xctConfig.reportResultsToIDE = YES;
         xctConfig.pathToXcodeReportingSocket = nil;
-        xctConfig.targetApplicationBundleID = [self bundleIdForPath:config.appBundlePath];//@"LI.BPSampleApp";
-        xctConfig.targetApplicationPath = config.appBundlePath;//@"/Users/khu/linkedin/bluepill/build/Products/Debug-iphonesimulator/BPSampleApp.app";
-        xctConfig.treatMissingBaselinesAsFailures = NO;
     }
 
     if (config.testCasesToSkip) {

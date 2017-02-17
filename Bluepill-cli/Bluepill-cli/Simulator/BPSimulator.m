@@ -132,8 +132,8 @@
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostBundlePath = self.config.appBundlePath;
 
-    hostBundleId = @"com.apple.test.BPSampleAppUITests-Runner";
-    hostBundlePath = @"/Users/khu/linkedin/bluepill/build/Products/Debug-iphonesimulator/BPSampleAppUITests-Runner.app";
+//    hostBundleId = @"com.apple.test.BPSampleAppUITests-Runner";
+//    hostBundlePath = @"/Users/khu/linkedin/bluepill/build/Products/Debug-iphonesimulator/BPSampleAppUITests-Runner.app";
     // Install the host application
     BOOL installed = [self.device
                       installApplication:[NSURL fileURLWithPath:hostBundlePath]
@@ -204,15 +204,6 @@
     // Keep the simulator runner around through processing of the block
     __block typeof(self) blockSelf = self;
 
-    NSError *infoError;
-    NSDictionary *appInfo = [self.device propertiesOfApplication:hostBundleId error:&infoError];
-    if (infoError) {
-        NSLog(@"Error in getting appInfo %@", [infoError localizedDescription]);
-    }
-
-    NSString *appPath = appInfo[@"Path"];
-    self.config.testBundlePath = [NSString stringWithFormat:@"%@/Plugins/BPSampleAppUITests.xctest", appPath];
-
     __block pid_t pid_test = 0;
     [self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid) {
         // Save the process ID to the monitor
@@ -248,7 +239,7 @@
     dConnection.testRunnerPid = pid_test;
     [dConnection connectWithTimeout:3600];
     [bConnection startTestPlan];
-    
+
 }
 
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion {

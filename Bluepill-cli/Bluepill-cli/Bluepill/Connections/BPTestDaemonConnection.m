@@ -60,9 +60,6 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 - (void)connect {
     DTXTransport *transport = [self connectTransport];
     DTXConnection *connection = [[objc_lookUpClass("DTXConnection") alloc] initWithTransport:transport];
-//    transport.dataReceivedHandler = ^{
-//        NSLog(@"Data received from Daemon connection.");
-//    };
     [connection registerDisconnectHandler:^{
         NSLog(@"Daemon connection Disconnected.");
     }];
