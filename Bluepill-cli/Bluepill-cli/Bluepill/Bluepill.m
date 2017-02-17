@@ -40,6 +40,7 @@ void onInterrupt(int ignore) {
 
 @property (nonatomic, assign) NSInteger maxCreateTries;
 @property (nonatomic, assign) NSInteger maxInstallTries;
+@property (nonatomic, assign) NSInteger maxLaunchTries;
 
 @end
 
@@ -204,7 +205,8 @@ void onInterrupt(int ignore) {
         if (!success) {
             if (--__self.maxCreateTries > 0) {
 //                NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
-                    context.runner = [self createSimulatorRunnerWithContext:context];
+                    [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+                    context.runner = [__self createSimulatorRunnerWithContext:context];
                     NEXT([__self createSimulatorWithContext:context]);
 //                }]);
             } else {
@@ -257,6 +259,8 @@ void onInterrupt(int ignore) {
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
 
+    self.maxLaunchTries = 2;
+
     NSError *error = nil;
     BOOL success = [context.runner installApplicationAndReturnError:&error];
 
@@ -265,14 +269,15 @@ void onInterrupt(int ignore) {
         if (!success) {
             if (--__self.maxInstallTries > 0) {
 //                NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
-                    context.runner = [self createSimulatorRunnerWithContext:context];
+                    [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+                    context.runner = [__self createSimulatorRunnerWithContext:context];
                     NEXT([__self createSimulatorWithContext:context]);
 //                }]);
             } else {
                 NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
             }
         } else {
-            NEXT([self launchApplicationWithContext:context]);
+            NEXT([__self launchApplicationWithContext:context]);
         }
     };
 
@@ -297,6 +302,22 @@ void onInterrupt(int ignore) {
     [[BPStats sharedStats] startTimer:RUN_TESTS(context.attemptNumber)];
 
     __weak typeof(self) __self = self;
+    DeleteSimulatorBlock failedLaunchBlock = ^(NSError *error, BOOL success) {
+        if (!success) {
+            if (--__self.maxLaunchTries > 0) {
+//                NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
+                    [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+                    context.runner = [__self createSimulatorRunnerWithContext:context];
+                    NEXT([__self createSimulatorWithContext:context]);
+//                }]);
+            } else {
+                NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
+            }
+        } else {
+            NEXT([__self checkProcessWithContext:context]);
+        }
+    };
+
     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:300.0];
     [timer start];
 
@@ -315,7 +336,7 @@ void onInterrupt(int ignore) {
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [BPUtils printError:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
-        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
+        failedLaunchBlock(error, NO);
     };
 
     handler.onTimeout = ^{
@@ -323,7 +344,7 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
-        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
+        failedLaunchBlock(nil, NO);
     };
 
     [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
