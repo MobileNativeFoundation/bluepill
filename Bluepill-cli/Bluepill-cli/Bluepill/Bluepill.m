@@ -203,9 +203,10 @@ void onInterrupt(int ignore) {
     DeleteSimulatorBlock failedCreateBlock = ^(NSError *error, BOOL success) {
         if (!success) {
             if (--__self.maxCreateTries > 0) {
-                NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
+//                NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
+                    context.runner = [self createSimulatorRunnerWithContext:context];
                     NEXT([__self createSimulatorWithContext:context]);
-                }]);
+//                }]);
             } else {
                 NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
             }
@@ -263,9 +264,10 @@ void onInterrupt(int ignore) {
     DeleteSimulatorBlock failedInstallBlock = ^(NSError *error, BOOL success) {
         if (!success) {
             if (--__self.maxInstallTries > 0) {
-                NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
+//                NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
+                    context.runner = [self createSimulatorRunnerWithContext:context];
                     NEXT([__self createSimulatorWithContext:context]);
-                }]);
+//                }]);
             } else {
                 NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
             }
