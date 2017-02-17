@@ -31,7 +31,7 @@ void onInterrupt(int ignore) {
     interrupted = 1;
 }
 
-@interface Bluepill()
+@interface Bluepill()<BPTestBundleConnectionDelegate>
 
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) BPConfiguration *executionConfigCopy;
@@ -298,10 +298,13 @@ void onInterrupt(int ignore) {
 }
 
 - (void)connectTestBundleAndTestDaemonWithContext:(BPExecutionContext *)context {
-    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:context.runner andInterface:nil];
+    if (context.isTestRunnerContext) {
+        // If the isTestRunnerContext is flipped on, don't connect testbundle again.
+        return;
+    }
+    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:context.runner andInterface:self];
     bConnection.simulator = context.runner;
     bConnection.config = self.config;
-    //        bConnection.stdoutPath = simStdoutRelativePath;
 
     BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:context.runner andInterface:nil];
     [bConnection connectWithTimeout:3600];
@@ -313,10 +316,6 @@ void onInterrupt(int ignore) {
 
 }
 - (void)checkProcessWithContext:(BPExecutionContext *)context {
-    // Waiting for host application to boot if this is runner process.
-    if (context.isTestRunnerContext) {
-        return;
-    }
     BOOL isRunning = [self isProcessRunningWithContext:context];
     if (!isRunning && [context.runner isFinished]) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
@@ -544,6 +543,12 @@ NSString *__from;
 
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"Currently executing %@: Line %d (Invoked by: %@)", __function, __line, __from];
+}
+
+#pragma mark - BPTestBundleConnectionDelegate
+- (void)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment {
+    self.context.isTestRunnerContext = YES;
+    [self installApplicationWithContext:self.context];
 }
 
 @end

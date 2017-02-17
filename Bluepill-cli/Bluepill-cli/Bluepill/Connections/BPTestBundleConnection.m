@@ -36,7 +36,7 @@
 static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 @interface BPTestBundleConnection()<XCTestManager_IDEInterface>
-@property (nonatomic, strong) id<XCTestManager_IDEInterface> interface;
+@property (nonatomic, weak) id<BPTestBundleConnectionDelegate> interface;
 @property (atomic, nullable, strong) id<XCTestDriverInterface> testBundleProxy;
 @property (atomic, nullable, strong, readwrite) DTXConnection *testBundleConnection;
 @property (nonatomic, assign) BOOL connected;
@@ -45,11 +45,11 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 @implementation BPTestBundleConnection
 
-- (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<XCTestManager_IDEInterface>)interface {
+- (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<BPTestBundleConnectionDelegate>)interface {
     self = [super init];
     if (self) {
         self.simulator = simulator;
-        self.interface = self;
+        self.interface = interface;
         self.queue = dispatch_queue_create("com.facebook.xctestboostrap.mediator", DISPATCH_QUEUE_PRIORITY_DEFAULT);
     }
     return self;
@@ -80,7 +80,6 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
             NSLog(@"%@", error);
         }
     }
-
     NSArray *requiredClasses = @[@"SimDevice", @"SimDeviceFramebufferService",
                                  @"DTXConnection", @"DTXRemoteInvocationReceipt",
                                  @"DVTDevice", @"IDEFoundationTestInitializer",
@@ -90,10 +89,8 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
             NSLog(@"%@ is loaded..", rc);
         }
     }
-
     NSAssert(NSThread.isMainThread, @"-[%@ %@] should be called from the main thread", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-//
-        [self connect];
+    [self connect];
 
     // Pool connection status till it passes.
     [BPUtils runWithTimeOut:3600 until:^BOOL{
@@ -254,8 +251,6 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     NSDictionary *options = @{
                               @"arguments": arguments,
                               @"environment": environment,
-//                              kOptionsStdoutKey: self.stdoutPath,
-//                              kOptionsStderrKey: self.stdoutPath
                               };
     NSError *error;
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
