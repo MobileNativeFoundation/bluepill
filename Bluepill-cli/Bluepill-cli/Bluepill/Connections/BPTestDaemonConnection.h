@@ -11,9 +11,11 @@
 
 // CoreSimulator
 #import "SimDevice.h"
+#import "BPSimulator.h"
 
 @interface BPTestDaemonConnection : NSObject
 @property (nonatomic, assign) pid_t testRunnerPid;
-- (instancetype)initWithDevice:(SimDevice *)device andInterface:(id<XCTestManager_IDEInterface>)interface;
+@property (nonatomic, strong) BPSimulator *simulator;
+- (instancetype)initWithDevice:(BPSimulator *)device andInterface:(id<XCTestManager_IDEInterface>)interface;
 - (void)connectWithTimeout:(NSTimeInterval)timeout;
 @end

@@ -22,7 +22,6 @@
 @interface BPSimulator()
 
 @property (nonatomic, strong) BPConfiguration *config;
-@property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) NSRunningApplication *app;
 @property (nonatomic, strong) NSFileHandle *stdOutHandle;
 @property (nonatomic, strong) SimulatorMonitor *monitor;
@@ -132,6 +131,13 @@
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostBundlePath = self.config.appBundlePath;
 
+    if (self.config.isUITestBundle) {
+        NSString *hostAppPath = [self.config.testRunnerPath stringByDeletingLastPathComponent];
+        hostBundleId = [SimulatorHelper bundleIdForPath:hostAppPath];
+        hostBundlePath = hostAppPath;
+
+    }
+
 //    hostBundleId = @"com.apple.test.BPSampleAppUITests-Runner";
 //    hostBundlePath = @"/Users/khu/linkedin/bluepill/build/Products/Debug-iphonesimulator/BPSampleAppUITests-Runner.app";
     // Install the host application
@@ -145,7 +151,7 @@
     return YES;
 }
 
-- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {
+- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion isHostApp:(BOOL)isHostApp {
 
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.appBundlePath];
@@ -204,12 +210,9 @@
     // Keep the simulator runner around through processing of the block
     __block typeof(self) blockSelf = self;
 
-    __block pid_t pid_test = 0;
     [self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid) {
         // Save the process ID to the monitor
         blockSelf.monitor.appPID = pid;
-        pid_test = pid;
-
         if (error == nil) {
             dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC, pid, DISPATCH_PROC_EXIT, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
             dispatch_source_set_event_handler(source, ^{
@@ -226,19 +229,6 @@
             };
         }
     }];
-    [BPUtils runWithTimeOut:3600 until:^BOOL{
-        return pid_test != 0;
-    }];
-    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:self.device andInterface:nil];
-    bConnection.config = self.config;
-
-
-    BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:self.device andInterface:nil];
-    [bConnection connectWithTimeout:3600];
-    
-    dConnection.testRunnerPid = pid_test;
-    [dConnection connectWithTimeout:3600];
-    [bConnection startTestPlan];
 
 }
 

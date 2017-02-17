@@ -10,10 +10,14 @@
 #import "XCTestManager_IDEInterface-Protocol.h"
 #import "SimDevice.h"
 #import "BPConfiguration.h"
+#import "BPSimulator.h"
 
 @interface BPTestBundleConnection : NSObject
 @property (nonatomic, strong) BPConfiguration *config;
-- (instancetype)initWithDevice:(SimDevice *)device andInterface:(id<XCTestManager_IDEInterface>)interface;
+@property (nonatomic, strong) BPSimulator *simulator;
+@property (nonatomic, strong) NSString *stdoutPath;
+@property (nonatomic, copy) void (^completionBlock)(NSError *, pid_t);
+- (instancetype)initWithDevice:(BPSimulator *)device andInterface:(id<XCTestManager_IDEInterface>)interface;
 - (void)connectWithTimeout:(NSTimeInterval)timeout;
 - (void)startTestPlan;
 @end

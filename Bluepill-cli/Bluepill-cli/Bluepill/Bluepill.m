@@ -277,7 +277,7 @@ void onInterrupt(int ignore) {
 
     handler.onSuccess = ^{
         context.pid = __handler.pid;
-        NEXT([__self checkProcessWithContext:context]);
+        NEXT([__self connectTestBundleAndTestDaemonWithContext:context]);
     };
 
     handler.onError = ^(NSError *error) {
@@ -294,10 +294,29 @@ void onInterrupt(int ignore) {
         NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
     };
 
-    [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
+    [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock isHostApp:NO];
 }
 
+- (void)connectTestBundleAndTestDaemonWithContext:(BPExecutionContext *)context {
+    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:context.runner andInterface:nil];
+    bConnection.simulator = context.runner;
+    bConnection.config = self.config;
+    //        bConnection.stdoutPath = simStdoutRelativePath;
+
+    BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:context.runner andInterface:nil];
+    [bConnection connectWithTimeout:3600];
+
+    dConnection.testRunnerPid = context.pid;
+    [dConnection connectWithTimeout:3600];
+    [bConnection startTestPlan];
+    NEXT([self checkProcessWithContext:context]);
+
+}
 - (void)checkProcessWithContext:(BPExecutionContext *)context {
+    // Waiting for host application to boot if this is runner process.
+    if (context.isTestRunnerContext) {
+        return;
+    }
     BOOL isRunning = [self isProcessRunningWithContext:context];
     if (!isRunning && [context.runner isFinished]) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];

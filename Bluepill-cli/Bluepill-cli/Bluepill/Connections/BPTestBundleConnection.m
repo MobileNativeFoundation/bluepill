@@ -8,9 +8,8 @@
 
 #import "BPTestBundleConnection.h"
 #import "BPUtils.h"
-
 #import "BPTestDaemonConnection.h"
-#import "BPUtils.h"
+#import "BPConstants.h"
 
 // XCTest framework
 #import "XCTestManager_IDEInterface-Protocol.h"
@@ -37,7 +36,6 @@
 static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 @interface BPTestBundleConnection()<XCTestManager_IDEInterface>
-@property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) id<XCTestManager_IDEInterface> interface;
 @property (atomic, nullable, strong) id<XCTestDriverInterface> testBundleProxy;
 @property (atomic, nullable, strong, readwrite) DTXConnection *testBundleConnection;
@@ -47,10 +45,10 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 @implementation BPTestBundleConnection
 
-- (instancetype)initWithDevice:(SimDevice *)device andInterface:(id<XCTestManager_IDEInterface>)interface {
+- (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<XCTestManager_IDEInterface>)interface {
     self = [super init];
     if (self) {
-        self.device = device;
+        self.simulator = simulator;
         self.interface = self;
         self.queue = dispatch_queue_create("com.facebook.xctestboostrap.mediator", DISPATCH_QUEUE_PRIORITY_DEFAULT);
     }
@@ -62,15 +60,14 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     // Check the availablity of frameworks
     NSArray *ar = @[
                     @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTFoundation.framework",
-                    @"/Applications/Xcode.app/Contents/Developer/../SharedFrameworks/DVTServices.framework",
+                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTServices.framework",
                     @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTAnalyticsClient.framework",
-                    @"/Applications/Xcode.app/Contents/Developer/../SharedFrameworks/DVTAnalyticsClient.framework",
-                    @"/Applications/Xcode.app/Contents/Developer/../SharedFrameworks/DVTAnalytics.framework",
+                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTAnalyticsClient.framework",
+                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTAnalytics.framework",
                     @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTPortal.framework",
                     @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTSourceControl.framework",
                     @"/Applications/Xcode.app/Contents/SharedFrameworks/SourceKit.framework",
                     @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTSourceControl.framework",
-
                     @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTAnalytics.framework",
                     @"/Applications/Xcode.app/Contents/Frameworks/IDEFoundation.framework",
 
@@ -95,7 +92,9 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     }
 
     NSAssert(NSThread.isMainThread, @"-[%@ %@] should be called from the main thread", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
-    [self connect];
+//
+        [self connect];
+
     // Pool connection status till it passes.
     [BPUtils runWithTimeOut:3600 until:^BOOL{
         return self.connected;
@@ -147,7 +146,6 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
                     NSLog(@"ERRRORRRRR");
                     return;
                 }
-
                 NSLog(@"testmanagerd handled session request");
                 [proxyChannel cancel];
             }];
@@ -156,7 +154,6 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
                     NSLog(@"ERRRORRRRR");
                     return;
                 }
-
                 NSLog(@"testmanagerd handled session request");
                 [proxyChannel cancel];
             }];
@@ -184,7 +181,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     if (socketFD == -1) {
         NSLog(@"Error in creating socketFD");
     }
-    NSString *socketString = [self.device getenv:testManagerEnv error:nil];
+    NSString *socketString = [self.simulator.device getenv:testManagerEnv error:nil];
     NSLog(@"SocketString is %@", socketString);
     const char *socketPath = socketString.UTF8String;
 
@@ -223,24 +220,24 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 #pragma mark XCTestDriverInterface
 
 - (id)_XCT_didBeginExecutingTestPlan {
-    NSLog(@"Did begin executing test plan!");
+//    NSLog(@"***Did begin executing test plan!");
     return nil;
 }
 
 - (id)_XCT_didFinishExecutingTestPlan {
-    NSLog(@"Did finish executing test plan");
+//    NSLog(@"Did finish executing test plan");
     return nil;
 }
 
 - (id)_XCT_testBundleReadyWithProtocolVersion:(NSNumber *)protocolVersion minimumVersion:(NSNumber *)minimumVersion {
     self.connected = YES;
-    NSLog(@"Test Bundle is connected!");
-    NSLog(@"Protocol version is %@, minimum version is %@", protocolVersion, minimumVersion);
+    NSLog(@"***Test Bundle is connected!");
+    NSLog(@"***Protocol version is %@, minimum version is %@", protocolVersion, minimumVersion);
     return nil;
 }
 
 - (id)_XCT_didBeginInitializingForUITesting {
-    NSLog(@"Start initialization UI tests");
+    NSLog(@"***Start initialization UI tests");
     return nil;
 }
 
@@ -256,57 +253,57 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 {
     NSDictionary *options = @{
                               @"arguments": arguments,
-                              @"environment": environment
+                              @"environment": environment,
+//                              kOptionsStdoutKey: self.stdoutPath,
+//                              kOptionsStderrKey: self.stdoutPath
                               };
     NSError *error;
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
-    [self.device installApplication:[NSURL fileURLWithPath:path] withOptions:@{kCFBundleIdentifier: bundleID} error:&error];
+    [self.simulator.device installApplication:[NSURL fileURLWithPath:path] withOptions:@{kCFBundleIdentifier: bundleID} error:&error];
     if (error) {
         NSLog(@"%@", error);
     }
-    [self.device launchApplicationWithID:bundleID options:options error:nil];
+    [self.simulator.device launchApplicationWithID:bundleID options:options error:nil];
+
     if (error) {
         NSLog(@"%@", error);
     }
     id token = @(receipt.hash);
-//    self.tokenToBundleIDMap[token] = bundleID;
     [receipt invokeCompletionWithReturnValue:token error:error];
     return receipt;
 }
 
-- (id)_XCT_getProgressForLaunch:(id)token
-{
-    NSLog(@"Test process requested launch process status with token %@", token);
+- (id)_XCT_getProgressForLaunch:(id)token {
+    NSLog(@"***Test process requested launch process status with token %@", token);
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
     [receipt invokeCompletionWithReturnValue:@1 error:nil];
     return receipt;
 }
 
-- (id)_XCT_terminateProcess:(id)token
-{
+- (id)_XCT_terminateProcess:(id)token {
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 #pragma mark iOS 10.x
-- (id)_XCT_handleCrashReportData:(NSData *)arg1 fromFileWithName:(NSString *)arg2
-{
+- (id)_XCT_handleCrashReportData:(NSData *)arg1 fromFileWithName:(NSString *)arg2 {
+//    NSLog(@"*** Crash Data****");
     return nil;
 }
 
 #pragma mark Test Suite Progress
 
 - (id)_XCT_testSuite:(NSString *)tests didStartAt:(NSString *)time {
-    NSLog(@"Test start at time %@", time);
+//    NSLog(@"***Test start at time %@", time);
     return nil;
 }
 
 - (id)_XCT_testCaseDidStartForTestClass:(NSString *)testClass method:(NSString *)method {
-    NSLog(@"Test did start for test class/method %@/%@", testClass, method);
+//    NSLog(@"***Test did start for test class/method %@/%@", testClass, method);
     return nil;
 }
 
 - (id)_XCT_testCaseDidFailForTestClass:(NSString *)testClass method:(NSString *)method withMessage:(NSString *)message file:(NSString *)file line:(NSNumber *)line {
-    NSLog(@"Test did fail for test class/method %@/%@/%@", testClass, method, message);
+//    NSLog(@"***Test did fail for test class/method %@/%@/%@", testClass, method, message);
     return nil;
 }
 
@@ -315,21 +312,22 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     return nil;
 }
 
-// ?
 - (id)_XCT_logMessage:(NSString *)message {
     return nil;
 }
 
 - (id)_XCT_testCaseDidFinishForTestClass:(NSString *)testClass method:(NSString *)method withStatus:(NSString *)statusString duration:(NSNumber *)duration {
-    NSLog(@"Test did finish for test class/method %@/%@- %@", testClass, method, statusString);
+//    NSLog(@"***Test did finish for test class/method %@/%@- %@", testClass, method, statusString);
     return nil;
 }
 
-- (id)_XCT_testSuite:(NSString *)arg1 didFinishAt:(NSString *)arg2 runCount:(NSNumber *)arg3 withFailures:(NSNumber *)arg4 unexpected:(NSNumber *)arg5 testDuration:(NSNumber *)arg6 totalDuration:(NSNumber *)arg7 {
+- (id)_XCT_testSuite:(NSString *)arg1 didFinishAt:(NSString *)time runCount:(NSNumber *)count withFailures:(NSNumber *)failureCount unexpected:(NSNumber *)unexpectedCount testDuration:(NSNumber *)testDuration totalDuration:(NSNumber *)totalTime {
+//    NSLog(@"*** testSuite did finish at %@, running %@ tests, with %@ failures, %@ unexpected, total time %@", time, count, failureCount, unexpectedCount, totalTime);
     return nil;
 }
 
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 didFinishActivity:(XCActivityRecord *)arg3 {
+
     return nil;
 }
 
@@ -388,6 +386,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 }
 
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 didStallOnMainThreadInFile:(NSString *)arg3 line:(NSNumber *)arg4 {
+    NSLog(@"***Did stall on meinthread .. ");
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 

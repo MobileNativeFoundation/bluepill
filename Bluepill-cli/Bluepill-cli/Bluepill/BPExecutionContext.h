@@ -23,6 +23,8 @@
 @property (nonatomic, assign) BOOL simulatorCreated;
 @property (nonatomic, assign) BOOL simulatorCrashed;
 @property (nonatomic, assign) pid_t pid;
+@property (nonatomic, assign) BOOL isTestRunnerContext;
+
 // current run's exit status
 @property (nonatomic, assign) BPExitStatus exitStatus;
 // final exit status for this context run

@@ -347,8 +347,14 @@
 - (void)testRunUITest {
     NSString *testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
     NSString *testRunnerPath = [BPTestHelper sampleAppUITestRunnerPath];
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/UITestsSetTempDir", tempDir] withError:&error];
+     NSLog(@"output directory is %@", outputDir);
     self.config.testRunnerPath = testRunnerPath;
     self.config.testBundlePath = testBundlePath;
+    self.config.outputDirectory = outputDir;
+    self.config.junitOutput = YES;
     self.config.isUITestBundle = YES;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
 }

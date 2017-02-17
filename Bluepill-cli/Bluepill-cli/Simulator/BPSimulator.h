@@ -17,6 +17,7 @@
 
 @property (nonatomic, assign, readonly) BOOL needsRetry;
 @property (nonatomic, readonly) NSString *UDID;
+@property (nonatomic, strong) SimDevice *device;
 
 + (instancetype)simulatorWithConfiguration:(BPConfiguration *)config;
 
@@ -28,7 +29,7 @@
 
 - (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error;
 
-- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion;
+- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion isHostApp:(BOOL)isHostApp;
 
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion;
 
