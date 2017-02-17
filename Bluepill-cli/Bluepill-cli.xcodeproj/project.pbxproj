@@ -58,7 +58,6 @@
 		BA1949371E4AF82F00881887 /* BPTestBundleConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */; };
 		BA19493A1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
 		BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
-		BA34F5DE1D6D70650063B17F /* SimulatorRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34F5DD1D6D70650063B17F /* SimulatorRunner.m */; };
 		BA34F5E41D6D75E30063B17F /* SimulatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */; };
 		BA4800EA1DC2C74600026972 /* BPAppNegativeTests-results.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4800E91DC2C74600026972 /* BPAppNegativeTests-results.xml */; };
 		BA4BCFAC1DC3FA3D00592FA4 /* crash_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFAB1DC3FA3D00592FA4 /* crash_tests.xml */; };
@@ -71,7 +70,6 @@
 		BAB24F741DB5DFA200867756 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F731DB5DFA200867756 /* BPTestHelper.m */; };
 		BAD558CF1DB6DC1C00C9A5CD /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
 		BAD558D01DB6DC1C00C9A5CD /* BPStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7D66011DB679820015C937 /* BPStats.m */; };
-		BAD558D11DB6DC1C00C9A5CD /* SimulatorRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34F5DD1D6D70650063B17F /* SimulatorRunner.m */; };
 		BAD558D21DB6DC1C00C9A5CD /* SimulatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */; };
 		BAD558D31DB6DC1C00C9A5CD /* SimulatorMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4933141DAD63A50060D54F /* SimulatorMonitor.m */; };
 		BAD558D41DB6DCB100C9A5CD /* BPReporters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C081DA817DE001BCEC2 /* BPReporters.m */; };
@@ -164,8 +162,6 @@
 		BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestBundleConnection.m; sourceTree = "<group>"; };
 		BA1949381E4AF83E00881887 /* BPTestDaemonConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestDaemonConnection.h; sourceTree = "<group>"; };
 		BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestDaemonConnection.m; sourceTree = "<group>"; };
-		BA34F5DC1D6D70650063B17F /* SimulatorRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorRunner.h; sourceTree = "<group>"; };
-		BA34F5DD1D6D70650063B17F /* SimulatorRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulatorRunner.m; sourceTree = "<group>"; };
 		BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorHelper.h; sourceTree = "<group>"; };
 		BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulatorHelper.m; sourceTree = "<group>"; };
 		BA34F5E61D6D78120063B17F /* XCTestConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XCTestConfiguration.h; sourceTree = "<group>"; };
@@ -1057,8 +1053,6 @@
 		BA34F5DB1D6D70300063B17F /* Simulator */ = {
 			isa = PBXGroup;
 			children = (
-				BA34F5DC1D6D70650063B17F /* SimulatorRunner.h */,
-				BA34F5DD1D6D70650063B17F /* SimulatorRunner.m */,
 				BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */,
 				BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */,
 				7A4933131DAD63A50060D54F /* SimulatorMonitor.h */,
@@ -2019,7 +2013,6 @@
 				BAFA2F791E567EE80072C69B /* BPSimulator.m in Sources */,
 				C41A2C781E0B24E8005D9751 /* BPTestClass.m in Sources */,
 				7A7E7BBC1DF21749007928F3 /* BPDeleteSimulatorHandler.m in Sources */,
-				BA34F5DE1D6D70650063B17F /* SimulatorRunner.m in Sources */,
 				7A7E7BB51DF2163F007928F3 /* BPHandler.m in Sources */,
 				7A564C0D1DA817DE001BCEC2 /* BPReporters.m in Sources */,
 				BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
@@ -2070,7 +2063,6 @@
 				7A7E7BB31DF20F81007928F3 /* BPApplicationLaunchHandler.m in Sources */,
 				BAD558CF1DB6DC1C00C9A5CD /* Bluepill.m in Sources */,
 				BA53B1701E30A0F100FCED71 /* BPConstants.m in Sources */,
-				BAD558D11DB6DC1C00C9A5CD /* SimulatorRunner.m in Sources */,
 				BAD558D41DB6DCB100C9A5CD /* BPReporters.m in Sources */,
 				C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */,
 				BAD558D51DB6DCB100C9A5CD /* BPTreeObjects.m in Sources */,

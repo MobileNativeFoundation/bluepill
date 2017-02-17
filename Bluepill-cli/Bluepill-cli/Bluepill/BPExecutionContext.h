@@ -11,13 +11,13 @@
 #import "BPExitStatus.h"
 
 @class BPConfiguration;
-@class SimulatorRunner;
+@class BPSimulator;
 @class BPTreeParser;
 
 @interface BPExecutionContext : NSObject
 
 @property (nonatomic, strong) BPConfiguration *config;
-@property (nonatomic, strong) SimulatorRunner *runner;
+@property (nonatomic, strong) BPSimulator *runner;
 @property (nonatomic, strong) BPTreeParser *parser;
 @property (nonatomic, assign) NSInteger attemptNumber;
 @property (nonatomic, assign) BOOL simulatorCreated;

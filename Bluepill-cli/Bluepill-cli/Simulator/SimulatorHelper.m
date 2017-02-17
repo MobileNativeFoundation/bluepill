@@ -21,12 +21,6 @@
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:config.appBundlePath];
     NSString *testSimulatorFrameworkPath = [[hostAppExecPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
     NSString *dyldLibraryPath = [NSString stringWithFormat:@"%@:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", testSimulatorFrameworkPath, config.xcodePath];
-    NSError *infoError;
-    NSDictionary *appInfo = [device propertiesOfApplication:hostBundleID error:&infoError];
-    if (infoError) {
-        NSLog(@"Error in getting appInfo %@", [infoError localizedDescription]);
-    }
-    NSString *appPath = appInfo[@"Path"];
     return @{
              @"AppTargetLocation" : hostAppExecPath,
              @"DYLD_FALLBACK_FRAMEWORK_PATH" : [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath],

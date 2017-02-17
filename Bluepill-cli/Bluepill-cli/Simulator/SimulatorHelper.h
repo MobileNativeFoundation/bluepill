@@ -15,8 +15,8 @@
 
 /*!
  * @discussion get app launch environment
- * @param hostAppPath the path to the host application /ABC.app/ABC
- * @param testBundlePath the path to the test bundle /ABC.app/scheme.xctest
+ * @param hostBundleID the bundleID of the host app
+ * @param device the device to run test
  * @param config the configuration object
  * @return returns the app launch environment as a dictionary
  */

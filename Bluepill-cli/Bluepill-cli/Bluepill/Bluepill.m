@@ -9,7 +9,8 @@
 
 #import "Bluepill.h"
 #import "BPConfiguration.h"
-#import "SimulatorRunner.h"
+//#import "SimulatorRunner.h"
+#import "BPSimulator.h"
 #import "BPTreeParser.h"
 #import "BPReporters.h"
 #import "BPWriter.h"
@@ -188,8 +189,8 @@ void onInterrupt(int ignore) {
     NEXT([self createSimulatorWithContext:context]);
 }
 
-- (SimulatorRunner *)createSimulatorRunnerWithContext:(BPExecutionContext *)context {
-    return [SimulatorRunner simulatorRunnerWithConfiguration:context.config];
+- (BPSimulator *)createSimulatorRunnerWithContext:(BPExecutionContext *)context {
+    return [BPSimulator simulatorWithConfiguration:context.config];
 }
 
 - (void)createSimulatorWithContext:(BPExecutionContext *)context {

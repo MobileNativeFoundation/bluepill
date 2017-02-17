@@ -20,7 +20,7 @@
 
 + (instancetype)simulatorWithConfiguration:(BPConfiguration *)config;
 
-- (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *, SimDevice *))completion;
+- (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
 
 - (void)bootWithCompletion:(void (^)(NSError *error))completion;
 
