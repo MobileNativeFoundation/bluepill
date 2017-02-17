@@ -137,8 +137,9 @@
         if (!self.app) {
             assert(error != nil);
             completion(error);
+            return;
         }
-        int attempts = 100;
+        int attempts = 1200;
         while (attempts > 0 && ![self.device.stateString isEqualToString:@"Booted"]) {
             [NSThread sleepForTimeInterval:0.1];
             --attempts;
