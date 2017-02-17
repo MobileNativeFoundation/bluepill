@@ -106,9 +106,6 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     dispatch_async(self.queue, ^{
         DTXTransport *transport = [self connectTransport];
         DTXConnection *connection = [[objc_lookUpClass("DTXConnection") alloc] initWithTransport:transport];
-        //        transport.dataReceivedHandler = ^{
-        //            NSLog(@"Data received from bundle connection.");
-        //        };
         [connection registerDisconnectHandler:^{
             NSLog(@"Bundle connection Disconnected.");
         }];

@@ -334,6 +334,7 @@
     [self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid) {
         // Save the process ID to the monitor
         blockSelf.monitor.appPID = pid;
+        pid_test = pid;
 
         if (error == nil) {
             dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC, pid, DISPATCH_PROC_EXIT, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
@@ -359,17 +360,11 @@
 
 
     BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:self.device andInterface:nil];
-//    dispatch_sync(dispatch_get_main_queue(), ^{
-        [bConnection connectWithTimeout:3600];
-//    });
+    [bConnection connectWithTimeout:3600];
 
     dConnection.testRunnerPid = pid_test;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-        [dConnection connectWithTimeout:3600];
-//    });
+    [dConnection connectWithTimeout:3600];
     [bConnection startTestPlan];
-
-
 
 }
 

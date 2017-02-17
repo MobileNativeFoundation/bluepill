@@ -15,21 +15,28 @@
 
 @implementation SimulatorHelper
 
-+ (NSDictionary *)appLaunchEnvironmentWith:(NSString *)hostAppPath
-                            testbundlePath:(NSString *)testBundlePath
++ (NSDictionary *)appLaunchEnvironmentWith:(NSString *)hostBundleID
+                                    device:(SimDevice *)device
                                     config:(BPConfiguration *)config {
-    NSString *testSimulatorFrameworkPath = [[hostAppPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+    NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:config.appBundlePath];
+    NSString *testSimulatorFrameworkPath = [[hostAppExecPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
     NSString *dyldLibraryPath = [NSString stringWithFormat:@"%@:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", testSimulatorFrameworkPath, config.xcodePath];
+    NSError *infoError;
+    NSDictionary *appInfo = [device propertiesOfApplication:hostBundleID error:&infoError];
+    if (infoError) {
+        NSLog(@"Error in getting appInfo %@", [infoError localizedDescription]);
+    }
+    NSString *appPath = appInfo[@"Path"];
     return @{
-             @"AppTargetLocation" : hostAppPath,
-//             @"DYLD_FALLBACK_FRAMEWORK_PATH" : [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath],
+             @"AppTargetLocation" : appPath,
+             @"DYLD_FALLBACK_FRAMEWORK_PATH" : [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath],
              @"DTX_CONNECTION_SERVICES_PATH" : @"/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/Developer/Library/PrivateFrameworks/DTXConnectionServices.framework",
              @"DYLD_FRAMEWORK_PATH" : dyldLibraryPath,
              @"DYLD_INSERT_LIBRARIES" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/IDEBundleInjection.framework/IDEBundleInjection", config.xcodePath],
              @"DYLD_LIBRARY_PATH" : dyldLibraryPath,
              @"NSUnbufferedIO" : @YES,
-             @"TestBundleLocation" : testBundlePath,
-             @"XCInjectBundle" : testBundlePath,
+             @"TestBundleLocation" : config.testBundlePath,
+             @"XCInjectBundle" : config.testBundlePath,
              @"XCInjectBundleInto" : hostAppPath,
              @"MNTF_TINKER_DELAY": @0.01,
              @"XCTestConfigurationFilePath" : [SimulatorHelper testEnvironmentWithConfiguration:config],
@@ -38,21 +45,22 @@
 
 + (NSString *)testEnvironmentWithConfiguration:(BPConfiguration *)config {
     XCTestConfiguration *xctConfig = [[XCTestConfiguration alloc] init];
-
     NSString *appName = [self appNameForPath:config.testBundlePath];
     [xctConfig setProductModuleName:appName];
     [xctConfig setTestBundleURL:[NSURL fileURLWithPath:config.testBundlePath]];
     xctConfig.sessionIdentifier = config.sessionIdentifier;
 
-    xctConfig.initializeForUITesting = YES;
-    xctConfig.disablePerformanceMetrics = NO;
-    xctConfig.reportActivities = NO;
-    xctConfig.testsMustRunOnMainThread = YES;
-    xctConfig.reportResultsToIDE = YES;
-    xctConfig.pathToXcodeReportingSocket = nil;
-    xctConfig.targetApplicationBundleID = @"LI.BPSampleApp";
-    xctConfig.targetApplicationPath = @"/Users/khu/linkedin/bluepill/build/Products/Debug-iphonesimulator/BPSampleApp.app";
-    xctConfig.treatMissingBaselinesAsFailures = NO;
+    if (config.isUITestBundle) {
+        xctConfig.initializeForUITesting = YES;
+        xctConfig.disablePerformanceMetrics = NO;
+        xctConfig.reportActivities = NO;
+        xctConfig.testsMustRunOnMainThread = YES;
+        xctConfig.reportResultsToIDE = YES;
+        xctConfig.pathToXcodeReportingSocket = nil;
+        xctConfig.targetApplicationBundleID = [self bundleIdForPath:config.appBundlePath];//@"LI.BPSampleApp";
+        xctConfig.targetApplicationPath = config.appBundlePath;//@"/Users/khu/linkedin/bluepill/build/Products/Debug-iphonesimulator/BPSampleApp.app";
+        xctConfig.treatMissingBaselinesAsFailures = NO;
+    }
 
     if (config.testCasesToSkip) {
         [xctConfig setTestsToSkip:[NSSet setWithArray:config.testCasesToSkip]];
