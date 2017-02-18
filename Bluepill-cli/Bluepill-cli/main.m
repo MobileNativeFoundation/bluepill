@@ -18,6 +18,7 @@
 #import "SimulatorRunner.h"
 #import "Bluepill.h"
 #import "BPUtils.h"
+#import "SimulatorHelper.h"
 
 #import <getopt.h>
 #import <libgen.h>
@@ -82,6 +83,7 @@ int main(int argc, char * argv[]) {
         [BPStats sharedStats]; // Create the BPStats object. This records our start time.
 
         config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
+        [SimulatorHelper loadFrameworksWithXcodePath:config.xcodePath];
 
         // We don't do any processing here, just save the args and let BPConfiguration
         // process/validate later.

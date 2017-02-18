@@ -15,6 +15,48 @@
 
 @implementation SimulatorHelper
 
++ (BOOL)loadFrameworksWithXcodePath:(NSString *)xcodePath {
+    // Check the availablity of frameworks
+
+    NSString *sharedFrameworksPath = [xcodePath stringByDeletingLastPathComponent];
+    NSArray *ar = @[
+                    [NSString stringWithFormat:@"%@/DVTFoundation.framework", sharedFrameworksPath],
+                    [NSString stringWithFormat:@"%@/DVTAnalyticsClient.framework", sharedFrameworksPath],
+                    [NSString stringWithFormat:@"%@/DVTAnalytics.framework", sharedFrameworksPath],
+                    [NSString stringWithFormat:@"%@/DVTPortal.framework", sharedFrameworksPath],
+                    [NSString stringWithFormat:@"%@/DVTSourceControl.framework", sharedFrameworksPath],
+                    [NSString stringWithFormat:@"%@/SourceKit.framework", sharedFrameworksPath],
+                    [NSString stringWithFormat:@"%@/DVTSourceControl.framework", sharedFrameworksPath],
+                    [NSString stringWithFormat:@"%@/DVTAnalytics.framework", sharedFrameworksPath],
+                    [NSString stringWithFormat:@"%@/IDEFoundation.framework", sharedFrameworksPath],
+                    [NSString stringWithFormat:@"%@/DVTFoundation.framework", sharedFrameworksPath]
+                    ];
+    for (NSString *address in ar) {
+        NSBundle *bl = [NSBundle bundleWithPath:address];
+        NSError *error;
+        [bl loadAndReturnError:&error];
+        if (error) {
+            NSLog(@"Failed to load framework %@, with error %@",address, error);
+            return NO;
+        }
+    }
+    NSArray *requiredClasses = @[@"SimDevice",
+                                 @"SimDeviceFramebufferService",
+                                 @"DTXConnection",
+                                 @"DTXRemoteInvocationReceipt",
+                                 @"DVTDevice",
+                                 @"IDEFoundationTestInitializer",
+                                 @"XCTestConfiguration"];
+    for (NSString *rc in requiredClasses) {
+        if (NSClassFromString(rc)) {
+            NSLog(@"%@ is loaded..", rc);
+        } else {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 + (NSDictionary *)appLaunchEnvironmentWithBundleID:(NSString *)hostBundleID
                                             device:(SimDevice *)device
                                             config:(BPConfiguration *)config {

@@ -32,7 +32,6 @@
 // runtime
 #import <objc/runtime.h>
 
-
 static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 @interface BPTestBundleConnection()<XCTestManager_IDEInterface>
@@ -57,39 +56,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (void)connectWithTimeout:(NSTimeInterval)timeout {
 
-    // Check the availablity of frameworks
-    NSArray *ar = @[
-                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTFoundation.framework",
-                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTServices.framework",
-                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTAnalyticsClient.framework",
-                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTAnalyticsClient.framework",
-                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTAnalytics.framework",
-                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTPortal.framework",
-                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTSourceControl.framework",
-                    @"/Applications/Xcode.app/Contents/SharedFrameworks/SourceKit.framework",
-                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTSourceControl.framework",
-                    @"/Applications/Xcode.app/Contents/SharedFrameworks/DVTAnalytics.framework",
-                    @"/Applications/Xcode.app/Contents/Frameworks/IDEFoundation.framework",
-
-                    ];
-    for (NSString *address in ar) {
-        NSBundle *bl = [NSBundle bundleWithPath:address];
-        NSError *error;
-        [bl loadAndReturnError:&error];
-        if (error) {
-            NSLog(@"%@", error);
-        }
-    }
-    NSArray *requiredClasses = @[@"SimDevice", @"SimDeviceFramebufferService",
-                                 @"DTXConnection", @"DTXRemoteInvocationReceipt",
-                                 @"DVTDevice", @"IDEFoundationTestInitializer",
-                                 @"XCTestConfiguration"];
-    for (NSString *rc in requiredClasses) {
-        if (NSClassFromString(rc)) {
-            NSLog(@"%@ is loaded..", rc);
-        }
-    }
-    NSAssert(NSThread.isMainThread, @"-[%@ %@] should be called from the main thread", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+        NSAssert(NSThread.isMainThread, @"-[%@ %@] should be called from the main thread", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self connect];
 
     // Pool connection status till it passes.

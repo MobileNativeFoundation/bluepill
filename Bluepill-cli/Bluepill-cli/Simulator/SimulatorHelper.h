@@ -14,6 +14,13 @@
 @interface SimulatorHelper : NSObject
 
 /*!
+ * @discussion load the required frameworks
+ * @param xcodePath path to the xcode.app/contents
+ * @return return whether the frameworks are successfully loaded or not.
+ */
++ (BOOL)loadFrameworksWithXcodePath:(NSString *)xcodePath;
+
+/*!
  * @discussion get app launch environment
  * @param hostBundleID the bundleID of the host app
  * @param device the device to run test
@@ -29,6 +36,8 @@
  * @return return the path to the test configuration file.
  */
 + (NSString *)testEnvironmentWithConfiguration:(BPConfiguration *)config;
+
+#pragma mark - Path Helper
 
 + (NSString *)bundleIdForPath:(NSString *)path;
 + (NSString *)executablePathforPath:(NSString *)path;
