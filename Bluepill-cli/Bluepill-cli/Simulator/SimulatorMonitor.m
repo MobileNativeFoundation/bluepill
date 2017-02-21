@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
     Idle,
     AppLaunched,
     Running,
+    TestsStarted,
     Completed
 };
 
@@ -83,12 +84,14 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
     [[BPStats sharedStats] startTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
     self.lastTestCaseStartDate = [NSDate date];
 
+    self.simulatorState = TestsStarted;
+
     self.currentTestName = testName;
     self.currentClassName = testClass;
 
     __weak typeof(self) __self = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.maxTestExecutionTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if ([__self.currentTestName isEqualToString:testName] && [__self.currentClassName isEqualToString:testClass] && __self.simulatorState == Running) {
+        if ([__self.currentTestName isEqualToString:testName] && [__self.currentClassName isEqualToString:testClass] && __self.simulatorState == TestsStarted) {
             [BPUtils printInfo:TIMEOUT withString:@"%10.6fs %@/%@", __self.maxTestExecutionTime, testClass, testName];
             [__self stopTestsWithErrorMessage:@"Test took too long to execute and was aborted." forTestName:testName inClass:testClass];
             __self.exitStatus = BPExitStatusTestTimeout;
@@ -183,21 +186,21 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
     __weak typeof(self) __self = self;
 
     // App crashed
-    if ([output isEqualToString:@"BP_APP_PROC_ENDED"] && __self.simulatorState == Running) {
+    if ([output isEqualToString:@"BP_APP_PROC_ENDED"] && __self.simulatorState == TestsStarted) {
         [BPUtils printInfo:CRASH withString:@"%@/%@ crashed app.",
-                                             (__self.currentClassName ?: __self.previousClassName),
-                                             (__self.currentTestName ?: __self.previousTestName)];
-        [__self stopTestsWithErrorMessage:@"App Crashed"
-                              forTestName:(__self.currentTestName ?: __self.previousTestName)
-                                  inClass:(__self.currentClassName ?: __self.previousClassName)];
-        __self.exitStatus = BPExitStatusAppCrashed;
+                                             (self.currentClassName ?: self.previousClassName),
+                                             (self.currentTestName ?: self.previousTestName)];
+        [self stopTestsWithErrorMessage:@"App Crashed"
+                              forTestName:(self.currentTestName ?: self.previousTestName)
+                                  inClass:(self.currentClassName ?: self.previousClassName)];
+        self.exitStatus = BPExitStatusAppCrashed;
         [[BPStats sharedStats] addApplicationCrash];
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(__self.maxTimeWithNoOutput * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (__self.currentOutputId == previousOutputId && (__self.simulatorState == Running || __self.simulatorState == AppLaunched)) {
+        if (__self.currentOutputId == previousOutputId && (__self.simulatorState >= AppLaunched && __self.simulatorState != Completed)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
             NSString *testName = (__self.currentTestName ?: __self.previousTestName);
-            if (testClass == nil && testName == nil && (__self.simulatorState == AppLaunched || __self.simulatorState == Idle)) {
+            if (testClass == nil && testName == nil && (__self.simulatorState < TestsStarted)) {
                 [BPUtils printInfo:ERROR withString:@"It appears that tests have not yet started. The test app has frozen prior to the first test."];
             } else {
                 [BPUtils printInfo:TIMEOUT withString:@" %10.6fs waiting for output from %@/%@",
@@ -242,7 +245,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 }
 
 - (BOOL)didTestsStart {
-    return (self.simulatorState == Running || self.simulatorState == Completed);
+    return (self.simulatorState >= Running);
 }
 
 @end
