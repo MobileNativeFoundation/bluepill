@@ -318,7 +318,7 @@ void onInterrupt(int ignore) {
         }
     };
 
-    BPWaitTimer *timer = [BPWaitTimer timerWithInterval:300.0];
+    BPWaitTimer *timer = [BPWaitTimer timerWithInterval:360.0];
     [timer start];
 
     BPApplicationLaunchHandler *handler = [BPApplicationLaunchHandler handlerWithTimer:timer];
