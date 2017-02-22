@@ -132,14 +132,12 @@
     NSString *hostBundlePath = self.config.appBundlePath;
 
     if (self.config.isUITestBundle) {
-        NSString *hostAppPath = [self.config.testRunnerPath stringByDeletingLastPathComponent];
+        NSString *hostAppPath = self.config.testRunnerBundlePath;
         hostBundleId = [SimulatorHelper bundleIdForPath:hostAppPath];
         hostBundlePath = hostAppPath;
 
     }
 
-//    hostBundleId = @"com.apple.test.BPSampleAppUITests-Runner";
-//    hostBundlePath = @"/Users/khu/linkedin/bluepill/build/Products/Debug-iphonesimulator/BPSampleAppUITests-Runner.app";
     // Install the host application
     BOOL installed = [self.device
                       installApplication:[NSURL fileURLWithPath:hostBundlePath]
@@ -156,9 +154,9 @@
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.appBundlePath];
 
-    if (self.config.testRunnerPath) {
-        hostAppExecPath = self.config.testRunnerPath;
-        hostBundleId = @"com.apple.test.BPSampleAppUITests-Runner";
+    if (self.config.isUITestBundle) {
+        hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.testRunnerBundlePath];
+        hostBundleId = [SimulatorHelper bundleIdForPath:self.config.testRunnerBundlePath];
     }
     // Create the environment for the host application
     NSDictionary *argsAndEnv = [BPUtils buildArgsAndEnvironmentWith:self.config.schemePath];

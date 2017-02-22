@@ -28,7 +28,7 @@
 @property (nonatomic, strong) NSUUID *sessionIdentifier;
 @property (nonatomic, strong) NSString *appBundlePath;
 
-@property (nonatomic, strong) NSString *testRunnerPath;
+@property (nonatomic, strong) NSString *testRunnerAppPath;
 @property (nonatomic, strong) NSString *testBundlePath;
 @property (nonatomic) BOOL isUITestBundle;
 
