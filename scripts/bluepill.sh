@@ -42,7 +42,14 @@ NSUnbufferedIO=YES
 export NSUnbufferedIO
 
 # If BPBuildScript is set to YES, it will disable verbose output in `bp`
-BPBuildScript=NO
+BPBuildScript=YES
+
+# Set it to YES if we're on Travis
+if [ "$TRAVIS" == "true" ]
+then
+    BPBuildScript=NO
+fi
+
 export BPBuildScript
 
 mkdir -p build/
