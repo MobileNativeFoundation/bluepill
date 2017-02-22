@@ -259,7 +259,7 @@ void onInterrupt(int ignore) {
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
 
-    self.maxLaunchTries = 2;
+    self.maxLaunchTries = 5;
 
     NSError *error = nil;
     BOOL success = [context.runner installApplicationAndReturnError:&error];
@@ -269,9 +269,17 @@ void onInterrupt(int ignore) {
         if (!success) {
             if (--__self.maxInstallTries > 0) {
 //                NEXT([__self deleteSimulatorWithContext:context andCallback:^(NSError *error, BOOL success) {
+                if ([[error description] containsString:@"Booting"]) {
+                    // The simulator is still booting, wait for 1 minute befor pulling again
+                    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 60, NO);
+                    // Call sell again
+                    NEXT([__self installApplicationWithContext:context]);
+                } else {
+                    // If it is other error, we relaunch the simulator.
                     [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
                     context.runner = [__self createSimulatorRunnerWithContext:context];
                     NEXT([__self createSimulatorWithContext:context]);
+                }
 //                }]);
             } else {
                 NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
