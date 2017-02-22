@@ -48,7 +48,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         NSString *testName = [[NSString stringWithUTF8String:line]
                               stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
         NSArray *parts = [testName componentsSeparatedByString:@"."];
-        if (!(parts.count == 3)) {
+        if (parts.count != 3) {
             continue;
         }
         BPTestClass *testClass = testClassesDict[parts[1]];
@@ -73,7 +73,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     NSArray *testsArray = [output componentsSeparatedByString:@"\n"];
     for (NSString *line in testsArray) {
         NSArray *parts = [line componentsSeparatedByString:@" "];
-        if (!(parts.count == 2)) {
+        if (parts.count != 2) {
             continue;
         }
         BPTestClass *testClass = testClassesDict[parts[0]];

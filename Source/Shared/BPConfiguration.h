@@ -20,8 +20,10 @@
 
 @interface BPConfiguration : NSObject <NSCopying>
 
-#define BLUEPILL    1
-#define BP          2
+typedef NS_ENUM(NSInteger, BPProgram) {
+    BP_MASTER = 1,
+    BP_SLAVE = 2,
+};
 
 /*
  * WARNING: Any fields you add here need to be explicitly handled in the copyWithZone
@@ -54,7 +56,7 @@
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
-@property (nonatomic) int program; // one of BLUEPILL or BP
+@property (nonatomic) BPProgram program; // one of BP_MASTER or BP_SLAVE
 
 // These fields are for testing.
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;

@@ -31,7 +31,7 @@
         [BPUtils quietMode:YES];
         [BPUtils enableDebugOutput:NO];
     }
-    self.config = [[BPConfiguration alloc] initWithProgram:BP];
+    self.config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
     self.config.testing_NoAppWillRun = YES;
 }
 

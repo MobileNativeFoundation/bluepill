@@ -73,7 +73,7 @@ int main(int argc, char * argv[]) {
 #pragma mark main
         int c;
 
-        BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP];
+        BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
 
         
         struct option *lopts = [BPConfiguration getLongOptions];

@@ -26,6 +26,7 @@
     [super tearDown];
 }
 
+// Make sure we don't pick up random helper functions that just happen to have _test in their names.
 void a_function_that_is_not_a_test() {
     return;
 }
