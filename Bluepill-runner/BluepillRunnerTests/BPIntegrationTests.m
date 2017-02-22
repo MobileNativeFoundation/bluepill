@@ -106,6 +106,9 @@
 
 - (void)testFourBPInstances {
     self.config.numSims = @4;
+    self.config.maxInstallTries = @5;
+    self.config.maxLaunchTries = @5;
+    self.config.maxCreateTries = @5;
     //self.config.reuseSimulator = YES;
 
     NSError *err;
