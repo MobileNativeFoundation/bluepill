@@ -19,6 +19,7 @@
 #import "BPExecutionContext.h"
 #import "BPHandler.h"
 #import <libproc.h>
+#import <objc/runtime.h>
 
 #define NEXT(x)     { [Bluepill setDiagnosticFunction:#x from:__FUNCTION__ line:__LINE__]; CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ (x); }); }
 
@@ -51,6 +52,13 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
 - (instancetype)initWithConfiguration:(BPConfiguration *)config {
     if (self = [super init]) {
         self.config = config;
+        unsigned int numProps = 0;
+        objc_property_t *props = class_copyPropertyList([config class], &numProps);
+        for (NSUInteger i = 0; i < numProps; ++i) {
+            objc_property_t prop = props[i];
+            NSString *propName = [[NSString alloc] initWithUTF8String:property_getName(prop)];
+            [BPUtils printInfo:DEBUGINFO withString:@"[CONFIGURATION] %@: %@", propName, [config valueForKey:propName]];
+        }
     }
     return self;
 }
@@ -269,6 +277,7 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
         if (!success) {
             if (--__self.maxInstallTries > 0) {
                 if ([[error description] containsString:@"Booting"]) {
+                    [BPUtils printInfo:INFO withString:@"Simulator is still booting. Will defer install for 1 minute."];
                     // The simulator is still booting, wait for 1 minute before trying again
                     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 60, NO); // spin the runloop while we wait
                     // Try to install again

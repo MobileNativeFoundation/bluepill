@@ -41,8 +41,8 @@ rm -rf build/
 NSUnbufferedIO=YES
 export NSUnbufferedIO
 
-# If BPBuildScript is set, it will disable verbose output in `bp`
-BPBuildScript=YES
+# If BPBuildScript is set to YES, it will disable verbose output in `bp`
+BPBuildScript=NO
 export BPBuildScript
 
 mkdir -p build/
