@@ -110,6 +110,7 @@
     self.config.maxLaunchTries = @10;
     self.config.maxCreateTries = @10;
     [BPUtils enableDebugOutput:YES];
+    [BPUtils quietMode:NO];
     //self.config.reuseSimulator = YES;
 
     NSError *err;
