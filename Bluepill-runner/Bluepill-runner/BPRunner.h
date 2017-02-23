@@ -25,8 +25,8 @@
  * @return return the BPRunner to start running tests
  */
 + (instancetype _Nullable )BPRunnerForApp:( BPApp * _Nonnull )app
-                    withConfig:(BPConfiguration * _Nonnull)config
-                    withBpPath:(NSString * _Nullable)bpPath;
+                               withConfig:(BPConfiguration * _Nonnull)config
+                               withBpPath:(NSString * _Nullable)bpPath;
 
 
 /*!

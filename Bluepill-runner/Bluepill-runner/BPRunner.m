@@ -211,10 +211,10 @@ maxprocs(void)
     return rc;
 }
 
-- (void) interrupt {
+- (void)interrupt {
     if (self.nsTaskList == nil) return;
     
-    for (int i=0; i<[self.nsTaskList count]; i++) {
+    for (int i = 0; i < [self.nsTaskList count]; i++) {
         [((NSTask *)[self.nsTaskList objectAtIndex:i]) interrupt];
     }
     
