@@ -275,7 +275,7 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     __weak typeof(self) __self = self;
     RetryOperationBlock failedInstallBlock = ^(NSError *error, BOOL success) {
         if (!success) {
-            [BPUtils printInfo:FAILED withString:@"Remaining retry count: %@",__self.maxInstallTries];
+            [BPUtils printInfo:ERROR withString:@"Remaining retry count: %@",__self.maxInstallTries];
             if (--__self.maxInstallTries > 0) {
                 if ([[error description] containsString:@"Booting"]) {
                     [BPUtils printInfo:INFO withString:@"Simulator is still booting. Will defer install for 1 minute."];
