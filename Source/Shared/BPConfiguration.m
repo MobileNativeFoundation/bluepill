@@ -533,9 +533,25 @@ struct BPOptions {
     if (!self.deviceType) {
         self.deviceType = [NSString stringWithUTF8String: BP_DEFAULT_DEVICE_TYPE];
     }
+
+    if (![self.deviceType isKindOfClass:[NSString class]]) {
+        if (err) {
+            *err = BP_ERROR(@"device must be a string like '%s'", BP_DEFAULT_DEVICE_TYPE);
+        }
+        return NO;
+    }
+
     if (!self.runtime) {
         self.runtime = [NSString stringWithUTF8String: BP_DEFAULT_RUNTIME];
     }
+
+    if (![self.runtime isKindOfClass:[NSString class]]) {
+        if (err) {
+            *err = BP_ERROR(@"runtime must be a string like '%s'.", BP_DEFAULT_RUNTIME);
+        }
+        return NO;
+    }
+
 
 #ifdef BP_USE_PRIVATE_FRAMEWORKS
     // Validate we were passed a valid device and runtime

@@ -9,6 +9,11 @@
 
 #!/bin/bash
 
+XCPRETTY=xcpretty
+command -v $XCPRETTY >/dev/null 2>&1 || {
+        XCPRETTY=cat
+}
+
 if [[ $# -ne 1 ]]; then
   echo $0: usage: bluepill.sh build OR bluepill.sh test
   exit 1
@@ -20,7 +25,7 @@ bluepill_build()
     -workspace Bluepill.xcworkspace \
     -scheme bluepill \
     -configuration Release \
-    -derivedDataPath "build/"
+    -derivedDataPath "build/" | $XCPRETTY
 }
 
 bluepill_test()
@@ -45,33 +50,37 @@ bluepill_test()
 
   mkdir -p build/
 
+  set -o pipefail
   xcodebuild build-for-testing \
     -workspace Bluepill.xcworkspace \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
-    -derivedDataPath "build/" || exit 1
+    -derivedDataPath "build/" | $XCPRETTY
+  set +o pipefail
 
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BPInstanceTests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt
+    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
-    echo See result.txt for details
+    echo Dumping result.txt for details
+    cat result.txt
     exit 1
   fi
 
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BluepillRunnerTests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt
+    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   # work around BPSampleTests failure fails the Bluepill tests.
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
-    echo See results.txt for details
+    echo Dumping result.txt for details
+    cat result.txt
     exit 1
   fi
 

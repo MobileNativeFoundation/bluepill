@@ -28,6 +28,19 @@
     [super tearDown];
 }
 
+- (void)testConfigWithNumberWhereWeExpectAString {
+    BPConfiguration *config = [[BPConfiguration alloc] init];
+    NSError *error;
+    NSString *resourcePath = [BPTestHelper resourceFolderPath];
+    NSString *configFile = [resourcePath stringByAppendingPathComponent:@"testConfig-busted.json"];
+    [config loadConfigFile:configFile withError:&error];
+    XCTAssertNil(error);
+    [config validateConfigWithError:&error];
+    XCTAssertNotNil(error);
+    NSString *expected = [[NSString alloc] initWithFormat:@"runtime must be a string like '%s'.", BP_DEFAULT_RUNTIME];
+    XCTAssert([[error localizedDescription] isEqualToString:expected], @"Wrong error message.");
+}
+
 - (void)testConfigFileLoading {
     BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
     NSError *error;
