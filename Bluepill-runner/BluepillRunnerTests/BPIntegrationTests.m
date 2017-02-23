@@ -106,6 +106,7 @@
 
 - (void)testFourBPInstances {
     self.config.numSims = @4;
+    self.config.errorRetriesCount = @10;
     self.config.maxInstallTries = @10;
     self.config.maxLaunchTries = @10;
     self.config.maxCreateTries = @10;
