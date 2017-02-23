@@ -60,6 +60,14 @@ static BOOL quiet = NO;
     return NO;
 }
 
++ (BOOL)definesBuildScript {
+    char* buildScript = getenv("BPBuildScript");
+    if (buildScript != NULL && strnlen(buildScript, 1) > 0) {
+        return YES;
+    }
+    return NO;
+}
+
 + (void)printInfo:(BPKind)kind withString:(NSString *)fmt, ... {
     if (kind == DEBUGINFO && !printDebugInfo) {
         return;

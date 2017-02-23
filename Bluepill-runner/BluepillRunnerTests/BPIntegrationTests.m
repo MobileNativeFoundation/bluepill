@@ -45,7 +45,7 @@
     self.config.headlessMode = TRUE;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    self.config.quiet = YES;
+    self.config.quiet = [BPUtils isBuildScript];
 }
 
 - (void)tearDown {
@@ -109,8 +109,8 @@
     self.config.maxInstallTries = @10;
     self.config.maxLaunchTries = @10;
     self.config.maxCreateTries = @10;
-    [BPUtils enableDebugOutput:YES];
-    [BPUtils quietMode:NO];
+    [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
+    [BPUtils quietMode:[BPUtils isBuildScript]];
     //self.config.reuseSimulator = YES;
 
     NSError *err;
