@@ -11,6 +11,12 @@
 
 configurations="build test instance_tests runner_tests integration_tests verbose_tests"
 
+if [ "$1" == "-v" ]
+then
+    VERBOSE=1
+    shift
+fi
+
 if [[ $# -ne 1 ]]; then
   echo "$0: usage: bluepill.sh <command>"
   echo "Where <command> is one of: " $configurations
@@ -45,7 +51,7 @@ export NSUnbufferedIO
 BPBuildScript=YES
 
 # Set it to YES if we're on Travis
-if [ "$TRAVIS" == "true" ]
+if [ "$TRAVIS" == "true" ] || [ "$VERBOSE" == "1" ]
 then
     BPBuildScript=NO
 fi

@@ -444,8 +444,10 @@ struct BPOptions {
         [self printConfig];
         exit(0);
     }
-    [BPUtils quietMode:self.quiet];
-    [BPUtils enableDebugOutput:self.verboseLogging];
+    if (![BPUtils definesBuildScript]) {
+        [BPUtils quietMode:self.quiet];
+        [BPUtils enableDebugOutput:self.verboseLogging];
+    }
     return TRUE;
 }
 
