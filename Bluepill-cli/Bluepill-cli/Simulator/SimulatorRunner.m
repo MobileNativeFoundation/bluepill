@@ -29,6 +29,7 @@
 @property (nonatomic, strong) NSFileHandle *stdOutHandle;
 @property (nonatomic, strong) SimulatorMonitor *monitor;
 @property (nonatomic, assign) BOOL needsRetry;
+@property (nonatomic, assign) BOOL abandoned;
 
 @end
 
@@ -137,8 +138,9 @@
         if (!self.app) {
             assert(error != nil);
             completion(error);
+            return;
         }
-        int attempts = 100;
+        int attempts = 1200;
         while (attempts > 0 && ![self.device.stateString isEqualToString:@"Booted"]) {
             [NSThread sleepForTimeInterval:0.1];
             --attempts;
@@ -287,9 +289,6 @@
     __block typeof(self) blockSelf = self;
 
     [self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid) {
-        // Save the process ID to the monitor
-        blockSelf.monitor.appPID = pid;
-
         if (error == nil) {
             dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC, pid, DISPATCH_PROC_EXIT, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
             dispatch_source_set_event_handler(source, ^{
@@ -301,19 +300,36 @@
             });
             dispatch_resume(source);
             self.stdOutHandle.readabilityHandler = ^(NSFileHandle *handle) {
+                if (blockSelf.abandoned) {
+                    return;
+                }
+                // This callback occurs on a background thread
                 NSData *chunk = [handle availableData];
                 [parser handleChunkData:chunk];
             };
         }
 
-        if (completion) {
-            completion(error, pid);
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Save the process ID to the monitor
+            blockSelf.monitor.appPID = pid;
+
+            if (completion) {
+                completion(error, pid);
+            }
+        });
     }];
 }
 
 - (BOOL)isFinished {
     return [self checkFinished];
+}
+
+- (BOOL)isApplicationStarted {
+    return [self.monitor isApplicationStarted];
+}
+
+- (BOOL)didTestStart {
+    return [self.monitor didTestsStart];
 }
 
 - (BOOL)checkFinished {
@@ -333,6 +349,10 @@
 
 - (BPExitStatus)exitStatus {
     return ([self.monitor exitStatus]);
+}
+
+- (void)abandon {
+    self.abandoned = YES;
 }
 
 - (NSString *)UDID {

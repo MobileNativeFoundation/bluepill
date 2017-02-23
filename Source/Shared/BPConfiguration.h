@@ -51,6 +51,15 @@
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
+@property (nonatomic) BOOL verboseLogging;
+@property (nonatomic, strong) NSNumber *maxCreateTries;
+@property (nonatomic, strong) NSNumber *maxInstallTries;
+@property (nonatomic, strong) NSNumber *maxLaunchTries;
+@property (nonatomic, strong) NSNumber *createTimeout;
+@property (nonatomic, strong) NSNumber *launchTimeout;
+@property (nonatomic, strong) NSNumber *deleteTimeout;
+
+
 
 // These fields are for testing.
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;
