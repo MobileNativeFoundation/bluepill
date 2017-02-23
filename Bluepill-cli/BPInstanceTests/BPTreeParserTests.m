@@ -27,6 +27,7 @@
 
 - (void)setUp {
     [super setUp];
+    NSLog(@"PID: %d", getpid());
     [BPUtils quietMode:[BPUtils isBuildScript]];
     [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
     self.config = [[BPConfiguration alloc] init];

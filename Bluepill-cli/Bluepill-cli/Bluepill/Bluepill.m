@@ -43,6 +43,8 @@ void onInterrupt(int ignore) {
 @property (nonatomic, assign) NSInteger maxInstallTries;
 @property (nonatomic, assign) NSInteger maxLaunchTries;
 
+@property (nonatomic, strong) NSDate *firstProcessNotFoundTime;
+
 typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
 
 @end
@@ -406,6 +408,19 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     int rc = kill(context.pid, 0);
     if (rc < 0) {
         [BPUtils printInfo:INFO withString:@"Process %d has died with error: %d", context.pid, errno];
+        [BPUtils printInfo:DEBUG withString:[BPUtils runShell:@"ps wuax"]];
+        if (self.firstProcessNotFoundTime == nil) {
+            self.firstProcessNotFoundTime = [NSDate date];
+        } else {
+            if ([[NSDate date] timeIntervalSinceDate:self.firstProcessNotFoundTime] > 10.0) {
+                [BPUtils printInfo:ERROR withString:@"Process %d still not found after 10 seconds. Assuming it's REALLY dead.", context.pid];
+            }
+        }
+    } else {
+        if (self.firstProcessNotFoundTime) {
+            self.firstProcessNotFoundTime = nil;
+        }
+        [BPUtils printInfo:INFO withString:@"Process %d was lost, but now it's found.", context.pid];
     }
     return (rc == 0);
 }
