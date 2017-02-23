@@ -272,7 +272,7 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     NSError *error = nil;
     BOOL success = [context.runner installApplicationAndReturnError:&error];
 
-    self.maxInstallTries = @10; // Temp
+    self.maxInstallTries = 10; // Temp
     __weak typeof(self) __self = self;
     RetryOperationBlock failedInstallBlock = ^(NSError *error, BOOL success) {
         if (!success) {
