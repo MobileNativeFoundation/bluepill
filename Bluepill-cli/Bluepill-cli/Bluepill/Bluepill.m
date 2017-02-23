@@ -217,6 +217,7 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
         if (!success) {
             if (--__self.maxCreateTries > 0) {
                 [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+                [context.runner abandon];
                 context.runner = [__self createSimulatorRunnerWithContext:context];
                 NEXT([__self createSimulatorWithContext:context]);
             } else {
@@ -289,6 +290,7 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
                 } else {
                     // If it is another error, relaunch the simulator
                     [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+                    [context.runner abandon];
                     context.runner = [__self createSimulatorRunnerWithContext:context];
                     NEXT([__self createSimulatorWithContext:context]);
                 }
@@ -325,6 +327,7 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
         if (!success) {
             if (--__self.maxLaunchTries > 0) {
                 [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+                [context.runner abandon];
                 context.runner = [__self createSimulatorRunnerWithContext:context];
                 NEXT([__self createSimulatorWithContext:context]);
             } else {

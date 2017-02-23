@@ -54,4 +54,9 @@
 - (BOOL)needsRetry;
 - (BPExitStatus)exitStatus;
 
+/*!
+ * @discussion Call this to abandon the current runner. It will not processes any output it may receive.
+ */
+- (void)abandon;
+
 @end
