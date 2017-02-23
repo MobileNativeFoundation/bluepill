@@ -411,10 +411,11 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
         [BPUtils printInfo:DEBUG withString:[BPUtils runShell:@"ps wuax"]];
         if (self.firstProcessNotFoundTime == nil) {
             self.firstProcessNotFoundTime = [NSDate date];
+        }
+        if ([[NSDate date] timeIntervalSinceDate:self.firstProcessNotFoundTime] > 10.0) {
+            [BPUtils printInfo:ERROR withString:@"Process %d still not found after 10 seconds. Assuming it's REALLY dead.", context.pid];
         } else {
-            if ([[NSDate date] timeIntervalSinceDate:self.firstProcessNotFoundTime] > 10.0) {
-                [BPUtils printInfo:ERROR withString:@"Process %d still not found after 10 seconds. Assuming it's REALLY dead.", context.pid];
-            }
+            return YES; // Pretend the app is still alive for now
         }
     } else {
         if (self.firstProcessNotFoundTime) {
