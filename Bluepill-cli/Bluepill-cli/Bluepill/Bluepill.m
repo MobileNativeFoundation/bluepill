@@ -404,6 +404,9 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     }
     NSAssert(context.pid > 0, @"Application PID must be > 0");
     int rc = kill(context.pid, 0);
+    if (rc < 0) {
+        [BPUtils printInfo:INFO withString:@"Process %d has died with error: %d", context.pid, errno];
+    }
     return (rc == 0);
 }
 
