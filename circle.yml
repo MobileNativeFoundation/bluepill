@@ -1,0 +1,7 @@
+compile:
+  override:
+    - ./scripts/bluepill.sh build
+
+test:
+  override:
+    - ./scripts/bluepill.sh test
