@@ -34,13 +34,15 @@
     NSMutableArray *allUITestFiles = [NSMutableArray new];
 
     // Handle single test bundle case.
-    if (config.unitTestBundlePath) {
-        BPXCTestFile *testFile = [self testFileFromXCTestPath:config.unitTestBundlePath isUITestBundle:NO withError:error];
-        [allUnitTestFiles addObject:testFile];
-    } else if (config.uiTestBundlePath) {
-        NSAssert(config.testRunnerAppPath, @"with UI test bundle path specified, you have to pass in the ui test runner path");
-        BPXCTestFile *testFile = [self testFileFromXCTestPath:config.uiTestBundlePath isUITestBundle:YES withError:error];
-        [allUITestFiles addObject:testFile];
+    if (config.testRunnerAppPath) {
+        if (!config.testRunnerAppPath) {
+            BPXCTestFile *testFile = [self testFileFromXCTestPath:config.testBundlePath isUITestBundle:NO withError:error];
+            [allUnitTestFiles addObject:testFile];
+        } else {
+            NSAssert(config.testRunnerAppPath, @"with UI test bundle path specified, you have to pass in the ui test runner path");
+            BPXCTestFile *testFile = [self testFileFromXCTestPath:config.testBundlePath isUITestBundle:YES withError:error];
+            [allUITestFiles addObject:testFile];
+        }
     } else {
         NSString *xcTestsPath = [hostAppPath stringByAppendingPathComponent:@"Plugins"];
         if (!([fm fileExistsAtPath:xcTestsPath isDirectory:&isdir]) && isdir) {
@@ -113,6 +115,17 @@
                                                               withError:error];
     return xcTestFile;
 
+}
+
+- (NSArray *)getAllTestBundles {
+    NSMutableArray *allTestBundles = [NSMutableArray new];
+    if (self.unitTestBundles.count > 0) {
+        [allTestBundles addObjectsFromArray:self.unitTestBundles];
+    }
+    if (self.uiTestBundles.count > 0) {
+        [allTestBundles addObject:self.uiTestBundles];
+    }
+    return allTestBundles;
 }
 
 - (NSString *)testBundlePathForName:(NSString *)name {

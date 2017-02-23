@@ -87,16 +87,18 @@
 
 + (NSString *)testEnvironmentWithConfiguration:(BPConfiguration *)config {
     XCTestConfiguration *xctConfig = [[XCTestConfiguration alloc] init];
-    NSString *appName = [self appNameForPath:config.testBundlePath];
+
+    NSString *testBundlePath = config.testBundlePath;
+    NSString *appName = [self appNameForPath:testBundlePath];
     xctConfig.productModuleName = appName;
-    xctConfig.testBundleURL = [NSURL fileURLWithPath:config.testBundlePath];
+    xctConfig.testBundleURL = [NSURL fileURLWithPath:testBundlePath];
     xctConfig.sessionIdentifier = config.sessionIdentifier;
     xctConfig.treatMissingBaselinesAsFailures = NO;
     xctConfig.targetApplicationBundleID = [self bundleIdForPath:config.appBundlePath];//@"LI.BPSampleApp";
     xctConfig.targetApplicationPath = config.appBundlePath;//@"/Users/khu/linkedin/bluepill/build/Products/Debug-iphonesimulator/BPSampleApp.app";
     xctConfig.reportResultsToIDE = YES;
 
-    if (config.isUITestBundle) {
+    if (config.testRunnerAppPath) {
         xctConfig.initializeForUITesting = YES;
         xctConfig.disablePerformanceMetrics = NO;
         xctConfig.reportActivities = NO;
@@ -112,10 +114,10 @@
         // According to @khu, we can't just pass the right setTestsToRun and have it work, so what we do instead
         // is get the full list of tests from the XCTest bundle, then skip everything we don't want to run.
         NSError *error;
-        NSString *basename = [[config.testBundlePath lastPathComponent] stringByDeletingPathExtension];
-        NSString *executable = [config.testBundlePath stringByAppendingPathComponent:basename];
+        NSString *basename = [[testBundlePath lastPathComponent] stringByDeletingPathExtension];
+        NSString *executable = [testBundlePath stringByAppendingPathComponent:basename];
 
-        BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable withError:&error];
+        BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable isUITestFile:(config.testRunnerAppPath == nil) withError:&error];
         NSAssert(xctTestFile != nil, @"Failed to load testcases from %@", [error localizedDescription]);
         NSMutableSet *testsToSkip = [[NSMutableSet alloc] initWithArray:xctTestFile.allTestCases];
         NSSet *testsToRun = [[NSSet alloc] initWithArray:config.testCasesToRun];

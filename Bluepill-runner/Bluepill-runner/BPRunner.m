@@ -83,7 +83,7 @@ maxprocs(void)
     return runner;
 }
 
-- (NSTask *)newTaskWithBundle:(BPBundle *)bundle andNumber:(NSUInteger)number andCompletionBlock:(void (^_Nonnull)(NSTask *))block {
+- (NSTask *)newTaskWithBundle:(BPBundle *)bundle andNumber:(NSUInteger)number andCompletionBlock:(void (^)(NSTask *))block {
     BPConfiguration *cfg = [self.config mutableCopy];
     cfg.testBundlePath = bundle.path;
     cfg.testCasesToSkip = bundle.testsToSkip;
@@ -108,7 +108,7 @@ maxprocs(void)
     [env addEntriesFromDictionary:[[NSProcessInfo processInfo] environment]];
     [env setObject:[NSString stringWithFormat:@"%lu", number] forKey:@"_BP_SIM_NUM"];
     [task setEnvironment:env];
-    [task setTerminationHandler:^(NSTask * _Nonnull task) {
+    [task setTerminationHandler:^(NSTask *task) {
         [[NSFileManager defaultManager] removeItemAtPath:cfg.configOutputFile
                                                    error:nil];
         [BPUtils printInfo:INFO withString:@"Simulator %lu (PID %u) has finished with exit code %d.",
@@ -125,7 +125,7 @@ maxprocs(void)
     NSUInteger numSims = [self.config.numSims intValue];
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
     NSError *error;
-    NSMutableArray *bundles = [BPPacker packTests:self.app.testBundles testCasesToRun:self.config.testCasesToRun withNoSplitList:self.config.noSplit intoBundles:numSims andError:&error];
+    NSMutableArray *bundles = [BPPacker packTests:self.app.allTestBundles configuration:self.config andError:&error];
     if (!bundles || bundles.count == 0) {
         [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
         return 1;
@@ -165,7 +165,7 @@ maxprocs(void)
         }
         if (([bundles count] == 0 && launchedTasks == 0) || (interrupted && launchedTasks == 0)) break;
         if ([bundles count] > 0 && launchedTasks < numSims && !interrupted) {
-            NSTask *task = [self newTaskWithBundle:[bundles objectAtIndex:0] andNumber:++taskNumber andCompletionBlock:^(NSTask * _Nonnull task) {
+            NSTask *task = [self newTaskWithBundle:[bundles objectAtIndex:0] andNumber:++taskNumber andCompletionBlock:^(NSTask *task) {
                 launchedTasks--;
                 [BPUtils printInfo:INFO withString:@"PID %d exited %d.", [task processIdentifier], [task terminationStatus]];
                 [taskList removeObject:[NSString stringWithFormat:@"%lu", taskNumber]];

@@ -131,11 +131,10 @@
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostBundlePath = self.config.appBundlePath;
 
-    if (self.config.isUITestBundle) {
-        NSString *hostAppPath = self.config.testRunnerBundlePath;
+    if (self.config.testRunnerAppPath) {
+        NSString *hostAppPath = self.config.testRunnerAppPath;
         hostBundleId = [SimulatorHelper bundleIdForPath:hostAppPath];
         hostBundlePath = hostAppPath;
-
     }
 
     // Install the host application
@@ -154,9 +153,10 @@
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.appBundlePath];
 
-    if (self.config.isUITestBundle) {
-        hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.testRunnerBundlePath];
-        hostBundleId = [SimulatorHelper bundleIdForPath:self.config.testRunnerBundlePath];
+    // One bp instance only run one kind of xctest file.
+    if (self.config.testRunnerAppPath) {
+        hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.testRunnerAppPath];
+        hostBundleId = [SimulatorHelper bundleIdForPath:self.config.testRunnerAppPath];
     }
     // Create the environment for the host application
     NSDictionary *argsAndEnv = [BPUtils buildArgsAndEnvironmentWith:self.config.schemePath];

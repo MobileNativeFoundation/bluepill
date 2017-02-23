@@ -30,14 +30,13 @@
 
 // XCUITest sector
 @property (nonatomic, strong) NSString *testRunnerAppPath;
-@property (nonatomic, strong) NSString *uiTestBundlePath;
 @property (nonatomic, strong) NSArray *additionalUITestBundles;
 
 // XCTest sector
 @property (nonatomic, strong) NSArray *additionalUnitTestBundles;
-@property (nonatomic, strong) NSString *unitTestBundlePath;
 
 // Common
+@property (nonatomic, strong) NSString *testBundlePath;
 @property (nonatomic, strong) NSString *deviceType;
 @property (nonatomic, strong) NSString *runtime;
 @property (nonatomic, strong) NSString *configFile;
