@@ -31,6 +31,7 @@
 
 - (void)setUp {
     [super setUp];
+    NSLog(@"PID: %d", getpid());
     self.continueAfterFailure = NO;
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];

@@ -21,6 +21,7 @@
 
 - (void)setUp {
     [super setUp];
+    NSLog(@"PID: %d", getpid());
     [BPUtils quietMode:[BPUtils isBuildScript]];
 }
 

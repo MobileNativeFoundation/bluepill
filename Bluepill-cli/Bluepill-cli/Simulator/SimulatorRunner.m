@@ -29,6 +29,7 @@
 @property (nonatomic, strong) NSFileHandle *stdOutHandle;
 @property (nonatomic, strong) SimulatorMonitor *monitor;
 @property (nonatomic, assign) BOOL needsRetry;
+@property (nonatomic, assign) BOOL abandoned;
 
 @end
 
@@ -314,6 +315,9 @@
             });
             dispatch_resume(source);
             self.stdOutHandle.readabilityHandler = ^(NSFileHandle *handle) {
+                if (blockSelf.abandoned) {
+                    return;
+                }
                 // This callback occurs on a background thread
                 NSData *chunk = [handle availableData];
                 [parser handleChunkData:chunk];
@@ -360,6 +364,10 @@
 
 - (BPExitStatus)exitStatus {
     return ([self.monitor exitStatus]);
+}
+
+- (void)abandon {
+    self.abandoned = YES;
 }
 
 - (NSString *)UDID {
