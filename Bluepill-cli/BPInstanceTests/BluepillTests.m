@@ -364,8 +364,7 @@
     Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode2 = [bp2 run];
     XCTAssert(exitCode2 == BPExitStatusTestsAllPassed);
-    
-    XCTAssertNil(self.config.useSimUDID); //set to nil when sim is deleted
+
     XCTAssertNotNil([bp2 getSimulatorUDID]);
     XCTAssertEqualObjects(oldDeviceID, [bp2 getSimulatorUDID]);
 
@@ -396,8 +395,7 @@
     Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode2 = [bp2 run];
     XCTAssert(exitCode2 == BPExitStatusAppCrashed);
-    
-    XCTAssertNil(self.config.useSimUDID); //set to nil when sim is deleted
+
     XCTAssertNotNil([bp2 getSimulatorUDID]);
     //Specified device has been deleted due to crashed test case and a NEW sim sould be created when RETRY
     XCTAssertNotEqualObjects(oldDeviceID, [bp2 getSimulatorUDID]);
@@ -426,7 +424,6 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
-    XCTAssertNil(self.config.useSimUDID); //set to nil when sim cannot be reused
     XCTAssertNotNil([bp getSimulatorUDID]);
     XCTAssertNotEqual(badDeviceID, [bp getSimulatorUDID]);
 }
@@ -473,6 +470,17 @@
     XCTAssert(exitCode2 == BPExitStatusSimulatorDeleted);
     XCTAssertEqualObjects(self.config.deleteSimUDID, [bp2 getSimulatorUDID]);
 
+}
+
+//make sure we don't retry to create a new simulator to delete
+- (void)testDeleteSimulatorNotExistWithRetry {
+    self.config.failureTolerance = 1;
+    self.config.errorRetriesCount = @2;
+    self.config.deleteSimUDID = @"XXXXX";
+
+    Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode2 = [bp run];
+    XCTAssert(exitCode2 == BPExitStatusSimulatorReuseFailed);
 }
 
 #pragma mark - Test helpers

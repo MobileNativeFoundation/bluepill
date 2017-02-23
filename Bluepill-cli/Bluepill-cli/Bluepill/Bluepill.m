@@ -37,6 +37,7 @@ void onInterrupt(int ignore) {
 @property (nonatomic, assign) BOOL exitLoop;
 @property (nonatomic, assign) NSInteger failureTolerance;
 @property (nonatomic, assign) NSInteger retries;
+@property (nonatomic, assign) BOOL mayReuseSim;
 
 @end
 
@@ -63,6 +64,8 @@ void onInterrupt(int ignore) {
 
     // Save our failure tolerance because we're going to be changing this
     self.failureTolerance = self.executionConfigCopy.failureTolerance;
+
+    self.mayReuseSim = YES;
 
     // Start the first attempt
     [self begin];
@@ -187,7 +190,7 @@ void onInterrupt(int ignore) {
     
     if (context.config.deleteSimUDID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
-    } else if (context.config.useSimUDID) {
+    } else if (context.config.useSimUDID && self.mayReuseSim) {
         NEXT([self reuseSimulatorWithContext:context]);
     } else {
         NEXT([self createSimulatorWithContext:context]);
@@ -255,8 +258,8 @@ void onInterrupt(int ignore) {
 
         NEXT([self uninstallApplicationWithContext:context]);
     } else {
-        context.config.useSimUDID = nil; //prevent reuse this device when RETRY
-        self.config.useSimUDID = nil;
+        self.mayReuseSim = NO; //prevent reuse this device when RETRY
+
         
         [[BPStats sharedStats] endTimer:stepName];
         [[BPStats sharedStats] addSimulatorCreateFailure];
@@ -467,8 +470,7 @@ void onInterrupt(int ignore) {
         return;
     }
     context.simulatorCreated = NO;  //also use this flag to tell writeSimUDIDFile() the simulator not avaiable
-    context.config.useSimUDID = nil; //prevent reuse this device when RETRY
-    self.config.useSimUDID = nil;
+    self.mayReuseSim = NO; //prevent reuse this device when RETRY
     
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
