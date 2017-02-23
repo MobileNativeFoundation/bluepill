@@ -278,7 +278,7 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
         if (!success) {
             [BPUtils printInfo:ERROR withString:@"Remaining retry count: %@",__self.maxInstallTries];
             if (--__self.maxInstallTries > 0) {
-                if ([[error description] containsString:@"Booting"]) {
+                if ([[error description] containsString:@"Unable to lookup in current state"]) {
                     [BPUtils printInfo:INFO withString:@"Simulator is still booting. Will defer install for 1 minute."];
                     // The simulator is still booting, wait for 1 minute before trying again
                     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 60, NO); // spin the runloop while we wait
