@@ -353,9 +353,9 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
-    XCTAssertNotNil([bp getSimulatorUDID]);
+    XCTAssertNotNil(bp.simulatorUDID);
     
-    self.config.useSimUDID = [bp getSimulatorUDID];
+    self.config.useSimUDID = bp.simulatorUDID;
     XCTAssertNotNil(self.config.useSimUDID);
     
     NSString *oldDeviceID = self.config.useSimUDID;
@@ -365,8 +365,8 @@
     BPExitStatus exitCode2 = [bp2 run];
     XCTAssert(exitCode2 == BPExitStatusTestsAllPassed);
 
-    XCTAssertNotNil([bp2 getSimulatorUDID]);
-    XCTAssertEqualObjects(oldDeviceID, [bp2 getSimulatorUDID]);
+    XCTAssertNotNil(bp2.simulatorUDID);
+    XCTAssertEqualObjects(oldDeviceID, bp2.simulatorUDID);
 
 }
 
@@ -380,9 +380,9 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
-    XCTAssertNotNil([bp getSimulatorUDID]);
+    XCTAssertNotNil(bp.simulatorUDID);
     
-    self.config.useSimUDID = [bp getSimulatorUDID];
+    self.config.useSimUDID = bp.simulatorUDID;
     XCTAssertNotNil(self.config.useSimUDID);
     
     NSString *oldDeviceID = self.config.useSimUDID;
@@ -396,9 +396,9 @@
     BPExitStatus exitCode2 = [bp2 run];
     XCTAssert(exitCode2 == BPExitStatusAppCrashed);
 
-    XCTAssertNotNil([bp2 getSimulatorUDID]);
+    XCTAssertNotNil(bp2.simulatorUDID);
     //Specified device has been deleted due to crashed test case and a NEW sim sould be created when RETRY
-    XCTAssertNotEqualObjects(oldDeviceID, [bp2 getSimulatorUDID]);
+    XCTAssertNotEqualObjects(oldDeviceID, bp2.simulatorUDID);
 }
 
 - (void)testReuseSimulatorNotExist {
@@ -409,7 +409,7 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusSimulatorCreationFailed);
-    XCTAssertNil([bp getSimulatorUDID]);
+    XCTAssertNil(bp.simulatorUDID);
 }
 
 - (void)testReuseSimulatorNotExistWithRetry {
@@ -424,8 +424,8 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
-    XCTAssertNotNil([bp getSimulatorUDID]);
-    XCTAssertNotEqual(badDeviceID, [bp getSimulatorUDID]);
+    XCTAssertNotNil(bp.simulatorUDID);
+    XCTAssertNotEqual(badDeviceID, bp.simulatorUDID);
 }
 
 //simulator shouldn't be kept in this case
@@ -460,15 +460,15 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
-    XCTAssertNotNil([bp getSimulatorUDID]);
+    XCTAssertNotNil(bp.simulatorUDID);
     
-    self.config.deleteSimUDID = [bp getSimulatorUDID];
+    self.config.deleteSimUDID = bp.simulatorUDID;
     XCTAssertNotNil(self.config.deleteSimUDID);
     
     Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode2 = [bp2 run];
     XCTAssert(exitCode2 == BPExitStatusSimulatorDeleted);
-    XCTAssertEqualObjects(self.config.deleteSimUDID, [bp2 getSimulatorUDID]);
+    XCTAssertEqualObjects(self.config.deleteSimUDID, bp2.simulatorUDID);
 
 }
 
@@ -481,6 +481,7 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode2 = [bp run];
     XCTAssert(exitCode2 == BPExitStatusSimulatorReuseFailed);
+    XCTAssertNil(bp.simulatorUDID);
 }
 
 #pragma mark - Test helpers

@@ -300,7 +300,7 @@ void onInterrupt(int ignore) {
     BOOL success = [context.runner uninstallApplicationAndReturnError:&error];
 
     [[BPStats sharedStats] endTimer:stepName];
-    [BPUtils printInfo:(success ? INFO : ERROR) withString:[@"Completed: " stringByAppendingString:stepName]];
+    [BPUtils printInfo:(success ? INFO : ERROR) withString:[@"Completed: %@" stringByAppendingString:stepName]];
 
     if (!success) {
         [[BPStats sharedStats] addSimulatorInstallFailure];
@@ -515,7 +515,6 @@ void onInterrupt(int ignore) {
         context.simulatorCreated = YES; //if we don't set this flag, deleteSimulatorWithContext() won't proceed
         
         NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorDeleted]);
-        
     } else {
         [BPUtils printError:ERROR withString:[NSString stringWithFormat:@"Failed to reconnect to simulator %@", context.config.deleteSimUDID]];
         context.exitStatus = BPExitStatusSimulatorReuseFailed;
@@ -590,10 +589,10 @@ void onInterrupt(int ignore) {
 }
 
 - (void)writeSimUDIDFile {
-    NSString *idStr = [self getSimulatorUDID];
+    NSString *idStr = self.simulatorUDID;
     if (!idStr || !self.context.simulatorCreated) return;
     
-    NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d",getpid()];
+    NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d", getpid()];
     NSString *tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName];
     
     NSError *error;
@@ -609,7 +608,7 @@ void onInterrupt(int ignore) {
     return (self.exitLoop == NO);
 }
 
-- (NSString *)getSimulatorUDID {
+- (NSString *)simulatorUDID {
     return self.context.runner.UDID;
 }
 

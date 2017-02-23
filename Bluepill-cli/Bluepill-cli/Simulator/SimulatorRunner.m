@@ -63,23 +63,25 @@
 
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
     self.device = [SimulatorRunner findDeviceWithConfig:self.config andDeviceID:deviceUDID];
-    if (self.device) {
-        if ([self.device.stateString isEqualToString:@"Booted"]) {
-            if (!self.config.headlessMode) {
-                self.app = [SimulatorRunner findSimAppWithDeviceUDID: [deviceUDID UUIDString]];
-                if (!self.app) {
-                    [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
-                                                                  [deviceUDID UUIDString]]];
-                    return NO;
-                }
-            }
-            return YES;
-        } else {
-            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]]];
+    if (!self.device) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice not found: %@", [deviceUDID UUIDString]]];
+        return NO;
+    }
+
+    if (![self.device.stateString isEqualToString:@"Booted"]) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]]];
+        return NO;
+    }
+
+    if (!self.config.headlessMode) {
+        self.app = [SimulatorRunner findSimAppWithDeviceUDID: [deviceUDID UUIDString]];
+        if (!self.app) {
+            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
+                                                 [deviceUDID UUIDString]]];
             return NO;
         }
     }
-    return NO;
+    return YES;
 }
 
 - (void)bootSimulatorWithCompletion:(void (^)(NSError *))completion {
@@ -186,9 +188,9 @@
 }
 
 + (BOOL)uninstallAppWithBundleID:(NSString *)hostBundleID
-                    bundlePath:(NSString *)hostBundlePath
-                        device:(SimDevice *)device
-                         error:(NSError **)error {
+                      bundlePath:(NSString *)hostBundlePath
+                          device:(SimDevice *)device
+                           error:(NSError **)error {
     return [device uninstallApplication:hostBundleID
                             withOptions:@{kCFBundleIdentifier: hostBundleID}
                                   error:error];
@@ -233,12 +235,7 @@
     }
 
     SimDevice *device = deviceSet.devicesByUDID[deviceID];
-    if (!device) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice not found: %@", [deviceID UUIDString]]];
-        return nil;
-    }
-    
-    return device;
+    return device; //could be nil when not found
  }
 
 + (NSRunningApplication *)findSimAppWithDeviceUDID:(NSString *)deviceUDID {
