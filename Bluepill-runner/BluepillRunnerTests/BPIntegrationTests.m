@@ -42,7 +42,6 @@
     self.config.jsonOutput = NO;
     self.config.headlessMode = NO;
     self.config.junitOutput = NO;
-    self.config.headlessMode = TRUE;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     self.config.quiet = YES;

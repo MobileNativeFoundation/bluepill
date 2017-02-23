@@ -64,10 +64,12 @@
 - (void)bootSimulatorWithCompletion:(void (^)(NSError *))completion {
     // Now boot it.
     if (self.config.headlessMode) {
+        [BPUtils printInfo:INFO withString:@"Running in HEADLESS mode..."];
         [SimulatorRunner bootDevice:self.device withCompletion:completion];
         return;
     }
     // not headless? open the simulator app.
+    [BPUtils printInfo:INFO withString:@"Running in NON-headless mode..."];
     [self openSimulatorWithCompletion:completion];
 }
 
