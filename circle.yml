@@ -1,3 +1,7 @@
+machine:
+  xcode:
+    version: 8.2
+
 compile:
   override:
     - ./scripts/bluepill.sh build
