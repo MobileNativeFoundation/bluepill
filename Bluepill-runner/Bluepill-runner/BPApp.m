@@ -14,6 +14,7 @@
 
 @implementation BPApp
 
+// This functions returns back a BPApp with an array of unit tests and an array of ui tests.
 + (instancetype)appWithConfig:(BPConfiguration *)config withError:(NSError *__autoreleasing *)error {
     BOOL isdir;
     NSFileManager *fm = [NSFileManager defaultManager];
@@ -29,12 +30,17 @@
     }
     BPApp *app = [[BPApp alloc] init];
 
-    NSMutableArray *allTestFiles = [NSMutableArray new];
+    NSMutableArray *allUnitTestFiles = [NSMutableArray new];
+    NSMutableArray *allUITestFiles = [NSMutableArray new];
 
-    // Handle single testBundlePath (assumption - unit test only, TO BE FIXED)
-    if (config.testBundlePath) {
-        BPXCTestFile *testFile = [self testFileFromXCTestPath:config.testBundlePath isUITestBundle:NO withError:error];
-        [allTestFiles addObject:testFile];
+    // Handle single test bundle case.
+    if (config.unitTestBundlePath) {
+        BPXCTestFile *testFile = [self testFileFromXCTestPath:config.unitTestBundlePath isUITestBundle:NO withError:error];
+        [allUnitTestFiles addObject:testFile];
+    } else if (config.uiTestBundlePath) {
+        NSAssert(config.testRunnerAppPath, @"with UI test bundle path specified, you have to pass in the ui test runner path");
+        BPXCTestFile *testFile = [self testFileFromXCTestPath:config.uiTestBundlePath isUITestBundle:YES withError:error];
+        [allUITestFiles addObject:testFile];
     } else {
         NSString *xcTestsPath = [hostAppPath stringByAppendingPathComponent:@"Plugins"];
         if (!([fm fileExistsAtPath:xcTestsPath isDirectory:&isdir]) && isdir) {
@@ -44,32 +50,40 @@
 
         NSArray *unitTestFiles = [self testFilesFromDirectory:xcTestsPath isUITestBundle:NO withError:error];
         if (unitTestFiles) {
-            [allTestFiles addObjectsFromArray:unitTestFiles];
+            [allUnitTestFiles addObjectsFromArray:unitTestFiles];
         }
         if (error) {return nil;}
+
+        // Read ui test bundles.
         if (config.testRunnerAppPath) {
-            NSString *xcTestsPath = [hostAppPath stringByAppendingPathComponent:@"Plugins"];
+            NSString *xcTestsPath = [config.testRunnerAppPath stringByAppendingPathComponent:@"Plugins"];
             NSArray *uiTestFiles = [self testFilesFromDirectory:xcTestsPath isUITestBundle:YES withError:error];
             if (!([fm fileExistsAtPath:xcTestsPath isDirectory:&isdir]) && isdir) {
                 NSLog(@"There is .xctest file under %@", xcTestsPath);
             }
             if (uiTestFiles) {
-                [allTestFiles addObjectsFromArray:uiTestFiles];
+                [allUITestFiles addObjectsFromArray:uiTestFiles];
             }
-
         }
     }
 
     // Handle additional test bundles  (assumption - unit test only, TO BE FIXED)
-    if (config.additionalTestBundles) {
-        for (NSString *testBundle in config.additionalTestBundles) {
+    if (config.additionalUnitTestBundles) {
+        for (NSString *testBundle in config.additionalUnitTestBundles) {
             BPXCTestFile *testFile = [self testFileFromXCTestPath:testBundle isUITestBundle:NO withError:error];
-            [allTestFiles addObject:testFile];
+            [allUnitTestFiles addObject:testFile];
         }
     }
-    app.testBundles = allTestFiles;
-    return app;
 
+    if (config.additionalUITestBundles) {
+        for (NSString *testBundle in config.additionalUnitTestBundles) {
+            BPXCTestFile *testFile = [self testFileFromXCTestPath:testBundle isUITestBundle:NO withError:error];
+            [allUnitTestFiles addObject:testFile];
+        }
+    }
+    app.unitTestBundles = allUnitTestFiles;
+    app.uiTestBundles = allUITestFiles;
+    return app;
 }
 
 + (NSArray *)testFilesFromDirectory:(NSString *)dirPath
@@ -102,7 +116,12 @@
 }
 
 - (NSString *)testBundlePathForName:(NSString *)name {
-    for (BPXCTestFile *xcTest in self.testBundles) {
+    for (BPXCTestFile *xcTest in self.unitTestBundles) {
+        if ([xcTest.name isEqualToString:name]) {
+            return xcTest.path;
+        }
+    }
+    for (BPXCTestFile *xcTest in self.uiTestBundles) {
         if ([xcTest.name isEqualToString:name]) {
             return xcTest.path;
         }
@@ -111,9 +130,13 @@
 }
 
 - (void)listBundles:(BOOL) verbose {
-    for (BPXCTestFile *testFile in self.testBundles) {
-        printf("%s.xctest\n", [testFile.name UTF8String]);
-        if (verbose) [testFile listTestClasses];
+    for (BPXCTestFile *xcTest in self.unitTestBundles) {
+        printf("%s.xctest\n", [xcTest.name UTF8String]);
+        if (verbose) [xcTest listTestClasses];
+    }
+    for (BPXCTestFile *xcTest in self.unitTestBundles) {
+        printf("%s.xctest\n", [xcTest.name UTF8String]);
+        if (verbose) [xcTest listTestClasses];
     }
 }
 

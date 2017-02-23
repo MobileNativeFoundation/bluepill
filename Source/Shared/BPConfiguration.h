@@ -28,11 +28,16 @@
 @property (nonatomic, strong) NSUUID *sessionIdentifier;
 @property (nonatomic, strong) NSString *appBundlePath;
 
+// XCUITest sector
 @property (nonatomic, strong) NSString *testRunnerAppPath;
-@property (nonatomic, strong) NSString *testBundlePath;
-@property (nonatomic) BOOL isUITestBundle;
+@property (nonatomic, strong) NSString *uiTestBundlePath;
+@property (nonatomic, strong) NSArray *additionalUITestBundles;
 
-@property (nonatomic, strong) NSArray *additionalTestBundles;
+// XCTest sector
+@property (nonatomic, strong) NSArray *additionalUnitTestBundles;
+@property (nonatomic, strong) NSString *unitTestBundlePath;
+
+// Common
 @property (nonatomic, strong) NSString *deviceType;
 @property (nonatomic, strong) NSString *runtime;
 @property (nonatomic, strong) NSString *configFile;

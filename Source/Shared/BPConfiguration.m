@@ -40,9 +40,6 @@ struct BPOptions {
         "The scheme to run tests."},
 
     // Required arguments for ui testing
-    {'U', "is-ui-test", required_argument, NULL, BP_BOOL, "isUITestBundle",
-        "whether this bundle is UI test"},
-
     {'u', "runner-app-path", required_argument, NULL, BP_VALUE | BP_PATH, "testRunnerAppPath",
         "The test runner for UI tests."},
 
@@ -71,7 +68,9 @@ struct BPOptions {
         "Number of simulators to run in parallel. (bluepill only)"},
     {'r', "runtime",  required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
         "What runtime to use."},
-    {'t', "test",     required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
+    {'t', "unit-test-bundle", required_argument, NULL, BP_VALUE | BP_PATH, "unitTestBundlePath",
+        "The path to the test bundle to execute (your .xctest)."},
+    {'I', "ui-test-bundle", required_argument, NULL, BP_VALUE | BP_PATH, "uiTestBundlePath",
         "The path to the test bundle to execute (your .xctest)."},
     {'x', "exclude", required_argument, NULL, BP_LIST, "testCasesToSkip",
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
@@ -97,8 +96,10 @@ struct BPOptions {
         "Only list tests in bundle"},
 
     // options without short-options
-    {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
+    {350, "additional-unit-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalUnitTestBundles",
         "Additional XCTest bundles to test."},
+    {355, "additional-ui-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalUITestBundles",
+        "Additional XCUITest bundles to test."},
     {0, 0, 0, 0}
 };
 
