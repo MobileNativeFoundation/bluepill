@@ -1,3 +1,7 @@
 language: objective-c
 osx_image: xcode8.2
-script: sh ./scripts/bluepill.sh test
+matrix:
+  include:
+  - env: _BP_TEST_SUITE=instance_tests
+  - env: _BP_TEST_SUITE=runner_tests
+script: sh ./scripts/bluepill.sh $_BP_TEST_SUITE

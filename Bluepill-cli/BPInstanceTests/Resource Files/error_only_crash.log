@@ -33,40 +33,40 @@ objc[50776]: Class AWDCallHistoryEntitlementRejection is implemented in both /Ap
 objc[50776]: Class AWDCallHistoryGizmoDatabaseMigrationFailure is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c780) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee210a0). One of the two will be used. Which one is undefined.
 objc[50776]: Class AWDCallHistoryNilUuid is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c870) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee210f0). One of the two will be used. Which one is undefined.
 objc[50776]: Class AWDCallHistoryMalformedCloudChangeToken is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x12485c7d0) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12ee21190). One of the two will be used. Which one is undefined.
-Test Case '-[OSAMeTests.913ef4e test72d6c61' started.
-Test Case '-[OSAMeTests.913ef4e test72d6c61' passed (5.985 seconds).
-Test Case '-[OSAMeTests.913ef4e test065a8c2' started.
-Test Case '-[OSAMeTests.913ef4e test065a8c2' passed (6.417 seconds).
-Test Case '-[OSAMeTests.913ef4e testb23799e' started.
-Test Case '-[OSAMeTests.913ef4e testb23799e' passed (4.627 seconds).
-Test Case '-[OSAMeTests.913ef4e test4026823' started.
-Test Case '-[OSAMeTests.913ef4e test4026823' passed (4.128 seconds).
+Test Case '-[OSAMeTests.913ef4e test72d6c61]' started.
+Test Case '-[OSAMeTests.913ef4e test72d6c61]' passed (5.985 seconds).
+Test Case '-[OSAMeTests.913ef4e test065a8c2]' started.
+Test Case '-[OSAMeTests.913ef4e test065a8c2]' passed (6.417 seconds).
+Test Case '-[OSAMeTests.913ef4e testb23799e]' started.
+Test Case '-[OSAMeTests.913ef4e testb23799e]' passed (4.627 seconds).
+Test Case '-[OSAMeTests.913ef4e test4026823]' started.
+Test Case '-[OSAMeTests.913ef4e test4026823]' passed (4.128 seconds).
 Test Suite '913ef4e' passed at 2016-12-09 11:31:27.465.
 	 Executed 4 tests, with 0 failures (0 unexpected) in 21.157 (23.151) seconds
 Test Suite 'ec55432' started at 2016-12-09 11:31:27.466
-Test Case '-[OSAMeTests.ec55432 test324bb6e' started.
-Test Case '-[OSAMeTests.ec55432 test324bb6e' passed (3.891 seconds).
-Test Case '-[OSAMeTests.ec55432 test3c454c6' started.
-Test Case '-[OSAMeTests.ec55432 test3c454c6' passed (5.426 seconds).
+Test Case '-[OSAMeTests.ec55432 test324bb6e]' started.
+Test Case '-[OSAMeTests.ec55432 test324bb6e]' passed (3.891 seconds).
+Test Case '-[OSAMeTests.ec55432 test3c454c6]' started.
+Test Case '-[OSAMeTests.ec55432 test3c454c6]' passed (5.426 seconds).
 Test Suite 'ec55432' passed at 2016-12-09 11:31:37.379.
 	 Executed 2 tests, with 0 failures (0 unexpected) in 9.317 (9.914) seconds
 Test Suite 'a69acac' started at 2016-12-09 11:31:37.379
-Test Case '-[OSAMeTests.a69acac test1163a44' started.
-Test Case '-[OSAMeTests.a69acac test1163a44' passed (3.321 seconds).
-Test Case '-[OSAMeTests.a69acac testf8066b1' started.
-Test Case '-[OSAMeTests.a69acac testf8066b1' passed (4.322 seconds).
+Test Case '-[OSAMeTests.a69acac test1163a44]' started.
+Test Case '-[OSAMeTests.a69acac test1163a44]' passed (3.321 seconds).
+Test Case '-[OSAMeTests.a69acac testf8066b1]' started.
+Test Case '-[OSAMeTests.a69acac testf8066b1]' passed (4.322 seconds).
 Test Suite 'a69acac' passed at 2016-12-09 11:31:45.522.
 	 Executed 2 tests, with 0 failures (0 unexpected) in 7.642 (8.143) seconds
 Test Suite '370a5f4' started at 2016-12-09 11:31:45.523
-Test Case '-[OSAMeTests.370a5f4 test201032d' started.
-Test Case '-[OSAMeTests.370a5f4 test201032d' passed (8.196 seconds).
-Test Case '-[OSAMeTests.370a5f4 test0a8b56d' started.
-Test Case '-[OSAMeTests.370a5f4 test0a8b56d' passed (7.906 seconds).
-Test Case '-[OSAMeTests.370a5f4 test0ffbd77' started.
-Test Case '-[OSAMeTests.370a5f4 test0ffbd77' passed (7.292 seconds).
-Test Case '-[OSAMeTests.370a5f4 test925c17a' started.
-Test Case '-[OSAMeTests.370a5f4 test925c17a' passed (2.996 seconds).
-Test Case '-[OSAMeTests.370a5f4 testae14cbd' started.
+Test Case '-[OSAMeTests.370a5f4 test201032d]' started.
+Test Case '-[OSAMeTests.370a5f4 test201032d]' passed (8.196 seconds).
+Test Case '-[OSAMeTests.370a5f4 test0a8b56d]' started.
+Test Case '-[OSAMeTests.370a5f4 test0a8b56d]' passed (7.906 seconds).
+Test Case '-[OSAMeTests.370a5f4 test0ffbd77]' started.
+Test Case '-[OSAMeTests.370a5f4 test0ffbd77]' passed (7.292 seconds).
+Test Case '-[OSAMeTests.370a5f4 test925c17a]' started.
+Test Case '-[OSAMeTests.370a5f4 test925c17a]' passed (2.996 seconds).
+Test Case '-[OSAMeTests.370a5f4 testae14cbd]' started.
         {
         eventBody =         {
             controlUrn = "urn:li:control:p_flagship3_notifications-prop_list";

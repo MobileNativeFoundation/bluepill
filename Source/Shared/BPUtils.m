@@ -34,6 +34,10 @@ Message Messages[] = {
     {" DEBUG  ", ANSI_COLOR_YELLOW},
 };
 
+static int bp_testing = -1;
+
+#define DEBUG 1
+
 #ifdef DEBUG
 static BOOL printDebugInfo = YES;
 #else
@@ -77,12 +81,15 @@ static BOOL quiet = NO;
     Message message = Messages[kind];
     NSString *simNum = @"";
     char *s;
-    if ((s = getenv("_BP_SIM_NUM"))) {
-        simNum = [NSString stringWithFormat:@"(%s) ", s];
+    if (bp_testing < 0) {
+        bp_testing = (getenv("_BP_TEST_SUITE") != 0);
     }
-    if (isatty(1)) {
-        fprintf(fd, "%s[%s]%s %s%s\n",
-                message.color, message.text, ANSI_COLOR_RESET, [simNum UTF8String], [txt UTF8String]);
+    if ((s = getenv("_BP_SIM_NUM"))) {
+        simNum = [NSString stringWithFormat:@"(SIM-%s) ", s];
+    }
+    if (isatty(1) && !bp_testing) {
+        fprintf(fd, "{%d} %s[%s]%s %s%s\n",
+                getpid(), message.color, message.text, ANSI_COLOR_RESET, [simNum UTF8String], [txt UTF8String]);
     } else {
         // Not a tty, print a timestamp
         char ts[1<<6];
@@ -91,7 +98,7 @@ static BOOL quiet = NO;
         time(&now);
         tms = localtime(&now);
         strftime(ts, 1<<6, "%Y%m%d.%H%M%S", tms);
-        fprintf(fd, "%s [%s] %s%s\n", ts, message.text, [simNum UTF8String], [txt UTF8String]);
+        fprintf(fd, "{%d} %s [%s] %s%s\n", getpid(), ts, message.text, [simNum UTF8String], [txt UTF8String]);
     }
     fflush(fd);
 }
