@@ -408,9 +408,9 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     NSAssert(context.pid > 0, @"Application PID must be > 0");
     int rc = kill(context.pid, 0);
     if (rc < 0) {
-        [BPUtils printInfo:INFO withString:@"Process %d has died with error: %d", context.pid, errno];
-        [BPUtils printInfo:DEBUG withString:[BPUtils runShell:@"ps wuax"]];
+//        [BPUtils printInfo:DEBUG withString:[BPUtils runShell:@"ps wuax"]];
         if (self.firstProcessNotFoundTime == nil) {
+            [BPUtils printInfo:INFO withString:@"Process %d has died with error: %d", context.pid, errno];
             self.firstProcessNotFoundTime = [NSDate date];
         }
         if ([[NSDate date] timeIntervalSinceDate:self.firstProcessNotFoundTime] > 10.0) {
@@ -421,8 +421,8 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     } else {
         if (self.firstProcessNotFoundTime) {
             self.firstProcessNotFoundTime = nil;
+            [BPUtils printInfo:INFO withString:@"Process %d was lost, but now it's found.", context.pid];
         }
-        [BPUtils printInfo:INFO withString:@"Process %d was lost, but now it's found.", context.pid];
     }
     return (rc == 0);
 }
