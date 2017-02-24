@@ -65,7 +65,7 @@
     // Now boot it.
     if (self.config.headlessMode) {
         [BPUtils printInfo:INFO withString:@"Running in HEADLESS mode..."];
-        [SimulatorRunner bootDevice:self.device withCompletion:completion];
+        [self openSimulatorHeadlessWithCompletion:completion];
         return;
     }
     // not headless? open the simulator app.
@@ -141,20 +141,40 @@
             completion(error);
             return;
         }
-        int attempts = 1200;
-        while (attempts > 0 && ![self.device.stateString isEqualToString:@"Booted"]) {
-            [NSThread sleepForTimeInterval:0.1];
-            --attempts;
-        }
-        if (![self.device.stateString isEqualToString:@"Booted"]) {
+        error = [SimulatorRunner waitForDeviceReady:self.device];
+        if (error) {
             [self.app terminate];
-            error = [NSError errorWithDomain:@"Simulator failed to boot" code:-1 userInfo:nil];
-            completion(error);
-            return;
         }
-        completion(nil);
+        completion(error);
         return;
     });
+}
+
+- (void)openSimulatorHeadlessWithCompletion:(void (^)(NSError *))completion {
+    NSDictionary *options = @{
+                              @"register-head-services" : @YES
+                              };
+    [self.device bootAsyncWithOptions:options completionHandler:^{
+        NSError *error = [SimulatorRunner waitForDeviceReady:self.device];
+        if (error) {
+            [self.app terminate];
+        }
+        completion(error);
+    }];
+}
+
++ (NSError *)waitForDeviceReady:(SimDevice *)device {
+    int attempts = 1200;
+    while (attempts > 0 && ![device.stateString isEqualToString:@"Booted"]) {
+        [NSThread sleepForTimeInterval:0.1];
+        --attempts;
+    }
+    if (![device.stateString isEqualToString:@"Booted"]) {
+        [BPUtils printInfo:ERROR withString:@"Simulator %@ failed to boot. State: %@", device.UDID.UUIDString, device.stateString];
+        return [NSError errorWithDomain:@"Simulator failed to boot" code:-1 userInfo:nil];
+    }
+    [BPUtils printInfo:INFO withString:@"Simulator %@ achieved the BOOTED state", device.UDID.UUIDString, device.stateString];
+    return nil;
 }
 
 + (BOOL)installAppWithBundleID:(NSString *)hostBundleID
@@ -191,13 +211,6 @@
                        completionHandler:^(NSError *error, SimDevice *device) {
                            completion(error, device);
                        }];
-}
-
-+ (void)bootDevice:(SimDevice *)device withCompletion:(void (^)())completion {
-    NSDictionary *options = @{
-                              @"register-head-services" : @YES
-                              };
-    [device bootAsyncWithOptions:options completionHandler:completion];
 }
 
 + (void)shutdownDevice:(SimDevice *)device withCompletion:(void (^)(NSError *error))completion {
