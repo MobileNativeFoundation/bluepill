@@ -94,7 +94,7 @@
     XCTAssert(config != nil);
     NSString *relpath = [[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingPathComponent:@"rel/path"];
     NSArray *expectedArray = @[ @"/Some/XCTest", relpath ];
-    XCTAssert([config.additionalTestBundles isEqualToArray:expectedArray]);
+    XCTAssert([config.additionalUnitTestBundles isEqualToArray:expectedArray]);
     [[NSFileManager defaultManager] removeItemAtPath:tmpConfig
                                                error:nil];
     

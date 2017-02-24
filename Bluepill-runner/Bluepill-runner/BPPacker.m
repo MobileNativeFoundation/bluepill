@@ -59,7 +59,7 @@
         if ([noSplit containsObject:[xctFile name]] || (bundleTestsToRunCount <= testsPerGroup && bundleTestsToRunCount > 0)) {
             // just pack the whole xctest file and move on
             // testsToRun doesn't work reliably, switch to use testsToSkip
-            BPBundle *bundle = [[BPBundle alloc] initWithPath:xctFile.path andTestsToSkip:@[]];
+            BPBundle *bundle = [[BPBundle alloc] initWithPath:xctFile.path isUITestBundle:xctFile.isUITestFile andTestsToSkip:@[]];
 
             // Always insert no splited tests to the front.
             [bundles insertObject:bundle atIndex:0];
@@ -76,7 +76,7 @@
             range.length = min(testsPerGroup, bundleTestsToRun.count - packed);
             NSMutableArray *testsToSkip = [NSMutableArray arrayWithArray:allTestCases];
             [testsToSkip removeObjectsInArray:[bundleTestsToRun subarrayWithRange:range]];
-            [bundles addObject:[[BPBundle alloc] initWithPath:xctFile.path andTestsToSkip:testsToSkip]];
+            [bundles addObject:[[BPBundle alloc] initWithPath:xctFile.path isUITestBundle:xctFile.isUITestFile andTestsToSkip:testsToSkip]];
             packed += range.length;
         }
         assert(packed == [bundleTestsToRun count]);

@@ -87,6 +87,9 @@ maxprocs(void)
     BPConfiguration *cfg = [self.config mutableCopy];
     cfg.testBundlePath = bundle.path;
     cfg.testCasesToSkip = bundle.testsToSkip;
+    if (!bundle.isUITestBundle) {
+        cfg.testRunnerAppPath = nil;
+    }
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
                              NSTemporaryDirectory(),

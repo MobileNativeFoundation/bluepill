@@ -44,12 +44,12 @@
 
 // Return the path to the XCTRunner
 + (NSString *)sampleAppUITestRunnerPath {
-    return @"/Users/khu/Library/Developer/Xcode/DerivedData/Bluepill-bwjswhkuftgtbadtarnyppfipngt/Build/Products/Debug-iphonesimulator/BPSampleAppUITests-Runner.app/XCTRunner";
+    return [[[self sampleAppPath] stringByDeletingLastPathComponent] stringByAppendingString:@"/BPSampleAppUITests-Runner.app/"];
 }
 
 // Return the path to the XCTRunner
 + (NSString *)sampleAppUITestBundlePath {
-    return @"/Users/khu/Library/Developer/Xcode/DerivedData/Bluepill-bwjswhkuftgtbadtarnyppfipngt/Build/Products/Debug-iphonesimulator/BPSampleAppUITests-Runner.app/PlugIns/BPSampleAppUITests.xctest";
+    return [[self sampleAppUITestRunnerPath] stringByAppendingString:@"/PlugIns/BPSampleAppUITests.xctest"];
 }
 
 #pragma mark - Helpers
