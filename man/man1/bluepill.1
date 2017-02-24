@@ -1,0 +1,195 @@
+
+.\" Bluepill help
+.TH man 1 "Summer 2017" ".1" "Bluepill"
+
+.SH NAME
+bluepill \- A tool to run iOS tests in parallel using multiple
+simulators.
+
+.SH SYNOPSIS
+.B bluepill
+\fB\-a\fR \fI<app>\fR
+\fB\-s\fR \fI<scheme>\fR
+\fB\-o\fR \fI<output_directory>\fR
+\fR[other_options]\fR
+
+.B bluepill
+\fB\-c\fR \fI<config_file>\fR
+
+.SH DESCRIPTION
+Bluepill is a tool to run iOS tests in parallel using multiple
+simulators. It requires the app to be compiled with the flags
+
+\fR -sdk iphonesimulator \fR
+
+.SH OPTIONS
+
+.TP
+.BI -a/--app " <app>"
+The path to the host application to execute (your .app)
+
+.TP
+.BI -s/--scheme-path " <scheme_path>"
+The scheme to run tests.
+
+.TP
+.BI -d/--device " <device>"
+On which device to run the app.
+\fR  Default Value: "iPhone 6" \fR
+
+.TP
+.BI -c/--config " <config>"
+Read options from the specified configuration file instead of the
+command line
+
+.TP
+.BI -C/--repeat-count " <repeat_count>"
+Number of times we'll run the entire test suite (used for stability
+testing).
+\fR  Default Value: 1 \fR
+
+.TP
+.BI -N/--no-split " <no_split>"
+A list of NO split test bundles
+
+.TP
+.BI -P/--print-config " <print_config>"
+Print a configuration file suitable for passing back using the `-c`
+option.
+\fR  Default Value: stdout \fR
+
+.TP
+.BI -R/--error-retries " <error_retries>"
+Number of times we'll recover from crashes to continue running the
+current test suite.
+\fR  Default Value: 4 \fR
+
+.TP
+.BI -S/--stuck-timeout " <stuck_timeout>"
+Timeout in seconds for a test that seems stuck (no output).
+\fR  Default Value: 300 \fR
+
+.TP
+.BI -T/--test-timeout " <test_timeout>"
+Timeout in seconds for a test that is producing output.
+\fR  Default Value: 300 \fR
+
+.TP
+.BI -f/--failure-tolerance " <failure_tolerance>"
+The number of retries on any failures (app crash/test failure).
+\fR  Default Value: NO \fR
+
+.TP
+.BI -i/--include " <include>"
+Include a testcase in the set of tests to run (unless specified in
+`exclude`).
+
+.TP
+.BI -n/--num-sims " <num_sims>"
+Number of simulators to run in parallel. (bluepill only)
+\fR  Default Value: 4 \fR
+
+.TP
+.BI -o/--output-dir " <output_dir>"
+Directory where to put output log files (bluepill only).
+
+.TP
+.BI -r/--runtime " <runtime>"
+What runtime to use.
+\fR  Default Value: "iOS 10.2" \fR
+
+.TP
+.BI -t/--test " <test>"
+The path to the test bundle to execute (your .xctest).
+
+.TP
+.BI -x/--exclude " <exclude>"
+Exclude a testcase in the set of tests to run (takes priority over
+`include`).
+
+.TP
+.BI -X/--xcode-path " <xcode_path>"
+Path to xcode.
+
+.TP
+.BI -H/--headless " headless"
+Run in headless mode (no GUI).
+\fR  Default Value: Off \fR
+
+.TP
+.BI -J/--json-output " json_output"
+Print test timing information in JSON format.
+\fR  Default Value: Off \fR
+
+.TP
+.BI -h/--help " help"
+This help.
+
+.TP
+.BI -p/--plain-output " plain_output"
+Print results in plain text.
+\fR  Default Value: Off \fR
+
+.TP
+.BI -q/--quiet " quiet"
+Turn off all output except fatal errors.
+\fR  Default Value: Off \fR
+
+.TP
+.BI -j/--junit-output " junit_output"
+Print results in JUnit format.
+\fR  Default Value: Off \fR
+
+.TP
+.BI -F/--only-retry-failed " only_retry_failed"
+If `failure-tolerance` is > 0, only retry tests that failed.
+\fR  Default Value: Off \fR
+
+.TP
+.BI -l/--list-tests " list_tests"
+Only list tests in bundle
+
+.TP
+.BI --additional-xctests " <additional_xctests>"
+Additional XCTest bundles to test.
+
+
+
+.SH RETURN VALUE
+
+Bluepill will exit zero on success (all tests passed) and non-zero on
+any kind of failure (either from the tests or because bluepill
+couldn't run them).
+
+.EXAMPLES
+
+ $ mkdir output_directory
+ $ xcodebuild -workspace MyApp.xcworkspace -scheme MyScheme -sdk iphonesimulator \
+
+       build-for-testing -derivedDataPath .
+ $ bluepill -a ./Build/Debug-iphonesimulator/MyApp.app -s MyScheme.xcscheme -o output_directory
+
+.SH SEE ALSO
+
+xcrun(1), xcode-build(1), xcode-select(1)
+
+.SH BUGS
+
+No known bugs. Please see http://github.com/linkedin/bluepill/issues
+for an up-to-date list.
+
+.SH HISTORY
+
+Bluepill was developed at LinkedIn during the fall of 2016 as a
+replacement for our scripts for running iPhone simulators in
+parallel. It was released as an Open Source project on GitHub at the
+beginning of 2017.
+
+.SH AUTHORS
+
+Ashit Gandhi (agandhi@linkedin.com)
+Jarek Rudzinski (jrudzinski@linkedin.com)
+Keqiu Hu (khu@linkedin.com)
+Oscar Bonilla (obonilla@linkedin.com)
+Yu Li (yli4@linkedin.com)
+
