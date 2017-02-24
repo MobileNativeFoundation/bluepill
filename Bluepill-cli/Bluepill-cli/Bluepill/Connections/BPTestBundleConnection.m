@@ -60,7 +60,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     [self connect];
 
     // Pool connection status till it passes.
-    [BPUtils runWithTimeOut:3600 until:^BOOL{
+    [BPUtils runWithTimeOut:timeout until:^BOOL{
         return self.connected;
     }];
 }

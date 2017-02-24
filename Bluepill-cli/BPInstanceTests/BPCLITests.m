@@ -69,7 +69,7 @@
     XCTAssert([config.noSplit isEqualToArray:want]);
 }
 
-- (void) testIgnoringAdditionalTestBundles {
+- (void)testIgnoringAdditionalTestBundles {
     // Write a config file
     NSString *tmpConfig = [BPUtils mkstemp:@"configXXX" withError:nil];
     XCTAssert(tmpConfig);
@@ -77,7 +77,7 @@
     {                                               \
     \"app\" : \"/Some/Path\",                       \
     \"scheme\" : \"/Some/Scheme\",                  \
-    \"additional-xctests\" : [ \"/Some/XCTest\", \"rel/path\" ] , \
+    \"additional-unit-xctests\" : [ \"/Some/XCTest\", \"rel/path\" ] , \
     }                                               \
     ";
     NSError *err;
