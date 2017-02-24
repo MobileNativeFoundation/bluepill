@@ -46,7 +46,7 @@
 @property (nonatomic, strong) NSNumber *errorRetriesCount;
 @property (nonatomic, strong) NSNumber *stuckTimeout;
 @property (nonatomic, strong) NSNumber *testCaseTimeout;
-@property (nonatomic, strong) NSMutableArray *noSplit;
+@property (nonatomic, strong) NSArray *noSplit;
 @property (nonatomic) BOOL junitOutput;
 @property (nonatomic) BOOL plainOutput;
 @property (nonatomic) BOOL jsonOutput;
