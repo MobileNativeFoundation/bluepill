@@ -9,6 +9,7 @@
 
 #import "BPHandler.h"
 #import "BPWaitTimer.h"
+#import "BPConstants.h"
 
 @implementation BPHandler
 
@@ -27,6 +28,11 @@
             dispatch_once(&strongSelf->onceToken, ^{
                 if (__self.onTimeout) {
                     __self.onTimeout();
+                }
+                // call timeout block first and then execute the onError block
+                if (__self.onError) {
+                    NSError *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:nil];
+                    __self.onError(error);
                 }
             });
         }
