@@ -44,9 +44,6 @@ void onInterrupt(int ignore) {
 @property (nonatomic, assign) NSInteger maxLaunchTries;
 
 @property (nonatomic, strong) NSDate *firstProcessNotFoundTime;
-
-typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
-
 @end
 
 @implementation Bluepill
@@ -213,22 +210,6 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
 
-    RetryOperationBlock failedCreateBlock = ^(NSError *error, BOOL success) {
-        if (!success) {
-            if (--__self.maxCreateTries > 0) {
-                [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
-                [context.runner abandon];
-                context.runner = [__self createSimulatorRunnerWithContext:context];
-                NEXT([__self createSimulatorWithContext:context]);
-            } else {
-                NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
-            }
-        } else {
-            context.simulatorCreated = YES;
-            NEXT([__self installApplicationWithContext:context]);
-        }
-    };
-
     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.createTimeout doubleValue]];
     [timer start];
 
@@ -250,15 +231,20 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [BPUtils printError:ERROR withString:@"%@", [error localizedDescription]];
         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
-        failedCreateBlock(error, NO);
+        if (--__self.maxCreateTries > 0) {
+            [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+            [context.runner abandon];
+            context.runner = [__self createSimulatorRunnerWithContext:context];
+            NEXT([__self createSimulatorWithContext:context]);
+        } else {
+            NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
+        }
     };
 
     handler.onTimeout = ^{
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
-        // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
-        failedCreateBlock(nil, NO);
     };
 
     self.maxInstallTries = [self.config.maxInstallTries integerValue];
@@ -276,37 +262,29 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     BOOL success = [context.runner installApplicationAndReturnError:&error];
 
     __weak typeof(self) __self = self;
-    RetryOperationBlock failedInstallBlock = ^(NSError *error, BOOL success) {
-        if (!success) {
-            if (--__self.maxInstallTries > 0) {
-                if ([[error description] containsString:@"Booting"]) {
-                    [BPUtils printInfo:INFO withString:@"Simulator is still booting. Will defer install for 1 minute."];
-                    // The simulator is still booting, wait for 1 minute before trying again
-                    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 60, NO); // spin the runloop while we wait
-                    // Try to install again
-                    NEXT([__self installApplicationWithContext:context]);
-                } else {
-                    // If it is another error, relaunch the simulator
-                    [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
-                    [context.runner abandon];
-                    context.runner = [__self createSimulatorRunnerWithContext:context];
-                    NEXT([__self createSimulatorWithContext:context]);
-                }
-            } else {
-                NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
-            }
-        } else {
-            NEXT([__self launchApplicationWithContext:context]);
-        }
-    };
-
     [[BPStats sharedStats] endTimer:stepName];
     [BPUtils printInfo:(success ? INFO : FAILED) withString:[@"Completed: " stringByAppendingString:stepName]];
 
     if (!success) {
         [[BPStats sharedStats] addSimulatorInstallFailure];
         [BPUtils printError:ERROR withString:@"Could not install app in simulator: %@", [error localizedDescription]];
-        failedInstallBlock(error, NO);
+        if (--__self.maxInstallTries > 0) {
+            if ([[error description] containsString:@"Booting"]) {
+                [BPUtils printInfo:INFO withString:@"Simulator is still booting. Will defer install for 1 minute."];
+                // The simulator is still booting, wait for 1 minute before trying again
+                CFRunLoopRunInMode(kCFRunLoopDefaultMode, 60, NO); // spin the runloop while we wait
+                // Try to install again
+                NEXT([__self installApplicationWithContext:context]);
+            } else {
+                // If it is another error, relaunch the simulator
+                [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+                [context.runner abandon];
+                context.runner = [__self createSimulatorRunnerWithContext:context];
+                NEXT([__self createSimulatorWithContext:context]);
+            }
+        } else {
+            NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusInstallAppFailed]);
+        }
         return;
     } else {
         NEXT([self launchApplicationWithContext:context]);
@@ -321,20 +299,6 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     [[BPStats sharedStats] startTimer:RUN_TESTS(context.attemptNumber)];
 
     __weak typeof(self) __self = self;
-    RetryOperationBlock failedLaunchBlock = ^(NSError *error, BOOL success) {
-        if (!success) {
-            if (--__self.maxLaunchTries > 0) {
-                [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
-                [context.runner abandon];
-                context.runner = [__self createSimulatorRunnerWithContext:context];
-                NEXT([__self createSimulatorWithContext:context]);
-            } else {
-                NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
-            }
-        } else {
-            NEXT([__self checkProcessWithContext:context]);
-        }
-    };
 
     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.launchTimeout doubleValue]];
     [timer start];
@@ -354,7 +318,14 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [BPUtils printError:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
-        failedLaunchBlock(error, NO);
+        if (--__self.maxLaunchTries > 0) {
+            [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+            [context.runner abandon];
+            context.runner = [__self createSimulatorRunnerWithContext:context];
+            NEXT([__self createSimulatorWithContext:context]);
+        } else {
+            NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
+        }
     };
 
     handler.onTimeout = ^{
@@ -362,7 +333,6 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
-        failedLaunchBlock(nil, NO);
     };
 
     [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
@@ -407,23 +377,6 @@ typedef void (^RetryOperationBlock)(NSError *error, BOOL success);
     }
     NSAssert(context.pid > 0, @"Application PID must be > 0");
     int rc = kill(context.pid, 0);
-    if (rc < 0) {
-//        [BPUtils printInfo:DEBUG withString:[BPUtils runShell:@"ps wuax"]];
-        if (self.firstProcessNotFoundTime == nil) {
-            [BPUtils printInfo:INFO withString:@"Process %d has died with error: %d", context.pid, errno];
-            self.firstProcessNotFoundTime = [NSDate date];
-        }
-        if ([[NSDate date] timeIntervalSinceDate:self.firstProcessNotFoundTime] > 10.0) {
-            [BPUtils printInfo:ERROR withString:@"Process %d still not found after 10 seconds. Assuming it's REALLY dead.", context.pid];
-        } else {
-            return YES; // Pretend the app is still alive for now
-        }
-    } else {
-        if (self.firstProcessNotFoundTime) {
-            self.firstProcessNotFoundTime = nil;
-            [BPUtils printInfo:INFO withString:@"Process %d was lost, but now it's found.", context.pid];
-        }
-    }
     return (rc == 0);
 }
 
