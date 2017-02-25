@@ -85,6 +85,7 @@ maxprocs(void)
 
 - (NSTask *)newTaskWithBundle:(BPBundle *)bundle andNumber:(NSUInteger)number andCompletionBlock:(void (^_Nonnull)(NSTask *))block {
     BPConfiguration *cfg = [self.config mutableCopy];
+    assert(cfg);
     cfg.testBundlePath = bundle.path;
     cfg.testCasesToSkip = bundle.testsToSkip;
     NSError *err;
@@ -181,7 +182,7 @@ maxprocs(void)
             }];
             if (!task) {
                 NSLog(@"Failed to launch: %@ %@", [task launchPath], [task arguments]);
-                continue;
+                exit(1);
             }
             [task launch];
             @synchronized (self) {

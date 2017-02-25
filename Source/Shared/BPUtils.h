@@ -47,8 +47,6 @@ typedef NS_ENUM(int, BPKind) {
  */
 + (BOOL)isBuildScript;
 
-+ (BOOL)definesBuildScript;
-
 /*!
  @discussion creates a temporary directory via mkdtemp(3)
  @param pathTemplate a path in which to create the temporary directory.
@@ -77,11 +75,16 @@ typedef NS_ENUM(int, BPKind) {
 + (void)printInfo:(BPKind)kind withString:(NSString *)fmt, ...;
 
 /*!
- @discussion print a message to stderr.
- @param kind one of the levels in BPKind
- @param fmt a format string (a la printf), followed by the var args.
+ @discussion get an NSError *
+ This is not really meant to be called, use the BP_ERROR macro below instead.
+ @param function The name of the function
+ @param line The line number
+ @param fmt a format string (a la printf), followed by var args.
  */
-+ (void)printError:(BPKind)kind withString:(NSString *)fmt, ...;
++ (NSError *)BPError:(const char *)function andLine:(int)line withFormat:(NSString *)fmt, ... ;
+
+#define VA_ARGS(...) , ##__VA_ARGS__
+#define BP_ERROR(fmt, ...) [BPUtils BPError:__func__ andLine:__LINE__ withFormat:fmt VA_ARGS(__VA_ARGS__)]
 
 /*!
  @discussion a function to determine if the given file name represents

@@ -143,7 +143,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 
 - (void)updateExecutedTestCaseList:(NSString *)testName inClass:(NSString *)testClass {
     if (testName == nil || testClass == nil) {
-        [BPUtils printError:DEBUGINFO withString:@"Attempting to add empty test name or class to the executed list"];
+        [BPUtils printInfo:DEBUGINFO withString:@"Attempting to add empty test name or class to the executed list"];
         return;
     }
     if (self.executedTests == nil) {

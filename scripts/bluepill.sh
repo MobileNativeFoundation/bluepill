@@ -9,6 +9,11 @@
 
 #!/bin/bash
 
+XCPRETTY=xcpretty
+command -v $XCPRETTY >/dev/null 2>&1 || {
+        XCPRETTY=cat
+}
+
 configurations="build test instance_tests runner_tests integration_tests verbose_tests"
 
 if [ "$1" == "-v" ]
@@ -40,6 +45,7 @@ then
     echo "Must be one of: " $configurations
     exit 1
 fi
+
 
 rm -rf build/
 #set -ex
@@ -73,29 +79,40 @@ test_runtime()
 
 bluepill_build()
 {
+  set -o pipefail
   xcodebuild \
     -workspace Bluepill.xcworkspace \
     -scheme bluepill \
     -configuration Release \
-    -derivedDataPath "build/"
+    -derivedDataPath "build/" | tee results.txt | $XCPRETTY
 
   test $? == 0 || {
           echo Build failed
+          cat results.txt
           exit 1
   }
   test -x build/Build/Products/Release/bluepill || {
           echo No bp built
           exit 1
   }
+  set +o pipefail
 }
 
 bluepill_build_sample_app()
 {
+  set -o pipefail
   xcodebuild build-for-testing \
     -workspace Bluepill.xcworkspace \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
-    -derivedDataPath "build/" || exit 1
+    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
+  
+  test $? == 0 || {
+          echo Build failed
+          cat results.txt
+          exit 1
+  }
+  set +o pipefail
 }
 
 bluepill_instance_tests()
@@ -103,11 +120,12 @@ bluepill_instance_tests()
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BPInstanceTests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt
+    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
-    echo See result.txt for details
+    echo Dumping result.txt for details
+    cat result.txt
     exit 1
   fi
 }
@@ -117,11 +135,12 @@ bluepill_runner_tests()
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BluepillRunnerTests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt
+    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
-    echo See results.txt for details
+    echo Dumping result.txt for details
+    cat result.txt
     exit 1
   fi
 }

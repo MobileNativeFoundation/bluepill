@@ -35,7 +35,7 @@
     self.continueAfterFailure = NO;
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
-    self.config = [BPConfiguration new];
+    self.config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
     self.config.testBundlePath = testBundlePath;
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @30;
@@ -88,7 +88,7 @@
     self.config.testing_NoAppWillRun = NO;
     self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    XCTAssert(exitCode == BPExitStatusAppCrashed);
+    XCTAssert(exitCode == BPExitStatusAppCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusAppCrashed, (long)exitCode);
 
     self.config.testing_NoAppWillRun = YES;
 }

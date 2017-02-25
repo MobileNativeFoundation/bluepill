@@ -73,7 +73,7 @@ int main(int argc, char * argv[]) {
 #pragma mark main
         int c;
 
-        BPConfiguration *config = [[BPConfiguration alloc] init];
+        BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
 
         
         struct option *lopts = [BPConfiguration getLongOptions];
@@ -97,7 +97,7 @@ int main(int argc, char * argv[]) {
         if (![config processOptionsWithError:&err] || ![config validateConfigWithError:&err]) {
             fprintf(stderr, "%s: invalid configuration\n\t%s\n",
                     basename(argv[0]), [[err localizedDescription] UTF8String]);
-            [config usage:1];
+            exit(1);
         }
 
         BPExitStatus exitCode;

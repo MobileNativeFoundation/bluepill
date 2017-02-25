@@ -27,11 +27,8 @@
     }];
     if (sortedXCTestFiles.count == 0) {
         if (error) {
-            *error = [NSError errorWithDomain:BPErrorDomain
-                                         code:-1
-                                     userInfo:@{NSLocalizedDescriptionKey:
-                                                    [NSString stringWithFormat:@"Found no XCTest files.\n"
-                                                     "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode."]}];
+            *error = BP_ERROR(@"Found no XCTest files.\n"
+                               "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode.");
         }
         return NULL;
     }

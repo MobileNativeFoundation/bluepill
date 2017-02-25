@@ -23,10 +23,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 //    path = @"/Users/khu/Library/Developer/Xcode/DerivedData/voyager-aodwsnztqjhrikgifstschfgfhzf/Build/Products/Debug-iphonesimulator/LinkedIn.app/PlugIns/VoyagerFeedControlMenuTests2.xctest/VoyagerFeedControlMenuTests2";
     if (!path || ![[NSFileManager defaultManager] fileExistsAtPath: path isDirectory:&isdir] || isdir) {
         if (error) {
-            *error = [NSError errorWithDomain:BPErrorDomain
-                                         code:-1
-                                     userInfo:@{ NSLocalizedDescriptionKey:
-                                                     [NSString stringWithFormat:@"Could not find test bundle at path %@.", path]}];
+            *error = BP_ERROR(@"Could not find test bundle at path %@.", path);
         }
         return nil;
     }
@@ -38,11 +35,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     FILE *p = popen([cmd UTF8String], "r");
     if (!p) {
         if (error) {
-            *error = [NSError errorWithDomain:BPErrorDomain
-                                         code:errno
-                                     userInfo:@{ NSLocalizedDescriptionKey:
-                                                     [NSString stringWithFormat:@"Failed to load test %@.\nERROR: %s\n",
-                                                      path, strerror(errno)]}];
+            *error = BP_ERROR(@"Failed to load test %@.\nERROR: %s\n", path, strerror(errno));
         }
         return nil;
     }
@@ -55,6 +48,9 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         NSString *testName = [[NSString stringWithUTF8String:line]
                               stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
         NSArray *parts = [testName componentsSeparatedByString:@"."];
+        if (parts.count != 3) {
+            continue;
+        }
         BPTestClass *testClass = testClassesDict[parts[1]];
         if (!testClass) {
             testClass = [[BPTestClass alloc] initWithName:parts[1]];
@@ -67,11 +63,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     }
     if (pclose(p) == -1) {
         if (error) {
-            *error = [NSError errorWithDomain:BPErrorDomain
-                                         code:errno
-                                     userInfo:@{NSLocalizedDescriptionKey:
-                                                    [NSString stringWithFormat:@"Failed to execute command: %@.\nERROR: %s\n",
-                                                     cmd, strerror(errno)]}];
+            *error = BP_ERROR(@"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno));
         }
         return nil;
     }
@@ -81,8 +73,8 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     NSArray *testsArray = [output componentsSeparatedByString:@"\n"];
     for (NSString *line in testsArray) {
         NSArray *parts = [line componentsSeparatedByString:@" "];
-        if (!([parts count] == 2)) {
-            break;
+        if (parts.count != 2) {
+            continue;
         }
         BPTestClass *testClass = testClassesDict[parts[0]];
         if (!testClass) {

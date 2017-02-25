@@ -81,6 +81,7 @@
 		C41A2C7A1E0B4306005D9751 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C741E0B24E8005D9751 /* BPTestCase.m */; };
 		C41A2C7B1E0B4306005D9751 /* BPTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C761E0B24E8005D9751 /* BPTestClass.m */; };
 		C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E5491DC930D200BC80EE /* BPCLITests.m */; };
+		C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */ = {isa = PBXBuildFile; fileRef = C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -870,6 +871,7 @@
 		C41A2C751E0B24E8005D9751 /* BPTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestClass.h; sourceTree = "<group>"; };
 		C41A2C761E0B24E8005D9751 /* BPTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestClass.m; sourceTree = "<group>"; };
 		C467E5491DC930D200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
+		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "testConfig-busted.json"; path = "BPInstanceTests/resources/testConfig-busted.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -918,6 +920,7 @@
 		7A7901791D5CB679004D4325 = {
 			isa = PBXGroup;
 			children = (
+				C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */,
 				7A7901841D5CB679004D4325 /* Bluepill-cli */,
 				7A7901851D5CB679004D4325 /* main.m */,
 				BAB24F691DB5DB2300867756 /* BPInstanceTests */,
@@ -1884,6 +1887,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */,
 				BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */,
 				BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */,
 				BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */,

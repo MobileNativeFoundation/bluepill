@@ -45,6 +45,7 @@ static BOOL printDebugInfo = NO;
 static BOOL quiet = NO;
 
 + (void)enableDebugOutput:(BOOL)enable {
+    NSLog(@"Enable == %hhd", enable);
     printDebugInfo = enable;
 }
 
@@ -54,15 +55,7 @@ static BOOL quiet = NO;
 
 + (BOOL)isBuildScript {
     char* buildScript = getenv("BPBuildScript");
-    if (buildScript && !strncmp(buildScript, "YES", 4)) {
-        return YES;
-    }
-    return NO;
-}
-
-+ (BOOL)definesBuildScript {
-    char* buildScript = getenv("BPBuildScript");
-    if (buildScript != NULL && strnlen(buildScript, 1) > 0) {
+    if (buildScript && !strncmp(buildScript, "YES", 3)) {
         return YES;
     }
     return NO;
@@ -72,23 +65,13 @@ static BOOL quiet = NO;
     if (kind == DEBUGINFO && !printDebugInfo) {
         return;
     }
-    if (quiet) return;
+    if (quiet && kind != ERROR) return;
+    FILE *out = kind == ERROR ? stderr : stdout;
     va_list args;
     va_start(args, fmt);
     NSString *txt = [[NSString alloc] initWithFormat:fmt arguments:args];
     va_end(args);
-    [self printTo:stdout kind:kind withString:txt];
-}
-
-+ (void)printError:(BPKind)kind withString:(NSString *)fmt, ... {
-    if (kind == DEBUGINFO && !printDebugInfo) {
-        return;
-    }
-    va_list args;
-    va_start(args, fmt);
-    NSString *txt = [[NSString alloc] initWithFormat:fmt arguments:args];
-    va_end(args);
-    [self printTo:stderr kind:kind withString:txt];
+    [self printTo:out kind:kind withString:txt];
 }
 
 + (void)printTo:(FILE*)fd kind:(BPKind)kind withString:(NSString *)txt {
@@ -117,15 +100,22 @@ static BOOL quiet = NO;
     fflush(fd);
 }
 
++ (NSError *)BPError:(const char *)function andLine:(int)line withFormat:(NSString *)fmt, ... {
+    va_list args;
+    va_start(args, fmt);
+    NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:args];
+    va_end(args);
+    return [NSError errorWithDomain:BPErrorDomain
+                               code:-1
+                           userInfo:@{NSLocalizedDescriptionKey: msg}];
+}
+
+
 + (NSString *)mkdtemp:(NSString *)template withError:(NSError **)error {
     char *dir = strdup([[template stringByAppendingString:@"_XXXXXX"] UTF8String]);
     if (mkdtemp(dir) == NULL) {
         if (error) {
-            *error = [NSError errorWithDomain:BPErrorDomain
-                                         code:-1
-                                     userInfo:@{
-                                                NSLocalizedDescriptionKey: [NSString stringWithUTF8String:strerror(errno)]
-                                                }];
+            *error = BP_ERROR(@"%s", strerror(errno));
         }
         free(dir);
         return nil;
@@ -140,10 +130,7 @@ static BOOL quiet = NO;
     int fd = mkstemp(file);
     if (fd < 0) {
         if (error) {
-            *error = [NSError errorWithDomain:BPErrorDomain
-                                         code:-1
-                                     userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithUTF8String:strerror(errno)]
-                                                 }];
+            *error = BP_ERROR(@"%s", strerror(errno));
         }
         free(file);
         return nil;
@@ -209,5 +196,6 @@ static BOOL quiet = NO;
     NSData *data = [fh readDataToEndOfFile];
     return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 }
+
 
 @end

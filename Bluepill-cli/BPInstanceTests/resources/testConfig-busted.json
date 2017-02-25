@@ -1,0 +1,12 @@
+{
+    "app": ".",
+    "no-split": [
+                 "VoyagerTests"
+                 ],
+    "error-retries": 0,
+    "test": "/tmp",
+    "scheme-path": "/etc/passwd",
+    "output-dir": "/tmp/simulator",
+    "runtime": 10.2,
+    "headless": false
+}
