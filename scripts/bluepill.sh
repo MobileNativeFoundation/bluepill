@@ -14,51 +14,109 @@ command -v $XCPRETTY >/dev/null 2>&1 || {
         XCPRETTY=cat
 }
 
+configurations="build test instance_tests runner_tests integration_tests verbose_tests"
+
+if [ "$1" == "-v" ]
+then
+    VERBOSE=1
+    shift
+fi
+
 if [[ $# -ne 1 ]]; then
-  echo $0: usage: bluepill.sh build OR bluepill.sh test
+  echo "$0: usage: bluepill.sh <command>"
+  echo "Where <command> is one of: " $configurations
   exit 1
 fi
 
-bluepill_build()
-{
-  xcodebuild \
-    -workspace Bluepill.xcworkspace \
-    -scheme bluepill \
-    -configuration Release \
-    -derivedDataPath "build/" | $XCPRETTY
-}
+found=0
 
-bluepill_test()
+for conf in $configurations
+do
+        if [ "$1" = "$conf" ];
+        then
+            found=1
+            break
+        fi
+done
+
+if [ "$found" -ne 1 ];
+then
+    echo "Invalid configuration"
+    echo "Must be one of: " $configurations
+    exit 1
+fi
+
+
+rm -rf build/
+#set -ex
+
+NSUnbufferedIO=YES
+export NSUnbufferedIO
+
+# If BPBuildScript is set to YES, it will disable verbose output in `bp`
+BPBuildScript=YES
+
+# Set it to YES if we're on Travis
+if [ "$TRAVIS" == "true" ] || [ "$VERBOSE" == "1" ]
+then
+    BPBuildScript=NO
+fi
+
+export BPBuildScript
+
+mkdir -p build/
+
+test_runtime()
 {
-  # Dump our current diff state with master
-  git --no-pager log \
-      --graph --decorate --format='%C(auto)%h%Creset %ad %C(auto)%d%Creset %C(cyan)%an%Creset %s' master..HEAD
+  # Test that we have a valid runtime.
 
   default_runtime=`grep BP_DEFAULT_RUNTIME ./Source/Shared/BPConstants.h | sed 's/.*BP_DEFAULT_RUNTIME *//;s/"//g;s/ *$//g;'`
   xcrun simctl list runtimes | grep -q "$default_runtime" || {
     echo "Your system doesn't contain latest runtime: iOS $default_runtime"
     exit -1
   }
+}
 
-  rm -rf build/
-  set -ex
+bluepill_build()
+{
+  set -o pipefail
+  xcodebuild \
+    -workspace Bluepill.xcworkspace \
+    -scheme bluepill \
+    -configuration Release \
+    -derivedDataPath "build/" | tee results.txt | $XCPRETTY
 
-  NSUnbufferedIO=YES
-  export NSUnbufferedIO
+  test $? == 0 || {
+          echo Build failed
+          cat results.txt
+          exit 1
+  }
+  test -x build/Build/Products/Release/bluepill || {
+          echo No bp built
+          exit 1
+  }
+  set +o pipefail
+}
 
-  BPBuildScript=YES
-  export BPBuildScript
-
-  mkdir -p build/
-
+bluepill_build_sample_app()
+{
   set -o pipefail
   xcodebuild build-for-testing \
     -workspace Bluepill.xcworkspace \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
-    -derivedDataPath "build/" | $XCPRETTY
+    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
+  
+  test $? == 0 || {
+          echo Build failed
+          cat results.txt
+          exit 1
+  }
   set +o pipefail
+}
 
+bluepill_instance_tests()
+{
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BPInstanceTests \
@@ -70,13 +128,14 @@ bluepill_test()
     cat result.txt
     exit 1
   fi
+}
 
+bluepill_runner_tests()
+{
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BluepillRunnerTests \
     -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
-
-  # work around BPSampleTests failure fails the Bluepill tests.
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
@@ -84,17 +143,20 @@ bluepill_test()
     cat result.txt
     exit 1
   fi
+}
 
-  bluepill_build
+bluepill_integration_tests()
+{
+  xcodebuild test \
+    -workspace Bluepill.xcworkspace \
+    -scheme BluepillIntegrationTests \
+    -derivedDataPath "build/" 2>&1 | tee result.txt
 
-  test $? == 0 || {
-          echo Build failed
-          exit 1
-  }
-  test -x build/Build/Products/Release/bluepill || {
-          echo No bp built
-          exit 1
-  }
+  if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
+    echo 'Test failed'
+    echo See results.txt for details
+    exit 1
+  fi
 }
 
 bluepill_verbose_tests()
@@ -104,13 +166,19 @@ bluepill_verbose_tests()
     bluepill_test
 }
 
-if [[ $1 == "build" ]]; then
+bluepill_test()
+{
+  bluepill_instance_tests
+  bluepill_runner_tests
   bluepill_build
-elif [[ $1 == "test" ]]; then
-  bluepill_test
-else
-  echo Unrecognized argument $1, please use build or test as argument
-  exit 1
+}
+
+
+if [[ $conf == *test** ]]
+then
+    bluepill_build_sample_app
 fi
+
+bluepill_$conf
 
 exit 0

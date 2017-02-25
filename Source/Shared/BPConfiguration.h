@@ -57,6 +57,14 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
 @property (nonatomic) BPProgram program; // one of BP_MASTER or BP_SLAVE
+@property (nonatomic) BOOL verboseLogging;
+@property (nonatomic, strong) NSNumber *maxCreateTries;
+@property (nonatomic, strong) NSNumber *maxInstallTries;
+@property (nonatomic, strong) NSNumber *maxLaunchTries;
+@property (nonatomic, strong) NSNumber *createTimeout;
+@property (nonatomic, strong) NSNumber *launchTimeout;
+@property (nonatomic, strong) NSNumber *deleteTimeout;
+
 
 // These fields are for testing.
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;

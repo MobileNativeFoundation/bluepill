@@ -23,6 +23,7 @@
 
 - (void)setUp {
     [super setUp];
+    
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
     self.config = [BPConfiguration new];

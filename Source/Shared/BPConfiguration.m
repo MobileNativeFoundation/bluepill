@@ -91,10 +91,24 @@ struct BPOptions {
         "If `failure-tolerance` is > 0, only retry tests that failed."},
     {'l', "list-tests", BP_MASTER, NO, NO, no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
         "Only list tests in bundle"},
+    {'v', "verbose", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "verboseLogging",
+        "Enable verbose logging"},
 
     // options without short-options
     {350, "additional-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
+    {351, "max-sim-create-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxCreateTries",
+        "The maximum number of times to attempt to create a simulator before failing a test attempt"},
+    {352, "max-sim-install-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxInstallTries",
+        "The maximum number of times to attempt to install the test app into a simulator before failing a test attempt"},
+    {353, "max-sim-launch-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxLaunchTries",
+        "The maximum number of times to attempt to launch the test app in a simulator before failing a test attempt"},
+    {354, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "900", BP_VALUE, "createTimeout",
+        "The maximum amount of time, in seconds, to wait before giving up on simulator creation"},
+    {355, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "900", BP_VALUE, "launchTimeout",
+        "The maximum amount of time, in seconds, to wait before giving up on application launch in the simulator"},
+    {356, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "900", BP_VALUE, "deleteTimeout",
+        "The maximum amount of time, in seconds, to wait before giving up on simulator deletion"},
     {0, 0, 0, 0, 0, 0, 0}
 };
 
@@ -114,6 +128,9 @@ struct BPOptions {
     self.cmdLineArgs = [[NSMutableArray alloc] init];
     // set factory defaults
     for (int i = 0; BPOptions[i].name; i++) {
+        if (!(BPOptions[i].program & self.program)) {
+            continue;
+        }
         if (BPOptions[i].default_val) {
             [self handleOpt:BPOptions[i].val withArg:(char *)BPOptions[i].default_val];
         }
@@ -250,6 +267,7 @@ struct BPOptions {
 
 - (id)mutableCopyWithZone:(NSZone *)zone {
     BPConfiguration *newConfig = [[BPConfiguration alloc] initWithProgram:self.program];
+    assert(newConfig);
     for(int i = 0; BPOptions[i].name; i++) {
         const char *name = BPOptions[i].property;
         if (!name) continue;
@@ -443,7 +461,6 @@ struct BPOptions {
         [self printConfig];
         exit(0);
     }
-    [BPUtils quietMode:self.quiet];
     return TRUE;
 }
 

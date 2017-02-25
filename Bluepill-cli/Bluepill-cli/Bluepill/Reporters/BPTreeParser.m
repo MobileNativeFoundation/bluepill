@@ -107,8 +107,8 @@ static const NSString * const kPassed = @"passed";
 }
 
 - (void)parseLine:(nullable NSString *)line {
+    [BPUtils printInfo:DEBUGINFO withString:@"[OUTPUT] %@", line];
     [self onOutputReceived:line];
-//    NSLog(@"line - %@", line);
     if (!line || ![line length]) {
         return;
     }
@@ -131,7 +131,6 @@ static const NSString * const kPassed = @"passed";
             NSString *numberOfTestsString = [line substringWithRange:[result rangeAtIndex:1]];
             NSString *numberOfFailuresString = [line substringWithRange:[result rangeAtIndex:2]];
             NSString *numberOfUnexpectedString = [line substringWithRange:[result rangeAtIndex:3]];
-            // NSString *time1String = [line substringWithRange:[result rangeAtIndex:4]];
             NSString *time2String = [line substringWithRange:[result rangeAtIndex:5]];
 
             self.current.reportedNumberOfTests = [numberOfTestsString integerValue];
