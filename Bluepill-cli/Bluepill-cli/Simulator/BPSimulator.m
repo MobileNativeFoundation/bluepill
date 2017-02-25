@@ -249,6 +249,14 @@
                 [parser handleChunkData:chunk];
             };
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Save the process ID to the monitor
+            blockSelf.monitor.appPID = pid;
+
+            if (completion) {
+                completion(error, pid);
+            }
+        });
     }];
 
 }

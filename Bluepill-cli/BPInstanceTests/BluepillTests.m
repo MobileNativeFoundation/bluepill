@@ -51,7 +51,6 @@
     self.config.testing_NoAppWillRun = YES;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    self.config.headlessMode = YES;
     [BPUtils quietMode:[BPUtils isBuildScript]];
 
     NSError *err;
@@ -380,6 +379,7 @@
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusTestsAllPassed);
 }
 
 #pragma mark - Test helpers

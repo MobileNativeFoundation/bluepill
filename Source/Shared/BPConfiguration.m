@@ -96,9 +96,9 @@ struct BPOptions {
         "Enable verbose logging"},
 
     // options without short-options
-    {350, "additional-unit-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalUnitTestBundles",
+    {349, "additional-unit-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalUnitTestBundles",
         "Additional XCTest bundles to test."},
-    {355, "additional-ui-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalUITestBundles",
+    {350, "additional-ui-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalUITestBundles",
         "Additional XCUITest bundles to test."},
     {351, "max-sim-create-attempts", required_argument, "2", BP_VALUE, "maxCreateTries",
         "The maximum number of times to attempt to create a simulator before failing a test attempt"},
