@@ -1,7 +1,7 @@
 
 ![BluepillIcon](doc/img/bluepill_text.png)
 
-[![Build Status](https://travis-ci.org/linkedin/bluepill.svg?branch=master)](https://travis-ci.org/linkedin/bluepill)
+[![Build Status](https://circleci.com/gh/linkedin/bluepill.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/linkedin/bluepill)
 
 Bluepill is a tool to run iOS tests in parallel using multiple simulators.
 
