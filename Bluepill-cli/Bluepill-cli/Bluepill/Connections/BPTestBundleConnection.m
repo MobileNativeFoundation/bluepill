@@ -146,7 +146,6 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
         NSLog(@"Error in creating socketFD");
     }
     NSString *socketString = [self.simulator.device getenv:testManagerEnv error:nil];
-    NSLog(@"SocketString is %@", socketString);
     const char *socketPath = socketString.UTF8String;
 
     if(![[NSFileManager new] fileExistsAtPath:socketString]) {

@@ -91,13 +91,12 @@ Latest Xcode (Xcode 8.2.1).
 
 ## Acknowledgement
 
-Bluepill was inspired by [parallel iOS test](https://github.com/plu/parallel_ios_tests) and Facebook’s [xctool](https://github.com/facebook/xctool) and [FBSimulatorControl](https://github.com/facebook/FBSimulatorControl). The Bluepill icon was created by Maria Iu.
+Bluepill was inspired by [parallel iOS test](https://github.com/plu/parallel_ios_tests) and Facebook’s [xctool](https://github.com/facebook/xctool) and [FBSimulatorControl](https://github.com/facebook/FBSimulatorControl). The Bluepill icon was created by [Maria Iu](https://www.linkedin.com/in/mariaiu/).
 
 ## Q & A
 - Are we able to run Xcode UI Testing bundle with Bluepill
 
-  Unfortunately, we don't support Xcode UI Testing bundles yet and we are working on that [**help wanted**].
-iOS Unit Testing Bundle is the one we support, which includes [KIF](https://github.com/kif-framework/KIF) tests, [EarlGrey](https://github.com/google/EarlGrey) tests.
+  _YES_, we recently added support for Xcode UI Testing bundles. Thanks to the inspiration from [FBSimulatorControl](https://github.com/facebook/FBSimulatorControl).
 
 - Easiest way to get Bluepill binary?
 

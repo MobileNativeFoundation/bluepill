@@ -48,8 +48,9 @@
     self.config.jsonOutput = NO;
     self.config.headlessMode = NO;
     self.config.junitOutput = NO;
-    self.config.testing_NoAppWillRun = YES;
     self.config.testRunnerAppPath = nil;
+    self.config.testing_CrashAppOnLaunch = NO;
+    self.config.testing_NoAppWillRun = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils quietMode:[BPUtils isBuildScript]];
@@ -86,7 +87,7 @@
     self.config.testBundlePath = testBundlePath;
     self.config.testing_CrashAppOnLaunch = YES;
     self.config.testing_NoAppWillRun = NO;
-    self.config.stuckTimeout = @3;
+    self.config.stuckTimeout = @10;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusAppCrashed);
 
@@ -98,7 +99,7 @@
     self.config.testBundlePath = testBundlePath;
     self.config.testing_HangAppOnLaunch = YES;
     self.config.testing_NoAppWillRun = NO;
-    self.config.stuckTimeout = @3;
+    self.config.stuckTimeout = @10;
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusAppCrashed);
 
@@ -231,7 +232,7 @@
 }
 
 - (void)testReportWithAppHangingTestsSet {
-    self.config.stuckTimeout = @2;
+    self.config.stuckTimeout = @10;
     self.config.plainOutput = YES;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
@@ -255,7 +256,7 @@
  - if a test timeout or crashed, even if we proceed to the next test, we should still return error exit code.
  */
 - (void)testReportWithAppHangingTestsShouldReturnFailure {
-    self.config.stuckTimeout = @2;
+    self.config.stuckTimeout = @10;
     self.config.plainOutput = YES;
     self.config.failureTolerance = 1;
     self.config.errorRetriesCount = @100;

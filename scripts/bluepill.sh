@@ -77,7 +77,8 @@ bluepill_build()
     -workspace Bluepill.xcworkspace \
     -scheme bluepill \
     -configuration Release \
-    -derivedDataPath "build/"
+    -derivedDataPath "build/" \
+    -quiet
 
   test $? == 0 || {
           echo Build failed
@@ -95,7 +96,7 @@ bluepill_build_sample_app()
     -workspace Bluepill.xcworkspace \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
-    -derivedDataPath "build/" || exit 1
+    -derivedDataPath "build/" -quiet || exit 1
 }
 
 bluepill_instance_tests()
