@@ -16,7 +16,7 @@
 // All test bundles inside Plugins directory in app.
 @property (nonatomic, strong) NSArray *unitTestBundles;
 @property (nonatomic, strong) NSArray *uiTestBundles;
-@property (nonatomic, strong, readonly) NSArray *allTestBundles;
+@property (nonatomic, strong, getter=getAllTestBundles) NSArray *allTestBundles;
 
 + (instancetype)appWithConfig:(BPConfiguration *)config
                     withError:(NSError **)error;

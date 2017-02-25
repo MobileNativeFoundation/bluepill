@@ -32,9 +32,10 @@
 
     NSMutableArray *allUnitTestFiles = [NSMutableArray new];
     NSMutableArray *allUITestFiles = [NSMutableArray new];
+    app.path = config.appBundlePath;
 
     // Handle single test bundle case.
-    if (config.testRunnerAppPath) {
+    if (config.testBundlePath) {
         if (!config.testRunnerAppPath) {
             BPXCTestFile *testFile = [self testFileFromXCTestPath:config.testBundlePath isUITestBundle:NO withError:error];
             [allUnitTestFiles addObject:testFile];
@@ -108,7 +109,7 @@
 }
 
 + (BPXCTestFile *)testFileFromXCTestPath:(NSString *)path isUITestBundle:(BOOL)isUITestBundle withError:(NSError *__autoreleasing *)error {
-    NSString *baseName = [path stringByDeletingPathExtension];
+    NSString *baseName = [[path lastPathComponent] stringByDeletingPathExtension];
     NSString *executablePath = [path stringByAppendingPathComponent:baseName];
     BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executablePath
                                                            isUITestFile:isUITestBundle

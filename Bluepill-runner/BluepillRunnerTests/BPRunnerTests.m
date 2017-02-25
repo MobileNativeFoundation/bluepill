@@ -57,6 +57,7 @@
     NSArray<BPBundle *> *bundles;
 
     allTests = [[NSMutableArray alloc] init];
+    self.config.testBundlePath = nil;
     BPApp *app = [BPApp appWithConfig:self.config withError:nil];
     XCTAssert(app != nil);
     // Make sure we have the test bundles we expect. If we add more, this will pop but that's okay. Just add
@@ -95,6 +96,7 @@
     XCTAssert([bundles[5].testsToSkip count] == 3);
 
     self.config.numSims = @4;
+    self.config.noSplit = nil;
     bundles = [BPPacker packTests:app.allTestBundles configuration:self.config andError:nil];
     // 4 unbreakable bundles (too few tests) and the big one broken into 4 bundles
     XCTAssert(bundles.count == 8);
@@ -142,6 +144,7 @@
         [toRun addObject:[NSString stringWithFormat:@"BPSampleAppTests/testCase%03ld", i]];
     }
     self.config.numSims = @4;
+    self.config.testCasesToRun = toRun;
     bundles = [BPPacker packTests:app.allTestBundles configuration:self.config andError:nil];
     
     XCTAssertEqual(bundles.count, 4);

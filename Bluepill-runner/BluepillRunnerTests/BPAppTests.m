@@ -42,6 +42,7 @@
 
 - (void)testAppWithAppBundlePathNoError {
     NSError *error;
+    self.config.testBundlePath = nil;
     BPApp *app = [BPApp appWithConfig:self.config withError:nil];
     XCTAssertNil(error);
     XCTAssertEqual(app.path, self.config.appBundlePath);
