@@ -88,10 +88,24 @@ struct BPOptions {
         "If `failure-tolerance` is > 0, only retry tests that failed."},
     {'l', "list-tests", no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
         "Only list tests in bundle"},
+    {'v', "verbose", no_argument, "Off", BP_VALUE | BP_BOOL, "verboseLogging",
+        "Enable verbose logging"},
 
     // options without short-options
     {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
+    {351, "max-sim-create-attempts", required_argument, "2", BP_VALUE, "maxCreateTries",
+        "The maximum number of times to attempt to create a simulator before failing a test attempt"},
+    {352, "max-sim-install-attempts", required_argument, "2", BP_VALUE, "maxInstallTries",
+        "The maximum number of times to attempt to install the test app into a simulator before failing a test attempt"},
+    {353, "max-sim-launch-attempts", required_argument, "2", BP_VALUE, "maxLaunchTries",
+        "The maximum number of times to attempt to launch the test app in a simulator before failing a test attempt"},
+    {354, "create-timeout", required_argument, "900", BP_VALUE, "createTimeout",
+        "The maximum amount of time, in seconds, to wait before giving up on simulator creation"},
+    {355, "launch-timeout", required_argument, "900", BP_VALUE, "launchTimeout",
+        "The maximum amount of time, in seconds, to wait before giving up on application launch in the simulator"},
+    {356, "delete-timeout", required_argument, "900", BP_VALUE, "deleteTimeout",
+        "The maximum amount of time, in seconds, to wait before giving up on simulator deletion"},
     {0, 0, 0, 0}
 };
 
@@ -430,7 +444,10 @@ struct BPOptions {
         [self printConfig];
         exit(0);
     }
-    [BPUtils quietMode:self.quiet];
+    if (![BPUtils definesBuildScript]) {
+        [BPUtils quietMode:self.quiet];
+        [BPUtils enableDebugOutput:self.verboseLogging];
+    }
     return TRUE;
 }
 

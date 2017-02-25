@@ -49,7 +49,14 @@
  * @discussion returns true if all execution is completed, false otherwise.
  */
 - (BOOL)isFinished;
+- (BOOL)isApplicationStarted;
+- (BOOL)didTestStart;
 - (BOOL)needsRetry;
 - (BPExitStatus)exitStatus;
+
+/*!
+ * @discussion Call this to abandon the current runner. It will not processes any output it may receive.
+ */
+- (void)abandon;
 
 @end

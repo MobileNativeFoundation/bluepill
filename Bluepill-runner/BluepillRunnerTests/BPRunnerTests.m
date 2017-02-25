@@ -26,6 +26,7 @@
 
 - (void)setUp {
     [super setUp];
+    NSLog(@"PID: %d", getpid());
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
     self.config = [BPConfiguration new];
