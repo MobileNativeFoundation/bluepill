@@ -25,7 +25,7 @@
 
 - (void)setUp {
     [super setUp];
-    
+
     // Put setup code here. This method is called before the invocation of each test method in the class.
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
@@ -57,10 +57,8 @@
     self.config.numSims = @1;
 
     NSError *err;
-    BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
-                         onlyTestingBundlePath:self.config.testBundlePath
-                          withExtraTestBundles:self.config.additionalTestBundles
-                                     withError:&err];
+    BPApp *app = [BPApp appWithConfig:self.config
+                            withError:&err];
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
@@ -74,10 +72,8 @@
     //self.config.reuseSimulator = NO;
 
     NSError *err;
-    BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
-                         onlyTestingBundlePath:self.config.testBundlePath
-                          withExtraTestBundles:self.config.additionalTestBundles
-                                     withError:&err];
+    BPApp *app = [BPApp appWithConfig:self.config
+                            withError:&err];
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
@@ -92,10 +88,9 @@
     //self.config.reuseSimulator = NO;
 
     NSError *err;
-    BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
-                         onlyTestingBundlePath:self.config.testBundlePath
-                          withExtraTestBundles:self.config.additionalTestBundles
-                                     withError:&err];
+    BPApp *app = [BPApp appWithConfig:self.config
+
+                            withError:&err];
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
@@ -111,10 +106,8 @@
     //self.config.reuseSimulator = YES;
 
     NSError *err;
-    BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
-                         onlyTestingBundlePath:self.config.testBundlePath
-                          withExtraTestBundles:self.config.additionalTestBundles
-                                     withError:&err];
+    BPApp *app = [BPApp appWithConfig:self.config
+                            withError:&err];
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
