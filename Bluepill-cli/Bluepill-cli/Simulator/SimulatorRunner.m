@@ -29,6 +29,7 @@
 @property (nonatomic, strong) NSFileHandle *stdOutHandle;
 @property (nonatomic, strong) SimulatorMonitor *monitor;
 @property (nonatomic, assign) BOOL needsRetry;
+@property (nonatomic, assign) BOOL appProcessFinished;
 @property (nonatomic, assign) BOOL abandoned;
 
 @end
@@ -311,6 +312,7 @@
             });
             dispatch_source_set_cancel_handler(source, ^{
                 // Post a APPCLOSED signal to the fifo
+                blockSelf.appProcessFinished = YES;
                 [blockSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
             });
             dispatch_resume(source);
@@ -340,7 +342,7 @@
 }
 
 - (BOOL)isApplicationStarted {
-    return [self.monitor isApplicationStarted];
+    return self.appProcessFinished || [self.monitor isApplicationStarted];
 }
 
 - (BOOL)didTestStart {
