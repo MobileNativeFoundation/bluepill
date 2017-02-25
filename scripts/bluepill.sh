@@ -151,7 +151,6 @@ bluepill_test()
 {
   bluepill_instance_tests
   bluepill_runner_tests
-  bluepill_integration_tests
   bluepill_build
 }
 
