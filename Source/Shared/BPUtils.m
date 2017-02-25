@@ -72,7 +72,7 @@ static BOOL quiet = NO;
     if (kind == DEBUGINFO && !printDebugInfo) {
         return;
     }
-    if (quiet) return;
+//    if (quiet) return;
     va_list args;
     va_start(args, fmt);
     NSString *txt = [[NSString alloc] initWithFormat:fmt arguments:args];
@@ -208,6 +208,21 @@ static BOOL quiet = NO;
     [task waitUntilExit];
     NSData *data = [fh readDataToEndOfFile];
     return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+}
+
++ (BOOL)runWithTimeOut:(NSTimeInterval)timeout until:(BPRunBlock)block {
+    if (!block) {
+        return NO;
+    }
+    NSDate *startDate = [NSDate date];
+    BOOL result = NO;
+
+    // Check the return value of the block every 0.1 second till timeout.
+    while( -[startDate timeIntervalSinceNow] < timeout && !result) {
+        result = block();
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, true);
+    }
+    return result;
 }
 
 @end

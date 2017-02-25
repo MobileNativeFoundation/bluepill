@@ -83,10 +83,13 @@ maxprocs(void)
     return runner;
 }
 
-- (NSTask *)newTaskWithBundle:(BPBundle *)bundle andNumber:(NSUInteger)number andCompletionBlock:(void (^_Nonnull)(NSTask *))block {
+- (NSTask *)newTaskWithBundle:(BPBundle *)bundle andNumber:(NSUInteger)number andCompletionBlock:(void (^)(NSTask *))block {
     BPConfiguration *cfg = [self.config mutableCopy];
     cfg.testBundlePath = bundle.path;
     cfg.testCasesToSkip = bundle.testsToSkip;
+    if (!bundle.isUITestBundle) {
+        cfg.testRunnerAppPath = nil;
+    }
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
                              NSTemporaryDirectory(),
@@ -108,7 +111,7 @@ maxprocs(void)
     [env addEntriesFromDictionary:[[NSProcessInfo processInfo] environment]];
     [env setObject:[NSString stringWithFormat:@"%lu", number] forKey:@"_BP_SIM_NUM"];
     [task setEnvironment:env];
-    [task setTerminationHandler:^(NSTask * _Nonnull task) {
+    [task setTerminationHandler:^(NSTask *task) {
         [[NSFileManager defaultManager] removeItemAtPath:cfg.configOutputFile
                                                    error:nil];
         [BPUtils printInfo:INFO withString:@"Simulator %lu (PID %u) has finished with exit code %d.",
@@ -125,7 +128,7 @@ maxprocs(void)
     NSUInteger numSims = [self.config.numSims intValue];
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
     NSError *error;
-    NSMutableArray *bundles = [BPPacker packTests:self.app.testBundles testCasesToRun:self.config.testCasesToRun withNoSplitList:self.config.noSplit intoBundles:numSims andError:&error];
+    NSMutableArray *bundles = [BPPacker packTests:self.app.allTestBundles configuration:self.config andError:&error];
     if (!bundles || bundles.count == 0) {
         [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
         return 1;
@@ -225,10 +228,10 @@ maxprocs(void)
     return rc;
 }
 
-- (void) interrupt {
+- (void)interrupt {
     if (self.nsTaskList == nil) return;
     
-    for (int i=0; i<[self.nsTaskList count]; i++) {
+    for (int i = 0; i < [self.nsTaskList count]; i++) {
         [((NSTask *)[self.nsTaskList objectAtIndex:i]) interrupt];
     }
     

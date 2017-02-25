@@ -13,8 +13,11 @@
 
 @property (nonatomic, strong) NSString *path;
 @property (nonatomic, strong) NSArray *testsToSkip;
+@property (nonatomic, assign) BOOL isUITestBundle;
 
-- (instancetype)initWithPath:(NSString *)path andTestsToSkip:(NSArray *)tests;
+- (instancetype)initWithPath:(NSString *)path
+              isUITestBundle:(BOOL)isUITest
+              andTestsToSkip:(NSArray *)tests;
 
 - (NSString *)description;
 - (NSString *)debugDescription;

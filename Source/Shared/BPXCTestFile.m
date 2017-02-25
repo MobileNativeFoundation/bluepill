@@ -17,7 +17,9 @@
 NSString *swiftNmCmdline = @"nm -gU '%@' | cut -d' ' -f3 | xargs xcrun swift-demangle | cut -d' ' -f3 | grep -e '[\\.|_]'test";
 NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-' -f2 | cut -d'[' -f2 | cut -d']' -f1 | grep ' test'";
 
-+ (instancetype)BPXCTestFileFromExecutable:(NSString *)path withError:(NSError **)error {
++ (instancetype)BPXCTestFileFromExecutable:(NSString *)path
+                              isUITestFile:(BOOL)isUITestFile
+                                 withError:(NSError **)error {
     BOOL isdir;
 
 //    path = @"/Users/khu/Library/Developer/Xcode/DerivedData/voyager-aodwsnztqjhrikgifstschfgfhzf/Build/Products/Debug-iphonesimulator/LinkedIn.app/PlugIns/VoyagerFeedControlMenuTests2.xctest/VoyagerFeedControlMenuTests2";
@@ -32,6 +34,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     }
     BPXCTestFile *xcTestFile = [[BPXCTestFile alloc] init];
     xcTestFile.name = [path lastPathComponent];
+    xcTestFile.isUITestFile = isUITestFile;
     xcTestFile.path = [path stringByDeletingLastPathComponent];
 
     NSString *cmd = [NSString stringWithFormat:swiftNmCmdline, path];

@@ -91,9 +91,6 @@ typedef NS_ENUM(int, BPKind) {
  */
 + (BOOL)isStdOut: (NSString *)fileName;
 
-
-// Scheme parsing
-
 /*!
  * @discussion return the build arguments and environment
  * @param schemePath the path to the scheme file
@@ -101,6 +98,22 @@ typedef NS_ENUM(int, BPKind) {
  *          @{@"args":@[argument_list], @"env":@{env_dictionary}}
  */
 + (NSDictionary *)buildArgsAndEnvironmentWith:(NSString *)schemePath;
+
+/*!
+ * @discussion run a shell command and return the output
+ * @param command the shell command to run
+ * @return return the shell output
+ */
 + (NSString *)runShell:(NSString *)command;
+
+typedef BOOL (^BPRunBlock)(void);
+
+/*!
+ * @discussion spin block till either it returns YES or timeout.
+ * @param time timeout time
+ * @param block the block to run
+ * @return return whether the block returns YES or not.
+ */
++ (BOOL)runWithTimeOut:(NSTimeInterval)time until:(BPRunBlock)block;
 
 @end

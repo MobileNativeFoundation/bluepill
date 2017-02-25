@@ -251,7 +251,7 @@ typedef NS_ENUM(NSInteger, BrowseType) {
     NSString *executable = [path stringByAppendingPathComponent:executableName];
 
     NSError *error = nil;
-    BPXCTestFile *testFile = [BPXCTestFile BPXCTestFileFromExecutable:executable withError:&error];
+    BPXCTestFile *testFile = [BPXCTestFile BPXCTestFileFromExecutable:executable isUITestFile:NO withError:&error]; //TO BE FIXED default UI test flag to NO.
 
     if (error) {
         NSLog(@"%@", [error localizedDescription]);

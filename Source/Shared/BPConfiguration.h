@@ -25,9 +25,18 @@
  * and mutableCopyWithZone methods. Yeah, it's stupid, we should fix it.
  */
 
+@property (nonatomic, strong) NSUUID *sessionIdentifier;
 @property (nonatomic, strong) NSString *appBundlePath;
+
+// XCUITest sector
+@property (nonatomic, strong) NSString *testRunnerAppPath;
+@property (nonatomic, strong) NSArray *additionalUITestBundles;
+
+// XCTest sector
+@property (nonatomic, strong) NSArray *additionalUnitTestBundles;
+
+// Common
 @property (nonatomic, strong) NSString *testBundlePath;
-@property (nonatomic, strong) NSArray *additionalTestBundles;
 @property (nonatomic, strong) NSString *deviceType;
 @property (nonatomic, strong) NSString *runtime;
 @property (nonatomic, strong) NSString *configFile;
@@ -37,7 +46,7 @@
 @property (nonatomic, strong) NSNumber *errorRetriesCount;
 @property (nonatomic, strong) NSNumber *stuckTimeout;
 @property (nonatomic, strong) NSNumber *testCaseTimeout;
-@property (nonatomic, strong) NSMutableArray *noSplit;
+@property (nonatomic, strong) NSArray *noSplit;
 @property (nonatomic) BOOL junitOutput;
 @property (nonatomic) BOOL plainOutput;
 @property (nonatomic) BOOL jsonOutput;

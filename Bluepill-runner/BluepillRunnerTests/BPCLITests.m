@@ -60,7 +60,7 @@
 
     BOOL result = [config processOptionsWithError:&err];
     XCTAssert(result == TRUE);
-    XCTAssert([config.additionalTestBundles isEqualToArray:@[ @"/tmp/extra-stuff" ]]);
+    XCTAssert([config.additionalUnitTestBundles isEqualToArray:@[ @"/tmp/extra-stuff" ]]);
 }
 
 @end

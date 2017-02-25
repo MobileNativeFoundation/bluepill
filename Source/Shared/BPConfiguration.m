@@ -39,11 +39,17 @@ struct BPOptions {
     {'s', "scheme-path", required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
 
+    // Required arguments for ui testing
+    {'u', "runner-app-path", required_argument, NULL, BP_VALUE | BP_PATH, "testRunnerAppPath",
+        "The test runner for UI tests."},
+
     // Optional argument
     {'d', "device",   required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
         "On which device to run the app."},
     {'c', "config",   required_argument, NULL, BP_VALUE, "configFile",
         "Read options from the specified configuration file instead of the command line"},
+    {'t', "test-bundle-path", required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
+        "The test bundle to run tests."},
     {'C', "repeat-count", required_argument, "1", BP_VALUE, "repeatTestsCount",
         "Number of times we'll run the entire test suite (used for stability testing)."},
     {'N', "no-split", required_argument, NULL, BP_LIST, "noSplit",
@@ -64,8 +70,6 @@ struct BPOptions {
         "Number of simulators to run in parallel. (bluepill only)"},
     {'r', "runtime",  required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
         "What runtime to use."},
-    {'t', "test",     required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
-        "The path to the test bundle to execute (your .xctest)."},
     {'x', "exclude", required_argument, NULL, BP_LIST, "testCasesToSkip",
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
     {'X', "xcode-path", required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
@@ -92,8 +96,10 @@ struct BPOptions {
         "Enable verbose logging"},
 
     // options without short-options
-    {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
+    {349, "additional-unit-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalUnitTestBundles",
         "Additional XCTest bundles to test."},
+    {350, "additional-ui-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalUITestBundles",
+        "Additional XCUITest bundles to test."},
     {351, "max-sim-create-attempts", required_argument, "2", BP_VALUE, "maxCreateTries",
         "The maximum number of times to attempt to create a simulator before failing a test attempt"},
     {352, "max-sim-install-attempts", required_argument, "2", BP_VALUE, "maxInstallTries",
@@ -109,7 +115,6 @@ struct BPOptions {
     {0, 0, 0, 0}
 };
 
-
 @implementation BPConfiguration
 
 #pragma mark instance methods
@@ -118,10 +123,12 @@ struct BPOptions {
     return [self initWithConfigFile:nil error:nil];
 }
 
+
 - (instancetype)initWithConfigFile:(NSString *)file error:(NSError **)err {
     self = [super init];
     self.cmdLineArgs = [[NSMutableArray alloc] init];
     // set factory defaults
+    self.sessionIdentifier = [[NSUUID alloc] initWithUUIDString:@"81878B29-AF14-4F89-8370-DD5D95EC047B"];
     for (int i = 0; BPOptions[i].name; i++) {
         if (BPOptions[i].default_val) {
             [self handleOpt:BPOptions[i].val withArg:(char *)BPOptions[i].default_val];

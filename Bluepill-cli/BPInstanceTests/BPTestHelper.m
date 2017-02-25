@@ -42,6 +42,16 @@
     return [[NSBundle bundleForClass:[self class]] resourcePath];
 }
 
+// Return the path to the XCTRunner
++ (NSString *)sampleAppUITestRunnerPath {
+    return [[[self sampleAppPath] stringByDeletingLastPathComponent] stringByAppendingString:@"/BPSampleAppUITests-Runner.app/"];
+}
+
+// Return the path to the XCTRunner
++ (NSString *)sampleAppUITestBundlePath {
+    return [[self sampleAppUITestRunnerPath] stringByAppendingString:@"/PlugIns/BPSampleAppUITests.xctest"];
+}
+
 + (NSString *)bpExecutablePath {
     return [[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"bp"];
 }
