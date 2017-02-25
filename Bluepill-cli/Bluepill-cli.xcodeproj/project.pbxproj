@@ -1019,7 +1019,7 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		BA180A0A1DBB011200D7D130 /* resources */ = {
+		BA180A0A1DBB011200D7D130 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
 				7A4FB8E71DFB66980073F268 /* error_only_crash.log */,
@@ -1036,7 +1036,7 @@
 				BA180A131DBB088100D7D130 /* testScheme.xcscheme */,
 				BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */,
 			);
-			path = resources;
+			path = "Resource Files";
 			sourceTree = "<group>";
 		};
 		BA1949331E4AF7FD00881887 /* Connections */ = {
@@ -1847,7 +1847,7 @@
 		BAB24F691DB5DB2300867756 /* BPInstanceTests */ = {
 			isa = PBXGroup;
 			children = (
-				BA180A0A1DBB011200D7D130 /* resources */,
+				BA180A0A1DBB011200D7D130 /* Resource Files */,
 				BAB24F6C1DB5DB2300867756 /* Info.plist */,
 				BA1809B71DB89B5600D7D130 /* BluepillTests.m */,
 				BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */,

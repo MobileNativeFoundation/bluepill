@@ -58,9 +58,8 @@ int main(int argc, char * argv[]) {
             fprintf(stderr, "ERROR: %s\n", [[err localizedDescription] UTF8String]);
             exit(1);
         }
-        if ([config.listTestsOnly integerValue] > 0) {
-            BOOL verbose = ([config.listTestsOnly integerValue] > 1) ? YES : NO;
-            [app listBundles: verbose];
+        if (config.listTestsOnly) {
+            [app listTests];
             exit(0);
         }
 

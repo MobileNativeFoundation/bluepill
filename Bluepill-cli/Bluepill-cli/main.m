@@ -15,7 +15,6 @@
 #import "BPStats.h"
 #import "BPWriter.h"
 #import "BPConfiguration.h"
-#import "SimulatorRunner.h"
 #import "Bluepill.h"
 #import "BPUtils.h"
 #import "SimulatorHelper.h"

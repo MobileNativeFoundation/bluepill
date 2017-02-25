@@ -52,6 +52,10 @@
     return [[self sampleAppUITestRunnerPath] stringByAppendingString:@"/PlugIns/BPSampleAppUITests.xctest"];
 }
 
++ (NSString *)bpExecutablePath {
+    return [[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"bp"];
+}
+
 #pragma mark - Helpers
 
 + (NSString *)bpDerivedDataPath {
