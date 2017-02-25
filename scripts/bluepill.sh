@@ -84,17 +84,6 @@ bluepill_test()
     exit 1
   fi
 
-bluepill_verbose_tests()
-{
-    BPBuildScript=NO
-    export BPBuildScript
-    bluepill_test
-}
-
-bluepill_test()
-{
-  bluepill_instance_tests
-  bluepill_runner_tests
   bluepill_build
 
   test $? == 0 || {
@@ -105,6 +94,13 @@ bluepill_test()
           echo No bp built
           exit 1
   }
+}
+
+bluepill_verbose_tests()
+{
+    BPBuildScript=NO
+    export BPBuildScript
+    bluepill_test
 }
 
 if [[ $1 == "build" ]]; then
