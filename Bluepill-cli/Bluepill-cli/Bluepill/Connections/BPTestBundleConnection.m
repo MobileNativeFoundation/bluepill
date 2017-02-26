@@ -126,6 +126,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (void)startTestPlan {
     dispatch_async(self.queue, ^{
+        NSLog(@"Start test plan!");
         [self.testBundleProxy _IDE_startExecutingTestPlanWithProtocolVersion:@(22)];
     });
 }

@@ -353,10 +353,10 @@ void onInterrupt(int ignore) {
     bConnection.config = self.config;
 
     BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:context.runner andInterface:nil];
-    [bConnection connectWithTimeout:1];
+    [bConnection connectWithTimeout:3];
 
     dConnection.testRunnerPid = context.pid;
-    [dConnection connectWithTimeout:1];
+    [dConnection connectWithTimeout:3];
     [bConnection startTestPlan];
     NEXT([self checkProcessWithContext:context]);
 
