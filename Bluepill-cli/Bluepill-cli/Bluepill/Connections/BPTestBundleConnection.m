@@ -49,14 +49,13 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     if (self) {
         self.simulator = simulator;
         self.interface = interface;
-        self.queue = dispatch_queue_create("com.facebook.xctestboostrap.mediator", DISPATCH_QUEUE_PRIORITY_DEFAULT);
+        self.queue = dispatch_queue_create("com.linkedin.bluepill.connection.queue", DISPATCH_QUEUE_PRIORITY_DEFAULT);
     }
     return self;
 }
 
 - (void)connectWithTimeout:(NSTimeInterval)timeout {
-
-        NSAssert(NSThread.isMainThread, @"-[%@ %@] should be called from the main thread", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
+    NSAssert(NSThread.isMainThread, @"-[%@ %@] should be called from the main thread", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
     [self connect];
 
     // Pool connection status till it passes.
@@ -365,8 +364,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 }
 
 // This will add more logs when unimplemented method from XCTestManager_IDEInterface protocol is called
-- (id)handleUnimplementedXCTRequest:(SEL)aSelector
-{
+- (id)handleUnimplementedXCTRequest:(SEL)aSelector {
     NSAssert(nil, [self unknownMessageForSelector:_cmd]);
     return nil;
 }

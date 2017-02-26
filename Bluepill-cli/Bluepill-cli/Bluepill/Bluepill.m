@@ -314,7 +314,11 @@ void onInterrupt(int ignore) {
 
     handler.onSuccess = ^{
         context.pid = __handler.pid;
-        NEXT([__self connectTestBundleAndTestDaemonWithContext:context]);
+//        if (context.config.testRunnerAppPath) {
+            NEXT([__self connectTestBundleAndTestDaemonWithContext:context]);
+//        } else {
+//            NEXT([__self checkProcessWithContext:context]);
+//        }
     };
 
     handler.onError = ^(NSError *error) {
@@ -349,10 +353,10 @@ void onInterrupt(int ignore) {
     bConnection.config = self.config;
 
     BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:context.runner andInterface:nil];
-    [bConnection connectWithTimeout:5];
+    [bConnection connectWithTimeout:1];
 
     dConnection.testRunnerPid = context.pid;
-    [dConnection connectWithTimeout:5];
+    [dConnection connectWithTimeout:1];
     [bConnection startTestPlan];
     NEXT([self checkProcessWithContext:context]);
 

@@ -101,17 +101,20 @@ static BOOL quiet = NO;
     if ((s = getenv("_BP_SIM_NUM"))) {
         simNum = [NSString stringWithFormat:@"(SIM-%s) ", s];
     }
+
+    // Get timestamp
+    char ts[1<<6];
+    time_t now;
+    struct tm *tms;
+    time(&now);
+    tms = localtime(&now);
+    strftime(ts, 1<<6, "%Y%m%d.%H%M%S", tms);
+
     if (isatty(1) && !bp_testing) {
-        fprintf(fd, "{%d} %s[%s]%s %s%s\n",
-                getpid(), message.color, message.text, ANSI_COLOR_RESET, [simNum UTF8String], [txt UTF8String]);
+        fprintf(fd, "{%d} %s %s[%s]%s %s%s\n",
+                getpid(), ts, message.color, message.text, ANSI_COLOR_RESET, [simNum UTF8String], [txt UTF8String]);
     } else {
-        // Not a tty, print a timestamp
-        char ts[1<<6];
-        time_t now;
-        struct tm *tms;
-        time(&now);
-        tms = localtime(&now);
-        strftime(ts, 1<<6, "%Y%m%d.%H%M%S", tms);
+
         fprintf(fd, "{%d} %s [%s] %s%s\n", getpid(), ts, message.text, [simNum UTF8String], [txt UTF8String]);
     }
     fflush(fd);

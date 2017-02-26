@@ -231,8 +231,14 @@
     [self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid) {
         // Save the process ID to the monitor
         blockSelf.monitor.appPID = pid;
+        blockSelf.monitor.simulatorState = AppLaunched;
+
+        [blockSelf.stdOutHandle writeData:[@"DEBUG_FLAG_TOBEREMOVED.\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        [BPUtils printInfo:INFO withString:@"Launch succeeded"];
 
         if (error == nil) {
+            [BPUtils printInfo:INFO withString:@"No error"];
             dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC, pid, DISPATCH_PROC_EXIT, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
             dispatch_source_set_event_handler(source, ^{
                 dispatch_source_cancel(source);
@@ -253,7 +259,9 @@
             // Save the process ID to the monitor
             blockSelf.monitor.appPID = pid;
 
+            [BPUtils printInfo:INFO withString:@"Completion block for launch"];
             if (completion) {
+                [BPUtils printInfo:INFO withString:@"Calling completion block"];
                 completion(error, pid);
             }
         });

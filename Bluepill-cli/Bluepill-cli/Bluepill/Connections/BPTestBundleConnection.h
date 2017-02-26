@@ -20,7 +20,6 @@
 @interface BPTestBundleConnection : NSObject
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) BPSimulator *simulator;
-@property (nonatomic, strong) NSString *stdoutPath;
 @property (nonatomic, copy) void (^completionBlock)(NSError *, pid_t);
 - (instancetype)initWithDevice:(BPSimulator *)device andInterface:(id<BPTestBundleConnectionDelegate>)interface;
 - (void)connectWithTimeout:(NSTimeInterval)timeout;
