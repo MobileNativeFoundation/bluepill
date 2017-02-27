@@ -228,7 +228,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
     if (![[self.device stateString] isEqualToString:@"Shutdown"] && !self.config.testing_NoAppWillRun) {
         [BPUtils printInfo:ERROR withString:@"Will kill the process with appPID: %d", self.appPID];
         NSAssert(self.appPID > 0, @"Failed to find a valid PID");
-        if ((kill(self.appPID, 0) == 0) && (kill(self.appPID, SIGTERM) < 0)) {
+        if ((kill(self.appPID, 0) == 0) && (kill(self.appPID, SIGKILL) < 0)) {
             [BPUtils printInfo:ERROR withString:@"Failed to kill the process with appPID: %d: %s",
                 self.appPID, strerror(errno)];
         }
