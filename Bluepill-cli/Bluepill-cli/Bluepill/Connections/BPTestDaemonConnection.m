@@ -101,8 +101,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 - (DTXTransport *)connectTransport {
     int socketFD = [self testManagerSocket];
     DTXTransport *transport = [[objc_lookUpClass("DTXSocketTransport") alloc] initWithConnectedSocket:socketFD disconnectAction:^{
-        NSLog(@"Connection failed");
-        NSLog(@"end status: %d", transport.status);
+        NSLog(@"DTXSocketTransport disconnected");
     }];
     return transport;
 }
