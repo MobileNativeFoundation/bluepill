@@ -14,6 +14,8 @@
 
 @interface Bluepill : NSObject
 
+@property (nonatomic, readonly) NSString *simulatorUDID;
+
 /*!
  * @discussion bp instance
  * @param config the configuration to instantiate a bp instance
@@ -27,7 +29,5 @@
 - (BPExitStatus)run;
 
 - (instancetype)init NS_UNAVAILABLE;
-
-- (NSString *)getSimulatorDeviceID;
 
 @end
