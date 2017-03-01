@@ -124,7 +124,7 @@
         [allTestBundles addObjectsFromArray:self.unitTestBundles];
     }
     if (self.uiTestBundles.count > 0) {
-        [allTestBundles addObject:self.uiTestBundles];
+        [allTestBundles addObjectsFromArray:self.uiTestBundles];
     }
     return allTestBundles;
 }
