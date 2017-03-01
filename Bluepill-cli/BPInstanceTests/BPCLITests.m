@@ -21,7 +21,8 @@
 
 - (void)setUp {
     [super setUp];
-    [BPUtils quietMode:YES];
+    
+    [BPUtils quietMode:[BPUtils isBuildScript]];
 }
 
 - (void)tearDown {
@@ -30,32 +31,23 @@
 }
 
 - (void)testNoSchemeinCLI {
-    BPConfiguration *config = [[BPConfiguration alloc] init];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
     NSError *err;
     BOOL result;
     
     result = [config processOptionsWithError:&err];
-    XCTAssert(result);
-    result = [config validateConfigWithError:&err];
     XCTAssert(result == FALSE);
-    XCTAssert([[err localizedDescription] isEqualToString:@"No app bundle provided."]);
-    config.appBundlePath = [BPTestHelper sampleAppPath];
-    result = [config validateConfigWithError:&err];
-    XCTAssert(result == FALSE);
-    XCTAssert([[err localizedDescription] isEqualToString:@"No scheme provided."]);
-    NSString *path = @"testScheme.xcscheme";
-    config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    result = [config validateConfigWithError:&err];
-    XCTAssert(result == FALSE);
-    XCTAssert([[err localizedDescription] isEqualToString:@"No test bundle provided."]);
-    config.testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
-    result = [config validateConfigWithError:&err];
-    XCTAssert(result == TRUE);
+    XCTAssert([[err localizedDescription] containsString:@"Missing required option"]);
+    XCTAssert([[err localizedDescription] containsString:@"-a/--app"]);
+    XCTAssert([[err localizedDescription] containsString:@"-s/--scheme-path"]);
+    XCTAssert([[err localizedDescription] containsString:@"-t/--test"]);
  }
 
 - (void)testListArguments {
-    BPConfiguration *config = [[BPConfiguration alloc] init];
-    
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
+    [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
+    [config saveOpt:[NSNumber numberWithInt:'s'] withArg:[BPTestHelper sampleTestScheme]];
+    [config saveOpt:[NSNumber numberWithInt:'t'] withArg:[BPTestHelper sampleAppBalancingTestsBunldePath]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"foo"]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"bar"]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"baz"]];
@@ -90,7 +82,8 @@
     }
     NSError *error;
     BPConfiguration *config = [[BPConfiguration alloc] initWithConfigFile:tmpConfig
-                                                                    error:&error];
+                                                               forProgram:BP_SLAVE
+                                                                withError:&error];
     XCTAssert(config != nil);
     NSString *relpath = [[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingPathComponent:@"rel/path"];
     NSArray *expectedArray = @[ @"/Some/XCTest", relpath ];
@@ -122,11 +115,10 @@
     // First just try passing a file that doesn't exist
     BPConfiguration *config;
     
-    config = [[BPConfiguration alloc] initWithConfigFile:@"/tmp/this_file_should_not_exist" error:&err];
+    config = [[BPConfiguration alloc] initWithConfigFile:@"/tmp/this_file_should_not_exist" forProgram:BP_SLAVE withError:&err];
     XCTAssert(config == nil);
     XCTAssert([[err localizedDescription] isEqualToString:@"The file “this_file_should_not_exist” couldn’t be opened because there is no such file."]);
-    config = [[BPConfiguration alloc] initWithConfigFile:tmpConfig
-                                                   error:&err];
+    config = [[BPConfiguration alloc] initWithConfigFile:tmpConfig forProgram:BP_SLAVE withError:&err];
     XCTAssert(config == nil);
 //    NSLog(@"%@", err);
     XCTAssert([[err localizedDescription] isEqualToString:@"Expected type NSArray for key 'no-split', got __NSCFNumber. Parsing failed."]);

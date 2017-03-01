@@ -6,10 +6,10 @@ Test Suite 'Selected tests' started at 2016-12-06 16:54:22.194
 Test Suite 'KIF.framework' started at 2016-12-06 16:54:22.195
 Test Suite 'KIF.framework' passed at 2016-12-06 16:54:22.195.
 	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'VoyagerIntTestsLib.framework' started at 2016-12-06 16:54:22.195
-Test Suite 'VoyagerIntTestsLib.framework' passed at 2016-12-06 16:54:22.196.
+Test Suite 'AppTests.framework' started at 2016-12-06 16:54:22.195
+Test Suite 'AppTests.framework' passed at 2016-12-06 16:54:22.196.
 	 Executed 0 tests, with 0 failures (0 unexpected) in 0.000 (0.000) seconds
-Test Suite 'VoyagerFeedIndividualPageTests.xctest' started at 2016-12-06 16:54:22.196
+Test Suite 'MainUIIndividualPageTests.xctest' started at 2016-12-06 16:54:22.196
 Test Suite 'FeedCrossPromoTest' started at 2016-12-06 16:54:22.196
 objc[48147]: Class VCWeakObjectHolder is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/GameKitServices.framework/Frameworks/ViceroyTrace.framework/ViceroyTrace (0x12f623b60) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/GameKitServices.framework/Frameworks/AVConference.framework/AVConference (0x12f5653c8). One of the two will be used. Which one is undefined.
 objc[48147]: Class AWDCallHistoryCommCenterMigration is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x124de04b0) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12f29e330). One of the two will be used. Which one is undefined.
@@ -30,7 +30,7 @@ objc[48147]: Class AWDCallHistoryEntitlementRejection is implemented in both /Ap
 objc[48147]: Class AWDCallHistoryGizmoDatabaseMigrationFailure is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x124de0780) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12f29f0a0). One of the two will be used. Which one is undefined.
 objc[48147]: Class AWDCallHistoryNilUuid is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x124de0870) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12f29f0f0). One of the two will be used. Which one is undefined.
 objc[48147]: Class AWDCallHistoryMalformedCloudChangeToken is implemented in both /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/usr/lib/libAWDSupportFramework.dylib (0x124de07d0) and /Applications/Xcode-8.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/PrivateFrameworks/CallHistory.framework/CallHistory (0x12f29f190). One of the two will be used. Which one is undefined.
-Test Case '-[VoyagerFeedIndividualPageTests.FeedCrossPromoTest testFeedCrossPromoWithShareArticle]' started.
+Test Case '-[MainUIIndividualPageTests.FeedCrossPromoTest testFeedCrossPromoWithShareArticle]' started.
 2016-12-06 16:54:24.331 App[48147:87528] *** Assertion failure in -[UICollectionView _dequeueReusableViewOfKind:withIdentifier:forIndexPath:viewCategory:], /BuildRoot/Library/Caches/com.apple.xbs/Sources/UIKit_Sim/UIKit-3600.5.2/UICollectionView.m:4922
 2016-12-06 16:54:24.346 App[48147:87528] *** Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'could not dequeue a view of kind: UICollectionElementKindCell with identifier FeedShareTextBaseCell - must register a nib or a class for the identifier or connect a prototype cell in a storyboard'
 *** First throw call stack:
@@ -42,8 +42,8 @@ Test Case '-[VoyagerFeedIndividualPageTests.FeedCrossPromoTest testFeedCrossProm
 	4   UIKit                               0x000000010c93b38b -[UICollectionView _dequeueReusableViewOfKind:withIdentifier:forIndexPath:viewCategory:] + 1960
 	5   UIKit                               0x0000000130b114e1 -[UICollectionViewAccessibility _dequeueReusableViewOfKind:withIdentifier:forIndexPath:viewCategory:] + 697
 	6   UIKit                               0x000000010c93b834 -[UICollectionView dequeueReusableCellWithReuseIdentifier:forIndexPath:] + 169
-	7   VoyagerFeed                         0x000000010eef888a _TFC11VoyagerFeed21UpdatesViewController14collectionViewfTCSo16UICollectionView13cellForItemAtV10Foundation9IndexPath_CSo20UICollectionViewCell + 1610
-	8   VoyagerFeed                         0x000000010eef8b27 _TToFC11VoyagerFeed21UpdatesViewController14collectionViewfTCSo16UICollectionView13cellForItemAtV10Foundation9IndexPath_CSo20UICollectionViewCell + 87
+	7   MainUI                         0x000000010eef888a _TFC11MainUI21UpdatesViewController14collectionViewfTCSo16UICollectionView13cellForItemAtV10Foundation9IndexPath_CSo20UICollectionViewCell + 1610
+	8   MainUI                         0x000000010eef8b27 _TToFC11MainUI21UpdatesViewController14collectionViewfTCSo16UICollectionView13cellForItemAtV10Foundation9IndexPath_CSo20UICollectionViewCell + 87
 	9   UIKit                               0x000000010c926980 -[UICollectionView _createPreparedCellForItemAtIndexPath:withLayoutAttributes:applyAttributes:isFocused:notify:] + 467
 	10  UIKit                               0x000000010c9267a7 -[UICollectionView _createPreparedCellForItemAtIndexPath:withLayoutAttributes:applyAttributes:] + 35
 	11  UIKit                               0x000000010c92bc7f -[UICollectionView _updateVisibleCellsNow:] + 4803
@@ -52,18 +52,18 @@ Test Case '-[VoyagerFeedIndividualPageTests.FeedCrossPromoTest testFeedCrossProm
 	14  QuartzCore                          0x000000011796ecc4 -[CALayer layoutSublayers] + 146
 	15  QuartzCore                          0x0000000117962788 _ZN2CA5Layer16layout_if_neededEPNS_11TransactionE + 366
 	16  UIKit                               0x000000010c096ff0 -[UIView(Hierarchy) layoutBelowIfNeeded] + 1507
-	17  LITrackingLib                       0x0000000108006262 -[LITrackCollectionViewImpressionTracker reloadViewPortCellsWithCompletion:] + 210
-	18  LITrackingLib                       0x00000001080192bf -[LITrackImpressionTracker viewPortWillRefresh:withReloadDataCompletion:] + 223
-	19  VoyagerFeedShell                    0x000000010fce3cbb _TFC16VoyagerFeedShell32FeedBaseCollectionViewController10reloadDatafT_T_ + 1515
-	20  VoyagerFeed                         0x000000010eef7aaa _TFC11VoyagerFeed21UpdatesViewController18providerHasUpdatedfT9fromCacheSb17hasInitialUpdatesSb_T_ + 234
-	21  VoyagerFeed                         0x000000010eef7bb2 _TToFC11VoyagerFeed21UpdatesViewController18providerHasUpdatedfT9fromCacheSb17hasInitialUpdatesSb_T_ + 82
-	22  VoyagerFeed                         0x000000010ee96514 _TTDFC11VoyagerFeed21UpdatesViewController18providerHasUpdatedfT9fromCacheSb17hasInitialUpdatesSb_T_ + 100
-	23  VoyagerFeed                         0x000000010ee9649b _TTWC11VoyagerFeed21UpdatesViewControllerS_32UpdateCollectionProviderDelegateS_FS1_18providerHasUpdatedfT9fromCacheSb17hasInitialUpdatesSb_T_ + 59
-	24  VoyagerFeed                         0x000000010eff8dd5 _TFFC11VoyagerFeed28BaseUpdateCollectionProvider22updateSectionProvidersFTSb17hasInitialUpdatesSb10completionGSqFT_T___T_U0_FT_T_ + 581
-	25  VoyagerFeed                         0x000000010eebffa1 _TTRXFo___XFo_iT__iT__ + 17
-	26  VoyagerFeed                         0x000000010effd711 _TPA__TTRXFo___XFo_iT__iT__.61 + 81
-	27  VoyagerCore                         0x000000010de102ec _TFFZFC11VoyagerCore3GCD31dispatchAsyncFeedOperationQueueFTFT_T_15thenOnMainQueueGSqFT_T___T_U_FT_T_U_FT_T_ + 76
-	28  VoyagerCore                         0x000000010dca4377 _TTRXFo___XFdCb___ + 39
+	17  StatingLib                       0x0000000108006262 -[StatCollectionViewImpressionTracker reloadViewPortCellsWithCompletion:] + 210
+	18  StatingLib                       0x00000001080192bf -[StatImpressionTracker viewPortWillRefresh:withReloadDataCompletion:] + 223
+	19  MainUIShell                    0x000000010fce3cbb _TFC16MainUIShell32FeedBaseCollectionViewController10reloadDatafT_T_ + 1515
+	20  MainUI                         0x000000010eef7aaa _TFC11MainUI21UpdatesViewController18providerHasUpdatedfT9fromCacheSb17hasInitialUpdatesSb_T_ + 234
+	21  MainUI                         0x000000010eef7bb2 _TToFC11MainUI21UpdatesViewController18providerHasUpdatedfT9fromCacheSb17hasInitialUpdatesSb_T_ + 82
+	22  MainUI                         0x000000010ee96514 _TTDFC11MainUI21UpdatesViewController18providerHasUpdatedfT9fromCacheSb17hasInitialUpdatesSb_T_ + 100
+	23  MainUI                         0x000000010ee9649b _TTWC11MainUI21UpdatesViewControllerS_32UpdateCollectionProviderDelegateS_FS1_18providerHasUpdatedfT9fromCacheSb17hasInitialUpdatesSb_T_ + 59
+	24  MainUI                         0x000000010eff8dd5 _TFFC11MainUI28BaseUpdateCollectionProvider22updateSectionProvidersFTSb17hasInitialUpdatesSb10completionGSqFT_T___T_U0_FT_T_ + 581
+	25  MainUI                         0x000000010eebffa1 _TTRXFo___XFo_iT__iT__ + 17
+	26  MainUI                         0x000000010effd711 _TPA__TTRXFo___XFo_iT__iT__.61 + 81
+	27  BaseStage                         0x000000010de102ec _TFFZFC11BaseStage3GCD31dispatchAsyncFeedOperationQueueFTFT_T_15thenOnMainQueueGSqFT_T___T_U_FT_T_U_FT_T_ + 76
+	28  BaseStage                         0x000000010dca4377 _TTRXFo___XFdCb___ + 39
 	29  mntf_ios                            0x00000001294085c8 __52-[TKResourceListener tk_dispatchAsyncCallWithBlock:]_block_invoke + 40
 	30  libdispatch.dylib                   0x0000000118fd7810 _dispatch_call_block_and_release + 12
 	31  libdispatch.dylib                   0x0000000118ff912e _dispatch_client_callout + 8
@@ -78,14 +78,14 @@ Test Case '-[VoyagerFeedIndividualPageTests.FeedCrossPromoTest testFeedCrossProm
 	40  KIF                                 0x00000001292bfae8 -[KIFSystemTestActor waitForNotificationName:object:whileExecutingBlock:] + 152
 	41  mntf_ios                            0x000000012941056d _TFE8mntf_iosCSo12MNTFTestCase17waitForCheckpointfTSSSSSi19whileExecutingBlockFT_T__T_ + 1005
 	42  mntf_ios                            0x0000000129410bc5 _TToFE8mntf_iosCSo12MNTFTestCase17waitForCheckpointfTSSSSSi19whileExecutingBlockFT_T__T_ + 277
-	43  VoyagerIntTestsLib                  0x00000001295f8d5d _TFC18VoyagerIntTestsLib18VoyagerIntTestCase17waitForCheckpointfTSSSSSi19whileExecutingBlockFT_T__T_ + 653
-	44  VoyagerIntTestsLib                  0x00000001295f9005 _TToFC18VoyagerIntTestsLib18VoyagerIntTestCase17waitForCheckpointfTSSSSSi19whileExecutingBlockFT_T__T_ + 277
-	45  VoyagerIntTestsLib                  0x00000001296cc13a _TFC18VoyagerIntTestsLib18VoyagerIntTestCase32waitForBackgroundThreadsToFinishfT_T_ + 394
-	46  VoyagerIntTestsLib                  0x00000001296cc792 _TToFC18VoyagerIntTestsLib18VoyagerIntTestCase32waitForBackgroundThreadsToFinishfT_T_ + 34
-	47  VoyagerIntTestsLib                  0x00000001296cb2ce _TFFC18VoyagerIntTestsLib18VoyagerIntTestCase12loginSuccessFTSSSi_T_U_FT_T_ + 558
-	48  VoyagerIntTestsLib                  0x00000001294bb4e7 _TTRXFo___XFdCb___ + 39
-	49  VoyagerIntTestsLib                  0x00000001295f9033 _TTRXFdCb___XFo___ + 19
-	50  VoyagerIntTestsLib                  0x00000001294bb4e7 _TTRXFo___XFdCb___ + 39
+	43  AppTests                  0x00000001295f8d5d _TFC18AppTests18AppTestCase17waitForCheckpointfTSSSSSi19whileExecutingBlockFT_T__T_ + 653
+	44  AppTests                  0x00000001295f9005 _TToFC18AppTests18AppTestCase17waitForCheckpointfTSSSSSi19whileExecutingBlockFT_T__T_ + 277
+	45  AppTests                  0x00000001296cc13a _TFC18AppTests18AppTestCase32waitForBackgroundThreadsToFinishfT_T_ + 394
+	46  AppTests                  0x00000001296cc792 _TToFC18AppTests18AppTestCase32waitForBackgroundThreadsToFinishfT_T_ + 34
+	47  AppTests                  0x00000001296cb2ce _TFFC18AppTests18AppTestCase12loginSuccessFTSSSi_T_U_FT_T_ + 558
+	48  AppTests                  0x00000001294bb4e7 _TTRXFo___XFdCb___ + 39
+	49  AppTests                  0x00000001295f9033 _TTRXFdCb___XFo___ + 19
+	50  AppTests                  0x00000001294bb4e7 _TTRXFo___XFdCb___ + 39
 	51  mntf_ios                            0x0000000129410bf3 _TTRXFdCb___XFo___ + 19
 	52  mntf_ios                            0x00000001294108d1 _TTRXFo___XFo_iT__iT__ + 17
 	53  mntf_ios                            0x0000000129410971 _TPA__TTRXFo___XFo_iT__iT__ + 81
@@ -95,5 +95,5 @@ Test Case '-[VoyagerFeedIndividualPageTests.FeedCrossPromoTest testFeedCrossProm
 	57  KIF                                 0x00000001292bfae8 -[KIFSystemTestActor waitForNotificationName:object:whileExecutingBlock:] + 152
 	58  mntf_ios                            0x000000012941056d _TFE8mntf_iosCSo12MNTFTestCase17waitForCheckpointfTSSSSSi19whileExecutingBlockFT_T__T_ + 1005
 	59  mntf_ios                            0x0000000129410bc5 _TToFE8mntf_iosCSo12MNTFTestCase17waitForCheckpointfTSSSSSi19whileExecutingBlockFT_T__T_ + 277
-	60  VoyagerIntTestsLib                  0x00000001295f8d5d _TF
+	60  AppTests                  0x00000001295f8d5d _TF
 BP_APP_PROC_ENDED

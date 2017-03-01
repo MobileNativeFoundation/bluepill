@@ -107,8 +107,8 @@ static const NSString * const kPassed = @"passed";
 }
 
 - (void)parseLine:(nullable NSString *)line {
+    [BPUtils printInfo:DEBUGINFO withString:@"[OUTPUT] %@", line];
     [self onOutputReceived:line];
-//    NSLog(@"line - %@", line);
     if (!line || ![line length]) {
         return;
     }
@@ -131,7 +131,6 @@ static const NSString * const kPassed = @"passed";
             NSString *numberOfTestsString = [line substringWithRange:[result rangeAtIndex:1]];
             NSString *numberOfFailuresString = [line substringWithRange:[result rangeAtIndex:2]];
             NSString *numberOfUnexpectedString = [line substringWithRange:[result rangeAtIndex:3]];
-            // NSString *time1String = [line substringWithRange:[result rangeAtIndex:4]];
             NSString *time2String = [line substringWithRange:[result rangeAtIndex:5]];
 
             self.current.reportedNumberOfTests = [numberOfTestsString integerValue];
@@ -219,7 +218,7 @@ static const NSString * const kPassed = @"passed";
                 } else if (([node.parent.testSuiteName isEqualToString:testSuiteName]) && node.parent.ended == NO) {
                     self.current = node.parent;
                 } else {
-                    [BPUtils printError:ERROR withString:
+                    [BPUtils printInfo:ERROR withString:
                      [NSString stringWithFormat:@"ERROR: WHERE ARE WE??? We're closing a node for a test suite that hasn't been started [Expected: %@, Current: %@]. Ended: %@\nProblem line: %@",
                       testSuiteName,
                       node.testSuiteName,
@@ -280,7 +279,7 @@ static const NSString * const kPassed = @"passed";
                 testCaseLogEntry.unexpected = isError;
                 testCaseLogEntry.errorMessage = errorMessage;
             } else {
-                [BPUtils printError:ERROR withString:
+                [BPUtils printInfo:ERROR withString:
                  [NSString stringWithFormat:@"HOW DID WE GET AN ERROR THAT WASN'T PARSED? We received an error in a test case that wasn't started or did not parse properly.\nProblem line: %@",
                   line]];
             }
@@ -423,7 +422,7 @@ static const NSString * const kPassed = @"passed";
                                       wasException:testCaseLogEntry.unexpected];
                 }
             } else {
-                [BPUtils printError:ERROR withString:
+                [BPUtils printInfo:ERROR withString:
                  [NSString stringWithFormat:@"HOW ON EARTH DID THIS HAPPEN? The test case passed but we failed to handle it properly\nProblem line: %@",
                   line]];
             }
@@ -540,16 +539,16 @@ static const NSString * const kPassed = @"passed";
 
 - (void)checkForDiscrepancies:(BPTestSuiteLogEntry *)logEntry {
     if (logEntry.numberOfTests != logEntry.reportedNumberOfTests) {
-        [BPUtils printError:DEBUGINFO withString:@"[%s] Mismatch numberOfTests calculated (%lu) vs reported (%lu)", [logEntry.testSuiteName UTF8String], logEntry.numberOfTests, logEntry.reportedNumberOfTests];
+        [BPUtils printInfo:DEBUGINFO withString:@"[%s] Mismatch numberOfTests calculated (%lu) vs reported (%lu)", [logEntry.testSuiteName UTF8String], logEntry.numberOfTests, logEntry.reportedNumberOfTests];
     }
     if (logEntry.numberOfFailures != logEntry.reportedNumberOfFailures) {
-        [BPUtils printError:DEBUGINFO withString:@"[%s] Mismatch numberOfFailures calculated (%lu) vs reported (%lu)", [logEntry.testSuiteName UTF8String], logEntry.numberOfFailures, logEntry.reportedNumberOfFailures];
+        [BPUtils printInfo:DEBUGINFO withString:@"[%s] Mismatch numberOfFailures calculated (%lu) vs reported (%lu)", [logEntry.testSuiteName UTF8String], logEntry.numberOfFailures, logEntry.reportedNumberOfFailures];
     }
     if (logEntry.numberOfUnexpected != logEntry.reportedNumberOfUnexpected) {
-        [BPUtils printError:DEBUGINFO withString:@"[%s] Mismatch numberOfUnexpected calculated (%lu) vs reported (%lu)", [logEntry.testSuiteName UTF8String], logEntry.numberOfUnexpected, logEntry.reportedNumberOfUnexpected];
+        [BPUtils printInfo:DEBUGINFO withString:@"[%s] Mismatch numberOfUnexpected calculated (%lu) vs reported (%lu)", [logEntry.testSuiteName UTF8String], logEntry.numberOfUnexpected, logEntry.reportedNumberOfUnexpected];
     }
     if (logEntry.totalTime != logEntry.reportedTotalTime) {
-        [BPUtils printError:DEBUGINFO withString:@"[%s] Mismatch totalTime calculated (%f) vs reported (%f)", [logEntry.testSuiteName UTF8String], logEntry.totalTime, logEntry.reportedTotalTime];
+        [BPUtils printInfo:DEBUGINFO withString:@"[%s] Mismatch totalTime calculated (%f) vs reported (%f)", [logEntry.testSuiteName UTF8String], logEntry.totalTime, logEntry.reportedTotalTime];
     }
     for (BPLogEntry *child in logEntry.children) {
         if ([child isKindOfClass:[BPTestSuiteLogEntry class]]) {

@@ -31,10 +31,11 @@
 
 - (void)setUp {
     [super setUp];
+    
     self.continueAfterFailure = NO;
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
-    self.config = [BPConfiguration new];
+    self.config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
     self.config.testBundlePath = testBundlePath;
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @30;
@@ -50,7 +51,8 @@
     self.config.testing_NoAppWillRun = YES;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    [BPUtils quietMode:YES];
+    self.config.headlessMode = YES;
+    [BPUtils quietMode:[BPUtils isBuildScript]];
 
     NSError *err;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&err];
@@ -84,8 +86,9 @@
     self.config.testBundlePath = testBundlePath;
     self.config.testing_CrashAppOnLaunch = YES;
     self.config.testing_NoAppWillRun = NO;
+    self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    XCTAssert(exitCode == BPExitStatusAppCrashed);
+    XCTAssert(exitCode == BPExitStatusAppCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusAppCrashed, (long)exitCode);
 
     self.config.testing_NoAppWillRun = YES;
 }
@@ -97,7 +100,7 @@
     self.config.testing_NoAppWillRun = NO;
     self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
-    XCTAssert(exitCode == BPExitStatusTestTimeout);
+    XCTAssert(exitCode == BPExitStatusAppCrashed);
 
     self.config.testing_NoAppWillRun = YES;
 }
@@ -178,6 +181,27 @@
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
     self.config.errorRetriesCount = @5;
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
+
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppCrashingTests-results.xml"];
+    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests.xml"];
+    [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
+}
+
+- (void)testReportWithAppCrashingAndRetryOnlyFailedTestsSet {
+    NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppCrashingTestsSetTempDir", tempDir] withError:&error];
+    // NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+    self.config.junitOutput = YES;
+    self.config.errorRetriesCount = @1;
+    self.config.failureTolerance = 1;
+    self.config.onlyRetryFailed = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusAppCrashed);

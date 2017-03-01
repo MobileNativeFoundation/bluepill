@@ -25,10 +25,11 @@
 
 - (void)setUp {
     [super setUp];
+    
     // Put setup code here. This method is called before the invocation of each test method in the class.
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
-    self.config = [BPConfiguration new];
+    self.config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
     self.config.testBundlePath = testBundlePath;
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @30;
@@ -44,7 +45,9 @@
     self.config.junitOutput = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    self.config.quiet = YES;
+    NSLog(@"BPBuildScript = %hhd", [BPUtils isBuildScript]);
+    [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
+    [BPUtils quietMode:[BPUtils isBuildScript]];
 }
 
 - (void)tearDown {
@@ -54,13 +57,13 @@
 
 - (void)testOneBPInstance {
     self.config.numSims = @1;
-    
+
     NSError *err;
     BPApp *app = [BPApp BPAppWithAppBundlePath:self.config.appBundlePath
                          onlyTestingBundlePath:self.config.testBundlePath
                           withExtraTestBundles:self.config.additionalTestBundles
                                      withError:&err];
-    
+
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
     int rc = [runner run];
@@ -77,7 +80,7 @@
                          onlyTestingBundlePath:self.config.testBundlePath
                           withExtraTestBundles:self.config.additionalTestBundles
                                      withError:&err];
-    
+
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
     int rc = [runner run];
@@ -95,7 +98,7 @@
                          onlyTestingBundlePath:self.config.testBundlePath
                           withExtraTestBundles:self.config.additionalTestBundles
                                      withError:&err];
-    
+
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
     int rc = [runner run];
@@ -112,7 +115,7 @@
                          onlyTestingBundlePath:self.config.testBundlePath
                           withExtraTestBundles:self.config.additionalTestBundles
                                      withError:&err];
-    
+
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
     int rc = [runner run];

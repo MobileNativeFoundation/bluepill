@@ -24,6 +24,9 @@
 struct BPOptions {
     int         val;          // short option (e.g. -f)
     const char  *name;        // long name of the option (e.g. --foobar)
+    int         program;      // BP_MASTER, BP_SLAVE, or both (BP_MASTER | BP_SLAVE)
+    BOOL        required;     // Whether the option is required or optional
+    BOOL        seen;         // Whether we've seen the option in processing.
     int         has_arg;      // One of: no_argument, required_argument, optional_argument
     const char  *default_val; // Default value (if option not provided)
     int         kind;         // List vs value.
@@ -32,75 +35,89 @@ struct BPOptions {
 } BPOptions[] = {
 
     // Required argument
-    {'a', "app",      required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
+    {'a', "app", BP_MASTER | BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
         "The path to the host application to execute (your .app)"},
-    {'o', "output-dir", required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
-        "Directory where to put output log files (bluepill only)."},
-    {'s', "scheme-path", required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
+    {'s', "scheme-path", BP_MASTER | BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
 
     // Optional argument
-    {'d', "device",   required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
+    {'d', "device", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
         "On which device to run the app."},
-    {'c', "config",   required_argument, NULL, BP_VALUE, "configFile",
+    {'c', "config", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "configFile",
         "Read options from the specified configuration file instead of the command line"},
-    {'C', "repeat-count", required_argument, "1", BP_VALUE, "repeatTestsCount",
+    {'C', "repeat-count", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "1", BP_VALUE, "repeatTestsCount",
         "Number of times we'll run the entire test suite (used for stability testing)."},
-    {'N', "no-split", required_argument, NULL, BP_LIST, "noSplit",
+    {'N', "no-split", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "noSplit",
         "A list of NO split test bundles"},
-    {'P', "print-config", required_argument, "stdout", BP_VALUE, "configOutputFile",
+    {'P', "print-config", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "stdout", BP_VALUE, "configOutputFile",
         "Print a configuration file suitable for passing back using the `-c` option."},
-    {'R', "error-retries", required_argument, "4", BP_VALUE, "errorRetriesCount",
+    {'R', "error-retries", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "4", BP_VALUE, "errorRetriesCount",
         "Number of times we'll recover from crashes to continue running the current test suite."},
-    {'S', "stuck-timeout", required_argument, "300", BP_VALUE, "stuckTimeout",
+    {'S', "stuck-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE, "stuckTimeout",
         "Timeout in seconds for a test that seems stuck (no output)."},
-    {'T', "test-timeout", required_argument, "300", BP_VALUE, "testCaseTimeout",
+    {'T', "test-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE, "testCaseTimeout",
         "Timeout in seconds for a test that is producing output."},
-    {'f', "failure-tolerance",   required_argument, NO, BP_VALUE, "failureTolerance",
+    {'f', "failure-tolerance", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NO, BP_VALUE, "failureTolerance",
         "The number of retries on any failures (app crash/test failure)."},
-    {'i', "include", required_argument, NULL, BP_LIST, "testCasesToRun",
+    {'i', "include", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToRun",
         "Include a testcase in the set of tests to run (unless specified in `exclude`)."},
-    {'n', "num-sims", required_argument, "4", BP_VALUE, "numSims",
+    {'n', "num-sims", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "4", BP_VALUE, "numSims",
         "Number of simulators to run in parallel. (bluepill only)"},
-    {'r', "runtime",  required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
+    {'o', "output-dir", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
+        "Directory where to put output log files (bluepill only)."},
+    {'r', "runtime", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
         "What runtime to use."},
-    {'t', "test",     required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
+    {'t', "test", BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
         "The path to the test bundle to execute (your .xctest)."},
-    {'x', "exclude", required_argument, NULL, BP_LIST, "testCasesToSkip",
+    {'x', "exclude", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToSkip",
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
-    {'X', "xcode-path", required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
+    {'X', "xcode-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
         "Path to xcode."},
-    {'u', "simulator-udid", required_argument, NULL, BP_VALUE, "useSimUDID",
+    {'u', "simulator-udid", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "useSimUDID",
         "Do not create a simulator but reuse the one with the UDID given. (BP INTERNAL USE ONLY). "},
-    {'D', "delete-simulator", required_argument, NULL, BP_VALUE, "deleteSimUDID",
+    {'D', "delete-simulator", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "deleteSimUDID",
         "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE. (BP INTERNAL USE ONLY). "},
 
     // options with no argument
-    {'H', "headless", no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
+    {'H', "headless", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
         "Run in headless mode (no GUI)."},
-    {'J', "json-output", no_argument, "Off", BP_VALUE | BP_BOOL, "jsonOutput",
+    {'J', "json-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "jsonOutput",
         "Print test timing information in JSON format."},
-    {'h', "help",     no_argument, NULL, BP_VALUE, NULL,
+    {'h', "help", BP_MASTER | BP_SLAVE, NO, NO, no_argument, NULL, BP_VALUE, NULL,
         "This help."},
-    {'p', "plain-output", no_argument, "Off", BP_VALUE | BP_BOOL, "plainOutput",
+    {'p', "plain-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "plainOutput",
         "Print results in plain text."},
-    {'q', "quiet", no_argument, "Off", BP_VALUE | BP_BOOL, "quiet",
+    {'q', "quiet", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "quiet",
         "Turn off all output except fatal errors."},
-    {'j', "junit-output", no_argument, "Off", BP_VALUE | BP_BOOL, "junitOutput",
+    {'j', "junit-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "junitOutput",
         "Print results in JUnit format."},
-    {'F', "only-retry-failed", no_argument, "Off", BP_VALUE | BP_BOOL, "onlyRetryFailed",
+    {'F', "only-retry-failed", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "onlyRetryFailed",
         "If `failure-tolerance` is > 0, only retry tests that failed."},
-    {'l', "list-tests", no_argument, NULL, BP_VALUE, "listTestsOnly",
+    {'l', "list-tests", BP_MASTER, NO, NO, no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
         "Only list tests in bundle"},
+    {'v', "verbose", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "verboseLogging",
+        "Enable verbose logging"},
 
     // options without short-options
-    {350, "additional-xctests", required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
+    {350, "additional-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
-    {351, "reuse-simulator", no_argument, "Off", BP_VALUE | BP_BOOL, "reuseSimulator",
+    {351, "reuse-simulator", BP_MASTER | BP_SLAVE , NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "reuseSimulator",
         "Enable reusing simulators between test bundles"},
-    {352, "keep-simulator", no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
+    {352, "keep-simulator", BP_MASTER | BP_SLAVE , NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
         "Don't delete the simulator device after one test bundle finish. (BP INTERNAL USE ONLY). "},
-    {0, 0, 0, 0}
+    {353, "max-sim-create-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxCreateTries",
+        "The maximum number of times to attempt to create a simulator before failing a test attempt"},
+    {354, "max-sim-install-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxInstallTries",
+        "The maximum number of times to attempt to install the test app into a simulator before failing a test attempt"},
+    {355, "max-sim-launch-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxLaunchTries",
+        "The maximum number of times to attempt to launch the test app in a simulator before failing a test attempt"},
+    {356, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "900", BP_VALUE, "createTimeout",
+        "The maximum amount of time, in seconds, to wait before giving up on simulator creation"},
+    {357, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "900", BP_VALUE, "launchTimeout",
+        "The maximum amount of time, in seconds, to wait before giving up on application launch in the simulator"},
+    {358, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "900", BP_VALUE, "deleteTimeout",
+        "The maximum amount of time, in seconds, to wait before giving up on simulator deletion"},
+    {0, 0, 0, 0, 0, 0, 0}
 };
 
 
@@ -108,18 +125,25 @@ struct BPOptions {
 
 #pragma mark instance methods
 
-- (instancetype)init {
-    return [self initWithConfigFile:nil error:nil];
+- (instancetype)initWithProgram:(int)program {
+    return [self initWithConfigFile:nil forProgram:program withError:nil];
 }
 
-- (instancetype)initWithConfigFile:(NSString *)file error:(NSError **)err {
+- (instancetype)initWithConfigFile:(NSString *)file forProgram:(int)program withError:(NSError **)err {
     self = [super init];
+    if (program != BP_MASTER && program != BP_SLAVE) return nil;
+    self.program = program;
     self.cmdLineArgs = [[NSMutableArray alloc] init];
     // set factory defaults
     for (int i = 0; BPOptions[i].name; i++) {
+        if (!(BPOptions[i].program & self.program)) {
+            continue;
+        }
         if (BPOptions[i].default_val) {
             [self handleOpt:BPOptions[i].val withArg:(char *)BPOptions[i].default_val];
         }
+        // Since we're reinitializing, we haven't seen any options
+        BPOptions[i].seen = NO;
     }
     if (!file || [self loadConfigFile:file withError:err]) {
         return self;
@@ -135,14 +159,21 @@ struct BPOptions {
     struct BPOptions *bpo = NULL;
 
     for (int i = 0; BPOptions[i].name; i++) {
+        if (!(BPOptions[i].program & self.program)) {
+            continue;
+        }
         if (BPOptions[i].val == opt) {
             bpo = &BPOptions[i];
             break;
         }
     }
-    if (bpo == NULL) { [self usage:-1]; }// exits
+    if (bpo == NULL) {
+        // The error has already been printed.
+        exit(1);
+    }
     assert(bpo && bpo->name);
     if (!strcmp(bpo->name, "help")) [self usage:0];
+    bpo->seen = YES;
     [self setProperty:bpo withArg:arg];
 }
 
@@ -243,7 +274,8 @@ struct BPOptions {
 }
 
 - (id)mutableCopyWithZone:(NSZone *)zone {
-    BPConfiguration *newConfig = [[BPConfiguration alloc] init];
+    BPConfiguration *newConfig = [[BPConfiguration alloc] initWithProgram:self.program];
+    assert(newConfig);
     for(int i = 0; BPOptions[i].name; i++) {
         const char *name = BPOptions[i].property;
         if (!name) continue;
@@ -354,11 +386,8 @@ struct BPOptions {
 
                 if (BPOptions[i].kind & BP_LIST && ![value isKindOfClass:[NSArray class]]) {
                     if (error) {
-                        *error = [NSError errorWithDomain:BPErrorDomain
-                                                     code:-1
-                                                 userInfo:@{NSLocalizedDescriptionKey:
-                                                                [NSString stringWithFormat:@"Expected type %@ for key '%@', got %@. Parsing failed.",
-                                                                 [NSArray className], key, [value className]]}];
+                        *error = BP_ERROR(@"Expected type %@ for key '%@', got %@. Parsing failed.",
+                                          [NSArray className], key, [value className]);
                     }
                     return NO;
                 }
@@ -382,6 +411,7 @@ struct BPOptions {
                 }
 
                 [self setValue:value forKey:[NSString stringWithUTF8String:BPOptions[i].property]];
+                BPOptions[i].seen = YES;
             }
         }
     }
@@ -397,25 +427,14 @@ struct BPOptions {
         if ([op isEqualToNumber:[NSNumber numberWithInt:'c']]) {
             if (loadedConfig) {
                 if (err) {
-                    NSError *error = [NSError errorWithDomain:BPErrorDomain
-                                                         code:-1
-                                                     userInfo:@{NSLocalizedDescriptionKey:
-                                                                    @"Only one configuration file (-c) allowed."}];
-                    *err = error;
+                    *err = BP_ERROR(@"Only one configuration file (-c) allowed.");
                 }
                 return FALSE;
             }
             // load the config file
             NSError *error;
             if (![self loadConfigFile:optarg withError:&error]) {
-                NSError *newError =
-                [NSError errorWithDomain:BPErrorDomain
-                                    code:-1
-                                userInfo:@{ NSLocalizedDescriptionKey:
-                                                [NSString stringWithFormat:@"Could not load configuration from %@\n%@",
-                                                 optarg, [error localizedDescription]]
-                                            }];
-                if (err) *err = newError;
+                if (err) *err = BP_ERROR(@"Could not load configuration from %@\n%@", optarg, [error localizedDescription]);
                 return FALSE;
             }
             loadedConfig = TRUE;
@@ -434,11 +453,22 @@ struct BPOptions {
 
         [self handleOpt:[op intValue] withArg:(char *)[optarg UTF8String]];
     }
+    // Now check we didn't miss any require options:
+    NSMutableArray *errors = [[NSMutableArray alloc] init];
+    for (int i = 0; BPOptions[i].name; i++) {
+        if ((self.program & BPOptions[i].program) && BPOptions[i].required && !BPOptions[i].seen) {
+            [errors addObject:[NSString stringWithFormat:@"Missing required option: -%c/--%s - %s",
+                               BPOptions[i].val, BPOptions[i].name, BPOptions[i].help]];
+        }
+    }
+    if (errors.count > 0) {
+        if (err) *err = BP_ERROR([errors componentsJoinedByString:@"\n\t"]);
+        return FALSE;
+    }
     if (printConfig) {
         [self printConfig];
         exit(0);
     }
-    [BPUtils quietMode:self.quiet];
     return TRUE;
 }
 
@@ -450,9 +480,14 @@ struct BPOptions {
 
     if (!self.xcodePath || [self.xcodePath isEqualToString:@""]) {
         if (err) {
-            *err = [NSError errorWithDomain:BPErrorDomain
-                                       code:-1
-                                   userInfo:@{NSLocalizedDescriptionKey: @"Could not set Xcode path!"}];
+            *err = BP_ERROR(@"Could not set Xcode path!");
+        }
+        return NO;
+    }
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:self.xcodePath isDirectory:&isdir] || !isdir) {
+        if (err) {
+            *err = BP_ERROR(@"Could not find Xcode at %@", self.xcodePath);
         }
         return NO;
     }
@@ -463,27 +498,20 @@ struct BPOptions {
     
     if (!self.appBundlePath) {
         if (err) {
-            NSDictionary *errInfo = @{ NSLocalizedDescriptionKey : @"No app bundle provided." };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = BP_ERROR(@"No app bundle provided.");
         }
         return NO;
     }
     if (![[NSFileManager defaultManager] fileExistsAtPath: self.appBundlePath isDirectory:&isdir] || !isdir) {
         if (err) {
-            NSDictionary *errInfo = @{ NSLocalizedDescriptionKey:
-                                           [NSString stringWithFormat:@"%@ not found.", self.appBundlePath] };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = BP_ERROR(@"%@ not found.", self.appBundlePath);
         }
         return NO;
     }
     if (self.outputDirectory) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.outputDirectory isDirectory:&isdir]) {
             if (!isdir) {
-                if (err) *err = [NSError errorWithDomain:BPErrorDomain
-                                                    code:-1
-                                                userInfo:@{ NSLocalizedDescriptionKey:
-                                                                [NSString stringWithFormat:@"%@ is not a directory.",
-                                                                 self.outputDirectory] }];
+                if (err) *err = BP_ERROR(@"%@ is not a directory.", self.outputDirectory);
                 return NO;
             }
         } else {
@@ -504,25 +532,15 @@ struct BPOptions {
     if (self.schemePath) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.schemePath isDirectory:&isdir]) {
             if (isdir) {
-                if (err) *err = [NSError errorWithDomain:BPErrorDomain
-                                                    code:-1
-                                                userInfo:@{ NSLocalizedDescriptionKey:
-                                                                [NSString stringWithFormat:@"%@ is a directory",
-                                                                 self.schemePath]}];
+                if (err) *err = BP_ERROR(@"%@ is a directory", self.schemePath);
                 return NO;
             }
         } else {
-            if (err) *err = [NSError errorWithDomain:BPErrorDomain
-                                                code:-1
-                                            userInfo:@{ NSLocalizedDescriptionKey:
-                                                            [NSString stringWithFormat:@"%@ doesn't exist",
-                                                             self.schemePath]}];
+            if (err) *err = BP_ERROR(@"%@ doesn't exist", self.schemePath);
             return NO;
         }
     } else {
-        if (err) *err = [NSError errorWithDomain:BPErrorDomain
-                                            code:-1
-                                        userInfo:@{NSLocalizedDescriptionKey: @"No scheme provided."}];
+        if (err) *err = BP_ERROR(@"No scheme provided.");
         return NO;
     }
 
@@ -530,17 +548,13 @@ struct BPOptions {
 #ifdef BP_USE_PRIVATE_FRAMEWORKS
     if (!self.testBundlePath) {
         if (err) {
-            NSString *desc = NSLocalizedString(@"No test bundle provided.", nil);
-            NSDictionary *errInfo = @{ NSLocalizedDescriptionKey : desc };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = BP_ERROR(@"No test bundle provided.");
         }
         return NO;
     }
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.testBundlePath isDirectory:&isdir] || !isdir) {
         if (err) {
-            NSDictionary *errInfo = @{ NSLocalizedDescriptionKey:
-                                           [NSString stringWithFormat:@"%@ not found.", self.testBundlePath] };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = BP_ERROR(@"%@ not found.", self.testBundlePath);
         }
         return NO;
     }
@@ -548,9 +562,25 @@ struct BPOptions {
     if (!self.deviceType) {
         self.deviceType = [NSString stringWithUTF8String: BP_DEFAULT_DEVICE_TYPE];
     }
+
+    if (![self.deviceType isKindOfClass:[NSString class]]) {
+        if (err) {
+            *err = BP_ERROR(@"device must be a string like '%s'", BP_DEFAULT_DEVICE_TYPE);
+        }
+        return NO;
+    }
+
     if (!self.runtime) {
         self.runtime = [NSString stringWithUTF8String: BP_DEFAULT_RUNTIME];
     }
+
+    if (![self.runtime isKindOfClass:[NSString class]]) {
+        if (err) {
+            *err = BP_ERROR(@"runtime must be a string like '%s'.", BP_DEFAULT_RUNTIME);
+        }
+        return NO;
+    }
+
 
 #ifdef BP_USE_PRIVATE_FRAMEWORKS
     // Validate we were passed a valid device and runtime
@@ -571,12 +601,10 @@ struct BPOptions {
 
     if (!self.simDeviceType) {
         if (err) {
-            NSDictionary *errInfo = @{
-                                      NSLocalizedDescriptionKey :
-                                          [ NSString stringWithFormat:@"%@ is not a valid device type.\n"
-                                           "Use `xcrun simctl list devicetypes` for a list of valid devices.",
-                                           self.deviceType] };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = BP_ERROR(@"%@ is not a valid device type.\n"
+                            "Use `xcrun simctl list devicetypes` for a list of valid devices.",
+                            self.deviceType);
+
         }
         return NO;
     }
@@ -592,12 +620,9 @@ struct BPOptions {
 
     if (!self.simRuntime) {
         if (err) {
-            NSDictionary *errInfo = @{
-                                      NSLocalizedDescriptionKey :
-                                          [ NSString stringWithFormat:@"%@ is not a valid runtime.\n"
-                                           "Use `xcrun simctl list runtimes` for a list of valid runtimes.",
-                                           self.runtime] };
-            *err = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:errInfo];
+            *err = BP_ERROR(@"%@ is not a valid runtime.\n"
+                             "Use `xcrun simctl list runtimes` for a list of valid runtimes.",
+                             self.runtime);
         }
         return NO;
     }

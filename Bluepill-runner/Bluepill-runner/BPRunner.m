@@ -85,6 +85,7 @@ maxprocs(void)
 
 - (NSTask *)newTaskWithBundle:(BPBundle *)bundle andNumber:(NSUInteger)number andDevice:(NSString *)deviceID andCompletionBlock:(void (^_Nonnull)(NSTask *))block {
     BPConfiguration *cfg = [self.config mutableCopy];
+    assert(cfg);
     cfg.testBundlePath = bundle.path;
     cfg.testCasesToSkip = bundle.testsToSkip;
     cfg.useSimUDID = deviceID;
@@ -182,8 +183,15 @@ maxprocs(void)
             }
             [self interrupt];
         }
-        if (([bundles count] == 0 && launchedTasks == 0) || (interrupted && launchedTasks == 0)) break;
-        if ([bundles count] > 0 && launchedTasks < numSims && !interrupted) {
+
+        int noLaunchedTasks;
+        int canLaunchTask;
+        @synchronized (self) {
+            noLaunchedTasks = (launchedTasks == 0);
+            canLaunchTask = (launchedTasks < numSims);
+        }
+        if (noLaunchedTasks && (bundles.count == 0 || interrupted)) break;
+        if (bundles.count > 0 && canLaunchTask && !interrupted) {
             NSString *deviceID = nil;
             @synchronized(self) {
                 if ([deviceList count] > 0) {
@@ -191,12 +199,9 @@ maxprocs(void)
                     [deviceList removeObjectAtIndex:0];
                 }
             }
-            
             NSTask *task = [self newTaskWithBundle:[bundles objectAtIndex:0] andNumber:++taskNumber andDevice:deviceID andCompletionBlock:^(NSTask * _Nonnull task) {
-                @synchronized(self) {
+                @synchronized (self) {
                     launchedTasks--;
-                    [BPUtils printInfo:INFO withString:@"PID %d exited %d.", [task processIdentifier], [task terminationStatus]];
-                    
                     if (self.config.reuseSimulator) {
                         NSString *deviceID = [self readDeviceIDFile:[task processIdentifier]];
                         if (deviceID) {
@@ -207,10 +212,12 @@ maxprocs(void)
                     [self.nsTaskList removeObject:task];
                     rc = (rc || [task terminationStatus]);
                 };
+                [BPUtils printInfo:INFO withString:@"PID %d exited %d.", [task processIdentifier], [task terminationStatus]];
+                rc = (rc || [task terminationStatus]);
             }];
             if (!task) {
                 NSLog(@"Failed to launch: %@ %@", [task launchPath], [task arguments]);
-                continue;
+                exit(1);
             }
             [task launch];
             @synchronized(self) {
@@ -223,8 +230,12 @@ maxprocs(void)
         }
         sleep(1);
         if (seconds % 30 == 0) {
+            NSString *listString;
+            @synchronized (self) {
+                listString = [taskList componentsJoinedByString:@", "];
+            }
             [BPUtils printInfo:INFO withString:@"%lu Simulator%s still running. [%@]",
-             launchedTasks, launchedTasks == 1 ? "" : "s", [taskList componentsJoinedByString:@", "]];
+             launchedTasks, launchedTasks == 1 ? "" : "s", listString];
             [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Using %d of %d processes.", numprocs(), maxProcs]];
 
         }
@@ -273,7 +284,7 @@ maxprocs(void)
     NSError *error;
     NSString *idStr = [NSString stringWithContentsOfFile:tempFilePath encoding:NSUTF8StringEncoding error:&error];
     if (!idStr) {
-        [BPUtils printError:ERROR withString:@"ERROR: Failed to read the device ID file %@ with error:", tempFilePath, [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"ERROR: Failed to read the device ID file %@ with error:", tempFilePath, [error localizedDescription]];
     }
     return idStr;
 }

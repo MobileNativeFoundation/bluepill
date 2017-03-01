@@ -29,7 +29,7 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
 
         int c;
-        BPConfiguration *config = [[BPConfiguration alloc] init];
+        BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
 
         struct option *lopts = [BPConfiguration getLongOptions];
         char *sopts = [BPConfiguration getShortOptions];
@@ -50,7 +50,7 @@ int main(int argc, char * argv[]) {
         if (![config processOptionsWithError:&err] || ![config validateConfigWithError:&err]) {
             fprintf(stderr, "%s: invalid configuration\n\t%s\n",
                     basename(argv[0]), [[err localizedDescription] UTF8String]);
-            [config usage:1];
+            exit(1);
         }
 
         BPApp *app = [BPApp BPAppWithAppBundlePath:config.appBundlePath
@@ -61,9 +61,8 @@ int main(int argc, char * argv[]) {
             fprintf(stderr, "ERROR: %s\n", [[err localizedDescription] UTF8String]);
             exit(1);
         }
-        if ([config.listTestsOnly integerValue] > 0) {
-            BOOL verbose = ([config.listTestsOnly integerValue] > 1) ? YES : NO;
-            [app listBundles: verbose];
+        if (config.listTestsOnly) {
+            [app listTests];
             exit(0);
         }
 

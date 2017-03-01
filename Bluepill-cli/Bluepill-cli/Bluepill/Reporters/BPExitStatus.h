@@ -27,6 +27,8 @@ typedef NS_ENUM(NSInteger, BPExitStatus) {
 @protocol BPExitStatusProtocl <NSObject>
 
 - (BOOL)isExecutionComplete;
+- (BOOL)isApplicationStarted;
+- (BOOL)didTestsStart;
 
 - (BPExitStatus)exitStatus;
 
