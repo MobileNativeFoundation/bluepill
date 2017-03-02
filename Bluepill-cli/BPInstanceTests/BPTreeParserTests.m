@@ -72,6 +72,28 @@ BPWriter *getWriter() {
     XCTAssert(monitor.exitStatus == BPExitStatusAppCrashed);
 }
 
+- (void)testMultipleReports {
+    NSString *logPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"multiple_reports_for_one_error.log"];
+    NSString *wholeFile = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];
+
+    BPWriter *writer = getWriter();
+    BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
+    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
+
+    parser.delegate = monitor;
+
+    [BPStats sharedStats].attemptNumber = 1;
+
+    [parser handleChunkData:[wholeFile dataUsingEncoding:NSUTF8StringEncoding]];
+    [parser completed];
+    [parser completedFinalRun];
+
+    if (![BPUtils isBuildScript]) {
+        NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
+    }
+    XCTAssert(monitor.exitStatus == BPExitStatusTestsFailed);
+}
+
 - (void)testCrashIntermixedWithPass {
     NSString *logPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"intermixed_crash.log"];
     NSString *wholeFile = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];
