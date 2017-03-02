@@ -39,6 +39,8 @@ struct BPOptions {
         "The path to the host application to execute (your .app)"},
     {'s', "scheme-path", BP_MASTER | BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
+    {'t', "test", BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
+        "The path to the test bundle to execute (your .xctest)."},
 
     // Optional argument
     {'d', "device", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
@@ -67,8 +69,6 @@ struct BPOptions {
         "Directory where to put output log files (bluepill only)."},
     {'r', "runtime", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
         "What runtime to use."},
-    {'t', "test", BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
-        "The path to the test bundle to execute (your .xctest)."},
     {'x', "exclude", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToSkip",
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
     {'X', "xcode-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
