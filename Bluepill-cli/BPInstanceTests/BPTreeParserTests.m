@@ -16,6 +16,7 @@
 #import "BPStats.h"
 #import "BPReporters.h"
 #import "BPUtils.h"
+#import "BPTreeAssembler.h"
 
 @interface BPTreeParserTests : XCTestCase
 
@@ -27,7 +28,8 @@
 
 - (void)setUp {
     [super setUp];
-    
+
+    [BPTreeAssembler.sharedInstance reset];
     [BPUtils quietMode:[BPUtils isBuildScript]];
     [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
     self.config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
@@ -39,7 +41,7 @@
     [super tearDown];
 }
 
-BPWriter *getWriter() {
+- (BPWriter *)writer {
     BPWriter *writer;
     if ([BPUtils isBuildScript]) {
         NSString *tmpPath = [BPUtils mkstemp:@"out" withError:nil];
@@ -54,7 +56,7 @@ BPWriter *getWriter() {
     NSString *logPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"parse_crash.log"];
     NSString *wholeFile = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];
 
-    BPWriter *writer = getWriter();
+    BPWriter *writer = [self writer];
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
     SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
 
@@ -76,7 +78,7 @@ BPWriter *getWriter() {
     NSString *logPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"multiple_reports_for_one_error.log"];
     NSString *wholeFile = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];
 
-    BPWriter *writer = getWriter();
+    BPWriter *writer = [self writer];
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
     SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
 
@@ -98,7 +100,7 @@ BPWriter *getWriter() {
     NSString *logPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"intermixed_crash.log"];
     NSString *wholeFile = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];
     
-    BPWriter *writer = getWriter();
+    BPWriter *writer = [self writer];
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
     SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
 
@@ -120,7 +122,7 @@ BPWriter *getWriter() {
     NSString *logPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"badfilename.log"];
     NSString *wholeFile = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];
     
-    BPWriter *writer = getWriter();
+    BPWriter *writer = [self writer];
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
     SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
 
@@ -142,7 +144,7 @@ BPWriter *getWriter() {
     NSString *logPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"missed-crash.log"];
     NSString *wholeFile = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];
     
-    BPWriter *writer = getWriter();
+    BPWriter *writer = [self writer];
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
     SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
     monitor.maxTimeWithNoOutput = 2.0; // change the max output time to 2 seconds
@@ -170,7 +172,7 @@ BPWriter *getWriter() {
     NSString *logPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"error_only_crash.log"];
     NSString *wholeFile = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];
     
-    BPWriter *writer = getWriter();
+    BPWriter *writer = [self writer];
     BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
     SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
 

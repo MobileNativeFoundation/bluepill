@@ -5,3 +5,4 @@ Test Case '-[Acceptance_Tests1.MakeReservationStats testGuest2WithNoStats]' star
 Test Case '-[Acceptance_Tests1.MakeReservationStats testGuest2WithNoStats]' failed (33.108 seconds).
 Test Suite 'Selected tests' failed at 2016-10-07 16:54:55.302.
     Executed 1 tests, with 0 failures (0 unexpected) in 9.317 (9.914) seconds
+BP_APP_PROC_ENDED

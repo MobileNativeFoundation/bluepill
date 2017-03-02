@@ -126,8 +126,11 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
     NSString *fullTestName = [NSString stringWithFormat:@"%@/%@", testClass, testName];
 
     BOOL additionalFailure = NO;
-    if ([self.failedTestCases containsObject:fullTestName]) {
-        additionalFailure = YES;
+    for (NSString *fullName in self.failedTestCases) {
+        if([fullTestName isEqualToString:fullName]) {
+            additionalFailure = YES;
+            break;
+        }
     }
 
     if (self.failedTestCases == nil) {
