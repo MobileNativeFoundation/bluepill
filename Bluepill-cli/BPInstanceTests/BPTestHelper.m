@@ -22,7 +22,7 @@
 }
 
 // Return the path to the sample app's xctest with 1000 test cases
-+ (NSString *)sampleAppBalancingTestsBunldePath {
++ (NSString *)sampleAppBalancingTestsBundlePath {
     return [[self sampleAppPath] stringByAppendingString:@"/Plugins/BPSampleAppTests.xctest"];
 }
 
