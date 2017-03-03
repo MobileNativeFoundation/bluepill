@@ -213,6 +213,7 @@
                        completionHandler:^(NSError *error, SimDevice *device) {
                            completion(error, device);
                        }];
+    [BPUtils printInfo:INFO withString:@" ¯\\_(ツ)_/¯"];
 }
 
 + (void)shutdownDevice:(SimDevice *)device withCompletion:(void (^)(NSError *error))completion {
