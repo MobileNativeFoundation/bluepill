@@ -47,7 +47,7 @@
     BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
     [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
     [config saveOpt:[NSNumber numberWithInt:'s'] withArg:[BPTestHelper sampleTestScheme]];
-    [config saveOpt:[NSNumber numberWithInt:'t'] withArg:[BPTestHelper sampleAppBalancingTestsBunldePath]];
+    [config saveOpt:[NSNumber numberWithInt:'t'] withArg:[BPTestHelper sampleAppBalancingTestsBundlePath]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"foo"]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"bar"]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"baz"]];

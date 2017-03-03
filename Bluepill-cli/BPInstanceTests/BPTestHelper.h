@@ -18,7 +18,7 @@
 + (NSString *)sampleTestScheme;
 
 // Return the path to the sample app's xctest with 1000 test cases
-+ (NSString *)sampleAppBalancingTestsBunldePath;
++ (NSString *)sampleAppBalancingTestsBundlePath;
 
 // Return the path to the sample app's xctest with failing tests. (no uncaught exception)
 + (NSString *)sampleAppNegativeTestsBundlePath;
