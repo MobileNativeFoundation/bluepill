@@ -242,7 +242,7 @@ void onInterrupt(int ignore) {
     handler.onTimeout = ^{
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:ERROR withString:[@"Timeout: " stringByAppendingString:stepName]];
     };
 
     self.maxInstallTries = [self.config.maxInstallTries integerValue];
