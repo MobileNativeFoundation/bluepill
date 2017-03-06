@@ -35,11 +35,16 @@
 static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 @interface BPTestBundleConnection()<XCTestManager_IDEInterface>
-@property (nonatomic, weak) id<BPTestBundleConnectionDelegate> interface;
+
 @property (atomic, nullable, strong) id<XCTestDriverInterface> testBundleProxy;
 @property (atomic, nullable, strong, readwrite) DTXConnection *testBundleConnection;
+
+@property (nonatomic, weak) id<BPTestBundleConnectionDelegate> interface;
 @property (nonatomic, assign) BOOL connected;
 @property (nonatomic, strong) dispatch_queue_t queue;
+@property (nonatomic, strong) NSString *bundleID;
+@property (nonatomic, assign) pid_t appProcessPID;
+
 @end
 
 @implementation BPTestBundleConnection
@@ -215,8 +220,8 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     if (error) {
         NSLog(@"%@", error);
     }
-    [self.simulator.device launchApplicationWithID:bundleID options:options error:nil];
-
+    self.appProcessPID = [self.simulator.device launchApplicationWithID:bundleID options:options error:nil];
+    self.bundleID = bundleID;
     if (error) {
         NSLog(@"%@", error);
     }
@@ -233,7 +238,11 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 }
 
 - (id)_XCT_terminateProcess:(id)token {
-    return [self handleUnimplementedXCTRequest:_cmd];
+    NSError *error;
+    kill(self.appProcessPID, SIGKILL);
+    DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
+    [receipt invokeCompletionWithReturnValue:token error:error];
+    return receipt;
 }
 
 #pragma mark iOS 10.x

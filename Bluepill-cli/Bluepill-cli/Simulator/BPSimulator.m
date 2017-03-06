@@ -8,7 +8,6 @@
 
 #import "BPSimulator.h"
 #import "SimulatorHelper.h"
-#import "SimulatorMonitor.h"
 #import "BPConfiguration.h"
 #import "BPConstants.h"
 #import "CoreSimulator.h"
@@ -24,7 +23,6 @@
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) NSRunningApplication *app;
 @property (nonatomic, strong) NSFileHandle *stdOutHandle;
-@property (nonatomic, strong) SimulatorMonitor *monitor;
 @property (nonatomic, assign) BOOL needsRetry;
 @property (nonatomic, assign) BOOL appProcessFinished;
 
@@ -353,6 +351,11 @@
 
 - (NSString *)UDID {
     return [self.device.UDID UUIDString];
+}
+
+- (NSDictionary *)appInfo:(NSString *)bundleID error:(NSError **)error {
+    NSDictionary *appInfo = [self.device propertiesOfApplication:bundleID error:error];
+    return appInfo;
 }
 
 @end
