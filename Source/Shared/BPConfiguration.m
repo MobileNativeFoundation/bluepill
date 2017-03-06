@@ -115,6 +115,8 @@ struct BPOptions {
     {0, 0, 0, 0}
 };
 
+static NSUUID *sessionID;
+
 @implementation BPConfiguration
 
 #pragma mark instance methods
@@ -128,7 +130,10 @@ struct BPOptions {
     self = [super init];
     self.cmdLineArgs = [[NSMutableArray alloc] init];
     // set factory defaults
-    self.sessionIdentifier = [[NSUUID alloc] initWithUUIDString:@"81878B29-AF14-4F89-8370-DD5D95EC047B"];
+    if (!sessionID) {
+        sessionID = [NSUUID UUID];
+    }
+    self.sessionIdentifier = sessionID;
     for (int i = 0; BPOptions[i].name; i++) {
         if (BPOptions[i].default_val) {
             [self handleOpt:BPOptions[i].val withArg:(char *)BPOptions[i].default_val];

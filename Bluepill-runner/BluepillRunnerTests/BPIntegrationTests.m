@@ -82,6 +82,23 @@
     //XCTAssert([runner.nsTaskList count] == 0);
 }
 
+- (void)testTwoBPInstancesWithUITests {
+    self.config.numSims = @2;
+    //self.config.reuseSimulator = NO;
+
+    self.config.testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
+    self.config.testRunnerAppPath = [BPTestHelper sampleAppUITestRunnerPath];
+    NSError *err;
+    BPApp *app = [BPApp appWithConfig:self.config
+                            withError:&err];
+
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
+    int rc = [runner run];
+    XCTAssert(rc == 0);
+    //XCTAssert([runner.nsTaskList count] == 0);
+}
+
 - (void)testTwoBPInstancesTestCaseFail {
     self.config.numSims = @2;
     self.config.testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
