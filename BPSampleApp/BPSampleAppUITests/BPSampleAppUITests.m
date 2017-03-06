@@ -33,14 +33,20 @@
 }
 
 - (void)testExample {
-
     XCUIApplication *app = [[XCUIApplication alloc] init];
     [app.buttons[@"Tap Me"] tap];
 
     XCUIElement *textField = [[app.otherElements containingType:XCUIElementTypeButton identifier:@"Tap Me"] childrenMatchingType:XCUIElementTypeTextField].element;
     [textField tap];
     [textField typeText:@"keqiu"];
+}
 
+- (void)testExample2 {
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.buttons[@"Tap Me"] tap];
+    XCUIElement *textField = [[app.otherElements containingType:XCUIElementTypeButton identifier:@"Tap Me"] childrenMatchingType:XCUIElementTypeTextField].element;
+    [textField tap];
+    [textField typeText:@"huhuhu"];
 }
 
 @end

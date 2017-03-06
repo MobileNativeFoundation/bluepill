@@ -104,15 +104,6 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
                                                            atPath:path
                                                            protocolVersion:@(22)];
             [receipt handleCompletion:^(NSNumber *version, NSError *error){
-                NSLog(@"E%@", receipt);
-                if (error || !version) {
-                    NSLog(@"ERRRORRRRR");
-                    return;
-                }
-                NSLog(@"testmanagerd handled session request");
-                [proxyChannel cancel];
-            }];
-            [receipt handleCompletion:^(NSNumber *version, NSError *error){
                 if (error || !version) {
                     NSLog(@"ERRRORRRRR");
                     return;
