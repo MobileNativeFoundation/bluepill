@@ -69,7 +69,8 @@
 
 - (void)testTwoBPInstances {
     self.config.numSims = @2;
-
+    self.config.errorRetriesCount = @2;
+    self.config.failureTolerance = 2;
     //self.config.reuseSimulator = NO;
 
     NSError *err;
@@ -104,6 +105,7 @@
 
 - (void)testTwoBPInstancesTestCaseFail {
     self.config.numSims = @2;
+
     self.config.testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
     //self.config.reuseSimulator = NO;
 
