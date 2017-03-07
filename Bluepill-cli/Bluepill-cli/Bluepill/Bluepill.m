@@ -53,13 +53,13 @@ void onInterrupt(int ignore) {
 - (instancetype)initWithConfiguration:(BPConfiguration *)config {
     if (self = [super init]) {
         self.config = config;
-        unsigned int numProps = 0;
-        objc_property_t *props = class_copyPropertyList([config class], &numProps);
-        for (NSUInteger i = 0; i < numProps; ++i) {
-            objc_property_t prop = props[i];
-            NSString *propName = [[NSString alloc] initWithUTF8String:property_getName(prop)];
-            [BPUtils printInfo:DEBUGINFO withString:@"[CONFIGURATION] %@: %@", propName, [config valueForKey:propName]];
-        }
+//        unsigned int numProps = 0;
+//        objc_property_t *props = class_copyPropertyList([config class], &numProps);
+//        for (NSUInteger i = 0; i < numProps; ++i) {
+//            objc_property_t prop = props[i];
+//            NSString *propName = [[NSString alloc] initWithUTF8String:property_getName(prop)];
+//            [BPUtils printInfo:DEBUGINFO withString:@"[CONFIGURATION] %@: %@", propName, [config valueForKey:propName]];
+//        }
     }
     return self;
 }

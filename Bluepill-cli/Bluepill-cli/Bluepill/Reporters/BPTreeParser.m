@@ -107,7 +107,7 @@ static const NSString * const kPassed = @"passed";
 }
 
 - (void)parseLine:(nullable NSString *)line {
-    [BPUtils printInfo:DEBUGINFO withString:@"[OUTPUT] %@", line];
+//    [BPUtils printInfo:DEBUGINFO withString:@"[OUTPUT] %@", line];
     [self onOutputReceived:line];
     if (!line || ![line length]) {
         return;

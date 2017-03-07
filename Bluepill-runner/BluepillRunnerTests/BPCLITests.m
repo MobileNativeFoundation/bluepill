@@ -49,18 +49,18 @@
     XCTAssert(result != FALSE);
 }
 
-- (void) testAdditionalTestBundles {
+- (void)testAdditionalTestBundles {
     NSError *err;
     BPConfiguration *config = [[BPConfiguration alloc] init];
     config.appBundlePath = [BPTestHelper sampleAppPath];
     NSString *path = @"testScheme.xcscheme";
     config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
 
-    [config saveOpt:[NSNumber numberWithInt:350] withArg:@"/tmp/extra-stuff"];
+    [config saveOpt:[NSNumber numberWithInt:349] withArg:@"/tmp/extra-stuff"];
 
     BOOL result = [config processOptionsWithError:&err];
     XCTAssert(result == TRUE);
-    XCTAssert([config.additionalUnitTestBundles isEqualToArray:@[ @"/tmp/extra-stuff" ]]);
+    XCTAssert([config.additionalUnitTestBundles isEqualToArray:@[@"/tmp/extra-stuff"]]);
 }
 
 @end
