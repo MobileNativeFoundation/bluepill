@@ -88,14 +88,14 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 
  @return A pointer to a `struct option` suitable for `getopt()`.
  */
-+ (struct option *)getLongOptions;
+- (struct option *)getLongOptions;
 
 /**
  Return a string of short options.
 
  @return A string suitable for `getopt()`.
  */
-+ (char *)getShortOptions;
+- (char *)getShortOptions;
 
 
 /**

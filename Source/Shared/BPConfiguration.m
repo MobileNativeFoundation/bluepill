@@ -67,15 +67,15 @@ struct BPOptions {
         "Directory where to put output log files (bluepill only)."},
     {'r', "runtime", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
         "What runtime to use."},
-    {'t', "test", BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
+    {'t', "test", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
         "The path to the test bundle to execute (your .xctest)."},
     {'x', "exclude", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToSkip",
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
     {'X', "xcode-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
         "Path to xcode."},
-    {'u', "simulator-udid", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "useSimUDID",
+    {'u', "simulator-udid", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "useSimUDID",
         "Do not create a simulator but reuse the one with the UDID given. (BP INTERNAL USE ONLY). "},
-    {'D', "delete-simulator", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "deleteSimUDID",
+    {'D', "delete-simulator", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "deleteSimUDID",
         "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE. (BP INTERNAL USE ONLY). "},
 
     // options with no argument
@@ -101,9 +101,9 @@ struct BPOptions {
     // options without short-options
     {350, "additional-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
         "Additional XCTest bundles to test."},
-    {351, "reuse-simulator", BP_MASTER | BP_SLAVE , NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "reuseSimulator",
+    {351, "reuse-simulator", BP_MASTER, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "reuseSimulator",
         "Enable reusing simulators between test bundles"},
-    {352, "keep-simulator", BP_MASTER | BP_SLAVE , NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
+    {352, "keep-simulator", BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
         "Don't delete the simulator device after one test bundle finish. (BP INTERNAL USE ONLY). "},
     {353, "max-sim-create-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxCreateTries",
         "The maximum number of times to attempt to create a simulator before failing a test attempt"},
@@ -168,7 +168,7 @@ struct BPOptions {
         }
     }
     if (bpo == NULL) {
-        // The error has already been printed.
+        // The error has already been printed in the call to getopt_long().
         exit(1);
     }
     assert(bpo && bpo->name);
@@ -295,33 +295,38 @@ struct BPOptions {
     return newConfig;
 }
 
-#pragma mark static methods
-
-+ (struct option *)getLongOptions {
+- (struct option *)getLongOptions {
     struct option *opt = {0};
-    int i;
+    int i, j;
     for (i = 0; BPOptions[i].name; i++) {}
     opt = malloc(sizeof(struct option) * (i + 1));
     assert(opt);
-    for (i = 0; BPOptions[i].name; i++) {
-        opt[i].name = BPOptions[i].name;
-        opt[i].has_arg = BPOptions[i].has_arg;
-        opt[i].flag = NULL;
-        opt[i].val = BPOptions[i].val;
+    for (i = 0, j = 0; BPOptions[i].name; i++) {
+        if (!(BPOptions[i].program & self.program)) {
+            continue;
+        }
+        opt[j].name = BPOptions[i].name;
+        opt[j].has_arg = BPOptions[i].has_arg;
+        opt[j].flag = NULL;
+        opt[j].val = BPOptions[i].val;
+        j++;
     }
-    opt[i].name = NULL;
-    opt[i].has_arg = 0;
-    opt[i].flag = NULL;
-    opt[i].val = 0;
+    opt[j].name = NULL;
+    opt[j].has_arg = 0;
+    opt[j].flag = NULL;
+    opt[j].val = 0;
     return opt;
 }
 
-+ (char *)getShortOptions {
+- (char *)getShortOptions {
     char *opt;
     int i, j;
     for (i = 0; BPOptions[i].name; i++) {}
     opt = malloc(i * 2 + 1);
     for (i = 0, j = 0; BPOptions[i].name; i++) {
+        if (!(BPOptions[i].program & self.program)) {
+            continue;
+        }
         if (!isascii(BPOptions[i].val)) continue;
         opt[j++] = BPOptions[i].val;
         if (BPOptions[i].has_arg == required_argument) {
@@ -343,6 +348,9 @@ struct BPOptions {
 
     printf("Usage:\n");
     for (int i = 0; BPOptions[i].name; i++) {
+        if (!(BPOptions[i].program & self.program)) {
+            continue;
+        }
         if (BPOptions[i].has_arg == required_argument) {
             arg = required_arg;
         } else if (BPOptions[i].has_arg == optional_argument){
@@ -456,7 +464,10 @@ struct BPOptions {
     // Now check we didn't miss any require options:
     NSMutableArray *errors = [[NSMutableArray alloc] init];
     for (int i = 0; BPOptions[i].name; i++) {
-        if ((self.program & BPOptions[i].program) && BPOptions[i].required && !BPOptions[i].seen) {
+        if (!self.deleteSimUDID &&
+            (((self.program & BPOptions[i].program) && BPOptions[i].required && !BPOptions[i].seen) ||
+             ((self.program & BP_SLAVE) && BPOptions[i].val == 't' && !BPOptions[i].seen))) {
+            // option "--test" is required for BP_SLAVE but optional for BP_MASTER
             [errors addObject:[NSString stringWithFormat:@"Missing required option: -%c/--%s - %s",
                                BPOptions[i].val, BPOptions[i].name, BPOptions[i].help]];
         }
