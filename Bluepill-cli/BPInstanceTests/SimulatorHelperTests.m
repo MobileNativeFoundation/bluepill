@@ -31,7 +31,7 @@
 
 - (void)testAppLaunchEnvironment {
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
-    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     BPConfiguration *config = [BPConfiguration new];
     config.testBundlePath = testBundlePath;
     config.appBundlePath = hostApplicationPath;

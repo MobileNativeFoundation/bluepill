@@ -111,11 +111,11 @@ struct BPOptions {
         "The maximum number of times to attempt to install the test app into a simulator before failing a test attempt"},
     {355, "max-sim-launch-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxLaunchTries",
         "The maximum number of times to attempt to launch the test app in a simulator before failing a test attempt"},
-    {356, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "900", BP_VALUE, "createTimeout",
+    {356, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE, "createTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator creation"},
-    {357, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "900", BP_VALUE, "launchTimeout",
+    {357, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE, "launchTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on application launch in the simulator"},
-    {358, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "900", BP_VALUE, "deleteTimeout",
+    {358, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE, "deleteTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator deletion"},
     {0, 0, 0, 0, 0, 0, 0}
 };

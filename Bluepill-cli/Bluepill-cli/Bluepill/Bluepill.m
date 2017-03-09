@@ -255,9 +255,7 @@ void onInterrupt(int ignore) {
     handler.onTimeout = ^{
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
-        // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
-        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
+        [BPUtils printInfo:ERROR withString:[@"Timeout: " stringByAppendingString:stepName]];
     };
 
     self.maxInstallTries = [self.config.maxInstallTries integerValue];

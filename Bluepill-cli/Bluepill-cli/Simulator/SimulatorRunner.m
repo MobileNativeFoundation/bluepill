@@ -242,6 +242,7 @@
                        completionHandler:^(NSError *error, SimDevice *device) {
                            completion(error, device);
                        }];
+    [BPUtils printInfo:INFO withString:@" ¯\\_(ツ)_/¯"];
 }
 
 + (SimDevice *)findDeviceWithConfig:(BPConfiguration *)config andDeviceID:(NSUUID *)deviceID {

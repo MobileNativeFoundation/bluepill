@@ -28,7 +28,7 @@
     
     // Put setup code here. This method is called before the invocation of each test method in the class.
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
-    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
     self.config.testBundlePath = testBundlePath;
     self.config.appBundlePath = hostApplicationPath;
