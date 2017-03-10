@@ -31,15 +31,13 @@
 
 - (void)testAppLaunchEnvironment {
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
-    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBunldePath];
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     BPConfiguration *config = [BPConfiguration new];
     config.testBundlePath = testBundlePath;
     config.appBundlePath = hostApplicationPath;
-
+    NSString *hostBundleId = [SimulatorHelper bundleIdForPath:config.appBundlePath];
     config.xcodePath = @"/Applications/Xcode.app/Contents/Developer";
-    NSDictionary *appLaunchEnvironment = [SimulatorHelper appLaunchEnvironmentWith:hostApplicationPath
-                                                                    testbundlePath:testBundlePath
-                                                                            config:config];
+    NSDictionary *appLaunchEnvironment = [SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:nil config:config];
     XCTAssert([appLaunchEnvironment[@"AppTargetLocation"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_FALLBACK_FRAMEWORK_PATH"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_FRAMEWORK_PATH"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
@@ -49,7 +47,6 @@
     XCTAssert([appLaunchEnvironment[@"XCInjectBundle"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app/Plugins/BPSampleAppTests.xctest"]);
     XCTAssert([appLaunchEnvironment[@"XCInjectBundleInto"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app"]);
     XCTAssert([appLaunchEnvironment[@"XCTestConfigurationFilePath"] containsString:@"T/BPSampleAppTests-"]);
-    
 }
 
 @end

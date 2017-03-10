@@ -13,14 +13,6 @@
 #import "BPStats.h"
 #import "BPUtils.h"
 
-typedef NS_ENUM(NSInteger, SimulatorState) {
-    Idle,
-    AppLaunched,
-    Running,
-    TestsStarted,
-    Completed
-};
-
 @interface SimulatorMonitor ()
 
 @property (nonatomic, weak) id<BPMonitorCallbackProtocol> callback;
@@ -31,7 +23,6 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 @property (nonatomic, strong) NSString *currentClassName;
 @property (nonatomic, strong) NSString *previousTestName;
 @property (nonatomic, strong) NSString *previousClassName;
-@property (nonatomic, assign) SimulatorState simulatorState;
 @property (nonatomic, assign) BPExitStatus exitStatus;
 @property (nonatomic, assign) NSUInteger currentOutputId;
 @property (nonatomic, assign) NSUInteger failureCount;
@@ -143,7 +134,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 
 - (void)updateExecutedTestCaseList:(NSString *)testName inClass:(NSString *)testClass {
     if (testName == nil || testClass == nil) {
-        [BPUtils printError:DEBUGINFO withString:@"Attempting to add empty test name or class to the executed list"];
+        [BPUtils printInfo:DEBUGINFO withString:@"Attempting to add empty test name or class to the executed list"];
         return;
     }
     if (self.executedTests == nil) {
@@ -196,6 +187,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
         self.exitStatus = BPExitStatusAppCrashed;
         [[BPStats sharedStats] addApplicationCrash];
     }
+    self.maxTimeWithNoOutput = 30; // TO BE REMOVED
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(__self.maxTimeWithNoOutput * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (__self.currentOutputId == previousOutputId && (__self.simulatorState >= AppLaunched && __self.simulatorState != Completed)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
@@ -228,7 +220,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
     if (![[self.device stateString] isEqualToString:@"Shutdown"] && !self.config.testing_NoAppWillRun) {
         [BPUtils printInfo:ERROR withString:@"Will kill the process with appPID: %d", self.appPID];
         NSAssert(self.appPID > 0, @"Failed to find a valid PID");
-        if ((kill(self.appPID, 0) == 0) && (kill(self.appPID, SIGTERM) < 0)) {
+        if ((kill(self.appPID, 0) == 0) && (kill(self.appPID, SIGKILL) < 0)) {
             [BPUtils printInfo:ERROR withString:@"Failed to kill the process with appPID: %d: %s",
                 self.appPID, strerror(errno)];
         }

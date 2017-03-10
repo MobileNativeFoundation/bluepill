@@ -45,6 +45,7 @@ static BOOL printDebugInfo = NO;
 static BOOL quiet = NO;
 
 + (void)enableDebugOutput:(BOOL)enable {
+    NSLog(@"Enable == %hhd", enable);
     printDebugInfo = enable;
 }
 
@@ -54,15 +55,7 @@ static BOOL quiet = NO;
 
 + (BOOL)isBuildScript {
     char* buildScript = getenv("BPBuildScript");
-    if (buildScript && !strncmp(buildScript, "YES", 4)) {
-        return YES;
-    }
-    return NO;
-}
-
-+ (BOOL)definesBuildScript {
-    char* buildScript = getenv("BPBuildScript");
-    if (buildScript != NULL && strnlen(buildScript, 1) > 0) {
+    if (buildScript && !strncmp(buildScript, "YES", 3)) {
         return YES;
     }
     return NO;
@@ -72,23 +65,13 @@ static BOOL quiet = NO;
     if (kind == DEBUGINFO && !printDebugInfo) {
         return;
     }
-    if (quiet) return;
+    if (quiet && kind != ERROR) return;
+    FILE *out = kind == ERROR ? stderr : stdout;
     va_list args;
     va_start(args, fmt);
     NSString *txt = [[NSString alloc] initWithFormat:fmt arguments:args];
     va_end(args);
-    [self printTo:stdout kind:kind withString:txt];
-}
-
-+ (void)printError:(BPKind)kind withString:(NSString *)fmt, ... {
-    if (kind == DEBUGINFO && !printDebugInfo) {
-        return;
-    }
-    va_list args;
-    va_start(args, fmt);
-    NSString *txt = [[NSString alloc] initWithFormat:fmt arguments:args];
-    va_end(args);
-    [self printTo:stderr kind:kind withString:txt];
+    [self printTo:out kind:kind withString:txt];
 }
 
 + (void)printTo:(FILE*)fd kind:(BPKind)kind withString:(NSString *)txt {
@@ -101,31 +84,41 @@ static BOOL quiet = NO;
     if ((s = getenv("_BP_SIM_NUM"))) {
         simNum = [NSString stringWithFormat:@"(SIM-%s) ", s];
     }
+
+    // Get timestamp
+    char ts[1<<6];
+    time_t now;
+    struct tm *tms;
+    time(&now);
+    tms = localtime(&now);
+    strftime(ts, 1<<6, "%Y%m%d.%H%M%S", tms);
+
     if (isatty(1) && !bp_testing) {
-        fprintf(fd, "{%d} %s[%s]%s %s%s\n",
-                getpid(), message.color, message.text, ANSI_COLOR_RESET, [simNum UTF8String], [txt UTF8String]);
+        fprintf(fd, "{%d} %s %s[%s]%s %s%s\n",
+                getpid(), ts, message.color, message.text, ANSI_COLOR_RESET, [simNum UTF8String], [txt UTF8String]);
     } else {
-        // Not a tty, print a timestamp
-        char ts[1<<6];
-        time_t now;
-        struct tm *tms;
-        time(&now);
-        tms = localtime(&now);
-        strftime(ts, 1<<6, "%Y%m%d.%H%M%S", tms);
+
         fprintf(fd, "{%d} %s [%s] %s%s\n", getpid(), ts, message.text, [simNum UTF8String], [txt UTF8String]);
     }
     fflush(fd);
 }
 
++ (NSError *)BPError:(const char *)function andLine:(int)line withFormat:(NSString *)fmt, ... {
+    va_list args;
+    va_start(args, fmt);
+    NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:args];
+    va_end(args);
+    return [NSError errorWithDomain:BPErrorDomain
+                               code:-1
+                           userInfo:@{NSLocalizedDescriptionKey: msg}];
+}
+
+
 + (NSString *)mkdtemp:(NSString *)template withError:(NSError **)error {
     char *dir = strdup([[template stringByAppendingString:@"_XXXXXX"] UTF8String]);
     if (mkdtemp(dir) == NULL) {
         if (error) {
-            *error = [NSError errorWithDomain:BPErrorDomain
-                                         code:-1
-                                     userInfo:@{
-                                                NSLocalizedDescriptionKey: [NSString stringWithUTF8String:strerror(errno)]
-                                                }];
+            *error = BP_ERROR(@"%s", strerror(errno));
         }
         free(dir);
         return nil;
@@ -140,10 +133,7 @@ static BOOL quiet = NO;
     int fd = mkstemp(file);
     if (fd < 0) {
         if (error) {
-            *error = [NSError errorWithDomain:BPErrorDomain
-                                         code:-1
-                                     userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithUTF8String:strerror(errno)]
-                                                 }];
+            *error = BP_ERROR(@"%s", strerror(errno));
         }
         free(file);
         return nil;
@@ -208,6 +198,21 @@ static BOOL quiet = NO;
     [task waitUntilExit];
     NSData *data = [fh readDataToEndOfFile];
     return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+}
+
++ (BOOL)runWithTimeOut:(NSTimeInterval)timeout until:(BPRunBlock)block {
+    if (!block) {
+        return NO;
+    }
+    NSDate *startDate = [NSDate date];
+    BOOL result = NO;
+
+    // Check the return value of the block every 0.1 second till timeout.
+    while( -[startDate timeIntervalSinceNow] < timeout && !result) {
+        result = block();
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, true);
+    }
+    return result;
 }
 
 @end

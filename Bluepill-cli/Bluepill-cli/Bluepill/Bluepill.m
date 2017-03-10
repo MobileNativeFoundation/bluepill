@@ -9,7 +9,7 @@
 
 #import "Bluepill.h"
 #import "BPConfiguration.h"
-#import "SimulatorRunner.h"
+#import "BPSimulator.h"
 #import "BPTreeParser.h"
 #import "BPReporters.h"
 #import "BPWriter.h"
@@ -19,6 +19,8 @@
 #import "BPExecutionContext.h"
 #import "BPHandler.h"
 #import <libproc.h>
+#import "BPTestBundleConnection.h"
+#import "BPTestDaemonConnection.h"
 #import <objc/runtime.h>
 
 #define NEXT(x)     { [Bluepill setDiagnosticFunction:#x from:__FUNCTION__ line:__LINE__]; CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ (x); }); }
@@ -29,7 +31,7 @@ void onInterrupt(int ignore) {
     interrupted = 1;
 }
 
-@interface Bluepill()
+@interface Bluepill()<BPTestBundleConnectionDelegate>
 
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) BPConfiguration *executionConfigCopy;
@@ -75,6 +77,8 @@ void onInterrupt(int ignore) {
 
     // Save our failure tolerance because we're going to be changing this
     self.failureTolerance = self.executionConfigCopy.failureTolerance;
+
+    // Connect to test manager daemon and test bundle
 
     // Start the first attempt
     [self begin];
@@ -179,7 +183,7 @@ void onInterrupt(int ignore) {
         simulatorLogPath = tmpFileName;
         if (!tmpFileName) {
             simulatorLogPath = [NSString stringWithFormat:@"/tmp/%lu-simulator.log", context.attemptNumber];
-            [BPUtils printError:ERROR withString:@"ERROR: %@\nLeaving log in %@", [err localizedDescription], simulatorLogPath];
+            [BPUtils printInfo:ERROR withString:@"ERROR: %@\nLeaving log in %@", [err localizedDescription], simulatorLogPath];
         }
     }
 
@@ -197,8 +201,8 @@ void onInterrupt(int ignore) {
     NEXT([self createSimulatorWithContext:context]);
 }
 
-- (SimulatorRunner *)createSimulatorRunnerWithContext:(BPExecutionContext *)context {
-    return [SimulatorRunner simulatorRunnerWithConfiguration:context.config];
+- (BPSimulator *)createSimulatorRunnerWithContext:(BPExecutionContext *)context {
+    return [BPSimulator simulatorWithConfiguration:context.config];
 }
 
 - (void)createSimulatorWithContext:(BPExecutionContext *)context {
@@ -228,7 +232,7 @@ void onInterrupt(int ignore) {
 
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] addSimulatorCreateFailure];
-        [BPUtils printError:ERROR withString:@"%@", [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"%@", [error localizedDescription]];
         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
         if (--__self.maxCreateTries > 0) {
             [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
@@ -242,7 +246,7 @@ void onInterrupt(int ignore) {
     handler.onTimeout = ^{
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:ERROR withString:[@"Timeout: " stringByAppendingString:stepName]];
     };
 
     self.maxInstallTries = [self.config.maxInstallTries integerValue];
@@ -265,7 +269,7 @@ void onInterrupt(int ignore) {
 
     if (!success) {
         [[BPStats sharedStats] addSimulatorInstallFailure];
-        [BPUtils printError:ERROR withString:@"Could not install app in simulator: %@", [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"Could not install app in simulator: %@", [error localizedDescription]];
         if (--__self.maxInstallTries > 0) {
             if ([[error description] containsString:@"Booting"]) {
                 [BPUtils printInfo:INFO withString:@"Simulator is still booting. Will defer install for 1 minute."];
@@ -309,12 +313,12 @@ void onInterrupt(int ignore) {
 
     handler.onSuccess = ^{
         context.pid = __handler.pid;
-        NEXT([__self checkProcessWithContext:context]);
+        NEXT([__self connectTestBundleAndTestDaemonWithContext:context]);
     };
 
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
-        [BPUtils printError:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
         if (--__self.maxLaunchTries > 0) {
             [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
             context.runner = [__self createSimulatorRunnerWithContext:context];
@@ -331,9 +335,28 @@ void onInterrupt(int ignore) {
         [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
     };
 
-    [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
+    [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock isHostApp:NO];
+    [BPUtils printInfo:INFO withString:[@"Yay, after the launch async call!!!" stringByAppendingString:stepName]];
 }
 
+- (void)connectTestBundleAndTestDaemonWithContext:(BPExecutionContext *)context {
+    if (context.isTestRunnerContext) {
+        // If the isTestRunnerContext is flipped on, don't connect testbundle again.
+        return;
+    }
+    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:context.runner andInterface:self];
+    bConnection.simulator = context.runner;
+    bConnection.config = self.config;
+
+    BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:context.runner andInterface:nil];
+    [bConnection connectWithTimeout:30];
+
+    dConnection.testRunnerPid = context.pid;
+    [dConnection connectWithTimeout:30];
+    [bConnection startTestPlan];
+    NEXT([self checkProcessWithContext:context]);
+
+}
 - (void)checkProcessWithContext:(BPExecutionContext *)context {
     BOOL isRunning = [self isProcessRunningWithContext:context];
     if (!isRunning && [context.runner isFinished]) {
@@ -470,7 +493,7 @@ void onInterrupt(int ignore) {
 
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] addSimulatorDeleteFailure];
-        [BPUtils printError:ERROR withString:@"%@", [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"%@", [error localizedDescription]];
         NEXT([__self finishWithContext:context]);
     };
 
@@ -562,6 +585,12 @@ NSString *__from;
 
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"Currently executing %@: Line %d (Invoked by: %@)", __function, __line, __from];
+}
+
+#pragma mark - BPTestBundleConnectionDelegate
+- (void)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment {
+    self.context.isTestRunnerContext = YES;
+    [self installApplicationWithContext:self.context];
 }
 
 @end

@@ -30,37 +30,48 @@
 }
 
 - (void)testNoSchemeinCLI {
-    BPConfiguration *config = [[BPConfiguration alloc] init];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
     NSError *err;
     BOOL result;
     
     result = [config processOptionsWithError:&err];
-    XCTAssert(result);
-    result = [config validateConfigWithError:&err];
     XCTAssert(result == FALSE);
-    XCTAssert([[err localizedDescription] isEqualToString:@"No app bundle provided."]);
-    config.appBundlePath = [BPTestHelper sampleAppPath];
-    result = [config validateConfigWithError:&err];
-    XCTAssert(result == FALSE);
-    XCTAssert([[err localizedDescription] isEqualToString:@"No scheme provided."]);
-    NSString *path = @"testScheme.xcscheme";
-    config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    result = [config validateConfigWithError:&err];
-    XCTAssert(result != FALSE);
+    XCTAssert([[err localizedDescription] containsString:@"Missing required option"]);
+    XCTAssert([[err localizedDescription] containsString:@"-a/--app"]);
+    XCTAssert([[err localizedDescription] containsString:@"-s/--scheme-path"]);
 }
 
-- (void) testAdditionalTestBundles {
+- (void)testAdditionalTestBundles {
     NSError *err;
-    BPConfiguration *config = [[BPConfiguration alloc] init];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
     config.appBundlePath = [BPTestHelper sampleAppPath];
     NSString *path = @"testScheme.xcscheme";
+    [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
+    [config saveOpt:[NSNumber numberWithInt:'s'] withArg:[BPTestHelper sampleTestScheme]];
+    [config saveOpt:[NSNumber numberWithInt:'t'] withArg:[BPTestHelper sampleTestScheme]];
+    [config saveOpt:[NSNumber numberWithInt:'X'] withArg:@"/this/is/an/invalid/path"];
     config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
 
-    [config saveOpt:[NSNumber numberWithInt:350] withArg:@"/tmp/extra-stuff"];
+    [config saveOpt:[NSNumber numberWithInt:349] withArg:@"/tmp/extra-stuff"];
 
     BOOL result = [config processOptionsWithError:&err];
     XCTAssert(result == TRUE);
-    XCTAssert([config.additionalTestBundles isEqualToArray:@[ @"/tmp/extra-stuff" ]]);
+    XCTAssert([config.additionalUnitTestBundles isEqualToArray:@[@"/tmp/extra-stuff"]]);
+}
+
+- (void)testXcodePathIsWrong {
+    NSError *err;
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
+    [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
+    [config saveOpt:[NSNumber numberWithInt:'s'] withArg:[BPTestHelper sampleTestScheme]];
+    [config saveOpt:[NSNumber numberWithInt:'X'] withArg:@"/this/is/an/invalid/path"];
+    
+    BOOL result = [config processOptionsWithError:&err];
+    XCTAssert(result == TRUE);
+    
+    result = [config validateConfigWithError:&err];
+    XCTAssert(result == FALSE);
+    XCTAssert([[err localizedDescription] isEqualToString:@"Could not find Xcode at /this/is/an/invalid/path"]);
 }
 
 @end

@@ -16,8 +16,13 @@
     return [[self bpDerivedDataPath] stringByAppendingString:@"/BPSampleApp.app"];
 }
 
++ (NSString *)sampleTestScheme {
+    NSString *path = @"testScheme.xcscheme";
+    return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
+}
+
 // Return the path to the sample app's xctest with 1000 test cases
-+ (NSString *)sampleAppBalancingTestsBunldePath {
++ (NSString *)sampleAppBalancingTestsBundlePath {
     return [[self sampleAppPath] stringByAppendingString:@"/Plugins/BPSampleAppTests.xctest"];
 }
 
@@ -40,6 +45,16 @@
 
 + (NSString *)resourceFolderPath {
     return [[NSBundle bundleForClass:[self class]] resourcePath];
+}
+
+// Return the path to the XCTRunner
++ (NSString *)sampleAppUITestRunnerPath {
+    return [[[self sampleAppPath] stringByDeletingLastPathComponent] stringByAppendingString:@"/BPSampleAppUITests-Runner.app/"];
+}
+
+// Return the path to the XCTRunner
++ (NSString *)sampleAppUITestBundlePath {
+    return [[self sampleAppUITestRunnerPath] stringByAppendingString:@"/PlugIns/BPSampleAppUITests.xctest"];
 }
 
 + (NSString *)bpExecutablePath {

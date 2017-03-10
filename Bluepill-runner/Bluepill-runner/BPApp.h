@@ -9,16 +9,17 @@
 
 #import <Foundation/Foundation.h>
 
+@class BPConfiguration;
 @interface BPApp : NSObject
 
 @property (nonatomic, strong) NSString *path;
 // All test bundles inside Plugins directory in app.
-@property (nonatomic, strong) NSArray *testBundles;
+@property (nonatomic, strong) NSArray *unitTestBundles;
+@property (nonatomic, strong) NSArray *uiTestBundles;
+@property (nonatomic, strong, getter=getAllTestBundles) NSArray *allTestBundles;
 
-+ (instancetype)BPAppWithAppBundlePath:(NSString *)path
-                 onlyTestingBundlePath:(NSString *)onlyBundlePath
-                  withExtraTestBundles:(NSArray *)extraTestBundles
-                             withError:(NSError **)error;
++ (instancetype)appWithConfig:(BPConfiguration *)config
+                    withError:(NSError **)error;
 
 /*! @discussion Print the test bundles in the App along with all of their test classes/cases (Basically the .xctest files inside the Plugins directory in the .app bundle)
  */

@@ -5,6 +5,7 @@
                  ],
     "error-retries": 0,
     "scheme-path": "/Users/khu/ios/dev/voyager-ios_trunk/Voyager.xcodeproj/xcshareddata/xcschemes/VoyagerScenarioTests4.xcscheme",
+    "repeat-count": 1,
     "output-dir": "/Users/khu/tmp/simulator",
     "headless": false
 }

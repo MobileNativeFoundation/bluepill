@@ -13,10 +13,13 @@
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *path;
+@property (nonatomic, assign) BOOL isUITestFile;
 // All test classes in the test bundle
 @property (nonatomic, strong) NSArray *testClasses;
 
-+ (instancetype)BPXCTestFileFromExecutable:(NSString *)path withError:(NSError **)error;
++ (instancetype)BPXCTestFileFromExecutable:(NSString *)path
+                              isUITestFile:(BOOL)isUITestFile
+                                 withError:(NSError **)error;
 
 - (NSUInteger)numTests;
 - (NSArray *)allTestCases;

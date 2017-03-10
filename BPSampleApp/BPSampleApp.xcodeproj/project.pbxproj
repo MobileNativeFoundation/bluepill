@@ -19,6 +19,7 @@
 		BAB24F411DB5D45E00867756 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BAB24F3F1DB5D45E00867756 /* LaunchScreen.storyboard */; };
 		BAB24F4C1DB5D45E00867756 /* BPSampleAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F4B1DB5D45E00867756 /* BPSampleAppTests.m */; };
 		BAB24F5D1DB5D83C00867756 /* BPAppNegativeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F5C1DB5D83C00867756 /* BPAppNegativeTests.m */; };
+		BAFCCA601E36DC2000E33C31 /* BPSampleAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFCCA5F1E36DC2000E33C31 /* BPSampleAppUITests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,13 @@
 			remoteGlobalIDString = BAB24F2D1DB5D45E00867756;
 			remoteInfo = BPSampleApp;
 		};
+		BAFCCA621E36DC2000E33C31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BAB24F261DB5D45E00867756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BAB24F2D1DB5D45E00867756;
+			remoteInfo = BPSampleApp;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +95,9 @@
 		BAB24F5A1DB5D83C00867756 /* BPAppNegativeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPAppNegativeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAB24F5C1DB5D83C00867756 /* BPAppNegativeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPAppNegativeTests.m; sourceTree = "<group>"; };
 		BAB24F5E1DB5D83C00867756 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BAFCCA5D1E36DC2000E33C31 /* BPSampleAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BAFCCA5F1E36DC2000E33C31 /* BPSampleAppUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppUITests.m; sourceTree = "<group>"; };
+		BAFCCA611E36DC2000E33C31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +137,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		BAB24F571DB5D83C00867756 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BAFCCA5A1E36DC2000E33C31 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -173,6 +191,7 @@
 				BAA4DA381DC3C02B00A58BCC /* BPSampleAppCrashingTests */,
 				BA4BCFC71DC47EC800592FA4 /* BPSampleAppHangingTests */,
 				BA9C2DD31DD7F182007CB967 /* BPSampleAppFatalErrorTests */,
+				BAFCCA5E1E36DC2000E33C31 /* BPSampleAppUITests */,
 				BAB24F2F1DB5D45E00867756 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -186,6 +205,7 @@
 				BAA4DA371DC3C02A00A58BCC /* BPSampleAppCrashingTests.xctest */,
 				BA4BCFC61DC47EC700592FA4 /* BPSampleAppHangingTests.xctest */,
 				BA9C2DD21DD7F182007CB967 /* BPSampleAppFatalErrorTests.xctest */,
+				BAFCCA5D1E36DC2000E33C31 /* BPSampleAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -230,6 +250,15 @@
 				BAB24F5E1DB5D83C00867756 /* Info.plist */,
 			);
 			path = BPAppNegativeTests;
+			sourceTree = "<group>";
+		};
+		BAFCCA5E1E36DC2000E33C31 /* BPSampleAppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				BAFCCA5F1E36DC2000E33C31 /* BPSampleAppUITests.m */,
+				BAFCCA611E36DC2000E33C31 /* Info.plist */,
+			);
+			path = BPSampleAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,6 +371,24 @@
 			productReference = BAB24F5A1DB5D83C00867756 /* BPAppNegativeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		BAFCCA5C1E36DC2000E33C31 /* BPSampleAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BAFCCA661E36DC2000E33C31 /* Build configuration list for PBXNativeTarget "BPSampleAppUITests" */;
+			buildPhases = (
+				BAFCCA591E36DC2000E33C31 /* Sources */,
+				BAFCCA5A1E36DC2000E33C31 /* Frameworks */,
+				BAFCCA5B1E36DC2000E33C31 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BAFCCA631E36DC2000E33C31 /* PBXTargetDependency */,
+			);
+			name = BPSampleAppUITests;
+			productName = BPSampleAppUITests;
+			productReference = BAFCCA5D1E36DC2000E33C31 /* BPSampleAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -387,6 +434,12 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = BAB24F2D1DB5D45E00867756;
 					};
+					BAFCCA5C1E36DC2000E33C31 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 57Y47U492U;
+						ProvisioningStyle = Automatic;
+						TestTargetID = BAB24F2D1DB5D45E00867756;
+					};
 				};
 			};
 			buildConfigurationList = BAB24F291DB5D45E00867756 /* Build configuration list for PBXProject "BPSampleApp" */;
@@ -408,6 +461,7 @@
 				BAA4DA361DC3C02A00A58BCC /* BPSampleAppCrashingTests */,
 				BA4BCFC51DC47EC700592FA4 /* BPSampleAppHangingTests */,
 				BA9C2DD11DD7F182007CB967 /* BPSampleAppFatalErrorTests */,
+				BAFCCA5C1E36DC2000E33C31 /* BPSampleAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -452,6 +506,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		BAB24F581DB5D83C00867756 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BAFCCA5B1E36DC2000E33C31 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -512,6 +573,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BAFCCA591E36DC2000E33C31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BAFCCA601E36DC2000E33C31 /* BPSampleAppUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -539,6 +608,11 @@
 			isa = PBXTargetDependency;
 			target = BAB24F2D1DB5D45E00867756 /* BPSampleApp */;
 			targetProxy = BAB24F5F1DB5D83C00867756 /* PBXContainerItemProxy */;
+		};
+		BAFCCA631E36DC2000E33C31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BAB24F2D1DB5D45E00867756 /* BPSampleApp */;
+			targetProxy = BAFCCA621E36DC2000E33C31 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -816,6 +890,32 @@
 			};
 			name = Release;
 		};
+		BAFCCA641E36DC2000E33C31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				INFOPLIST_FILE = BPSampleAppUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = BPSampleApp;
+			};
+			name = Debug;
+		};
+		BAFCCA651E36DC2000E33C31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				INFOPLIST_FILE = BPSampleAppUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = BPSampleApp;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -881,6 +981,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		BAFCCA661E36DC2000E33C31 /* Build configuration list for PBXNativeTarget "BPSampleAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BAFCCA641E36DC2000E33C31 /* Debug */,
+				BAFCCA651E36DC2000E33C31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

@@ -6,26 +6,62 @@
 
 @import Foundation;
 
+@class NSDictionary, NSSet, NSString, NSURL, NSUUID;
+
 @interface XCTestConfiguration : NSObject <NSSecureCoding>
+{
+    NSURL *_testBundleURL;
+    NSString *_testBundleRelativePath;
+    NSString *_absolutePath;
+    NSSet *_testsToSkip;
+    NSSet *_testsToRun;
+    _Bool _reportResultsToIDE;
+    NSUUID *_sessionIdentifier;
+    NSString *_pathToXcodeReportingSocket;
+    _Bool _disablePerformanceMetrics;
+    _Bool _treatMissingBaselinesAsFailures;
+    NSURL *_baselineFileURL;
+    NSString *_baselineFileRelativePath;
+    NSString *_targetApplicationPath;
+    NSString *_targetApplicationBundleID;
+    NSString *_productModuleName;
+    _Bool _reportActivities;
+    _Bool _testsMustRunOnMainThread;
+    _Bool _initializeForUITesting;
+    NSDictionary *_aggregateStatisticsBeforeCrash;
+}
 
-@property(copy) NSURL *baselineFileURL;
-@property BOOL disablePerformanceMetrics;
-@property(copy) NSString *pathToXcodeReportingSocket;
-@property(copy) NSString *productModuleName;
-@property BOOL reportResultsToIDE;
-@property(copy) NSUUID *sessionIdentifier;
-@property(copy) NSString *targetApplicationBundleID;
-@property(copy) NSString *targetApplicationPath;
-@property(copy) NSURL *testBundleURL;
-@property(copy) NSSet *testsToRun;
-@property(copy) NSSet *testsToSkip;
-@property BOOL treatMissingBaselinesAsFailures;
-
-+ (id)activeTestConfiguration;
 + (id)configurationWithContentsOfFile:(id)arg1;
++ (id)activeTestConfiguration;
 + (void)setActiveTestConfiguration:(id)arg1;
-+ (BOOL)supportsSecureCoding;
-
-- (BOOL)writeToFile:(id)arg1;
++ (_Bool)supportsSecureCoding;
+@property(copy) NSDictionary *aggregateStatisticsBeforeCrash; // @synthesize aggregateStatisticsBeforeCrash=_aggregateStatisticsBeforeCrash;
+@property _Bool initializeForUITesting; // @synthesize initializeForUITesting=_initializeForUITesting;
+@property _Bool testsMustRunOnMainThread; // @synthesize testsMustRunOnMainThread=_testsMustRunOnMainThread;
+@property _Bool reportActivities; // @synthesize reportActivities=_reportActivities;
+@property(copy) NSString *productModuleName; // @synthesize productModuleName=_productModuleName;
+@property(copy) NSString *targetApplicationBundleID; // @synthesize targetApplicationBundleID=_targetApplicationBundleID;
+@property(copy) NSString *targetApplicationPath; // @synthesize targetApplicationPath=_targetApplicationPath;
+@property _Bool treatMissingBaselinesAsFailures; // @synthesize treatMissingBaselinesAsFailures=_treatMissingBaselinesAsFailures;
+@property _Bool disablePerformanceMetrics; // @synthesize disablePerformanceMetrics=_disablePerformanceMetrics;
+@property _Bool reportResultsToIDE; // @synthesize reportResultsToIDE=_reportResultsToIDE;
+@property(copy) NSString *baselineFileRelativePath; // @synthesize baselineFileRelativePath=_baselineFileRelativePath;
+@property(copy, nonatomic) NSURL *baselineFileURL; // @synthesize baselineFileURL=_baselineFileURL;
+@property(copy) NSString *pathToXcodeReportingSocket; // @synthesize pathToXcodeReportingSocket=_pathToXcodeReportingSocket;
+@property(copy) NSUUID *sessionIdentifier; // @synthesize sessionIdentifier=_sessionIdentifier;
+@property(copy) NSSet *testsToSkip; // @synthesize testsToSkip=_testsToSkip;
+@property(copy) NSSet *testsToRun; // @synthesize testsToRun=_testsToRun;
+@property(copy, nonatomic) NSURL *testBundleURL; // @synthesize testBundleURL=_testBundleURL;
+@property(copy) NSString *testBundleRelativePath; // @synthesize testBundleRelativePath=_testBundleRelativePath;
+@property(copy) NSString *absolutePath; // @synthesize absolutePath=_absolutePath;
+- (_Bool)isEqual:(id)arg1;
+- (unsigned long long)hash;
+- (id)description;
+- (_Bool)writeToFile:(id)arg1;
+- (void)encodeWithCoder:(id)arg1;
+- (id)initWithCoder:(id)arg1;
+- (id)init;
+- (void)dealloc;
 
 @end
+

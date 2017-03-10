@@ -15,9 +15,9 @@
 #import "BPStats.h"
 #import "BPWriter.h"
 #import "BPConfiguration.h"
-#import "SimulatorRunner.h"
 #import "Bluepill.h"
 #import "BPUtils.h"
+#import "SimulatorHelper.h"
 
 #import <getopt.h>
 #import <libgen.h>
@@ -73,7 +73,7 @@ int main(int argc, char * argv[]) {
 #pragma mark main
         int c;
 
-        BPConfiguration *config = [[BPConfiguration alloc] init];
+        BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
 
         
         struct option *lopts = [BPConfiguration getLongOptions];
@@ -82,6 +82,7 @@ int main(int argc, char * argv[]) {
         [BPStats sharedStats]; // Create the BPStats object. This records our start time.
 
         config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
+        [SimulatorHelper loadFrameworksWithXcodePath:config.xcodePath];
 
         // We don't do any processing here, just save the args and let BPConfiguration
         // process/validate later.
@@ -97,7 +98,7 @@ int main(int argc, char * argv[]) {
         if (![config processOptionsWithError:&err] || ![config validateConfigWithError:&err]) {
             fprintf(stderr, "%s: invalid configuration\n\t%s\n",
                     basename(argv[0]), [[err localizedDescription] UTF8String]);
-            [config usage:1];
+            exit(1);
         }
 
         BPExitStatus exitCode;

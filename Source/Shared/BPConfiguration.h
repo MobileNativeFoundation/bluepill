@@ -20,14 +20,28 @@
 
 @interface BPConfiguration : NSObject <NSCopying>
 
+typedef NS_ENUM(NSInteger, BPProgram) {
+    BP_MASTER = 1,
+    BP_SLAVE = 2,
+};
+
 /*
  * WARNING: Any fields you add here need to be explicitly handled in the copyWithZone
  * and mutableCopyWithZone methods. Yeah, it's stupid, we should fix it.
  */
 
+@property (nonatomic, strong) NSUUID *sessionIdentifier;
 @property (nonatomic, strong) NSString *appBundlePath;
+
+// XCUITest sector
+@property (nonatomic, strong) NSString *testRunnerAppPath;
+@property (nonatomic, strong) NSArray *additionalUITestBundles;
+
+// XCTest sector
+@property (nonatomic, strong) NSArray *additionalUnitTestBundles;
+
+// Common
 @property (nonatomic, strong) NSString *testBundlePath;
-@property (nonatomic, strong) NSArray *additionalTestBundles;
 @property (nonatomic, strong) NSString *deviceType;
 @property (nonatomic, strong) NSString *runtime;
 @property (nonatomic, strong) NSString *configFile;
@@ -37,7 +51,7 @@
 @property (nonatomic, strong) NSNumber *errorRetriesCount;
 @property (nonatomic, strong) NSNumber *stuckTimeout;
 @property (nonatomic, strong) NSNumber *testCaseTimeout;
-@property (nonatomic, strong) NSMutableArray *noSplit;
+@property (nonatomic, strong) NSArray *noSplit;
 @property (nonatomic) BOOL junitOutput;
 @property (nonatomic) BOOL plainOutput;
 @property (nonatomic) BOOL jsonOutput;
@@ -51,6 +65,7 @@
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
+@property (nonatomic) BPProgram program; // one of BP_MASTER or BP_SLAVE
 @property (nonatomic) BOOL verboseLogging;
 @property (nonatomic, strong) NSNumber *maxCreateTries;
 @property (nonatomic, strong) NSNumber *maxInstallTries;
@@ -58,7 +73,6 @@
 @property (nonatomic, strong) NSNumber *createTimeout;
 @property (nonatomic, strong) NSNumber *launchTimeout;
 @property (nonatomic, strong) NSNumber *deleteTimeout;
-
 
 
 // These fields are for testing.
@@ -124,17 +138,27 @@
 - (BOOL)validateConfigWithError:(NSError **)err;
 
 /**
+ Create a new configuration object with default values.
+ 
+ @param program One of BLUEPILL or BP
+ 
+ @return An instance of `BPConfiguration` on success. Nil on failure.
+ */
+- (instancetype)initWithProgram:(int)program;
+
+/**
  Create a new configuration object based on the given configuration file. 
  
  Note that this function only loads the configuration, it doesn't perform 
  any validation. For that, call `validateConfigWithError:`
 
  @param file The file to load (nil will init a config object with defaults)
+ @param program Which program is calling this? Bluepill or Bp
  @param err  The error in case loading the config file fails.
 
  @return An instance of `BPConfiguration` on success. Nil on failure.
  */
-- (instancetype)initWithConfigFile:(NSString *)file error:(NSError **)err;
+- (instancetype)initWithConfigFile:(NSString *)file forProgram:(BPProgram)program withError:(NSError **)err;
 
 /**
  Save a command line option for later processing.
