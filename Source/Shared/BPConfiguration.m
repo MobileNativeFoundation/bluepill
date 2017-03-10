@@ -40,11 +40,17 @@ struct BPOptions {
     {'s', "scheme-path", BP_MASTER | BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
 
+    // Required arguments for ui testing
+    {'u', "runner-app-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testRunnerAppPath",
+        "The test runner for UI tests."},
+
     // Optional argument
     {'d', "device", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
         "On which device to run the app."},
     {'c', "config", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "configFile",
         "Read options from the specified configuration file instead of the command line"},
+    {'t', "test-bundle-path", BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
+        "The test bundle to run tests."},
     {'C', "repeat-count", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "1", BP_VALUE, "repeatTestsCount",
         "Number of times we'll run the entire test suite (used for stability testing)."},
     {'N', "no-split", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "noSplit",
@@ -67,8 +73,6 @@ struct BPOptions {
         "Directory where to put output log files (bluepill only)."},
     {'r', "runtime", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
         "What runtime to use."},
-    {'t', "test", BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
-        "The path to the test bundle to execute (your .xctest)."},
     {'x', "exclude", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToSkip",
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
     {'X', "xcode-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
@@ -95,8 +99,10 @@ struct BPOptions {
         "Enable verbose logging"},
 
     // options without short-options
-    {350, "additional-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalTestBundles",
+    {349, "additional-unit-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUnitTestBundles",
         "Additional XCTest bundles to test."},
+    {350, "additional-ui-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUITestBundles",
+        "Additional XCUITest bundles to test."},
     {351, "max-sim-create-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxCreateTries",
         "The maximum number of times to attempt to create a simulator before failing a test attempt"},
     {352, "max-sim-install-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxInstallTries",
@@ -112,6 +118,7 @@ struct BPOptions {
     {0, 0, 0, 0, 0, 0, 0}
 };
 
+static NSUUID *sessionID;
 
 @implementation BPConfiguration
 
@@ -121,12 +128,16 @@ struct BPOptions {
     return [self initWithConfigFile:nil forProgram:program withError:nil];
 }
 
-- (instancetype)initWithConfigFile:(NSString *)file forProgram:(int)program withError:(NSError **)err {
+- (instancetype)initWithConfigFile:(NSString *)file forProgram:(BPProgram)program withError:(NSError **)err {
     self = [super init];
     if (program != BP_MASTER && program != BP_SLAVE) return nil;
     self.program = program;
     self.cmdLineArgs = [[NSMutableArray alloc] init];
     // set factory defaults
+    if (!sessionID) {
+        sessionID = [NSUUID UUID];
+    }
+    self.sessionIdentifier = sessionID;
     for (int i = 0; BPOptions[i].name; i++) {
         if (!(BPOptions[i].program & self.program)) {
             continue;

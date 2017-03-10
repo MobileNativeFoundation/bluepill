@@ -53,10 +53,7 @@ int main(int argc, char * argv[]) {
             exit(1);
         }
 
-        BPApp *app = [BPApp BPAppWithAppBundlePath:config.appBundlePath
-                             onlyTestingBundlePath:config.testBundlePath
-                              withExtraTestBundles:config.additionalTestBundles
-                                         withError:&err];
+        BPApp *app = [BPApp appWithConfig:config withError:&err];
         if (!app) {
             fprintf(stderr, "ERROR: %s\n", [[err localizedDescription] UTF8String]);
             exit(1);

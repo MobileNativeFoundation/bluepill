@@ -177,7 +177,7 @@ typedef void (^CDUnknownBlockType)(void);
 - (void)eraseContentsAndSettingsAsyncWithCompletionHandler:(CDUnknownBlockType)arg1;
 - (void)renameAsync:(id)arg1 completionHandler:(CDUnknownBlockType)arg2;
 - (void)shutdownAsyncWithCompletionHandler:(void (^)(NSError *error))arg1;
-- (void)bootAsyncWithOptions:(id)arg1 completionHandler:(CDUnknownBlockType)arg2;
+- (void)bootAsyncWithOptions:(id)arg1 completionHandler:(void (^)(NSError *error))arg2;
 - (BOOL)unpairIDSRelayWithDevice:(id)arg1 error:(id *)arg2;
 - (BOOL)setActiveIDSRelayDevice:(id)arg1 error:(id *)arg2;
 - (BOOL)disconnectIDSRelayToDevice:(id)arg1 error:(id *)arg2;
