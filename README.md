@@ -82,8 +82,6 @@ A full list supported options are listed here.
 |         quiet          |           -q           | Turn off all output except fatal errors.                                           |     N    | YES              |
 |          help          |           -h           | Help.                                                                              |     N    | n/a              |
 |     runner-app-path    |           -u           | The test runner for UI tests.                                                      |     N    | n/a              |
-|         quiet          |           -q           | Turn off all output except fatal errors.                                           |     N    | YES              |
-|         quiet          |           -q           | Turn off all output except fatal errors.                                           |     N    | YES              |
 
 ## Demo
 
@@ -100,7 +98,7 @@ Bluepill was inspired by [parallel iOS test](https://github.com/plu/parallel_ios
 ## Q & A
 - Are we able to run Xcode UI Testing bundle with Bluepill
 
-  _YES_, we recently added support for Xcode UI Testing bundles. Thanks to the inspiration from [FBSimulatorControl](https://github.com/facebook/FBSimulatorControl).
+  _YES_, we recently added support for Xcode UI Testing bundles. Thanks to the inspiration from [FBSimulatorControl](https://github.com/facebook/FBSimulatorControl). Bluepill now supports Xcode unit test bundle and UI test bundles.
 
 - Easiest way to get Bluepill binary?
 
