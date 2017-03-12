@@ -53,7 +53,7 @@
         if (unitTestFiles) {
             [allUnitTestFiles addObjectsFromArray:unitTestFiles];
         }
-        if (error) {return nil;}
+        if (error && *error) {return nil;}
 
         // Read ui test bundles.
         if (config.testRunnerAppPath) {
