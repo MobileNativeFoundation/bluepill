@@ -13,25 +13,28 @@
 #import <objc/runtime.h>
 #import "BPConstants.h"
 
-#define BP_VALUE 1 // Single value
-#define BP_LIST  2 // List value
-#define BP_PATH  4 // Single value, CWD will be prepended
-#define BP_BOOL  8 // Boolean variable
+typedef NS_OPTIONS(NSUInteger, BPOptionType) {
+    BP_VALUE = 1, // Single value
+    BP_LIST = 1 << 1, // List value
+    BP_PATH = 1 << 2, // Single value, CWD will be prepended
+    BP_BOOL = 1 << 3, // Boolean value
+    BP_INTEGER = 1 << 4, // Integer value
+};
 
 // This data structure is shared between `bp` and `bluepill` to keep the
 // arguments consistent and also make it easier to share config files
 // between the two.
 struct BPOptions {
-    int         val;          // short option (e.g. -f)
-    const char  *name;        // long name of the option (e.g. --foobar)
-    int         program;      // BP_MASTER, BP_SLAVE, or both (BP_MASTER | BP_SLAVE)
-    BOOL        required;     // Whether the option is required or optional
-    BOOL        seen;         // Whether we've seen the option in processing.
-    int         has_arg;      // One of: no_argument, required_argument, optional_argument
-    const char  *default_val; // Default value (if option not provided)
-    int         kind;         // List vs value.
-    const char  *property;    // Which class property to set (via KVO)
-    const char  *help;        // Help string, what the option does.
+    int          val;          // short option (e.g. -f)
+    const char   *name;        // long name of the option (e.g. --foobar)
+    int          program;      // BP_MASTER, BP_SLAVE, or both (BP_MASTER | BP_SLAVE)
+    BOOL         required;     // Whether the option is required or optional
+    BOOL         seen;         // Whether we've seen the option in processing.
+    int          has_arg;      // One of: no_argument, required_argument, optional_argument
+    const char   *default_val; // Default value (if option not provided)
+    BPOptionType kind;         // List vs value.
+    const char   *property;    // Which class property to set (via KVO)
+    const char   *help;        // Help string, what the option does.
 } BPOptions[] = {
 
     // Required argument
@@ -51,23 +54,23 @@ struct BPOptions {
         "Read options from the specified configuration file instead of the command line"},
     {'t', "test-bundle-path", BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
         "The test bundle to run tests."},
-    {'C', "repeat-count", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "1", BP_VALUE, "repeatTestsCount",
+    {'C', "repeat-count", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "1", BP_VALUE | BP_INTEGER, "repeatTestsCount",
         "Number of times we'll run the entire test suite (used for stability testing)."},
     {'N', "no-split", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "noSplit",
         "A list of NO split test bundles"},
     {'P', "print-config", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "stdout", BP_VALUE, "configOutputFile",
         "Print a configuration file suitable for passing back using the `-c` option."},
-    {'R', "error-retries", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "4", BP_VALUE, "errorRetriesCount",
+    {'R', "error-retries", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "4", BP_VALUE | BP_INTEGER, "errorRetriesCount",
         "Number of times we'll recover from crashes to continue running the current test suite."},
-    {'S', "stuck-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE, "stuckTimeout",
+    {'S', "stuck-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "stuckTimeout",
         "Timeout in seconds for a test that seems stuck (no output)."},
-    {'T', "test-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE, "testCaseTimeout",
+    {'T', "test-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "testCaseTimeout",
         "Timeout in seconds for a test that is producing output."},
-    {'f', "failure-tolerance", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NO, BP_VALUE, "failureTolerance",
+    {'f', "failure-tolerance", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "0", BP_VALUE | BP_INTEGER, "failureTolerance",
         "The number of retries on any failures (app crash/test failure)."},
     {'i', "include", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToRun",
         "Include a testcase in the set of tests to run (unless specified in `exclude`)."},
-    {'n', "num-sims", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "4", BP_VALUE, "numSims",
+    {'n', "num-sims", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "4", BP_VALUE | BP_INTEGER, "numSims",
         "Number of simulators to run in parallel. (bluepill only)"},
     {'o', "output-dir", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
         "Directory where to put output log files (bluepill only)."},
@@ -103,17 +106,17 @@ struct BPOptions {
         "Additional XCTest bundles to test."},
     {350, "additional-ui-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUITestBundles",
         "Additional XCUITest bundles to test."},
-    {351, "max-sim-create-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxCreateTries",
+    {351, "max-sim-create-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxCreateTries",
         "The maximum number of times to attempt to create a simulator before failing a test attempt"},
-    {352, "max-sim-install-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxInstallTries",
+    {352, "max-sim-install-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxInstallTries",
         "The maximum number of times to attempt to install the test app into a simulator before failing a test attempt"},
-    {353, "max-sim-launch-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE, "maxLaunchTries",
+    {353, "max-sim-launch-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxLaunchTries",
         "The maximum number of times to attempt to launch the test app in a simulator before failing a test attempt"},
-    {354, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE, "createTimeout",
+    {354, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "createTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator creation"},
-    {355, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE, "launchTimeout",
+    {355, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "launchTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on application launch in the simulator"},
-    {356, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE, "deleteTimeout",
+    {356, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "deleteTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator deletion"},
     {0, 0, 0, 0, 0, 0, 0}
 };
@@ -211,16 +214,25 @@ static NSUUID *sessionID;
                         forKey:propName];
             }
         } else {
-            [self setValue:value
-                    forKey:propName];
+            if (bpo->kind & BP_INTEGER) {
+                [self setValue:@([value integerValue]) forKey:propName];
+            } else {
+                [self setValue:value forKey:propName];
+            }
         }
     } else if (bpo->kind & BP_LIST) {
+        id listValue = value;
+
+        if (bpo->kind & BP_INTEGER) {
+            listValue = @([value integerValue]);
+        }
+
         NSString *property = [NSString stringWithUTF8String:bpo->property];
         NSMutableArray *a = [self valueForKey:property];
         if (a) {
-            [a addObject:value];
+            [a addObject:listValue];
         } else {
-            NSMutableArray *a = [[NSMutableArray alloc] initWithArray:@[value]];
+            NSMutableArray *a = [[NSMutableArray alloc] initWithArray:@[listValue]];
             [self setValue:a forKey:property];
         }
     }
