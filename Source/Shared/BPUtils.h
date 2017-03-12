@@ -103,6 +103,14 @@ typedef NS_ENUM(int, BPKind) {
 + (NSDictionary *)buildArgsAndEnvironmentWith:(NSString *)schemePath;
 
 /*!
+ * @discussion return the environment variable from a scheme, expanding Xcode variables where possible (such as SRCROOT)
+ * @param environmentVariable environment variable value
+ * @param schemePath the path to the scheme file
+ * @return the expanded environment variable value
+ */
++ (NSString *)expandEnvironmentVariable:(NSString *)environmentVariable withSchemePath:(NSString *)schemePath;
+
+/*!
  * @discussion run a shell command and return the output
  * @param command the shell command to run
  * @return return the shell output

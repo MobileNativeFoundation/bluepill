@@ -177,12 +177,42 @@ static BOOL quiet = NO;
         for (NSXMLElement *node in envNodes) {
             NSString *key = [[node attributeForName:@"key"] stringValue];
             NSString *value = [[node attributeForName:@"value"] stringValue];
-            argsAndEnv[@"env"][key] = value;
+            argsAndEnv[@"env"][key] = [self expandEnvironmentVariable:value withSchemePath:schemePath];
 
         }
     }
     NSAssert(error == nil, @"Failed to get nodes: %@", [error localizedFailureReason]);
     return argsAndEnv;
+}
+
++ (NSString *)expandEnvironmentVariable:(NSString *)environmentVariable withSchemePath:(NSString *)schemePath {
+    NSString *xcodeprojPath;
+    NSRange xcodeprojRange = [schemePath rangeOfString:@".xcodeproj"];
+
+    if (xcodeprojRange.location != NSNotFound) {
+        xcodeprojPath = [schemePath substringToIndex:NSMaxRange(xcodeprojRange)];
+    }
+
+    NSString *srcroot = [xcodeprojPath stringByDeletingLastPathComponent];
+    NSMutableDictionary<NSString *, NSString *> *replacements = [NSMutableDictionary dictionary];
+
+    if (xcodeprojPath) {
+        replacements[@"PROJECT_FILE_PATH"] = xcodeprojPath;
+    }
+
+    if (srcroot) {
+        replacements[@"SRCROOT"] = srcroot;
+        replacements[@"SOURCE_ROOT"] = srcroot;
+        replacements[@"PROJECT_DIR"] = srcroot;
+    }
+
+    for (NSString *nextKey in replacements) {
+        NSString *nextValue = [replacements objectForKey:nextKey];
+
+        environmentVariable = [environmentVariable stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"$(%@)", nextKey] withString:nextValue];
+    }
+
+    return environmentVariable;
 }
 
 + (NSString *)runShell:(NSString *)command {

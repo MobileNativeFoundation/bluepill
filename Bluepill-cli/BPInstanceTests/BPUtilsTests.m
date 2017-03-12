@@ -59,4 +59,14 @@
                                          };
     XCTAssert([dictionary isEqualToDictionary:expectedDictionary], @"Dictionary doesn't match expectation");
 }
+
+- (void)testEnvironmentVariableExpansion {
+    NSString *schemePath = @"/Users/test/XcodeProject/XcodeProject.xcodeproj/xcshareddata/xcschemes/XcodeProjectTests.xcscheme";
+
+    XCTAssertEqualObjects([BPUtils expandEnvironmentVariable:@"$(SRCROOT)/Resources" withSchemePath:schemePath], @"/Users/test/XcodeProject/Resources");
+    XCTAssertEqualObjects([BPUtils expandEnvironmentVariable:@"$(SOURCE_ROOT)/Resources" withSchemePath:schemePath], @"/Users/test/XcodeProject/Resources");
+    XCTAssertEqualObjects([BPUtils expandEnvironmentVariable:@"$(PROJECT_DIR)/Resources" withSchemePath:schemePath], @"/Users/test/XcodeProject/Resources");
+    XCTAssertEqualObjects([BPUtils expandEnvironmentVariable:@"$(PROJECT_FILE_PATH)" withSchemePath:schemePath], @"/Users/test/XcodeProject/XcodeProject.xcodeproj");
+}
+
 @end
