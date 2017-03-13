@@ -40,7 +40,6 @@
     XCTAssert([[err localizedDescription] containsString:@"Missing required option"]);
     XCTAssert([[err localizedDescription] containsString:@"-a/--app"]);
     XCTAssert([[err localizedDescription] containsString:@"-s/--scheme-path"]);
-    XCTAssert([[err localizedDescription] containsString:@"-t/--test"]);
  }
 
 - (void)testListArguments {
