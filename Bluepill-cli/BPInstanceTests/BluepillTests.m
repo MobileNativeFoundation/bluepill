@@ -200,7 +200,7 @@
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
     self.config.errorRetriesCount = @1;
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     self.config.onlyRetryFailed = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
@@ -257,7 +257,7 @@
 - (void)testReportWithAppHangingTestsShouldReturnFailure {
     self.config.stuckTimeout = @3;
     self.config.plainOutput = YES;
-    self.config.failureTolerance = 0;
+    self.config.failureTolerance = @0;
     self.config.errorRetriesCount = @100;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
@@ -298,7 +298,7 @@
     self.config.outputDirectory = outputDir;
     self.config.errorRetriesCount = @100;
     self.config.junitOutput = YES;
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);
     // validate the report
@@ -316,7 +316,7 @@
     self.config.outputDirectory = outputDir;
     self.config.errorRetriesCount = @100;
     self.config.junitOutput = YES;
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);
     // Make sure all tests started on the first run
@@ -341,7 +341,7 @@
     self.config.outputDirectory = outputDir;
     self.config.errorRetriesCount = @100;
     self.config.junitOutput = YES;
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     self.config.onlyRetryFailed = YES;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);

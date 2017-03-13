@@ -76,7 +76,7 @@ void onInterrupt(int ignore) {
     self.executionConfigCopy = [self.config copy];
 
     // Save our failure tolerance because we're going to be changing this
-    self.failureTolerance = self.executionConfigCopy.failureTolerance;
+    self.failureTolerance = [self.executionConfigCopy.failureTolerance integerValue];
 
     // Connect to test manager daemon and test bundle
 
