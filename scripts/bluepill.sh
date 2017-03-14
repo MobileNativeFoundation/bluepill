@@ -14,6 +14,9 @@ command -v $XCPRETTY >/dev/null 2>&1 || {
         XCPRETTY=cat
 }
 
+# Turn off xcpretty for travis
+test $TRAVIS = true && XCPRETTY=cat
+
 configurations="build test instance_tests runner_tests integration_tests verbose_tests"
 
 if [ "$1" == "-v" ]
