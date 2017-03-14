@@ -53,6 +53,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "BluepillTests">
+               </Test>
+               <Test
                   Identifier = "BluepillTests/testVoyager">
                </Test>
             </SkippedTests>

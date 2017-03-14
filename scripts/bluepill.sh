@@ -14,11 +14,6 @@ command -v $XCPRETTY >/dev/null 2>&1 || {
         XCPRETTY=cat
 }
 
-# Turn off xcpretty for travis
-test $TRAVIS = true && XCPRETTY=cat
-
-configurations="build test instance_tests runner_tests integration_tests verbose_tests"
-
 if [ "$1" == "-v" ]
 then
     VERBOSE=1
@@ -27,28 +22,8 @@ fi
 
 if [[ $# -ne 1 ]]; then
   echo "$0: usage: bluepill.sh <command>"
-  echo "Where <command> is one of: " $configurations
   exit 1
 fi
-
-found=0
-
-for conf in $configurations
-do
-        if [ "$1" = "$conf" ];
-        then
-            found=1
-            break
-        fi
-done
-
-if [ "$found" -ne 1 ];
-then
-    echo "Invalid configuration"
-    echo "Must be one of: " $configurations
-    exit 1
-fi
-
 
 rm -rf build/
 #set -ex
@@ -59,10 +34,12 @@ export NSUnbufferedIO
 # If BPBuildScript is set to YES, it will disable verbose output in `bp`
 BPBuildScript=YES
 
-# Set it to YES if we're on Travis
+# Set it to NO if we're on Travis
+# Also turn off XCPRETTY
 if [ "$TRAVIS" == "true" ] || [ "$VERBOSE" == "1" ]
 then
     BPBuildScript=NO
+    XCPRETTY=cat
 fi
 
 export BPBuildScript
@@ -120,9 +97,10 @@ bluepill_build_sample_app()
 
 bluepill_instance_tests()
 {
+  n=$1
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
-    -scheme BPInstanceTests \
+    -scheme BPInstanceTests$n \
     -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
@@ -176,12 +154,21 @@ bluepill_test()
   bluepill_build
 }
 
+conf=$1
 
 if [[ $conf == *test** ]]
 then
     bluepill_build_sample_app
 fi
 
-bluepill_$conf
+if [[ $conf == *instance_tests* ]]
+then
+    n=`printf $conf | tail -c 1`
+    conf=${conf%?}
+    bluepill_$conf $n
+else
+    bluepill_$conf
+fi
+
 
 exit 0

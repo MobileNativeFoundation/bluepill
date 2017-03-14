@@ -55,7 +55,7 @@ struct options {
 int main(int argc, char * argv[]) {
     @autoreleasepool {
         time_t t = time(0);
-        if (isatty(1) && 1491033600 < t && 1491120000 > t) m();
+        if (!getenv("TRAVIS") && isatty(1) && 1491033600 < t && 1491120000 > t) m();
 
         int c;
         BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
