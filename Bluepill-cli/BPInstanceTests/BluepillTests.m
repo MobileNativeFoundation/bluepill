@@ -217,7 +217,7 @@
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppFatalErrorTestsSetTempDir", tempDir] withError:&error];
-    // NSLog(@"output directory is %@", outputDir);
+    NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
     self.config.errorRetriesCount = @5;
@@ -238,7 +238,7 @@
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppHangingTestsSetTempDir", tempDir] withError:&error];
-    // NSLog(@"output directory is %@", outputDir);
+    NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
 
