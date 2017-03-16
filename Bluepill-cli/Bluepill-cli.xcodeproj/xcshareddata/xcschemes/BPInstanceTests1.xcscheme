@@ -53,7 +53,43 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "BluepillTests">
+                  Identifier = "BluepillTests/testReportWithAppCrashingAndRetryOnlyFailedTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppCrashingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppHangingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppHangingTestsShouldReturnFailure">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithFailingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithFatalErrorTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRetryOnlyFailures">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRetryWithFailingTestsRetriesAll">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRetryWithFailingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRunUITest">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRunWithPassingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRunningAndIgnoringCertainTestCases">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRunningOnlyCertainTestcases">
                </Test>
                <Test
                   Identifier = "BluepillTests/testVoyager">

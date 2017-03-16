@@ -65,6 +65,12 @@
                   Identifier = "BPUtilsTests">
                </Test>
                <Test
+                  Identifier = "BluepillTests/testAppThatCrashesOnLaunch">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testAppThatHangsOnLaunch">
+               </Test>
+               <Test
                   Identifier = "BluepillTests/testReportWithFailingTestsSet">
                </Test>
                <Test
