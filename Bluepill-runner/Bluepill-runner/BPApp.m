@@ -48,12 +48,13 @@
             NSLog(@"There is .xctest file under %@", xcTestsPath);
         }
 
-
         NSArray *unitTestFiles = [self testFilesFromDirectory:xcTestsPath isUITestBundle:NO withError:error];
         if (unitTestFiles) {
             [allUnitTestFiles addObjectsFromArray:unitTestFiles];
         }
-        if (error && *error) {return nil;}
+        if (error && *error) {
+            [BPUtils printInfo:INFO withString:@"No unit test detected - %@", [*error localizedDescription]];
+        }
 
         // Read ui test bundles.
         if (config.testRunnerAppPath) {
@@ -65,6 +66,9 @@
             if (uiTestFiles) {
                 [allUITestFiles addObjectsFromArray:uiTestFiles];
             }
+        }
+        if (error && *error) {
+            [BPUtils printInfo:INFO withString:@"No UI test bundle detected %@", [*error localizedDescription]];
         }
     }
 

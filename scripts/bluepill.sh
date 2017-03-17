@@ -64,11 +64,11 @@ bluepill_build()
     -workspace Bluepill.xcworkspace \
     -scheme bluepill \
     -configuration Release \
-    -derivedDataPath "build/" | tee results.txt | $XCPRETTY
+    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
 
   test $? == 0 || {
           echo Build failed
-          cat results.txt
+          cat result.txt
           exit 1
   }
   test -x build/Build/Products/Release/bluepill || {
@@ -89,7 +89,7 @@ bluepill_build_sample_app()
   
   test $? == 0 || {
           echo Build failed
-          cat results.txt
+          cat result.txt
           exit 1
   }
   set +o pipefail
@@ -135,7 +135,7 @@ bluepill_integration_tests()
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
-    echo See results.txt for details
+    echo See result.txt for details
     exit 1
   fi
 }
