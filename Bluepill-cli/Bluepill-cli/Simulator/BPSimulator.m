@@ -7,10 +7,8 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
-#import "SimulatorRunner.h"
+#import "BPSimulator.h"
 #import "SimulatorHelper.h"
-#import "SimulatorMonitor.h"
-#import "SimDevice.h"
 #import "BPConfiguration.h"
 #import "BPConstants.h"
 #import "CoreSimulator.h"
@@ -18,53 +16,67 @@
 #import "BPUtils.h"
 #import <AppKit/AppKit.h>
 #import <sys/stat.h>
+#import "BPTestBundleConnection.h"
+#import "BPTestDaemonConnection.h"
 
-#pragma mark - environment constants
-
-@interface SimulatorRunner()<NSXMLParserDelegate>
+@interface BPSimulator()
 
 @property (nonatomic, strong) BPConfiguration *config;
-@property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) NSRunningApplication *app;
 @property (nonatomic, strong) NSFileHandle *stdOutHandle;
-@property (nonatomic, strong) SimulatorMonitor *monitor;
 @property (nonatomic, assign) BOOL needsRetry;
 @property (nonatomic, assign) BOOL appProcessFinished;
-@property (nonatomic, assign) BOOL abandoned;
 
 @end
 
-@implementation SimulatorRunner
+@implementation BPSimulator
 
-+ (instancetype)simulatorRunnerWithConfiguration:(BPConfiguration *)config {
-    SimulatorRunner *runner = [[self alloc] init];
-    runner.config = config;
-    return runner;
++ (instancetype)simulatorWithConfiguration:(BPConfiguration *)config {
+    BPSimulator *sim = [[self alloc] init];
+    sim.config = config;
+    return sim;
 }
 
 - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
     assert(!self.device);
+    deviceName = deviceName ?: [NSString stringWithFormat:@"BP%d", getpid()];
+    // Create a new simulator with the given device/runtime
+    NSError *error;
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+    if (!sc) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        return;
+    }
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (!deviceSet) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        return;
+    }
+
     __weak typeof(self) __self = self;
-    [SimulatorRunner createDeviceWithConfig:self.config andName:deviceName completion:^(NSError *error, SimDevice *device) {
-        __self.device = device;
-        if (!__self.device || error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completion(error);
-            });
-        } else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [__self bootSimulatorWithCompletion:^(NSError *error) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        completion(error);
-                    });
-                }];
-            });
-        }
-    }];
+    [deviceSet createDeviceAsyncWithType:self.config.simDeviceType
+                                 runtime:self.config.simRuntime
+                                    name:deviceName
+                       completionHandler:^(NSError *error, SimDevice *device) {
+                           __self.device = device;
+                           if (!__self.device || error) {
+                               dispatch_async(dispatch_get_main_queue(), ^{
+                                   completion(error);
+                               });
+                           } else {
+                               dispatch_async(dispatch_get_main_queue(), ^{
+                                   [__self bootWithCompletion:^(NSError *error) {
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           completion(error);
+                                       });
+                                   }];
+                               });
+                           }
+                       }];
 }
 
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
-    self.device = [SimulatorRunner findDeviceWithConfig:self.config andDeviceID:deviceUDID];
+    self.device = [BPSimulator findDeviceWithConfig:self.config andDeviceID:deviceUDID];
     if (!self.device) {
         [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice not found: %@", [deviceUDID UUIDString]]];
         return NO;
@@ -76,7 +88,7 @@
     }
 
     if (!self.config.headlessMode) {
-        self.app = [SimulatorRunner findSimAppWithDeviceUDID: [deviceUDID UUIDString]];
+        self.app = [BPSimulator findSimAppWithDeviceUDID: [deviceUDID UUIDString]];
         if (!self.app) {
             [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
                                                  [deviceUDID UUIDString]]];
@@ -86,7 +98,8 @@
     return YES;
 }
 
-- (void)bootSimulatorWithCompletion:(void (^)(NSError *))completion {
+
+- (void)bootWithCompletion:(void (^)(NSError *error))completion {
     // Now boot it.
     if (self.config.headlessMode) {
         [BPUtils printInfo:INFO withString:@"Running in HEADLESS mode..."];
@@ -96,52 +109,6 @@
     // not headless? open the simulator app.
     [BPUtils printInfo:INFO withString:@"Running in NON-headless mode..."];
     [self openSimulatorWithCompletion:completion];
-}
-
-- (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion {
-    if (self.app) {
-        [self.app terminate];
-        // We need to wait until the simulator has shut down.
-        int attempts = 300;
-        while (attempts > 0 && ![self.device.stateString isEqualToString:@"Shutdown"]) {
-            [NSThread sleepForTimeInterval:1.0];
-            --attempts;
-        }
-        if (![self.device.stateString isEqualToString:@"Shutdown"]) {
-            NSLog(@"Timed out waiting for %@ to shutdown. It won't be deleted. Last state: %@", self.device.name, self.device.stateString);
-            // Go ahead and try to delete anyway
-        }
-        [SimulatorRunner deleteDevice:self.device withConfig:self.config andCompletion:^(NSError *error) {
-            if (error) {
-                NSLog(@"Could not delete simulator: %@", [error localizedDescription]);
-            }
-            completion(error, error ? NO: YES);
-        }];
-    } else {
-        [SimulatorRunner shutdownDevice:self.device withCompletion:^(NSError *error) {
-            if (!error) {
-                [SimulatorRunner deleteDevice:self.device withConfig:self.config andCompletion:^(NSError *error) {
-                    if (error) {
-                        NSLog(@"Could not delete simulator: %@", [error localizedDescription]);
-                    }
-                    completion(error, error ? NO: YES);
-                }];
-            } else {
-                NSLog(@"Could not shutdown simulator: %@", [error localizedDescription]);
-                completion(error, NO);
-            }
-        }];
-    }
-}
-
-- (BOOL)isSimulatorRunning {
-    NSError *error = nil;
-    BOOL isRunning = [[self.device stateString] isEqualToString:@"Booted"];
-    BOOL isAvailable = [self.device isAvailableWithError:&error];
-    if (error) {
-        fprintf(stderr, "%s\n", [[error description] UTF8String]);
-    }
-    return isRunning && isAvailable;
 }
 
 - (void)openSimulatorWithCompletion:(void (^)(NSError *))completion {
@@ -166,7 +133,7 @@
             completion(error);
             return;
         }
-        error = [SimulatorRunner waitForDeviceReady:self.device];
+        error = [self waitForDeviceReady];
         if (error) {
             [self.app terminate];
         }
@@ -179,29 +146,30 @@
     NSDictionary *options = @{
                               @"register-head-services" : @YES
                               };
-    [self.device bootAsyncWithOptions:options completionHandler:^{
-        NSError *error = [SimulatorRunner waitForDeviceReady:self.device];
+    [self.device bootAsyncWithOptions:options completionHandler:^(NSError *bootError){
+        NSError *error = [self waitForDeviceReady];
         if (error) {
             [self.app terminate];
         }
-        completion(error);
+        completion(bootError);
     }];
 }
 
-+ (NSError *)waitForDeviceReady:(SimDevice *)device {
+- (NSError *)waitForDeviceReady {
     int attempts = 1200;
-    while (attempts > 0 && ![device.stateString isEqualToString:@"Booted"]) {
+    while (attempts > 0 && ![self.device.stateString isEqualToString:@"Booted"]) {
         [NSThread sleepForTimeInterval:0.1];
         --attempts;
     }
-    if (![device.stateString isEqualToString:@"Booted"]) {
-        [BPUtils printInfo:ERROR withString:@"Simulator %@ failed to boot. State: %@", device.UDID.UUIDString, device.stateString];
+    if (![self.device.stateString isEqualToString:@"Booted"]) {
+        [BPUtils printInfo:ERROR withString:@"Simulator %@ failed to boot. State: %@", self.device.UDID.UUIDString, self.device.stateString];
         return [NSError errorWithDomain:@"Simulator failed to boot" code:-1 userInfo:nil];
     }
-    [BPUtils printInfo:INFO withString:@"Simulator %@ achieved the BOOTED state", device.UDID.UUIDString, device.stateString];
+    [BPUtils printInfo:INFO withString:@"Simulator %@ achieved the BOOTED state", self.device.UDID.UUIDString, self.device.stateString];
     return nil;
 }
 
+// <<<<<<< HEAD:Bluepill-cli/Bluepill-cli/Simulator/SimulatorRunner.m
 + (BOOL)installAppWithBundleID:(NSString *)hostBundleID
                     bundlePath:(NSString *)hostBundlePath
                         device:(SimDevice *)device
@@ -303,14 +271,23 @@
     [deviceSet deleteDeviceAsync:device completionHandler:completion];
 }
 
+// =======
+// >>>>>>> 7a0b95b611c5c5a966b7867d37e9a34bfffc4283:Bluepill-cli/Bluepill-cli/Simulator/BPSimulator.m
 - (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
+    NSString *hostBundlePath = self.config.appBundlePath;
+
+    if (self.config.testRunnerAppPath) {
+        NSString *hostAppPath = self.config.testRunnerAppPath;
+        hostBundleId = [SimulatorHelper bundleIdForPath:hostAppPath];
+        hostBundlePath = hostAppPath;
+    }
 
     // Install the host application
-    BOOL installed = [SimulatorRunner installAppWithBundleID:hostBundleId
-                                                  bundlePath:self.config.appBundlePath
-                                                      device:self.device error:error];
-
+    BOOL installed = [self.device
+                      installApplication:[NSURL fileURLWithPath:hostBundlePath]
+                      withOptions:@{kCFBundleIdentifier: hostBundleId}
+                      error:error];
     if (!installed) {
         return NO;
     }
@@ -321,21 +298,24 @@
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
 
     // Install the host application
-    return [SimulatorRunner uninstallAppWithBundleID:hostBundleId
+    return [BPSimulator uninstallAppWithBundleID:hostBundleId
                                           bundlePath:self.config.appBundlePath
                                               device:self.device error:error];
 }
 
-- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {
+- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion isHostApp:(BOOL)isHostApp {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.appBundlePath];
 
+    // One bp instance only run one kind of xctest file.
+    if (self.config.testRunnerAppPath) {
+        hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.testRunnerAppPath];
+        hostBundleId = [SimulatorHelper bundleIdForPath:self.config.testRunnerAppPath];
+    }
     // Create the environment for the host application
     NSDictionary *argsAndEnv = [BPUtils buildArgsAndEnvironmentWith:self.config.schemePath];
 
-    NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWith:hostAppExecPath
-                                                                                                                         testbundlePath:self.config.testBundlePath
-                                                                                                                                 config:self.config]];
+    NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config]];
     [appLaunchEnvironment addEntriesFromDictionary:argsAndEnv[@"env"]];
 
     if (self.config.testing_CrashAppOnLaunch) {
@@ -383,7 +363,16 @@
     __block typeof(self) blockSelf = self;
 
     [self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid) {
+        // Save the process ID to the monitor
+        blockSelf.monitor.appPID = pid;
+        blockSelf.monitor.simulatorState = AppLaunched;
+
+        [blockSelf.stdOutHandle writeData:[@"DEBUG_FLAG_TOBEREMOVED.\n" dataUsingEncoding:NSUTF8StringEncoding]];
+
+        [BPUtils printInfo:INFO withString:@"Launch succeeded"];
+
         if (error == nil) {
+            [BPUtils printInfo:INFO withString:@"No error"];
             dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC, pid, DISPATCH_PROC_EXIT, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
             dispatch_source_set_event_handler(source, ^{
                 dispatch_source_cancel(source);
@@ -400,16 +389,69 @@
                 [parser handleChunkData:chunk];
             };
         }
-
         dispatch_async(dispatch_get_main_queue(), ^{
             // Save the process ID to the monitor
             blockSelf.monitor.appPID = pid;
 
+            [BPUtils printInfo:INFO withString:@"Completion block for launch"];
             if (completion) {
+                [BPUtils printInfo:INFO withString:@"Calling completion block"];
                 completion(error, pid);
             }
         });
     }];
+
+}
+
+- (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion {
+    NSError *error;
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (self.app) {
+        [self.app terminate];
+        // We need to wait until the simulator has shut down.
+        int attempts = 300;
+        while (attempts > 0 && ![self.device.stateString isEqualToString:@"Shutdown"]) {
+            [NSThread sleepForTimeInterval:1.0];
+            --attempts;
+        }
+        if (![self.device.stateString isEqualToString:@"Shutdown"]) {
+            NSLog(@"Timed out waiting for %@ to shutdown. It won't be deleted. Last state: %@", self.device.name, self.device.stateString);
+            // Go ahead and try to delete anyway
+        }
+        [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
+            if (error) {
+                NSLog(@"Could not delete simulator: %@", [error localizedDescription]);
+            }
+            completion(error, error ? NO: YES);
+        }];
+    } else {
+        [self.device shutdownAsyncWithCompletionHandler:^(NSError *error) {
+            if (!error) {
+                [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
+                    if (error) {
+                        NSLog(@"Could not delete simulator: %@", [error localizedDescription]);
+                    }
+                    completion(error, error ? NO: YES);
+                }];
+            } else {
+                NSLog(@"Could not shutdown simulator: %@", [error localizedDescription]);
+                completion(error, NO);
+            }
+        }];
+    }
+}
+
+#pragma mark - helper methods
+
+- (BOOL)isSimulatorRunning {
+    NSError *error = nil;
+    BOOL isRunning = [[self.device stateString] isEqualToString:@"Booted"];
+    BOOL isAvailable = [self.device isAvailableWithError:&error];
+    if (error) {
+        fprintf(stderr, "%s\n", [[error description] UTF8String]);
+    }
+    return isRunning && isAvailable;
 }
 
 - (BOOL)isFinished {
@@ -445,6 +487,11 @@
 
 - (NSString *)UDID {
     return [self.device.UDID UUIDString];
+}
+
+- (NSDictionary *)appInfo:(NSString *)bundleID error:(NSError **)error {
+    NSDictionary *appInfo = [self.device propertiesOfApplication:bundleID error:error];
+    return appInfo;
 }
 
 @end

@@ -13,10 +13,10 @@
 
 @interface BPRunner : NSObject
 
-@property (nonatomic, strong, nonnull) BPConfiguration *config;
-@property (nonatomic, strong, nonnull) BPApp *app;
-@property (nonatomic, strong, nonnull) NSString *bpExecutable;
-@property (nonatomic, strong,nonnull) NSMutableArray *nsTaskList;
+@property (nonatomic, strong) BPConfiguration *config;
+@property (nonatomic, strong) BPApp *app;
+@property (nonatomic, strong) NSString *bpExecutable;
+@property (nonatomic, strong) NSMutableArray *nsTaskList;
 /*!
  * @discussion get a BPRunnner to run tests
  * @param app the BPapp
@@ -24,9 +24,9 @@
  * @param bpPath the path to the Bp binary, if this is nil, we will search in the bluepill directory
  * @return return the BPRunner to start running tests
  */
-+ (instancetype _Nullable )BPRunnerForApp:( BPApp * _Nonnull )app
-                    withConfig:(BPConfiguration * _Nonnull)config
-                    withBpPath:(NSString * _Nullable)bpPath;
++ (instancetype)BPRunnerForApp:(BPApp *)app
+                               withConfig:(BPConfiguration *)config
+                               withBpPath:(NSString *)bpPath;
 
 
 /*!
@@ -37,8 +37,8 @@
  * @return An NSTask ready to be executed via [task launch] or nil in failure.
  *
  */
-- (NSTask * _Nonnull)newTaskWithBundle:(NSArray * _Nonnull)bundle andNumber:(NSUInteger)number andDevice:(NSString * _Nullable)deviceID andCompletionBlock:(void (^_Nonnull)(NSTask * _Nonnull))block;
 
+- (NSTask *)newTaskWithBundle:(NSArray *)bundle andNumber:(NSUInteger)number andDevice:(NSString *)deviceID andCompletionBlock:(void (^)(NSTask * ))block;
 /**
  @discussion start running tests
  @return 1: test failures 0: pass -1: failed to run tests

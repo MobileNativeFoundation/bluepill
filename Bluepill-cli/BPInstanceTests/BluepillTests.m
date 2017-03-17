@@ -48,10 +48,11 @@
     self.config.jsonOutput = NO;
     self.config.headlessMode = NO;
     self.config.junitOutput = NO;
+    self.config.testRunnerAppPath = nil;
+    self.config.testing_CrashAppOnLaunch = NO;
     self.config.testing_NoAppWillRun = YES;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    self.config.headlessMode = YES;
     [BPUtils quietMode:[BPUtils isBuildScript]];
 
     NSError *err;
@@ -180,11 +181,9 @@
     // NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
-    self.config.errorRetriesCount = @5;
-
+    self.config.errorRetriesCount = @1;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
-
     NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppCrashingTests-results.xml"];
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests.xml"];
     [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
@@ -231,7 +230,7 @@
 }
 
 - (void)testReportWithAppHangingTestsSet {
-    self.config.stuckTimeout = @2;
+    self.config.stuckTimeout = @3;
     self.config.plainOutput = YES;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
@@ -255,7 +254,7 @@
  - if a test timeout or crashed, even if we proceed to the next test, we should still return error exit code.
  */
 - (void)testReportWithAppHangingTestsShouldReturnFailure {
-    self.config.stuckTimeout = @2;
+    self.config.stuckTimeout = @3;
     self.config.plainOutput = YES;
     self.config.failureTolerance = 1;
     self.config.errorRetriesCount = @100;
@@ -506,6 +505,22 @@
     BPExitStatus exitCode2 = [bp run];
     XCTAssert(exitCode2 == BPExitStatusSimulatorReuseFailed);
     XCTAssertNil(bp.simulatorUDID);
+}
+
+- (void)testRunUITest {
+    NSString *testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
+    NSString *testRunnerPath = [BPTestHelper sampleAppUITestRunnerPath];
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/UITestsSetTempDir", tempDir] withError:&error];
+     NSLog(@"output directory is %@", outputDir);
+    self.config.testRunnerAppPath = testRunnerPath;
+    self.config.testBundlePath = testBundlePath;
+    self.config.outputDirectory = outputDir;
+    self.config.junitOutput = YES;
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    self.config.testRunnerAppPath = nil;
+    XCTAssert(exitCode == BPExitStatusTestsAllPassed);
 }
 
 #pragma mark - Test helpers

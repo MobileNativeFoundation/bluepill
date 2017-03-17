@@ -9,38 +9,37 @@
 
 #import <Foundation/Foundation.h>
 #import "BPExitStatus.h"
+#import "SimulatorMonitor.h"
 
 @class BPConfiguration;
 @class BPTreeParser;
 @class SimDevice;
 
-@interface SimulatorRunner : NSObject
+@interface BPSimulator : NSObject
 
+@property (nonatomic, strong) SimulatorMonitor *monitor;
 @property (nonatomic, assign, readonly) BOOL needsRetry;
 @property (nonatomic, readonly) NSString *UDID;
+@property (nonatomic, strong) SimDevice *device;
 
-+ (instancetype)simulatorRunnerWithConfiguration:(BPConfiguration *)config;
++ (instancetype)simulatorWithConfiguration:(BPConfiguration *)config;
 
 - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
-- (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion;
+
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID;
 
-///*!
-// * @discussion install an app in a specified simulator
-// * @param hostBundleID the bundleID of the app to be installed in the simulator
-// * @param hostBundlePath the path to the app (/debug-simulator/ABC.app)
-// * @param device the device that the app will be installed in
-// * @param error the error information
-// * @return return whether the installation is successful or not
-// */
-//+ (BOOL)installAppWithBundleID:(NSString *)hostBundleID
-//                    bundlePath:(NSString *)hostBundlePath
-//                        device:(SimDevice *)device
-//                         error:(NSError **)error;
 
-- (BOOL)installApplicationAndReturnError:(NSError **)error;
 - (BOOL)uninstallApplicationAndReturnError:(NSError **)error;
-- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t pid))completion;
+
+- (void)bootWithCompletion:(void (^)(NSError *error))completion;
+
+- (void)openSimulatorWithCompletion:(void (^)(NSError *))completion;
+
+- (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error;
+
+- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion isHostApp:(BOOL)isHostApp;
+
+- (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion;
 
 /*!
  * @discussion returns true if the simulator is still running -- useful for detecting simulator crashes
@@ -51,9 +50,7 @@
  * @discussion returns true if all execution is completed, false otherwise.
  */
 - (BOOL)isFinished;
-- (BOOL)isApplicationStarted;
-- (BOOL)didTestStart;
 - (BOOL)needsRetry;
 - (BPExitStatus)exitStatus;
-
+- (BOOL)isApplicationStarted;
 @end

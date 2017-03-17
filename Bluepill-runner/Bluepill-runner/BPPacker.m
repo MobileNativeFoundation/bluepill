@@ -16,11 +16,12 @@
 @implementation BPPacker
 
 + (NSMutableArray *)packTests:(NSArray *)xcTestFiles
-               testCasesToRun:(NSArray *)testCasesToRun
-              withNoSplitList:(NSArray *)noSplit
-                  intoBundles:(NSUInteger)numBundles
+                configuration:(BPConfiguration *)config
                      andError:(NSError **)error {
-    NSArray *sortedXCTestFiles = [xcTestFiles sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+    NSArray *testCasesToRun = config.testCasesToRun;
+    NSArray *noSplit = config.noSplit;
+    NSUInteger numBundles = [config.numSims integerValue];
+    NSArray *sortedXCTestFiles = [xcTestFiles sortedArrayUsingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
         NSUInteger numTests1 = [(BPXCTestFile *)obj1 numTests];
         NSUInteger numTests2 = [(BPXCTestFile *)obj2 numTests];
         return numTests2 - numTests1;
@@ -55,7 +56,7 @@
         if ([noSplit containsObject:[xctFile name]] || (bundleTestsToRunCount <= testsPerGroup && bundleTestsToRunCount > 0)) {
             // just pack the whole xctest file and move on
             // testsToRun doesn't work reliably, switch to use testsToSkip
-            BPBundle *bundle = [[BPBundle alloc] initWithPath:xctFile.path andTestsToSkip:@[]];
+            BPBundle *bundle = [[BPBundle alloc] initWithPath:xctFile.path isUITestBundle:xctFile.isUITestFile andTestsToSkip:@[]];
 
             // Always insert no splited tests to the front.
             [bundles insertObject:bundle atIndex:0];
@@ -72,7 +73,7 @@
             range.length = min(testsPerGroup, bundleTestsToRun.count - packed);
             NSMutableArray *testsToSkip = [NSMutableArray arrayWithArray:allTestCases];
             [testsToSkip removeObjectsInArray:[bundleTestsToRun subarrayWithRange:range]];
-            [bundles addObject:[[BPBundle alloc] initWithPath:xctFile.path andTestsToSkip:testsToSkip]];
+            [bundles addObject:[[BPBundle alloc] initWithPath:xctFile.path isUITestBundle:xctFile.isUITestFile andTestsToSkip:testsToSkip]];
             packed += range.length;
         }
         assert(packed == [bundleTestsToRun count]);

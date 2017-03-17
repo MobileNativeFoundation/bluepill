@@ -13,14 +13,6 @@
 #import "BPStats.h"
 #import "BPUtils.h"
 
-typedef NS_ENUM(NSInteger, SimulatorState) {
-    Idle,
-    AppLaunched,
-    Running,
-    TestsStarted,
-    Completed
-};
-
 @interface SimulatorMonitor ()
 
 @property (nonatomic, weak) id<BPMonitorCallbackProtocol> callback;
@@ -31,7 +23,6 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 @property (nonatomic, strong) NSString *currentClassName;
 @property (nonatomic, strong) NSString *previousTestName;
 @property (nonatomic, strong) NSString *previousClassName;
-@property (nonatomic, assign) SimulatorState simulatorState;
 @property (nonatomic, assign) BPExitStatus exitStatus;
 @property (nonatomic, assign) NSUInteger currentOutputId;
 @property (nonatomic, assign) NSUInteger failureCount;
@@ -196,6 +187,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
         self.exitStatus = BPExitStatusAppCrashed;
         [[BPStats sharedStats] addApplicationCrash];
     }
+    self.maxTimeWithNoOutput = 30; // TO BE REMOVED
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(__self.maxTimeWithNoOutput * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (__self.currentOutputId == previousOutputId && (__self.simulatorState >= AppLaunched && __self.simulatorState != Completed)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);

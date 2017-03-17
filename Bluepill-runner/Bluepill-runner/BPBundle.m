@@ -12,13 +12,16 @@
 @implementation BPBundle
 
 - (instancetype)init {
-    return [self initWithPath:nil andTestsToSkip:nil];
+    return [self initWithPath:nil isUITestBundle:NO andTestsToSkip:nil];
 }
 
-- (instancetype)initWithPath:(NSString *)path andTestsToSkip:(NSArray *)tests {
+- (instancetype)initWithPath:(NSString *)path
+              isUITestBundle:(BOOL)isUITest
+              andTestsToSkip:(NSArray *)tests {
     self = [super init];
     if (self) {
         self.path = path;
+        self.isUITestBundle = isUITest;
         self.testsToSkip = tests;
     }
     return self;

@@ -41,16 +41,22 @@
     XCTAssert([[err localizedDescription] containsString:@"-s/--scheme-path"]);
 }
 
-- (void) testAdditionalTestBundles {
+- (void)testAdditionalTestBundles {
     NSError *err;
-    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
+    config.appBundlePath = [BPTestHelper sampleAppPath];
+    NSString *path = @"testScheme.xcscheme";
     [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
     [config saveOpt:[NSNumber numberWithInt:'s'] withArg:[BPTestHelper sampleTestScheme]];
-    [config saveOpt:[NSNumber numberWithInt:350] withArg:@"/tmp/extra-stuff"];
+    [config saveOpt:[NSNumber numberWithInt:'t'] withArg:[BPTestHelper sampleTestScheme]];
+    [config saveOpt:[NSNumber numberWithInt:'X'] withArg:@"/this/is/an/invalid/path"];
+    config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
+
+    [config saveOpt:[NSNumber numberWithInt:349] withArg:@"/tmp/extra-stuff"];
 
     BOOL result = [config processOptionsWithError:&err];
     XCTAssert(result == TRUE);
-    XCTAssert([config.additionalTestBundles isEqualToArray:@[ @"/tmp/extra-stuff" ]]);
+    XCTAssert([config.additionalUnitTestBundles isEqualToArray:@[@"/tmp/extra-stuff"]]);
 }
 
 - (void)testXcodePathIsWrong {
