@@ -37,7 +37,7 @@
     self.config.runtime = @BP_DEFAULT_RUNTIME;
     self.config.repeatTestsCount = @1;
     self.config.errorRetriesCount = @0;
-    self.config.failureTolerance = 0;
+    self.config.failureTolerance = @0;
     self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
     self.config.plainOutput = NO;
     self.config.jsonOutput = NO;
@@ -72,8 +72,13 @@
 - (void)testTwoBPInstances {
     self.config.numSims = @2;
     self.config.errorRetriesCount = @2;
+<<<<<<< HEAD
     self.config.failureTolerance = 2;
     self.config.reuseSimulator = NO;
+=======
+    self.config.failureTolerance = @2;
+    //self.config.reuseSimulator = NO;
+>>>>>>> 2ac96e34f1f91c6b3e3f2bde06ff396d226668e8
 
     NSError *err;
     BPApp *app = [BPApp appWithConfig:self.config
@@ -89,7 +94,7 @@
 - (void)testTwoBPInstancesWithUITests {
     self.config.numSims = @2;
     self.config.errorRetriesCount = @2;
-    self.config.failureTolerance = 2;
+    self.config.failureTolerance = @2;
     //self.config.reuseSimulator = NO;
 
     self.config.testBundlePath = [BPTestHelper sampleAppUITestBundlePath];

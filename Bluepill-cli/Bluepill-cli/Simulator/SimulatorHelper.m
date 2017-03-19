@@ -63,26 +63,34 @@
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:config.appBundlePath];
     NSString *testSimulatorFrameworkPath = [[hostAppExecPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
     NSString *dyldLibraryPath = [NSString stringWithFormat:@"%@:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", testSimulatorFrameworkPath, config.xcodePath];
-    return @{
-             @"AppTargetLocation" : hostAppExecPath,
-             @"DYLD_FALLBACK_FRAMEWORK_PATH" : [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath],
-             @"DTX_CONNECTION_SERVICES_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/Developer/Library/PrivateFrameworks/DTXConnectionServices.framework", config.xcodePath],
-             @"DYLD_FRAMEWORK_PATH" : dyldLibraryPath,
-             @"DYLD_INSERT_LIBRARIES" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/IDEBundleInjection.framework/IDEBundleInjection", config.xcodePath],
-             @"DYLD_LIBRARY_PATH" : dyldLibraryPath,
-             @"NSUnbufferedIO" : @YES,
-             @"OS_ACTIVITY_DT_MODE" : @YES,
-             @"TestBundleLocation" : config.testBundlePath,
-             @"XCInjectBundle" : config.testBundlePath,
-             @"XCInjectBundleInto" : hostAppExecPath,
-             @"MNTF_TINKER_DELAY": @0.01,
-             @"XCODE_DBG_XPC_EXCLUSIONS" : @"com.apple.dt.xctestSymbolicator",
-             @"XCTestConfigurationFilePath" : [SimulatorHelper testEnvironmentWithConfiguration:config],
-             @"__XCODE_BUILT_PRODUCTS_DIR_PATHS" : testSimulatorFrameworkPath,
-             @"__XPC_DYLD_FRAMEWORK_PATH" : testSimulatorFrameworkPath,
-             @"__XPC_DYLD_LIBRARY_PATH" : testSimulatorFrameworkPath,
-             };
+    NSMutableDictionary<NSString *, NSString *> *environment = [@{
+                                                                  @"AppTargetLocation" : hostAppExecPath,
+                                                                  @"DYLD_FALLBACK_FRAMEWORK_PATH" : [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath],
+                                                                  @"DTX_CONNECTION_SERVICES_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/Developer/Library/PrivateFrameworks/DTXConnectionServices.framework", config.xcodePath],
+                                                                  @"DYLD_FRAMEWORK_PATH" : dyldLibraryPath,
+                                                                  @"DYLD_INSERT_LIBRARIES" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/IDEBundleInjection.framework/IDEBundleInjection", config.xcodePath],
+                                                                  @"DYLD_LIBRARY_PATH" : dyldLibraryPath,
+                                                                  @"NSUnbufferedIO" : @YES,
+                                                                  @"OS_ACTIVITY_DT_MODE" : @YES,
+                                                                  @"TestBundleLocation" : config.testBundlePath,
+                                                                  @"XCInjectBundle" : config.testBundlePath,
+                                                                  @"XCInjectBundleInto" : hostAppExecPath,
+                                                                  @"MNTF_TINKER_DELAY": @0.01,
+                                                                  @"XCODE_DBG_XPC_EXCLUSIONS" : @"com.apple.dt.xctestSymbolicator",
+                                                                  @"XCTestConfigurationFilePath" : [SimulatorHelper testEnvironmentWithConfiguration:config],
+                                                                  @"__XCODE_BUILT_PRODUCTS_DIR_PATHS" : testSimulatorFrameworkPath,
+                                                                  @"__XPC_DYLD_FRAMEWORK_PATH" : testSimulatorFrameworkPath,
+                                                                  @"__XPC_DYLD_LIBRARY_PATH" : testSimulatorFrameworkPath,
+                                                                  } mutableCopy];
 
+    if (config.outputDirectory) {
+        NSString *coveragePath = [config.outputDirectory stringByAppendingPathComponent:@"%p.profraw"];
+
+        environment[@"LLVM_PROFILE_FILE"] = coveragePath;
+        environment[@"__XPC_LLVM_PROFILE_FILE"] = coveragePath;
+    }
+
+    return environment;
 }
 
 + (NSString *)testEnvironmentWithConfiguration:(BPConfiguration *)config {

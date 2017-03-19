@@ -43,6 +43,7 @@
     self.config.runtime = @BP_DEFAULT_RUNTIME;
     self.config.repeatTestsCount = @1;
     self.config.errorRetriesCount = @0;
+    self.config.testCaseTimeout = @5;
     self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
     self.config.plainOutput = NO;
     self.config.jsonOutput = NO;
@@ -199,7 +200,7 @@
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
     self.config.errorRetriesCount = @1;
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     self.config.onlyRetryFailed = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
@@ -242,7 +243,7 @@
     self.config.junitOutput = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    XCTAssertTrue(exitCode == BPExitStatusTestTimeout);
+    XCTAssertTrue(exitCode == BPExitStatusTestTimeout || exitCode == BPExitStatusAppCrashed);
 
     NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppHangingTests-results.xml"];
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"hanging_tests.xml"];
@@ -256,7 +257,7 @@
 - (void)testReportWithAppHangingTestsShouldReturnFailure {
     self.config.stuckTimeout = @3;
     self.config.plainOutput = YES;
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @0;
     self.config.errorRetriesCount = @100;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
@@ -268,7 +269,7 @@
     self.config.junitOutput = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    XCTAssertTrue(exitCode == BPExitStatusTestTimeout);
+    XCTAssertTrue(exitCode == BPExitStatusTestTimeout || exitCode == BPExitStatusAppCrashed);
 
     NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppHangingTests-results.xml"];
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"hanging_tests.xml"];
@@ -297,7 +298,7 @@
     self.config.outputDirectory = outputDir;
     self.config.errorRetriesCount = @100;
     self.config.junitOutput = YES;
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);
     // validate the report
@@ -315,7 +316,7 @@
     self.config.outputDirectory = outputDir;
     self.config.errorRetriesCount = @100;
     self.config.junitOutput = YES;
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);
     // Make sure all tests started on the first run
@@ -340,7 +341,7 @@
     self.config.outputDirectory = outputDir;
     self.config.errorRetriesCount = @100;
     self.config.junitOutput = YES;
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     self.config.onlyRetryFailed = YES;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);
@@ -411,7 +412,7 @@
     NSString *oldDeviceID = self.config.useSimUDID;
     
     self.config.testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     self.config.keepSimulator = NO;
     self.config.errorRetriesCount = @2;
     
@@ -441,7 +442,7 @@
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.useSimUDID = badDeviceID;
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     self.config.errorRetriesCount = @2;
     
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
@@ -497,7 +498,7 @@
 
 //make sure we don't retry to create a new simulator to delete
 - (void)testDeleteSimulatorNotExistWithRetry {
-    self.config.failureTolerance = 1;
+    self.config.failureTolerance = @1;
     self.config.errorRetriesCount = @2;
     self.config.deleteSimUDID = @"XXXXX";
 
@@ -508,6 +509,8 @@
 }
 
 - (void)testRunUITest {
+    // The delay of ui test bootstrapping is larger than 5s.
+    self.config.testCaseTimeout = @300;
     NSString *testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
     NSString *testRunnerPath = [BPTestHelper sampleAppUITestRunnerPath];
     NSString *tempDir = NSTemporaryDirectory();

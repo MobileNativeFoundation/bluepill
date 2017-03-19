@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic) BOOL junitOutput;
 @property (nonatomic) BOOL plainOutput;
 @property (nonatomic) BOOL jsonOutput;
-@property (nonatomic) NSUInteger failureTolerance;
+@property (nonatomic, strong) NSNumber *failureTolerance;
 @property (nonatomic) BOOL onlyRetryFailed;
 @property (nonatomic, strong) NSArray *testCasesToSkip;
 @property (nonatomic, strong) NSArray *testCasesToRun;
