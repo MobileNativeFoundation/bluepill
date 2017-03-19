@@ -123,6 +123,23 @@
     XCTAssert([runner.nsTaskList count] == 0);
 }
 
+- (void)testTwoBPInstancesReuseSim {
+    self.config.numSims = @2;
+    [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
+    [BPUtils quietMode:[BPUtils isBuildScript]];
+    self.config.reuseSimulator = YES;
+
+    NSError *err;
+    BPApp *app = [BPApp appWithConfig:self.config
+                            withError:&err];
+
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
+    int rc = [runner run];
+    XCTAssert(rc == 0);
+    XCTAssert([runner.nsTaskList count] == 0);
+}
+
 // This test killed Travis, have to disable it.
 //- (void)testFourBPInstances {
 //    self.config.numSims = @4;
@@ -138,7 +155,7 @@
 //    BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
 //    int rc = [runner run];
 //    XCTAssert(rc == 0);
-//    //XCTAssert([runner.nsTaskList count] == 0);
+//    XCTAssert([runner.nsTaskList count] == 0);
 //}
 
 @end
