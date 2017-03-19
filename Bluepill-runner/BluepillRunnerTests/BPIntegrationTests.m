@@ -72,13 +72,8 @@
 - (void)testTwoBPInstances {
     self.config.numSims = @2;
     self.config.errorRetriesCount = @2;
-<<<<<<< HEAD
-    self.config.failureTolerance = 2;
-    self.config.reuseSimulator = NO;
-=======
     self.config.failureTolerance = @2;
-    //self.config.reuseSimulator = NO;
->>>>>>> 2ac96e34f1f91c6b3e3f2bde06ff396d226668e8
+    self.config.reuseSimulator = NO;
 
     NSError *err;
     BPApp *app = [BPApp appWithConfig:self.config

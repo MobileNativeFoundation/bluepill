@@ -203,7 +203,11 @@ void onInterrupt(int ignore) {
     }
 
     context.runner = [self createSimulatorRunnerWithContext:context];
+
+    // Set up retry counts.
     self.maxCreateTries = [self.config.maxCreateTries integerValue];
+    self.maxInstallTries = [self.config.maxInstallTries integerValue];
+    self.maxLaunchTries = [self.config.maxLaunchTries integerValue];
     
     if (context.config.deleteSimUDID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
@@ -262,7 +266,6 @@ void onInterrupt(int ignore) {
         [BPUtils printInfo:ERROR withString:[@"Timeout: " stringByAppendingString:stepName]];
     };
 
-    self.maxInstallTries = [self.config.maxInstallTries integerValue];
     [context.runner createSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
 }
 
@@ -296,8 +299,6 @@ void onInterrupt(int ignore) {
     NSString *stepName = INSTALL_APPLICATION(context.attemptNumber);
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
-
-    self.maxLaunchTries = [self.config.maxLaunchTries integerValue];
 
     NSError *error = nil;
     BOOL success = [context.runner installApplicationAndReturnError:&error];

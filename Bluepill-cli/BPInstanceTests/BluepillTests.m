@@ -217,13 +217,14 @@
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppFatalErrorTestsSetTempDir", tempDir] withError:&error];
-    // NSLog(@"output directory is %@", outputDir);
+    NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
     self.config.errorRetriesCount = @5;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
+    // BUG: Sometimes the app crashes instead of timing out
+    XCTAssertTrue(exitCode == BPExitStatusAppCrashed || exitCode == BPExitStatusAppCrashed);
 
     NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppFatalErrorTests-results.xml"];
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"fatal_tests.xml"];
@@ -233,16 +234,18 @@
 - (void)testReportWithAppHangingTestsSet {
     self.config.stuckTimeout = @3;
     self.config.plainOutput = YES;
+    self.config.errorRetriesCount = @4;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppHangingTestsSetTempDir", tempDir] withError:&error];
-    // NSLog(@"output directory is %@", outputDir);
+    NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    // BUG: Sometimes the app crashes instead of timing out
     XCTAssertTrue(exitCode == BPExitStatusTestTimeout || exitCode == BPExitStatusAppCrashed);
 
     NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppHangingTests-results.xml"];
@@ -258,7 +261,7 @@
     self.config.stuckTimeout = @3;
     self.config.plainOutput = YES;
     self.config.failureTolerance = @0;
-    self.config.errorRetriesCount = @100;
+    self.config.errorRetriesCount = @4;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     NSString *tempDir = NSTemporaryDirectory();
@@ -269,6 +272,7 @@
     self.config.junitOutput = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    // BUG: Sometimes the app crashes instead of timing out
     XCTAssertTrue(exitCode == BPExitStatusTestTimeout || exitCode == BPExitStatusAppCrashed);
 
     NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppHangingTests-results.xml"];
