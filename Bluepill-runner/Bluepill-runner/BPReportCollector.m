@@ -30,7 +30,7 @@
 
     /**from here we need to go inside this node and get its child nodes
      *
-     *   testsuites from a simulator report (.xml) - needs to be combined
+     * testsuites from a simulator report (.xml) - needs to be combined
      *    |--testsuite with scheme name (.xctest) - needs to be combined
      *           |--testsuite with test class name (XXXXTests) - needs to be combined
      *           |      |--testcase
@@ -74,13 +74,13 @@
     [xmlData writeToFile:finalReportPath atomically:YES];
 }
 
+// This function combines two XML elements that has the same "name" attribute by merging attributes and children recursively
 + (NSXMLElement *)mergeElement:(NSXMLElement *)mainElement withElement:(NSXMLElement *)secondElement {
     
     @autoreleasepool {
-        NSMutableDictionary *m_attributes = [NSMutableDictionary new];
         
         //if they have the same name, we need to combine these two elements
-        if ([[[mainElement attributeForName:@"name"] stringValue] isEqualToString:[[secondElement attributeForName:@"name"] stringValue]]) {
+        if ([self compareNamesForElement:mainElement and:secondElement]) {
             
             //combine attributes
             int totalTests = [[[mainElement attributeForName:@"tests"] stringValue] intValue] + [[[secondElement attributeForName:@"tests"] stringValue] intValue];
@@ -88,12 +88,14 @@
             int totalFailures = [[[mainElement attributeForName:@"failures"] stringValue] intValue] + [[[secondElement attributeForName:@"failures"] stringValue] intValue];
             int totalTime = [[[mainElement attributeForName:@"time"] stringValue] intValue] + [[[secondElement attributeForName:@"time"] stringValue] intValue];
             
+            NSMutableDictionary *m_attributes = [NSMutableDictionary new];
             m_attributes[@"tests"] = [@(totalTests) stringValue];
             m_attributes[@"errors"] = [@(totalErrors) stringValue];
             m_attributes[@"failures"] = [@(totalFailures) stringValue];
             m_attributes[@"time"] = [@(totalTime) stringValue];
             
-            //children
+            //combine children
+            //We won't have duplicate test cases so will not do any recurse
             if ([[mainElement.children firstObject].name isEqualToString:@"testcase"]
                 && [[secondElement.children firstObject].name isEqualToString:@"testcase"]) {
                 for (NSXMLNode *child in secondElement.children) {
@@ -101,7 +103,6 @@
                 }
                 
             } else {
-            
                 NSMutableArray<NSXMLNode *> *mergedChildren = [NSMutableArray<NSXMLNode *> new];
                 NSMutableArray *discardedItems = [NSMutableArray array];
                 NSMutableArray<NSXMLNode *> *m_children = [NSMutableArray arrayWithArray:mainElement.children];
@@ -142,7 +143,6 @@
 }
 
 + (BOOL)compareNamesForElement:(NSXMLElement *)fistElement and:(NSXMLElement *)secondElement {
-    
     NSString *firstName = [[fistElement attributeForName:@"name"] stringValue];
     NSString *secondName = [[secondElement attributeForName:@"name"] stringValue];
     if (firstName == nil || secondName == nil) return false;
