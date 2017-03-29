@@ -22,7 +22,6 @@
 		7A564C0E1DA817DE001BCEC2 /* BPTreeObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0A1DA817DE001BCEC2 /* BPTreeObjects.m */; };
 		7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0C1DA817DE001BCEC2 /* BPTreeParser.m */; };
 		7A58D0751D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A58D0741D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework */; };
-		7A58D2E61D62689B002F6B6D /* DVTFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A58D2E51D62689B002F6B6D /* DVTFoundation.framework */; };
 		7A6672BE1E0B04D300AC6778 /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8D01DF89A790073F268 /* BPUtils.m */; };
 		7A6672BF1E0B04D500AC6778 /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CE1DF89A790073F268 /* BPConfiguration.m */; };
 		7A7901861D5CB679004D4325 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7901851D5CB679004D4325 /* main.m */; };
@@ -925,7 +924,6 @@
 				7AB913011D5E209800621608 /* Foundation.framework in Frameworks */,
 				7A79018F1D5D1370004D4325 /* CoreSimulator.framework in Frameworks */,
 				7A58D0751D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework in Frameworks */,
-				7A58D2E61D62689B002F6B6D /* DVTFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2176,6 +2174,14 @@
 			buildSettings = {
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2185,6 +2191,14 @@
 			buildSettings = {
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -2197,6 +2211,14 @@
 				INFOPLIST_FILE = BPInstanceTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2210,6 +2232,14 @@
 				INFOPLIST_FILE = BPInstanceTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
