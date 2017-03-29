@@ -60,7 +60,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     DTXTransport *transport = [self connectTransport];
     DTXConnection *connection = [[objc_lookUpClass("DTXConnection") alloc] initWithTransport:transport];
     [connection registerDisconnectHandler:^{
-        NSLog(@"Daemon connection Disconnected.");
+        [BPUtils printInfo:INFO withString:@"Daemon connection Disconnected."];
     }];
     [connection resume];
 
@@ -73,12 +73,11 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     DTXRemoteInvocationReceipt *receipt = [daemonProxy _IDE_initiateControlSessionForTestProcessID:@(self.testRunnerPid) protocolVersion:@(22)];
     [receipt handleCompletion:^(NSNumber *version, NSError *error) {
         if (error) {
-            NSLog(@"Faced an error with daemon connection");
+            [BPUtils printInfo:ERROR withString:@"Error with daemon connection: %@", [error localizedDescription]];
             return;
         }
         NSInteger daemonProtocolVersion = version.integerValue;
-        NSLog(@"Daemon connection: got whitelisting response and daemon protocol version %ld", (long)daemonProtocolVersion);
-        NSLog(@"Daemon connection: ready to execute test plan");
+        [BPUtils printInfo:INFO withString:@"Daemon ready to execute test plan (protocol version %ld)", (long)daemonProtocolVersion];
         self.connected = YES;
     }];
 }
@@ -93,7 +92,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     strncpy(remote.sun_path, socketPath, 104);
     socklen_t length = (socklen_t)(strnlen(remote.sun_path, 1024) + sizeof(remote.sun_family) + sizeof(remote.sun_len));
     if (connect(socketFD, (struct sockaddr *)&remote, length) == -1) {
-        NSLog(@"ERROR!");
+        [BPUtils printInfo:ERROR withString:@"ERROR connecting socket"];
     }
     return socketFD;
 }
@@ -101,7 +100,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 - (DTXTransport *)connectTransport {
     int socketFD = [self testManagerSocket];
     DTXTransport *transport = [[objc_lookUpClass("DTXSocketTransport") alloc] initWithConnectedSocket:socketFD disconnectAction:^{
-        NSLog(@"DTXSocketTransport disconnected");
+        [BPUtils printInfo:INFO withString:@"DTXSocketTransport disconnected"];
     }];
     return transport;
 }
@@ -144,7 +143,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 }
 
 - (id)_XCT_testBundleReadyWithProtocolVersion:(NSNumber *)protocolVersion minimumVersion:(NSNumber *)minimumVersion {
-    NSLog(@"Test bundle is ready");
+    [BPUtils printInfo:INFO withString:@"Test bundle is ready"];
     return nil;
 }
 
