@@ -164,7 +164,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
         [BPUtils printInfo:ERROR withString:@"Failed to get socket fd to test bundle."];
     }
     DTXTransport *transport = [[objc_lookUpClass("DTXSocketTransport") alloc] initWithConnectedSocket:socketFD disconnectAction:^{
-        [BPUtils printInfo:INFO withString:@"Socket transport disconneted with status %@.", transport.status];
+        [BPUtils printInfo:INFO withString:@"Socket transport disconneted"];
     }];
     if (!transport) {
         [BPUtils printInfo:ERROR withString:@"Transport creation failed."];

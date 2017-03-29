@@ -51,8 +51,8 @@
     XCTAssertNil(error);
     XCTAssert([config.appBundlePath isEqualToString:@"/Users/khu/Library/Developer/Xcode/DerivedData/voyager-frhgmrtfxqiflycndwcgfpqkbhdy/Build/Products/Debug-iphonesimulator/LinkedIn.app"]);
     XCTAssert([config.noSplit isEqualToArray:@[@"VoyagerTests"]]);
-    XCTAssert(config.repeatTestsCount.integerValue == 1);
-    XCTAssert(config.errorRetriesCount.integerValue == 0);
+    XCTAssertEqualObjects(config.repeatTestsCount, @1);
+    XCTAssertEqualObjects(config.errorRetriesCount, @0);
     XCTAssert([config.schemePath isEqualToString:@"/Users/khu/ios/dev/voyager-ios_trunk/Voyager.xcodeproj/xcshareddata/xcschemes/VoyagerScenarioTests4.xcscheme"]);
     XCTAssertEqual(config.headlessMode, NO);
     XCTAssert([config.outputDirectory isEqualToString:@"/Users/khu/tmp/simulator"]);
