@@ -89,7 +89,7 @@ A full list supported options are listed here.
 
 ## Requirements
 
-Latest Xcode (Xcode 8.2.1).
+Latest Xcode (Xcode 8.3).
 
 ## Acknowledgement
 
