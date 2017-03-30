@@ -157,7 +157,7 @@
 - (void)testNoSplittingOfExtraTestBundles {
     // Move the BPSampleAppTests.xctest out of the app so that we get just one.
     NSError *err;
-    NSString *inAppBundle = [self.config.appBundlePath stringByAppendingPathComponent:@"Plugins/BPSampleAppTests.xctest"];
+    NSString *inAppBundle = [self.config.appBundlePath stringByAppendingPathComponent:@"PlugIns/BPSampleAppTests.xctest"];
     NSString *tmpPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"BPSampleAppTests.xctest"];
     if (![[NSFileManager defaultManager] moveItemAtPath:inAppBundle toPath:tmpPath error:&err]) {
         NSLog(@"%@", err);

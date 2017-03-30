@@ -44,8 +44,8 @@
     XCTAssert([appLaunchEnvironment[@"DYLD_FRAMEWORK_PATH"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_INSERT_LIBRARIES"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/IDEBundleInjection.framework/IDEBundleInjection"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_LIBRARY_PATH"] containsString:@"/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
-    XCTAssert([appLaunchEnvironment[@"TestBundleLocation"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app/Plugins/BPSampleAppTests.xctest"]);
-    XCTAssert([appLaunchEnvironment[@"XCInjectBundle"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app/Plugins/BPSampleAppTests.xctest"]);
+    XCTAssert([appLaunchEnvironment[@"TestBundleLocation"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app/PlugIns/BPSampleAppTests.xctest"]);
+    XCTAssert([appLaunchEnvironment[@"XCInjectBundle"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app/PlugIns/BPSampleAppTests.xctest"]);
     XCTAssert([appLaunchEnvironment[@"XCInjectBundleInto"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app"]);
     XCTAssert([appLaunchEnvironment[@"XCTestConfigurationFilePath"] containsString:@"T/BPSampleAppTests-"]);
     XCTAssertEqualObjects(appLaunchEnvironment[@"LLVM_PROFILE_FILE"], @"/Users/test/output/%p.profraw");
