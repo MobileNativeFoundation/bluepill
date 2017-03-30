@@ -53,7 +53,46 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "BPCLITests">
+               </Test>
+               <Test
+                  Identifier = "BPConfigurationTests">
+               </Test>
+               <Test
+                  Identifier = "BPTreeParserTests">
+               </Test>
+               <Test
+                  Identifier = "BPUtilsTests">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testAppThatCrashesOnLaunch">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testAppThatHangsOnLaunch">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppCrashingAndRetryOnlyFailedTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppCrashingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppHangingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppHangingTestsShouldReturnFailure">
+               </Test>
+               <Test
                   Identifier = "BluepillTests/testVoyager">
+               </Test>
+               <Test
+                  Identifier = "RegexTests">
+               </Test>
+               <Test
+                  Identifier = "SimulatorHelperTests">
+               </Test>
+               <Test
+                  Identifier = "WaitTimerTests">
                </Test>
             </SkippedTests>
          </TestableReference>

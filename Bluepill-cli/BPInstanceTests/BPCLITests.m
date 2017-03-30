@@ -40,7 +40,6 @@
     XCTAssert([[err localizedDescription] containsString:@"Missing required option"]);
     XCTAssert([[err localizedDescription] containsString:@"-a/--app"]);
     XCTAssert([[err localizedDescription] containsString:@"-s/--scheme-path"]);
-    XCTAssert([[err localizedDescription] containsString:@"-t/--test"]);
  }
 
 - (void)testListArguments {
@@ -48,6 +47,9 @@
     [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
     [config saveOpt:[NSNumber numberWithInt:'s'] withArg:[BPTestHelper sampleTestScheme]];
     [config saveOpt:[NSNumber numberWithInt:'t'] withArg:[BPTestHelper sampleAppBalancingTestsBundlePath]];
+    [config saveOpt:[NSNumber numberWithInt:'R'] withArg:@"2"];
+    [config saveOpt:[NSNumber numberWithInt:'f'] withArg:@"1"];
+    [config saveOpt:[NSNumber numberWithInt:'n'] withArg:@"5"];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"foo"]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"bar"]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"baz"]];
@@ -59,9 +61,12 @@
     XCTAssert(result);
     NSArray *want = @[@"foo", @"bar", @"baz"];
     XCTAssert([config.noSplit isEqualToArray:want]);
+    XCTAssertEqualObjects(config.errorRetriesCount, @2);
+    XCTAssertEqualObjects(config.failureTolerance, @1);
+    XCTAssertEqualObjects(config.numSims, @5);
 }
 
-- (void) testIgnoringAdditionalTestBundles {
+- (void)testIgnoringAdditionalTestBundles {
     // Write a config file
     NSString *tmpConfig = [BPUtils mkstemp:@"configXXX" withError:nil];
     XCTAssert(tmpConfig);
@@ -69,7 +74,7 @@
     {                                               \
     \"app\" : \"/Some/Path\",                       \
     \"scheme\" : \"/Some/Scheme\",                  \
-    \"additional-xctests\" : [ \"/Some/XCTest\", \"rel/path\" ] , \
+    \"additional-unit-xctests\" : [ \"/Some/XCTest\", \"rel/path\" ] , \
     }                                               \
     ";
     NSError *err;
@@ -87,7 +92,7 @@
     XCTAssert(config != nil);
     NSString *relpath = [[[NSFileManager defaultManager] currentDirectoryPath] stringByAppendingPathComponent:@"rel/path"];
     NSArray *expectedArray = @[ @"/Some/XCTest", relpath ];
-    XCTAssert([config.additionalTestBundles isEqualToArray:expectedArray]);
+    XCTAssert([config.additionalUnitTestBundles isEqualToArray:expectedArray]);
     [[NSFileManager defaultManager] removeItemAtPath:tmpConfig
                                                error:nil];
     

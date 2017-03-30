@@ -9,8 +9,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define BP_DEFAULT_RUNTIME "iOS 10.2"
-#define BP_DEFAULT_DEVICE_TYPE "iPhone 6"
+#define BP_DEFAULT_RUNTIME "iOS 10.3"
+#define BP_DEFAULT_DEVICE_TYPE "iPhone 7"
 
 static const NSString * kCFBundleIdentifier = @"CFBundleIdentifier";
 static const NSString * kOptionsArgumentsKey = @"arguments";
@@ -21,22 +21,22 @@ static const NSString * kOptionsWaitForDebuggerKey = @"wait_for_debugger";
 
 extern NSString * const BPErrorDomain;
 
-extern NSString * const Xcode_BUILT_PRODUCTS_DIR;
-extern NSString * const Xcode_EFFECTIVE_PLATFORM_NAME;
-extern NSString * const Xcode_FULL_PRODUCT_NAME;
-extern NSString * const Xcode_IPHONEOS_DEPLOYMENT_TARGET;
-extern NSString * const Xcode_LAUNCH_TIMEOUT;
-extern NSString * const Xcode_OBJROOT;
-extern NSString * const Xcode_PLATFORM_DIR;
-extern NSString * const Xcode_PLATFORM_NAME;
-extern NSString * const Xcode_PRODUCT_MODULE_NAME;
-extern NSString * const Xcode_PRODUCT_NAME;
-extern NSString * const Xcode_PRODUCT_TYPE_FRAMEWORK_SEARCH_PATHS;
-extern NSString * const Xcode_PROJECT_DIR;
-extern NSString * const Xcode_SDK_NAME;
-extern NSString * const Xcode_SDKROOT;
-extern NSString * const Xcode_SHARED_PRECOMPS_DIR;
-extern NSString * const Xcode_SYMROOT;
-extern NSString * const Xcode_TARGET_BUILD_DIR;
-extern NSString * const Xcode_TARGETED_DEVICE_FAMILY;
-extern NSString * const Xcode_TEST_FRAMEWORK_SEARCH_PATHS;
+extern NSString * const XCODE_BUILT_PRODUCTS_DIR;
+extern NSString * const XCODE_EFFECTIVE_PLATFORM_NAME;
+extern NSString * const XCODE_FULL_PRODUCT_NAME;
+extern NSString * const XCODE_IPHONEOS_DEPLOYMENT_TARGET;
+extern NSString * const XCODE_LAUNCH_TIMEOUT;
+extern NSString * const XCODE_OBJROOT;
+extern NSString * const XCODE_PLATFORM_DIR;
+extern NSString * const XCODE_PLATFORM_NAME;
+extern NSString * const XCODE_PRODUCT_MODULE_NAME;
+extern NSString * const XCODE_PRODUCT_NAME;
+extern NSString * const XCODE_PRODUCT_TYPE_FRAMEWORK_SEARCH_PATHS;
+extern NSString * const XCODE_PROJECT_DIR;
+extern NSString * const XCODE_SDK_NAME;
+extern NSString * const XCODE_SDKROOT;
+extern NSString * const XCODE_SHARED_PRECOMPS_DIR;
+extern NSString * const XCODE_SYMROOT;
+extern NSString * const XCODE_TARGET_BUILD_DIR;
+extern NSString * const XCODE_TARGETED_DEVICE_FAMILY;
+extern NSString * const XCODE_TEST_FRAMEWORK_SEARCH_PATHS;

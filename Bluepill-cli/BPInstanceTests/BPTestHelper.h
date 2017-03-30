@@ -32,6 +32,12 @@
 // Return the path to the sample app's xctest with crashing tests.
 + (NSString *)sampleAppFatalTestsBundlePath;
 
+// Return the path to the XCTRunner
++ (NSString *)sampleAppUITestRunnerPath;
+
+// Return the path to the XCTRunner
++ (NSString *)sampleAppUITestBundlePath;
+
 // Return the path to the resource folder
 + (NSString *)resourceFolderPath;
 

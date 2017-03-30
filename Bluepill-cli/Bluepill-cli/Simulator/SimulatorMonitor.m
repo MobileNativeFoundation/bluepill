@@ -13,14 +13,6 @@
 #import "BPStats.h"
 #import "BPUtils.h"
 
-typedef NS_ENUM(NSInteger, SimulatorState) {
-    Idle,
-    AppLaunched,
-    Running,
-    TestsStarted,
-    Completed
-};
-
 @interface SimulatorMonitor ()
 
 @property (nonatomic, weak) id<BPMonitorCallbackProtocol> callback;
@@ -31,7 +23,6 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 @property (nonatomic, strong) NSString *currentClassName;
 @property (nonatomic, strong) NSString *previousTestName;
 @property (nonatomic, strong) NSString *previousClassName;
-@property (nonatomic, assign) SimulatorState simulatorState;
 @property (nonatomic, assign) BPExitStatus exitStatus;
 @property (nonatomic, assign) NSUInteger currentOutputId;
 @property (nonatomic, assign) NSUInteger failureCount;

@@ -23,28 +23,38 @@
 
 // Return the path to the sample app's xctest with 1000 test cases
 + (NSString *)sampleAppBalancingTestsBundlePath {
-    return [[self sampleAppPath] stringByAppendingString:@"/Plugins/BPSampleAppTests.xctest"];
+    return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppTests.xctest"];
 }
 
 // Return the path to the sample app's xctest with different kinds of negative tests
 + (NSString *)sampleAppNegativeTestsBundlePath {
-    return [[self sampleAppPath] stringByAppendingString:@"/Plugins/BPAppNegativeTests.xctest"];
+    return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPAppNegativeTests.xctest"];
 }
 
 + (NSString *)sampleAppCrashingTestsBundlePath {
-    return [[self sampleAppPath] stringByAppendingString:@"/Plugins/BPSampleAppCrashingTests.xctest"];
+    return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppCrashingTests.xctest"];
 }
 
 + (NSString *)sampleAppHangingTestsBundlePath {
-    return [[self sampleAppPath] stringByAppendingString:@"/Plugins/BPSampleAppHangingTests.xctest"];
+    return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppHangingTests.xctest"];
 }
 
 + (NSString *)sampleAppFatalTestsBundlePath {
-    return [[self sampleAppPath] stringByAppendingString:@"/Plugins/BPSampleAppFatalErrorTests.xctest"];
+    return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppFatalErrorTests.xctest"];
 }
 
 + (NSString *)resourceFolderPath {
     return [[NSBundle bundleForClass:[self class]] resourcePath];
+}
+
+// Return the path to the XCTRunner
++ (NSString *)sampleAppUITestRunnerPath {
+    return [[[self sampleAppPath] stringByDeletingLastPathComponent] stringByAppendingString:@"/BPSampleAppUITests-Runner.app/"];
+}
+
+// Return the path to the XCTRunner
++ (NSString *)sampleAppUITestBundlePath {
+    return [[self sampleAppUITestRunnerPath] stringByAppendingString:@"/PlugIns/BPSampleAppUITests.xctest"];
 }
 
 + (NSString *)bpExecutablePath {

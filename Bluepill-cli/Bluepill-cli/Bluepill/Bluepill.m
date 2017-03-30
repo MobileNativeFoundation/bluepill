@@ -9,7 +9,7 @@
 
 #import "Bluepill.h"
 #import "BPConfiguration.h"
-#import "SimulatorRunner.h"
+#import "BPSimulator.h"
 #import "BPTreeParser.h"
 #import "BPReporters.h"
 #import "BPWriter.h"
@@ -19,6 +19,8 @@
 #import "BPExecutionContext.h"
 #import "BPHandler.h"
 #import <libproc.h>
+#import "BPTestBundleConnection.h"
+#import "BPTestDaemonConnection.h"
 #import <objc/runtime.h>
 
 #define NEXT(x)     { [Bluepill setDiagnosticFunction:#x from:__FUNCTION__ line:__LINE__]; CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ (x); }); }
@@ -29,7 +31,7 @@ void onInterrupt(int ignore) {
     interrupted = 1;
 }
 
-@interface Bluepill()
+@interface Bluepill()<BPTestBundleConnectionDelegate>
 
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) BPConfiguration *executionConfigCopy;
@@ -74,7 +76,9 @@ void onInterrupt(int ignore) {
     self.executionConfigCopy = [self.config copy];
 
     // Save our failure tolerance because we're going to be changing this
-    self.failureTolerance = self.executionConfigCopy.failureTolerance;
+    self.failureTolerance = [self.executionConfigCopy.failureTolerance integerValue];
+
+    // Connect to test manager daemon and test bundle
 
     // Start the first attempt
     [self begin];
@@ -193,12 +197,16 @@ void onInterrupt(int ignore) {
 
     context.runner = [self createSimulatorRunnerWithContext:context];
 
+    // Set up retry counts.
     self.maxCreateTries = [self.config.maxCreateTries integerValue];
+    self.maxInstallTries = [self.config.maxInstallTries integerValue];
+    self.maxLaunchTries = [self.config.maxLaunchTries integerValue];
+
     NEXT([self createSimulatorWithContext:context]);
 }
 
-- (SimulatorRunner *)createSimulatorRunnerWithContext:(BPExecutionContext *)context {
-    return [SimulatorRunner simulatorRunnerWithConfiguration:context.config];
+- (BPSimulator *)createSimulatorRunnerWithContext:(BPExecutionContext *)context {
+    return [BPSimulator simulatorWithConfiguration:context.config];
 }
 
 - (void)createSimulatorWithContext:(BPExecutionContext *)context {
@@ -245,7 +253,6 @@ void onInterrupt(int ignore) {
         [BPUtils printInfo:ERROR withString:[@"Timeout: " stringByAppendingString:stepName]];
     };
 
-    self.maxInstallTries = [self.config.maxInstallTries integerValue];
     [context.runner createSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
 }
 
@@ -253,8 +260,6 @@ void onInterrupt(int ignore) {
     NSString *stepName = INSTALL_APPLICATION(context.attemptNumber);
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
-
-    self.maxLaunchTries = [self.config.maxLaunchTries integerValue];
 
     NSError *error = nil;
     BOOL success = [context.runner installApplicationAndReturnError:&error];
@@ -309,7 +314,7 @@ void onInterrupt(int ignore) {
 
     handler.onSuccess = ^{
         context.pid = __handler.pid;
-        NEXT([__self checkProcessWithContext:context]);
+        NEXT([__self connectTestBundleAndTestDaemonWithContext:context]);
     };
 
     handler.onError = ^(NSError *error) {
@@ -331,9 +336,28 @@ void onInterrupt(int ignore) {
         [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
     };
 
-    [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
+    [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock isHostApp:NO];
+    [BPUtils printInfo:INFO withString:[@"Yay, after the launch async call!!!" stringByAppendingString:stepName]];
 }
 
+- (void)connectTestBundleAndTestDaemonWithContext:(BPExecutionContext *)context {
+    if (context.isTestRunnerContext) {
+        // If the isTestRunnerContext is flipped on, don't connect testbundle again.
+        return;
+    }
+    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:context.runner andInterface:self];
+    bConnection.simulator = context.runner;
+    bConnection.config = self.config;
+
+    BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:context.runner andInterface:nil];
+    [bConnection connectWithTimeout:30];
+
+    dConnection.testRunnerPid = context.pid;
+    [dConnection connectWithTimeout:30];
+    [bConnection startTestPlan];
+    NEXT([self checkProcessWithContext:context]);
+
+}
 - (void)checkProcessWithContext:(BPExecutionContext *)context {
     BOOL isRunning = [self isProcessRunningWithContext:context];
     if (!isRunning && [context.runner isFinished]) {
@@ -562,6 +586,12 @@ NSString *__from;
 
 - (NSString *)debugDescription {
     return [NSString stringWithFormat:@"Currently executing %@: Line %d (Invoked by: %@)", __function, __line, __from];
+}
+
+#pragma mark - BPTestBundleConnectionDelegate
+- (void)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment {
+    self.context.isTestRunnerContext = YES;
+    [self installApplicationWithContext:self.context];
 }
 
 @end

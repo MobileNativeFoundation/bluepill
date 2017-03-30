@@ -11,6 +11,14 @@
 #import "BPExecutionPhaseProtocol.h"
 #import "BPExitStatus.h"
 
+typedef NS_ENUM(NSInteger, SimulatorState) {
+    Idle,
+    AppLaunched,
+    Running,
+    TestsStarted,
+    Completed
+};
+
 @class SimDevice;
 @class BPConfiguration;
 
@@ -18,6 +26,7 @@
 
 @property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) NSString *hostBundleId;
+@property (nonatomic, assign) SimulatorState simulatorState;
 @property (nonatomic) pid_t appPID;
 
 /*!

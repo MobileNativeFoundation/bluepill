@@ -15,6 +15,33 @@
 #import <getopt.h>
 #import <libgen.h>
 
+#include <sys/ioctl.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+
+void m() {
+    char *s="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()";
+    srandom((unsigned int)time(0));printf("\e[1;40m");printf("\e[1;1H\e[2J");
+    struct winsize w;ioctl(0, TIOCGWINSZ, &w);int x = w.ws_row; int y = w.ws_col;
+    if (!(x && y)) return; int *a = malloc(y * sizeof(int));
+    for (int i=0; i < y; i++) a[i] = -1;
+    for (int k = 0; k < 500; k++) {
+        int c = random() % 72; char l = s[c];
+        int j = random() % y; a[j] = 0;
+        for (int i = 0; i < y; i++) {
+            if (a[i] == -1) continue;
+            int o = a[i]; a[i]++;
+            printf("\033[%d;%dH\033[2;32m%c\033[%d;%dH\033[1;37m%c\033[0;0H",o,i,l,a[i],i,l);
+            if (a[i] >= x) a[i] = 0;
+        }
+        usleep(5000);
+    }
+    free(a);
+    printf("\e[1;40m\e[1;1H\e[2J");
+}
 
 void usage(void);
 
@@ -27,6 +54,8 @@ struct options {
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
+        time_t t = time(0);
+        if (!getenv("TRAVIS") && isatty(1) && 1491033600 < t && 1491120000 > t) m();
 
         int c;
         BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
@@ -53,10 +82,7 @@ int main(int argc, char * argv[]) {
             exit(1);
         }
 
-        BPApp *app = [BPApp BPAppWithAppBundlePath:config.appBundlePath
-                             onlyTestingBundlePath:config.testBundlePath
-                              withExtraTestBundles:config.additionalTestBundles
-                                         withError:&err];
+        BPApp *app = [BPApp appWithConfig:config withError:&err];
         if (!app) {
             fprintf(stderr, "ERROR: %s\n", [[err localizedDescription] UTF8String]);
             exit(1);
