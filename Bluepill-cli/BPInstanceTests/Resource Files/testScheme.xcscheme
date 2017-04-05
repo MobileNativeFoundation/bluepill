@@ -86,6 +86,13 @@
                 ReferencedContainer = "container:mntf-ios.xcodeproj">
             </BuildableReference>
         </MacroExpansion>
+        <EnvironmentVariables>
+            <EnvironmentVariable
+                key = "TA_SCREENSHOTS_REAL"
+                value = "/Documents/Screenshots"
+                isEnabled = "YES">
+            </EnvironmentVariable>
+        </EnvironmentVariables>
         <AdditionalOptions>
         </AdditionalOptions>
     </TestAction>
