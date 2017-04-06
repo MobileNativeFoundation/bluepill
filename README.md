@@ -74,7 +74,7 @@ A full list supported options are listed here.
 |         runtime        |           -r           | What runtime to use.                                                               |     N    | iOS 10.3        |
 |      stuck-timeout     |           -S           | Timeout in seconds for a test that seems stuck (no output).                        |     N    | 300s             |
 |      test-timeout      |           -T           | Timeout in seconds for a test that is producing output.                            |     N    | 300s             |
-|          test          |           -t           | The path to the test bundle to execute (single .xctest).                           |     N    | n/a              |
+|    test-bundle-path    |           -t           | The path to the test bundle to execute (single .xctest).                           |     N    | n/a              |
 | additional-unit-xctests|           n/a          | Additional XCTest bundles that is not Plugin folder                                |     N    | n/a              |
 |  additional-ui-xctests |           n/a          | Additional XCTUITest bundles that is not Plugin folder                             |     N    | n/a              |
 |      repeat-count      |           -C           | Number of times we'll run the entire test suite (used for load testing).           |     N    | 1                |
