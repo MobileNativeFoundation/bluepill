@@ -1,0 +1,8 @@
+Test Suite 'Selected tests' started at 2016-12-06 16:54:22.194
+Test Case '-[Acceptance_Tests1.MakeReservationStats testGuest2WithNoStats]' started.
+/Users/Matt/work/opentable/GuestCenter-iPad/Acceptance Tests/KIFTestActor+CommonSetup.m:126: error: -[Acceptance_Tests1.MakeReservationStats testGuest2WithNoStats] : The step timed out after 30.00 seconds: Could not find element with accessibilityIdentifier == "MenuButton"
+/Users/Matt/work/opentable/GuestCenter-iPad/Acceptance Tests/MakeReservationStats.swift:18: error: -[Acceptance_Tests1.MakeReservationStats testGuest2WithNoStats] : Failure in child step: The step timed out after 30.00 seconds: Could not find element with accessibilityIdentifier == "MenuButton"
+Test Case '-[Acceptance_Tests1.MakeReservationStats testGuest2WithNoStats]' failed (33.108 seconds).
+Test Suite 'Selected tests' failed at 2016-10-07 16:54:55.302.
+    Executed 1 tests, with 0 failures (0 unexpected) in 9.317 (9.914) seconds
+BP_APP_PROC_ENDED

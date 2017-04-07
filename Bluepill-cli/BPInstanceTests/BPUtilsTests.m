@@ -54,7 +54,8 @@
                                                  @"MNTF_SCREENSHOTS_BASELINE_REAL" : @"/Documents/Baseline",
                                                  @"MNTF_SCREENSHOTS_DIFF" : @"$(PROJECT_DIR)/build/outputs/tests_artifacts/Diff",
                                                  @"MNTF_SCREENSHOTS_DIFF_REAL" : @"/Documents/Screenshots/Diff",
-                                                 @"MNTF_SCREENSHOTS_REAL" : @"/Documents/Screenshots"
+                                                 @"MNTF_SCREENSHOTS_REAL" : @"/Documents/Screenshots",
+                                                 @"TA_SCREENSHOTS_REAL" : @"/Documents/Screenshots"
                                                  }
                                          };
     XCTAssert([dictionary isEqualToDictionary:expectedDictionary], @"Dictionary doesn't match expectation");

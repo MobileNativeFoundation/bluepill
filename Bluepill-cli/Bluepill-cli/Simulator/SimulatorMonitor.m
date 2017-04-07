@@ -29,6 +29,7 @@
 @property (nonatomic, assign) BOOL testsBegan;
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) NSMutableArray *executedTests;
+@property (nonatomic, strong) NSMutableArray *failedTestCases;
 
 @end
 
@@ -112,9 +113,32 @@
 - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass
                           inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
     NSDate *currentTime = [NSDate date];
-    [BPUtils printInfo:FAILED withString:@"%10.6fs %@/%@",
-                                          [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
-                                          testClass, testName];
+
+    NSString *fullTestName = [NSString stringWithFormat:@"%@/%@", testClass, testName];
+
+    BOOL additionalFailure = NO;
+    for (NSString *fullName in self.failedTestCases) {
+        if([fullTestName isEqualToString:fullName]) {
+            additionalFailure = YES;
+            break;
+        }
+    }
+
+    if (self.failedTestCases == nil) {
+        self.failedTestCases = [[NSMutableArray alloc] init];
+    }
+
+    [self.failedTestCases addObject:fullTestName];
+
+    [BPUtils printInfo:FAILED withString:@"%@%10.6fs %@",
+     additionalFailure ? @"[ADDITIONAL FAILURE] " : @"",
+     [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
+     fullTestName];
+
+    if (additionalFailure) {
+        return;
+    }
+
     self.failureCount++;
 
     // Passing or failing means that if the simulator crashes later, we shouldn't rerun this test. Unless we've enabled re-running failed tests.

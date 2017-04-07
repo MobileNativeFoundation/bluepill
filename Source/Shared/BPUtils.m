@@ -160,8 +160,9 @@ static BOOL quiet = NO;
         NSArray *argsNodes =
         [document nodesForXPath:[NSString stringWithFormat:@"//%@//CommandLineArgument", @"LaunchAction"] error:&error];
         NSAssert(error == nil, @"Failed to get nodes: %@", [error localizedFailureReason]);
-        NSArray *envNodes =
-        [document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"LaunchAction"] error:&error];
+        NSMutableArray *envNodes = [[NSMutableArray alloc] init];
+        [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"LaunchAction"] error:&error]];
+        [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"TestAction"] error:&error]];
         for (NSXMLElement *node in argsNodes) {
             NSString *argument = [[node attributeForName:@"argument"] stringValue];
             NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];

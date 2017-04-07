@@ -22,7 +22,6 @@
 		7A564C0E1DA817DE001BCEC2 /* BPTreeObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0A1DA817DE001BCEC2 /* BPTreeObjects.m */; };
 		7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0C1DA817DE001BCEC2 /* BPTreeParser.m */; };
 		7A58D0751D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A58D0741D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework */; };
-		7A58D2E61D62689B002F6B6D /* DVTFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A58D2E51D62689B002F6B6D /* DVTFoundation.framework */; };
 		7A6672BE1E0B04D300AC6778 /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8D01DF89A790073F268 /* BPUtils.m */; };
 		7A6672BF1E0B04D500AC6778 /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CE1DF89A790073F268 /* BPConfiguration.m */; };
 		7A7901861D5CB679004D4325 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7901851D5CB679004D4325 /* main.m */; };
@@ -39,6 +38,7 @@
 		7A7E7BC01DF22CE1007928F3 /* BPExecutionContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */; };
 		7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */; };
 		7A7E7BC31DF5BA45007928F3 /* badfilename.log in Resources */ = {isa = PBXBuildFile; fileRef = 7A7E7BC21DF5BA45007928F3 /* badfilename.log */; };
+		7AA4C2291E4A797E00FAA39E /* multiple_reports_for_one_error.log in Resources */ = {isa = PBXBuildFile; fileRef = 7AA4C2281E4A797E00FAA39E /* multiple_reports_for_one_error.log */; };
 		7AAE7AAF1DB7DC1E009B5549 /* BPRegexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AAE7AAE1DB7DC1E009B5549 /* BPRegexTests.m */; };
 		7AB913001D5E209800621608 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB912FE1D5E209800621608 /* AppKit.framework */; };
 		7AB913011D5E209800621608 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB912FF1D5E209800621608 /* Foundation.framework */; };
@@ -142,6 +142,7 @@
 		7A7E7BBE1DF22CE1007928F3 /* BPExecutionContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPExecutionContext.h; sourceTree = "<group>"; };
 		7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPExecutionContext.m; sourceTree = "<group>"; };
 		7A7E7BC21DF5BA45007928F3 /* badfilename.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = badfilename.log; sourceTree = "<group>"; };
+		7AA4C2281E4A797E00FAA39E /* multiple_reports_for_one_error.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = multiple_reports_for_one_error.log; sourceTree = "<group>"; };
 		7AAE7AAE1DB7DC1E009B5549 /* BPRegexTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPRegexTests.m; sourceTree = "<group>"; };
 		7AB912FE1D5E209800621608 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		7AB912FF1D5E209800621608 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -913,7 +914,7 @@
 		C41A2C751E0B24E8005D9751 /* BPTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestClass.h; sourceTree = "<group>"; };
 		C41A2C761E0B24E8005D9751 /* BPTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestClass.m; sourceTree = "<group>"; };
 		C467E5491DC930D200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
-		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "testConfig-busted.json"; path = "BPInstanceTests/resources/testConfig-busted.json"; sourceTree = "<group>"; };
+		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -925,7 +926,6 @@
 				7AB913011D5E209800621608 /* Foundation.framework in Frameworks */,
 				7A79018F1D5D1370004D4325 /* CoreSimulator.framework in Frameworks */,
 				7A58D0751D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework in Frameworks */,
-				7A58D2E61D62689B002F6B6D /* DVTFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -962,7 +962,6 @@
 		7A7901791D5CB679004D4325 = {
 			isa = PBXGroup;
 			children = (
-				C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */,
 				7A7901841D5CB679004D4325 /* Bluepill-cli */,
 				7A7901851D5CB679004D4325 /* main.m */,
 				BAB24F691DB5DB2300867756 /* BPInstanceTests */,
@@ -1025,6 +1024,8 @@
 		BA180A0A1DBB011200D7D130 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
+				C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */,
+				7AA4C2281E4A797E00FAA39E /* multiple_reports_for_one_error.log */,
 				7A4FB8E71DFB66980073F268 /* error_only_crash.log */,
 				7A4FB8E51DF8AD4F0073F268 /* missed-crash.log */,
 				7A7E7BC21DF5BA45007928F3 /* badfilename.log */,
@@ -1994,6 +1995,7 @@
 				BA0096FE1DCA5D810000DD45 /* testConfigRelativePath.json in Resources */,
 				7A7E7BC31DF5BA45007928F3 /* badfilename.log in Resources */,
 				BA180A0C1DBB011200D7D130 /* testConfig.json in Resources */,
+				7AA4C2291E4A797E00FAA39E /* multiple_reports_for_one_error.log in Resources */,
 				BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */,
 				BA4800EA1DC2C74600026972 /* BPAppNegativeTests-results.xml in Resources */,
 				7A4FB8E61DF8AD4F0073F268 /* missed-crash.log in Resources */,
@@ -2176,6 +2178,14 @@
 			buildSettings = {
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2185,6 +2195,14 @@
 			buildSettings = {
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -2197,6 +2215,14 @@
 				INFOPLIST_FILE = BPInstanceTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2210,6 +2236,14 @@
 				INFOPLIST_FILE = BPInstanceTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

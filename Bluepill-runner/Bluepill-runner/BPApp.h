@@ -13,7 +13,7 @@
 @interface BPApp : NSObject
 
 @property (nonatomic, strong) NSString *path;
-// All test bundles inside Plugins directory in app.
+// All test bundles inside PlugIns directory in app.
 @property (nonatomic, strong) NSArray *unitTestBundles;
 @property (nonatomic, strong) NSArray *uiTestBundles;
 @property (nonatomic, strong, getter=getAllTestBundles) NSArray *allTestBundles;
@@ -21,7 +21,7 @@
 + (instancetype)appWithConfig:(BPConfiguration *)config
                     withError:(NSError **)error;
 
-/*! @discussion Print the test bundles in the App along with all of their test classes/cases (Basically the .xctest files inside the Plugins directory in the .app bundle)
+/*! @discussion Print the test bundles in the App along with all of their test classes/cases (Basically the .xctest files inside the PlugIns directory in the .app bundle)
  */
 - (void)listTests;
 
