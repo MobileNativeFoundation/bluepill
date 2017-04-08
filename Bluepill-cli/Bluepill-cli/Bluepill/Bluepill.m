@@ -341,7 +341,7 @@ void onInterrupt(int ignore) {
     BOOL success = [context.runner uninstallApplicationAndReturnError:&error];
 
     [[BPStats sharedStats] endTimer:stepName];
-    [BPUtils printInfo:(success ? INFO : ERROR) withString:[@"Completed: %@" stringByAppendingString:stepName]];
+    [BPUtils printInfo:(success ? INFO : ERROR) withString:@"Completed: %@", stepName];
 
     if (!success) {
         [[BPStats sharedStats] addSimulatorInstallFailure];
