@@ -169,7 +169,6 @@
     return nil;
 }
 
-// <<<<<<< HEAD:Bluepill-cli/Bluepill-cli/Simulator/SimulatorRunner.m
 + (BOOL)installAppWithBundleID:(NSString *)hostBundleID
                     bundlePath:(NSString *)hostBundlePath
                         device:(SimDevice *)device
@@ -271,8 +270,6 @@
     [deviceSet deleteDeviceAsync:device completionHandler:completion];
 }
 
-// =======
-// >>>>>>> 7a0b95b611c5c5a966b7867d37e9a34bfffc4283:Bluepill-cli/Bluepill-cli/Simulator/BPSimulator.m
 - (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostBundlePath = self.config.appBundlePath;
