@@ -103,11 +103,11 @@
     xctConfig.testBundleURL = [NSURL fileURLWithPath:testBundlePath];
     xctConfig.sessionIdentifier = config.sessionIdentifier;
     xctConfig.treatMissingBaselinesAsFailures = NO;
-    xctConfig.targetApplicationBundleID = [self bundleIdForPath:config.appBundlePath];//@"LI.BPSampleApp";
-    xctConfig.targetApplicationPath = config.appBundlePath;//@"/Users/khu/linkedin/bluepill/build/Products/Debug-iphonesimulator/BPSampleApp.app";
+    xctConfig.targetApplicationPath = config.appBundlePath;
     xctConfig.reportResultsToIDE = YES;
 
     if (config.testRunnerAppPath) {
+        xctConfig.targetApplicationBundleID = [self bundleIdForPath:config.appBundlePath];
         xctConfig.initializeForUITesting = YES;
         xctConfig.disablePerformanceMetrics = NO;
         xctConfig.reportActivities = NO;
