@@ -1,0 +1,12 @@
+machine:
+  xcode:
+    version: 8.3
+
+compile:
+  override:
+    - ./scripts/bluepill.sh build
+
+test:
+  override:
+    - ./scripts/bluepill.sh instance_tests1 
+
