@@ -34,6 +34,104 @@
                ReferencedContainer = "container:Bluepill-cli.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BAB24F2D1DB5D45E00867756"
+               BuildableName = "BPSampleApp.app"
+               BlueprintName = "BPSampleApp"
+               ReferencedContainer = "container:../BPSampleApp/BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BAB24F591DB5D83C00867756"
+               BuildableName = "BPAppNegativeTests.xctest"
+               BlueprintName = "BPAppNegativeTests"
+               ReferencedContainer = "container:../BPSampleApp/BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BAA4DA361DC3C02A00A58BCC"
+               BuildableName = "BPSampleAppCrashingTests.xctest"
+               BlueprintName = "BPSampleAppCrashingTests"
+               ReferencedContainer = "container:../BPSampleApp/BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BA9C2DD11DD7F182007CB967"
+               BuildableName = "BPSampleAppFatalErrorTests.xctest"
+               BlueprintName = "BPSampleAppFatalErrorTests"
+               ReferencedContainer = "container:../BPSampleApp/BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BA4BCFC51DC47EC700592FA4"
+               BuildableName = "BPSampleAppHangingTests.xctest"
+               BlueprintName = "BPSampleAppHangingTests"
+               ReferencedContainer = "container:../BPSampleApp/BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BAB24F461DB5D45E00867756"
+               BuildableName = "BPSampleAppTests.xctest"
+               BlueprintName = "BPSampleAppTests"
+               ReferencedContainer = "container:../BPSampleApp/BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BAFCCA5C1E36DC2000E33C31"
+               BuildableName = "BPSampleAppUITests.xctest"
+               BlueprintName = "BPSampleAppUITests"
+               ReferencedContainer = "container:../BPSampleApp/BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

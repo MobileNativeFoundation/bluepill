@@ -154,6 +154,11 @@
         hostBundleId = [SimulatorHelper bundleIdForPath:hostAppPath];
         hostBundlePath = hostAppPath;
     }
+    if (!hostBundleId || !hostBundlePath) {
+        [BPUtils printInfo:ERROR withString:@"hostBundleId: %@ or hostBundlePath: %@ is null",
+         hostBundleId, hostBundlePath];
+        return NO;
+    }
 
     // Install the host application
     BOOL installed = [self.device

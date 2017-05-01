@@ -153,6 +153,9 @@
     NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:[path stringByAppendingPathComponent:@"Info.plist"]];
 
     NSString *bundleId = [dic objectForKey:(NSString *)kCFBundleIdentifierKey];
+    if (!bundleId) {
+        [BPUtils printInfo:ERROR withString:@"Could not extract bundleID: %@", dic];
+    }
     return bundleId;
 }
 
