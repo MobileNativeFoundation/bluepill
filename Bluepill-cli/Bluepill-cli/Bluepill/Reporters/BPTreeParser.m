@@ -94,10 +94,19 @@ static const NSString * const kPassed = @"passed";
     if ([chunk length] > 0) {
         NSString *str = [[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding];
         NSRange range = [str rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]];
+        unsigned long numLines = 0;
+        unsigned long maxLines = [chunk length];
         while (range.location != NSNotFound) {
             self.line = [self.line stringByAppendingString:[str substringToIndex:range.location] ?: @""];
             [self.log writeLine:@"%@", self.line];
             [self parseLine:self.line];
+            if (numLines++ > maxLines) {
+                [BPUtils printInfo:ERROR withString:@"Infinite Loop Averted!: range {%@, %@}, %d, %@",
+                 range.length, range.location, [chunk length], str];
+                [BPUtils printInfo:ERROR withString:@"Data: %@", [[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding]];
+                // Fail hard.
+                exit(1);
+            }
             self.line = @"";
             str = [str substringFromIndex:range.location+range.length];
             range = [str rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]];
