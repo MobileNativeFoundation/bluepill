@@ -294,7 +294,7 @@
             }
             completion(error, error ? NO: YES);
         }];
-    } else {
+    } else if (self.device) {
         [self.device shutdownAsyncWithCompletionHandler:^(NSError *error) {
             if (!error) {
                 [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
@@ -308,6 +308,9 @@
                 completion(error, NO);
             }
         }];
+    } else {
+        [BPUtils printInfo:ERROR withString:@"No device to delete"];
+        completion(nil, NO);
     }
 }
 
