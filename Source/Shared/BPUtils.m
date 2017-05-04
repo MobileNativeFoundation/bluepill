@@ -165,6 +165,9 @@ static BOOL quiet = NO;
         [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"TestAction"] error:&error]];
         for (NSXMLElement *node in argsNodes) {
             NSString *argument = [[node attributeForName:@"argument"] stringValue];
+            if (![[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
+                continue;
+            }
             NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];
             for (NSString *arg in argumentsArray) {
                 if (![arg isEqualToString:@""]) {
@@ -178,7 +181,9 @@ static BOOL quiet = NO;
         for (NSXMLElement *node in envNodes) {
             NSString *key = [[node attributeForName:@"key"] stringValue];
             NSString *value = [[node attributeForName:@"value"] stringValue];
-            argsAndEnv[@"env"][key] = value;
+            if ([[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
+                argsAndEnv[@"env"][key] = value;
+            }
 
         }
     }
