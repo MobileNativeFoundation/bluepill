@@ -108,10 +108,14 @@ static const NSString * const kPassed = @"passed";
 
 - (void)parseLine:(nullable NSString *)line {
     [BPUtils printInfo:DEBUGINFO withString:@"[OUTPUT] %@", line];
-    [self onOutputReceived:line];
+
     if (!line || ![line length]) {
         return;
     }
+
+    // We've seen hangs where the app just prints endless \n's so we
+    // don't count \n's as output.
+    [self onOutputReceived:line];
 
     NSRange lineRange = NSMakeRange(0, [line length]);
     BOOL logLine = YES;

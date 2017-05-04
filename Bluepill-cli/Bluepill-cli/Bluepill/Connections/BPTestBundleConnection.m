@@ -137,15 +137,18 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     int socketFD = socket(AF_UNIX, SOCK_STREAM, 0);
     if (socketFD == -1) {
         [BPUtils printInfo:ERROR withString:@"Error in creating socketFD"];
+        return -1;
     }
     NSString *socketString = [self.simulator.device getenv:testManagerEnv error:nil];
     const char *socketPath = socketString.UTF8String;
 
     if(![[NSFileManager new] fileExistsAtPath:socketString]) {
         [BPUtils printInfo:ERROR withString:@"Does not exist - %@", socketString];
+        return -1;
     }
     if(strnlen(socketPath, 1024) >= 104) {
         [BPUtils printInfo:ERROR withString:@"Socket path is too big %@", socketString];
+        return -1;
     }
     struct sockaddr_un remote;
     remote.sun_family = AF_UNIX;
@@ -153,6 +156,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     socklen_t length = (socklen_t)(strnlen(remote.sun_path, 1024) + sizeof(remote.sun_family) + sizeof(remote.sun_len));
     if (connect(socketFD, (struct sockaddr *)&remote, length) == -1) {
         [BPUtils printInfo:ERROR withString:@"Failed to connect to socket"];
+        return -1;
     }
     return socketFD;
 }
@@ -160,14 +164,16 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 - (DTXTransport *)connectTransport {
     if ([NSThread isMainThread]) {assert(NO);}
     int socketFD = [self testManagerSocket];
-    if (socketFD == 1) {
+    if (socketFD == -1) {
         [BPUtils printInfo:ERROR withString:@"Failed to get socket fd to test bundle."];
+        return NULL;
     }
     DTXTransport *transport = [[objc_lookUpClass("DTXSocketTransport") alloc] initWithConnectedSocket:socketFD disconnectAction:^{
         [BPUtils printInfo:INFO withString:@"Socket transport disconneted"];
     }];
     if (!transport) {
         [BPUtils printInfo:ERROR withString:@"Transport creation failed."];
+        return NULL;
     }
     return transport;
 }
@@ -212,11 +218,13 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     [self.simulator.device installApplication:[NSURL fileURLWithPath:path] withOptions:@{kCFBundleIdentifier: bundleID} error:&error];
     if (error) {
         [BPUtils printInfo:ERROR withString:@"Launch application during UI tests failed %@", error];
+        return nil;
     }
     self.appProcessPID = [self.simulator.device launchApplicationWithID:bundleID options:options error:nil];
     self.bundleID = bundleID;
     if (error) {
         [BPUtils printInfo:ERROR withString:@"Launch application during UI tests failed %@", error];
+        return nil;
     }
     id token = @(receipt.hash);
     [receipt invokeCompletionWithReturnValue:token error:error];
