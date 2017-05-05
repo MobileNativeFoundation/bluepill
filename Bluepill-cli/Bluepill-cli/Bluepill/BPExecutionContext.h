@@ -20,7 +20,6 @@
 @property (nonatomic, strong) BPSimulator *runner;
 @property (nonatomic, strong) BPTreeParser *parser;
 @property (nonatomic, assign) NSInteger attemptNumber;
-@property (nonatomic, assign) BOOL simulatorCreated;
 @property (nonatomic, assign) BOOL simulatorCrashed;
 @property (nonatomic, assign) pid_t pid;
 @property (nonatomic, assign) BOOL isTestRunnerContext;
