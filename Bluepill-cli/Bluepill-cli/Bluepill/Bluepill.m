@@ -243,7 +243,6 @@ void onInterrupt(int ignore) {
     };
 
     handler.onSuccess = ^{
-        context.simulatorCreated = YES;
         NEXT([__self installApplicationWithContext:context]);
     };
 
@@ -253,8 +252,10 @@ void onInterrupt(int ignore) {
         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
         if (--__self.maxCreateTries > 0) {
             [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
-            context.runner = [__self createSimulatorRunnerWithContext:context];
-            NEXT([__self createSimulatorWithContext:context]);
+            [__self deleteSimulatorWithContext:context completion:^{
+                context.runner = [__self createSimulatorRunnerWithContext:context];
+                NEXT([__self createSimulatorWithContext:context]);
+            }];
         } else {
             NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCreationFailed]);
         }
@@ -276,7 +277,6 @@ void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:stepName];
     
     if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.useSimUDID]]) {
-        context.simulatorCreated = YES; //if we don't set this flag, deleteSimulatorWithContext() won't proceed
         
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:INFO withString:@"Completed: %@ %@", stepName, context.runner.UDID];
@@ -528,21 +528,22 @@ void onInterrupt(int ignore) {
 }
 
 - (void)deleteSimulatorWithContext:(BPExecutionContext *)context andStatus:(BPExitStatus)status {
-    NSString *stepName = DELETE_SIMULATOR(context.attemptNumber);
     context.exitStatus = status;
-
-    if (!context.simulatorCreated) {
-        // Since we didn't create the simulator, don't try to delete the simulator and just go straight to finish
-        NEXT([self finishWithContext:context]);
-        return;
-    }
-    context.simulatorCreated = NO;  //also use this flag to tell writeSimUDIDFile() the simulator not avaiable
-    self.mayReuseSim = NO; //prevent reuse this device when RETRY
+    __weak typeof(self) __self = self;
     
+    [self deleteSimulatorWithContext:context completion:^{
+        NEXT([__self finishWithContext:context]);
+    }];
+}
+
+- (void)deleteSimulatorWithContext:(BPExecutionContext *)context completion:(void (^)(void))completion {
+    NSString *stepName = DELETE_SIMULATOR(context.attemptNumber);
+
+    self.mayReuseSim = NO; //prevent reuse this device when RETRY
+
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
-
-    __weak typeof(self) __self = self;
+    
     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.deleteTimeout doubleValue]];
     [timer start];
 
@@ -555,13 +556,13 @@ void onInterrupt(int ignore) {
     };
 
     handler.onSuccess = ^{
-        NEXT([__self finishWithContext:context]);
+        completion();
     };
 
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] addSimulatorDeleteFailure];
         [BPUtils printInfo:ERROR withString:@"%@", [error localizedDescription]];
-        NEXT([__self finishWithContext:context]);
+        completion();
     };
 
     handler.onTimeout = ^{
@@ -569,7 +570,7 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:ERROR
                 withString:[@"Timeout: " stringByAppendingString:stepName]];
-        NEXT([__self finishWithContext:context]);
+        completion();
     };
 
     [context.runner deleteSimulatorWithCompletion:handler.defaultHandlerBlock];
@@ -578,9 +579,7 @@ void onInterrupt(int ignore) {
 // Only called when bp is running in the delete only mode.
 - (void)deleteSimulatorOnlyTaskWithContext:(BPExecutionContext *)context {
     
-    if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.deleteSimUDID]]) {
-        context.simulatorCreated = YES; //if we don't set this flag, deleteSimulatorWithContext() won't proceed
-        
+    if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.deleteSimUDID]]) {        
         NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorDeleted]);
     } else {
         [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to reconnect to simulator %@", context.config.deleteSimUDID]];
@@ -657,7 +656,7 @@ void onInterrupt(int ignore) {
 
 - (void)writeSimUDIDFile {
     NSString *idStr = self.simulatorUDID;
-    if (!idStr || !self.context.simulatorCreated) return;
+    if (!idStr) return;
     
     NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d", getpid()];
     NSString *tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName];
