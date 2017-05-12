@@ -14,7 +14,7 @@
 
 @interface Bluepill : NSObject
 
-@property (nonatomic, readonly) NSString *simulatorUDID;
+@property (nonatomic, readonly) NSString *test_simulatorUDID;
 
 /*!
  * @discussion bp instance

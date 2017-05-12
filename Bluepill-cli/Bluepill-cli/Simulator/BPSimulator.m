@@ -76,7 +76,7 @@
 }
 
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
-    self.device = [BPSimulator findDeviceWithConfig:self.config andDeviceID:deviceUDID];
+    self.device = [self findDeviceWithConfig:self.config andDeviceID:deviceUDID];
     if (!self.device) {
         [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice not found: %@", [deviceUDID UUIDString]]];
         return NO;
@@ -88,7 +88,7 @@
     }
 
     if (!self.config.headlessMode) {
-        self.app = [BPSimulator findSimAppWithDeviceUDID: [deviceUDID UUIDString]];
+        self.app = [self findSimGUIAppWithDeviceUDID: [deviceUDID UUIDString]];
         if (!self.app) {
             [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
                                                  [deviceUDID UUIDString]]];
@@ -169,7 +169,7 @@
     return nil;
 }
 
-+ (BOOL)installAppWithBundleID:(NSString *)hostBundleID
+- (BOOL)installAppWithBundleID:(NSString *)hostBundleID
                     bundlePath:(NSString *)hostBundlePath
                         device:(SimDevice *)device
                          error:(NSError **)error {
@@ -179,7 +179,7 @@
                                 error:error];
 }
 
-+ (BOOL)uninstallAppWithBundleID:(NSString *)hostBundleID
+- (BOOL)uninstallAppWithBundleID:(NSString *)hostBundleID
                       bundlePath:(NSString *)hostBundlePath
                           device:(SimDevice *)device
                            error:(NSError **)error {
@@ -212,9 +212,7 @@
     [BPUtils printInfo:INFO withString:@" ¯\\_(ツ)_/¯"];
 }
 
-+ (SimDevice *)findDeviceWithConfig:(BPConfiguration *)config andDeviceID:(NSUUID *)deviceID {
-    deviceID = deviceID ?: [[NSUUID alloc] initWithUUIDString:config.useSimUDID];
-    
+- (SimDevice *)findDeviceWithConfig:(BPConfiguration *)config andDeviceID:(NSUUID *)deviceID {
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
     if (!sc) {
@@ -231,7 +229,7 @@
     return device; //could be nil when not found
  }
 
-+ (NSRunningApplication *)findSimAppWithDeviceUDID:(NSString *)deviceUDID {
+- (NSRunningApplication *)findSimGUIAppWithDeviceUDID:(NSString *)deviceUDID {
     NSString * cmd = [NSString stringWithFormat:@"ps -A | grep 'Simulator\\.app.*-CurrentDeviceUDID %@'", deviceUDID];
     NSString * output = [[BPUtils runShell:cmd] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSArray *fields = [output componentsSeparatedByString: @" "];
@@ -242,32 +240,6 @@
         return app;
     }
     return nil;
-}
-
-+ (void)bootDevice:(SimDevice *)device withCompletion:(void (^)())completion {
-    NSDictionary *options = @{
-                              @"register-head-services" : @YES
-                              };
-    [device bootAsyncWithOptions:options completionHandler:completion];
-}
-
-+ (void)shutdownDevice:(SimDevice *)device withCompletion:(void (^)(NSError *error))completion {
-    [device shutdownAsyncWithCompletionHandler:completion];
-}
-
-+ (void)deleteDevice:(SimDevice *)device withConfig:(BPConfiguration *)config andCompletion:(void (^)(NSError *error))completion {
-    NSError *error;
-    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
-    if (!sc) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
-        return;
-    }
-    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
-    if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
-        return;
-    }
-    [deviceSet deleteDeviceAsync:device completionHandler:completion];
 }
 
 - (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error {
@@ -300,7 +272,7 @@
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
 
     // Install the host application
-    return [BPSimulator uninstallAppWithBundleID:hostBundleId
+    return [self uninstallAppWithBundleID:hostBundleId
                                           bundlePath:self.config.appBundlePath
                                               device:self.device error:error];
 }

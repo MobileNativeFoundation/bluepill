@@ -90,7 +90,7 @@
     self.config.numSims = @2;
     self.config.errorRetriesCount = @2;
     self.config.failureTolerance = @2;
-    //self.config.reuseSimulator = NO;
+    self.config.reuseSimulator = NO;
 
     self.config.testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
     self.config.testRunnerAppPath = [BPTestHelper sampleAppUITestRunnerPath];

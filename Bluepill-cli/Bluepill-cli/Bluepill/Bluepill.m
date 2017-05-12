@@ -40,7 +40,7 @@ void onInterrupt(int ignore) {
 @property (nonatomic, assign) BOOL exitLoop;
 @property (nonatomic, assign) NSInteger failureTolerance;
 @property (nonatomic, assign) NSInteger retries;
-@property (nonatomic, assign) BOOL mayReuseSim;
+@property (nonatomic, assign) BOOL reuseSimAllowed;
 
 @property (nonatomic, assign) NSInteger maxCreateTries;
 @property (nonatomic, assign) NSInteger maxInstallTries;
@@ -79,7 +79,7 @@ void onInterrupt(int ignore) {
     // Save our failure tolerance because we're going to be changing this
     self.failureTolerance = [self.executionConfigCopy.failureTolerance integerValue];
 
-    self.mayReuseSim = YES;
+    self.reuseSimAllowed = YES;
 
     // Connect to test manager daemon and test bundle
 
@@ -211,7 +211,7 @@ void onInterrupt(int ignore) {
     
     if (context.config.deleteSimUDID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
-    } else if (context.config.useSimUDID && self.mayReuseSim) {
+    } else if (context.config.useSimUDID && self.reuseSimAllowed) {
         NEXT([self reuseSimulatorWithContext:context]);
     } else {
         NEXT([self createSimulatorWithContext:context]);
@@ -283,8 +283,7 @@ void onInterrupt(int ignore) {
 
         NEXT([self uninstallApplicationWithContext:context]);
     } else {
-        self.mayReuseSim = NO; //prevent reuse this device when RETRY
-
+        self.reuseSimAllowed = NO; //prevent reuse this device when RETRY
         
         [[BPStats sharedStats] endTimer:stepName];
         [[BPStats sharedStats] addSimulatorCreateFailure];
@@ -518,8 +517,9 @@ void onInterrupt(int ignore) {
     if (context.simulatorCrashed) {
         // If we crashed, we need to retry
         [self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCrashed];
-    } else if (self.config.keepSimulator && (context.runner.exitStatus == BPExitStatusTestsAllPassed ||
-                                             context.runner.exitStatus == BPExitStatusTestsFailed)) {
+    } else if (self.config.keepSimulator
+               && (context.runner.exitStatus == BPExitStatusTestsAllPassed
+                || context.runner.exitStatus == BPExitStatusTestsFailed)) {
       context.exitStatus = [context.runner exitStatus];
       NEXT([self finishWithContext:context]);
     } else {
@@ -539,7 +539,7 @@ void onInterrupt(int ignore) {
 - (void)deleteSimulatorWithContext:(BPExecutionContext *)context completion:(void (^)(void))completion {
     NSString *stepName = DELETE_SIMULATOR(context.attemptNumber);
 
-    self.mayReuseSim = NO; //prevent reuse this device when RETRY
+    self.reuseSimAllowed = NO; //prevent reuse this device when RETRY
 
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:stepName];
@@ -655,7 +655,7 @@ void onInterrupt(int ignore) {
 }
 
 - (void)writeSimUDIDFile {
-    NSString *idStr = self.simulatorUDID;
+    NSString *idStr = self.context.runner.UDID;
     if (!idStr) return;
     
     NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d", getpid()];
@@ -674,7 +674,7 @@ void onInterrupt(int ignore) {
     return (self.exitLoop == NO);
 }
 
-- (NSString *)simulatorUDID {
+- (NSString *)test_simulatorUDID {
     return self.context.runner.UDID;
 }
 

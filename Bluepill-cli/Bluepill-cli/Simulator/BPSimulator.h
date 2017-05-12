@@ -28,7 +28,6 @@
 
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID;
 
-
 - (BOOL)uninstallApplicationAndReturnError:(NSError **)error;
 
 - (void)bootWithCompletion:(void (^)(NSError *error))completion;
