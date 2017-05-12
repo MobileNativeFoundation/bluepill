@@ -188,30 +188,6 @@
                                   error:error];
 }
 
-+ (void)createDeviceWithConfig:(BPConfiguration *)config andName:(NSString *)deviceName completion:(void (^)(NSError *, SimDevice *))completion {
-    deviceName = deviceName ?: [NSString stringWithFormat:@"BP%d", getpid()];
-    
-    // Create a new simulator with the given device/runtime
-    NSError *error;
-    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
-    if (!sc) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
-        return;
-    }
-    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
-    if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
-        return;
-    }
-    [deviceSet createDeviceAsyncWithType:config.simDeviceType
-                                 runtime:config.simRuntime
-                                    name:deviceName
-                       completionHandler:^(NSError *error, SimDevice *device) {
-                           completion(error, device);
-                       }];
-    [BPUtils printInfo:INFO withString:@" ¯\\_(ツ)_/¯"];
-}
-
 - (SimDevice *)findDeviceWithConfig:(BPConfiguration *)config andDeviceID:(NSUUID *)deviceID {
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
