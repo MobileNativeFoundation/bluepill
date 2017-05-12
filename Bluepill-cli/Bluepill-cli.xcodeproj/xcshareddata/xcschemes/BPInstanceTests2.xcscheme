@@ -14,10 +14,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BAB24F671DB5DB2300867756"
-               BuildableName = "BPInstanceTests.xctest"
-               BlueprintName = "BPInstanceTests"
-               ReferencedContainer = "container:Bluepill-cli.xcodeproj">
+               BlueprintIdentifier = "BAB24F2D1DB5D45E00867756"
+               BuildableName = "BPSampleApp.app"
+               BlueprintName = "BPSampleApp"
+               ReferencedContainer = "container:../BPSampleApp/BPSampleApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -42,10 +42,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BAB24F2D1DB5D45E00867756"
-               BuildableName = "BPSampleApp.app"
-               BlueprintName = "BPSampleApp"
-               ReferencedContainer = "container:../BPSampleApp/BPSampleApp.xcodeproj">
+               BlueprintIdentifier = "BAB24F671DB5DB2300867756"
+               BuildableName = "BPInstanceTests.xctest"
+               BlueprintName = "BPInstanceTests"
+               ReferencedContainer = "container:Bluepill-cli.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry

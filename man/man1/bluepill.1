@@ -33,14 +33,22 @@ The path to the host application to execute (your .app)
 The scheme to run tests.
 
 .TP
+.BI -u/--runner-app-path " <runner_app_path>"
+The test runner for UI tests.
+
+.TP
 .BI -d/--device " <device>"
 On which device to run the app.
-\fR  Default Value: "iPhone 6" \fR
+\fR  Default Value: "iPhone 7" \fR
 
 .TP
 .BI -c/--config " <config>"
 Read options from the specified configuration file instead of the
 command line
+
+.TP
+.BI -t/--test-bundle-path " <test_bundle_path>"
+The test bundle to run tests.
 
 .TP
 .BI -C/--repeat-count " <repeat_count>"
@@ -77,7 +85,7 @@ Timeout in seconds for a test that is producing output.
 .TP
 .BI -f/--failure-tolerance " <failure_tolerance>"
 The number of retries on any failures (app crash/test failure).
-\fR  Default Value: NO \fR
+\fR  Default Value: 0 \fR
 
 .TP
 .BI -i/--include " <include>"
@@ -96,11 +104,7 @@ Directory where to put output log files (bluepill only).
 .TP
 .BI -r/--runtime " <runtime>"
 What runtime to use.
-\fR  Default Value: "iOS 10.2" \fR
-
-.TP
-.BI -t/--test " <test>"
-The path to the test bundle to execute (your .xctest).
+\fR  Default Value: "iOS 10.3" \fR
 
 .TP
 .BI -x/--exclude " <exclude>"
@@ -150,8 +154,59 @@ If `failure-tolerance` is > 0, only retry tests that failed.
 Only list tests in bundle
 
 .TP
-.BI --additional-xctests " <additional_xctests>"
+.BI -v/--verbose " verbose"
+Enable verbose logging
+\fR  Default Value: Off \fR
+
+.TP
+.BI --additional-unit-xctests " <additional_unit_xctests>"
 Additional XCTest bundles to test.
+
+.TP
+.BI --additional-ui-xctests " <additional_ui_xctests>"
+Additional XCUITest bundles to test.
+
+.TP
+.BI --max-sim-create-attempts " <max_sim_create_attempts>"
+The maximum number of times to attempt to create a simulator before
+failing a test attempt
+\fR  Default Value: 2 \fR
+
+.TP
+.BI --max-sim-install-attempts " <max_sim_install_attempts>"
+The maximum number of times to attempt to install the test app into a
+simulator before failing a test attempt
+\fR  Default Value: 2 \fR
+
+.TP
+.BI --max-sim-launch-attempts " <max_sim_launch_attempts>"
+The maximum number of times to attempt to launch the test app in a
+simulator before failing a test attempt
+\fR  Default Value: 2 \fR
+
+.TP
+.BI --create-timeout " <create_timeout>"
+The maximum amount of time, in seconds, to wait before giving up on
+simulator creation
+\fR  Default Value: 300 \fR
+
+.TP
+.BI --launch-timeout " <launch_timeout>"
+The maximum amount of time, in seconds, to wait before giving up on
+application launch in the simulator
+\fR  Default Value: 300 \fR
+
+.TP
+.BI --delete-timeout " <delete_timeout>"
+The maximum amount of time, in seconds, to wait before giving up on
+simulator deletion
+\fR  Default Value: 300 \fR
+
+.TP
+.BI --log-level " <log_level>"
+The logging level (FAILED=8, CRASH=7, TIMEOUT=6, PASSED=5, ERROR=4,
+WARNING=3, INFO=2, DEBUG=1
+\fR  Default Value: 2 \fR
 
 
 

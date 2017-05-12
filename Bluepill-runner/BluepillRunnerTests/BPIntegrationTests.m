@@ -46,8 +46,11 @@
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     NSLog(@"BPBuildScript = %hhd", [BPUtils isBuildScript]);
-    [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
-    [BPUtils quietMode:[BPUtils isBuildScript]];
+    if ([BPUtils isBuildScript]) {
+        [BPUtils setLogLevel:INFO];
+    } else {
+        [BPUtils setLogLevel:DEBUGINFO];
+    }
 }
 
 - (void)tearDown {

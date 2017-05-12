@@ -23,34 +23,29 @@ typedef struct Message {
     const char *color;
 } Message;
 
+// These must match BPKind in BPUtils.h
 Message Messages[] = {
+    {"        ", ANSI_COLOR_RED   }, // 0
+    {" DEBUG  ", ANSI_COLOR_YELLOW},
+    {"  INFO  ", ANSI_COLOR_BLUE  },
+    {" WARNING", ANSI_COLOR_YELLOW},
+    {"  ERROR ", ANSI_COLOR_RED   },
     {" PASSED ", ANSI_COLOR_GREEN },
     {" FAILED ", ANSI_COLOR_RED   },
-    {" TIMEOUT", ANSI_COLOR_YELLOW},
-    {"  INFO  ", ANSI_COLOR_BLUE  },
-    {"  ERROR ", ANSI_COLOR_RED   },
-    {" WARNING", ANSI_COLOR_YELLOW},
     {" CRASH  ", ANSI_COLOR_RED   },
-    {" DEBUG  ", ANSI_COLOR_YELLOW},
+    {" TIMEOUT", ANSI_COLOR_YELLOW},
 };
 
 static int bp_testing = -1;
 
-#ifdef DEBUG
-static BOOL printDebugInfo = YES;
-#else
-static BOOL printDebugInfo = NO;
-#endif
+static BPKind logLevel = INFO;
 
-static BOOL quiet = NO;
-
-+ (void)enableDebugOutput:(BOOL)enable {
-    NSLog(@"Enable == %hhd", enable);
-    printDebugInfo = enable;
++ (void)setLogLevel:(BPKind) level {
+    logLevel = level;
 }
 
 + (void)quietMode:(BOOL)enable {
-    quiet = enable;
+    [BPUtils setLogLevel:ERROR];
 }
 
 + (BOOL)isBuildScript {
@@ -62,11 +57,10 @@ static BOOL quiet = NO;
 }
 
 + (void)printInfo:(BPKind)kind withString:(NSString *)fmt, ... {
-    if (kind == DEBUGINFO && !printDebugInfo) {
+    if (kind < logLevel) {
         return;
     }
-    if (quiet && kind != ERROR) return;
-    FILE *out = kind == ERROR ? stderr : stdout;
+    FILE *out = (kind <= ERROR) ? stderr : stdout;
     va_list args;
     va_start(args, fmt);
     NSString *txt = [[NSString alloc] initWithFormat:fmt arguments:args];

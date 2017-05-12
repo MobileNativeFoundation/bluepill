@@ -136,7 +136,7 @@ for op in parsed_opts:
         else:
             defval = op['default_val']
         print('\\fR  Default Value: {} \\fR'.format(defval))
-    print()
+    print('')
 
 print("""
 

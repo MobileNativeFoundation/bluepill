@@ -118,6 +118,8 @@ struct BPOptions {
         "The maximum amount of time, in seconds, to wait before giving up on application launch in the simulator"},
     {356, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "deleteTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator deletion"},
+    {357, "log-level", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "logLevel",
+        "The logging level (FAILED=8, CRASH=7, TIMEOUT=6, PASSED=5, ERROR=4, WARNING=3, INFO=2, DEBUG=1)"},
     {0, 0, 0, 0, 0, 0, 0}
 };
 
@@ -554,6 +556,11 @@ static NSUUID *sessionID;
         if (err) *err = BP_ERROR(@"No scheme provided.");
         return NO;
     }
+    
+    if (self.quiet) {
+        self.logLevel = [NSNumber numberWithInt:ERROR];
+    }
+    [BPUtils setLogLevel:[self.logLevel intValue]];
 
     // bp requires an xctest argument while `bluepill` does not.
 #ifdef BP_USE_PRIVATE_FRAMEWORKS

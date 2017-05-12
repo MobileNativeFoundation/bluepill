@@ -31,7 +31,7 @@
 
     [BPTreeAssembler.sharedInstance reset];
     [BPUtils quietMode:[BPUtils isBuildScript]];
-    [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
+    if ([BPUtils isBuildScript]) [BPUtils setLogLevel:DEBUGINFO];
     self.config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
     self.config.testing_NoAppWillRun = YES;
 }
