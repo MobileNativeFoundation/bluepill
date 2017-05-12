@@ -93,11 +93,29 @@ static const NSString * const kPassed = @"passed";
 - (void)handleChunkData:(nonnull NSData *)chunk {
     if ([chunk length] > 0) {
         NSString *str = [[NSString alloc] initWithData:chunk encoding:NSUTF8StringEncoding];
+        if (!str) {
+            [BPUtils printInfo:WARNING withString:@"Failed to UTF8 decode chunk: %@", chunk];
+            str = [[NSString alloc] initWithData:chunk encoding:NSASCIIStringEncoding];
+            [BPUtils printInfo:WARNING withString:@"ASCII: %@", str];
+        }
+        if (!str) {
+            [BPUtils printInfo:ERROR withString:@"Failed to ASCII decode chunk: %@", chunk];
+            exit(1);
+        }
         NSRange range = [str rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]];
+        unsigned long numLines = 0;
+        unsigned long maxLines = [chunk length];
         while (range.location != NSNotFound) {
             self.line = [self.line stringByAppendingString:[str substringToIndex:range.location] ?: @""];
             [self.log writeLine:@"%@", self.line];
             [self parseLine:self.line];
+            if (numLines++ > maxLines) {
+                [BPUtils printInfo:ERROR withString:@"Infinite Loop Averted!: range {%d, %d}, %d, %@",
+                 range.length, range.location, [chunk length], str];
+                [BPUtils printInfo:ERROR withString:@"Data: %@", chunk];
+                // Fail hard.
+                exit(1);
+            }
             self.line = @"";
             str = [str substringFromIndex:range.location+range.length];
             range = [str rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]];
@@ -108,14 +126,10 @@ static const NSString * const kPassed = @"passed";
 
 - (void)parseLine:(nullable NSString *)line {
     [BPUtils printInfo:DEBUGINFO withString:@"[OUTPUT] %@", line];
-
+    [self onOutputReceived:line];
     if (!line || ![line length]) {
         return;
     }
-
-    // We've seen hangs where the app just prints endless \n's so we
-    // don't count \n's as output.
-    [self onOutputReceived:line];
 
     NSRange lineRange = NSMakeRange(0, [line length]);
     BOOL logLine = YES;
