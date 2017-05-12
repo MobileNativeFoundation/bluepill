@@ -169,25 +169,6 @@
     return nil;
 }
 
-- (BOOL)installAppWithBundleID:(NSString *)hostBundleID
-                    bundlePath:(NSString *)hostBundlePath
-                        device:(SimDevice *)device
-                         error:(NSError **)error {
-
-    return [device installApplication:[NSURL fileURLWithPath:hostBundlePath]
-                          withOptions:@{kCFBundleIdentifier: hostBundleID}
-                                error:error];
-}
-
-- (BOOL)uninstallAppWithBundleID:(NSString *)hostBundleID
-                      bundlePath:(NSString *)hostBundlePath
-                          device:(SimDevice *)device
-                           error:(NSError **)error {
-    return [device uninstallApplication:hostBundleID
-                            withOptions:@{kCFBundleIdentifier: hostBundleID}
-                                  error:error];
-}
-
 - (SimDevice *)findDeviceWithConfig:(BPConfiguration *)config andDeviceID:(NSUUID *)deviceID {
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
@@ -248,9 +229,9 @@
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
 
     // Install the host application
-    return [self uninstallAppWithBundleID:hostBundleId
-                                          bundlePath:self.config.appBundlePath
-                                              device:self.device error:error];
+    return [self.device uninstallApplication:hostBundleId
+                                 withOptions:@{kCFBundleIdentifier: hostBundleId}
+                                       error:error];
 }
 
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion isHostApp:(BOOL)isHostApp {
