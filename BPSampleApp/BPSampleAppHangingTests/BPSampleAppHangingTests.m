@@ -26,13 +26,8 @@
     [super tearDown];
 }
 
-- (void)testAppHangingWithOutput {
-    while(TRUE){printf("\n");}
-}
-
 - (void)testAppHanging {
     while(TRUE){};
 }
-
 
 @end

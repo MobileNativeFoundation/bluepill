@@ -48,8 +48,22 @@
 }
 
 - (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    self.config.testCasesToSkip = @[];
     [super tearDown];
+}
+
+- (void)testPackingWithTestsToSkip {
+    self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.testCasesToSkip = @[@"BPSampleAppTests/testCase000"];
+    self.config.numSims = @8;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    XCTAssert(app != nil);
+    NSArray<BPBundle *> *bundles;
+    bundles = [BPPacker packTests:app.allTestBundles configuration:self.config andError:nil];
+    for (BPBundle *bundle in bundles) {
+        XCTAssertTrue([bundle.testsToSkip containsObject:@"BPSampleAppTests/testCase000"], @"testCase000 should be in testToSkip for all bundles");
+    }
+
 }
 
 - (void)testPacking {

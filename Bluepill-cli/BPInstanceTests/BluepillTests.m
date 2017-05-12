@@ -367,6 +367,7 @@
 - (void)testRunWithPassingTestsSet {
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
+    self.config.testCasesToSkip = @[@"BPSampleAppTests/testCase000"];
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
