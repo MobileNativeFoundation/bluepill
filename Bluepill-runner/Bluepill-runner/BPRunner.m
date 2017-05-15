@@ -245,7 +245,7 @@ maxprocs(void)
         seconds += 1;
     }
 
-    for (int i=0; i<[deviceList count]; i++) {
+    for (int i = 0; i < [deviceList count]; i++) {
         NSTask *task = [self newTaskToDeleteDevice:[deviceList objectAtIndex:i] andNumber:i+1];
         [task launch];
         //fire & forget, DON'T WAIT
