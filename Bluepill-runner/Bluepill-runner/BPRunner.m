@@ -112,7 +112,7 @@ maxprocs(void)
     [task setArguments:@[@"-c", cfg.configOutputFile]];
     NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
     [env addEntriesFromDictionary:[[NSProcessInfo processInfo] environment]];
-    [env setObject:[NSString stringWithFormat:@"%lu", number] forKey:@"_BP_SIM_NUM"];
+    [env setObject:[NSString stringWithFormat:@"%lu", number] forKey:@"_BP_NUM"];
     [task setEnvironment:env];
     [task setTerminationHandler:^(NSTask *task) {
         [[NSFileManager defaultManager] removeItemAtPath:cfg.configOutputFile
@@ -130,7 +130,7 @@ maxprocs(void)
     [task setArguments:@[@"-D", deviceID]];
     NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
     [env addEntriesFromDictionary:[[NSProcessInfo processInfo] environment]];
-    [env setObject:[NSString stringWithFormat:@"%lu", number] forKey:@"_BP_SIM_NUM"];
+    [env setObject:[NSString stringWithFormat:@"%lu", number] forKey:@"_BP_NUM"];
     [task setEnvironment:env];
     
     [task setTerminationHandler:^(NSTask * _Nonnull task) {
