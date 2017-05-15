@@ -80,6 +80,10 @@ struct BPOptions {
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
     {'X', "xcode-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
         "Path to xcode."},
+    {'u', "simulator-udid", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "useSimUDID",
+        "Do not create a simulator but reuse the one with the UDID given. (BP INTERNAL USE ONLY). "},
+    {'D', "delete-simulator", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "deleteSimUDID",
+        "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE. (BP INTERNAL USE ONLY). "},
 
     // options with no argument
     {'H', "headless", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
@@ -106,17 +110,21 @@ struct BPOptions {
         "Additional XCTest bundles to test."},
     {350, "additional-ui-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUITestBundles",
         "Additional XCUITest bundles to test."},
-    {351, "max-sim-create-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxCreateTries",
+    {351, "reuse-simulator", BP_MASTER, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "reuseSimulator",
+        "Enable reusing simulators between test bundles"},
+    {352, "keep-simulator", BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
+        "Don't delete the simulator device after one test bundle finish. (BP INTERNAL USE ONLY). "},
+    {353, "max-sim-create-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxCreateTries",
         "The maximum number of times to attempt to create a simulator before failing a test attempt"},
-    {352, "max-sim-install-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxInstallTries",
+    {354, "max-sim-install-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxInstallTries",
         "The maximum number of times to attempt to install the test app into a simulator before failing a test attempt"},
-    {353, "max-sim-launch-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxLaunchTries",
+    {355, "max-sim-launch-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxLaunchTries",
         "The maximum number of times to attempt to launch the test app in a simulator before failing a test attempt"},
-    {354, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "createTimeout",
+    {356, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "createTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator creation"},
-    {355, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "launchTimeout",
+    {357, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "launchTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on application launch in the simulator"},
-    {356, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "deleteTimeout",
+    {358, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "deleteTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator deletion"},
     {0, 0, 0, 0, 0, 0, 0}
 };
@@ -174,7 +182,7 @@ static NSUUID *sessionID;
         }
     }
     if (bpo == NULL) {
-        // The error has already been printed.
+        // The error has already been printed in the call to getopt_long().
         exit(1);
     }
     assert(bpo && bpo->name);
@@ -310,33 +318,38 @@ static NSUUID *sessionID;
     return newConfig;
 }
 
-#pragma mark static methods
-
-+ (struct option *)getLongOptions {
+- (struct option *)getLongOptions {
     struct option *opt = {0};
-    int i;
+    int i, j;
     for (i = 0; BPOptions[i].name; i++) {}
     opt = malloc(sizeof(struct option) * (i + 1));
     assert(opt);
-    for (i = 0; BPOptions[i].name; i++) {
-        opt[i].name = BPOptions[i].name;
-        opt[i].has_arg = BPOptions[i].has_arg;
-        opt[i].flag = NULL;
-        opt[i].val = BPOptions[i].val;
+    for (i = 0, j = 0; BPOptions[i].name; i++) {
+        if (!(BPOptions[i].program & self.program)) {
+            continue;
+        }
+        opt[j].name = BPOptions[i].name;
+        opt[j].has_arg = BPOptions[i].has_arg;
+        opt[j].flag = NULL;
+        opt[j].val = BPOptions[i].val;
+        j++;
     }
-    opt[i].name = NULL;
-    opt[i].has_arg = 0;
-    opt[i].flag = NULL;
-    opt[i].val = 0;
+    opt[j].name = NULL;
+    opt[j].has_arg = 0;
+    opt[j].flag = NULL;
+    opt[j].val = 0;
     return opt;
 }
 
-+ (char *)getShortOptions {
+- (char *)getShortOptions {
     char *opt;
     int i, j;
     for (i = 0; BPOptions[i].name; i++) {}
     opt = malloc(i * 2 + 1);
     for (i = 0, j = 0; BPOptions[i].name; i++) {
+        if (!(BPOptions[i].program & self.program)) {
+            continue;
+        }
         if (!isascii(BPOptions[i].val)) continue;
         opt[j++] = BPOptions[i].val;
         if (BPOptions[i].has_arg == required_argument) {
@@ -358,6 +371,9 @@ static NSUUID *sessionID;
 
     printf("Usage:\n");
     for (int i = 0; BPOptions[i].name; i++) {
+        if (!(BPOptions[i].program & self.program)) {
+            continue;
+        }
         if (BPOptions[i].has_arg == required_argument) {
             arg = required_arg;
         } else if (BPOptions[i].has_arg == optional_argument){
@@ -471,7 +487,10 @@ static NSUUID *sessionID;
     // Now check we didn't miss any require options:
     NSMutableArray *errors = [[NSMutableArray alloc] init];
     for (int i = 0; BPOptions[i].name; i++) {
-        if ((self.program & BPOptions[i].program) && BPOptions[i].required && !BPOptions[i].seen) {
+        if (!self.deleteSimUDID &&
+            (((self.program & BPOptions[i].program) && BPOptions[i].required && !BPOptions[i].seen) ||
+             ((self.program & BP_SLAVE) && BPOptions[i].val == 't' && !BPOptions[i].seen))) {
+            // option "--test" is required for BP_SLAVE but optional for BP_MASTER
             [errors addObject:[NSString stringWithFormat:@"Missing required option: -%c/--%s - %s",
                                BPOptions[i].val, BPOptions[i].name, BPOptions[i].help]];
         }
@@ -507,6 +526,10 @@ static NSUUID *sessionID;
         return NO;
     }
 
+    if (self.deleteSimUDID) {
+        return YES;
+    }
+    
     if (!self.appBundlePath) {
         if (err) {
             *err = BP_ERROR(@"No app bundle provided.");

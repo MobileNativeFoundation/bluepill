@@ -80,6 +80,7 @@ A full list supported options are listed here.
 |      repeat-count      |           -C           | Number of times we'll run the entire test suite (used for load testing).           |     N    | 1                |
 |        no-split        |           -N           | Test bundles you don't want to be packed into different groups to run in parallel. |     N    | n/a              |
 |         quiet          |           -q           | Turn off all output except fatal errors.                                           |     N    | YES              |
+|    reuse-simulator     |           n/a          | Enable reusing simulators between test bundles                                     |     N    | NO               
 |          help          |           -h           | Help.                                                                              |     N    | n/a              |
 |     runner-app-path    |           -u           | The test runner for UI tests.                                                      |     N    | n/a              |
 

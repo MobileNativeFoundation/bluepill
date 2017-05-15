@@ -65,6 +65,10 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
+@property (nonatomic, strong) NSString *useSimUDID;
+@property (nonatomic, strong) NSString *deleteSimUDID;
+@property (nonatomic) BOOL keepSimulator;
+@property (nonatomic) BOOL reuseSimulator;
 @property (nonatomic) BPProgram program; // one of BP_MASTER or BP_SLAVE
 @property (nonatomic) BOOL verboseLogging;
 @property (nonatomic, strong) NSNumber *maxCreateTries;
@@ -73,7 +77,6 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSNumber *createTimeout;
 @property (nonatomic, strong) NSNumber *launchTimeout;
 @property (nonatomic, strong) NSNumber *deleteTimeout;
-
 
 // These fields are for testing.
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;
@@ -94,14 +97,14 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 
  @return A pointer to a `struct option` suitable for `getopt()`.
  */
-+ (struct option *)getLongOptions;
+- (struct option *)getLongOptions;
 
 /**
  Return a string of short options.
 
  @return A string suitable for `getopt()`.
  */
-+ (char *)getShortOptions;
+- (char *)getShortOptions;
 
 
 /**

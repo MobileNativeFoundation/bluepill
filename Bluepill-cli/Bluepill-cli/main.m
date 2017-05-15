@@ -76,8 +76,8 @@ int main(int argc, char * argv[]) {
         BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
 
         
-        struct option *lopts = [BPConfiguration getLongOptions];
-        char *sopts = [BPConfiguration getShortOptions];
+        struct option *lopts = [config getLongOptions];
+        char *sopts = [config getShortOptions];
 
         [BPStats sharedStats]; // Create the BPStats object. This records our start time.
 

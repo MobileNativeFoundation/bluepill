@@ -75,6 +75,30 @@
                        }];
 }
 
+- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
+    self.device = [self findDeviceWithConfig:self.config andDeviceID:deviceUDID];
+    if (!self.device) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice not found: %@", [deviceUDID UUIDString]]];
+        return NO;
+    }
+
+    if (![self.device.stateString isEqualToString:@"Booted"]) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]]];
+        return NO;
+    }
+
+    if (!self.config.headlessMode) {
+        self.app = [self findSimGUIAppWithDeviceUDID: [deviceUDID UUIDString]];
+        if (!self.app) {
+            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
+                                                 [deviceUDID UUIDString]]];
+            return NO;
+        }
+    }
+    return YES;
+}
+
+
 - (void)bootWithCompletion:(void (^)(NSError *error))completion {
     // Now boot it.
     if (self.config.headlessMode) {
@@ -145,6 +169,36 @@
     return nil;
 }
 
+- (SimDevice *)findDeviceWithConfig:(BPConfiguration *)config andDeviceID:(NSUUID *)deviceID {
+    NSError *error;
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
+    if (!sc) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        return nil;
+    }
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (!deviceSet) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        return nil;
+    }
+
+    SimDevice *device = deviceSet.devicesByUDID[deviceID];
+    return device; //could be nil when not found
+ }
+
+- (NSRunningApplication *)findSimGUIAppWithDeviceUDID:(NSString *)deviceUDID {
+    NSString * cmd = [NSString stringWithFormat:@"ps -A | grep 'Simulator\\.app.*-CurrentDeviceUDID %@'", deviceUDID];
+    NSString * output = [[BPUtils runShell:cmd] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSArray *fields = [output componentsSeparatedByString: @" "];
+    if ([fields count] > 0) {
+        NSString *pidStr = [fields objectAtIndex:0];
+        int pid = [pidStr intValue];
+        NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
+        return app;
+    }
+    return nil;
+}
+
 - (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostBundlePath = self.config.appBundlePath;
@@ -171,8 +225,16 @@
     return YES;
 }
 
-- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion isHostApp:(BOOL)isHostApp {
+- (BOOL)uninstallApplicationAndReturnError:(NSError *__autoreleasing *)error {
+    NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
 
+    // Install the host application
+    return [self.device uninstallApplication:hostBundleId
+                                 withOptions:@{kCFBundleIdentifier: hostBundleId}
+                                       error:error];
+}
+
+- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion isHostApp:(BOOL)isHostApp {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.appBundlePath];
 
