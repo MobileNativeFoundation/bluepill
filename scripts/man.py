@@ -1,3 +1,4 @@
+from __future__ import print_function
 import re
 import string
 import textwrap
@@ -136,7 +137,7 @@ for op in parsed_opts:
         else:
             defval = op['default_val']
         print('\\fR  Default Value: {} \\fR'.format(defval))
-    print('')
+    print()
 
 print("""
 

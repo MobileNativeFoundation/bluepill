@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
             // Don't do this setup again...
             setenv("BP_DYLD_RESOLVED", "YES", 1);
             execv(argv[0], (char *const *)argv);
-
+            perror(argv[0]);
             // we should never get here
             assert(!"FAIL");
         }
