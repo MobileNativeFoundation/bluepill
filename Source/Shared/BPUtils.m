@@ -75,8 +75,8 @@ static BPKind logLevel = INFO;
     if (bp_testing < 0) {
         bp_testing = (getenv("_BP_TEST_SUITE") != 0);
     }
-    if ((s = getenv("_BP_SIM_NUM"))) {
-        simNum = [NSString stringWithFormat:@"(SIM-%s) ", s];
+    if ((s = getenv("_BP_NUM"))) {
+        simNum = [NSString stringWithFormat:@"(BP-%s) ", s];
     }
 
     // Get timestamp

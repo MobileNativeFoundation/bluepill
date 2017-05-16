@@ -41,6 +41,9 @@
             if (testCasesToRun) {
                 [bundleTestsToRun intersectSet:[[NSSet alloc] initWithArray:testCasesToRun]];
             }
+            if (config.testCasesToSkip) {
+                [bundleTestsToRun minusSet:[[NSSet alloc] initWithArray:config.testCasesToSkip]];
+            }
             if (bundleTestsToRun.count > 0) {
                 testsToRunByTestFilePath[xctFile.path] = bundleTestsToRun;
                 totalTests += bundleTestsToRun.count;
@@ -74,7 +77,6 @@
             range.length = min(testsPerGroup, bundleTestsToRun.count - packed);
             NSMutableArray *testsToSkip = [NSMutableArray arrayWithArray:allTestCases];
             [testsToSkip removeObjectsInArray:[bundleTestsToRun subarrayWithRange:range]];
-            [testsToSkip addObjectsFromArray:config.testCasesToSkip]; // always add the tests to skip.
             [bundles addObject:[[BPBundle alloc] initWithPath:xctFile.path isUITestBundle:xctFile.isUITestFile andTestsToSkip:testsToSkip]];
             packed += range.length;
         }

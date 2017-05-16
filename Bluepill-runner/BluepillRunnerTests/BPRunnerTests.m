@@ -66,6 +66,28 @@
 
 }
 
+- (void)testPackingProvidesBalancedBundles {
+    self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.numSims = @8;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    NSMutableArray *testCasesToSkip = [NSMutableArray new];
+    for (BPXCTestFile *xctFile in app.allTestBundles) {
+        [testCasesToSkip addObjectsFromArray:xctFile.allTestCases];
+    }
+    for (long i = 1; i <= 8; i++) {
+        [testCasesToSkip removeObject:[NSString stringWithFormat:@"BPSampleAppTests/testCase%03ld", i]];
+    }
+    self.config.testCasesToSkip = testCasesToSkip;
+    XCTAssert(app != nil);
+    NSArray<BPBundle *> *bundles;
+    bundles = [BPPacker packTests:app.allTestBundles configuration:self.config andError:nil];
+    for (long i = 1; i <= 8; i++) {
+        BPBundle *bpBundle = bundles[i - 1];
+        NSString *testThatShouldExist = [NSString stringWithFormat:@"BPSampleAppTests/testCase%03ld", i];
+        XCTAssertFalse([bpBundle.testsToSkip containsObject:testThatShouldExist]);
+    }
+}
+
 - (void)testPacking {
     NSArray *want, *got;
     NSArray *allTests;

@@ -60,8 +60,8 @@ int main(int argc, char * argv[]) {
         int c;
         BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
 
-        struct option *lopts = [BPConfiguration getLongOptions];
-        char *sopts = [BPConfiguration getShortOptions];
+        struct option *lopts = [config getLongOptions];
+        char *sopts = [config getShortOptions];
        
         while((c = getopt_long(argc, argv, sopts, lopts, NULL)) != -1) {
             if (!optarg) optarg = "";

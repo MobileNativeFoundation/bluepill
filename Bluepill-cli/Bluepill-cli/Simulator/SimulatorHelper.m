@@ -91,7 +91,6 @@
     }
 
     return environment;
-
 }
 
 + (NSString *)testEnvironmentWithConfiguration:(BPConfiguration *)config {
