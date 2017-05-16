@@ -30,6 +30,7 @@
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
     self.config = [BPConfiguration new];
+    self.config.program = BP_MASTER;
     self.config.testBundlePath = testBundlePath;
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @30;
@@ -86,6 +87,97 @@
         NSString *testThatShouldExist = [NSString stringWithFormat:@"BPSampleAppTests/testCase%03ld", i];
         XCTAssertFalse([bpBundle.testsToSkip containsObject:testThatShouldExist]);
     }
+}
+
+- (void)testPackingExcludesAllTestsInExcludedTestSuite {
+    self.config.testBundlePath = nil;
+    self.config.testCasesToSkip = @[@"BPSampleAppTests"];
+    self.config.numSims = @2;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    
+    XCTAssert(app != nil);
+    NSArray<BPBundle *> *bundles;
+    bundles = [BPPacker packTests:app.allTestBundles configuration:self.config andError:nil];
+    NSMutableSet *expectedTestCasesToSkip = [NSMutableSet new];
+    for (BPXCTestFile *xctFile in app.allTestBundles) {
+        for (NSString *testCaseToSkip in xctFile.allTestCases) {
+            if ([testCaseToSkip hasPrefix:@"BPSampleAppTests/"]) {
+                [expectedTestCasesToSkip addObject:testCaseToSkip];
+            }
+        }
+    }
+    for (BPBundle *bundle in bundles) {
+        NSSet *actualTestsToSkip = [NSSet setWithArray:bundle.testsToSkip];
+        XCTAssertTrue([actualTestsToSkip intersectsSet:expectedTestCasesToSkip], @"All BPSampleAppTests should be skipped");
+    }
+}
+
+- (void)testPackingDoesntExcludeTestSuiteWithSimilarPrefix {
+    self.config.testBundlePath = nil;
+    self.config.testCasesToSkip = @[@"BPSampleAppTes"];
+    self.config.numSims = @2;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    
+    XCTAssert(app != nil);
+    NSArray<BPBundle *> *bundles;
+    bundles = [BPPacker packTests:app.allTestBundles configuration:self.config andError:nil];
+    NSMutableSet *expectedTestCasesToSkip = [NSMutableSet new];
+    for (BPXCTestFile *xctFile in app.allTestBundles) {
+        for (NSString *testCaseToSkip in xctFile.allTestCases) {
+            if ([testCaseToSkip hasPrefix:@"BPSampleAppTests/"]) {
+                [expectedTestCasesToSkip addObject:testCaseToSkip];
+            }
+        }
+    }
+    BOOL willRunTestsInAtLeastOneBundle = NO;
+    for (BPBundle *bundle in bundles) {
+        NSSet *actualTestsToSkip = [NSSet setWithArray:bundle.testsToSkip];
+        if (![actualTestsToSkip intersectsSet:expectedTestCasesToSkip]) {
+            willRunTestsInAtLeastOneBundle = YES;
+        }
+    }
+    
+    XCTAssertTrue(willRunTestsInAtLeastOneBundle, @"At least 1 of the bundles must have BPSampleAppTests");
+}
+
+- (void)testPackingOnlyIncludesTestsInIncludedTestSuite {
+    self.config.testBundlePath = nil;
+    self.config.testCasesToRun = @[@"BPSampleAppTests"];
+    self.config.numSims = @2;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    
+    XCTAssert(app != nil);
+    NSArray<BPBundle *> *bundles;
+    bundles = [BPPacker packTests:app.allTestBundles configuration:self.config andError:nil];
+    
+    NSMutableSet *expectedTestCasesToRun = [NSMutableSet new];
+    NSMutableSet *actualTests = [NSMutableSet set];
+    for (BPXCTestFile *xctFile in app.allTestBundles) {
+        [actualTests addObjectsFromArray:xctFile.allTestCases];
+        for (NSString *testCase in xctFile.allTestCases) {
+            if ([testCase hasPrefix:@"BPSampleAppTests/"]) {
+                [expectedTestCasesToRun addObject:testCase];
+            }
+        }
+    }
+    for (BPBundle *bundle in bundles) {
+        NSSet *bundleTestsToSkip = [NSSet setWithArray:bundle.testsToSkip];
+        XCTAssertTrue([bundleTestsToSkip isSubsetOfSet:expectedTestCasesToRun]);
+        XCTAssertFalse([expectedTestCasesToRun isSubsetOfSet:bundleTestsToSkip]);
+    }
+}
+
+- (void)testPackingNoTestsWhenIncludedTestSuiteHasSimilarButNonexistentPrefix {
+    self.config.testBundlePath = nil;
+    self.config.testCasesToRun = @[@"BPSampleAppTes"];
+    self.config.numSims = @2;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    
+    XCTAssert(app != nil);
+    NSArray<BPBundle *> *bundles;
+    bundles = [BPPacker packTests:app.allTestBundles configuration:self.config andError:nil];
+    
+    XCTAssertEqual(bundles.count, 0);
 }
 
 - (void)testPacking {
