@@ -18,6 +18,8 @@
 + (NSMutableArray *)packTests:(NSArray *)xcTestFiles
                 configuration:(BPConfiguration *)config
                      andError:(NSError **)error {
+
+    config = [BPPacker normalizeBPConfiguration:config withTestFiles:xcTestFiles];
     NSArray *testCasesToRun = config.testCasesToRun;
     NSArray *noSplit = config.noSplit;
     NSUInteger numBundles = [config.numSims integerValue];
@@ -50,6 +52,7 @@
             }
         }
     }
+    
     NSUInteger testsPerGroup = MAX(1, totalTests / numBundles);
     NSMutableArray *bundles = [[NSMutableArray alloc] init];
     for (BPXCTestFile *xctFile in sortedXCTestFiles) {
@@ -84,5 +87,74 @@
     }
     return bundles;
 }
+
+#pragma mark - Private helper methods
+
+/*!
+
+ @brief Updates the config to expand any testsuites in the tests-to-run/skip into their individual test cases.
+ 
+ @discussion Bluepill supports passing in just the 'testsuite' as one of the tests to 'include' or 'exclude'.
+ This method takes such items and expands them out so that the 'packTests:' method above can simply
+ work with a list of fully qualified tests in the format of 'testsuite/testcase'.
+ 
+ @param config the @c BPConfiguration for this bluepill-runner
+ @param xcTestFiles an NSArray of BPXCTestFile's to retrieve the tests from
+ @return an updated @c BPConfiguration with testCasesToSkip and testCasesToRun that have had testsuites fully expanded into a list of 'testsuite/testcases'
+
+ */
++ (BPConfiguration *)normalizeBPConfiguration:(BPConfiguration *)config
+                                withTestFiles:(NSArray *)xcTestFiles {
+    
+    config = [config mutableCopy];
+    NSMutableSet *testsToRun = [NSMutableSet new];
+    NSMutableSet *testsToSkip = [NSMutableSet new];
+    for (BPXCTestFile *xctFile in xcTestFiles) {
+        if (config.testCasesToRun) {
+            [testsToRun unionSet:[BPPacker expandTests:config.testCasesToRun
+                                          withTestFile:xctFile]];
+        }
+        if (config.testCasesToSkip) {
+            [testsToSkip unionSet:[BPPacker expandTests:config.testCasesToSkip
+                                           withTestFile:xctFile]];
+        }
+    }
+    
+    if (testsToRun.allObjects.count > 0) {
+        config.testCasesToRun = testsToRun.allObjects;
+    }
+    config.testCasesToSkip = testsToSkip.allObjects;
+    return config;
+}
+
+/*!
+ @brief expand testcases into a list of fully expanded testcases in the form of 'testsuite/testcase'.
+ 
+ @discussion searches the given .xctest bundle's entire list of actual testcases
+ (that are in the form of 'testsuite/testcase') for testcases that belong to testsuites
+ that were provided in the configTestCases.
+ 
+ @param configTestCases a list of testcases: each item is either a 'testsuite' or a 'testsuite/testcase'.
+ @param xctFile represents a .xctest bundle that contains the list of testcases available for that bundle.
+ @return a @c NSMutableSet of all the expanded 'testsuite/testcase' items that match the given configTestCases.
+ 
+ */
++ (NSMutableSet *)expandTests:(NSArray *)configTestCases withTestFile:(BPXCTestFile *)xctFile {
+    NSMutableSet *expandedTests = [NSMutableSet new];
+    
+    for (NSString *testCase in configTestCases) {
+        if ([testCase rangeOfString:@"/"].location == NSNotFound) {
+            [xctFile.allTestCases enumerateObjectsUsingBlock:^(NSString *actualTestCase, NSUInteger idx, BOOL *stop) {
+                if ([actualTestCase hasPrefix:[NSString stringWithFormat:@"%@/", testCase]]) {
+                    [expandedTests addObject:actualTestCase];
+                }
+            }];
+        } else {
+            [expandedTests addObject:testCase];
+        }
+    }
+    return expandedTests;
+}
+
 
 @end
