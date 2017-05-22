@@ -12,6 +12,7 @@
 #import "BPConfiguration.h"
 #import "BPRunner.h"
 #import "BPVersion.h"
+#import "BPUtils.h"
 #import <getopt.h>
 #import <libgen.h>
 
@@ -91,9 +92,10 @@ int main(int argc, char * argv[]) {
             [app listTests];
             exit(0);
         }
-
+        
+        BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:config withTestFiles:app.allTestBundles];
         // start a runner and let it fly
-        BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:config withBpPath:nil];
+        BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:normalizedConfig withBpPath:nil];
         exit([runner run]);
     }
     return 0;

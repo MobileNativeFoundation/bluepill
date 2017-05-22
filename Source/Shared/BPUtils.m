@@ -9,6 +9,8 @@
 
 #import "BPUtils.h"
 #import "BPConstants.h"
+#import "BPXCTestFile.h"
+#import "BPConfiguration.h"
 
 @implementation BPUtils
 
@@ -144,6 +146,29 @@ static BOOL quiet = NO;
     return ret;
 }
 
+
++ (BPConfiguration *)normalizeConfiguration:(BPConfiguration *)config
+                              withTestFiles:(NSArray *)xctTestFiles {
+    
+    config = [config mutableCopy];
+    NSMutableSet *testsToRun = [NSMutableSet new];
+    NSMutableSet *testsToSkip = [NSMutableSet new];
+    for (BPXCTestFile *xctFile in xctTestFiles) {
+        if (config.testCasesToRun) {
+            [testsToRun unionSet:[NSSet setWithArray:[BPUtils expandTests:config.testCasesToRun withTestFile:xctFile]]];
+        }
+        if (config.testCasesToSkip) {
+            [testsToSkip unionSet:[NSSet setWithArray:[BPUtils expandTests:config.testCasesToSkip withTestFile:xctFile]]];
+        }
+    }
+    
+    if (testsToRun.allObjects.count > 0) {
+        config.testCasesToRun = testsToRun.allObjects;
+    }
+    config.testCasesToSkip = testsToSkip.allObjects;
+    return config;
+}
+
 + (BOOL)isStdOut:(NSString *)fileName {
     return [fileName isEqualToString:@"stdout"] || [fileName isEqualToString:@"-"];
 }
@@ -219,6 +244,36 @@ static BOOL quiet = NO;
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, true);
     }
     return result;
+}
+
+#pragma mark - Private Helper Methods
+
+/*!
+ @brief expand testcases into a list of fully expanded testcases in the form of 'testsuite/testcase'.
+ 
+ @discussion searches the given .xctest bundle's entire list of actual testcases
+ (that are in the form of 'testsuite/testcase') for testcases that belong to testsuites
+ that were provided in the configTestCases.
+ 
+ @param testCases a list of testcases: each item is either a 'testsuite' or a 'testsuite/testcase'.
+ @return a @c NSArray of all the expanded 'testsuite/testcase' items that match the given configTestCases.
+ 
+ */
++ (NSArray *)expandTests:(NSArray *)testCases withTestFile:(BPXCTestFile *)testFile {
+    NSMutableArray *expandedTestCases = [NSMutableArray new];
+    
+    for (NSString *testCase in testCases) {
+        if ([testCase rangeOfString:@"/"].location == NSNotFound) {
+            [testFile.allTestCases enumerateObjectsUsingBlock:^(NSString *actualTestCase, NSUInteger idx, BOOL *stop) {
+                if ([actualTestCase hasPrefix:[NSString stringWithFormat:@"%@/", testCase]]) {
+                    [expandedTestCases addObject:actualTestCase];
+                }
+            }];
+        } else {
+            [expandedTestCases addObject:testCase];
+        }
+    }
+    return expandedTestCases;
 }
 
 @end
