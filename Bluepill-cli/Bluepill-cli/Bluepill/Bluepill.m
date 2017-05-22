@@ -420,6 +420,7 @@ void onInterrupt(int ignore) {
 - (void)checkProcessWithContext:(BPExecutionContext *)context {
     BOOL isRunning = [self isProcessRunningWithContext:context];
     if (!isRunning && [context.runner isFinished]) {
+        [BPUtils printInfo:INFO withString:@"BPDEBUGGING finished"];
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [self runnerCompletedWithContext:context];
         return;

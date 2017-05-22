@@ -339,6 +339,7 @@
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
     SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
     if (self.app) {
+        [BPUtils printInfo:INFO withString:@"Terminating Simulator.app"];
         [self.app terminate];
         // We need to wait until the simulator has shut down.
         int attempts = 300;
@@ -347,26 +348,28 @@
             --attempts;
         }
         if (![self.device.stateString isEqualToString:@"Shutdown"]) {
-            NSLog(@"Timed out waiting for %@ to shutdown. It won't be deleted. Last state: %@", self.device.name, self.device.stateString);
+            [BPUtils printInfo:ERROR withString:@"Timed out waiting for %@ to shutdown. It won't be deleted. Last state: %@", self.device.name, self.device.stateString];
             // Go ahead and try to delete anyway
         }
         [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
             if (error) {
-                NSLog(@"Could not delete simulator: %@", [error localizedDescription]);
+                [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
             }
             completion(error, error ? NO: YES);
         }];
     } else if (self.device) {
+        [BPUtils printInfo:INFO withString:@"Shutting down Simulator Device"];
         [self.device shutdownAsyncWithCompletionHandler:^(NSError *error) {
             if (!error) {
+                [BPUtils printInfo:INFO withString:@"Deleting Simulator Device"];
                 [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
                     if (error) {
-                        NSLog(@"Could not delete simulator: %@", [error localizedDescription]);
+                        [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
                     }
                     completion(error, error ? NO: YES);
                 }];
             } else {
-                NSLog(@"Could not shutdown simulator: %@", [error localizedDescription]);
+                [BPUtils printInfo:ERROR withString:@"Could not shutdown simulator: %@", [error localizedDescription]];
                 completion(error, NO);
             }
         }];
