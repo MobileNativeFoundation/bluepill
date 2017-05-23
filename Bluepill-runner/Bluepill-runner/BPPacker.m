@@ -106,7 +106,6 @@
 + (BPConfiguration *)normalizeBPConfiguration:(BPConfiguration *)config
                                 withTestFiles:(NSArray *)xcTestFiles {
     
-    config = [config mutableCopy];
     NSMutableSet *testsToRun = [NSMutableSet new];
     NSMutableSet *testsToSkip = [NSMutableSet new];
     for (BPXCTestFile *xctFile in xcTestFiles) {

@@ -30,7 +30,6 @@
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
     self.config = [BPConfiguration new];
-    self.config.program = BP_MASTER;
     self.config.testBundlePath = testBundlePath;
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @30;
@@ -165,6 +164,8 @@
         XCTAssertTrue([bundleTestsToSkip isSubsetOfSet:expectedTestCasesToRun]);
         XCTAssertFalse([expectedTestCasesToRun isSubsetOfSet:bundleTestsToSkip]);
     }
+    NSSet *configTestCasesToRun = [NSSet setWithArray:self.config.testCasesToRun];
+    XCTAssertTrue([expectedTestCasesToRun isEqualToSet:configTestCasesToRun]);
 }
 
 - (void)testPackingNoTestsWhenIncludedTestSuiteHasSimilarButNonexistentPrefix {
