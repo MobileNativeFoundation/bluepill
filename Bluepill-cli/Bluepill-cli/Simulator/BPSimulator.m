@@ -372,12 +372,14 @@
                     [BPUtils printInfo:ERROR withString:@"deviceSet is null"];
                     return;
                 }
-                [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
-                    if (error) {
-                        [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
-                    }
-                    completion(error, error ? NO: YES);
-                }];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
+                        if (error) {
+                            [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+                        }
+                        completion(error, error ? NO: YES);
+                    }];
+                });
             } else {
                 [BPUtils printInfo:ERROR withString:@"Could not shutdown simulator: %@", [error localizedDescription]];
                 completion(error, NO);
