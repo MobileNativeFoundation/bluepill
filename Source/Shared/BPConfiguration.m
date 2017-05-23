@@ -280,13 +280,13 @@ static NSUUID *sessionID;
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:&err];
         if (!json) {
-            NSLog(@"%@", err);
+            [BPUtils printInfo:ERROR withString:@"%@", err];
             return nil;
         }
         NSString *jsonString = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
         return jsonString;
     } else {
-        NSLog(@"Error: configuration not serializable.");
+        [BPUtils printInfo:ERROR withString:@"Error: configuration not serializable."];
     }
     return nil;
 }
@@ -622,7 +622,7 @@ static NSUUID *sessionID;
 
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.xcodePath error: err];
     if (!sc) {
-        NSLog(@"Failed to initialize SimServiceContext: %@", *err);
+        [BPUtils printInfo:ERROR withString:@"Failed to initialize SimServiceContext: %@", *err];
         return NO;
     }
 

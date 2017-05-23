@@ -111,6 +111,7 @@ int main(int argc, char * argv[]) {
             [[BPStats sharedStats] exitWithWriter:statsWriter exitCode:exitCode andCreateFullReport:YES];
         }
 
+        [BPUtils printInfo:INFO withString:@"BP exiting %d", exitCode];
         return exitCode;
     }
 }
