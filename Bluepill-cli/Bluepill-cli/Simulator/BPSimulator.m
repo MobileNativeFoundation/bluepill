@@ -336,8 +336,6 @@
 
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion {
     NSError *error;
-    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
-    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
     if (self.app) {
         [BPUtils printInfo:INFO withString:@"Terminating Simulator.app"];
         [self.app terminate];
@@ -351,6 +349,8 @@
             [BPUtils printInfo:ERROR withString:@"Timed out waiting for %@ to shutdown. It won't be deleted. Last state: %@", self.device.name, self.device.stateString];
             // Go ahead and try to delete anyway
         }
+        SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+        SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
         [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
             if (error) {
                 [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
@@ -362,6 +362,16 @@
         [self.device shutdownAsyncWithCompletionHandler:^(NSError *error) {
             if (!error) {
                 [BPUtils printInfo:INFO withString:@"Deleting Simulator Device"];
+                SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+                if (!sc) {
+                    [BPUtils printInfo:ERROR withString:@"sc is null"];
+                    return;
+                }
+                SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+                if (!deviceSet) {
+                    [BPUtils printInfo:ERROR withString:@"deviceSet is null"];
+                    return;
+                }
                 [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
                     if (error) {
                         [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
