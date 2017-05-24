@@ -27,6 +27,8 @@ typedef NS_ENUM(int, BPKind) {
     DEBUGINFO // DEBUG collides with a #define, so DEBUGINFO it is
 };
 
+@class BPConfiguration;
+
 @interface BPUtils : NSObject
 
 /*!
@@ -85,6 +87,22 @@ typedef NS_ENUM(int, BPKind) {
 
 #define VA_ARGS(...) , ##__VA_ARGS__
 #define BP_ERROR(fmt, ...) [BPUtils BPError:__func__ andLine:__LINE__ withFormat:fmt VA_ARGS(__VA_ARGS__)]
+
+/*!
+ 
+ @brief Updates the config to expand any testsuites in the tests-to-run/skip into their individual test cases.
+ 
+ @discussion Bluepill supports passing in just the 'testsuite' as one of the tests to 'include' or 'exclude'.
+ This method takes such items and expands them out so that @c BPPacker and @c SimulatorHelper can simply
+ work with a list of fully qualified tests in the format of 'testsuite/testcase'.
+ 
+ @param config the @c BPConfiguration for this bluepill-runner
+ @param xctTestFiles an NSArray of BPXCTestFile's to retrieve the tests from
+ @return an updated @c BPConfiguration with testCasesToSkip and testCasesToRun that have had testsuites fully expanded into a list of 'testsuite/testcases'
+ 
+ */
++ (BPConfiguration *)normalizeConfiguration:(BPConfiguration *)config
+                              withTestFiles:(NSArray *)xctTestFiles;
 
 /*!
  @discussion a function to determine if the given file name represents

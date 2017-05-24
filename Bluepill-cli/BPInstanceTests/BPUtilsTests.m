@@ -9,9 +9,13 @@
 
 #import <XCTest/XCTest.h>
 #import "BPUtils.h"
+#import "BPXCTestFile.h"
+#import "BPTestHelper.h"
+#import "BPConfiguration.h"
 
 @interface BPUtilsTests : XCTestCase
-
+@property (nonatomic, strong) BPXCTestFile *xcTestFile;
+@property (nonatomic, strong) BPConfiguration *config;
 @end
 
 @implementation BPUtilsTests
@@ -20,6 +24,17 @@
     [super setUp];
     
     [BPUtils quietMode:[BPUtils isBuildScript]];
+    
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    NSString *basename = [[testBundlePath lastPathComponent] stringByDeletingPathExtension];
+    NSString *executable = [testBundlePath stringByAppendingPathComponent:basename];
+    
+    self.xcTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable
+                                                  isUITestFile:NO
+                                                     withError:nil];
+    
+    self.config = [BPConfiguration new];
+    self.config.program = BP_MASTER;
 }
 
 - (void)tearDown {
@@ -60,4 +75,65 @@
                                          };
     XCTAssert([dictionary isEqualToDictionary:expectedDictionary], @"Dictionary doesn't match expectation");
 }
+
+- (void)testNormalizingConfigurationExcludesAllTestsInExcludedTestSuite {
+    self.config.testCasesToSkip = @[@"BPSampleAppTests"];
+    
+    NSMutableSet *expectedTestCasesToSkip = [NSMutableSet new];
+    for (NSString *testCaseToSkip in self.xcTestFile.allTestCases) {
+        if ([testCaseToSkip hasPrefix:@"BPSampleAppTests/"]) {
+            [expectedTestCasesToSkip addObject:testCaseToSkip];
+        }
+    }
+    BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:self.config
+                                                          withTestFiles:@[self.xcTestFile]];
+    XCTAssertTrue([[NSSet setWithArray:normalizedConfig.testCasesToSkip] isEqualToSet:expectedTestCasesToSkip]);
+}
+
+- (void)testNormalizingConfigurationDoesntExcludeTestSuiteWithSimilarPrefix {
+    self.config.testCasesToSkip = @[@"BPSampleAppTes"];
+    
+    NSMutableSet *testCasesNotToSkip = [NSMutableSet new];
+    for (NSString *testCase in self.xcTestFile.allTestCases) {
+        if ([testCase hasPrefix:@"BPSampleAppTests/"]) {
+            [testCasesNotToSkip addObject:testCase];
+        }
+    }
+    BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:self.config
+                                                          withTestFiles:@[self.xcTestFile]];
+    
+    XCTAssertFalse([[NSSet setWithArray:normalizedConfig.testCasesToSkip] isEqualToSet:testCasesNotToSkip]);
+}
+
+- (void)testNormalizingConfigurationOnlyIncludesTestsInIncludedTestSuite {
+    self.config.testCasesToRun = @[@"BPSampleAppTests"];
+    
+    NSMutableSet *expectedTestCasesToRun = [NSMutableSet new];
+    for (NSString *testCaseToRun in self.xcTestFile.allTestCases) {
+        if ([testCaseToRun hasPrefix:@"BPSampleAppTests/"]) {
+            [expectedTestCasesToRun addObject:testCaseToRun];
+        }
+    }
+    BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:self.config
+                                                          withTestFiles:@[self.xcTestFile]];
+    
+    XCTAssertTrue([[NSSet setWithArray:normalizedConfig.testCasesToRun] isEqualToSet:expectedTestCasesToRun]);
+}
+
+- (void)testNormalizingConfigurationNoTestsWhenIncludedTestSuiteHasSimilarButNonexistentPrefix {
+    self.config.testCasesToRun = @[@"BPSampleAppTes"];
+    
+    NSMutableSet *testCasesNotToRun = [NSMutableSet new];
+    for (NSString *testCase in self.xcTestFile.allTestCases) {
+        if ([testCase hasPrefix:@"BPSampleAppTests/"]) {
+            [testCasesNotToRun addObject:testCase];
+        }
+    }
+    
+    BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:self.config
+                                                          withTestFiles:@[self.xcTestFile]];
+    
+    XCTAssertFalse([[NSSet setWithArray:normalizedConfig.testCasesToRun] isEqualToSet:testCasesNotToRun]);
+}
+
 @end
