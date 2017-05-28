@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		261070761EDA4AFC00E1DC1C /* testConfigLoadsExcludedTestsFromScheme.json in Resources */ = {isa = PBXBuildFile; fileRef = 261070751EDA4AFC00E1DC1C /* testConfigLoadsExcludedTestsFromScheme.json */; };
+		261070781EDA4B0A00E1DC1C /* BPSaskatoon.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = 261070771EDA4B0A00E1DC1C /* BPSaskatoon.xcscheme */; };
 		7A202A411DB0066100D935E3 /* BPWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A202A401DB0066100D935E3 /* BPWriter.m */; };
 		7A4933151DAD63A50060D54F /* SimulatorMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4933141DAD63A50060D54F /* SimulatorMonitor.m */; };
 		7A4D7A811DDA5FA1001E085D /* BPTreeParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7A801DDA5FA1001E085D /* BPTreeParserTests.m */; };
@@ -101,6 +103,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		261070751EDA4AFC00E1DC1C /* testConfigLoadsExcludedTestsFromScheme.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = testConfigLoadsExcludedTestsFromScheme.json; path = "BPInstanceTests/Resource Files/testConfigLoadsExcludedTestsFromScheme.json"; sourceTree = "<group>"; };
+		261070771EDA4B0A00E1DC1C /* BPSaskatoon.xcscheme */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = BPSaskatoon.xcscheme; path = "BPInstanceTests/Resource Files/BPSaskatoon.xcscheme"; sourceTree = "<group>"; };
 		7A202A3D1DAED04900D935E3 /* BPExitStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPExitStatus.h; sourceTree = "<group>"; };
 		7A202A3F1DB0066100D935E3 /* BPWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPWriter.h; sourceTree = "<group>"; };
 		7A202A401DB0066100D935E3 /* BPWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPWriter.m; sourceTree = "<group>"; };
@@ -962,6 +966,8 @@
 		7A7901791D5CB679004D4325 = {
 			isa = PBXGroup;
 			children = (
+				261070771EDA4B0A00E1DC1C /* BPSaskatoon.xcscheme */,
+				261070751EDA4AFC00E1DC1C /* testConfigLoadsExcludedTestsFromScheme.json */,
 				7A7901841D5CB679004D4325 /* Bluepill-cli */,
 				7A7901851D5CB679004D4325 /* main.m */,
 				BAB24F691DB5DB2300867756 /* BPInstanceTests */,
@@ -1984,6 +1990,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				261070781EDA4B0A00E1DC1C /* BPSaskatoon.xcscheme in Resources */,
+				261070761EDA4AFC00E1DC1C /* testConfigLoadsExcludedTestsFromScheme.json in Resources */,
 				C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */,
 				BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */,
 				BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */,
