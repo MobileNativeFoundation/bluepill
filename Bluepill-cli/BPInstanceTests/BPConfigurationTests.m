@@ -74,4 +74,19 @@
     XCTAssert([config.outputDirectory containsString:@"./simulator"]);
 }
 
+- (void)testConfigLoadsExcludedTestsFromScheme {
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
+    NSError *error;
+    NSString *resourcePath = [BPTestHelper resourceFolderPath];
+    NSString *configFile = [resourcePath stringByAppendingPathComponent:@"testConfigLoadsExcludedTestsFromScheme.json"];
+    [config loadConfigFile:configFile withError:&error];
+    XCTAssertNil(error);
+    config.schemePath = [resourcePath stringByAppendingPathComponent:@"BPSaskatoon.xcscheme"];
+    [config processOptionsWithError:&error];
+    XCTAssertNil(error);
+    XCTAssert([config.testCasesToSkip containsObject:@"BPAppNegativeTests"]);
+    XCTAssert([config.testCasesToSkip containsObject:@"BPSampleAppCrashingTests/testAppCrash1"]);
+    XCTAssert([config.testCasesToSkip containsObject:@"BPSampleAppCrashingTests/testAppCrash2"]);
+}
+
 @end

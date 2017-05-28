@@ -495,6 +495,11 @@ static NSUUID *sessionID;
                                BPOptions[i].val, BPOptions[i].name, BPOptions[i].help]];
         }
     }
+    BOOL testCasesNotSpecified = ([self.testCasesToSkip count] == 0 && [self.testCasesToRun count] == 0);
+    BOOL hasScheme = ([self.schemePath length] > 0);
+    if (testCasesNotSpecified && hasScheme) {
+        [self readSkippedTestsFromScheme:err];
+    }
     if (errors.count > 0) {
         if (err) *err = BP_ERROR([errors componentsJoinedByString:@"\n\t"]);
         return FALSE;
@@ -504,6 +509,30 @@ static NSUUID *sessionID;
         exit(0);
     }
     return TRUE;
+}
+
+- (void)readSkippedTestsFromScheme:(NSError *__autoreleasing *)err  {
+    NSError *error;
+    NSURL *url = [NSURL fileURLWithPath:self.schemePath];
+    NSXMLDocument *doc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:0 error:err];
+    if (error) {
+        [BPUtils printInfo:ERROR withString:@"Failed to parse %@: %@", url, error.localizedDescription];
+        return;
+    }
+    NSArray<NSXMLNode*> *skippedTestNodes = [doc nodesForXPath:[NSString stringWithFormat:@".//SkippedTests/Test"] error:&error];
+    if (error) {
+        [BPUtils printInfo:ERROR withString:@"Failed to get nodes for skipped tests xpath in file %@: %@", url, error.localizedDescription];
+        return;
+    }
+    NSMutableArray *testCasesToSkip = nil;
+    if ([skippedTestNodes count] > 0) {
+        testCasesToSkip = [NSMutableArray new];
+    }
+    for (NSXMLElement *skippedTestElement in skippedTestNodes) {
+        NSXMLNode *identifierNode = [skippedTestElement attributeForName:@"Identifier"];
+        [testCasesToSkip addObject:[identifierNode stringValue]];
+    }
+    self.testCasesToSkip = testCasesToSkip;
 }
 
 - (BOOL)validateConfigWithError:(NSError *__autoreleasing *)err {

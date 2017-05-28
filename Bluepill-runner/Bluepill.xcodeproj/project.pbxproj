@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		261070731EDA494F00E1DC1C /* BPSaskatoon.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = 261070711EDA494F00E1DC1C /* BPSaskatoon.xcscheme */; };
+		261070741EDA494F00E1DC1C /* testConfigLoadsExcludedTestsFromScheme.json in Resources */ = {isa = PBXBuildFile; fileRef = 261070721EDA494F00E1DC1C /* testConfigLoadsExcludedTestsFromScheme.json */; };
 		56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */; };
 		7A4FB8CB1DF89A370073F268 /* BPXCTestFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */; };
 		7A4FB8DD1DF89B1A0073F268 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */; };
@@ -56,6 +58,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		261070711EDA494F00E1DC1C /* BPSaskatoon.xcscheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = BPSaskatoon.xcscheme; path = "../../../Bluepill-cli/BPInstanceTests/Resource Files/BPSaskatoon.xcscheme"; sourceTree = "<group>"; };
+		261070721EDA494F00E1DC1C /* testConfigLoadsExcludedTestsFromScheme.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = testConfigLoadsExcludedTestsFromScheme.json; path = "../../../Bluepill-cli/BPInstanceTests/Resource Files/testConfigLoadsExcludedTestsFromScheme.json"; sourceTree = "<group>"; };
 		56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPIntegrationTests.m; sourceTree = "<group>"; };
 		7A4FB8C91DF89A370073F268 /* BPXCTestFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPXCTestFile.h; sourceTree = "<group>"; };
 		7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPXCTestFile.m; sourceTree = "<group>"; };
@@ -180,6 +184,8 @@
 		BA9C2DAD1DD674AD007CB967 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
+				261070711EDA494F00E1DC1C /* BPSaskatoon.xcscheme */,
+				261070721EDA494F00E1DC1C /* testConfigLoadsExcludedTestsFromScheme.json */,
 				BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */,
 				BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */,
 			);
@@ -321,8 +327,10 @@
 				BA9C2DB11DD67B66007CB967 /* testScheme.xcscheme in Resources */,
 				BA70318A1DE4ED2F008B3539 /* result3.xml in Resources */,
 				BA7031881DE4ED2F008B3539 /* result1.xml in Resources */,
+				261070731EDA494F00E1DC1C /* BPSaskatoon.xcscheme in Resources */,
 				BA9C2DAF1DD674AD007CB967 /* BPSampleAppTests.xctest in Resources */,
 				BA7031891DE4ED2F008B3539 /* result2.xml in Resources */,
+				261070741EDA494F00E1DC1C /* testConfigLoadsExcludedTestsFromScheme.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
