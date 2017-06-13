@@ -25,7 +25,7 @@ if [[ $# -ne 1 ]]; then
   exit 1
 fi
 
-rm -rf build/
+# rm -rf build/
 #set -ex
 
 NSUnbufferedIO=YES

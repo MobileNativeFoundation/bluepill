@@ -17,29 +17,37 @@
 NSString *swiftNmCmdline = @"nm -gU '%@' | cut -d' ' -f3 | xargs xcrun swift-demangle | cut -d' ' -f3 | grep -e '[\\.|_]'test";
 NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-' -f2 | cut -d'[' -f2 | cut -d']' -f1 | grep ' test'";
 
-+ (instancetype)BPXCTestFileFromExecutable:(NSString *)path
-                              isUITestFile:(BOOL)isUITestFile
-                                 withError:(NSError **)error {
-    BOOL isdir;
++ (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
+                            andHostAppBundle:(NSString *)testHostPath
+                                   withError:(NSError *__autoreleasing *)error {
+    return [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
+                                     andHostAppBundle:testHostPath
+                                   andUITargetAppPath:nil
+                                            withError:error];
+}
 
-//    path = @"/Users/khu/Library/Developer/Xcode/DerivedData/voyager-aodwsnztqjhrikgifstschfgfhzf/Build/Products/Debug-iphonesimulator/LinkedIn.app/PlugIns/VoyagerFeedControlMenuTests2.xctest/VoyagerFeedControlMenuTests2";
-    if (!path || ![[NSFileManager defaultManager] fileExistsAtPath: path isDirectory:&isdir] || isdir) {
-        if (error) {
-            *error = BP_ERROR(@"Could not find test bundle at path %@.", path);
-        }
++ (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)path
+                              andHostAppBundle:(NSString *)testHostPath
+                          andUITargetAppPath:(NSString *)UITargetAppPath
+                                   withError:(NSError **)error {
+    BOOL isdir = NO;
+
+    if (!path || ![[NSFileManager defaultManager] fileExistsAtPath: path isDirectory:&isdir] || !isdir) {
+        BP_SET_ERROR(error, @"Could not find test bundle at path %@.", path);
         return nil;
     }
+    NSString *baseName = [[path lastPathComponent] stringByDeletingPathExtension];
+    path = [path stringByAppendingPathComponent:baseName];
     BPXCTestFile *xcTestFile = [[BPXCTestFile alloc] init];
     xcTestFile.name = [path lastPathComponent];
-    xcTestFile.isUITestFile = isUITestFile;
-    xcTestFile.path = [path stringByDeletingLastPathComponent];
+    xcTestFile.testHostPath = testHostPath;
+    xcTestFile.UITargetAppPath = UITargetAppPath;
+    xcTestFile.testBundlePath = [path stringByDeletingLastPathComponent];
 
     NSString *cmd = [NSString stringWithFormat:swiftNmCmdline, path];
     FILE *p = popen([cmd UTF8String], "r");
     if (!p) {
-        if (error) {
-            *error = BP_ERROR(@"Failed to load test %@.\nERROR: %s\n", path, strerror(errno));
-        }
+        BP_SET_ERROR(error, @"Failed to load test %@.\nERROR: %s\n", path, strerror(errno));
         return nil;
     }
     char *line = NULL;
@@ -65,9 +73,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         }
     }
     if (pclose(p) == -1) {
-        if (error) {
-            *error = BP_ERROR(@"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno));
-        }
+        BP_SET_ERROR(error, @"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno));
         return nil;
     }
 
@@ -90,6 +96,50 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 
 
     xcTestFile.testClasses = [NSArray arrayWithArray:allClasses];
+    return xcTestFile;
+}
+
++ (instancetype)BPXCTestFileFromDictionary:(NSDictionary *)dict withTestRoot:(NSString *)testRoot andError:(NSError *__autoreleasing *)error {
+    NSAssert(dict, @"A dictionary should be provided");
+    NSAssert(testRoot, @"A testRoot argument must be supplied");
+    NSString *testHostPath = [dict objectForKey:@"TestHostPath"];
+    if (!testHostPath) {
+        BP_SET_ERROR(error, @"No 'TestHostPath' found");
+        return nil;
+    }
+    testHostPath = [testHostPath stringByReplacingOccurrencesOfString:@"__TESTROOT__" withString:testRoot];
+
+    NSString *testBundlePath = [dict objectForKey:@"TestBundlePath"];
+    if (!testBundlePath) {
+        BP_SET_ERROR(error, @"No 'TestBundlePath' found");
+        return nil;
+    }
+    testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:@"__TESTHOST__" withString:testHostPath];
+
+    NSString * UITargetAppPath = [dict objectForKey:@"UITargetAppPath"];
+    if (UITargetAppPath) {
+        [UITargetAppPath stringByReplacingOccurrencesOfString:@"__TESTROOT__" withString:testRoot];
+    }
+    BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
+                                                         andHostAppBundle:testHostPath
+                                                       andUITargetAppPath:UITargetAppPath
+                                                                withError:error];
+    if (!xcTestFile) {
+        return nil;
+    }
+    
+    xcTestFile.testHostPath = testHostPath;
+    xcTestFile.testBundlePath = testBundlePath;
+
+    xcTestFile.testHostBundleIdentifier = [dict objectForKey:@"TestHostBundleIdentifier"];
+    NSArray<NSString *> *commandLineArguments = [dict objectForKey:@"CommandLineArguments"];
+    if (commandLineArguments) {
+        xcTestFile.commandLineArguments = [[NSArray alloc] initWithArray:commandLineArguments];
+    }
+    NSDictionary<NSString *, NSString *> *environment = [dict objectForKey:@"EnvironmentVariables"];
+    if (environment) {
+        xcTestFile.environmentVariables = [[NSDictionary alloc] initWithDictionary:environment];
+    }
     return xcTestFile;
 }
 
@@ -128,6 +178,23 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 - (NSString *)debugDescription
 {
     return [NSString stringWithFormat:@"<%@: %p> %@", [self class], self, self.testClasses];
+}
+
+
+
+- (id)copyWithZone:(NSZone *)zone {
+    BPXCTestFile *copy = [[BPXCTestFile alloc] init];
+    if (copy) {
+        copy.name = self.name;
+        copy.commandLineArguments = self.commandLineArguments;
+        copy.environmentVariables = self.environmentVariables;
+        copy.testHostPath = self.testHostPath;
+        copy.testHostBundleIdentifier = self.testHostBundleIdentifier;
+        copy.testBundlePath= self.testBundlePath;
+        copy.UITargetAppPath = self.UITargetAppPath;
+        copy.skipTestIdentifiers = self.skipTestIdentifiers;
+    }
+    return copy;
 }
 
 @end

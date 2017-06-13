@@ -989,6 +989,7 @@
 				BAFCCA651E36DC2000E33C31 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -9,21 +9,36 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BPXCTestFile : NSObject
+@interface BPXCTestFile : NSObject <NSCopying>
 
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *path;
-@property (nonatomic, assign) BOOL isUITestFile;
+@property (nonatomic, strong) NSArray<NSString *> *commandLineArguments;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environmentVariables;
+@property (nonatomic, strong) NSString *testHostPath;
+@property (nonatomic, strong) NSString *testHostBundleIdentifier;
+@property (nonatomic, strong) NSString *testBundlePath;
+@property (nonatomic, strong) NSString *UITargetAppPath;
+@property (nonatomic, strong) NSArray<NSString *> *skipTestIdentifiers;
+
 // All test classes in the test bundle
 @property (nonatomic, strong) NSArray *testClasses;
 
-+ (instancetype)BPXCTestFileFromExecutable:(NSString *)path
-                              isUITestFile:(BOOL)isUITestFile
++ (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
+                            andHostAppBundle:(NSString *)testHostPath
                                  withError:(NSError **)error;
+
++ (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
+                            andHostAppBundle:(NSString *)testHostPath
+                          andUITargetAppPath:(NSString *)UITargetAppPath
+                                   withError:(NSError **)error;
+
++ (instancetype)BPXCTestFileFromDictionary:(NSDictionary<NSString *, NSString *>*) dict
+                                            withTestRoot:(NSString *)testRoot
+                                            andError:(NSError **)error;
 
 - (NSUInteger)numTests;
 - (NSArray *)allTestCases;
 - (void)listTestClasses;
 - (NSString *)description;
-
+- (NSString *)debugDescription;
 @end

@@ -395,8 +395,8 @@ void onInterrupt(int ignore) {
         NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
     };
 
-    [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock isHostApp:NO];
-    [BPUtils printInfo:INFO withString:[@"Yay, after the launch async call!!!" stringByAppendingString:stepName]];
+    [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
+    [BPUtils printInfo:INFO withString:[@"Async Launch Returned" stringByAppendingString:stepName]];
 }
 
 - (void)connectTestBundleAndTestDaemonWithContext:(BPExecutionContext *)context {

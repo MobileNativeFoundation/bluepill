@@ -8,24 +8,21 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import "BPApp.h"
+#import "BPXCTestFile.h"
 #import "BPConfiguration.h"
 
 @interface BPRunner : NSObject
 
 @property (nonatomic, strong) BPConfiguration *config;
-@property (nonatomic, strong) BPApp *app;
 @property (nonatomic, strong) NSString *bpExecutable;
 @property (nonatomic, strong) NSMutableArray *nsTaskList;
 /*!
  * @discussion get a BPRunnner to run tests
- * @param app the BPapp
  * @param config the config to run tests
  * @param bpPath the path to the Bp binary, if this is nil, we will search in the bluepill directory
  * @return return the BPRunner to start running tests
  */
-+ (instancetype)BPRunnerForApp:(BPApp *)app
-                               withConfig:(BPConfiguration *)config
++ (instancetype)BPRunnerWithConfig:(BPConfiguration *)config
                                withBpPath:(NSString *)bpPath;
 
 
@@ -43,7 +40,7 @@
  @discussion start running tests
  @return 1: test failures 0: pass -1: failed to run tests
  */
-- (int)run;
+- (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *>*)xcTestFiles;
 
 - (void) interrupt;
 

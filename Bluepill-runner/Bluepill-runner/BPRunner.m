@@ -7,7 +7,6 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
-#import "BPBundle.h"
 #import "BPRunner.h"
 #import "BPPacker.h"
 #import "BPUtils.h"
@@ -48,11 +47,9 @@ maxprocs(void)
 
 @implementation BPRunner
 
-+ (instancetype)BPRunnerForApp:(BPApp *)app
-                    withConfig:(BPConfiguration *)config
++ (instancetype)BPRunnerWithConfig:(BPConfiguration *)config
                     withBpPath:(NSString *)bpPath {
     BPRunner *runner = [[BPRunner alloc] init];
-    runner.app = app;
     runner.config = config;
     // Find the `bp` binary.
 
@@ -83,16 +80,21 @@ maxprocs(void)
     return runner;
 }
 
-- (NSTask *)newTaskWithBundle:(BPBundle *)bundle andNumber:(NSUInteger)number andDevice:(NSString *)deviceID andCompletionBlock:(void (^)(NSTask *))block {
+- (NSTask *)newTaskWithBundle:(BPXCTestFile *)bundle
+                    andNumber:(NSUInteger)number
+                    andDevice:(NSString *)deviceID
+           andCompletionBlock:(void (^)(NSTask *))block {
     BPConfiguration *cfg = [self.config mutableCopy];
     assert(cfg);
-    cfg.testBundlePath = bundle.path;
-    cfg.testCasesToSkip = bundle.testsToSkip;
+    cfg.appBundlePath = bundle.testHostPath;
+    cfg.testBundlePath = bundle.testBundlePath;
+    if (bundle.UITargetAppPath) cfg.testRunnerAppPath = bundle.UITargetAppPath;
+    cfg.testCasesToSkip = bundle.skipTestIdentifiers;
+    cfg.commandLineArguments = bundle.commandLineArguments;
+    cfg.environmentVariables = bundle.environmentVariables;
     cfg.useSimUDID = deviceID;
     cfg.keepSimulator = cfg.reuseSimulator;
-    if (!bundle.isUITestBundle) {
-        cfg.testRunnerAppPath = nil;
-    }
+
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
                              NSTemporaryDirectory(),
@@ -140,14 +142,14 @@ maxprocs(void)
     return task;
 }
 
-- (int)run {
+- (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
     // Set up our SIGINT handler
     signal(SIGINT, onInterrupt);
     
     NSUInteger numSims = [self.config.numSims intValue];
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
     NSError *error;
-    NSMutableArray *bundles = [BPPacker packTests:self.app.allTestBundles configuration:self.config andError:&error];
+    NSMutableArray *bundles = [BPPacker packTests:xcTestFiles configuration:self.config andError:&error];
     if (!bundles || bundles.count == 0) {
         [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
         return 1;

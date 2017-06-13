@@ -234,7 +234,7 @@
                                        error:error];
 }
 
-- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion isHostApp:(BOOL)isHostApp {
+- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.appBundlePath];
 
@@ -244,7 +244,10 @@
         hostBundleId = [SimulatorHelper bundleIdForPath:self.config.testRunnerAppPath];
     }
     // Create the environment for the host application
-    NSDictionary *argsAndEnv = [BPUtils buildArgsAndEnvironmentWith:self.config.schemePath];
+
+    NSMutableDictionary *argsAndEnv = [[NSMutableDictionary alloc] init];
+    argsAndEnv[@"args"] = self.config.commandLineArguments ?: [[NSArray alloc] init];
+    argsAndEnv[@"env"] = self.config.environmentVariables ?: [[NSDictionary alloc] init];
 
     NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config]];
     [appLaunchEnvironment addEntriesFromDictionary:argsAndEnv[@"env"]];
@@ -326,7 +329,7 @@
 
             [BPUtils printInfo:INFO withString:@"Completion block for launch"];
             if (completion) {
-                [BPUtils printInfo:INFO withString:@"Calling completion block"];
+                [BPUtils printInfo:INFO withString:@"Calling completion block with: %@ - %d", error, pid];
                 completion(error, pid);
             }
         });
@@ -338,47 +341,39 @@
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
     SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (!self.app && !self.device) {
+        [BPUtils printInfo:ERROR withString:@"No device to delete"];
+        completion(nil, NO);
+        return;
+    }
     if (self.app) {
         [BPUtils printInfo:INFO withString:@"Terminating Simulator.app"];
         [self.app terminate];
-        // We need to wait until the simulator has shut down.
-        int attempts = 300;
-        while (attempts > 0 && ![self.device.stateString isEqualToString:@"Shutdown"]) {
-            [NSThread sleepForTimeInterval:1.0];
-            --attempts;
-        }
-        if (![self.device.stateString isEqualToString:@"Shutdown"]) {
-            [BPUtils printInfo:ERROR withString:@"Timed out waiting for %@ to shutdown. It won't be deleted. Last state: %@", self.device.name, self.device.stateString];
-            // Go ahead and try to delete anyway
-        }
-        [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
-            if (error) {
-                [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
-            }
-            completion(error, error ? NO: YES);
-        }];
     } else if (self.device) {
-        [BPUtils printInfo:INFO withString:@"Shutting down Simulator Device"];
-        [self.device shutdownAsyncWithCompletionHandler:^(NSError *error) {
-            if (!error) {
-                [BPUtils printInfo:INFO withString:@"Deleting Simulator Device"];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
-                        if (error) {
-                            [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
-                        }
-                        completion(error, error ? NO: YES);
-                    }];
-                });
-            } else {
-                [BPUtils printInfo:ERROR withString:@"Could not shutdown simulator: %@", [error localizedDescription]];
-                completion(error, NO);
-            }
-        }];
-    } else {
-        [BPUtils printInfo:ERROR withString:@"No device to delete"];
-        completion(nil, NO);
+        [BPUtils printInfo:INFO withString:@"Shutting down Simulator"];
+        [self.device shutdownWithError:&error];
+        if (error) {
+            [BPUtils printInfo:ERROR withString:@"Shutting down Simulator failed: %@", [error localizedDescription]];
+            completion(error, NO);
+            return;
+        }
     }
+    // We need to wait until the simulator has shut down.
+    int attempts = 300;
+    while (attempts > 0 && ![self.device.stateString isEqualToString:@"Shutdown"]) {
+        [NSThread sleepForTimeInterval:1.0];
+        --attempts;
+    }
+    if (![self.device.stateString isEqualToString:@"Shutdown"]) {
+        [BPUtils printInfo:ERROR withString:@"Timed out waiting for %@ to shutdown. It won't be deleted. Last state: %@", self.device.name, self.device.stateString];
+        // Go ahead and try to delete anyway
+    }
+    [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
+        if (error) {
+            [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+        }
+        completion(error, error ? NO: YES);
+    }];
 }
 
 #pragma mark - helper methods

@@ -20,7 +20,6 @@
 		BA1809F91DBA949600D7D130 /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */; };
 		BA1809FA1DBA949600D7D130 /* BPRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F81DB14B5F001F32A2 /* BPRunner.m */; };
 		BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
-		BA1809FC1DBA949600D7D130 /* BPBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C601DB82295000ED28C /* BPBundle.m */; };
 		BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
 		BA180A021DBA949600D7D130 /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C5D1DB80971000ED28C /* BPUtils.m */; };
 		BA53B16F1E30932400FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16E1E30932400FCED71 /* BPConstants.m */; };
@@ -40,7 +39,6 @@
 		C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
 		C4FD8C5E1DB80971000ED28C /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C5D1DB80971000ED28C /* BPUtils.m */; };
-		C4FD8C611DB82295000ED28C /* BPBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C601DB82295000ED28C /* BPBundle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -94,8 +92,6 @@
 		C4FD8C571DB6E09B000ED28C /* BPPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPacker.m; sourceTree = "<group>"; };
 		C4FD8C5C1DB80971000ED28C /* BPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPUtils.h; sourceTree = "<group>"; };
 		C4FD8C5D1DB80971000ED28C /* BPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPUtils.m; sourceTree = "<group>"; };
-		C4FD8C5F1DB82295000ED28C /* BPBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPBundle.h; sourceTree = "<group>"; };
-		C4FD8C601DB82295000ED28C /* BPBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPBundle.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,8 +221,6 @@
 				C41C41F81DB14B5F001F32A2 /* BPRunner.m */,
 				C4FD8C561DB6E09B000ED28C /* BPPacker.h */,
 				C4FD8C571DB6E09B000ED28C /* BPPacker.m */,
-				C4FD8C5F1DB82295000ED28C /* BPBundle.h */,
-				C4FD8C601DB82295000ED28C /* BPBundle.m */,
 				C41C41F11DB04032001F32A2 /* BPApp.h */,
 				C41C41F21DB04032001F32A2 /* BPApp.m */,
 				BAD848481DBC6A83007034CF /* BPReportCollector.h */,
@@ -358,7 +352,6 @@
 				C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */,
 				7A6672C21E0B0BBF00AC6778 /* BPTestCase.m in Sources */,
 				BAD8484D1DBC6BA2007034CF /* BPReportCollectorTests.m in Sources */,
-				BA1809FC1DBA949600D7D130 /* BPBundle.m in Sources */,
 				BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */,
 				7A6672C01E0B0BB400AC6778 /* BPXCTestFile.m in Sources */,
 				BAD8484B1DBC6A86007034CF /* BPReportCollector.m in Sources */,
@@ -377,7 +370,6 @@
 				C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */,
 				7A4FB8DD1DF89B1A0073F268 /* BPTestCase.m in Sources */,
 				BAEF4B381DAC539400E68294 /* main.m in Sources */,
-				C4FD8C611DB82295000ED28C /* BPBundle.m in Sources */,
 				C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */,
 				C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */,
 				BAD8484A1DBC6A83007034CF /* BPReportCollector.m in Sources */,

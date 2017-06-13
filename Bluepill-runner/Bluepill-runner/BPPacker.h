@@ -9,6 +9,7 @@
 
 #import <Foundation/Foundation.h>
 #import "BPConfiguration.h"
+#import "BPXCTestFile.h"
 
 @interface BPPacker : NSObject
 
@@ -16,9 +17,9 @@
  * @discussion Pack a series of .xctest bundles into an NSArray of NSString with the testcases distributed according to the packing rules.
  * @param xcTestFiles An NSArray of BPXCTestFile's to pack
  * @param config The configuration file for this bluepill-runner
- * @return An NSMutableArray of BPBundle's with the tests packed into bundles.
+ * @return An NSMutableArray of BPXCTestFile's with the tests packed into bundles.
  */
-+ (NSMutableArray *)packTests:(NSArray *)xcTestFiles
++ (NSMutableArray<BPXCTestFile *> *)packTests:(NSArray *)xcTestFiles
                 configuration:(BPConfiguration *)config
                      andError:(NSError **)error;
 
