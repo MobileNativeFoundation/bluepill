@@ -119,9 +119,7 @@ static BOOL quiet = NO;
 + (NSString *)mkdtemp:(NSString *)template withError:(NSError **)error {
     char *dir = strdup([[template stringByAppendingString:@"_XXXXXX"] UTF8String]);
     if (mkdtemp(dir) == NULL) {
-        if (error) {
-            *error = BP_ERROR(@"%s", strerror(errno));
-        }
+        BP_SET_ERROR(error, @"%s", strerror(errno));
         free(dir);
         return nil;
     }
@@ -134,9 +132,7 @@ static BOOL quiet = NO;
     char *file = strdup([[template stringByAppendingString:@".XXXXXX"] UTF8String]);
     int fd = mkstemp(file);
     if (fd < 0) {
-        if (error) {
-            *error = BP_ERROR(@"%s", strerror(errno));
-        }
+        BP_SET_ERROR(error, @"%s", strerror(errno));
         free(file);
         return nil;
     }
@@ -171,49 +167,6 @@ static BOOL quiet = NO;
 
 + (BOOL)isStdOut:(NSString *)fileName {
     return [fileName isEqualToString:@"stdout"] || [fileName isEqualToString:@"-"];
-}
-
-+ (NSDictionary *)buildArgsAndEnvironmentWith:(NSString *)schemePath {
-    NSMutableDictionary *argsAndEnv = [NSMutableDictionary new];
-    argsAndEnv[@"args"]  = [NSMutableArray new];
-    argsAndEnv[@"env"]  = [NSMutableDictionary new];
-
-    NSData *xmlData = [[NSMutableData alloc] initWithContentsOfFile:schemePath];
-    NSError *error;
-    if (xmlData) {
-        NSXMLDocument *document = [[NSXMLDocument alloc] initWithData:xmlData options:0 error:&error];
-        NSArray *argsNodes =
-        [document nodesForXPath:[NSString stringWithFormat:@"//%@//CommandLineArgument", @"LaunchAction"] error:&error];
-        NSAssert(error == nil, @"Failed to get nodes: %@", [error localizedFailureReason]);
-        NSMutableArray *envNodes = [[NSMutableArray alloc] init];
-        [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"LaunchAction"] error:&error]];
-        [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"TestAction"] error:&error]];
-        for (NSXMLElement *node in argsNodes) {
-            NSString *argument = [[node attributeForName:@"argument"] stringValue];
-            if (![[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
-                continue;
-            }
-            NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];
-            for (NSString *arg in argumentsArray) {
-                if (![arg isEqualToString:@""]) {
-                    [argsAndEnv[@"args"] addObject:arg];
-                }
-            }
-        }
-
-        [argsAndEnv[@"args"] addObjectsFromArray:@[@"-NSTreatUnknownArgumentsAsOpen", @"NO", @"-ApplePersistenceIgnoreState", @"YES"]];
-
-        for (NSXMLElement *node in envNodes) {
-            NSString *key = [[node attributeForName:@"key"] stringValue];
-            NSString *value = [[node attributeForName:@"value"] stringValue];
-            if ([[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
-                argsAndEnv[@"env"][key] = value;
-            }
-
-        }
-    }
-    NSAssert(error == nil, @"Failed to get nodes: %@", [error localizedFailureReason]);
-    return argsAndEnv;
 }
 
 + (NSString *)runShell:(NSString *)command {

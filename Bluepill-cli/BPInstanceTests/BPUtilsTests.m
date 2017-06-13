@@ -26,12 +26,10 @@
     [BPUtils quietMode:[BPUtils isBuildScript]];
     
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
-    NSString *basename = [[testBundlePath lastPathComponent] stringByDeletingPathExtension];
-    NSString *executable = [testBundlePath stringByAppendingPathComponent:basename];
-    
-    self.xcTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable
-                                                  isUITestFile:NO
-                                                     withError:nil];
+
+    self.xcTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
+                                                andHostAppBundle:[BPTestHelper sampleAppBalancingTestsBundlePath]
+                                                       withError:nil];
     
     self.config = [BPConfiguration new];
     self.config.program = BP_MASTER;
@@ -40,40 +38,6 @@
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
-}
-
-- (void)testBuildArgsAndEnvironmentWithPath {
-    NSString *path = @"testScheme.xcscheme";
-    path = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    NSDictionary *dictionary = [BPUtils buildArgsAndEnvironmentWith:path];
-    NSDictionary *expectedDictionary = @{
-                                         @"args" : @[
-                                                 @"-com.linkedin.mntf-ios.EnvironmentAnimationSpeed",
-                                                 @"10000",
-                                                 @"-com.linkedin.kif.EnvironmentUseAnimation",
-                                                 @"false",
-                                                 @"-com.linkedin.kif.EnvironmentSpeed",
-                                                 @"10",
-                                                 @"-com.linkedin.mntf-ios.EnvironmentLiveTestsEnabled",
-                                                 @"false",
-                                                 @"-mntf.validateLiveEvents",
-                                                 @"true",
-                                                 @"-NSTreatUnknownArgumentsAsOpen",
-                                                 @"NO",
-                                                 @"-ApplePersistenceIgnoreState",
-                                                 @"YES"
-                                                 ],
-                                         @"env" : @{
-                                                 @"MNTF_SCREENSHOTS" : @"$(PROJECT_DIR)/build/outputs/tests_artifacts",
-                                                 @"MNTF_SCREENSHOTS_BASELINE" : @"$(PROJECT_DIR)/mntf-iosUITests/Screenshots/Baseline",
-                                                 @"MNTF_SCREENSHOTS_BASELINE_REAL" : @"/Documents/Baseline",
-                                                 @"MNTF_SCREENSHOTS_DIFF" : @"$(PROJECT_DIR)/build/outputs/tests_artifacts/Diff",
-                                                 @"MNTF_SCREENSHOTS_DIFF_REAL" : @"/Documents/Screenshots/Diff",
-                                                 @"MNTF_SCREENSHOTS_REAL" : @"/Documents/Screenshots",
-                                                 @"TA_SCREENSHOTS_REAL" : @"/Documents/Screenshots"
-                                                 }
-                                         };
-    XCTAssert([dictionary isEqualToDictionary:expectedDictionary], @"Dictionary doesn't match expectation");
 }
 
 - (void)testNormalizingConfigurationExcludesAllTestsInExcludedTestSuite {

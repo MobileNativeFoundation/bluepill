@@ -46,17 +46,16 @@
     self.config.testBundlePath = nil;
     BPApp *app = [BPApp appWithConfig:self.config withError:nil];
     XCTAssertNil(error);
-    XCTAssertEqual(app.path, self.config.appBundlePath);
-    XCTAssert(app.allTestBundles.count > 2);
+    XCTAssert(app.testBundles.count > 2);
 }
 
 - (void)testAppWithOnlyTestBundlePath {
     NSError *error;
     BPApp *app = [BPApp appWithConfig:self.config withError:nil];
     XCTAssertNil(error);
-    XCTAssertEqual(app.path, self.config.appBundlePath);
-    XCTAssert(app.allTestBundles.count == 1);
-    XCTAssertEqualObjects([app.allTestBundles[0] path], self.config.testBundlePath);
+    XCTAssert(app.testBundles.count == 1);
+    BPXCTestFile *testBundle = app.testBundles[0];
+    XCTAssertEqualObjects(testBundle.testBundlePath, self.config.testBundlePath);
 }
 
 @end

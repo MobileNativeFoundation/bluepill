@@ -121,6 +121,29 @@
                BlueprintName = "BPSampleAppTests"
                ReferencedContainer = "container:BPSampleApp.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "BPSampleAppTests/testCase002">
+               </Test>
+               <Test
+                  Identifier = "BPSampleAppTests/testCase003">
+               </Test>
+               <Test
+                  Identifier = "BPSampleAppTests/testCase005">
+               </Test>
+               <Test
+                  Identifier = "BPSampleAppTests/testCase007">
+               </Test>
+               <Test
+                  Identifier = "BPSampleAppTests/testCase011">
+               </Test>
+               <Test
+                  Identifier = "BPSampleAppTests/testCase013">
+               </Test>
+               <Test
+                  Identifier = "BPSampleAppTests/testCase017">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">

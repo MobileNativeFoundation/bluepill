@@ -13,7 +13,7 @@
 
 // Return the path to the sample app directory (path to XX.app)
 + (NSString *)sampleAppPath {
-    return [[self bpDerivedDataPath] stringByAppendingString:@"/BPSampleApp.app"];
+    return [[self derivedDataPath] stringByAppendingString:@"/BPSampleApp.app"];
 }
 
 + (NSString *)sampleTestScheme {
@@ -63,7 +63,7 @@
 
 #pragma mark - Helpers
 
-+ (NSString *)bpDerivedDataPath {
++ (NSString *)derivedDataPath {
     NSString *currentPath = [[NSBundle bundleForClass:[self class]] bundlePath];
     return [[[currentPath stringByDeletingLastPathComponent]
             stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Debug-iphonesimulator"];

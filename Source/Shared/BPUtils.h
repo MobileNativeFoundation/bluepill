@@ -78,7 +78,7 @@ typedef NS_ENUM(int, BPKind) {
 
 /*!
  @discussion get an NSError *
- This is not really meant to be called, use the BP_ERROR macro below instead.
+ This is not really meant to be called, use the BP_SET_ERROR macro below instead.
  @param function The name of the function
  @param line The line number
  @param fmt a format string (a la printf), followed by var args.
@@ -86,7 +86,11 @@ typedef NS_ENUM(int, BPKind) {
 + (NSError *)BPError:(const char *)function andLine:(int)line withFormat:(NSString *)fmt, ... ;
 
 #define VA_ARGS(...) , ##__VA_ARGS__
-#define BP_ERROR(fmt, ...) [BPUtils BPError:__func__ andLine:__LINE__ withFormat:fmt VA_ARGS(__VA_ARGS__)]
+#define BP_SET_ERROR(error, fmt, ...) { \
+    if (error) { \
+        *error = [BPUtils BPError:__func__ andLine:__LINE__ withFormat:fmt VA_ARGS(__VA_ARGS__)]; \
+    } \
+}
 
 /*!
  
@@ -111,14 +115,6 @@ typedef NS_ENUM(int, BPKind) {
  @return whether it's stdout.
  */
 + (BOOL)isStdOut: (NSString *)fileName;
-
-/*!
- * @discussion return the build arguments and environment
- * @param schemePath the path to the scheme file
- * @return return the ArgsAndEnvironement as a dictionary:
- *          @{@"args":@[argument_list], @"env":@{env_dictionary}}
- */
-+ (NSDictionary *)buildArgsAndEnvironmentWith:(NSString *)schemePath;
 
 /*!
  * @discussion run a shell command and return the output
