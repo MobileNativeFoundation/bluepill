@@ -25,7 +25,7 @@
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
                             andHostAppBundle:(NSString *)testHostPath
-                                 withError:(NSError **)error;
+                                   withError:(NSError **)error;
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
                             andHostAppBundle:(NSString *)testHostPath
@@ -33,8 +33,8 @@
                                    withError:(NSError **)error;
 
 + (instancetype)BPXCTestFileFromDictionary:(NSDictionary<NSString *, NSString *>*) dict
-                                            withTestRoot:(NSString *)testRoot
-                                            andError:(NSError **)error;
+                              withTestRoot:(NSString *)testRoot
+                                  andError:(NSError **)error;
 
 - (NSUInteger)numTests;
 - (NSArray *)allTestCases;

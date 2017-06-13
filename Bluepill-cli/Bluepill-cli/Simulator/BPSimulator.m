@@ -246,8 +246,8 @@
     // Create the environment for the host application
 
     NSMutableDictionary *argsAndEnv = [[NSMutableDictionary alloc] init];
-    argsAndEnv[@"args"] = self.config.commandLineArguments ?: [[NSArray alloc] init];
-    argsAndEnv[@"env"] = self.config.environmentVariables ?: [[NSDictionary alloc] init];
+    argsAndEnv[@"args"] = self.config.commandLineArguments ?: @[];
+    argsAndEnv[@"env"] = self.config.environmentVariables ?: @{};
 
     NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config]];
     [appLaunchEnvironment addEntriesFromDictionary:argsAndEnv[@"env"]];
@@ -365,7 +365,7 @@
         --attempts;
     }
     if (![self.device.stateString isEqualToString:@"Shutdown"]) {
-        [BPUtils printInfo:ERROR withString:@"Timed out waiting for %@ to shutdown. It won't be deleted. Last state: %@", self.device.name, self.device.stateString];
+        [BPUtils printInfo:ERROR withString:@"It may not be possible to delete simulator %@ in '%@' state.", self.device.name, self.device.stateString];
         // Go ahead and try to delete anyway
     }
     [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {

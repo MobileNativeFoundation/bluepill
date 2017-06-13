@@ -62,8 +62,8 @@
                             withError:&err];
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
-    BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
-    int rc = [runner run];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
     XCTAssert([runner.nsTaskList count] == 0);
 }
@@ -79,8 +79,8 @@
                             withError:&err];
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
-    BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
-    int rc = [runner run];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
     XCTAssert([runner.nsTaskList count] == 0);
 }
@@ -98,10 +98,26 @@
                             withError:&err];
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
-    BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
-    int rc = [runner run];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
     XCTAssert([runner.nsTaskList count] == 0);
+}
+
+- (void)testTwoBPInstancesWithXCTestRunFile {
+    self.config.numSims = @2;
+    self.config.testBundlePath = nil;
+    self.config.testRunnerAppPath = nil;
+    NSString *runtime = [[NSString stringWithUTF8String:BP_DEFAULT_RUNTIME] stringByReplacingOccurrencesOfString:@"iOS " withString:@""];
+    NSString *xcTestRunFile = [NSString stringWithFormat:@"BPSampleApp_iphonesimulator%@-x86_64.xctestrun", runtime];
+    self.config.xcTestRunPath = [[[BPTestHelper derivedDataPath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:xcTestRunFile];
+    NSError *err;
+    BPApp *app = [BPApp appWithConfig:self.config withError:&err];
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc != 0); // this runs tests that fail
+
 }
 
 - (void)testTwoBPInstancesTestCaseFail {
@@ -115,8 +131,8 @@
                             withError:&err];
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
-    BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
-    int rc = [runner run];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
 
     XCTAssert(rc != 0);
     XCTAssert([runner.nsTaskList count] == 0);
@@ -133,8 +149,8 @@
                             withError:&err];
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
-    BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
-    int rc = [runner run];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
     XCTAssert([runner.nsTaskList count] == 0);
 }

@@ -16,9 +16,9 @@
 @implementation BPApp
 
 + (NSArray<BPXCTestFile *>*)testsFromAppBundle:(NSString *)appBundlePath
-                    andTestBundlePath:(NSString *)testBundlePath
+                             andTestBundlePath:(NSString *)testBundlePath
                             andUITargetAppPath:(NSString *)UITargetAppPath
-                            withError:(NSError *__autoreleasing *)error {
+                                     withError:(NSError *__autoreleasing *)error {
     if (testBundlePath == nil) {
         return [BPApp testsFromAppBundle:appBundlePath
                       andUITargetAppPath:UITargetAppPath
@@ -35,15 +35,15 @@
 
 + (NSArray<BPXCTestFile *>*)testsFromAppBundle:(NSString *)appBundlePath
                             andUITargetAppPath:(NSString *)UITargetAppPath
-                             withError:(NSError *__autoreleasing *)error {
+                                     withError:(NSError *__autoreleasing *)error {
     NSFileManager *fm = [NSFileManager defaultManager];
-    BOOL isdir = FALSE;
+    BOOL isDir = FALSE;
     NSString *dirPath = [appBundlePath stringByAppendingPathComponent:@"Plugins"];
-    if (![fm fileExistsAtPath:dirPath isDirectory:&isdir] || !isdir) {
+    if (![fm fileExistsAtPath:dirPath isDirectory:&isDir] || !isDir) {
         BP_SET_ERROR(error, @"%s", strerror(errno));
         return nil;
     }
-    NSArray *allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:dirPath error:error];
+    NSArray *allFiles = [fm contentsOfDirectoryAtPath:dirPath error:error];
     if (!allFiles && *error) {
         return nil;
     };
@@ -64,8 +64,8 @@
 }
 
 + (NSArray <BPXCTestFile *>*)testsFromXCTestRunDict:(NSDictionary *)xcTestRunDict
-                     andXCTestRunPath:(NSString *)xcTestRunPath
-                            withError:(NSError *__autoreleasing *)error {
+                                   andXCTestRunPath:(NSString *)xcTestRunPath
+                                          withError:(NSError *__autoreleasing *)error {
 
     NSMutableArray<BPXCTestFile *> *allTests = [[NSMutableArray alloc] init];
     NSUInteger errors = 0;
@@ -87,19 +87,21 @@
     return allTests;
 }
 
-+ (instancetype)appWithConfig:(BPConfiguration *)config withError:(NSError *__autoreleasing *)error {
++ (instancetype)appWithConfig:(BPConfiguration *)config
+                    withError:(NSError *__autoreleasing *)error {
 
     BPApp *app = [[BPApp alloc] init];
     NSMutableArray<BPXCTestFile *> *allTests = [[NSMutableArray alloc] init];
 
-    // configa.appBundlePath, config.testBundlePath, config.testrunner, config.xctestrundict
     if (config.xcTestRunDict) {
         NSAssert(config.xcTestRunPath, @"");
+        [BPUtils printInfo:INFO withString:@"Using xctestrun configuration"];
         [allTests addObjectsFromArray:[BPApp testsFromXCTestRunDict:config.xcTestRunDict
                                                    andXCTestRunPath: config.xcTestRunPath
                                                           withError:error]];
     } else if (config.appBundlePath) {
         NSAssert(config.appBundlePath, @"no app bundle and no xctestrun file");
+        [BPUtils printInfo:WARNING withString:@"Using broken configuration, consider using .xctestrun files"];
         [allTests addObjectsFromArray:[BPApp testsFromAppBundle:config.appBundlePath
                                               andTestBundlePath:config.testBundlePath
                                              andUITargetAppPath:config.testRunnerAppPath

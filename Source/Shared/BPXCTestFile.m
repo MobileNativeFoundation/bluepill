@@ -27,12 +27,12 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 }
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)path
-                              andHostAppBundle:(NSString *)testHostPath
+                            andHostAppBundle:(NSString *)testHostPath
                           andUITargetAppPath:(NSString *)UITargetAppPath
                                    withError:(NSError **)error {
-    BOOL isdir = NO;
+    BOOL isDir = NO;
 
-    if (!path || ![[NSFileManager defaultManager] fileExistsAtPath: path isDirectory:&isdir] || !isdir) {
+    if (!path || ![[NSFileManager defaultManager] fileExistsAtPath: path isDirectory:&isDir] || !isDir) {
         BP_SET_ERROR(error, @"Could not find test bundle at path %@.", path);
         return nil;
     }
@@ -99,7 +99,9 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     return xcTestFile;
 }
 
-+ (instancetype)BPXCTestFileFromDictionary:(NSDictionary *)dict withTestRoot:(NSString *)testRoot andError:(NSError *__autoreleasing *)error {
++ (instancetype)BPXCTestFileFromDictionary:(NSDictionary *)dict
+                              withTestRoot:(NSString *)testRoot
+                                  andError:(NSError *__autoreleasing *)error {
     NSAssert(dict, @"A dictionary should be provided");
     NSAssert(testRoot, @"A testRoot argument must be supplied");
     NSString *testHostPath = [dict objectForKey:@"TestHostPath"];
@@ -177,7 +179,8 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 
 - (NSString *)debugDescription
 {
-    return [NSString stringWithFormat:@"<%@: %p> %@", [self class], self, self.testClasses];
+    NSArray *allTestClasses = self.allTestCases;
+    return [NSString stringWithFormat:@"<%@: %p> allTests: %lu skipped: %lu", [self class], self, (unsigned long)(unsigned long)allTestClasses.count, (unsigned long)self.skipTestIdentifiers.count];
 }
 
 
@@ -186,6 +189,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     BPXCTestFile *copy = [[BPXCTestFile alloc] init];
     if (copy) {
         copy.name = self.name;
+        copy.testClasses = self.testClasses;
         copy.commandLineArguments = self.commandLineArguments;
         copy.environmentVariables = self.environmentVariables;
         copy.testHostPath = self.testHostPath;

@@ -78,7 +78,7 @@
             NSMutableArray *testsToSkip = [NSMutableArray arrayWithArray:allTestCases];
             [testsToSkip removeObjectsInArray:[bundleTestsToRun subarrayWithRange:range]];
             BPXCTestFile *bundle = [xctFile copy];
-            xctFile.skipTestIdentifiers = testsToSkip;
+            bundle.skipTestIdentifiers = testsToSkip;
             [bundles addObject:bundle];
             packed += range.length;
         }

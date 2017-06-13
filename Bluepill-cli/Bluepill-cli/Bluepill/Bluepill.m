@@ -396,7 +396,6 @@ void onInterrupt(int ignore) {
     };
 
     [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
-    [BPUtils printInfo:INFO withString:[@"Async Launch Returned" stringByAppendingString:stepName]];
 }
 
 - (void)connectTestBundleAndTestDaemonWithContext:(BPExecutionContext *)context {

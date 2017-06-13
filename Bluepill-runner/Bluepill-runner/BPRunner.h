@@ -23,8 +23,7 @@
  * @return return the BPRunner to start running tests
  */
 + (instancetype)BPRunnerWithConfig:(BPConfiguration *)config
-                               withBpPath:(NSString *)bpPath;
-
+                        withBpPath:(NSString *)bpPath;
 
 /*!
  * @discussion Create a new Simulator wrapped in a `bp` process. It will run the specified bundle and execute the block once it finishes.
@@ -35,7 +34,10 @@
  *
  */
 
-- (NSTask *)newTaskWithBundle:(NSArray *)bundle andNumber:(NSUInteger)number andDevice:(NSString *)deviceID andCompletionBlock:(void (^)(NSTask * ))block;
+- (NSTask *)newTaskWithBundle:(NSArray *)bundle
+                    andNumber:(NSUInteger)number
+                    andDevice:(NSString *)deviceID
+           andCompletionBlock:(void (^)(NSTask * ))block;
 /**
  @discussion start running tests
  @return 1: test failures 0: pass -1: failed to run tests

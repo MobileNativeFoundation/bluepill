@@ -48,7 +48,7 @@ maxprocs(void)
 @implementation BPRunner
 
 + (instancetype)BPRunnerWithConfig:(BPConfiguration *)config
-                    withBpPath:(NSString *)bpPath {
+                        withBpPath:(NSString *)bpPath {
     BPRunner *runner = [[BPRunner alloc] init];
     runner.config = config;
     // Find the `bp` binary.
@@ -88,7 +88,7 @@ maxprocs(void)
     assert(cfg);
     cfg.appBundlePath = bundle.testHostPath;
     cfg.testBundlePath = bundle.testBundlePath;
-    if (bundle.UITargetAppPath) cfg.testRunnerAppPath = bundle.UITargetAppPath;
+    cfg.testRunnerAppPath = bundle.UITargetAppPath ?: nil;
     cfg.testCasesToSkip = bundle.skipTestIdentifiers;
     cfg.commandLineArguments = bundle.commandLineArguments;
     cfg.environmentVariables = bundle.environmentVariables;
@@ -161,9 +161,9 @@ maxprocs(void)
     }
     [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Running with %lu simulator%s.",
                                         (unsigned long)numSims, (numSims > 1) ? "s" : ""]];
-    NSArray *copyBundels = [NSMutableArray arrayWithArray:bundles];
+    NSArray *copyBundles = [NSMutableArray arrayWithArray:bundles];
     for (int i = 1; i < [self.config.repeatTestsCount integerValue]; i++) {
-        [bundles addObjectsFromArray:copyBundels];
+        [bundles addObjectsFromArray:copyBundles];
     }
     [BPUtils printInfo:INFO withString:@"Packed tests into %lu bundles", (unsigned long)[bundles count]];
     __block NSUInteger launchedTasks = 0;

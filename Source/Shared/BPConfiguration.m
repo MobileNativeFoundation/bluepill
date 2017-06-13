@@ -672,6 +672,7 @@ static NSUUID *sessionID;
         if (![self parseXcSchemeFile:self.schemePath withError:err]) {
             return NO;
         }
+        [BPUtils printInfo:WARNING withString:@"The --scheme-path option is broken and is being deprecated. Please switch to using --xctestrun-path."];
     } else if (!_xcTestRunDict) {
         BP_SET_ERROR(err, @"No scheme provided.");
         return NO;

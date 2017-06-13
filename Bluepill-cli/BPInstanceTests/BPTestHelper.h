@@ -43,4 +43,7 @@
 
 // Return the path to the bp executable
 + (NSString *)bpExecutablePath;
+
+// Return the derivedDataPath
++ (NSString *)derivedDataPath;
 @end
