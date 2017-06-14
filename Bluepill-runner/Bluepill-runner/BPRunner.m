@@ -88,7 +88,7 @@ maxprocs(void)
     assert(cfg);
     cfg.appBundlePath = bundle.testHostPath;
     cfg.testBundlePath = bundle.testBundlePath;
-    cfg.testRunnerAppPath = bundle.UITargetAppPath ?: nil;
+    cfg.testRunnerAppPath = bundle.UITargetAppPath;
     cfg.testCasesToSkip = bundle.skipTestIdentifiers;
     cfg.commandLineArguments = bundle.commandLineArguments;
     cfg.environmentVariables = bundle.environmentVariables;

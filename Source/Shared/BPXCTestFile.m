@@ -142,6 +142,10 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     if (environment) {
         xcTestFile.environmentVariables = [[NSDictionary alloc] initWithDictionary:environment];
     }
+    NSArray<NSString *> *skipTestIdentifiers = [dict objectForKey:@"SkipTestIdentifiers"];
+    if (skipTestIdentifiers) {
+        xcTestFile.skipTestIdentifiers = [[NSArray alloc] initWithArray:skipTestIdentifiers];
+    }
     return xcTestFile;
 }
 
