@@ -118,7 +118,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 
     NSString * UITargetAppPath = [dict objectForKey:@"UITargetAppPath"];
     if (UITargetAppPath) {
-        [UITargetAppPath stringByReplacingOccurrencesOfString:@"__TESTROOT__" withString:testRoot];
+        UITargetAppPath = [UITargetAppPath stringByReplacingOccurrencesOfString:@"__TESTROOT__" withString:testRoot];
     }
     BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
                                                          andHostAppBundle:testHostPath
