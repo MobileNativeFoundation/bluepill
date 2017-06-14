@@ -70,7 +70,7 @@ struct BPOptions {
         "The number of retries on any failures (app crash/test failure)."},
     {'i', "include", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToRun",
         "Include a testcase in the set of tests to run (unless specified in `exclude`)."},
-    {'n', "num-sims", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "1", BP_VALUE | BP_INTEGER, "numSims",
+    {'n', "num-sims", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "4", BP_VALUE | BP_INTEGER, "numSims",
         "Number of simulators to run in parallel. (bluepill only)"},
     {'o', "output-dir", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
         "Directory where to put output log files (bluepill only)."},

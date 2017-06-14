@@ -97,7 +97,7 @@
         NSAssert(config.xcTestRunPath, @"");
         [BPUtils printInfo:INFO withString:@"Using xctestrun configuration"];
         [allTests addObjectsFromArray:[BPApp testsFromXCTestRunDict:config.xcTestRunDict
-                                                   andXCTestRunPath: config.xcTestRunPath
+                                                   andXCTestRunPath:config.xcTestRunPath
                                                           withError:error]];
     } else if (config.appBundlePath) {
         NSAssert(config.appBundlePath, @"no app bundle and no xctestrun file");

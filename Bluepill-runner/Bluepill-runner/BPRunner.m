@@ -86,9 +86,9 @@ maxprocs(void)
            andCompletionBlock:(void (^)(NSTask *))block {
     BPConfiguration *cfg = [self.config mutableCopy];
     assert(cfg);
-    cfg.appBundlePath = bundle.testHostPath;
+    cfg.appBundlePath = bundle.UITargetAppPath ?: bundle.testHostPath;
     cfg.testBundlePath = bundle.testBundlePath;
-    cfg.testRunnerAppPath = bundle.UITargetAppPath;
+    cfg.testRunnerAppPath = bundle.UITargetAppPath ? bundle.testHostPath : nil;
     cfg.testCasesToSkip = bundle.skipTestIdentifiers;
     cfg.commandLineArguments = bundle.commandLineArguments;
     cfg.environmentVariables = bundle.environmentVariables;
