@@ -11,11 +11,10 @@
 #import "BPPacker.h"
 #import "BPXCTestFile.h"
 #import "BPUtils.h"
-#import "BPBundle.h"
 
 @implementation BPPacker
 
-+ (NSMutableArray *)packTests:(NSArray *)xcTestFiles
++ (NSMutableArray<BPXCTestFile *> *)packTests:(NSArray<BPXCTestFile *> *)xcTestFiles
                 configuration:(BPConfiguration *)config
                      andError:(NSError **)error {
 
@@ -28,10 +27,8 @@
         return numTests2 - numTests1;
     }];
     if (sortedXCTestFiles.count == 0) {
-        if (error) {
-            *error = BP_ERROR(@"Found no XCTest files.\n"
-                               "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode.");
-        }
+        BP_SET_ERROR(error, @"Found no XCTest files.\n"
+                     "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode.");
         return NULL;
     }
     NSMutableDictionary *testsToRunByTestFilePath = [[NSMutableDictionary alloc] init];
@@ -46,23 +43,24 @@
                 [bundleTestsToRun minusSet:[[NSSet alloc] initWithArray:config.testCasesToSkip]];
             }
             if (bundleTestsToRun.count > 0) {
-                testsToRunByTestFilePath[xctFile.path] = bundleTestsToRun;
+                testsToRunByTestFilePath[xctFile.testBundlePath] = bundleTestsToRun;
                 totalTests += bundleTestsToRun.count;
             }
         }
     }
     
     NSUInteger testsPerGroup = MAX(1, totalTests / numBundles);
-    NSMutableArray *bundles = [[NSMutableArray alloc] init];
+    NSMutableArray<BPXCTestFile *> *bundles = [[NSMutableArray alloc] init];
     for (BPXCTestFile *xctFile in sortedXCTestFiles) {
-        NSArray *bundleTestsToRun = [[testsToRunByTestFilePath[xctFile.path] allObjects] sortedArrayUsingSelector:@selector(compare:)];
+        NSArray *bundleTestsToRun = [[testsToRunByTestFilePath[xctFile.testBundlePath] allObjects] sortedArrayUsingSelector:@selector(compare:)];
         NSUInteger bundleTestsToRunCount = [bundleTestsToRun count];
         // if the xctfile is in nosplit list, don't pack it
         if ([noSplit containsObject:[xctFile name]] || (bundleTestsToRunCount <= testsPerGroup && bundleTestsToRunCount > 0)) {
             // just pack the whole xctest file and move on
             // testsToRun doesn't work reliably, switch to use testsToSkip
-            // add testsToSkip from Bluepill runner's config to all BPBundle
-            BPBundle *bundle = [[BPBundle alloc] initWithPath:xctFile.path isUITestBundle:xctFile.isUITestFile andTestsToSkip:config.testCasesToSkip];
+            // add testsToSkip from Bluepill runner's config
+            BPXCTestFile *bundle = [xctFile copy];
+            bundle.skipTestIdentifiers = config.testCasesToSkip;
 
             // Always insert no splited tests to the front.
             [bundles insertObject:bundle atIndex:0];
@@ -79,7 +77,9 @@
             range.length = min(testsPerGroup, bundleTestsToRun.count - packed);
             NSMutableArray *testsToSkip = [NSMutableArray arrayWithArray:allTestCases];
             [testsToSkip removeObjectsInArray:[bundleTestsToRun subarrayWithRange:range]];
-            [bundles addObject:[[BPBundle alloc] initWithPath:xctFile.path isUITestBundle:xctFile.isUITestFile andTestsToSkip:testsToSkip]];
+            BPXCTestFile *bundle = [xctFile copy];
+            bundle.skipTestIdentifiers = testsToSkip;
+            [bundles addObject:bundle];
             packed += range.length;
         }
         assert(packed == [bundleTestsToRun count]);

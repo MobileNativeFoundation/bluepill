@@ -215,11 +215,13 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
                               };
     NSError *error;
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
+    [BPUtils printInfo:DEBUGINFO withString:@"Installing UITargetApp: %@", path];
     [self.simulator.device installApplication:[NSURL fileURLWithPath:path] withOptions:@{kCFBundleIdentifier: bundleID} error:&error];
     if (error) {
         [BPUtils printInfo:ERROR withString:@"Launch application during UI tests failed %@", error];
         return nil;
     }
+    [BPUtils printInfo:DEBUGINFO withString:@"Launching app: %@", bundleID];
     self.appProcessPID = [self.simulator.device launchApplicationWithID:bundleID options:options error:nil];
     self.bundleID = bundleID;
     if (error) {

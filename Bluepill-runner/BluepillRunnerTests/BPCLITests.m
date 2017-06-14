@@ -36,9 +36,9 @@
     
     result = [config processOptionsWithError:&err];
     XCTAssert(result == FALSE);
-    XCTAssert([[err localizedDescription] containsString:@"Missing required option"]);
-    XCTAssert([[err localizedDescription] containsString:@"-a/--app"]);
-    XCTAssert([[err localizedDescription] containsString:@"-s/--scheme-path"]);
+    XCTAssert([[err localizedDescription] containsString:@"Missing required option"], @"GOT: %@", [err localizedDescription]);
+    XCTAssert([[err localizedDescription] containsString:@"-a/--app"], @"GOT: %@", [err localizedDescription]);
+    XCTAssert([[err localizedDescription] containsString:@"-s/--scheme-path"], "GOT: %@", [err localizedDescription]);
 }
 
 - (void)testAdditionalTestBundles {

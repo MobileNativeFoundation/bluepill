@@ -55,14 +55,21 @@ struct options {
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        time_t t = time(0);
-        if (!getenv("TRAVIS") && isatty(1) && 1491033600 < t && 1491120000 > t) m();
-
         int c;
         BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
 
         struct option *lopts = [config getLongOptions];
         char *sopts = [config getShortOptions];
+
+        if (argv[1] && (!strcmp(argv[1], "version") || (!strcmp(argv[1], "--version")))) {
+            printf("Bluepill %s\n", BP_VERSION);
+            exit(0);
+        }
+
+        if (argv[1] && (!strcmp(argv[1], "--matrix"))) {
+            m();
+            exit(0);
+        }
        
         while((c = getopt_long(argc, argv, sopts, lopts, NULL)) != -1) {
             if (!optarg) optarg = "";
@@ -70,11 +77,6 @@ int main(int argc, char * argv[]) {
         }
         free(lopts);
         free(sopts);
-
-        if (argv[optind] && !strcmp(argv[optind], "version")) {
-            printf("Bluepill %s\n", BP_VERSION);
-            exit(0);
-        }
 
         NSError *err = nil;
         if (![config processOptionsWithError:&err] || ![config validateConfigWithError:&err]) {
@@ -93,10 +95,10 @@ int main(int argc, char * argv[]) {
             exit(0);
         }
         
-        BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:config withTestFiles:app.allTestBundles];
+        BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:config withTestFiles:app.testBundles];
         // start a runner and let it fly
-        BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:normalizedConfig withBpPath:nil];
-        exit([runner run]);
+        BPRunner *runner = [BPRunner BPRunnerWithConfig:normalizedConfig withBpPath:nil];
+        exit([runner runWithBPXCTestFiles:app.testBundles]);
     }
     return 0;
 }
