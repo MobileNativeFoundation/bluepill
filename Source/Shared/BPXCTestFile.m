@@ -104,23 +104,25 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
                                   andError:(NSError *__autoreleasing *)error {
     NSAssert(dict, @"A dictionary should be provided");
     NSAssert(testRoot, @"A testRoot argument must be supplied");
+    NSString * const TESTROOT = @"__TESTROOT__";
+    NSString * const TESTHOST = @"__TESTHOST__";
     NSString *testHostPath = [dict objectForKey:@"TestHostPath"];
     if (!testHostPath) {
         BP_SET_ERROR(error, @"No 'TestHostPath' found");
         return nil;
     }
-    testHostPath = [testHostPath stringByReplacingOccurrencesOfString:@"__TESTROOT__" withString:testRoot];
+    testHostPath = [testHostPath stringByReplacingOccurrencesOfString:TESTROOT withString:testRoot];
 
     NSString *testBundlePath = [dict objectForKey:@"TestBundlePath"];
     if (!testBundlePath) {
         BP_SET_ERROR(error, @"No 'TestBundlePath' found");
         return nil;
     }
-    testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:@"__TESTHOST__" withString:testHostPath];
+    testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTHOST withString:testHostPath];
 
     NSString * UITargetAppPath = [dict objectForKey:@"UITargetAppPath"];
     if (UITargetAppPath) {
-        UITargetAppPath = [UITargetAppPath stringByReplacingOccurrencesOfString:@"__TESTROOT__" withString:testRoot];
+        UITargetAppPath = [UITargetAppPath stringByReplacingOccurrencesOfString:TESTROOT withString:testRoot];
     }
     BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
                                                          andHostAppBundle:testHostPath
@@ -181,10 +183,9 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     return [NSString stringWithFormat:@"%@ / %lu classes / %d tests", self.name, [self.testClasses count], tests];
 }
 
-- (NSString *)debugDescription
-{
+- (NSString *)debugDescription {
     NSArray *allTestClasses = self.allTestCases;
-    return [NSString stringWithFormat:@"<%@: %p> allTests: %lu skipped: %lu", [self class], self, (unsigned long)(unsigned long)allTestClasses.count, (unsigned long)self.skipTestIdentifiers.count];
+    return [NSString stringWithFormat:@"<%@: %p> allTests: %lu skipped: %lu", [self class], self, (unsigned long)allTestClasses.count, (unsigned long)self.skipTestIdentifiers.count];
 }
 
 

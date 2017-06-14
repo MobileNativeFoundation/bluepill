@@ -37,7 +37,7 @@
                             andUITargetAppPath:(NSString *)UITargetAppPath
                                      withError:(NSError *__autoreleasing *)error {
     NSFileManager *fm = [NSFileManager defaultManager];
-    BOOL isDir = FALSE;
+    BOOL isDir = NO;
     NSString *dirPath = [appBundlePath stringByAppendingPathComponent:@"Plugins"];
     if (![fm fileExistsAtPath:dirPath isDirectory:&isDir] || !isDir) {
         BP_SET_ERROR(error, @"%s", strerror(errno));
@@ -68,19 +68,19 @@
                                           withError:(NSError *__autoreleasing *)error {
 
     NSMutableArray<BPXCTestFile *> *allTests = [[NSMutableArray alloc] init];
-    NSUInteger errors = 0;
+    NSUInteger errorCount = 0;
     for (NSString *key in xcTestRunDict) {
         BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromDictionary:[xcTestRunDict objectForKey:key]
                                                                withTestRoot:[xcTestRunPath stringByDeletingLastPathComponent]
                                                                              andError:error];
         if (!xcTestFile) {
             [BPUtils printInfo:ERROR withString:@"Failed to read data for %@", key];
-            errors++;
+            errorCount++;
             continue;
         }
         [allTests addObject:xcTestFile];
     }
-    if (errors) {
+    if (errorCount) {
         BP_SET_ERROR(error, @"Failed to load some test bundles");
         return nil;
     }
