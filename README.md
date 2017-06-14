@@ -52,7 +52,8 @@ A full list supported options are listed here.
 
 |   Config Arguments     | Command Line Arguments | Explanation                                                                        | Required | Default value    |
 |:----------------------:|:----------------------:|------------------------------------------------------------------------------------|:--------:|:----------------:|
-|          `app`         |           -a           | The path to the host application to execute (your .app)                            |     Y    | n/a              |
+|          `app`         |           -a           | The path to the host application to execute (your .app)                            |     N    | n/a              |
+|    `xctestrun-path`    |                        | The path to the `.xctestrun` file that xcode leaves when you `build-for-testing`.  |     Y    | n/a              |
 |      `output-dir`      |           -o           | Directory where to put output log files (bluepill only)                            |     Y    | n/a              |
 |         config         |           -c           | Read options from the specified configuration file instead of the command line     |     N    | n/a              |
 |         device         |           -d           | On which device to run the app.                                                    |     N    | iPhone 6         |
