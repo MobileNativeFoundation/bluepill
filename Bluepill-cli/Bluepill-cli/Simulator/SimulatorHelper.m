@@ -49,7 +49,7 @@
                                  @"XCTestConfiguration"];
     for (NSString *rc in requiredClasses) {
         if (NSClassFromString(rc)) {
-            NSLog(@"%@ is loaded..", rc);
+            [BPUtils printInfo:DEBUGINFO withString:@"%@ is loaded..", rc];
         } else {
             return NO;
         }
@@ -98,12 +98,14 @@
 
     NSString *testBundlePath = config.testBundlePath;
     NSString *appName = [self appNameForPath:testBundlePath];
+    NSString *testHostPath;
     xctConfig.productModuleName = appName;
     xctConfig.testBundleURL = [NSURL fileURLWithPath:testBundlePath];
     xctConfig.sessionIdentifier = config.sessionIdentifier;
     xctConfig.treatMissingBaselinesAsFailures = NO;
     xctConfig.targetApplicationPath = config.appBundlePath;
     xctConfig.reportResultsToIDE = YES;
+    testHostPath = config.appBundlePath;
 
     if (config.testRunnerAppPath) {
         xctConfig.targetApplicationBundleID = [self bundleIdForPath:config.appBundlePath];
@@ -112,6 +114,7 @@
         xctConfig.reportActivities = NO;
         xctConfig.testsMustRunOnMainThread = YES;
         xctConfig.pathToXcodeReportingSocket = nil;
+        testHostPath = config.testRunnerAppPath;
     }
 
     if (config.testCasesToSkip) {
@@ -122,10 +125,10 @@
         // According to @khu, we can't just pass the right setTestsToRun and have it work, so what we do instead
         // is get the full list of tests from the XCTest bundle, then skip everything we don't want to run.
         NSError *error;
-        NSString *basename = [[testBundlePath lastPathComponent] stringByDeletingPathExtension];
-        NSString *executable = [testBundlePath stringByAppendingPathComponent:basename];
 
-        BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromExecutable:executable isUITestFile:(config.testRunnerAppPath == nil) withError:&error];
+        BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
+                                                              andHostAppBundle:testHostPath
+                                                                     withError:&error];
         NSAssert(xctTestFile != nil, @"Failed to load testcases from %@", [error localizedDescription]);
         NSMutableSet *testsToSkip = [[NSMutableSet alloc] initWithArray:xctTestFile.allTestCases];
         NSSet *testsToRun = [[NSSet alloc] initWithArray:config.testCasesToRun];
@@ -150,6 +153,12 @@
 
 + (NSString *)bundleIdForPath:(NSString *)path {
     NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:[path stringByAppendingPathComponent:@"Info.plist"]];
+    
+    NSString *platform = [dic objectForKey:@"DTPlatformName"];
+    if (platform && ![platform isEqualToString:@"iphonesimulator"]) {
+        [BPUtils printInfo:ERROR withString:@"Wrong platform in %@. Expected 'iphonesimulator', found '%@'", path, platform];
+        return nil;
+    }
 
     NSString *bundleId = [dic objectForKey:(NSString *)kCFBundleIdentifierKey];
     if (!bundleId) {
