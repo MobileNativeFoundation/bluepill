@@ -77,6 +77,8 @@
             range.length = min(testsPerGroup, bundleTestsToRun.count - packed);
             NSMutableArray *testsToSkip = [NSMutableArray arrayWithArray:allTestCases];
             [testsToSkip removeObjectsInArray:[bundleTestsToRun subarrayWithRange:range]];
+            [testsToSkip addObjectsFromArray:xctFile.skipTestIdentifiers];
+            [testsToSkip sortUsingSelector:@selector(compare:)];
             BPXCTestFile *bundle = [xctFile copy];
             bundle.skipTestIdentifiers = testsToSkip;
             [bundles addObject:bundle];
