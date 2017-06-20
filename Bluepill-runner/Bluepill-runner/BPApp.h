@@ -14,7 +14,7 @@
 @interface BPApp : NSObject
 
 // All test bundles inside PlugIns directory in app.
-@property (nonatomic, strong) NSArray *testBundles;
+@property (nonatomic, strong) NSArray<BPXCTestFile *> *testBundles;
 
 + (instancetype)appWithConfig:(BPConfiguration *)config
                     withError:(NSError **)error;

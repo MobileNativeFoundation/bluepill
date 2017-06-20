@@ -112,10 +112,12 @@
     NSString *xcTestRunFile = [NSString stringWithFormat:@"BPSampleApp_iphonesimulator%@-x86_64.xctestrun", runtime];
     self.config.xcTestRunPath = [[[BPTestHelper derivedDataPath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:xcTestRunFile];
     NSError *err;
+    [self.config validateConfigWithError:&err];
     BPApp *app = [BPApp appWithConfig:self.config withError:&err];
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(app.testBundles[1].skipTestIdentifiers.count == 7);
     XCTAssert(rc != 0); // this runs tests that fail
 
 }
