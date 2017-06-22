@@ -246,9 +246,18 @@
     // Create the environment for the host application
 
     NSMutableDictionary *argsAndEnv = [[NSMutableDictionary alloc] init];
-    argsAndEnv[@"args"] = self.config.commandLineArguments ?: @[];
+    NSArray *argumentsArr = self.config.commandLineArguments ?: @[];
+    NSMutableArray *commandLineArgs = [NSMutableArray array];
+    for (NSString *argument in argumentsArr) {
+        NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];
+        for (NSString *arg in argumentsArray) {
+            if (![arg isEqualToString:@""]) {
+                [commandLineArgs addObject:arg];
+            }
+        }
+    }
+    argsAndEnv[@"args"] = [commandLineArgs copy];
     argsAndEnv[@"env"] = self.config.environmentVariables ?: @{};
-
     NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config]];
     [appLaunchEnvironment addEntriesFromDictionary:argsAndEnv[@"env"]];
 
