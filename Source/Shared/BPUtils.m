@@ -9,6 +9,8 @@
 
 #import "BPUtils.h"
 #import "BPConstants.h"
+#import "BPXCTestFile.h"
+#import "BPConfiguration.h"
 
 @implementation BPUtils
 
@@ -111,9 +113,7 @@ static BPKind logLevel = INFO;
 + (NSString *)mkdtemp:(NSString *)template withError:(NSError **)error {
     char *dir = strdup([[template stringByAppendingString:@"_XXXXXX"] UTF8String]);
     if (mkdtemp(dir) == NULL) {
-        if (error) {
-            *error = BP_ERROR(@"%s", strerror(errno));
-        }
+        BP_SET_ERROR(error, @"%s", strerror(errno));
         free(dir);
         return nil;
     }
@@ -126,9 +126,7 @@ static BPKind logLevel = INFO;
     char *file = strdup([[template stringByAppendingString:@".XXXXXX"] UTF8String]);
     int fd = mkstemp(file);
     if (fd < 0) {
-        if (error) {
-            *error = BP_ERROR(@"%s", strerror(errno));
-        }
+        BP_SET_ERROR(error, @"%s", strerror(errno));
         free(file);
         return nil;
     }
@@ -138,51 +136,31 @@ static BPKind logLevel = INFO;
     return ret;
 }
 
-+ (BOOL)isStdOut:(NSString *)fileName {
-    return [fileName isEqualToString:@"stdout"] || [fileName isEqualToString:@"-"];
-}
 
-+ (NSDictionary *)buildArgsAndEnvironmentWith:(NSString *)schemePath {
-    NSMutableDictionary *argsAndEnv = [NSMutableDictionary new];
-    argsAndEnv[@"args"]  = [NSMutableArray new];
-    argsAndEnv[@"env"]  = [NSMutableDictionary new];
-
-    NSData *xmlData = [[NSMutableData alloc] initWithContentsOfFile:schemePath];
-    NSError *error;
-    if (xmlData) {
-        NSXMLDocument *document = [[NSXMLDocument alloc] initWithData:xmlData options:0 error:&error];
-        NSArray *argsNodes =
-        [document nodesForXPath:[NSString stringWithFormat:@"//%@//CommandLineArgument", @"LaunchAction"] error:&error];
-        NSAssert(error == nil, @"Failed to get nodes: %@", [error localizedFailureReason]);
-        NSMutableArray *envNodes = [[NSMutableArray alloc] init];
-        [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"LaunchAction"] error:&error]];
-        [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"TestAction"] error:&error]];
-        for (NSXMLElement *node in argsNodes) {
-            NSString *argument = [[node attributeForName:@"argument"] stringValue];
-            if (![[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
-                continue;
-            }
-            NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];
-            for (NSString *arg in argumentsArray) {
-                if (![arg isEqualToString:@""]) {
-                    [argsAndEnv[@"args"] addObject:arg];
-                }
-            }
++ (BPConfiguration *)normalizeConfiguration:(BPConfiguration *)config
+                              withTestFiles:(NSArray *)xctTestFiles {
+    
+    config = [config mutableCopy];
+    NSMutableSet *testsToRun = [NSMutableSet new];
+    NSMutableSet *testsToSkip = [NSMutableSet new];
+    for (BPXCTestFile *xctFile in xctTestFiles) {
+        if (config.testCasesToRun) {
+            [testsToRun unionSet:[NSSet setWithArray:[BPUtils expandTests:config.testCasesToRun withTestFile:xctFile]]];
         }
-
-        [argsAndEnv[@"args"] addObjectsFromArray:@[@"-NSTreatUnknownArgumentsAsOpen", @"NO", @"-ApplePersistenceIgnoreState", @"YES"]];
-
-        for (NSXMLElement *node in envNodes) {
-            NSString *key = [[node attributeForName:@"key"] stringValue];
-            NSString *value = [[node attributeForName:@"value"] stringValue];
-            if ([[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
-                argsAndEnv[@"env"][key] = value;
-            }
-
+        if (config.testCasesToSkip) {
+            [testsToSkip unionSet:[NSSet setWithArray:[BPUtils expandTests:config.testCasesToSkip withTestFile:xctFile]]];
         }
     }
-    NSAssert(error == nil, @"Failed to get nodes: %@", [error localizedFailureReason]);
-    return argsAndEnv;
+    
+    if (testsToRun.allObjects.count > 0) {
+        config.testCasesToRun = testsToRun.allObjects;
+    }
+    config.testCasesToSkip = testsToSkip.allObjects;
+    return config;
+}
+
++ (BOOL)isStdOut:(NSString *)fileName {
+    return [fileName isEqualToString:@"stdout"] || [fileName isEqualToString:@"-"];
 }
 
 + (NSString *)runShell:(NSString *)command {
@@ -195,8 +173,8 @@ static BPKind logLevel = INFO;
     task.standardOutput = pipe;
     NSFileHandle *fh = pipe.fileHandleForReading;
     [task launch];
-    [task waitUntilExit];
     NSData *data = [fh readDataToEndOfFile];
+    [task waitUntilExit];
     return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 }
 
@@ -213,6 +191,36 @@ static BPKind logLevel = INFO;
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, true);
     }
     return result;
+}
+
+#pragma mark - Private Helper Methods
+
+/*!
+ @brief expand testcases into a list of fully expanded testcases in the form of 'testsuite/testcase'.
+ 
+ @discussion searches the given .xctest bundle's entire list of actual testcases
+ (that are in the form of 'testsuite/testcase') for testcases that belong to testsuites
+ that were provided in the configTestCases.
+ 
+ @param testCases a list of testcases: each item is either a 'testsuite' or a 'testsuite/testcase'.
+ @return a @c NSArray of all the expanded 'testsuite/testcase' items that match the given configTestCases.
+ 
+ */
++ (NSArray *)expandTests:(NSArray *)testCases withTestFile:(BPXCTestFile *)testFile {
+    NSMutableArray *expandedTestCases = [NSMutableArray new];
+    
+    for (NSString *testCase in testCases) {
+        if ([testCase rangeOfString:@"/"].location == NSNotFound) {
+            [testFile.allTestCases enumerateObjectsUsingBlock:^(NSString *actualTestCase, NSUInteger idx, BOOL *stop) {
+                if ([actualTestCase hasPrefix:[NSString stringWithFormat:@"%@/", testCase]]) {
+                    [expandedTestCases addObject:actualTestCase];
+                }
+            }];
+        } else {
+            [expandedTestCases addObject:testCase];
+        }
+    }
+    return expandedTestCases;
 }
 
 @end

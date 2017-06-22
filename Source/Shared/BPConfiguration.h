@@ -46,7 +46,9 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *runtime;
 @property (nonatomic, strong) NSString *configFile;
 @property (nonatomic, strong) NSString *schemePath;
-@property (nonatomic, strong) NSMutableArray *cmdLineArgs;
+@property (nonatomic, strong) NSString *xcTestRunPath;
+@property (nonatomic, strong) NSDictionary *xcTestRunDict; // parsed copy of the path above.
+@property (nonatomic, strong) NSMutableArray *bpCmdLineArgs; // command line arguments passed to bluepill
 @property (nonatomic, strong) NSNumber *repeatTestsCount;
 @property (nonatomic, strong) NSNumber *errorRetriesCount;
 @property (nonatomic, strong) NSNumber *stuckTimeout;
@@ -78,6 +80,10 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSNumber *createTimeout;
 @property (nonatomic, strong) NSNumber *launchTimeout;
 @property (nonatomic, strong) NSNumber *deleteTimeout;
+
+@property (nonatomic, strong) NSArray<NSString *> *commandLineArguments; // command line arguments for the app
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environmentVariables;
+
 
 // These fields are for testing.
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;

@@ -38,9 +38,9 @@ struct BPOptions {
 } BPOptions[] = {
 
     // Required argument
-    {'a', "app", BP_MASTER | BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
+    {'a', "app", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
         "The path to the host application to execute (your .app)"},
-    {'s', "scheme-path", BP_MASTER | BP_SLAVE, YES, NO, required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
+    {'s', "scheme-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
         "The scheme to run tests."},
 
     // Required arguments for ui testing
@@ -99,7 +99,7 @@ struct BPOptions {
     {'j', "junit-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "junitOutput",
         "Print results in JUnit format."},
     {'F', "only-retry-failed", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "onlyRetryFailed",
-        "If `failure-tolerance` is > 0, only retry tests that failed."},
+        "If `failure-`tolerance` is > 0, only retry tests that failed."},
     {'l', "list-tests", BP_MASTER, NO, NO, no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
         "Only list tests in bundle"},
     {'v', "verbose", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "verboseLogging",
@@ -126,8 +126,13 @@ struct BPOptions {
         "The maximum amount of time, in seconds, to wait before giving up on application launch in the simulator"},
     {358, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "deleteTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator deletion"},
-    {357, "log-level", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "logLevel",
+    {359, "log-level", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "logLevel",
         "The logging level (FAILED=8, CRASH=7, TIMEOUT=6, PASSED=5, ERROR=4, WARNING=3, INFO=2, DEBUG=1)"},
+
+    // New options
+    {360, "xctestrun-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcTestRunPath",
+        "The .xctestrun file with test information."},
+  
     {0, 0, 0, 0, 0, 0, 0}
 };
 
@@ -145,7 +150,7 @@ static NSUUID *sessionID;
     self = [super init];
     if (program != BP_MASTER && program != BP_SLAVE) return nil;
     self.program = program;
-    self.cmdLineArgs = [[NSMutableArray alloc] init];
+    self.bpCmdLineArgs = [[NSMutableArray alloc] init];
     // set factory defaults
     if (!sessionID) {
         sessionID = [NSUUID UUID];
@@ -168,7 +173,7 @@ static NSUUID *sessionID;
 }
 
 - (void)saveOpt:(NSNumber *)opt withArg:(NSString *)arg {
-    [self.cmdLineArgs addObject:@[opt, arg]];
+    [self.bpCmdLineArgs addObject:@[opt, arg]];
 }
 
 - (void)handleOpt:(int)opt withArg:(char *)arg {
@@ -276,19 +281,25 @@ static NSUUID *sessionID;
         NSString *cfgName = [NSString stringWithUTF8String:BPOptions[i].name];
         [dict setValue:value forKey:cfgName];
     }
+    if (self.commandLineArguments) {
+        [dict setValue:self.commandLineArguments forKey:@"commandLineArguments"];
+    }
+    if (self.environmentVariables) {
+        [dict setValue:self.environmentVariables forKey:@"environmentVariables"];
+    }
     if ([NSJSONSerialization isValidJSONObject:dict]) {
         NSError *err;
         NSData *json = [NSJSONSerialization dataWithJSONObject:dict
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:&err];
         if (!json) {
-            NSLog(@"%@", err);
+            [BPUtils printInfo:ERROR withString:@"%@", err];
             return nil;
         }
         NSString *jsonString = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
         return jsonString;
     } else {
-        NSLog(@"Error: configuration not serializable.");
+        [BPUtils printInfo:ERROR withString:@"Error: configuration not serializable."];
     }
     return nil;
 }
@@ -316,6 +327,10 @@ static NSUUID *sessionID;
     newConfig.testing_CrashAppOnLaunch = self.testing_CrashAppOnLaunch;
     newConfig.testing_HangAppOnLaunch = self.testing_HangAppOnLaunch;
     newConfig.testing_NoAppWillRun = self.testing_NoAppWillRun;
+    newConfig.xcTestRunPath = self.xcTestRunPath;
+    newConfig.xcTestRunDict = self.xcTestRunDict;
+    newConfig.commandLineArguments = self.commandLineArguments;
+    newConfig.environmentVariables = self.environmentVariables;
 
     return newConfig;
 }
@@ -418,10 +433,8 @@ static NSUUID *sessionID;
             if (!strcmp([key UTF8String], BPOptions[i].name)) {
 
                 if (BPOptions[i].kind & BP_LIST && ![value isKindOfClass:[NSArray class]]) {
-                    if (error) {
-                        *error = BP_ERROR(@"Expected type %@ for key '%@', got %@. Parsing failed.",
+                    BP_SET_ERROR(error, @"Expected type %@ for key '%@', got %@. Parsing failed.",
                                           [NSArray className], key, [value className]);
-                    }
                     return NO;
                 }
                 if (BPOptions[i].kind & BP_PATH) {
@@ -448,26 +461,27 @@ static NSUUID *sessionID;
             }
         }
     }
+    // Pull out two keys that are undocumented but needed for supporting xctest
+    self.commandLineArguments = [configDict objectForKey:@"commandLineArguments"];
+    self.environmentVariables = [configDict objectForKey:@"environmentVariables"];
     return YES;
 }
 
 - (BOOL)processOptionsWithError:(NSError **)err {
     // look for a config file first
     BOOL loadedConfig = FALSE;
-    for (NSMutableArray *pair in self.cmdLineArgs) {
+    for (NSMutableArray *pair in self.bpCmdLineArgs) {
         NSNumber *op = pair[0];
         NSString *optarg = pair[1];
         if ([op isEqualToNumber:[NSNumber numberWithInt:'c']]) {
             if (loadedConfig) {
-                if (err) {
-                    *err = BP_ERROR(@"Only one configuration file (-c) allowed.");
-                }
+                BP_SET_ERROR(err, @"Only one configuration file (-c) allowed.");
                 return FALSE;
             }
             // load the config file
             NSError *error;
             if (![self loadConfigFile:optarg withError:&error]) {
-                if (err) *err = BP_ERROR(@"Could not load configuration from %@\n%@", optarg, [error localizedDescription]);
+                BP_SET_ERROR(err, @"Could not load configuration from %@\n%@", optarg, [error localizedDescription]);
                 return FALSE;
             }
             loadedConfig = TRUE;
@@ -476,7 +490,7 @@ static NSUUID *sessionID;
 
     // Now process options, ignoring config files.
     BOOL printConfig = FALSE;
-    for (NSMutableArray *pair in self.cmdLineArgs) {
+    for (NSMutableArray *pair in self.bpCmdLineArgs) {
         NSNumber *op = pair[0];
         NSString *optarg = pair[1];
 
@@ -488,17 +502,14 @@ static NSUUID *sessionID;
     }
     // Now check we didn't miss any require options:
     NSMutableArray *errors = [[NSMutableArray alloc] init];
-    for (int i = 0; BPOptions[i].name; i++) {
-        if (!self.deleteSimUDID &&
-            (((self.program & BPOptions[i].program) && BPOptions[i].required && !BPOptions[i].seen) ||
-             ((self.program & BP_SLAVE) && BPOptions[i].val == 't' && !BPOptions[i].seen))) {
-            // option "--test" is required for BP_SLAVE but optional for BP_MASTER
-            [errors addObject:[NSString stringWithFormat:@"Missing required option: -%c/--%s - %s",
-                               BPOptions[i].val, BPOptions[i].name, BPOptions[i].help]];
-        }
+    if (!(self.appBundlePath && self.schemePath) && !(self.xcTestRunPath)) {
+        [errors addObject:@"Missing required option: -a/--app and -s/--scheme-path OR --xctestrun-path"];
+    }
+    if ((self.program & BP_SLAVE) && !(self.testBundlePath)) {
+        [errors addObject:@"Missing required option: -t/--test-bundle-path"];
     }
     if (errors.count > 0) {
-        if (err) *err = BP_ERROR([errors componentsJoinedByString:@"\n\t"]);
+        BP_SET_ERROR(err, [errors componentsJoinedByString:@"\n\t"]);
         return FALSE;
     }
     if (printConfig) {
@@ -508,6 +519,80 @@ static NSUUID *sessionID;
     return TRUE;
 }
 
+// Validate that the xctestrun file used is in a valid format and fill in the parsed dictionary.
+// See `man xcodebuild.xctestrun` for info about the file.
+- (BOOL)parseXcTestRunFile:(NSString *)path withError:(NSError *__autoreleasing *)error {
+    BOOL isdir;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isdir] || isdir) {
+        BP_SET_ERROR(error, @"Failed to find file %@", path);
+        return NO;
+    }
+    NSData *plistData = [[NSMutableData alloc] initWithContentsOfFile:path];
+    if (plistData == nil) {
+        BP_SET_ERROR(error, @"Failed to open file %@", path);
+        return NO;
+    }
+    NSMutableDictionary* plist = [NSPropertyListSerialization propertyListWithData:plistData
+                                                                           options: NSPropertyListImmutable
+                                                                            format:NULL
+                                                                             error:error];
+    if (plist == nil) {
+        BP_SET_ERROR(error, @"Could not parse plist format from %@: %@", path, [*error localizedDescription]);
+        return NO;
+    }
+    self.xcTestRunDict = plist;
+    return YES;
+}
+
+- (BOOL)parseXcSchemeFile:(NSString *)schemePath withError:(NSError *__autoreleasing *)error {
+    NSMutableArray<NSString *> *commandLineArgs  = [NSMutableArray new];
+    NSMutableDictionary<NSString *, NSString *> *environmentVariables = [NSMutableDictionary new];
+    
+    NSData *xmlData = [[NSMutableData alloc] initWithContentsOfFile:schemePath];
+    if (xmlData) {
+        NSXMLDocument *document = [[NSXMLDocument alloc] initWithData:xmlData options:0 error:error];
+        if (!document) {
+            BP_SET_ERROR(error, @"Failed to parse scheme file at %@: %@", schemePath, [*error localizedDescription]);
+            return NO;
+        }
+        NSArray *argsNodes = [document nodesForXPath:[NSString stringWithFormat:@"//%@//CommandLineArgument", @"LaunchAction"] error:error];
+        NSMutableArray *envNodes = [[NSMutableArray alloc] init];
+        [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"LaunchAction"] error:error]];
+        [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"TestAction"] error:error]];
+        for (NSXMLElement *node in argsNodes) {
+            NSString *argument = [[node attributeForName:@"argument"] stringValue];
+            if (![[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
+                continue;
+            }
+            NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];
+            for (NSString *arg in argumentsArray) {
+                if (![arg isEqualToString:@""]) {
+                    [commandLineArgs addObject:arg];
+                }
+            }
+        }
+        
+        [commandLineArgs addObjectsFromArray:@[
+                                               @"-NSTreatUnknownArgumentsAsOpen", @"NO",
+                                               @"-ApplePersistenceIgnoreState", @"YES"
+                                               ]];
+        
+        for (NSXMLElement *node in envNodes) {
+            NSString *key = [[node attributeForName:@"key"] stringValue];
+            NSString *value = [[node attributeForName:@"value"] stringValue];
+            if ([[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
+                environmentVariables[key] = value;
+            }
+            
+        }
+    }
+    self.commandLineArguments = commandLineArgs;
+    self.environmentVariables = environmentVariables;
+    return YES;
+}
+
+
+
 - (BOOL)validateConfigWithError:(NSError *__autoreleasing *)err {
     BOOL isdir;
     if (!self.xcodePath) {
@@ -515,39 +600,49 @@ static NSUUID *sessionID;
     }
 
     if (!self.xcodePath || [self.xcodePath isEqualToString:@""]) {
-        if (err) {
-            *err = BP_ERROR(@"Could not set Xcode path!");
-        }
+        BP_SET_ERROR(err, @"Could not set Xcode path!");
         return NO;
     }
-    
+
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.xcodePath isDirectory:&isdir] || !isdir) {
-        if (err) {
-            *err = BP_ERROR(@"Could not find Xcode at %@", self.xcodePath);
-        }
+        BP_SET_ERROR(err, @"Could not find Xcode at %@", self.xcodePath);
         return NO;
     }
 
     if (self.deleteSimUDID) {
         return YES;
     }
+
+    if (self.xcTestRunPath && ![self parseXcTestRunFile:self.xcTestRunPath withError:err]) {
+            return NO;
+    }
+
+    if (!self.appBundlePath && !self.xcTestRunDict) {
+        BP_SET_ERROR(err, @"No app bundle provided.");
+        return NO;
+    }
+
+    if (self.appBundlePath && (![[NSFileManager defaultManager] fileExistsAtPath: self.appBundlePath isDirectory:&isdir] || !isdir)) {
+        BP_SET_ERROR(err, @"%@ not found.", self.appBundlePath);
+        return NO;
+    }
+    NSString *path = [self.appBundlePath stringByAppendingPathComponent:@"Info.plist"];
+    NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:path];
     
-    if (!self.appBundlePath) {
-        if (err) {
-            *err = BP_ERROR(@"No app bundle provided.");
-        }
+    if (!dic) {
+        BP_SET_ERROR(err, @"Could not read %@, perhaps you forgot to run xcodebuild build-for-testing?", path);
+    }
+
+    NSString *platform = [dic objectForKey:@"DTPlatformName"];
+    if (platform && ![platform isEqualToString:@"iphonesimulator"]) {
+        BP_SET_ERROR(err, @"Wrong platform in %@. Expected 'iphonesimulator', found '%@'", self.appBundlePath, platform);
         return NO;
     }
-    if (![[NSFileManager defaultManager] fileExistsAtPath: self.appBundlePath isDirectory:&isdir] || !isdir) {
-        if (err) {
-            *err = BP_ERROR(@"%@ not found.", self.appBundlePath);
-        }
-        return NO;
-    }
+
     if (self.outputDirectory) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.outputDirectory isDirectory:&isdir]) {
             if (!isdir) {
-                if (err) *err = BP_ERROR(@"%@ is not a directory.", self.outputDirectory);
+                BP_SET_ERROR(err, @"%@ is not a directory.", self.outputDirectory);
                 return NO;
             }
         } else {
@@ -565,18 +660,22 @@ static NSUUID *sessionID;
         self.jsonOutput = TRUE;
     }
 
-    if (self.schemePath) {
+    if (!self.xcTestRunDict && self.schemePath) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.schemePath isDirectory:&isdir]) {
             if (isdir) {
-                if (err) *err = BP_ERROR(@"%@ is a directory", self.schemePath);
+                BP_SET_ERROR(err, @"%@ is a directory", self.schemePath);
                 return NO;
             }
         } else {
-            if (err) *err = BP_ERROR(@"%@ doesn't exist", self.schemePath);
+            BP_SET_ERROR(err, @"%@ doesn't exist", self.schemePath);
             return NO;
         }
-    } else {
-        if (err) *err = BP_ERROR(@"No scheme provided.");
+        if (![self parseXcSchemeFile:self.schemePath withError:err]) {
+            return NO;
+        }
+        [BPUtils printInfo:WARNING withString:@"The --scheme-path option is broken and is being deprecated. Please switch to using --xctestrun-path."];
+    } else if (!_xcTestRunDict) {
+        BP_SET_ERROR(err, @"No scheme provided.");
         return NO;
     }
     
@@ -588,15 +687,11 @@ static NSUUID *sessionID;
     // bp requires an xctest argument while `bluepill` does not.
 #ifdef BP_USE_PRIVATE_FRAMEWORKS
     if (!self.testBundlePath) {
-        if (err) {
-            *err = BP_ERROR(@"No test bundle provided.");
-        }
+        BP_SET_ERROR(err, @"No test bundle provided.");
         return NO;
     }
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.testBundlePath isDirectory:&isdir] || !isdir) {
-        if (err) {
-            *err = BP_ERROR(@"%@ not found.", self.testBundlePath);
-        }
+        BP_SET_ERROR(err, @"%@ not found.", self.testBundlePath);
         return NO;
     }
 #endif
@@ -605,9 +700,7 @@ static NSUUID *sessionID;
     }
 
     if (![self.deviceType isKindOfClass:[NSString class]]) {
-        if (err) {
-            *err = BP_ERROR(@"device must be a string like '%s'", BP_DEFAULT_DEVICE_TYPE);
-        }
+        BP_SET_ERROR(err, @"device must be a string like '%s'", BP_DEFAULT_DEVICE_TYPE);
         return NO;
     }
 
@@ -616,9 +709,7 @@ static NSUUID *sessionID;
     }
 
     if (![self.runtime isKindOfClass:[NSString class]]) {
-        if (err) {
-            *err = BP_ERROR(@"runtime must be a string like '%s'.", BP_DEFAULT_RUNTIME);
-        }
+        BP_SET_ERROR(err, @"runtime must be a string like '%s'.", BP_DEFAULT_RUNTIME);
         return NO;
     }
 
@@ -629,7 +720,7 @@ static NSUUID *sessionID;
 
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.xcodePath error: err];
     if (!sc) {
-        NSLog(@"Failed to initialize SimServiceContext: %@", *err);
+        [BPUtils printInfo:ERROR withString:@"Failed to initialize SimServiceContext: %@", *err];
         return NO;
     }
 
@@ -641,12 +732,9 @@ static NSUUID *sessionID;
     }
 
     if (!self.simDeviceType) {
-        if (err) {
-            *err = BP_ERROR(@"%@ is not a valid device type.\n"
-                            "Use `xcrun simctl list devicetypes` for a list of valid devices.",
-                            self.deviceType);
-
-        }
+        BP_SET_ERROR(err, @"%@ is not a valid device type.\n"
+                     "Use `xcrun simctl list devicetypes` for a list of valid devices.",
+                     self.deviceType);
         return NO;
     }
 
@@ -660,11 +748,9 @@ static NSUUID *sessionID;
     }
 
     if (!self.simRuntime) {
-        if (err) {
-            *err = BP_ERROR(@"%@ is not a valid runtime.\n"
-                             "Use `xcrun simctl list runtimes` for a list of valid runtimes.",
-                             self.runtime);
-        }
+        BP_SET_ERROR(err, @"%@ is not a valid runtime.\n"
+                     "Use `xcrun simctl list runtimes` for a list of valid runtimes.",
+                     self.runtime);
         return NO;
     }
 #endif

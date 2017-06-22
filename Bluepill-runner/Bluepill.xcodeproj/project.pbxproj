@@ -20,9 +20,9 @@
 		BA1809F91DBA949600D7D130 /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */; };
 		BA1809FA1DBA949600D7D130 /* BPRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F81DB14B5F001F32A2 /* BPRunner.m */; };
 		BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
-		BA1809FC1DBA949600D7D130 /* BPBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C601DB82295000ED28C /* BPBundle.m */; };
 		BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
 		BA180A021DBA949600D7D130 /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C5D1DB80971000ED28C /* BPUtils.m */; };
+		BA23EF611EF8ACF10074A4EF /* BPPackerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23EF601EF8ACF10074A4EF /* BPPackerTests.m */; };
 		BA53B16F1E30932400FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16E1E30932400FCED71 /* BPConstants.m */; };
 		BA7031881DE4ED2F008B3539 /* result1.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031831DE4ED2F008B3539 /* result1.xml */; };
 		BA7031891DE4ED2F008B3539 /* result2.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031851DE4ED2F008B3539 /* result2.xml */; };
@@ -40,7 +40,6 @@
 		C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
 		C4FD8C5E1DB80971000ED28C /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C5D1DB80971000ED28C /* BPUtils.m */; };
-		C4FD8C611DB82295000ED28C /* BPBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C601DB82295000ED28C /* BPBundle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,17 +57,18 @@
 /* Begin PBXFileReference section */
 		56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPIntegrationTests.m; sourceTree = "<group>"; };
 		7A4FB8C91DF89A370073F268 /* BPXCTestFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPXCTestFile.h; sourceTree = "<group>"; };
-		7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPXCTestFile.m; sourceTree = "<group>"; };
+		7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPXCTestFile.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7A4FB8D91DF89B1A0073F268 /* BPTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestCase.h; sourceTree = "<group>"; };
 		7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestCase.m; sourceTree = "<group>"; };
 		7A4FB8DB1DF89B1A0073F268 /* BPTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestClass.h; sourceTree = "<group>"; };
 		7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestClass.m; sourceTree = "<group>"; };
 		BA1809E01DBA8FB100D7D130 /* BluepillRunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BluepillRunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA1809E41DBA8FB100D7D130 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPRunnerTests.m; sourceTree = "<group>"; };
+		BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPRunnerTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		BA1809EA1DBA910400D7D130 /* BPAppTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPAppTests.m; sourceTree = "<group>"; };
 		BA1809EC1DBA929600D7D130 /* BPTestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BPTestHelper.h; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.h"; sourceTree = "<group>"; };
 		BA1809ED1DBA929600D7D130 /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BPTestHelper.m; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.m"; sourceTree = "<group>"; };
+		BA23EF601EF8ACF10074A4EF /* BPPackerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPackerTests.m; sourceTree = "<group>"; };
 		BA53B16D1E30932400FCED71 /* BPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConstants.h; sourceTree = "<group>"; };
 		BA53B16E1E30932400FCED71 /* BPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConstants.m; sourceTree = "<group>"; };
 		BA7031831DE4ED2F008B3539 /* result1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result1.xml; sourceTree = "<group>"; };
@@ -77,25 +77,23 @@
 		BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPSampleAppTests.xctest; sourceTree = "<group>"; };
 		BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = testScheme.xcscheme; sourceTree = "<group>"; };
 		BAD848481DBC6A83007034CF /* BPReportCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPReportCollector.h; sourceTree = "<group>"; };
-		BAD848491DBC6A83007034CF /* BPReportCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPReportCollector.m; sourceTree = "<group>"; };
+		BAD848491DBC6A83007034CF /* BPReportCollector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPReportCollector.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		BAD8484C1DBC6BA2007034CF /* BPReportCollectorTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPReportCollectorTests.m; sourceTree = "<group>"; };
 		BAEF4B341DAC539400E68294 /* bluepill */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bluepill; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAEF4B371DAC539400E68294 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BAFCCA361E33595F00E33C31 /* bluepill.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = bluepill.xcconfig; sourceTree = "<group>"; };
 		C41C41F11DB04032001F32A2 /* BPApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPApp.h; sourceTree = "<group>"; };
-		C41C41F21DB04032001F32A2 /* BPApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPApp.m; sourceTree = "<group>"; };
+		C41C41F21DB04032001F32A2 /* BPApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPApp.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C41C41F71DB14B5F001F32A2 /* BPRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPRunner.h; sourceTree = "<group>"; };
 		C41C41F81DB14B5F001F32A2 /* BPRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPRunner.m; sourceTree = "<group>"; };
 		C432D41F1DDCF05400FB27D0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
 		C467E54B1DC94BB200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
 		C4FD8C4D1DB692F8000ED28C /* BPConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConfiguration.h; sourceTree = "<group>"; };
-		C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConfiguration.m; sourceTree = "<group>"; };
+		C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPConfiguration.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4FD8C561DB6E09B000ED28C /* BPPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPPacker.h; sourceTree = "<group>"; };
 		C4FD8C571DB6E09B000ED28C /* BPPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPacker.m; sourceTree = "<group>"; };
 		C4FD8C5C1DB80971000ED28C /* BPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPUtils.h; sourceTree = "<group>"; };
 		C4FD8C5D1DB80971000ED28C /* BPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPUtils.m; sourceTree = "<group>"; };
-		C4FD8C5F1DB82295000ED28C /* BPBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPBundle.h; sourceTree = "<group>"; };
-		C4FD8C601DB82295000ED28C /* BPBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPBundle.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +147,7 @@
 				BAD8484C1DBC6BA2007034CF /* BPReportCollectorTests.m */,
 				C467E54B1DC94BB200BC80EE /* BPCLITests.m */,
 				56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */,
+				BA23EF601EF8ACF10074A4EF /* BPPackerTests.m */,
 			);
 			path = BluepillRunnerTests;
 			sourceTree = "<group>";
@@ -225,8 +224,6 @@
 				C41C41F81DB14B5F001F32A2 /* BPRunner.m */,
 				C4FD8C561DB6E09B000ED28C /* BPPacker.h */,
 				C4FD8C571DB6E09B000ED28C /* BPPacker.m */,
-				C4FD8C5F1DB82295000ED28C /* BPBundle.h */,
-				C4FD8C601DB82295000ED28C /* BPBundle.m */,
 				C41C41F11DB04032001F32A2 /* BPApp.h */,
 				C41C41F21DB04032001F32A2 /* BPApp.m */,
 				BAD848481DBC6A83007034CF /* BPReportCollector.h */,
@@ -358,7 +355,6 @@
 				C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */,
 				7A6672C21E0B0BBF00AC6778 /* BPTestCase.m in Sources */,
 				BAD8484D1DBC6BA2007034CF /* BPReportCollectorTests.m in Sources */,
-				BA1809FC1DBA949600D7D130 /* BPBundle.m in Sources */,
 				BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */,
 				7A6672C01E0B0BB400AC6778 /* BPXCTestFile.m in Sources */,
 				BAD8484B1DBC6A86007034CF /* BPReportCollector.m in Sources */,
@@ -366,6 +362,7 @@
 				BA180A021DBA949600D7D130 /* BPUtils.m in Sources */,
 				BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */,
 				7A6672C11E0B0BBC00AC6778 /* BPTestClass.m in Sources */,
+				BA23EF611EF8ACF10074A4EF /* BPPackerTests.m in Sources */,
 				56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -377,7 +374,6 @@
 				C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */,
 				7A4FB8DD1DF89B1A0073F268 /* BPTestCase.m in Sources */,
 				BAEF4B381DAC539400E68294 /* main.m in Sources */,
-				C4FD8C611DB82295000ED28C /* BPBundle.m in Sources */,
 				C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */,
 				C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */,
 				BAD8484A1DBC6A83007034CF /* BPReportCollector.m in Sources */,

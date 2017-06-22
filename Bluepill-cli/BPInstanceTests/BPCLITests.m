@@ -31,7 +31,7 @@
 }
 
 - (void)testNoSchemeinCLI {
-    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
     NSError *err;
     BOOL result;
     

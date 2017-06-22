@@ -247,11 +247,11 @@ typedef NS_ENUM(NSInteger, BrowseType) {
         return;
     }
 
-    NSString *executableName = [[path lastPathComponent] stringByDeletingPathExtension];
-    NSString *executable = [path stringByAppendingPathComponent:executableName];
-
     NSError *error = nil;
-    BPXCTestFile *testFile = [BPXCTestFile BPXCTestFileFromExecutable:executable isUITestFile:NO withError:&error]; //TO BE FIXED default UI test flag to NO.
+    //TO BE FIXED where do we get the appBundle from?
+    BPXCTestFile *testFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:path
+                                                       andHostAppBundle:nil
+                                                              withError:&error];
 
     if (error) {
         NSLog(@"%@", [error localizedDescription]);

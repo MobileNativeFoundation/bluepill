@@ -58,14 +58,14 @@
 		7A38ED2E1DEDD8C3001460EE /* bp */ = {isa = PBXFileReference; lastKnownFileType = text; path = bp; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A38ED301DEDD8DE001460EE /* bluepill */ = {isa = PBXFileReference; lastKnownFileType = text; path = bluepill; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A4FB8D61DF89AD60073F268 /* BPXCTestFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPXCTestFile.h; sourceTree = "<group>"; };
-		7A4FB8D71DF89AD60073F268 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPXCTestFile.m; sourceTree = "<group>"; };
+		7A4FB8D71DF89AD60073F268 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPXCTestFile.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7A4FB8DF1DF89B280073F268 /* BPTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestCase.h; sourceTree = "<group>"; };
 		7A4FB8E01DF89B280073F268 /* BPTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestCase.m; sourceTree = "<group>"; };
 		7A4FB8E11DF89B280073F268 /* BPTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestClass.h; sourceTree = "<group>"; };
 		7A4FB8E21DF89B280073F268 /* BPTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestClass.m; sourceTree = "<group>"; };
 		7AA919A31DEDFFA20031D0BC /* list_tests.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = list_tests.sh; path = ../scripts/list_tests.sh; sourceTree = "<group>"; };
 		7AA919A71DEE094C0031D0BC /* BPConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConfiguration.h; sourceTree = "<group>"; };
-		7AA919A81DEE094C0031D0BC /* BPConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConfiguration.m; sourceTree = "<group>"; };
+		7AA919A81DEE094C0031D0BC /* BPConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPConfiguration.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7AA919A91DEE094C0031D0BC /* BPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPUtils.h; sourceTree = "<group>"; };
 		7AA919AA1DEE094C0031D0BC /* BPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPUtils.m; sourceTree = "<group>"; };
 		7AA919AD1DEE09DA0031D0BC /* BPConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPConstants.h; sourceTree = "<group>"; };

@@ -112,7 +112,7 @@
 		7A4D7A851DDBB156001E085D /* BPExitStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPExitStatus.m; sourceTree = "<group>"; };
 		7A4D7A881DDE3A85001E085D /* intermixed_crash.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = intermixed_crash.log; sourceTree = "<group>"; };
 		7A4FB8CD1DF89A790073F268 /* BPConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConfiguration.h; sourceTree = "<group>"; };
-		7A4FB8CE1DF89A790073F268 /* BPConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConfiguration.m; sourceTree = "<group>"; };
+		7A4FB8CE1DF89A790073F268 /* BPConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPConfiguration.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		7A4FB8CF1DF89A790073F268 /* BPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPUtils.h; sourceTree = "<group>"; };
 		7A4FB8D01DF89A790073F268 /* BPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPUtils.m; sourceTree = "<group>"; };
 		7A4FB8E51DF8AD4F0073F268 /* missed-crash.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "missed-crash.log"; sourceTree = "<group>"; };
@@ -452,7 +452,7 @@
 		BA95506B1D6D1AB3007D011D /* DVTFileDataTypeDetectionMagicCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVTFileDataTypeDetectionMagicCache.h; sourceTree = "<group>"; };
 		BA95506C1D6D1AB3007D011D /* DVTFileDataTypeDetector-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DVTFileDataTypeDetector-Protocol.h"; sourceTree = "<group>"; };
 		BA95506D1D6D1AB3007D011D /* DVTFileLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVTFileLogger.h; sourceTree = "<group>"; };
-		BA95506E1D6D1AB3007D011D /* DVTFilePath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVTFilePath.h; sourceTree = "<group>"; };
+		BA95506E1D6D1AB3007D011D /* DVTFilePath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = DVTFilePath.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		BA95506F1D6D1AB3007D011D /* DVTFilePathEventWatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVTFilePathEventWatcher.h; sourceTree = "<group>"; };
 		BA9550701D6D1AB3007D011D /* DVTFileSystemRepresentationProviding-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DVTFileSystemRepresentationProviding-Protocol.h"; sourceTree = "<group>"; };
 		BA9550711D6D1AB3007D011D /* DVTFileSystemVNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVTFileSystemVNode.h; sourceTree = "<group>"; };
@@ -908,7 +908,7 @@
 		BAFCCA701E37298B00E33C31 /* XCTestDriverInterface-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTestDriverInterface-Protocol.h"; sourceTree = "<group>"; };
 		BAFCCA711E37298B00E33C31 /* XCTestManager_DaemonConnectionInterface-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTestManager_DaemonConnectionInterface-Protocol.h"; sourceTree = "<group>"; };
 		C41A2C701E0B2497005D9751 /* BPXCTestFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPXCTestFile.h; sourceTree = "<group>"; };
-		C41A2C711E0B2497005D9751 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPXCTestFile.m; sourceTree = "<group>"; };
+		C41A2C711E0B2497005D9751 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPXCTestFile.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C41A2C731E0B24E8005D9751 /* BPTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestCase.h; sourceTree = "<group>"; };
 		C41A2C741E0B24E8005D9751 /* BPTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestCase.m; sourceTree = "<group>"; };
 		C41A2C751E0B24E8005D9751 /* BPTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestClass.h; sourceTree = "<group>"; };

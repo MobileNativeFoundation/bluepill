@@ -8,15 +8,13 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
+#import "BPXCTestFile.h"
 
 @class BPConfiguration;
 @interface BPApp : NSObject
 
-@property (nonatomic, strong) NSString *path;
 // All test bundles inside PlugIns directory in app.
-@property (nonatomic, strong) NSArray *unitTestBundles;
-@property (nonatomic, strong) NSArray *uiTestBundles;
-@property (nonatomic, strong, getter=getAllTestBundles) NSArray *allTestBundles;
+@property (nonatomic, strong) NSArray<BPXCTestFile *> *testBundles;
 
 + (instancetype)appWithConfig:(BPConfiguration *)config
                     withError:(NSError **)error;
@@ -24,7 +22,5 @@
 /*! @discussion Print the test bundles in the App along with all of their test classes/cases (Basically the .xctest files inside the PlugIns directory in the .app bundle)
  */
 - (void)listTests;
-
-- (NSString *)testBundlePathForName:(NSString *)name;
 
 @end
