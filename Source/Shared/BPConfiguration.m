@@ -571,11 +571,6 @@ static NSUUID *sessionID;
             }
         }
         
-        [commandLineArgs addObjectsFromArray:@[
-                                               @"-NSTreatUnknownArgumentsAsOpen", @"NO",
-                                               @"-ApplePersistenceIgnoreState", @"YES"
-                                               ]];
-        
         for (NSXMLElement *node in envNodes) {
             NSString *key = [[node attributeForName:@"key"] stringValue];
             NSString *value = [[node attributeForName:@"value"] stringValue];

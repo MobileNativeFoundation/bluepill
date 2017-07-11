@@ -256,6 +256,13 @@
             }
         }
     }
+
+    // These are appended by Xcode so we do that here.
+    [commandLineArgs addObjectsFromArray:@[
+                                           @"-NSTreatUnknownArgumentsAsOpen", @"NO",
+                                           @"-ApplePersistenceIgnoreState", @"YES"
+                                           ]];
+
     argsAndEnv[@"args"] = [commandLineArgs copy];
     argsAndEnv[@"env"] = self.config.environmentVariables ?: @{};
     NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config]];
