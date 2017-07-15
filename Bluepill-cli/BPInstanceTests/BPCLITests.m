@@ -50,6 +50,7 @@
     [config saveOpt:[NSNumber numberWithInt:'R'] withArg:@"2"];
     [config saveOpt:[NSNumber numberWithInt:'f'] withArg:@"1"];
     [config saveOpt:[NSNumber numberWithInt:'n'] withArg:@"5"];
+    [config saveOpt:[NSNumber numberWithInt:'B'] withArg:@"3"];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"foo"]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"bar"]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"baz"]];
@@ -63,6 +64,7 @@
     XCTAssert([config.noSplit isEqualToArray:want]);
     XCTAssertEqualObjects(config.errorRetriesCount, @2);
     XCTAssertEqualObjects(config.failureTolerance, @1);
+    XCTAssertEqualObjects(config.testFailureRetriesCount, @3);
     XCTAssertEqualObjects(config.numSims, @5);
 }
 

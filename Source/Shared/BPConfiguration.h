@@ -51,6 +51,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSMutableArray *bpCmdLineArgs; // command line arguments passed to bluepill
 @property (nonatomic, strong) NSNumber *repeatTestsCount;
 @property (nonatomic, strong) NSNumber *errorRetriesCount;
+@property (nonatomic, strong) NSNumber *testFailureRetriesCount;
 @property (nonatomic, strong) NSNumber *stuckTimeout;
 @property (nonatomic, strong) NSNumber *testCaseTimeout;
 @property (nonatomic, strong) NSArray *noSplit;

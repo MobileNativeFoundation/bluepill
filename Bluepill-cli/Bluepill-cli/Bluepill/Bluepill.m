@@ -40,6 +40,7 @@ void onInterrupt(int ignore) {
 @property (nonatomic, assign) BOOL exitLoop;
 @property (nonatomic, assign) NSInteger failureTolerance;
 @property (nonatomic, assign) NSInteger retries;
+@property (nonatomic, assign) NSInteger testFailureRetries;
 @property (nonatomic, assign) BOOL reuseSimAllowed;
 
 @property (nonatomic, assign) NSInteger maxCreateTries;
@@ -130,6 +131,25 @@ void onInterrupt(int ignore) {
         self.exitLoop = YES;
         return;
     }
+
+    // If there are test case failures
+    if (self.context.exitStatus == BPExitStatusTestsFailed) {
+        int testFailureRetriesCount = [self.config.testFailureRetriesCount integerValue];
+        [BPUtils printInfo:INFO withString:@"Current Test Failure Retries: %lu", self.testFailureRetries];
+        [BPUtils printInfo:INFO withString:@"Max Test Failure Retries: %lu", testFailureRetriesCount];
+
+        if (self.testFailureRetries >= testFailureRetriesCount) {
+            [BPUtils printInfo:INFO withString:@"Reach to the test failure retries limitation, will exit the retry"];
+            // If there is no more testFailureRetries, set the final exitCode to current context's exitCode
+            self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+            self.exitLoop = YES;
+            return;
+        } else {
+            // else, testFailureRetries add 1
+            self.testFailureRetries += 1;
+        }
+    }
+
     [self.context.parser cleanup];
     // Otherwise, reduce our failure tolerance count and retry
     self.failureTolerance -= 1;
@@ -142,7 +162,7 @@ void onInterrupt(int ignore) {
     self.retries += 1;
 
     // Log some useful information to the log
-    [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
+    [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.context.exitStatus]];
     [BPUtils printInfo:INFO withString:@"Failure Tolerance: %lu", self.failureTolerance];
     [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
 
