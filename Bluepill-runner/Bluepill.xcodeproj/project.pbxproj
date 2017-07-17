@@ -510,6 +510,7 @@
 		BAEF4B3C1DAC539400E68294 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEPLOYMENT_LOCATION = NO;
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -518,6 +519,7 @@
 		BAEF4B3D1DAC539400E68294 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEPLOYMENT_LOCATION = NO;
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

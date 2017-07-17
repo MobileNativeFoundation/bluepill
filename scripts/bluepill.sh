@@ -85,8 +85,9 @@ bluepill_build_sample_app()
     -workspace Bluepill.xcworkspace \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
-    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
-  
+    -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' \
+    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
+
   test $? == 0 || {
           echo Build failed
           cat result.txt
