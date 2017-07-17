@@ -54,6 +54,7 @@
     XCTAssert([config.noSplit isEqualToArray:@[@"VoyagerTests"]]);
     XCTAssertEqualObjects(config.repeatTestsCount, @1);
     XCTAssertEqualObjects(config.errorRetriesCount, @0);
+    XCTAssertEqualObjects(config.testFailureRetriesCount, @2);
     XCTAssert([config.schemePath isEqualToString:@"/Users/khu/ios/dev/voyager-ios_trunk/Voyager.xcodeproj/xcshareddata/xcschemes/VoyagerScenarioTests4.xcscheme"]);
     XCTAssertEqual(config.headlessMode, NO);
     XCTAssert([config.outputDirectory isEqualToString:@"/Users/khu/tmp/simulator"]);

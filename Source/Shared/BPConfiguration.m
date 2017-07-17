@@ -62,6 +62,8 @@ struct BPOptions {
         "Print a configuration file suitable for passing back using the `-c` option."},
     {'R', "error-retries", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "4", BP_VALUE | BP_INTEGER, "errorRetriesCount",
         "Number of times we'll recover from crashes to continue running the current test suite."},
+    {'B', "test-failure-retries", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "0", BP_VALUE | BP_INTEGER, "testFailureRetriesCount",
+        "Number of times to retry test case failures. It requires `failure-tolerance` > 0"},
     {'S', "stuck-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "stuckTimeout",
         "Timeout in seconds for a test that seems stuck (no output)."},
     {'T', "test-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "testCaseTimeout",

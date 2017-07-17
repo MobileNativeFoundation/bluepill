@@ -68,6 +68,7 @@ A full list supported options are listed here.
 |      plain-output      |           -p           | Print results in plain text.                                                       |     N    | true             |
 |      printf-config     |           -P           | Print a configuration file suitable for passing back using the `-c` option.        |     N    | n/a              |
 |      error-retries     |           -R           | Number of times we'll recover from app crashing/hanging and continue running       |     N    | 5                |
+|  test-failure-retries  |           -B           | Number of times to retry test case failures. It requires `failure-tolerance` >0       |     N    | 0                |
 |    failure-tolerance   |           -f           | The number of retries on any failures (app crash/test failure)                     |     N    | 0                |
 |    only-retry-failed   |           -F           | When `failure-tolerance` > 0, only retry tests that failed                         |     N    | false            |
 |         runtime        |           -r           | What runtime to use.                                                               |     N    | iOS 10.3        |
