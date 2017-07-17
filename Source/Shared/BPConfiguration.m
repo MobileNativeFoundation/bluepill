@@ -501,10 +501,10 @@ static NSUUID *sessionID;
     }
     // Now check we didn't miss any require options:
     NSMutableArray *errors = [[NSMutableArray alloc] init];
-    if (!(self.appBundlePath && self.schemePath) && !(self.xcTestRunPath)) {
+    if (!(self.appBundlePath && self.schemePath) && !(self.xcTestRunPath) && !(self.deleteSimUDID)) {
         [errors addObject:@"Missing required option: -a/--app and -s/--scheme-path OR --xctestrun-path"];
     }
-    if ((self.program & BP_SLAVE) && !(self.testBundlePath)) {
+    if ((self.program & BP_SLAVE) && !(self.testBundlePath) && !(self.deleteSimUDID)) {
         [errors addObject:@"Missing required option: -t/--test-bundle-path"];
     }
     if (errors.count > 0) {
