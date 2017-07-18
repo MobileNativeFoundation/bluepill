@@ -102,6 +102,7 @@ bluepill_instance_tests()
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BPInstanceTests$n \
+    -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' \
     -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
