@@ -44,9 +44,9 @@
     self.config.junitOutput = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-    NSLog(@"BPBuildScript = %hhd", [BPUtils isBuildScript]);
     [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
     [BPUtils quietMode:[BPUtils isBuildScript]];
+    self.config.quiet = [BPUtils isBuildScript];
 }
 
 - (void)tearDown {
@@ -70,8 +70,8 @@
 
 - (void)testTwoBPInstances {
     self.config.numSims = @2;
-    self.config.errorRetriesCount = @2;
-    self.config.failureTolerance = @2;
+    self.config.errorRetriesCount = @1;
+    self.config.failureTolerance = @0;
     self.config.reuseSimulator = NO;
 
     NSError *err;
@@ -87,12 +87,17 @@
 
 - (void)testTwoBPInstancesWithUITests {
     self.config.numSims = @2;
-    self.config.errorRetriesCount = @2;
-    self.config.failureTolerance = @2;
+    self.config.errorRetriesCount = @1;
+    self.config.failureTolerance = @0;
     self.config.reuseSimulator = NO;
 
+    // This looks backwards but we want the main app to be the runner
+    // and the sampleApp is launched from the callback.
     self.config.testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
-    self.config.testRunnerAppPath = [BPTestHelper sampleAppUITestRunnerPath];
+    self.config.testRunnerAppPath = [BPTestHelper sampleAppPath];
+    self.config.appBundlePath = [BPTestHelper sampleAppUITestRunnerPath];
+
+
     NSError *err;
     BPApp *app = [BPApp appWithConfig:self.config
                             withError:&err];

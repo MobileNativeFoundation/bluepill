@@ -42,20 +42,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BAB24F2D1DB5D45E00867756"
-               BuildableName = "BPSampleApp.app"
-               BlueprintName = "BPSampleApp"
-               ReferencedContainer = "container:../BPSampleApp/BPSampleApp.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "BAA4DA361DC3C02A00A58BCC"
                BuildableName = "BPSampleAppCrashingTests.xctest"
                BlueprintName = "BPSampleAppCrashingTests"

@@ -419,8 +419,7 @@
 					};
 					BAB24F2D1DB5D45E00867756 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 57Y47U492U;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					BAB24F461DB5D45E00867756 = {
 						CreatedOnToolsVersion = 8.0;
@@ -816,12 +815,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 57Y47U492U;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = BPSampleApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -829,12 +829,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 57Y47U492U;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = BPSampleApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};

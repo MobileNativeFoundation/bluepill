@@ -55,7 +55,6 @@
     self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.numSims = @2;
     BPApp *app = [BPApp appWithConfig:self.config withError:nil];
-    NSMutableArray *testCasesToSkip = [NSMutableArray new];
     app.testBundles[0].skipTestIdentifiers = @[@"BPSampleAppTests/testCase000", @"BPSampleAppTests/testCase001"];
 
     XCTAssert(app != nil);

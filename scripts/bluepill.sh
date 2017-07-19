@@ -26,7 +26,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 rm -rf build/
-#set -ex
+set -ex
 
 NSUnbufferedIO=YES
 export NSUnbufferedIO
@@ -85,8 +85,9 @@ bluepill_build_sample_app()
     -workspace Bluepill.xcworkspace \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
-    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
-  
+    -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' \
+    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
+
   test $? == 0 || {
           echo Build failed
           cat result.txt
@@ -160,6 +161,7 @@ conf=$1
 
 if [[ $conf == *test** ]]
 then
+    echo "Building Sample App..."
     bluepill_build_sample_app
 fi
 
@@ -167,8 +169,10 @@ if [[ $conf == *instance_tests* ]]
 then
     n=`printf $conf | tail -c 1`
     conf=${conf%?}
+    echo "Running tests: $conf $n"
     bluepill_$conf $n
 else
+    echo "Running $conf"
     bluepill_$conf
 fi
 
