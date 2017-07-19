@@ -147,7 +147,7 @@ void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
 
     // Then start again at the beginning
-    [BPUtils printInfo:INFO withString:@"Start to retry"];
+    [BPUtils printInfo:INFO withString:@"Retrying from scratch"];
     NEXT([self begin]);
 }
 
@@ -180,7 +180,7 @@ void onInterrupt(int ignore) {
   [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
 
   // Then start again from the beginning
-  [BPUtils printInfo:INFO withString:@"Start to recover"];
+  [BPUtils printInfo:INFO withString:@"Recovering from tooling problem"];
   NEXT([self begin]);
 }
 
@@ -198,7 +198,7 @@ void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
     self.context.attemptNumber = self.retries + 1; // set the attempt number
     self.context.exitStatus = BPExitStatusTestsAllPassed; // reset exitStatus
-    [BPUtils printInfo:INFO withString:@"Start to proceed"];
+    [BPUtils printInfo:INFO withString:@"Proceeding to next test"];
     NEXT([self beginWithContext:self.context]);
 }
 
