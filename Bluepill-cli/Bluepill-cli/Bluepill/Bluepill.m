@@ -142,12 +142,46 @@ void onInterrupt(int ignore) {
     self.retries += 1;
 
     // Log some useful information to the log
-    [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
+    [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.context.exitStatus]];
     [BPUtils printInfo:INFO withString:@"Failure Tolerance: %lu", self.failureTolerance];
     [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
 
     // Then start again at the beginning
+    [BPUtils printInfo:INFO withString:@"Retrying from scratch"];
     NEXT([self begin]);
+}
+
+// Recover from scratch if there is tooling failure, such as
+//  - BPExitStatusSimulatorCreationFailed
+//  - BPExitStatusSimulatorCrashed
+//  - BPExitStatusInstallAppFailed
+//  - BPExitStatusUninstallAppFailed
+//  - BPExitStatusLaunchAppFailed
+- (void)recover {
+  // If error retry reach to the max, then return
+  if (self.retries == [self.config.errorRetriesCount integerValue]) {
+      self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+      self.exitLoop = YES;
+      [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
+      return;
+  }
+
+  [self.context.parser cleanup];
+  // If we're not retrying only failed tests, we need to get rid of our saved tests, so that we re-execute everything. Recopy config.
+  if (self.executionConfigCopy.onlyRetryFailed == NO) {
+      self.executionConfigCopy = [self.config copy];
+  }
+  // Increment the retry count
+  self.retries += 1;
+
+  // Log some useful information to the log
+  [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.context.exitStatus]];
+  [BPUtils printInfo:INFO withString:@"Failure Tolerance: %lu", self.failureTolerance];
+  [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
+
+  // Then start again from the beginning
+  [BPUtils printInfo:INFO withString:@"Recovering from tooling problem"];
+  NEXT([self begin]);
 }
 
 // Proceed to next test case
@@ -159,11 +193,12 @@ void onInterrupt(int ignore) {
         return;
     }
     self.retries += 1;
-    [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
+    [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.context.exitStatus]];
     [BPUtils printInfo:INFO withString:@"Failure Tolerance: %lu", self.failureTolerance];
     [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
     self.context.attemptNumber = self.retries + 1; // set the attempt number
     self.context.exitStatus = BPExitStatusTestsAllPassed; // reset exitStatus
+    [BPUtils printInfo:INFO withString:@"Proceeding to next test"];
     NEXT([self beginWithContext:self.context]);
 }
 
@@ -579,7 +614,7 @@ void onInterrupt(int ignore) {
 // Only called when bp is running in the delete only mode.
 - (void)deleteSimulatorOnlyTaskWithContext:(BPExecutionContext *)context {
     
-    if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.deleteSimUDID]]) {        
+    if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.deleteSimUDID]]) {
         NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorDeleted]);
     } else {
         [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to reconnect to simulator %@", context.config.deleteSimUDID]];
@@ -627,13 +662,13 @@ void onInterrupt(int ignore) {
             }
             return;
 
-        // Retry from scratch if there is tooling failure.
+        // Recover from scratch if there is tooling failure.
         case BPExitStatusSimulatorCreationFailed:
         case BPExitStatusSimulatorCrashed:
         case BPExitStatusInstallAppFailed:
         case BPExitStatusUninstallAppFailed:
         case BPExitStatusLaunchAppFailed:
-            NEXT([self retry]);
+            NEXT([self recover]);
             return;
 
         // If it is test hanging or crashing, we set final exit code of current context and proceed.

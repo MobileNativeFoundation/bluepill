@@ -215,7 +215,9 @@
         if (__self.currentOutputId == previousOutputId && (__self.simulatorState >= AppLaunched && __self.simulatorState != Completed)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
             NSString *testName = (__self.currentTestName ?: __self.previousTestName);
+            BOOL testsReallyStarted = [self didTestsStart];
             if (testClass == nil && testName == nil && (__self.simulatorState < TestsStarted)) {
+                testsReallyStarted = false;
                 [BPUtils printInfo:ERROR withString:@"It appears that tests have not yet started. The test app has frozen prior to the first test."];
             } else {
                 [BPUtils printInfo:TIMEOUT withString:@" %10.6fs waiting for output from %@/%@",
@@ -223,7 +225,7 @@
                 [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
             }
             // Set exit status before stopping the tests because stopping the tests will set the SimulatorState to Completed
-            __self.exitStatus = [self didTestsStart] ? BPExitStatusTestTimeout : BPExitStatusAppCrashed;
+            __self.exitStatus = testsReallyStarted ? BPExitStatusTestTimeout : BPExitStatusSimulatorCrashed;
             [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aboorted."
                                   forTestName:testName
                                       inClass:testClass];
