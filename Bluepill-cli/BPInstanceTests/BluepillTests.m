@@ -90,7 +90,7 @@
     self.config.testing_NoAppWillRun = NO;
     self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    XCTAssert(exitCode == BPExitStatusAppCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusAppCrashed, (long)exitCode);
+    XCTAssert(exitCode == BPExitStatusSimulatorCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusAppCrashed, (long)exitCode);
 
     self.config.testing_NoAppWillRun = YES;
 }
@@ -102,11 +102,38 @@
     self.config.testing_NoAppWillRun = NO;
     self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
-    XCTAssert(exitCode == BPExitStatusAppCrashed);
+    XCTAssert(exitCode == BPExitStatusSimulatorCrashed);
 
     self.config.testing_NoAppWillRun = YES;
 }
 
+- (void)testRecoverSimulatorOnCrash {
+    NSString *tempDir = NSTemporaryDirectory();
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/RecoverSimulatorOnCrash", tempDir] withError:nil];
+    self.config.outputDirectory = outputDir;
+
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.testing_HangAppOnLaunch = YES;
+    self.config.testing_NoAppWillRun = NO;
+    self.config.stuckTimeout = @3;
+    self.config.failureTolerance = @0;
+    self.config.errorRetriesCount = @1;
+    BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusSimulatorCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusSimulatorCrashed, (long)exitCode);
+
+    self.config.testing_NoAppWillRun = YES;
+
+    NSString *simulator1Path = [outputDir stringByAppendingPathComponent:@"1-simulator.log"];
+    NSString *simulator2Path = [outputDir stringByAppendingPathComponent:@"2-simulator.log"];
+    NSString *simulator3Path = [outputDir stringByAppendingPathComponent:@"3-simulator.log"];
+    NSString *log1 = [NSString stringWithContentsOfFile:simulator1Path encoding:NSUTF8StringEncoding error:nil];
+    NSString *log2 = [NSString stringWithContentsOfFile:simulator2Path encoding:NSUTF8StringEncoding error:nil];
+    NSString *log3 = [NSString stringWithContentsOfFile:simulator3Path encoding:NSUTF8StringEncoding error:nil];
+    XCTAssert(log1 != nil);
+    XCTAssert(log2 != nil);
+    XCTAssert(log3 == nil);
+}
 
 - (void)testRunningOnlyCertainTestcases {
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];

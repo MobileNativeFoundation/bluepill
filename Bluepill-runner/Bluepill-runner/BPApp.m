@@ -96,9 +96,14 @@
     if (config.xcTestRunDict) {
         NSAssert(config.xcTestRunPath, @"");
         [BPUtils printInfo:INFO withString:@"Using xctestrun configuration"];
-        [allTests addObjectsFromArray:[BPApp testsFromXCTestRunDict:config.xcTestRunDict
-                                                   andXCTestRunPath:config.xcTestRunPath
-                                                          withError:error]];
+        NSArray<BPXCTestFile *> *loadedTests = [BPApp testsFromXCTestRunDict:config.xcTestRunDict
+                                                           andXCTestRunPath:config.xcTestRunPath
+                                                                  withError:error];
+        if (loadedTests == nil) {
+            return nil;
+        }
+
+        [allTests addObjectsFromArray:loadedTests];
     } else if (config.appBundlePath) {
         NSAssert(config.appBundlePath, @"no app bundle and no xctestrun file");
         [BPUtils printInfo:WARNING withString:@"Using broken configuration, consider using .xctestrun files"];

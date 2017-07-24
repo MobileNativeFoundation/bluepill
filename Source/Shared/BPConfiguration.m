@@ -502,10 +502,10 @@ static NSUUID *sessionID;
     }
     // Now check we didn't miss any require options:
     NSMutableArray *errors = [[NSMutableArray alloc] init];
-    if (!(self.appBundlePath && self.schemePath) && !(self.xcTestRunPath)) {
+    if (!(self.appBundlePath && self.schemePath) && !(self.xcTestRunPath) && !(self.deleteSimUDID)) {
         [errors addObject:@"Missing required option: -a/--app and -s/--scheme-path OR --xctestrun-path"];
     }
-    if ((self.program & BP_SLAVE) && !(self.testBundlePath)) {
+    if ((self.program & BP_SLAVE) && !(self.testBundlePath) && !(self.deleteSimUDID)) {
         [errors addObject:@"Missing required option: -t/--test-bundle-path"];
     }
     if (errors.count > 0) {
@@ -571,11 +571,6 @@ static NSUUID *sessionID;
                 }
             }
         }
-        
-        [commandLineArgs addObjectsFromArray:@[
-                                               @"-NSTreatUnknownArgumentsAsOpen", @"NO",
-                                               @"-ApplePersistenceIgnoreState", @"YES"
-                                               ]];
         
         for (NSXMLElement *node in envNodes) {
             NSString *key = [[node attributeForName:@"key"] stringValue];

@@ -67,8 +67,8 @@ A full list supported options are listed here.
 |        num-sims        |           -n           | Number of simulators to run in parallel. (bluepill only)                           |     N    | 4                |
 |      plain-output      |           -p           | Print results in plain text.                                                       |     N    | true             |
 |      printf-config     |           -P           | Print a configuration file suitable for passing back using the `-c` option.        |     N    | n/a              |
-|      error-retries     |           -R           | Number of times we'll recover from app crashing/hanging and continue running       |     N    | 5                |
-|    failure-tolerance   |           -f           | The number of retries on any failures (app crash/test failure)                     |     N    | 0                |
+|      error-retries     |           -R           | Number of times to recover from simulator/app crashing/hanging and continue running|     N    | 5                |
+|    failure-tolerance   |           -f           | Number of times to retry on test failures                                          |     N    | 0                |
 |    only-retry-failed   |           -F           | When `failure-tolerance` > 0, only retry tests that failed                         |     N    | false            |
 |         runtime        |           -r           | What runtime to use.                                                               |     N    | iOS 10.3        |
 |      stuck-timeout     |           -S           | Timeout in seconds for a test that seems stuck (no output).                        |     N    | 300s             |
