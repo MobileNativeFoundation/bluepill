@@ -9,7 +9,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define BP_DEFAULT_RUNTIME "iOS 10.3"
+#define BP_DEFAULT_RUNTIME "iOS 11.0"
 #define BP_DEFAULT_DEVICE_TYPE "iPhone 7"
 
 static const NSString * kCFBundleIdentifier = @"CFBundleIdentifier";
