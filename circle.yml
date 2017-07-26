@@ -1,6 +1,6 @@
 machine:
   xcode:
-    version: 9.0 Beta 2
+    version: 9.0
 
 compile:
   override:
