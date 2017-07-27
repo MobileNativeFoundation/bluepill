@@ -32,8 +32,6 @@
 // runtime
 #import <objc/runtime.h>
 
-#define BP_PROTOCOL_VERSION 22
-
 static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 @interface BPTestBundleConnection()<XCTestManager_IDEInterface>
@@ -105,7 +103,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
                                                            _IDE_initiateSessionWithIdentifier:self.config.sessionIdentifier
                                                            forClient:[self clientProcessUniqueIdentifier]
                                                            atPath:path
-                                                           protocolVersion:@(22)];
+                                                           protocolVersion:@(BP_TM_PROTOCOL_VERSION)];
             [receipt handleCompletion:^(NSNumber *version, NSError *error){
                 if (error || !version) {
                     [BPUtils printInfo:ERROR withString:@"Retry count: %@", error];
@@ -120,7 +118,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 - (void)startTestPlan {
     dispatch_async(self.queue, ^{
         [BPUtils printInfo:INFO withString:@"Test plan started!"];
-        [self.testBundleProxy _IDE_startExecutingTestPlanWithProtocolVersion:@(BP_PROTOCOL_VERSION)];
+        [self.testBundleProxy _IDE_startExecutingTestPlanWithProtocolVersion:@(BP_TM_PROTOCOL_VERSION)];
     });
 }
 
@@ -296,67 +294,83 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 #pragma mark - Unimplemented
 
 - (id)_XCT_nativeFocusItemDidChangeAtTime:(NSNumber *)arg1 parameterSnapshot:(XCElementSnapshot *)arg2 applicationSnapshot:(XCElementSnapshot *)arg3 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: nativeFocusItemDidChangeAtATime"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedEventNames:(NSArray *)arg1 timestamp:(NSNumber *)arg2 duration:(NSNumber *)arg3 startLocation:(NSDictionary *)arg4 startElementSnapshot:(XCElementSnapshot *)arg5 startApplicationSnapshot:(XCElementSnapshot *)arg6 endLocation:(NSDictionary *)arg7 endElementSnapshot:(XCElementSnapshot *)arg8 endApplicationSnapshot:(XCElementSnapshot *)arg9 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: recordedEventNames"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedOrientationChange:(NSString *)arg1 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: recordedOrientationChange"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedFirstResponderChangedWithApplicationSnapshot:(XCElementSnapshot *)arg1 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: recordedFirstResponderChanged"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_exchangeCurrentProtocolVersion:(NSNumber *)arg1 minimumVersion:(NSNumber *)arg2 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: exhangeCurrentProtocolVersion"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedKeyEventsWithApplicationSnapshot:(XCElementSnapshot *)arg1 characters:(NSString *)arg2 charactersIgnoringModifiers:(NSString *)arg3 modifierFlags:(NSNumber *)arg4 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: recordedKeyEventsWithApplicationSnapshot"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedEventNames:(NSArray *)arg1 duration:(NSNumber *)arg2 startLocation:(NSDictionary *)arg3 startElementSnapshot:(XCElementSnapshot *)arg4 startApplicationSnapshot:(XCElementSnapshot *)arg5 endLocation:(NSDictionary *)arg6 endElementSnapshot:(XCElementSnapshot *)arg7 endApplicationSnapshot:(XCElementSnapshot *)arg8 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: recordedEventNames"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedKeyEventsWithCharacters:(NSString *)arg1 charactersIgnoringModifiers:(NSString *)arg2 modifierFlags:(NSNumber *)arg3 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: recordedKeyEventsWithCharacters"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedEventNames:(NSArray *)arg1 duration:(NSNumber *)arg2 startElement:(XCAccessibilityElement *)arg3 startApplicationSnapshot:(XCElementSnapshot *)arg4 endElement:(XCAccessibilityElement *)arg5 endApplicationSnapshot:(XCElementSnapshot *)arg6 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: recordedEventsName"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedEvent:(NSString *)arg1 targetElementID:(NSDictionary *)arg2 applicationSnapshot:(XCElementSnapshot *)arg3 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: recordedEvent"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedEvent:(NSString *)arg1 forElement:(NSString *)arg2 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: recordedEvent"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_testMethod:(NSString *)arg1 ofClass:(NSString *)arg2 didMeasureMetric:(NSDictionary *)arg3 file:(NSString *)arg4 line:(NSNumber *)arg5 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: testMethod"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 didStallOnMainThreadInFile:(NSString *)arg3 line:(NSNumber *)arg4 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: testCase"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_testMethod:(NSString *)arg1 ofClass:(NSString *)arg2 didMeasureValues:(NSArray *)arg3 forPerformanceMetricID:(NSString *)arg4 name:(NSString *)arg5 withUnits:(NSString *)arg6 baselineName:(NSString *)arg7 baselineAverage:(NSNumber *)arg8 maxPercentRegression:(NSNumber *)arg9 maxPercentRelativeStandardDeviation:(NSNumber *)arg10 file:(NSString *)arg11 line:(NSNumber *)arg12
 {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: testMethod..."];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_testBundleReady {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: testBundle Ready!]"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (NSString *)unknownMessageForSelector:(SEL)aSelector {
+    [BPUtils printInfo:DEBUGINFO withString:@"XCT: unknownMessageForSelector: %@", aSelector];
     return [NSString stringWithFormat:@"Received call for unhandled method (%@). Probably you should have a look at _IDETestManagerAPIMediator in IDEFoundation.framework and implement it. Good luck!", NSStringFromSelector(aSelector)];
 }
 

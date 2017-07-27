@@ -19,10 +19,11 @@
     NSObject<OS_dispatch_queue> *_queue;
     NSObject<OS_dispatch_semaphore> *_acqSem;
     DTXResourceTracker *_parentTracker;
-    _Bool _log;
+    BOOL _log;
 }
 
-@property(nonatomic) _Bool log; // @synthesize log=_log;
+@property(nonatomic) BOOL log; // @synthesize log=_log;
+- (void).cxx_destruct;
 - (void)resumeLimits;
 - (void)suspendLimits;
 - (void)releaseSize:(unsigned long long)arg1;
@@ -30,7 +31,6 @@
 - (unsigned int)acquireSize:(unsigned long long)arg1;
 @property(nonatomic) unsigned long long maxChunkSize;
 @property(nonatomic) unsigned long long totalSize;
-- (void)dealloc;
 - (id)init;
 
 @end

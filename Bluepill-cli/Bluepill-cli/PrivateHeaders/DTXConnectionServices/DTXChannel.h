@@ -14,22 +14,24 @@
 {
     NSString *_label;
     DTXConnection *_connection;
+    DTXConnection *_strongConnection;
     NSObject<OS_dispatch_queue> *_serialQueue;
     NSObject<OS_dispatch_queue> *_atomicHandlers;
     id <DTXAllowedRPC> _dispatchTarget;
     CDUnknownBlockType _messageHandler;
     CDUnknownBlockType _dispatchValidator;
-    _Bool _canceled;
+    BOOL _canceled;
     unsigned int _channelCode;
     int _compressionTypeHint;
 }
 
-@property(nonatomic) int compressionTypeHint; // @synthesize compressionTypeHint=_compressionTypeHint;
+@property int compressionTypeHint; // @synthesize compressionTypeHint=_compressionTypeHint;
 @property(readonly, nonatomic) unsigned int channelCode; // @synthesize channelCode=_channelCode;
-@property _Bool isCanceled; // @synthesize isCanceled=_canceled;
+@property BOOL isCanceled; // @synthesize isCanceled=_canceled;
+- (void).cxx_destruct;
 - (void)sendMessageSync:(id)arg1 replyHandler:(CDUnknownBlockType)arg2;
 - (void)sendMessage:(id)arg1 replyHandler:(CDUnknownBlockType)arg2;
-- (_Bool)sendMessageAsync:(id)arg1 replyHandler:(CDUnknownBlockType)arg2;
+- (BOOL)sendMessageAsync:(id)arg1 replyHandler:(CDUnknownBlockType)arg2;
 - (void)sendControlSync:(id)arg1 replyHandler:(CDUnknownBlockType)arg2;
 - (void)sendControlAsync:(id)arg1 replyHandler:(CDUnknownBlockType)arg2;
 - (void)_setTargetQueue:(id)arg1;
@@ -39,12 +41,10 @@
 - (void)registerDisconnectHandler:(CDUnknownBlockType)arg1;
 - (void)_setDispatchValidator:(CDUnknownBlockType)arg1;
 @property(retain) id <DTXAllowedRPC> dispatchTarget;
-@property(copy) CDUnknownBlockType messageHandler;
-- (id)label;
-- (void)setLabel:(id)arg1;
+@property(copy, nonatomic) CDUnknownBlockType messageHandler;
+@property(copy, nonatomic) NSString *label;
 - (void)_scheduleMessage:(id)arg1 tracker:(id)arg2 withHandler:(CDUnknownBlockType)arg3;
 - (void)_scheduleBlock:(CDUnknownBlockType)arg1;
-- (void)dealloc;
 - (id)initWithConnection:(id)arg1 channelIdentifier:(unsigned int)arg2 label:(id)arg3;
 
 // Remaining properties

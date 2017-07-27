@@ -17,7 +17,6 @@
 - (void)invokeCompletionWithReturnValue:(id)arg1 error:(id)arg2;
 - (void)handleCompletion:(void(^)(NSNumber *version, NSError *error))arg1;
 - (void)_checkedAssign:(CDUnknownBlockType)arg1;
-- (void)dealloc;
 - (id)init;
 
 @end
