@@ -9,9 +9,6 @@
 
 #import <Foundation/Foundation.h>
 #import "CoreSimulator.h"
-#import "DVTiPhoneSimulatorRemoteClient.h"
-#import "DVTFoundation.h"
-#import "SimulatorKit.h"
 #import "BPStats.h"
 #import "BPWriter.h"
 #import "BPConfiguration.h"
