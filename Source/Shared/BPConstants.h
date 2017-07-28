@@ -12,6 +12,7 @@
 #define BP_DEFAULT_RUNTIME "iOS 11.0"
 #define BP_DEFAULT_DEVICE_TYPE "iPhone 7"
 #define BP_TM_PROTOCOL_VERSION 24
+#define BP_DAEMON_PROTOCOL_VERSION 17
 
 static const NSString * kCFBundleIdentifier = @"CFBundleIdentifier";
 static const NSString * kOptionsArgumentsKey = @"arguments";

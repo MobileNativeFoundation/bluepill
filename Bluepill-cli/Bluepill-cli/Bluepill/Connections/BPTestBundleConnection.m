@@ -10,6 +10,7 @@
 #import "BPUtils.h"
 #import "BPTestDaemonConnection.h"
 #import "BPConstants.h"
+#import "SimulatorHelper.h"
 
 // XCTest framework
 #import "XCTestManager_IDEInterface-Protocol.h"
@@ -207,9 +208,12 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment
 {
+    NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
+    [env addEntriesFromDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:bundleID device:nil config:_config]];
+    [env addEntriesFromDictionary:environment];
     NSDictionary *options = @{
                               @"arguments": arguments,
-                              @"environment": environment,
+                              @"environment": env,
                               };
     NSError *error;
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
@@ -219,8 +223,9 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
         [BPUtils printInfo:ERROR withString:@"Launch application during UI tests failed %@", error];
         return nil;
     }
-    [BPUtils printInfo:DEBUGINFO withString:@"Launching app: %@", bundleID];
-    self.appProcessPID = [self.simulator.device launchApplicationWithID:bundleID options:options error:nil];
+    [BPUtils printInfo:DEBUGINFO withString:@"Launching app: %@ with options %@", bundleID, options];
+    
+    self.appProcessPID = [self.simulator.device launchApplicationWithID:bundleID options:options error:&error];
     self.bundleID = bundleID;
     if (error) {
         [BPUtils printInfo:ERROR withString:@"Launch application during UI tests failed %@", error];
@@ -248,46 +253,55 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 #pragma mark iOS 10.x
 - (id)_XCT_handleCrashReportData:(NSData *)arg1 fromFileWithName:(NSString *)arg2 {
+    [BPUtils printInfo:DEBUGINFO withString:@""];
     return nil;
 }
 
 #pragma mark Test Suite Progress
 
 - (id)_XCT_testSuite:(NSString *)tests didStartAt:(NSString *)time {
+    [BPUtils printInfo:DEBUGINFO withString:@"_XCT_testSuite"];
     return nil;
 }
 
 - (id)_XCT_testCaseDidStartForTestClass:(NSString *)testClass method:(NSString *)method {
+    [BPUtils printInfo:DEBUGINFO withString:@"_XCT_testCaseDidStartForTestClass"];
     return nil;
 }
 
 - (id)_XCT_testCaseDidFailForTestClass:(NSString *)testClass method:(NSString *)method withMessage:(NSString *)message file:(NSString *)file line:(NSNumber *)line {
+    [BPUtils printInfo:DEBUGINFO withString:@"_XCT_testCaseDidFailForTestClass"];
     return nil;
 }
 
 // This looks like tested application logs
 - (id)_XCT_logDebugMessage:(NSString *)debugMessage {
+    [BPUtils printInfo:DEBUGINFO withString:@"TBC: _XCT_logDebugMessage: %@", debugMessage];
     return nil;
 }
 
 - (id)_XCT_logMessage:(NSString *)message {
+    [BPUtils printInfo:DEBUGINFO withString:@"_XCT_logMessage: %@", message];
     return nil;
 }
 
 - (id)_XCT_testCaseDidFinishForTestClass:(NSString *)testClass method:(NSString *)method withStatus:(NSString *)statusString duration:(NSNumber *)duration {
+    [BPUtils printInfo:DEBUGINFO withString:@"_XCT_testCaseDidFinishForTestClass"];
     return nil;
 }
 
 - (id)_XCT_testSuite:(NSString *)arg1 didFinishAt:(NSString *)time runCount:(NSNumber *)count withFailures:(NSNumber *)failureCount unexpected:(NSNumber *)unexpectedCount testDuration:(NSNumber *)testDuration totalDuration:(NSNumber *)totalTime {
+    [BPUtils printInfo:DEBUGINFO withString:@"_XCT_testSuite"];
     return nil;
 }
 
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 didFinishActivity:(XCActivityRecord *)arg3 {
-
+    [BPUtils printInfo:DEBUGINFO withString:@"_XCT_testCase"];
     return nil;
 }
 
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 willStartActivity:(XCActivityRecord *)arg3 {
+    [BPUtils printInfo:DEBUGINFO withString:@"_XCT_testCase"];
     return nil;
 }
 

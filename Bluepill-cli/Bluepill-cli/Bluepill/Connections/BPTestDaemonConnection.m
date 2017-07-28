@@ -71,7 +71,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
     [channel setExportedObject:self queue:dispatch_get_main_queue()];
     id<XCTestManager_DaemonConnectionInterface> daemonProxy = (id<XCTestManager_DaemonConnectionInterface>)channel.remoteObjectProxy;
-    DTXRemoteInvocationReceipt *receipt = [daemonProxy _IDE_initiateControlSessionForTestProcessID:@(self.testRunnerPid) protocolVersion:@(BP_TM_PROTOCOL_VERSION)];
+    DTXRemoteInvocationReceipt *receipt = [daemonProxy _IDE_initiateControlSessionForTestProcessID:@(self.testRunnerPid) protocolVersion:@(BP_DAEMON_PROTOCOL_VERSION)];
     [receipt handleCompletion:^(NSNumber *version, NSError *error) {
         if (error) {
             [BPUtils printInfo:ERROR withString:@"Error with daemon connection: %@", [error localizedDescription]];
@@ -174,7 +174,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 }
 
 - (id)_XCT_logDebugMessage:(NSString *)debugMessage {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_logDebugMessage: %@", debugMessage];
+    [BPUtils printInfo:DEBUGINFO withString:@"Daemon: _XCT_logDebugMessage: %@", debugMessage];
     return nil;
 }
 
