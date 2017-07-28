@@ -6,7 +6,7 @@
 
 @import Foundation;
 
-@class NSMachPort, NSObject, NSString;
+@class NSMachPort, NSObject, NSObject, NSString;
 
 @interface SimMachPortServer : NSObject
 {
@@ -16,13 +16,12 @@
     NSObject *_serverSource;
 }
 
-@property(retain, nonatomic) NSObject *serverSource; // @synthesize serverSource=_serverSource;
-@property(retain, nonatomic) NSObject *serverQueue; // @synthesize serverQueue=_serverQueue;
-@property(readonly, nonatomic) NSString *name; // @synthesize name=_name;
-@property(readonly, nonatomic) NSMachPort *port; // @synthesize port=_port;
-//- (void).cxx_destruct;
+@property(retain, nonatomic) NSObject<OS_dispatch_source> *serverSource; // @synthesize serverSource=_serverSource;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *serverQueue; // @synthesize serverQueue=_serverQueue;
+@property(retain, nonatomic) NSString *name; // @synthesize name=_name;
+@property(retain, nonatomic) NSMachPort *port; // @synthesize port=_port;
 - (id)description;
-- (id)initWithName:(id)arg1 machMessageHandler:(const CDUnknownFunctionPointerType)arg2 machMessageSize:(unsigned int)arg3 error:(id *)arg4;
+- (id)initWithName:(id)arg1 machMessageHandler:(CDUnknownFunctionPointerType)arg2 machMessageSize:(unsigned int)arg3;
 
 @end
 

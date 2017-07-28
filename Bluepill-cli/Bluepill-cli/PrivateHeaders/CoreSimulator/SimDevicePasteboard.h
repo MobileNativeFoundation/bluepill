@@ -8,25 +8,31 @@
 
 #import "SimPasteboard-Protocol.h"
 
-@class NSArray, NSObject, SimDevice, SimDeviceNotificationManager, SimDevicePasteboardConnection, SimMachPortServer;
+@class NSArray, NSDate, NSObject, SimDevice, SimDeviceNotificationManager, SimDevicePasteboardConnection, SimMachPortServer;
 
 @interface SimDevicePasteboard : NSObject <SimPasteboard>
 {
-    NSObject *_itemsQueue;
+    NSObject<OS_dispatch_queue> *_itemsQueue;
     unsigned long long _changeCount;
     NSArray *_items;
     SimDevice *_device;
     SimDevicePasteboardConnection *_pasteboardConnection;
     SimMachPortServer *_notificationServer;
     SimDeviceNotificationManager *_notificationManager;
-    unsigned long long _registeredID;
+    unsigned long long _bootMonitorRegistrationID;
     SimMachPortServer *_promisedDataServer;
+    NSObject *_subscriptionStateQueue;
+    NSDate *_lastConnectionTime;
+    NSObject *_lifecycleSource;
     NSArray *_stagedItems;
 }
 
 @property(retain) NSArray *stagedItems; // @synthesize stagedItems=_stagedItems;
+@property(retain, nonatomic) NSObject *lifecycleSource; // @synthesize lifecycleSource=_lifecycleSource;
+@property(retain, nonatomic) NSDate *lastConnectionTime; // @synthesize lastConnectionTime=_lastConnectionTime;
+@property(retain, nonatomic) NSObject *subscriptionStateQueue; // @synthesize subscriptionStateQueue=_subscriptionStateQueue;
 @property(retain, nonatomic) SimMachPortServer *promisedDataServer; // @synthesize promisedDataServer=_promisedDataServer;
-@property(nonatomic) unsigned long long registeredID; // @synthesize registeredID=_registeredID;
+@property(nonatomic) unsigned long long bootMonitorRegistrationID; // @synthesize bootMonitorRegistrationID=_bootMonitorRegistrationID;
 @property(retain, nonatomic) SimDeviceNotificationManager *notificationManager; // @synthesize notificationManager=_notificationManager;
 @property(retain, nonatomic) SimMachPortServer *notificationServer; // @synthesize notificationServer=_notificationServer;
 @property(retain, nonatomic) SimDevicePasteboardConnection *pasteboardConnection; // @synthesize pasteboardConnection=_pasteboardConnection;
@@ -37,7 +43,6 @@
 //- (void).cxx_destruct;
 - (BOOL)unregisterNotificationHandler:(unsigned long long)arg1 error:(id *)arg2;
 - (unsigned long long)registerNotificationHandlerOnQueue:(id)arg1 handler:(CDUnknownBlockType)arg2;
-- (unsigned long long)registerNotificationHandler:(CDUnknownBlockType)arg1;
 - (void)syncBarrier;
 - (unsigned long long)setPasteboardWithItems:(id)arg1 error:(id *)arg2;
 - (void)setPasteboardAsyncWithItems:(id)arg1 completionQueue:(id)arg2 completionHandler:(CDUnknownBlockType)arg3;
@@ -46,10 +51,11 @@
 - (id)generateSimPasteboardItemsWithTypes:(id)arg1 changeCount:(unsigned long long)arg2;
 - (void)setItems:(id)arg1 changeCount:(unsigned long long)arg2;
 - (void)pasteboardHasChanged:(unsigned long long)arg1 itemsTypes:(id)arg2;
-- (void)unsubscribe;
-- (void)subscribe;
+- (void)_onSubscriptionStateQueue_unsubscribe;
+- (void)addDisconnectMonitorPort:(unsigned int)arg1;
+- (void)startMonitorLifecyclePort;
+- (void)_onSubscriptionStateQueue_subscribe;
 - (id)description;
-- (void)registerSimDeviceNotificationListener;
 - (void)dealloc;
 - (id)initWithDevice:(id)arg1;
 

@@ -4,29 +4,40 @@
 //     class-dump is Copyright (C) 1997-1998, 2000-2001, 2004-2013 by Steve Nygard.
 //
 
-#import "SimDeviceIO.h"
+#import "CoreSimulator.h"
 
 #import "SimDeviceIOInterface-Protocol.h"
 
-@class NSArray, NSDictionary;
+@class NSArray, NSDictionary, NSString;
 
 @interface SimDeviceIOServer : SimDeviceIO <SimDeviceIOInterface>
 {
     NSDictionary *_loadedBundles;
+    NSDictionary *_loadedBundlesByPortClass;
     NSArray *_ioPorts;
-    NSArray *_ioPortProxies;
 }
 
-@property(retain, nonatomic) NSArray *ioPortProxies; // @synthesize ioPortProxies=_ioPortProxies;
 @property(retain, nonatomic) NSArray *ioPorts; // @synthesize ioPorts=_ioPorts;
+@property(retain, nonatomic) NSDictionary *loadedBundlesByPortClass; // @synthesize loadedBundlesByPortClass=_loadedBundlesByPortClass;
 @property(retain, nonatomic) NSDictionary *loadedBundles; // @synthesize loadedBundles=_loadedBundles;
 //- (void).cxx_destruct;
+- (BOOL)notificationSetState:(unsigned long long)arg1 name:(id)arg2 error:(id *)arg3;
+- (BOOL)notificationGetState:(unsigned long long *)arg1 name:(id)arg2 error:(id *)arg3;
+- (BOOL)postNotification:(id)arg1 error:(id *)arg2;
 - (BOOL)unregisterService:(id)arg1 error:(id *)arg2;
 - (BOOL)registerPort:(unsigned int)arg1 service:(id)arg2 error:(id *)arg3;
-- (id)tvOutDisplayDescriptorState;
-- (id)mainDisplayDescriptorState;
+- (id)audioHostRouteDescriptorState;
+- (id)externalDisplayDescriptorState;
+- (id)internalDisplayDescriptorState;
+- (id)legacyHIDDescriptorState;
 - (BOOL)unloadAllBundles;
 - (BOOL)loadAllBundles;
+
+// Remaining properties
+@property(readonly, copy) NSString *debugDescription;
+@property(readonly, copy) NSString *description;
+@property(readonly) unsigned long long hash;
+@property(readonly) Class superclass;
 
 @end
 

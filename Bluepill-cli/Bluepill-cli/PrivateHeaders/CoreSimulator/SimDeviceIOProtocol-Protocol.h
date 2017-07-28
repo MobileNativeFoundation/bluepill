@@ -6,12 +6,9 @@
 
 @import Foundation;
 
-
-@class NSArray<SimDeviceIOPortInterface>, NSObject, NSObject, NSUUID;
+@class NSArray, NSObject, NSUUID;
 
 @protocol SimDeviceIOProtocol <NSObject>
-- (void)detachConsumer:(NSObject *)arg1 fromPort:(NSObject *)arg2;
-- (void)attachConsumer:(NSObject *)arg1 toPort:(NSObject *)arg2;
 - (NSArray *)ioPorts;
 - (NSObject *)ioPortForUUID:(NSUUID *)arg1;
 @end

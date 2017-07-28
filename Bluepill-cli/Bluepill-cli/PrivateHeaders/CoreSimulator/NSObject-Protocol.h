@@ -6,7 +6,6 @@
 
 @class NSString, Protocol;
 
-/*
 @protocol NSObject
 @property(readonly, copy) NSString *description;
 @property(readonly) Class superclass;
@@ -31,4 +30,4 @@
 @optional
 @property(readonly, copy) NSString *debugDescription;
 @end
-*/
+

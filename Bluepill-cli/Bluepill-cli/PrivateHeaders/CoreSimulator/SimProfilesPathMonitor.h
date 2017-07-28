@@ -5,7 +5,6 @@
 //
 
 @import Foundation;
-
 @class NSArray, NSMutableArray, NSMutableDictionary, NSObject, SimServiceContext;
 
 @interface SimProfilesPathMonitor : NSObject
@@ -20,15 +19,14 @@
 @property(nonatomic) __weak SimServiceContext *serviceContext; // @synthesize serviceContext=_serviceContext;
 @property(retain, nonatomic) NSMutableDictionary *monitoredPathsDict; // @synthesize monitoredPathsDict=_monitoredPathsDict;
 @property(retain, nonatomic) NSMutableArray *leafMonitorSources; // @synthesize leafMonitorSources=_leafMonitorSources;
-@property(retain, nonatomic) NSObject *monitorQueue; // @synthesize monitorQueue=_monitorQueue;
-//- (void).cxx_destruct;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *monitorQueue; // @synthesize monitorQueue=_monitorQueue;
 - (void)_monitorProfilesSubDirectory:(int)arg1 path:(id)arg2 updateBlock:(CDUnknownBlockType)arg3;
 - (void)_monitorProfilesDirectory:(int)arg1 path:(id)arg2 forSubDirectory:(id)arg3 updateBlock:(CDUnknownBlockType)arg4;
 - (void)_monitorProfilesDirectory:(int)arg1 path:(id)arg2;
 - (void)_monitorProfilesParentDirectory:(int)arg1 nextPathComponent:(id)arg2 path:(id)arg3;
 - (void)_monitorProfilesPath:(id)arg1;
 - (void)fence;
-@property(readonly, copy) NSArray *monitoredPaths;
+@property(readonly, nonatomic) NSArray *monitoredPaths;
 - (void)monitorProfilesPath:(id)arg1;
 - (void)monitorDefaultProfilePaths;
 - (id)initWithContext:(id)arg1;

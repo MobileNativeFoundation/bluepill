@@ -6,7 +6,7 @@
 
 @import Foundation;
 
-@class NSArray, NSBundle, NSDictionary, NSString;
+@class NSArray, NSBundle, NSDictionary, NSString, NSURL;
 
 @interface SimDeviceType : NSObject
 {
@@ -22,10 +22,12 @@
     NSArray *_supportedArchs;
     NSArray *_supportedProductFamilyIDs;
     NSDictionary *_capabilities;
+    NSURL *_framebufferMaskURL;
+    NSString *_chromeIdentifier;
     NSString *_springBoardConfigName;
     NSString *_productClass;
     NSDictionary *_environment_extra;
-    NSDictionary *_aliases;
+    NSArray *_aliases;
     NSDictionary *_supportedFeatures;
     NSDictionary *_supportedFeaturesConditionalOnRuntime;
     struct CGSize _mainScreenSize;
@@ -34,7 +36,7 @@
 
 @property(copy, nonatomic) NSDictionary *supportedFeaturesConditionalOnRuntime; // @synthesize supportedFeaturesConditionalOnRuntime=_supportedFeaturesConditionalOnRuntime;
 @property(copy, nonatomic) NSDictionary *supportedFeatures; // @synthesize supportedFeatures=_supportedFeatures;
-@property(copy, nonatomic) NSDictionary *aliases; // @synthesize aliases=_aliases;
+@property(copy, nonatomic) NSArray *aliases; // @synthesize aliases=_aliases;
 @property(copy, nonatomic) NSDictionary *environment_extra; // @synthesize environment_extra=_environment_extra;
 @property(copy, nonatomic) NSString *productClass; // @synthesize productClass=_productClass;
 @property(copy, nonatomic) NSString *springBoardConfigName; // @synthesize springBoardConfigName=_springBoardConfigName;
@@ -44,6 +46,8 @@
 @property(nonatomic) unsigned int minRuntimeVersion; // @synthesize minRuntimeVersion=_minRuntimeVersion;
 @property(nonatomic) struct CGSize mainScreenDPI; // @synthesize mainScreenDPI=_mainScreenDPI;
 @property(nonatomic) struct CGSize mainScreenSize; // @synthesize mainScreenSize=_mainScreenSize;
+@property(retain, nonatomic) NSString *chromeIdentifier; // @synthesize chromeIdentifier=_chromeIdentifier;
+@property(copy, nonatomic) NSURL *framebufferMaskURL; // @synthesize framebufferMaskURL=_framebufferMaskURL;
 @property(copy, nonatomic) NSDictionary *capabilities; // @synthesize capabilities=_capabilities;
 @property(nonatomic) float mainScreenScale; // @synthesize mainScreenScale=_mainScreenScale;
 @property(copy, nonatomic) NSArray *supportedProductFamilyIDs; // @synthesize supportedProductFamilyIDs=_supportedProductFamilyIDs;
@@ -52,7 +56,6 @@
 @property(copy, nonatomic) NSString *modelIdentifier; // @synthesize modelIdentifier=_modelIdentifier;
 @property(copy, nonatomic) NSString *identifier; // @synthesize identifier=_identifier;
 @property(copy, nonatomic) NSString *name; // @synthesize name=_name;
-//- (void).cxx_destruct;
 - (Class)deviceClass;
 - (long long)compare:(id)arg1;
 - (BOOL)supportsFeatureConditionally:(id)arg1;
@@ -60,6 +63,7 @@
 - (id)environment;
 @property(readonly, nonatomic) NSString *productFamily;
 @property(readonly, nonatomic) int productFamilyID;
+- (id)debugDescription;
 - (id)description;
 - (id)initWithBundle:(id)arg1;
 - (id)initWithPath:(id)arg1;

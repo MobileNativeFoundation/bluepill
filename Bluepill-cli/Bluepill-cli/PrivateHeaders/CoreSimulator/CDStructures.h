@@ -17,7 +17,7 @@ struct CGSize {
     double width;
     double height;
 };
-*/
+ */
 
 struct NSDictionary {
     Class _field1;
