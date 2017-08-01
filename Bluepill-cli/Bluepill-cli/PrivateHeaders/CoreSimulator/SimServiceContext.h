@@ -33,7 +33,7 @@
 + (void)setSharedContextConnectionType:(long long)arg1;
 + (id)serviceContextForDeveloperDir:(id)arg1 connectionType:(long long)arg2 error:(id *)arg3;
 + (id)sharedServiceContextForDeveloperDir:(id)arg1 error:(id *)arg2;
-@property(retain, nonatomic) NSObject<OS_dispatch_queue> *allDeviceSetsQueue; // @synthesize allDeviceSetsQueue=_allDeviceSetsQueue;
+@property(retain, nonatomic) NSObject *allDeviceSetsQueue; // @synthesize allDeviceSetsQueue=_allDeviceSetsQueue;
 @property(nonatomic) BOOL initialized; // @synthesize initialized=_initialized;
 @property(retain, nonatomic) NSObject<OS_dispatch_queue> *profileQueue; // @synthesize profileQueue=_profileQueue;
 @property(retain, nonatomic) SimProfilesPathMonitor *profileMonitor; // @synthesize profileMonitor=_profileMonitor;
