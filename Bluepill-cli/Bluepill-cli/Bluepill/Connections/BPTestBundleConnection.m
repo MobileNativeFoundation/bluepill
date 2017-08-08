@@ -104,7 +104,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
                                                            _IDE_initiateSessionWithIdentifier:self.config.sessionIdentifier
                                                            forClient:[self clientProcessUniqueIdentifier]
                                                            atPath:path
-                                                           protocolVersion:@(BP_TM_PROTOCOL_VERSION)];
+                                                           protocolVersion:@(BP_DAEMON_PROTOCOL_VERSION)];
             [receipt handleCompletion:^(NSNumber *version, NSError *error){
                 if (error || !version) {
                     [BPUtils printInfo:ERROR withString:@"Retry count: %@", error];
