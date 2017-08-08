@@ -111,95 +111,95 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 #pragma mark Process Launch Delegation
 
 - (id)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_launchProcessWithPath: %@", path];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_launchProcessWithPath: %@, bundleID: %@, arguments: %@, environmentVariables: %@", path, bundleID, arguments, environment];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_getProgressForLaunch:(id)token {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_getProgressForLaunch"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_getProgressForLaunch token: %@", token];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_terminateProcess:(id)token {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_terminateProcess"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_terminateProcess token: %@", token];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_didBeginExecutingTestPlan {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_didBeginExecutingTestPlan"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_didBeginExecutingTestPlan"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_didFinishExecutingTestPlan {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_didFinishExecutingTestPlan"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_didFinishExecutingTestPlan"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 #pragma mark iOS 10.x
 - (id)_XCT_handleCrashReportData:(NSData *)arg1 fromFileWithName:(NSString *)arg2 {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_handleCrashReportData"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_handleCrashReportData: %@, fromFileWithName: %@", arg1, arg2];
     return nil;
 }
 
 - (id)_XCT_didBeginInitializingForUITesting {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_didBeginInitializingForUITesting"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_didBeginInitializingForUITesting"];
     return nil;
 }
 
 - (id)_XCT_initializationForUITestingDidFailWithError:(NSError *)error {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_initializationForUITestingDidFailWithError: %@", error];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_initializationForUITestingDidFailWithError : %@", error];
     return nil;
 }
 
 - (id)_XCT_testBundleReadyWithProtocolVersion:(NSNumber *)protocolVersion minimumVersion:(NSNumber *)minimumVersion {
-    [BPUtils printInfo:INFO withString:@"Test bundle is ready (%u, %u)", protocolVersion, minimumVersion];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_testBundleReadyWithProtocolVersion : %@, minimumVersion: %@", protocolVersion, minimumVersion];
     return nil;
 }
 
 #pragma mark Test Suite Progress
 
 - (id)_XCT_testSuite:(NSString *)tests didStartAt:(NSString *)time {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: testSuite"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_testSuite : %@, didStartAt: %@", tests, time];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_testCaseDidStartForTestClass:(NSString *)testClass method:(NSString *)method {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_testCaseDidStartForTestClass"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_testCaseDidStartForTestClass : %@, method: %@", testClass, method];
     return nil;
 }
 
 - (id)_XCT_testCaseDidFailForTestClass:(NSString *)testClass method:(NSString *)method withMessage:(NSString *)message file:(NSString *)file line:(NSNumber *)line {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_testCaseDidFailForTestClass"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_testCaseDidFailForTestClass : %@, method: %@, withMessage: %@, file: %@, line: %@", testClass, method, message, file, line];
     return nil;
 }
 
 - (id)_XCT_logDebugMessage:(NSString *)debugMessage {
-    [BPUtils printInfo:DEBUGINFO withString:@"Daemon: _XCT_logDebugMessage: %@", debugMessage];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_logDebugMessage: %@", debugMessage];
     return nil;
 }
 
 - (id)_XCT_logMessage:(NSString *)message {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_logMessage: %@", message];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_logMessage: %@", message];
     return nil;
 }
 
 - (id)_XCT_testCaseDidFinishForTestClass:(NSString *)testClass method:(NSString *)method withStatus:(NSString *)statusString duration:(NSNumber *)duration {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_testCaseDidFinishForTestClass"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_testCaseDidFinishForTestClass: %@, method: %@, withStatus: %@, duration: %@", testClass, method, statusString, duration];
     return nil;
 }
 
 - (id)_XCT_testSuite:(NSString *)arg1 didFinishAt:(NSString *)arg2 runCount:(NSNumber *)arg3 withFailures:(NSNumber *)arg4 unexpected:(NSNumber *)arg5 testDuration:(NSNumber *)arg6 totalDuration:(NSNumber *)arg7 {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_testSuite"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_testSuite: %@, didFinishAt: %@, runCount: %@, withFailures: %@, unexpected: %@, testDuration: %@, totalDuration: %@", arg1, arg2, arg3, arg4, arg5, arg6, arg7];
     return nil;
 }
 
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 didFinishActivity:(XCActivityRecord *)arg3 {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_testCase"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_testCase: %@, method: %@, didFinishActivity: %@", arg1, arg2, arg3];
     return nil;
 }
 
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 willStartActivity:(XCActivityRecord *)arg3 {
-    [BPUtils printInfo:DEBUGINFO withString:@"XCT: _XCT_testCase"];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestDaemonConnection_XCT_testCase: %@, method: %@, willStartActivity: %@", arg1, arg2, arg3];
     return nil;
 }
 

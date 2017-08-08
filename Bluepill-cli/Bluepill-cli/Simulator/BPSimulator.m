@@ -213,7 +213,7 @@
          hostBundleId, hostBundlePath];
         return NO;
     }
-
+    [BPUtils printInfo:INFO withString: @"installApplication: host bundleId: %@, host BundlePath: %@, testRunnerAppPath: %@", hostBundleId, hostBundlePath, self.config.testRunnerAppPath];
     // Install the host application
     BOOL installed = [self.device
                       installApplication:[NSURL fileURLWithPath:hostBundlePath]
