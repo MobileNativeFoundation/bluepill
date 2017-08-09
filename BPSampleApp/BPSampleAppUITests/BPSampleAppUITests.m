@@ -12,13 +12,13 @@
 @end
 
 @implementation BPSampleAppUITests
-+ (void)setUp {
+- (void)setUp {
     [super setUp];
     self.continueAfterFailure = NO;
     self.app = [[XCUIApplication alloc] init];
 }
 
-+ (void)tearDown {
+- (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
