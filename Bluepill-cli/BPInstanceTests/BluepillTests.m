@@ -548,7 +548,6 @@
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/UITestsSetTempDir", tempDir] withError:&error];
-     NSLog(@"output directory is %@", outputDir);
     self.config.testRunnerAppPath = testRunnerPath;
     self.config.testBundlePath = testBundlePath;
     self.config.outputDirectory = outputDir;
