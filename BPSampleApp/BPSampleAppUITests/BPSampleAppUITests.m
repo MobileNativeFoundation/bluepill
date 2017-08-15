@@ -24,8 +24,7 @@
 }
 
 - (void)testExample {
-
-    [self.app activate];
+    [self.app launch];
     [self.app.buttons[@"Tap Me"] tap];
     XCUIElement *textField = [[self.app.otherElements containingType:XCUIElementTypeButton identifier:@"Tap Me"] childrenMatchingType:XCUIElementTypeTextField].element;
     [textField tap];
@@ -33,7 +32,7 @@
 }
 
 - (void)testExample2 {
-    [self.app activate];
+    [self.app launch];
     [self.app.buttons[@"Tap Me"] tap];
     XCUIElement *textField = [[self.app.otherElements containingType:XCUIElementTypeButton identifier:@"Tap Me"] childrenMatchingType:XCUIElementTypeTextField].element;
     [textField tap];
