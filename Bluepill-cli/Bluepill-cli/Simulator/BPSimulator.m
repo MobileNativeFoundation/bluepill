@@ -288,7 +288,8 @@
     NSMutableDictionary *appLaunchEnv = [appLaunchEnvironment mutableCopy];
     [appLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStdoutKey];
     [appLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStderrKey];
-
+    NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/IDEBundleInjection.framework/IDEBundleInjection", self.config.xcodePath];
+    [appLaunchEnv setObject:insertLibraryPath forKey:@"DYLD_INSERT_LIBRARIES"];
     int fd = open([simStdoutPath UTF8String], O_RDWR);
     self.stdOutHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd];
 
