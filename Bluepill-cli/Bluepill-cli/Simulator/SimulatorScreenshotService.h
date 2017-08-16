@@ -41,9 +41,8 @@
  If file already exists (another attempt for given test), proper suffix will be added, for example testName_1
 
  @param name full name for screenshot, usually full failed test name
- @return True is save was successfull
  */
-- (BOOL)saveScreenshotForFailedTestWithName:(NSString *)name;
+- (void)saveScreenshotForFailedTestWithName:(NSString *)name;
 
 - (void)startService;
 - (void)stopService;

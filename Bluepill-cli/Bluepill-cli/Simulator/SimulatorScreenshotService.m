@@ -8,13 +8,10 @@
 
 #import "SimulatorScreenshotService.h"
 #import "SimDeviceFramebufferService.h"
-#import "SimDeviceFramebufferBackingStore.h"
 #import "BPUtils.h"
-#import "BPWaitTimer.h"
+#import <CoreImage/CoreImage.h>
 
 #import <objc/runtime.h>
-
-static const NSTimeInterval BPSimulatorFramebufferFrameTimeInterval = 0.033;
 
 @interface SimulatorScreenshotService() <SimDisplayDamageRectangleDelegate, SimDisplayIOSurfaceRenderableDelegate, SimDeviceIOPortConsumer>
 
@@ -22,7 +19,7 @@ static const NSTimeInterval BPSimulatorFramebufferFrameTimeInterval = 0.033;
 @property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) SimDeviceFramebufferService *frameBufferService;
 @property (nonatomic, strong) dispatch_queue_t frameBufferQueue;
-@property (nonatomic, strong) NSTimer *frameTimer;
+@property (nonatomic, assign) IOSurfaceRef ioSurface;
 
 @end
 
@@ -43,25 +40,58 @@ static const NSTimeInterval BPSimulatorFramebufferFrameTimeInterval = 0.033;
 }
 
 - (CGImageRef)screenshot {
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CIImage *ciImage = [CIImage imageWithIOSurface:self.ioSurface];
 
-    //to do
+    CGImageRef cgImage = [context createCGImage:ciImage fromRect:ciImage.extent];
+    if (!cgImage) {
+        [BPUtils printInfo:INFO withString:@"Rendering simulator screenshot failed, returning null"];
+        return NULL;
+    }
 
-    return nil;
+    CFAutorelease(cgImage);
+    return cgImage;
 }
 
-- (BOOL)saveScreenshotForFailedTestWithName:(NSString *)name {
-    [BPUtils printInfo:INFO withString:@"Saving screenshot for failed test: %@", name];
+- (void)saveScreenshotForFailedTestWithName:(NSString *)name {
+    [self saveScreenshotForFailedTestWithName:name suffix:0];
+}
 
+- (void)saveScreenshotForFailedTestWithName:(NSString *)name suffix:(int)suffix {
+    NSString *outputFilePath = [NSString stringWithFormat:@"%@/%@_%d.jpeg", self.config.screenshotsDirectory, name, suffix];
 
-    //to do
+    // Check if this file exists already
+    if ([[NSFileManager defaultManager] fileExistsAtPath:outputFilePath]) {
+        [self saveScreenshotForFailedTestWithName:name suffix:suffix + 1];
+        return;
+    }
 
-    return YES;
+    NSURL *outputFileURL = [NSURL fileURLWithPath:outputFilePath];
+    CGImageRef screenshot = [self screenshot];
+
+    CFURLRef cfURL = (__bridge CFURLRef)outputFileURL;
+    CGImageDestinationRef destination = CGImageDestinationCreateWithURL(cfURL, kUTTypeJPEG, 1, NULL);
+    if (!destination) {
+        [BPUtils printInfo:WARNING withString:@"Saving screenshot for failed test: %@, creating destination failed %@", name, destination];
+        return;
+    }
+
+    CGImageDestinationAddImage(destination, screenshot, nil);
+    if (!CGImageDestinationFinalize(destination)) {
+        [BPUtils printInfo:WARNING withString:@"Saving screenshot for failed test: %@ failed", name];
+        CFRelease(destination);
+        return;
+    }
+
+    CFRelease(destination);
+    [BPUtils printInfo:INFO withString:@"Saved screenshot for failed test: %@", name];
 }
 
 - (void)startService {
     [BPUtils printInfo:INFO withString:@"Starting SimulatorScreenshotService for device: %@", self.device.UDID.UUIDString];
 
-    self.frameBufferQueue = dispatch_queue_create("com.linkedin.bluepill.SimulatorScreenshotService", DISPATCH_QUEUE_SERIAL);
+    NSString *queueName = [NSString stringWithFormat:@"com.linkedin.bluepill.SimulatorScreenshotService-%@", self.device.UDID.UUIDString];
+    self.frameBufferQueue = dispatch_queue_create(queueName.UTF8String, DISPATCH_QUEUE_SERIAL);
 
     [self.frameBufferService registerClient:self onQueue:self.frameBufferQueue];
     [self.frameBufferService resume];
@@ -70,8 +100,8 @@ static const NSTimeInterval BPSimulatorFramebufferFrameTimeInterval = 0.033;
 - (void)stopService {
     [BPUtils printInfo:INFO withString:@"Stopping SimulatorScreenshotService for device: %@", self.device.UDID.UUIDString];
 
-    [self.frameTimer invalidate];
     [self.frameBufferService unregisterClient:self];
+    [self releaseOldIOSurface];
 }
 
 #pragma mark Private Methods
@@ -96,60 +126,39 @@ static const NSTimeInterval BPSimulatorFramebufferFrameTimeInterval = 0.033;
     return service;
 }
 
-- (void)generateScreenshot {
-
-
+- (void)releaseOldIOSurface {
+    if (self.ioSurface != NULL) {
+        [BPUtils printInfo:INFO withString:@"Removing old IO surface from SimulatorScreenshotService"];
+        IOSurfaceDecrementUseCount(self.ioSurface);
+        CFRelease(self.ioSurface);
+        self.ioSurface = nil;
+    }
 }
 
-#pragma mark SimDisplayDamageRectangleDelegate, SimDisplayIOSurfaceRenderableDelegate, SimDeviceIOPortConsumer
+#pragma mark SimDisplayIOSurfaceRenderableDelegate
 
 - (void)setIOSurface:(IOSurfaceRef)surface {
-    [BPUtils printInfo:INFO withString:@"Surface changed: set %@", surface];
+    [self releaseOldIOSurface];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.frameTimer invalidate];
-
-        __weak typeof(self) __self = self;
-        self.frameTimer = [NSTimer scheduledTimerWithTimeInterval:BPSimulatorFramebufferFrameTimeInterval repeats:YES block:^(NSTimer * _Nonnull timer) {
-            [__self generateScreenshot];
-        }];
-    });
+    if (surface != NULL) {
+        IOSurfaceIncrementUseCount(surface);
+        CFRetain(surface);
+        [BPUtils printInfo:INFO withString:@"Retaining new IO surface for SimulatorScreenshotService"];
+        self.ioSurface = surface;
+    }
 }
 
-
-
-
-
-
-
-- (void)framebufferService:(SimDeviceFramebufferService *)service didUpdateRegion:(CGRect)region ofBackingStore:(SimDeviceFramebufferBackingStore *)backingStore
-{
-    [BPUtils printInfo:INFO withString:@"Surface changed region: %@", region];
+- (void)didChangeIOSurface:(nullable id)unknown {
 
 }
 
-- (void)framebufferService:(SimDeviceFramebufferService *)service didRotateToAngle:(double)angle
-{
-    [BPUtils printInfo:INFO withString:@"Surface changed: angle %@", angle];
+#pragma mark SimDisplayDamageRectangleDelegate
 
+- (void)didReceiveDamageRect:(CGRect)rect {
+    // Nothing to do here
 }
 
-- (void)framebufferService:(SimDeviceFramebufferService *)service didFailWithError:(NSError *)error
-{
-    [BPUtils printInfo:INFO withString:@"Surface changed fail: %@", error];
-
-}
-
-- (void)didChangeIOSurface:(nullable id)unknown
-{
-    [BPUtils printInfo:INFO withString:@"Surface changed: %@", unknown];
-}
-
-- (void)didReceiveDamageRect:(CGRect)rect
-{
-    [BPUtils printInfo:INFO withString:@"Surface changed: damage %@", rect];
-
-}
+#pragma mark SimDeviceIOPortConsumer
 
 - (NSString *)consumerIdentifier {
     return NSStringFromClass(self.class);
@@ -159,12 +168,4 @@ static const NSTimeInterval BPSimulatorFramebufferFrameTimeInterval = 0.033;
     return NSUUID.UUID.UUIDString;
 }
 
-
-
-
 @end
-
-
-//[BPUtils printInfo:INFO withString:@"Main screen service created for device: %@", [ __self.device UDID]];
-//[BPUtils printInfo:INFO withString:@"Device state: %@", __self.device.stateString];
-//[BPUtils printInfo:INFO withString:@"Lookup: %@", objc_lookUpClass("SimDeviceFramebufferService")];

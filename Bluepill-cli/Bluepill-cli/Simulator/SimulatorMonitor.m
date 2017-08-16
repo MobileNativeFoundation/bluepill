@@ -138,7 +138,8 @@
      fullTestName];
 
     // Save screenshot for failed test
-    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
+    NSString *screenshotName = [fullTestName stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+    [self.screenshotService saveScreenshotForFailedTestWithName:screenshotName];
 
     if (additionalFailure) {
         return;
