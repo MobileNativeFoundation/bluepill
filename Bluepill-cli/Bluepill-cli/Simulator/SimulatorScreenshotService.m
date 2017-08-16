@@ -11,8 +11,6 @@
 #import "BPUtils.h"
 #import <CoreImage/CoreImage.h>
 
-#import <objc/runtime.h>
-
 @interface SimulatorScreenshotService() <SimDisplayDamageRectangleDelegate, SimDisplayIOSurfaceRenderableDelegate, SimDeviceIOPortConsumer>
 
 @property (nonatomic, strong) BPConfiguration *config;
@@ -45,7 +43,7 @@
 
     CGImageRef cgImage = [context createCGImage:ciImage fromRect:ciImage.extent];
     if (!cgImage) {
-        [BPUtils printInfo:INFO withString:@"Rendering simulator screenshot failed, returning null"];
+        [BPUtils printInfo:WARNING withString:@"Rendering simulator screenshot failed, returning null"];
         return NULL;
     }
 
@@ -117,7 +115,7 @@
 
 - (SimDeviceFramebufferService *)createMainScreenServiceForDevice:(SimDevice *)device {
     NSError *error = nil;
-    SimDeviceFramebufferService *service = [objc_lookUpClass("SimDeviceFramebufferService")
+    SimDeviceFramebufferService *service = [SimDeviceFramebufferService
                                             mainScreenFramebufferServiceForDevice: device
                                             error: &error];
     if (!service) {
@@ -128,7 +126,7 @@
 
 - (void)releaseOldIOSurface {
     if (self.ioSurface != NULL) {
-        [BPUtils printInfo:INFO withString:@"Removing old IO surface from SimulatorScreenshotService"];
+        [BPUtils printInfo:DEBUGINFO withString:@"Removing old IO surface from SimulatorScreenshotService"];
         IOSurfaceDecrementUseCount(self.ioSurface);
         CFRelease(self.ioSurface);
         self.ioSurface = nil;
@@ -143,7 +141,7 @@
     if (surface != NULL) {
         IOSurfaceIncrementUseCount(surface);
         CFRetain(surface);
-        [BPUtils printInfo:INFO withString:@"Retaining new IO surface for SimulatorScreenshotService"];
+        [BPUtils printInfo:DEBUGINFO withString:@"Retaining new IO surface for SimulatorScreenshotService"];
         self.ioSurface = surface;
     }
 }
