@@ -116,6 +116,9 @@
 
     NSString *fullTestName = [NSString stringWithFormat:@"%@/%@", testClass, testName];
 
+    // Save screenshot for failed test
+    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
+
     BOOL additionalFailure = NO;
     for (NSString *fullName in self.failedTestCases) {
         if([fullTestName isEqualToString:fullName]) {

@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 #import "BPExitStatus.h"
 #import "SimulatorMonitor.h"
+#import "SimulatorScreenshotService.h"
 
 @class BPConfiguration;
 @class BPTreeParser;
@@ -18,6 +19,7 @@
 @interface BPSimulator : NSObject
 
 @property (nonatomic, strong) SimulatorMonitor *monitor;
+@property (nonatomic, strong) SimulatorScreenshotService *screenshotService;
 @property (nonatomic, assign, readonly) BOOL needsRetry;
 @property (nonatomic, readonly) NSString *UDID;
 @property (nonatomic, strong) SimDevice *device;
