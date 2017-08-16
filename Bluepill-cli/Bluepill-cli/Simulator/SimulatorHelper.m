@@ -29,7 +29,8 @@
                     [NSString stringWithFormat:@"%@/DVTSourceControl.framework", sharedFrameworksPath],
                     [NSString stringWithFormat:@"%@/DVTAnalytics.framework", sharedFrameworksPath],
                     [NSString stringWithFormat:@"%@/IDEFoundation.framework", sharedFrameworksPath],
-                    [NSString stringWithFormat:@"%@/DVTFoundation.framework", sharedFrameworksPath]
+                    [NSString stringWithFormat:@"%@/DVTFoundation.framework", sharedFrameworksPath],
+                    [NSString stringWithFormat:@"%@/SimulatorKit.framework", sharedFrameworksPath]
                     ];
     for (NSString *address in ar) {
         NSBundle *bl = [NSBundle bundleWithPath:address];

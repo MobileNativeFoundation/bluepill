@@ -2186,6 +2186,8 @@
 					CoreSimulator,
 					"-weak_framework",
 					XCTest,
+					"-weak_framework",
+					SimulatorKit,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2204,6 +2206,8 @@
 					CoreSimulator,
 					"-weak_framework",
 					XCTest,
+					"-weak_framework",
+					SimulatorKit,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2224,6 +2228,8 @@
 					CoreSimulator,
 					"-weak_framework",
 					XCTest,
+					"-weak_framework",
+					SimulatorKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2245,6 +2251,8 @@
 					CoreSimulator,
 					"-weak_framework",
 					XCTest,
+					"-weak_framework",
+					SimulatorKit,
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
