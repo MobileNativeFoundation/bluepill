@@ -8,28 +8,38 @@
 
 #import "SimulatorScreenshotService.h"
 #import "SimDeviceFramebufferService.h"
+#import "SimDeviceFramebufferBackingStore.h"
 #import "BPUtils.h"
+#import "BPWaitTimer.h"
 
 #import <objc/runtime.h>
 
-@interface SimulatorScreenshotService()
+static const NSTimeInterval BPSimulatorFramebufferFrameTimeInterval = 0.033;
+
+@interface SimulatorScreenshotService() <SimDisplayDamageRectangleDelegate, SimDisplayIOSurfaceRenderableDelegate, SimDeviceIOPortConsumer>
 
 @property (nonatomic, strong) BPConfiguration *config;
+@property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) SimDeviceFramebufferService *frameBufferService;
+@property (nonatomic, strong) dispatch_queue_t frameBufferQueue;
+@property (nonatomic, strong) NSTimer *frameTimer;
 
 @end
 
 @implementation SimulatorScreenshotService
 
-+ (instancetype)simulatorScreenshotServiceWithConfiguration:(BPConfiguration *)config forDevice:(SimDevice *)device {
-    SimulatorScreenshotService *service = [[self alloc] init];
-    service.config = config;
+- (instancetype)initWithConfiguration:(BPConfiguration *)config forDevice:(SimDevice *)device {
+    self = [super init];
+    if (self) {
+        self.config = config;
+        self.device = device;
 
-    if ([service meetsPreconditionsForConnectingToDevice:device]) {
-        service.frameBufferService = [service createMainScreenServiceForDevice:device];
+        if ([self meetsPreconditionsForConnectingToDevice:device]) {
+            self.frameBufferService = [self createMainScreenServiceForDevice:device];
+        }
     }
 
-    return service;
+    return self;
 }
 
 - (CGImageRef)screenshot {
@@ -48,6 +58,22 @@
     return YES;
 }
 
+- (void)startService {
+    [BPUtils printInfo:INFO withString:@"Starting SimulatorScreenshotService for device: %@", self.device.UDID.UUIDString];
+
+    self.frameBufferQueue = dispatch_queue_create("com.linkedin.bluepill.SimulatorScreenshotService", DISPATCH_QUEUE_SERIAL);
+
+    [self.frameBufferService registerClient:self onQueue:self.frameBufferQueue];
+    [self.frameBufferService resume];
+}
+
+- (void)stopService {
+    [BPUtils printInfo:INFO withString:@"Stopping SimulatorScreenshotService for device: %@", self.device.UDID.UUIDString];
+
+    [self.frameTimer invalidate];
+    [self.frameBufferService unregisterClient:self];
+}
+
 #pragma mark Private Methods
 
 - (BOOL)meetsPreconditionsForConnectingToDevice:(SimDevice *)device {
@@ -55,7 +81,7 @@
         return YES;
     }
 
-    [BPUtils printInfo:ERROR withString:@"ScreenshotService can be created for device: %@. Device has wrong state: %@", device.UDID, device.stateString];
+    [BPUtils printInfo:ERROR withString:@"ScreenshotService can't be created for device: %@. Device has wrong state: %@", self.device.UDID.UUIDString, device.stateString];
     return NO;
 }
 
@@ -65,29 +91,76 @@
                                             mainScreenFramebufferServiceForDevice: device
                                             error: &error];
     if (!service) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to create FrameBufferService for device: %@, error: %@", [device UDID], [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to create FrameBufferService for device: %@, error: %@", self.device.UDID.UUIDString, [error localizedDescription]]];
     }
     return service;
 }
 
-/*+ (instancetype)framebufferWithService:(SimDeviceFramebufferService *)framebufferService configuration:(FBFramebufferConfiguration *)configuration simulator:(FBSimulator *)simulator
+- (void)generateScreenshot {
+
+
+}
+
+#pragma mark SimDisplayDamageRectangleDelegate, SimDisplayIOSurfaceRenderableDelegate, SimDeviceIOPortConsumer
+
+- (void)setIOSurface:(IOSurfaceRef)surface {
+    [BPUtils printInfo:INFO withString:@"Surface changed: set %@", surface];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.frameTimer invalidate];
+
+        __weak typeof(self) __self = self;
+        self.frameTimer = [NSTimer scheduledTimerWithTimeInterval:BPSimulatorFramebufferFrameTimeInterval repeats:YES block:^(NSTimer * _Nonnull timer) {
+            [__self generateScreenshot];
+        }];
+    });
+}
+
+
+
+
+
+
+
+- (void)framebufferService:(SimDeviceFramebufferService *)service didUpdateRegion:(CGRect)region ofBackingStore:(SimDeviceFramebufferBackingStore *)backingStore
 {
-    dispatch_queue_t queue = self.createClientQueue;
-    id<FBControlCoreLogger> logger = [self loggerForSimulator:simulator queue:queue];
+    [BPUtils printInfo:INFO withString:@"Surface changed region: %@", region];
 
-    if (FBControlCoreGlobalConfiguration.isXcode8OrGreater) {
-        FBFramebufferSurface *surface = [FBFramebufferSurface mainScreenSurfaceForFramebufferService:framebufferService];
-        FBFramebufferFrameGenerator *frameGenerator = [FBFramebufferIOSurfaceFrameGenerator
-                                                       generatorWithRenderable:surface
-                                                       scale:configuration.scaleValue
-                                                       queue:queue
-                                                       logger:logger];
+}
 
-        return [[FBFramebuffer_IOSurface alloc] initWithConfiguration:configuration eventSink:simulator.eventSink frameGenerator:frameGenerator surface:surface logger:logger];
-    }
-    FBFramebufferBackingStoreFrameGenerator *frameGenerator = [FBFramebufferBackingStoreFrameGenerator generatorWithFramebufferService:framebufferService scale:configuration.scaleValue queue:queue logger:logger];
-    return [[FBFramebuffer_FramebufferService alloc] initWithConfiguration:configuration eventSink:simulator.eventSink frameGenerator:frameGenerator surface:nil logger:logger];
-}*/
+- (void)framebufferService:(SimDeviceFramebufferService *)service didRotateToAngle:(double)angle
+{
+    [BPUtils printInfo:INFO withString:@"Surface changed: angle %@", angle];
+
+}
+
+- (void)framebufferService:(SimDeviceFramebufferService *)service didFailWithError:(NSError *)error
+{
+    [BPUtils printInfo:INFO withString:@"Surface changed fail: %@", error];
+
+}
+
+- (void)didChangeIOSurface:(nullable id)unknown
+{
+    [BPUtils printInfo:INFO withString:@"Surface changed: %@", unknown];
+}
+
+- (void)didReceiveDamageRect:(CGRect)rect
+{
+    [BPUtils printInfo:INFO withString:@"Surface changed: damage %@", rect];
+
+}
+
+- (NSString *)consumerIdentifier {
+    return NSStringFromClass(self.class);
+}
+
+- (NSString *)consumerUUID {
+    return NSUUID.UUID.UUIDString;
+}
+
+
+
 
 @end
 

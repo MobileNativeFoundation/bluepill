@@ -24,7 +24,7 @@
  @param device SimDevice
  @return SimulatorScreenshotService
  */
-+ (instancetype)simulatorScreenshotServiceWithConfiguration:(BPConfiguration *)config forDevice:(SimDevice *)device;
+- (instancetype)initWithConfiguration:(BPConfiguration *)config forDevice:(SimDevice *)device;
 
 #pragma mark Public Methods
 
@@ -44,5 +44,8 @@
  @return True is save was successfull
  */
 - (BOOL)saveScreenshotForFailedTestWithName:(NSString *)name;
+
+- (void)startService;
+- (void)stopService;
 
 @end

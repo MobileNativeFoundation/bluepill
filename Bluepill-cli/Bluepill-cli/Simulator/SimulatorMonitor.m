@@ -53,6 +53,7 @@
 
 - (void)onAllTestsBegan {
     self.simulatorState = Running;
+    [self.screenshotService startService];
     // Don't overwrite the original start time on secondary attempts
     if ([BPStats sharedStats].cleanRun) {
         [BPStats sharedStats].cleanRun = NO;
@@ -63,6 +64,7 @@
 
 - (void)onAllTestsEnded {
     self.simulatorState = Completed;
+    [self.screenshotService stopService];
     if (self.failureCount) {
         self.exitStatus = BPExitStatusTestsFailed;
     } else {
@@ -116,9 +118,6 @@
 
     NSString *fullTestName = [NSString stringWithFormat:@"%@/%@", testClass, testName];
 
-    // Save screenshot for failed test
-    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
-
     BOOL additionalFailure = NO;
     for (NSString *fullName in self.failedTestCases) {
         if([fullTestName isEqualToString:fullName]) {
@@ -137,6 +136,9 @@
      additionalFailure ? @"[ADDITIONAL FAILURE] " : @"",
      [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
      fullTestName];
+
+    // Save screenshot for failed test
+    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
 
     if (additionalFailure) {
         return;
