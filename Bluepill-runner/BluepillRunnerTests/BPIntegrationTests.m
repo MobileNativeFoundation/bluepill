@@ -124,7 +124,6 @@
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(app.testBundles[1].skipTestIdentifiers.count == 7);
     XCTAssert(rc != 0); // this runs tests that fail
-
 }
 
 - (void)testTwoBPInstancesTestCaseFail {
