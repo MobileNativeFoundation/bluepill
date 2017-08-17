@@ -36,6 +36,8 @@
 
 - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException;
 
+- (void)onTestCaseAssertionFailedWithName:(NSString *)testName inClass:(NSString *)testClass inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber;
+
 - (void)onOutputReceived:(NSString *)output;
 
 @end

@@ -42,7 +42,7 @@
 
  @param name full name for screenshot, usually full failed test name
  */
-- (void)saveScreenshotForFailedTestWithName:(NSString *)name;
+- (void)saveScreenshotForFailedTestWithName:(NSString *)name failOnLineNumber:(NSUInteger)lineNumber;
 
 - (void)startService;
 - (void)stopService;

@@ -137,10 +137,6 @@
      [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
      fullTestName];
 
-    // Save screenshot for failed test
-    NSString *screenshotName = [fullTestName stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
-    [self.screenshotService saveScreenshotForFailedTestWithName:screenshotName];
-
     if (additionalFailure) {
         return;
     }
@@ -160,6 +156,12 @@
     if (wasException) {
         [[BPStats sharedStats] addTestError];
     }
+}
+
+- (void)onTestCaseAssertionFailedWithName:(NSString *)testName inClass:(NSString *)testClass inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber {
+    // Save screenshot for failed test
+    NSString *fullTestName = [NSString stringWithFormat:@"%@_%@", testClass, testName];
+    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName failOnLineNumber:lineNumber];
 }
 
 - (void)updateExecutedTestCaseList:(NSString *)testName inClass:(NSString *)testClass {
