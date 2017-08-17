@@ -59,7 +59,10 @@
                                     name:deviceName
                        completionHandler:^(NSError *error, SimDevice *device) {
                            __self.device = device;
-                           __self.screenshotService = [[SimulatorScreenshotService alloc] initWithConfiguration:__self.config forDevice:device];
+
+                           if (__self.config.screenshotsDirectory) {
+                               __self.screenshotService = [[SimulatorScreenshotService alloc] initWithConfiguration:__self.config forDevice:device];
+                           }
 
                            if (!__self.device || error) {
                                dispatch_async(dispatch_get_main_queue(), ^{
