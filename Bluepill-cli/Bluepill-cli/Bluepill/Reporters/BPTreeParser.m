@@ -77,6 +77,11 @@ static const NSString * const kPassed = @"passed";
 }
 
 - (BPTestCaseLogEntry *)currentTest {
+    if([BPTreeAssembler sharedInstance]==nil){
+        [BPUtils printInfo:INFO withString:@"[BPTreeAssembler sharedInstance] returned nil which may caused crash"];
+    }else{
+        [BPUtils printInfo:INFO withString:@"[BPTreeAssembler sharedInstance] address is %p", [BPTreeAssembler sharedInstance]];
+    }
     return [BPTreeAssembler sharedInstance].currentTest;
 }
 
@@ -460,6 +465,12 @@ static const NSString * const kPassed = @"passed";
                 self.current.log = @"";
             }
             logEntry = self.current;
+        }
+        if(logEntry.log==nil){
+            [BPUtils printInfo:INFO withString:@"logEntry.log is nil which may caused crash"];
+            logEntry.log = @"";
+        }else{
+            [BPUtils printInfo:INFO withString:@"logEntry.log size is %lu", [logEntry.log length]];
         }
         logEntry.log = [logEntry.log stringByAppendingString:line];
         logEntry.log = [logEntry.log stringByAppendingString:@"\n"];
