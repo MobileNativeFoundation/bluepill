@@ -123,18 +123,21 @@
         NSWorkspaceLaunchWithoutActivation |
         NSWorkspaceLaunchAndHide |
         NSWorkspaceLaunchNewInstance;
+        [BPUtils printInfo:INFO withString:@"configuration %@, simulatorURL: %@", configuration, simulatorURL];
         self.app = [[NSWorkspace sharedWorkspace]
                     launchApplicationAtURL:simulatorURL
                     options:launchOptions
                     configuration:configuration
                     error:&error];
+
         if (!self.app) {
             assert(error != nil);
             completion(error);
             return;
         }
-        error = [self waitForDeviceReady];
-        if (error) {
+        NSError *errorWait = [self waitForDeviceReady];
+        [BPUtils printInfo:INFO withString:@"Simulator %@ has error: %@", self.device.UDID.UUIDString, error];
+        if (errorWait) {
             [self.app terminate];
         }
         completion(error);
@@ -158,6 +161,7 @@
 - (NSError *)waitForDeviceReady {
     int attempts = 1200;
     while (attempts > 0 && ![self.device.stateString isEqualToString:@"Booted"]) {
+        [BPUtils printInfo:INFO withString:@"Simulator %@ currently has the state: %@", self.device.UDID.UUIDString, self.device.stateString];
         [NSThread sleepForTimeInterval:0.1];
         --attempts;
     }
