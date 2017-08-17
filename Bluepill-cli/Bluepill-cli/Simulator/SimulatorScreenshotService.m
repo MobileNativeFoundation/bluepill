@@ -51,16 +51,16 @@
     return cgImage;
 }
 
-- (void)saveScreenshotForFailedTestWithName:(NSString *)name failOnLineNumber:(NSUInteger)lineNumber {
-    [self saveScreenshotForFailedTestWithName:name failOnLineNumber:lineNumber suffix:1];
+- (void)saveScreenshotForFailedTestWithName:(NSString *)name {
+    [self saveScreenshotForFailedTestWithName:name suffix:1];
 }
 
-- (void)saveScreenshotForFailedTestWithName:(NSString *)name failOnLineNumber:(NSUInteger)lineNumber suffix:(int)suffix {
-    NSString *outputFilePath = [NSString stringWithFormat:@"%@/%@_line_%lu_attempt_%d.jpeg", self.config.screenshotsDirectory, name, (unsigned long)lineNumber, suffix];
+- (void)saveScreenshotForFailedTestWithName:(NSString *)name suffix:(int)suffix {
+    NSString *outputFilePath = [NSString stringWithFormat:@"%@/%@_attempt_%d.jpeg", self.config.screenshotsDirectory, name, suffix];
 
     // Check if this file exists already
     if ([[NSFileManager defaultManager] fileExistsAtPath:outputFilePath]) {
-        [self saveScreenshotForFailedTestWithName:name failOnLineNumber:lineNumber suffix:suffix + 1];
+        [self saveScreenshotForFailedTestWithName:name suffix:suffix + 1];
         return;
     }
 

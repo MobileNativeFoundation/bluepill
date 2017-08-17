@@ -565,8 +565,8 @@
     self.config.outputDirectory = outputDir;
     self.config.screenshotsDirectory = outputDir;
 
-    NSArray *expectedScreenshotsFileNames = @[@"BPAppNegativeTests_testAssertFailure_line_40_attempt_1.jpeg",
-                                              @"BPAppNegativeTests_testRaiseException_line_48_attempt_1.jpeg"];
+    NSArray *expectedScreenshotsFileNames = @[@"BPAppNegativeTests_testAssertFailure_attempt_1.jpeg",
+                                              @"BPAppNegativeTests_testRaiseException_attempt_1.jpeg"];
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);
@@ -586,10 +586,10 @@
     self.config.screenshotsDirectory = outputDir;
     self.config.failureTolerance = @(1);
 
-    NSArray *expectedScreenshotsFileNames = @[@"BPAppNegativeTests_testAssertFailure_line_40_attempt_1.jpeg",
-                                              @"BPAppNegativeTests_testAssertFailure_line_40_attempt_2.jpeg",
-                                              @"BPAppNegativeTests_testRaiseException_line_48_attempt_1.jpeg",
-                                              @"BPAppNegativeTests_testRaiseException_line_48_attempt_2.jpeg"];
+    NSArray *expectedScreenshotsFileNames = @[@"BPAppNegativeTests_testAssertFailure_attempt_1.jpeg",
+                                              @"BPAppNegativeTests_testAssertFailure_attempt_2.jpeg",
+                                              @"BPAppNegativeTests_testRaiseException_attempt_1.jpeg",
+                                              @"BPAppNegativeTests_testRaiseException_attempt_2.jpeg"];
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);
@@ -607,8 +607,8 @@
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
     self.config.outputDirectory = outputDir;
 
-    NSArray *expectedScreenshotsFileNames = @[@"BPAppNegativeTests_testAssertFailure_line_40_attempt_1.jpeg",
-                                              @"BPAppNegativeTests_testRaiseException_line_48_attempt_1.jpeg"];
+    NSArray *expectedScreenshotsFileNames = @[@"BPAppNegativeTests_testAssertFailure_attempt_1.jpeg",
+                                              @"BPAppNegativeTests_testRaiseException_attempt_1.jpeg"];
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsFailed);

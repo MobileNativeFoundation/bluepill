@@ -161,7 +161,7 @@
 - (void)onTestCaseAssertionFailedWithName:(NSString *)testName inClass:(NSString *)testClass inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber {
     // Save screenshot for failed test
     NSString *fullTestName = [NSString stringWithFormat:@"%@_%@", testClass, testName];
-    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName failOnLineNumber:lineNumber];
+    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
 }
 
 - (void)updateExecutedTestCaseList:(NSString *)testName inClass:(NSString *)testClass {
