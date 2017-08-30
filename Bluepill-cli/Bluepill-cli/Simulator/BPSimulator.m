@@ -150,7 +150,10 @@
     [self.device bootAsyncWithOptions:options completionHandler:^(NSError *bootError){
         NSError *error = [self waitForDeviceReady];
         if (error) {
-            [self.app terminate];
+            [self.device shutdownWithError:&error];
+            if (error) {
+                [BPUtils printInfo:ERROR withString:@"Shutting down Simulator failed: %@", [error localizedDescription]];
+            }
         }
         completion(bootError);
     }];
@@ -365,10 +368,7 @@
         completion(nil, NO);
         return;
     }
-    if (self.app) {
-        [BPUtils printInfo:INFO withString:@"Terminating Simulator.app"];
-        [self.app terminate];
-    } else if (self.device) {
+    if (self.device) {
         [BPUtils printInfo:INFO withString:@"Shutting down Simulator"];
         [self.device shutdownWithError:&error];
         if (error) {
