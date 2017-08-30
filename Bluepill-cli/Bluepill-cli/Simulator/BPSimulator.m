@@ -88,7 +88,7 @@
     }
 
     if (!self.config.headlessMode) {
-        self.app = [self findSimGUIAppWithDeviceUDID: [deviceUDID UUIDString]];
+        self.app = [self findSimGUIApp];
         if (!self.app) {
             [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
                                                  [deviceUDID UUIDString]]];
@@ -101,14 +101,13 @@
 
 - (void)bootWithCompletion:(void (^)(NSError *error))completion {
     // Now boot it.
-    if (self.config.headlessMode) {
-        [BPUtils printInfo:INFO withString:@"Running in HEADLESS mode..."];
-        [self openSimulatorHeadlessWithCompletion:completion];
-        return;
-    }
+    [BPUtils printInfo:INFO withString:@"Running in HEADLESS mode..."];
+    [self openSimulatorHeadlessWithCompletion:completion];
     // not headless? open the simulator app.
-    [BPUtils printInfo:INFO withString:@"Running in NON-headless mode..."];
-    [self openSimulatorWithCompletion:completion];
+    if (!self.config.headlessMode) {
+        [BPUtils printInfo:INFO withString:@"Running in NON-headless mode..."];
+        [self openSimulatorWithCompletion:completion];
+    }
 }
 
 - (void)openSimulatorWithCompletion:(void (^)(NSError *))completion {
@@ -121,13 +120,12 @@
         NSDictionary *configuration = @{NSWorkspaceLaunchConfigurationArguments: @[@"-CurrentDeviceUDID", [[self.device UDID] UUIDString]]};
         NSWorkspaceLaunchOptions launchOptions = NSWorkspaceLaunchAsync |
         NSWorkspaceLaunchWithoutActivation |
-        NSWorkspaceLaunchAndHide |
-        NSWorkspaceLaunchNewInstance;
+        NSWorkspaceLaunchAndHide;
         [BPUtils printInfo:INFO withString:@"configuration %@, simulatorURL: %@", configuration, simulatorURL];
         self.app = [[NSWorkspace sharedWorkspace]
                     launchApplicationAtURL:simulatorURL
                     options:launchOptions
-                    configuration:configuration
+                    configuration:@{}
                     error:&error];
 
         if (!self.app) {
@@ -190,8 +188,8 @@
     return device; //could be nil when not found
  }
 
-- (NSRunningApplication *)findSimGUIAppWithDeviceUDID:(NSString *)deviceUDID {
-    NSString * cmd = [NSString stringWithFormat:@"ps -A | grep 'Simulator\\.app.*-CurrentDeviceUDID %@'", deviceUDID];
+- (NSRunningApplication *)findSimGUIApp {
+    NSString * cmd = [NSString stringWithFormat:@"ps -A | grep 'Simulator\\.app'"];
     NSString * output = [[BPUtils runShell:cmd] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSArray *fields = [output componentsSeparatedByString: @" "];
     if ([fields count] > 0) {
