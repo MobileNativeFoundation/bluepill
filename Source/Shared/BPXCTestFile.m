@@ -112,14 +112,33 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         return nil;
     }
     testHostPath = [testHostPath stringByReplacingOccurrencesOfString:TESTROOT withString:testRoot];
+    NSLog(@"testHostPath is: %@", testHostPath);
 
     NSString *testBundlePath = [dict objectForKey:@"TestBundlePath"];
     if (!testBundlePath) {
         BP_SET_ERROR(error, @"No 'TestBundlePath' found");
         return nil;
     }
-    testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTHOST withString:testHostPath];
-
+    //testBundlePath is expected to be "__TESTHOST__/PlugIns/.."
+    //temporal workaround for bug: 34135468, Xcode9beta5 Inconsistent TestBundlePath With "xcodebuild build-for-testing” Command
+    //when it is "__TESTROOT__"
+    //testHostPath path is: /Users/xzhang3/Desktop/Documents/Git/bluepill/build/Build/Products/Debug-iphonesimulator/bluepill/
+    //testBundlePath is: __TESTROOT__/Debug-iphonesimulator/BPSampleApp.app/PlugIns/BPSampleAppHangingTests.xctest
+    //expected path is: /Users/xzhang3/Desktop/Documents/Git/bluepill/build/Build/Products/Debug-iphonesimulator/BPSampleApp.app/
+    //testHost path is: __TESTROOT__/Debug-iphonesimulator/BPSampleApp.app
+    NSLog(@"testBundlePath in the plist is: %@", testBundlePath);
+    if ([testBundlePath rangeOfString:TESTHOST].location != NSNotFound) {
+        testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTHOST withString:testHostPath];
+    } else if ([testBundlePath rangeOfString:TESTROOT].location != NSNotFound) {
+        testHostPath = [testHostPath stringByDeletingLastPathComponent]; //remove /bluepill
+        NSString *temp = [testHostPath stringByDeletingLastPathComponent]; //remove /iphonesimulator
+        testHostPath = [testHostPath stringByAppendingString:@"/BPSampleApp.app"];
+        testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTROOT withString:temp];
+    } else {
+        [BPUtils printInfo:ERROR withString:@"testBundlePath is incorrect, please check xctestrun file"];
+    }
+    NSLog(@"testBundlePath after processing is: %@", testBundlePath);
+    NSLog(@"testHostPath after processing is: %@", testHostPath);
     NSString * UITargetAppPath = [dict objectForKey:@"UITargetAppPath"];
     if (UITargetAppPath) {
         UITargetAppPath = [UITargetAppPath stringByReplacingOccurrencesOfString:TESTROOT withString:testRoot];
