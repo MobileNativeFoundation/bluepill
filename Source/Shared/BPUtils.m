@@ -171,15 +171,24 @@ static BOOL quiet = NO;
 
 + (NSString *)runShell:(NSString *)command {
     NSAssert(command, @"Command should not be nil");
-    NSTask *task = [NSTask new];
+    NSTask *task = [[NSTask alloc] init];
+    NSData *data;
     task.launchPath = @"/bin/sh";
     task.arguments = @[@"-c", command];
-    NSPipe *pipe = [NSPipe new];
+    NSPipe *pipe = [[NSPipe alloc] init];
     task.standardError = pipe;
     task.standardOutput = pipe;
     NSFileHandle *fh = pipe.fileHandleForReading;
-    [task launch];
-    NSData *data = [fh readDataToEndOfFile];
+    if (task) {
+        [task launch];
+    } else {
+        NSAssert(task, @"task should not be nil");
+    }
+    if (fh) {
+        data = [fh readDataToEndOfFile];
+    } else {
+        NSAssert(task, @"fh should not be nil");
+    }
     [task waitUntilExit];
     return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 }
