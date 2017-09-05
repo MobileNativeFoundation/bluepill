@@ -9,8 +9,9 @@
 
 #import <Foundation/Foundation.h>
 #import "BPExitStatus.h"
+#import "BPWriter.h"
+#import "BPConfiguration.h"
 
-@class BPConfiguration;
 @class BPSimulator;
 @class BPTreeParser;
 
@@ -18,6 +19,7 @@
 
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) BPSimulator *runner;
+@property (nonatomic, strong) BPWriter *simulatorLogWriter;
 @property (nonatomic, strong) BPTreeParser *parser;
 @property (nonatomic, assign) NSInteger attemptNumber;
 @property (nonatomic, assign) BOOL simulatorCrashed;

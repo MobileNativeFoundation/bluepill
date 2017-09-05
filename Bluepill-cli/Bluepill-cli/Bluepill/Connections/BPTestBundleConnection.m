@@ -11,6 +11,7 @@
 #import "BPTestDaemonConnection.h"
 #import "BPConstants.h"
 #import "SimulatorHelper.h"
+#import "BPExecutionContext.h"
 
 // XCTest framework
 #import "XCTestManager_IDEInterface-Protocol.h"
@@ -40,6 +41,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 @property (atomic, nullable, strong) id<XCTestDriverInterface> testBundleProxy;
 @property (atomic, nullable, strong, readwrite) DTXConnection *testBundleConnection;
 
+@property (nonatomic, strong) BPExecutionContext *context;
 @property (nonatomic, weak) id<BPTestBundleConnectionDelegate> interface;
 @property (nonatomic, assign) BOOL connected;
 @property (nonatomic, strong) dispatch_queue_t queue;
@@ -50,10 +52,11 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 @implementation BPTestBundleConnection
 
-- (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<BPTestBundleConnectionDelegate>)interface {
+- (instancetype)initWithContext:(BPExecutionContext *)context andInterface:(id<BPTestBundleConnectionDelegate>)interface {
     self = [super init];
     if (self) {
-        self.simulator = simulator;
+        self.context = context;
+        self.simulator = context.runner;
         self.interface = interface;
         self.queue = dispatch_queue_create("com.linkedin.bluepill.connection.queue", DISPATCH_QUEUE_PRIORITY_DEFAULT);
     }
@@ -215,8 +218,10 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     [env addEntriesFromDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:bundleID device:nil config:_config]];
     [env addEntriesFromDictionary:environment];
     NSDictionary *options = @{
-                              @"arguments": arguments,
-                              @"environment": env,
+                              kOptionsArgumentsKey: arguments,
+                              kOptionsEnvironmentKey: env,
+                              kOptionsStderrKey: self.simulator.stdOutAndErrorFifoFile.relativePath,
+                              kOptionsStdoutKey: self.simulator.stdOutAndErrorFifoFile.relativePath,
                               };
     NSError *error;
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];

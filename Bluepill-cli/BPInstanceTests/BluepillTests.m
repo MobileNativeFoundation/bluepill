@@ -555,6 +555,11 @@
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     self.config.testRunnerAppPath = nil;
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+
+    NSString *simulator1Path = [outputDir stringByAppendingPathComponent:@"1-simulator.log"];
+    NSString *log1 = [NSString stringWithContentsOfFile:simulator1Path encoding:NSUTF8StringEncoding error:nil];
+    XCTAssert([log1 rangeOfString:@"stdout message from ViewController\n"].location != NSNotFound);
+    XCTAssert([log1 rangeOfString:@"stderr message from ViewController\n"].location != NSNotFound);
 }
 
 #pragma mark - Test helpers

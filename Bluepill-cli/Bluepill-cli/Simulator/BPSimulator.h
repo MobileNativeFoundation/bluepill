@@ -9,6 +9,7 @@
 
 #import <Foundation/Foundation.h>
 #import "BPExitStatus.h"
+#import "BPSimulatorFifoFile.h"
 #import "SimulatorMonitor.h"
 
 @class BPConfiguration;
@@ -18,6 +19,7 @@
 @interface BPSimulator : NSObject
 
 @property (nonatomic, strong) SimulatorMonitor *monitor;
+@property (nonatomic, strong) BPSimulatorFifoFile *stdOutAndErrorFifoFile;
 @property (nonatomic, assign, readonly) BOOL needsRetry;
 @property (nonatomic, readonly) NSString *UDID;
 @property (nonatomic, strong) SimDevice *device;

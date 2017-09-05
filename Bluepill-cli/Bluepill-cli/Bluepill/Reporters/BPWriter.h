@@ -9,7 +9,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class BPConfiguration;
+@class BPExecutionContext;
 
 typedef NS_ENUM(NSInteger, BPWriterDestination) {
     BPWriterDestinationStdout,
@@ -21,6 +21,8 @@ typedef NS_ENUM(NSInteger, BPWriterDestination) {
 
 - (nonnull instancetype)initWithDestination:(BPWriterDestination)destination;
 - (nonnull instancetype)initWithDestination:(BPWriterDestination)destination andPath:(nullable NSString *)filePath;
+
++ (nonnull instancetype)writerWithContext:(BPExecutionContext *_Nonnull)context logName:(NSString *_Nonnull) logName;
 
 /*!
  * @discussion writes output to the destination specified on creation

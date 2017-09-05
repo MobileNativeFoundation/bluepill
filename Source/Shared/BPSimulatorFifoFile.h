@@ -7,27 +7,13 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
-#import "ViewController.h"
+#import <Foundation/Foundation.h>
 
-@interface ViewController ()
+@interface BPSimulatorFifoFile : NSObject
 
-@end
+@property (atomic, nonnull, strong) NSString *absolutePath;
+@property (atomic, nonnull, strong) NSString *relativePath;
 
-@implementation ViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-
-    fprintf(stdout, "stdout message from ViewController\n");
-    fprintf(stderr, "stderr message from ViewController\n");
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
+- (instancetype _Nonnull)initAtPath:(NSString *_Nonnull)filePath withDeviceDataPath:(NSString *_Nonnull)dataPath;
 
 @end

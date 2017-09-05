@@ -18,6 +18,7 @@
 #import "BPWaitTimer.h"
 #import "BPExecutionContext.h"
 #import "BPHandler.h"
+#import "BPWriter.h"
 #import <libproc.h>
 #import "BPTestBundleConnection.h"
 #import "BPTestDaemonConnection.h"
@@ -206,6 +207,7 @@ void onInterrupt(int ignore) {
     BPExecutionContext *context = [[BPExecutionContext alloc] init];
     context.config = self.executionConfigCopy;
     context.attemptNumber = self.retries + 1;
+    context.simulatorLogWriter = [BPWriter writerWithContext:context logName:@"simulator"];
     self.context = context; // Store the context on self so that it's accessible to the interrupt handler in the loop
 }
 
@@ -215,23 +217,7 @@ void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"Running Tests. Attempt Number %lu.", context.attemptNumber];
     [BPStats sharedStats].attemptNumber = context.attemptNumber;
 
-    NSString *simulatorLogPath;
-    if (context.config.outputDirectory) {
-        simulatorLogPath = [context.config.outputDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%lu-simulator.log", context.attemptNumber]];
-    } else {
-        NSError *err;
-        NSString *tmpFileName = [BPUtils mkstemp:[NSString stringWithFormat:@"%@/%lu-bp-stdout-%u", NSTemporaryDirectory(), context.attemptNumber, getpid()]
-                                       withError:&err];
-        simulatorLogPath = tmpFileName;
-        if (!tmpFileName) {
-            simulatorLogPath = [NSString stringWithFormat:@"/tmp/%lu-simulator.log", context.attemptNumber];
-            [BPUtils printInfo:ERROR withString:@"ERROR: %@\nLeaving log in %@", [err localizedDescription], simulatorLogPath];
-        }
-    }
-
-    // This is the raw output from the simulator running tests
-    BPWriter *simulatorWriter = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:simulatorLogPath];
-    context.parser = [[BPTreeParser alloc] initWithWriter:simulatorWriter];
+    context.parser = [[BPTreeParser alloc] initWithWriter:context.simulatorLogWriter];
 
     if (context.attemptNumber == 1) {
         [context.parser cleanup];
@@ -438,7 +424,7 @@ void onInterrupt(int ignore) {
         // If the isTestRunnerContext is flipped on, don't connect testbundle again.
         return;
     }
-    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:context.runner andInterface:self];
+    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithContext:context andInterface:self];
     bConnection.simulator = context.runner;
     bConnection.config = self.config;
 

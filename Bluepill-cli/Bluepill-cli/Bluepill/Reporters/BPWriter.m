@@ -7,6 +7,8 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
+#import "BPExecutionContext.h"
+#import "BPUtils.h"
 #import "BPWriter.h"
 
 @interface BPWriter ()
@@ -33,6 +35,27 @@
         self.filePath = filePath;
     }
     return self;
+}
+
++ (BPWriter *)writerWithContext:(BPExecutionContext *)context logName:(NSString *) logName {
+    NSString *logPath;
+    BPConfiguration *config = context.config;
+
+    if (config.outputDirectory) {
+        logPath = [config.outputDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%lu-%@.log", context.attemptNumber, logName]];
+    } else {
+        NSError *err;
+        NSString *tmpFileName = [BPUtils
+                                 mkstemp:[NSString stringWithFormat:@"%@/%lu-%@-%u.log", NSTemporaryDirectory(), context.attemptNumber, logName, getpid()]
+                                 withError:&err];
+        logPath = tmpFileName;
+        if (!tmpFileName) {
+            logPath = [NSString stringWithFormat:@"/tmp/%lu-%@.log", context.attemptNumber, logName];
+            [BPUtils printInfo:ERROR withString:@"ERROR: %@\nLeaving log in %@", [err localizedDescription], logPath];
+        }
+    }
+
+    return [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:logPath];
 }
 
 - (void)removeFile {

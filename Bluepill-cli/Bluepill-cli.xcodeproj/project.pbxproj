@@ -47,6 +47,8 @@
 		7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */; };
+		B9357DCC1F5E604C007E7B22 /* BPSimulatorFifoFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B9357DCA1F5E604C007E7B22 /* BPSimulatorFifoFile.m */; };
+		B9D3D73A1F63B0A40082F6BF /* BPSimulatorFifoFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B9357DCA1F5E604C007E7B22 /* BPSimulatorFifoFile.m */; };
 		BA0096FE1DCA5D810000DD45 /* testConfigRelativePath.json in Resources */ = {isa = PBXBuildFile; fileRef = BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */; };
 		BA0097001DCA61210000DD45 /* BPConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */; };
 		BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA0C554C1DDAE241009E1377 /* failure_retry_report.xml */; };
@@ -152,6 +154,8 @@
 		7ADBB1451DCBBC0E00DC4E8D /* BPTreeAssembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTreeAssembler.h; sourceTree = "<group>"; };
 		7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTreeAssembler.m; sourceTree = "<group>"; };
 		B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = ../../../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework; sourceTree = "<group>"; };
+		B9357DCA1F5E604C007E7B22 /* BPSimulatorFifoFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPSimulatorFifoFile.m; sourceTree = "<group>"; };
+		B9357DCB1F5E604C007E7B22 /* BPSimulatorFifoFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPSimulatorFifoFile.h; sourceTree = "<group>"; };
 		BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testConfigRelativePath.json; sourceTree = "<group>"; };
 		BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConfigurationTests.m; sourceTree = "<group>"; };
 		BA0097011DCA626F0000DD45 /* BPConfiguration+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BPConfiguration+Test.h"; sourceTree = "<group>"; };
@@ -300,6 +304,8 @@
 		7A4FB8CC1DF89A790073F268 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				B9357DCA1F5E604C007E7B22 /* BPSimulatorFifoFile.m */,
+				B9357DCB1F5E604C007E7B22 /* BPSimulatorFifoFile.h */,
 				BA53B16A1E30931E00FCED71 /* BPConstants.h */,
 				BA53B16B1E30931E00FCED71 /* BPConstants.m */,
 				C41A2C731E0B24E8005D9751 /* BPTestCase.h */,
@@ -704,6 +710,7 @@
 				7A7E7BB81DF2173C007928F3 /* BPCreateSimulatorHandler.m in Sources */,
 				BA34F5E41D6D75E30063B17F /* SimulatorHelper.m in Sources */,
 				7A4FB8D31DF89A790073F268 /* BPConfiguration.m in Sources */,
+				B9357DCC1F5E604C007E7B22 /* BPSimulatorFifoFile.m in Sources */,
 				7A7E7BC01DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
 				C41A2C771E0B24E8005D9751 /* BPTestCase.m in Sources */,
 				7A4FB8D41DF89A790073F268 /* BPUtils.m in Sources */,
@@ -734,6 +741,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9D3D73A1F63B0A40082F6BF /* BPSimulatorFifoFile.m in Sources */,
 				C41A2C7A1E0B4306005D9751 /* BPTestCase.m in Sources */,
 				BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
 				BAFA2F7A1E567EE80072C69B /* BPSimulator.m in Sources */,

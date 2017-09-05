@@ -14,6 +14,7 @@
 		7A6672C01E0B0BB400AC6778 /* BPXCTestFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */; };
 		7A6672C11E0B0BBC00AC6778 /* BPTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */; };
 		7A6672C21E0B0BBF00AC6778 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */; };
+		B9357DC61F5E5CD7007E7B22 /* BPSimulatorFifoFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B9357DC51F5E5CD7007E7B22 /* BPSimulatorFifoFile.m */; };
 		BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */; };
 		BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809EA1DBA910400D7D130 /* BPAppTests.m */; };
 		BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809ED1DBA929600D7D130 /* BPTestHelper.m */; };
@@ -62,6 +63,8 @@
 		7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestCase.m; sourceTree = "<group>"; };
 		7A4FB8DB1DF89B1A0073F268 /* BPTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestClass.h; sourceTree = "<group>"; };
 		7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestClass.m; sourceTree = "<group>"; };
+		B9357DC51F5E5CD7007E7B22 /* BPSimulatorFifoFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPSimulatorFifoFile.m; sourceTree = "<group>"; };
+		B9357DC71F5E5D56007E7B22 /* BPSimulatorFifoFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPSimulatorFifoFile.h; sourceTree = "<group>"; };
 		BA1809E01DBA8FB100D7D130 /* BluepillRunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BluepillRunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA1809E41DBA8FB100D7D130 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPRunnerTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -129,6 +132,8 @@
 				C4FD8C5D1DB80971000ED28C /* BPUtils.m */,
 				7A4FB8C91DF89A370073F268 /* BPXCTestFile.h */,
 				7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */,
+				B9357DC51F5E5CD7007E7B22 /* BPSimulatorFifoFile.m */,
+				B9357DC71F5E5D56007E7B22 /* BPSimulatorFifoFile.h */,
 			);
 			name = Shared;
 			path = ../../Source/Shared;
@@ -377,6 +382,7 @@
 				C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */,
 				C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */,
 				BAD8484A1DBC6A83007034CF /* BPReportCollector.m in Sources */,
+				B9357DC61F5E5CD7007E7B22 /* BPSimulatorFifoFile.m in Sources */,
 				7A4FB8DE1DF89B1A0073F268 /* BPTestClass.m in Sources */,
 				C41C41F31DB04032001F32A2 /* BPApp.m in Sources */,
 				7A4FB8CB1DF89A370073F268 /* BPXCTestFile.m in Sources */,

@@ -14,8 +14,8 @@
 #import "CoreSimulator.h"
 #import "BPTreeParser.h"
 #import "BPUtils.h"
+#import "BPSimulatorFifoFile.h"
 #import <AppKit/AppKit.h>
-#import <sys/stat.h>
 #import "BPTestBundleConnection.h"
 #import "BPTestDaemonConnection.h"
 
@@ -241,22 +241,18 @@
         appLaunchEnvironment[@"_BP_TEST_HANG_ON_LAUNCH"] = @"YES";
     }
 
-    // Intercept stdout, stderr and post as simulator-output events
-    NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/stdout_stderr_%@", self.device.dataPath, [[self.device UDID] UUIDString]];
-    NSString *simStdoutPath = [BPUtils mkstemp:stdout_stderr withError:nil];
-    assert(simStdoutPath != nil);
+    self.stdOutAndErrorFifoFile = [[BPSimulatorFifoFile alloc]
+                                   initAtPath:[NSString stringWithFormat:@"/tmp/stdout_stderr_%@", [[self.device UDID] UUIDString]]
+                                   withDeviceDataPath:self.device.dataPath];
 
-    NSString *simStdoutRelativePath = [simStdoutPath substringFromIndex:((NSString *)self.device.dataPath).length];
-    [[NSFileManager defaultManager] removeItemAtPath:simStdoutPath error:nil];
-
-    mkfifo([simStdoutPath UTF8String], S_IWUSR | S_IRUSR | S_IRGRP);
+    NSString *simStdoutRelativePath = self.stdOutAndErrorFifoFile.relativePath;
 
     NSMutableDictionary *appLaunchEnv = [appLaunchEnvironment mutableCopy];
     [appLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStdoutKey];
     [appLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStderrKey];
     NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/IDEBundleInjection.framework/IDEBundleInjection", self.config.xcodePath];
     [appLaunchEnv setObject:insertLibraryPath forKey:@"DYLD_INSERT_LIBRARIES"];
-    int fd = open([simStdoutPath UTF8String], O_RDWR);
+    int fd = open([self.stdOutAndErrorFifoFile.absolutePath UTF8String], O_RDWR);
     self.stdOutHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd];
 
     appLaunchEnvironment = [appLaunchEnv copy];
