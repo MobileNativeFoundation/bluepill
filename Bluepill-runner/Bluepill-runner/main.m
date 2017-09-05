@@ -57,15 +57,19 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
         int c;
         BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
-
         struct option *lopts = [config getLongOptions];
         char *sopts = [config getShortOptions];
-
         if (argv[1] && (!strcmp(argv[1], "version") || (!strcmp(argv[1], "--version")))) {
             printf("Bluepill %s\n", BP_VERSION);
             exit(0);
         }
-
+        
+        NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
+        if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
+            fprintf(stderr, "ERROR: invalide xcode version: %s; only %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
+            exit(1);
+        }
+        
         if (argv[1] && (!strcmp(argv[1], "--matrix"))) {
             m();
             exit(0);
