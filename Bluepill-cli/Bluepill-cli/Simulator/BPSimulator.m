@@ -101,46 +101,8 @@
 
 - (void)bootWithCompletion:(void (^)(NSError *error))completion {
     // Now boot it.
-    [BPUtils printInfo:INFO withString:@"Running in HEADLESS mode..."];
+    [BPUtils printInfo:INFO withString:@"Booting a simulator without launching Simulator app"];
     [self openSimulatorHeadlessWithCompletion:completion];
-    // not headless? open the simulator app.
-    if (!self.config.headlessMode) {
-        [BPUtils printInfo:INFO withString:@"Running in NON-headless mode..."];
-        [self openSimulatorWithCompletion:completion];
-    }
-}
-
-- (void)openSimulatorWithCompletion:(void (^)(NSError *))completion {
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
-        NSError *error;
-        NSURL *simulatorURL = [NSURL fileURLWithPath:
-                               [NSString stringWithFormat:@"%@/Applications/Simulator.app/Contents/MacOS/Simulator",
-                                self.config.xcodePath]];
-
-        NSDictionary *configuration = @{NSWorkspaceLaunchConfigurationArguments: @[@"-CurrentDeviceUDID", [[self.device UDID] UUIDString]]};
-        NSWorkspaceLaunchOptions launchOptions = NSWorkspaceLaunchAsync |
-        NSWorkspaceLaunchWithoutActivation |
-        NSWorkspaceLaunchAndHide;
-        [BPUtils printInfo:INFO withString:@"configuration %@, simulatorURL: %@", configuration, simulatorURL];
-        self.app = [[NSWorkspace sharedWorkspace]
-                    launchApplicationAtURL:simulatorURL
-                    options:launchOptions
-                    configuration:@{}
-                    error:&error];
-
-        if (!self.app) {
-            assert(error != nil);
-            completion(error);
-            return;
-        }
-        NSError *errorWait = [self waitForDeviceReady];
-        [BPUtils printInfo:INFO withString:@"Simulator %@ has error: %@", self.device.UDID.UUIDString, error];
-        if (errorWait) {
-            [self.app terminate];
-        }
-        completion(error);
-        return;
-    });
 }
 
 - (void)openSimulatorHeadlessWithCompletion:(void (^)(NSError *))completion {
