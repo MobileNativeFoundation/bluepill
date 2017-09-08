@@ -240,7 +240,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 }
 
 - (id)_XCT_getProgressForLaunch:(id)token {
-    [BPUtils printInfo:INFO withString:@"BPTestBundleConnectionTest process requested launch process status with token %@", token];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnectionTest process requested launch process status with token %@", token];
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
     [receipt invokeCompletionWithReturnValue:@1 error:nil];
     return receipt;
@@ -251,7 +251,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     kill(self.appProcessPID, SIGKILL);
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
     [receipt invokeCompletionWithReturnValue:token error:error];
-    [BPUtils printInfo:INFO withString:@"BPTestBundleConnection_XCT_terminateProcess with token %@", token];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_terminateProcess with token %@", token];
     return receipt;
 }
 

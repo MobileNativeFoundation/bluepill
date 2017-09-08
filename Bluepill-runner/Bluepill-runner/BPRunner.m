@@ -149,10 +149,10 @@ maxprocs(void)
                             config.xcodePath]];
     
     NSWorkspaceLaunchOptions launchOptions = NSWorkspaceLaunchAsync |
-    NSWorkspaceLaunchWithoutActivation |
-    NSWorkspaceLaunchAndHide;
+                                             NSWorkspaceLaunchWithoutActivation |
+                                             NSWorkspaceLaunchAndHide;
     //launch Simulator.app without booting a simulator
-    NSDictionary *configuration = @{NSWorkspaceLaunchConfigurationArguments: @[@"-StartLastDeviceOnLaunch",@"0"]};
+    NSDictionary *configuration = @{NSWorkspaceLaunchConfigurationArguments:@[@"-StartLastDeviceOnLaunch",@"0"]};
     NSRunningApplication *app = [[NSWorkspace sharedWorkspace]
                                  launchApplicationAtURL:simulatorURL
                                  options:launchOptions

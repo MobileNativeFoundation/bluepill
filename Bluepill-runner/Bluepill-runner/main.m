@@ -66,7 +66,7 @@ int main(int argc, char * argv[]) {
         
         NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
         if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
-            fprintf(stderr, "ERROR: invalide xcode version: %s; only %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
+            fprintf(stderr, "ERROR: Invalid xcode version: %s; Only %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
             exit(1);
         }
         

@@ -124,7 +124,6 @@
 - (NSError *)waitForDeviceReady {
     int attempts = 1200;
     while (attempts > 0 && ![self.device.stateString isEqualToString:@"Booted"]) {
-        [BPUtils printInfo:INFO withString:@"Simulator %@ currently has the state: %@", self.device.UDID.UUIDString, self.device.stateString];
         [NSThread sleepForTimeInterval:0.1];
         --attempts;
     }
@@ -180,7 +179,7 @@
          hostBundleId, hostBundlePath];
         return NO;
     }
-    [BPUtils printInfo:INFO withString: @"installApplication: host bundleId: %@, host BundlePath: %@, testRunnerAppPath: %@", hostBundleId, hostBundlePath, self.config.testRunnerAppPath];
+    [BPUtils printInfo:DEBUGINFO withString: @"installApplication: host bundleId: %@, host BundlePath: %@, testRunnerAppPath: %@", hostBundleId, hostBundlePath, self.config.testRunnerAppPath];
     // Install the host application
     BOOL installed = [self.device
                       installApplication:[NSURL fileURLWithPath:hostBundlePath]
