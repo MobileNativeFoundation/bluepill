@@ -107,6 +107,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     NSString * const TESTROOT = @"__TESTROOT__";
     NSString * const TESTHOST = @"__TESTHOST__";
     NSString *testHostPath = [dict objectForKey:@"TestHostPath"];
+    NSString *testHostBundleIdentifier = [dict objectForKey:@"TestHostBundleIdentifier"];
     if (!testHostPath) {
         BP_SET_ERROR(error, @"No 'TestHostPath' found");
         return nil;
@@ -130,7 +131,12 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     } else if ([testBundlePath rangeOfString:TESTROOT].location != NSNotFound) {
         testHostPath = [testHostPath stringByDeletingLastPathComponent]; //remove /bluepill
         NSString *temp = [testHostPath stringByDeletingLastPathComponent]; //remove /iphonesimulator
-        testHostPath = [testHostPath stringByAppendingString:@"/BPSampleApp.app"];
+        //extract app name with .app extension
+        NSRange dotPosition = [testHostBundleIdentifier rangeOfString:@"." options:NSBackwardsSearch];
+        NSString *appName = [testHostBundleIdentifier substringFromIndex:dotPosition.location + 1];
+        NSString *appNameWithExtension = [appName stringByAppendingString:@".app"];
+        //append the app name to the direction
+        testHostPath = [testHostPath stringByAppendingString:appNameWithExtension];
         testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTROOT withString:temp];
     } else {
         [BPUtils printInfo:ERROR withString:@"testBundlePath is incorrect, please check xctestrun file"];
