@@ -11,6 +11,7 @@
 
 #define BP_DEFAULT_RUNTIME "iOS 10.3"
 #define BP_DEFAULT_DEVICE_TYPE "iPhone 7"
+#define BP_DEFAULT_XCODE_VERSION "Xcode 8"
 
 static const NSString * kCFBundleIdentifier = @"CFBundleIdentifier";
 static const NSString * kOptionsArgumentsKey = @"arguments";
