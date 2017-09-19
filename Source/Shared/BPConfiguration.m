@@ -130,6 +130,8 @@ struct BPOptions {
     // New options
     {359, "xctestrun-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcTestRunPath",
         "The .xctestrun file with test information."},
+    {360, "diagnostics", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "saveDiagnosticsOnError",
+        "Save Simulator diagnostics and useful debugging information in the output directory. If no output directory it doesn't do anything."},
     
 
     {0, 0, 0, 0, 0, 0, 0}

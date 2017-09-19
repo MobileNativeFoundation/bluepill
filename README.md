@@ -70,7 +70,7 @@ A full list supported options are listed here.
 |      error-retries     |           -R           | Number of times to recover from simulator/app crashing/hanging and continue running|     N    | 5                |
 |    failure-tolerance   |           -f           | Number of times to retry on test failures                                          |     N    | 0                |
 |    only-retry-failed   |           -F           | When `failure-tolerance` > 0, only retry tests that failed                         |     N    | false            |
-|         runtime        |           -r           | What runtime to use.                                                               |     N    | iOS 10.3        |
+|         runtime        |           -r           | What runtime to use.                                                               |     N    | iOS 10.3         |
 |      stuck-timeout     |           -S           | Timeout in seconds for a test that seems stuck (no output).                        |     N    | 300s             |
 |      test-timeout      |           -T           | Timeout in seconds for a test that is producing output.                            |     N    | 300s             |
 |    test-bundle-path    |           -t           | The path to the test bundle to execute (single .xctest).                           |     N    | n/a              |
@@ -79,7 +79,8 @@ A full list supported options are listed here.
 |      repeat-count      |           -C           | Number of times we'll run the entire test suite (used for load testing).           |     N    | 1                |
 |        no-split        |           -N           | Test bundles you don't want to be packed into different groups to run in parallel. |     N    | n/a              |
 |         quiet          |           -q           | Turn off all output except fatal errors.                                           |     N    | YES              |
-|    reuse-simulator     |           n/a          | Enable reusing simulators between test bundles                                     |     N    | NO               
+|    reuse-simulator     |           n/a          | Enable reusing simulators between test bundles                                     |     N    | NO               |
+|       diagnostics      |           n/a          | Enable collection of diagnostics in outputDir in case of test failures             |     N    | NO               |
 |          help          |           -h           | Help.                                                                              |     N    | n/a              |
 |     runner-app-path    |           -u           | The test runner for UI tests.                                                      |     N    | n/a              |
 

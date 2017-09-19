@@ -181,7 +181,8 @@ static BOOL quiet = NO;
     [task launch];
     NSData *data = [fh readDataToEndOfFile];
     [task waitUntilExit];
-    return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    NSString *result = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    return result;
 }
 
 + (BOOL)runWithTimeOut:(NSTimeInterval)timeout until:(BPRunBlock)block {
@@ -227,6 +228,20 @@ static BOOL quiet = NO;
         }
     }
     return expandedTestCases;
+}
+
++ (void)saveDebuggingDiagnostics:(NSString *)outputDirectory {
+  BOOL isDir = false;
+  NSFileManager *fm = [NSFileManager defaultManager];
+  if (outputDirectory == nil || !([fm fileExistsAtPath:outputDirectory isDirectory:&isDir] && isDir)) {
+    return;
+  }
+  NSString *cmd = [NSString stringWithFormat:@"echo | xcrun simctl diagnose -b --output='%@/diagnostics' --data-container", outputDirectory];
+  [BPUtils runShell:cmd];
+  cmd = [NSString stringWithFormat:@"ps axuw > '%@'/ps-axuw.log", outputDirectory];
+  [BPUtils runShell:cmd];
+  cmd = [NSString stringWithFormat:@"df -h > '%@'/df-h.log", outputDirectory];
+  [BPUtils runShell:cmd];
 }
 
 @end

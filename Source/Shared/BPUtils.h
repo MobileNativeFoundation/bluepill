@@ -133,4 +133,10 @@ typedef BOOL (^BPRunBlock)(void);
  */
 + (BOOL)runWithTimeOut:(NSTimeInterval)time until:(BPRunBlock)block;
 
+/*!
+ * @discussion save debugging statistics in output directory
+ * @param outputDirectory where to save the diagnostics
+ */
++ (void)saveDebuggingDiagnostics:(NSString *)outputDirectory;
+
 @end
