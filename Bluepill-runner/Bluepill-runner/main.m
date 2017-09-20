@@ -66,7 +66,7 @@ int main(int argc, char * argv[]) {
             exit(0);
         }
         
-        //Check if xcode version running on the host match the intended Bluepill branch: Xcode 8 branch is not compatible with Xcode 9 branch
+        //Check if Xcode version running on the host match the intended Bluepill branch: Xcode 8 branch is not compatible with Xcode 9 branch
         NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
         if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
             fprintf(stderr, "ERROR: Invalid Xcode version:\n%s;\nOnly %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
@@ -75,18 +75,10 @@ int main(int argc, char * argv[]) {
         
         //Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
         //Senario to prevent: Bluepill is compiled with Xcode 9, but runs with host installed with Xcode 8
-        NSArray *versionStrArray = [xcodeVersion componentsSeparatedByString:@"\n"];
-        NSString *lineOne = [versionStrArray objectAtIndex:0];
-        NSString *lineTwo = [versionStrArray objectAtIndex:1];
-        NSRange xcodeRange = [lineOne rangeOfString:@"Xcode"];
-        NSString *xcodeVer = [lineOne substringFromIndex:xcodeRange.location + 6]; //Xcode version string
-        NSRange versionRange = [lineTwo rangeOfString:@"version"];
-        NSString *buildVer = [lineTwo substringFromIndex:versionRange.location+8]; //build version string
-        NSString *runTimeVersion = [NSString stringWithFormat:@"%@ (%@)", xcodeVer, buildVer];
-        if ([runTimeVersion isEqualToString:@XCODE_VERSION]) {
+        if ([[BPUtils getXcodeRuntimeVersion] isEqualToString:@XCODE_VERSION]) {
             printf("Bluepill runtime version and compile time version are matched: %s\n", XCODE_VERSION);
         } else {
-            fprintf(stderr, "ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n", [runTimeVersion UTF8String], XCODE_VERSION);
+            fprintf(stderr, "ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n", [[BPUtils getXcodeRuntimeVersion] UTF8String], XCODE_VERSION);
             exit(1);
         }
 

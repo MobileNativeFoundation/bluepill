@@ -122,6 +122,7 @@ typedef NS_ENUM(int, BPKind) {
  * @return return the shell output
  */
 + (NSString *)runShell:(NSString *)command;
++ (NSString *)getXcodeRuntimeVersion;
 
 typedef BOOL (^BPRunBlock)(void);
 
