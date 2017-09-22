@@ -5,7 +5,6 @@
 //
 
 @import Foundation;
-
 @protocol SimDeviceIOBundleInterface;
 @class NSBundle;
 

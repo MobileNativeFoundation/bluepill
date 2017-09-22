@@ -6,24 +6,27 @@
 
 #import "SimDeviceIO.h"
 
-@class NSArray, NSMutableDictionary, NSObject;
+
+@class NSArray, NSObject, NSString;
 
 @interface SimDeviceIOClient : SimDeviceIO
 {
     NSArray *_deviceIOPorts;
-    struct NSMutableDictionary *_consumerProxies;
-    NSObject<OS_dispatch_queue> *_executionQueue;
+     NSObject<OS_dispatch_queue> *_executionQueue;
 }
 
 @property(retain, nonatomic) NSObject<OS_dispatch_queue> *executionQueue; // @synthesize executionQueue=_executionQueue;
-@property(retain, nonatomic) NSMutableDictionary *consumerProxies; // @synthesize consumerProxies=_consumerProxies;
 @property(retain, nonatomic) NSArray *deviceIOPorts; // @synthesize deviceIOPorts=_deviceIOPorts;
 //- (void).cxx_destruct;
 - (void)updateIOPorts;
-- (void)detachConsumer:(id)arg1 fromPort:(id)arg2;
-- (void)attachConsumer:(id)arg1 toPort:(id)arg2;
 - (id)ioPorts;
-- (id)initWithDevice:(id)arg1;
+- (id)initWithDevice:(id)arg1 errorQueue:(id)arg2 errorHandler:(CDUnknownBlockType)arg3;
+
+// Remaining properties
+@property(readonly, copy) NSString *debugDescription;
+@property(readonly, copy) NSString *description;
+@property(readonly) unsigned long long hash;
+@property(readonly) Class superclass;
 
 @end
 

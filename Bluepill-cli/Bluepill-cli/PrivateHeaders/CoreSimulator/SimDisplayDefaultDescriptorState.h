@@ -8,7 +8,7 @@
 
 #import "SimDisplayDescriptorState.h"
 
-@class NSString;
+@class NSString, NSURL;
 
 @interface SimDisplayDefaultDescriptorState : NSObject <SimDisplayDescriptorState>
 {
@@ -16,14 +16,18 @@
     int _powerState;
     unsigned int _defaultWidthForDisplay;
     unsigned int _defaultHeightForDisplay;
+    unsigned int _defaultPixelFormat;
+    NSURL *_mask;
 }
 
-+ (id)defaultDisplayDescriptorStateWithPowerState:(int)arg1 displayClass:(unsigned short)arg2 width:(unsigned int)arg3 height:(unsigned int)arg4;
++ (id)defaultDisplayDescriptorStateWithPowerState:(int)arg1 displayClass:(unsigned short)arg2 width:(unsigned int)arg3 height:(unsigned int)arg4 pixelFormat:(unsigned int)arg5 mask:(id)arg6;
+@property(retain, nonatomic) NSURL *mask; // @synthesize mask=_mask;
+@property(nonatomic) unsigned int defaultPixelFormat; // @synthesize defaultPixelFormat=_defaultPixelFormat;
 @property(nonatomic) unsigned int defaultHeightForDisplay; // @synthesize defaultHeightForDisplay=_defaultHeightForDisplay;
 @property(nonatomic) unsigned int defaultWidthForDisplay; // @synthesize defaultWidthForDisplay=_defaultWidthForDisplay;
 @property(nonatomic) unsigned short displayClass; // @synthesize displayClass=_displayClass;
 @property(nonatomic) int powerState; // @synthesize powerState=_powerState;
-- (id)xpcObject;
+- (void).cxx_destruct;
 
 // Remaining properties
 @property(readonly, copy) NSString *debugDescription;

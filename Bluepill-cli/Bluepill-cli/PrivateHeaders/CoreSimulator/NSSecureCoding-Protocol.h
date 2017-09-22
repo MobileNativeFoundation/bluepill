@@ -6,8 +6,7 @@
 
 @import Foundation;
 
-/*
 @protocol NSSecureCoding <NSCoding>
 + (BOOL)supportsSecureCoding;
 @end
-*/
+

@@ -17,6 +17,7 @@
 }
 
 + (id)schemes;
+- (void).cxx_destruct;
 - (void)disconnect;
 - (void)URLSession:(id)arg1 task:(id)arg2 didCompleteWithError:(id)arg3;
 - (unsigned long long)transmit:(const void *)arg1 ofLength:(unsigned long long)arg2;

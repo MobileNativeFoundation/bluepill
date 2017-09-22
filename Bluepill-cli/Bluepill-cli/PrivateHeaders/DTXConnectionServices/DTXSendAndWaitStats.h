@@ -22,10 +22,10 @@
     NSMutableSet *_compressionTypeSet;
 }
 
+- (void).cxx_destruct;
 - (void)logStats:(id)arg1;
 - (void)notifyCompressedData:(unsigned long long)arg1 withUncompressedSize:(unsigned long long)arg2 nanosToCompress:(unsigned long long)arg3 usingCompressionType:(int)arg4;
 - (void)sentAdditionalBytes:(unsigned long long)arg1;
-- (void)dealloc;
 - (id)initWithQueue:(id)arg1 andMicrosPerUnit:(double)arg2;
 
 @end

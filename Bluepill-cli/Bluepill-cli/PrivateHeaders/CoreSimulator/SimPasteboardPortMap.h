@@ -5,21 +5,17 @@
 //
 
 @import Foundation;
-
-@class NSArray, NSMutableDictionary, NSObject;
+@class NSMutableDictionary, NSObject;
 
 @interface SimPasteboardPortMap : NSObject
 {
-    NSArray *_pasteboardItems;
     NSMutableDictionary *_portToProxyMap;
     NSObject *_concurrentQueue;
 }
 
 + (id)sharedManager;
-@property(retain, nonatomic) NSObject *concurrentQueue; // @synthesize concurrentQueue=_concurrentQueue;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *concurrentQueue; // @synthesize concurrentQueue=_concurrentQueue;
 @property(retain, nonatomic) NSMutableDictionary *portToProxyMap; // @synthesize portToProxyMap=_portToProxyMap;
-@property(retain, nonatomic) NSArray *pasteboardItems; // @synthesize pasteboardItems=_pasteboardItems;
-//- (void).cxx_destruct;
 - (id)createPortKey:(unsigned int)arg1;
 - (void)setValue:(id)arg1 forPort:(unsigned int)arg2;
 - (id)lookupWith:(unsigned int)arg1;

@@ -13,9 +13,9 @@
     DTXProxyChannel *_proxyChannel;
 }
 
+- (void).cxx_destruct;
 - (id)methodSignatureForSelector:(SEL)arg1;
 - (void)forwardInvocation:(id)arg1;
-- (void)dealloc;
 - (id)initWithChannel:(id)arg1;
 
 @end

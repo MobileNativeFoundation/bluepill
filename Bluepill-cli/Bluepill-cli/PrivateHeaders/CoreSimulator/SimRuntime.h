@@ -28,14 +28,12 @@
     NSDictionary *_requiredHostServices;
     NSDictionary *_forwardHostNotifications;
     NSDictionary *_forwardHostNotificationsWithState;
-    NSString *_platformName;
-    NSString *_platformPath;
     NSArray *_supportedProductFamilyIDs;
     SimRuntimePairingReuirements *_pairingRequirements;
     NSArray *_preferredPairingDeviceTypes;
     NSDictionary *_environment_extra;
     void *_libLaunchHostHandle;
-    NSDictionary *_aliases;
+    NSArray *_aliases;
 }
 
 + (unsigned int)equivalentIOSVersionForVersion:(unsigned int)arg1 profile:(id)arg2 platformIdentifier:(id)arg3;
@@ -45,14 +43,12 @@
 @property(nonatomic) unsigned int minCoreSimulatorFrameworkVersion; // @synthesize minCoreSimulatorFrameworkVersion=_minCoreSimulatorFrameworkVersion;
 @property(nonatomic) unsigned int maxHostVersion; // @synthesize maxHostVersion=_maxHostVersion;
 @property(nonatomic) unsigned int minHostVersion; // @synthesize minHostVersion=_minHostVersion;
-@property(copy, nonatomic) NSDictionary *aliases; // @synthesize aliases=_aliases;
+@property(copy, nonatomic) NSArray *aliases; // @synthesize aliases=_aliases;
 @property(nonatomic) void *libLaunchHostHandle; // @synthesize libLaunchHostHandle=_libLaunchHostHandle;
 @property(copy, nonatomic) NSDictionary *environment_extra; // @synthesize environment_extra=_environment_extra;
 @property(copy, nonatomic) NSArray *preferredPairingDeviceTypes; // @synthesize preferredPairingDeviceTypes=_preferredPairingDeviceTypes;
 @property(retain, nonatomic) SimRuntimePairingReuirements *pairingRequirements; // @synthesize pairingRequirements=_pairingRequirements;
 @property(copy, nonatomic) NSArray *supportedProductFamilyIDs; // @synthesize supportedProductFamilyIDs=_supportedProductFamilyIDs;
-@property(copy, nonatomic) NSString *platformPath; // @synthesize platformPath=_platformPath;
-@property(copy, nonatomic) NSString *platformName; // @synthesize platformName=_platformName;
 @property(copy, nonatomic) NSDictionary *forwardHostNotificationsWithState; // @synthesize forwardHostNotificationsWithState=_forwardHostNotificationsWithState;
 @property(copy, nonatomic) NSDictionary *forwardHostNotifications; // @synthesize forwardHostNotifications=_forwardHostNotifications;
 @property(copy, nonatomic) NSDictionary *requiredHostServices; // @synthesize requiredHostServices=_requiredHostServices;
@@ -67,16 +63,6 @@
 @property(retain, nonatomic) NSBundle *bundle; // @synthesize bundle=_bundle;
 @property(copy, nonatomic) NSString *identifier; // @synthesize identifier=_identifier;
 @property(copy, nonatomic) NSString *name; // @synthesize name=_name;
-//- (void).cxx_destruct;
-- (id)platformRuntimeOverlay;
-- (CDUnknownFunctionPointerType)launch_sim_set_death_handler;
-- (CDUnknownFunctionPointerType)launch_sim_waitpid;
-- (CDUnknownFunctionPointerType)launch_sim_spawn;
-- (CDUnknownFunctionPointerType)launch_sim_getenv;
-- (CDUnknownFunctionPointerType)launch_sim_bind_session_to_port;
-- (CDUnknownFunctionPointerType)launch_sim_find_endpoint;
-- (CDUnknownFunctionPointerType)launch_sim_unregister_endpoint;
-- (CDUnknownFunctionPointerType)launch_sim_register_endpoint;
 - (BOOL)isAvailableWithError:(id *)arg1;
 @property(readonly, nonatomic) BOOL available;
 - (id)dyld_simPath;
@@ -86,7 +72,9 @@
 - (BOOL)supportsFeatureConditionally:(id)arg1;
 - (BOOL)supportsFeature:(id)arg1;
 - (BOOL)supportsDeviceType:(id)arg1;
+- (id)platformResourcesPath;
 - (id)environment;
+- (id)debugDescription;
 - (id)description;
 - (id)initWithBundle:(id)arg1;
 - (id)initWithPath:(id)arg1;

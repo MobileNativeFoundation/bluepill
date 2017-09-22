@@ -6,27 +6,26 @@
 
 #import "NSObject.h"
 
-@class NSMutableDictionary, NSObject<OS_dispatch_queue>, NSObject<OS_dispatch_semaphore>;
+@class NSMutableDictionary, NSObject<OS_dispatch_queue>;
 
 @interface DTXMessageParser : NSObject
 {
     const char *_parsingBuffer;
     unsigned long long _parsingBufferUsed;
     unsigned long long _parsingBufferSize;
+    CDUnknownBlockType _exceptionHandler;
+    CDUnknownBlockType _parsedMessageHandler;
+    _Bool _eof;
     NSObject<OS_dispatch_queue> *_parsingQueue;
     NSMutableDictionary *_fragmentedBuffersByIdentifier;
-    NSObject<OS_dispatch_semaphore> *_hasMoreDataSem;
-    NSObject<OS_dispatch_semaphore> *_wantsMoreDataSem;
-    unsigned long long _desiredSize;
-    _Bool _eof;
     id <DTXBlockCompressor> _compressor;
 }
 
+- (void).cxx_destruct;
 - (void)replaceCompressor:(id)arg1;
-- (void)parsingComplete;
+- (id)parsingComplete;
 - (void)parseIncomingBytes:(const char *)arg1 length:(unsigned long long)arg2;
-- (const void *)waitForMoreData:(unsigned long long)arg1 incrementalBuffer:(const void **)arg2;
-- (id)parseMessageWithExceptionHandler:(CDUnknownBlockType)arg1;
+- (void)_messageParsedWithHeader:(struct DTXMessageHeader)arg1 bytes:(const void *)arg2 length:(unsigned long long)arg3 destructor:(CDUnknownBlockType)arg4;
 - (void)dealloc;
 - (id)initWithMessageHandler:(CDUnknownBlockType)arg1 andParseExceptionHandler:(CDUnknownBlockType)arg2;
 

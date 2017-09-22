@@ -10,8 +10,6 @@
 {
 }
 
-+ (id)createLibCompressionBlockCompressor;
-+ (id)createLibFastCompressionBlockCompressor;
 + (id)createBlockCompressor;
 
 @end

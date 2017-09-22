@@ -22,18 +22,18 @@
     NSMutableArray *_disconnectSources;
     unsigned long long _gizmoNotificationRegID;
     unsigned long long _companionNotificationRegID;
-    NSObject *_stateVariableQueue;
+    NSObject<OS_dispatch_queue> *_stateVariableQueue;
     SimDeviceNotificationManager *_notificationManager;
 }
 
 + (BOOL)testPossiblePairingWithDeviceTypeA:(id)arg1 RuntimeA:(id)arg2 DeviceTypeB:(id)arg3 RuntimeB:(id)arg4 error:(id *)arg5;
 + (id)SimDevicePairWithUUID:(id)arg1 gizmo:(id)arg2 companion:(id)arg3 active:(BOOL)arg4 connected:(BOOL)arg5 deviceSet:(id)arg6;
 @property(retain, nonatomic) SimDeviceNotificationManager *notificationManager; // @synthesize notificationManager=_notificationManager;
-@property(retain, nonatomic) NSObject *stateVariableQueue; // @synthesize stateVariableQueue=_stateVariableQueue;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *stateVariableQueue; // @synthesize stateVariableQueue=_stateVariableQueue;
 @property(nonatomic) unsigned long long companionNotificationRegID; // @synthesize companionNotificationRegID=_companionNotificationRegID;
 @property(nonatomic) unsigned long long gizmoNotificationRegID; // @synthesize gizmoNotificationRegID=_gizmoNotificationRegID;
 @property(retain, nonatomic) NSMutableArray *disconnectSources; // @synthesize disconnectSources=_disconnectSources;
-@property(retain, nonatomic) NSObject *pairingStateQueue; // @synthesize pairingStateQueue=_pairingStateQueue;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *pairingStateQueue; // @synthesize pairingStateQueue=_pairingStateQueue;
 @property(nonatomic) __weak SimDeviceSet *deviceSet; // @synthesize deviceSet=_deviceSet;
 @property(retain, nonatomic) SimDevice *companion; // @synthesize companion=_companion;
 @property(retain, nonatomic) SimDevice *gizmo; // @synthesize gizmo=_gizmo;
@@ -63,7 +63,6 @@
 - (id)description;
 - (BOOL)unregisterNotificationHandler:(unsigned long long)arg1 error:(id *)arg2;
 - (unsigned long long)registerNotificationHandlerOnQueue:(id)arg1 handler:(CDUnknownBlockType)arg2;
-- (unsigned long long)registerNotificationHandler:(CDUnknownBlockType)arg1;
 - (void)invalidate;
 - (id)initWithUUID:(id)arg1 gizmo:(id)arg2 companion:(id)arg3 active:(BOOL)arg4 connected:(BOOL)arg5 deviceSet:(id)arg6;
 
