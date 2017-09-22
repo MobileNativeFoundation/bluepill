@@ -241,17 +241,4 @@ static BOOL quiet = NO;
     return runTimeVersion;
 }
 
-+ (NSString *)getXcodeRuntimeVersion {
-    NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
-    NSArray *versionStrArray = [xcodeVersion componentsSeparatedByString:@"\n"];
-    NSString *lineOne = [versionStrArray objectAtIndex:0];
-    NSString *lineTwo = [versionStrArray objectAtIndex:1];
-    NSRange xcodeRange = [lineOne rangeOfString:@"Xcode"];
-    NSString *xcodeVer = [lineOne substringFromIndex:xcodeRange.location + 6]; //Xcode version string
-    NSRange versionRange = [lineTwo rangeOfString:@"version"];
-    NSString *buildVer = [lineTwo substringFromIndex:versionRange.location+8]; //build version string
-    NSString *runTimeVersion = [NSString stringWithFormat:@"%@ (%@)", xcodeVer, buildVer];
-    return runTimeVersion;
-}
-
 @end
