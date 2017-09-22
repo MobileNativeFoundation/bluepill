@@ -16,15 +16,16 @@ _a < _b ? _a : _b; \
 
 #import <Foundation/Foundation.h>
 
+// These must match Messages in BPUtils.m
 typedef NS_ENUM(int, BPKind) {
-    PASSED,
-    FAILED,
-    TIMEOUT,
-    INFO,
-    ERROR,
-    WARNING,
-    CRASH,
-    DEBUGINFO // DEBUG collides with a #define, so DEBUGINFO it is
+    TIMEOUT   = 8,
+    CRASH     = 7,
+    FAILED    = 6,
+    PASSED    = 5,
+    ERROR     = 4,
+    WARNING   = 3,
+    INFO      = 2,
+    DEBUGINFO = 1 // DEBUG collides with a #define, so DEBUGINFO it is
 };
 
 @class BPConfiguration;
@@ -32,10 +33,10 @@ typedef NS_ENUM(int, BPKind) {
 @interface BPUtils : NSObject
 
 /*!
- @discussion enable debugging messages
- @param enable True enables debugging, False disables it.
+ @discussion set logging level
+ @param level the log level
  */
-+ (void)enableDebugOutput:(BOOL)enable;
++ (void)setLogLevel:(BPKind) level ;
 
 /*!
  @discussion omit all output except fatal errors

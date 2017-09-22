@@ -72,7 +72,7 @@ maxprocs(void)
             }
             if (!foundIt) {
                 fprintf(stderr, "ERROR: I couldn't find the `bp` executable anywhere.\n"
-                        "Please put it somewhere in your PATH. (Ideally next to `bluepill`.\n");
+                        "Please put it somewhere in your PATH. (Ideally next to `bluepill`).\n");
                 return nil;
             }
         }

@@ -87,6 +87,7 @@ A full list supported options are listed here.
 |    reuse-simulator     |           n/a          | Enable reusing simulators between test bundles                                     |     N    | NO               
 |          help          |           -h           | Help.                                                                              |     N    | n/a              |
 |     runner-app-path    |           -u           | The test runner for UI tests.                                                      |     N    | n/a              |
+|        log-level       |                        | Set the log level ((FAILED=8, CRASH=7, TIMEOUT=6, PASSED=5, ERROR=4, WARNING=3, INFO=2, DEBUG=1) |     N    | n/a              |
 
 ## Demo
 
@@ -123,6 +124,6 @@ Bluepill was inspired by [parallel iOS test](https://github.com/plu/parallel_ios
 
   Run `./scripts/bluepill.sh test`.
 
-- How to BUMP the max files and max procs to support running multiple simulators on macOS?
+- I can't run with more than 4 simulators but the demo you posted has 12 simulators running! I call B.S.!
 
-  Check - https://blog.dekstroza.io/ulimit-shenanigans-on-osx-el-capitan/
+  You need to bump up your maxfiles and maxprocs, See https://blog.dekstroza.io/ulimit-shenanigans-on-osx-el-capitan/

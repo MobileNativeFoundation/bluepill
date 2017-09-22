@@ -65,6 +65,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *outputDirectory;
 @property (nonatomic) BOOL headlessMode;
 @property (nonatomic, strong) NSNumber *numSims;
+@property (nonatomic, strong) NSNumber *logLevel;
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
 @property (nonatomic, strong) NSString *useSimUDID;
