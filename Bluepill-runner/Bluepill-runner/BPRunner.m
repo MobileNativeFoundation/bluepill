@@ -253,7 +253,7 @@ maxprocs(void)
                 rc = (rc || [task terminationStatus]);
             }];
             if (!task) {
-                NSLog(@"Failed to launch: %@ %@", [task launchPath], [task arguments]);
+                [BPUtils printInfo:ERROR withString:@"task is nil!"];
                 exit(1);
             }
             [task launch];

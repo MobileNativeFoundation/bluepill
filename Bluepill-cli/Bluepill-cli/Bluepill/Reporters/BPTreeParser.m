@@ -461,6 +461,9 @@ static const NSString * const kPassed = @"passed";
             }
             logEntry = self.current;
         }
+        if (logEntry.log == nil) {
+            logEntry.log = @"";
+        }
         logEntry.log = [logEntry.log stringByAppendingString:line];
         logEntry.log = [logEntry.log stringByAppendingString:@"\n"];
     }

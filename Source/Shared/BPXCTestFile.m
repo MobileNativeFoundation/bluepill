@@ -14,7 +14,7 @@
 
 @implementation BPXCTestFile
 
-NSString *swiftNmCmdline = @"nm -gU '%@' | cut -d' ' -f3 | xargs xcrun swift-demangle | cut -d' ' -f3 | grep -e '[\\.|_]'test";
+NSString *swiftNmCmdline = @"nm -gU '%@' | cut -d' ' -f3 | xargs -s 131072 xcrun swift-demangle | cut -d' ' -f3 | grep -e '[\\.|_]'test";
 NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-' -f2 | cut -d'[' -f2 | cut -d']' -f1 | grep ' test'";
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
