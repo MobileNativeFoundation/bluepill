@@ -79,7 +79,6 @@ int main(int argc, char * argv[]) {
             fprintf(stderr, "ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n", [[BPUtils getXcodeRuntimeVersion] UTF8String], XCODE_VERSION);
             exit(1);
         }
-        
         if (argv[1] && (!strcmp(argv[1], "--matrix"))) {
             m();
             exit(0);
