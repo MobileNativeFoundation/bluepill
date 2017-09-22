@@ -7,7 +7,7 @@ Bluepill is a tool to run iOS tests in parallel using multiple simulators.
 
 ## Motivation
 
-[LinkedIn](https://www.linkedin.com) created Bluepill to run iOS tests in parallel using multiple simulators.
+[LinkedIn](https://www.linkedin.com) created Bluepill to run its large iOS test suite in a reasonable amount of time. If you want the long story, read [the blog post](https://engineering.linkedin.com/blog/2017/01/open-sourcing-bluepill--run-ios-tests-in-multiple-simulators).
 
 ## Features
 
@@ -37,7 +37,7 @@ $ bluepill --xctestrun-path ./SampleAppTest_iphonesimulator10.3-x86_64.xctestrun
 
 Alternatively, you can use a configuration file like the one below:
 
-```json
+```
 {
    "xctestrun-path": "./SampleAppTest_iphonesimulator10.3-x86_64.xctestrun", # Relative path or abs path
    "output-dir": "./build/" # Relative path or abs path
@@ -95,8 +95,7 @@ A full list supported options are listed here.
 
 ## Requirements
 
-Bluepill only runs on the latest Xcode (Xcode 9.0 Beta6). If you're
-looking for Xcode 8 support, please check out the
+Bluepill only works with **Xcode 9.0**. If you're looking for Xcode 8 support, please check out the
 [xcode8](https://github.com/linkedin/bluepill/tree/xcode8) branch.
 
 ## Acknowledgement
