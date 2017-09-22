@@ -77,9 +77,6 @@ static const NSString * const kPassed = @"passed";
 }
 
 - (BPTestCaseLogEntry *)currentTest {
-    if ([BPTreeAssembler sharedInstance] == nil) {
-        [BPUtils printInfo:INFO withString:@"[BPTreeAssembler sharedInstance] returned nil which may caused crash"];
-    }
     return [BPTreeAssembler sharedInstance].currentTest;
 }
 
@@ -465,7 +462,6 @@ static const NSString * const kPassed = @"passed";
             logEntry = self.current;
         }
         if (logEntry.log == nil) {
-            [BPUtils printInfo:INFO withString:@"logEntry.log is nil which may caused crash"];
             logEntry.log = @"";
         }
         logEntry.log = [logEntry.log stringByAppendingString:line];
