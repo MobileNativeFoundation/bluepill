@@ -112,7 +112,10 @@
 
 // Remaining properties
 @property(readonly, copy) NSString *debugDescription;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-property-type"
 @property(readonly) unsigned long long hash;
+#pragma clang diagnostic pop
 @property(readonly) Class superclass;
 
 @end
