@@ -314,10 +314,19 @@
     // NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
+    self.config.saveDiagnosticsOnError = YES;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPAppNegativeTests-results.xml"];
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"BPAppNegativeTests-results.xml"];
     [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [BPUtils runShell:[NSString stringWithFormat:@"find %@", outputDir]];
+    BOOL diagFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/diagnostics.tar.gz", outputDir]];
+    XCTAssert(diagFileFound);
+    BOOL psFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/ps-axuw.log", outputDir]];
+    XCTAssert(psFileFound);
+    BOOL dfFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/df-h.log", outputDir]];
+    XCTAssert(dfFileFound);
     XCTAssert(exitCode == BPExitStatusTestsFailed);
 }
 

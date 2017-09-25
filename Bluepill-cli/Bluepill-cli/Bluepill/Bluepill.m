@@ -558,6 +558,12 @@ void onInterrupt(int ignore) {
       context.exitStatus = [context.runner exitStatus];
       NEXT([self finishWithContext:context]);
     } else {
+      // If the tests failed, save as much debugging info as we can. XXX: Put this behind a flag
+      if (context.runner.exitStatus != BPExitStatusTestsAllPassed && _config.saveDiagnosticsOnError) {
+        [BPUtils printInfo:INFO withString:@"Saving Diagnostics for Debugging"];
+        [BPUtils saveDebuggingDiagnostics:_config.outputDirectory];
+      }
+      
       [self deleteSimulatorWithContext:context andStatus:[context.runner exitStatus]];
     }
 }

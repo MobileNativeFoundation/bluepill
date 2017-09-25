@@ -190,7 +190,8 @@ static BOOL quiet = NO;
         NSAssert(task, @"fh should not be nil");
     }
     [task waitUntilExit];
-    return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    NSString *result = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    return result;
 }
 
 + (BOOL)runWithTimeOut:(NSTimeInterval)timeout until:(BPRunBlock)block {
@@ -248,6 +249,20 @@ static BOOL quiet = NO;
     NSString *buildVer = [lineTwo substringFromIndex:versionRange.location+8]; //build version string
     NSString *runTimeVersion = [NSString stringWithFormat:@"%@ (%@)", xcodeVer, buildVer];
     return runTimeVersion;
+}
+
++ (void)saveDebuggingDiagnostics:(NSString *)outputDirectory {
+  BOOL isDir = false;
+  NSFileManager *fm = [NSFileManager defaultManager];
+  if (outputDirectory == nil || !([fm fileExistsAtPath:outputDirectory isDirectory:&isDir] && isDir)) {
+    return;
+  }
+  NSString *cmd = [NSString stringWithFormat:@"echo | xcrun simctl diagnose -b --output='%@/diagnostics' --data-container", outputDirectory];
+  [BPUtils runShell:cmd];
+  cmd = [NSString stringWithFormat:@"ps axuw > '%@'/ps-axuw.log", outputDirectory];
+  [BPUtils runShell:cmd];
+  cmd = [NSString stringWithFormat:@"df -h > '%@'/df-h.log", outputDirectory];
+  [BPUtils runShell:cmd];
 }
 
 @end
