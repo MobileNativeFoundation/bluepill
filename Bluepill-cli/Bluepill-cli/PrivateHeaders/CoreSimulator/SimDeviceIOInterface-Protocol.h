@@ -7,7 +7,7 @@
 //#import "FXPCImpersonateable.h"
 
 @class NSArray, NSString;
-//<FXPCImpersonateable>
+// <FXPCImpersonateable>
 @protocol SimDeviceIOInterface
 - (BOOL)notificationSetState:(unsigned long long)arg1 name:(NSString *)arg2 error:(id *)arg3;
 - (BOOL)notificationGetState:(unsigned long long *)arg1 name:(NSString *)arg2 error:(id *)arg3;
