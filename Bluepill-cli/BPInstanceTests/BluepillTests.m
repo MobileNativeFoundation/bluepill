@@ -307,7 +307,7 @@
     [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
 }
 
-- (void)testReportWithFailingTestsSet {
+- (void)testReportWithFailingTestsSetAndDiagnostics {
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
