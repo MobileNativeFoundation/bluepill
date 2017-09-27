@@ -300,6 +300,11 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     return nil;
 }
 
+- (id)_XCT_testMethod:(NSString *)arg1 ofClass:(NSString *)arg2 didMeasureMetric:(NSDictionary *)arg3 file:(NSString *)arg4 line:(NSNumber *)arg5 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testMethod: %@, ofClass: %@, didMeasureMetric: %@, file: %@, line: %@", arg1, arg2, arg3, arg4, arg5];
+    return nil;
+}
+
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 didFinishActivity:(XCActivityRecord *)arg3 {
     [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testCase %@, method: %@, didFinishActivity: %@", arg1, arg2, arg3];
     return nil;
@@ -367,11 +372,6 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
-- (id)_XCT_testMethod:(NSString *)arg1 ofClass:(NSString *)arg2 didMeasureMetric:(NSDictionary *)arg3 file:(NSString *)arg4 line:(NSNumber *)arg5 {
-    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: testMethod: %@, ofClass: %@, arg2: %@, didMeasureMetric: %@, file: %@, line: %@", arg1, arg2, arg3, arg4, arg5];
-    return [self handleUnimplementedXCTRequest:_cmd];
-}
-
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 didStallOnMainThreadInFile:(NSString *)arg3 line:(NSNumber *)arg4 {
     [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: testCase: %@, method: %@, didStallOnMainThreadInFile: %@, line: %@", arg1, arg2, arg3, arg4];
     return [self handleUnimplementedXCTRequest:_cmd];
@@ -389,7 +389,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 }
 
 - (NSString *)unknownMessageForSelector:(SEL)aSelector {
-    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: unknownMessageForSelector: %@", aSelector];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: unknownMessageForSelector: %@", NSStringFromSelector(aSelector)];
     return [NSString stringWithFormat:@"Received call for unhandled method (%@). Probably you should have a look at _IDETestManagerAPIMediator in IDEFoundation.framework and implement it. Good luck!", NSStringFromSelector(aSelector)];
 }
 
