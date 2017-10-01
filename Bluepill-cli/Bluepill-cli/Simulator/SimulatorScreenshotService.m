@@ -11,13 +11,13 @@
 #import "BPUtils.h"
 #import <CoreImage/CoreImage.h>
 
-@interface SimulatorScreenshotService() <SimDisplayDamageRectangleDelegate, SimDisplayIOSurfaceRenderableDelegate, SimDeviceIOPortConsumer>
+@interface SimulatorScreenshotService()
 
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) SimDeviceFramebufferService *frameBufferService;
 @property (nonatomic, strong) dispatch_queue_t frameBufferQueue;
-@property (nonatomic, assign) IOSurfaceRef ioSurface;
+@property (nonatomic) IOSurfaceRef ioSurface;
 
 @end
 
@@ -31,19 +31,24 @@
 
         if ([self meetsPreconditionsForConnectingToDevice:device]) {
             _frameBufferService = [self createMainScreenServiceForDevice:device];
+            [self startService];
         }
     }
 
     return self;
 }
 
-- (CGImageRef)screenshot {
-    CIContext *context = [CIContext contextWithOptions:nil];
-    CIImage *ciImage = [CIImage imageWithIOSurface:self.ioSurface];
+- (void)dealloc {
+    [self stopService];
+}
 
-    CGImageRef cgImage = [context createCGImage:ciImage fromRect:ciImage.extent];
+- (CGImageRef)screenshot {
+    CIContext *context = [CIContext contextWithOptions: nil];
+    CIImage *ciImage = [CIImage imageWithIOSurface: _ioSurface];
+
+    CGImageRef cgImage = [context createCGImage: ciImage fromRect: ciImage.extent];
     if (!cgImage) {
-        [BPUtils printInfo:WARNING withString:@"Rendering simulator screenshot failed, returning null"];
+        [BPUtils printInfo:ERROR withString:@"Rendering simulator screenshot failed, returning null"];
         return NULL;
     }
 
@@ -56,7 +61,7 @@
 }
 
 - (void)saveScreenshotForFailedTestWithName:(NSString *)name suffix:(int)suffix {
-    NSString *outputFilePath = [NSString stringWithFormat:@"%@/%@_attempt_%d.jpeg", self.config.screenshotsDirectory, name, suffix];
+    NSString *outputFilePath = [NSString stringWithFormat:@"%@/%@_attempt_%d.jpeg", _config.screenshotsDirectory, name, suffix];
 
     // Check if this file exists already
     if ([[NSFileManager defaultManager] fileExistsAtPath:outputFilePath]) {
@@ -86,21 +91,30 @@
 }
 
 - (void)startService {
-    [BPUtils printInfo:INFO withString:@"Starting SimulatorScreenshotService for device: %@", self.device.UDID.UUIDString];
+    [BPUtils printInfo:INFO withString:@"Starting SimulatorScreenshotService for device: %@", _device.UDID.UUIDString];
 
-    NSString *queueName = [NSString stringWithFormat:@"com.linkedin.bluepill.SimulatorScreenshotService-%@", self.device.UDID.UUIDString];
+    NSString *queueName = [NSString stringWithFormat:@"com.linkedin.bluepill.SimulatorScreenshotService-%@", _device.UDID.UUIDString];
     _frameBufferQueue = dispatch_queue_create(queueName.UTF8String, DISPATCH_QUEUE_SERIAL);
 
-    [self.frameBufferService registerClient:self onQueue:self.frameBufferQueue];
-    [self.frameBufferService resume];
+    [_frameBufferService registerClient: self onQueue: _frameBufferQueue];
+    [_frameBufferService resume];
 }
 
 - (void)stopService {
-    [BPUtils printInfo:INFO withString:@"Stopping SimulatorScreenshotService for device: %@", self.device.UDID.UUIDString];
+    [BPUtils printInfo:INFO withString:@"Stopping SimulatorScreenshotService for device: %@", _device.UDID.UUIDString];
 
-    [self.frameBufferService unregisterClient:self];
+    [_frameBufferService unregisterClient: self];
     [self releaseOldIOSurface];
 }
+
+- (void)releaseOldIOSurface {
+    if (_ioSurface != NULL) {
+        [BPUtils printInfo:DEBUGINFO withString:@"Removing old IO surface from SimulatorScreenshotService"];
+        IOSurfaceDecrementUseCount(_ioSurface);
+        CFRelease(_ioSurface);
+        _ioSurface = nil;
+    }
+ }
 
 #pragma mark - Private Methods
 
@@ -109,7 +123,7 @@
         return YES;
     }
 
-    [BPUtils printInfo:ERROR withString:@"ScreenshotService can't be created for device: %@. Device has wrong state: %@", self.device.UDID.UUIDString, device.stateString];
+    [BPUtils printInfo:ERROR withString:@"ScreenshotService can't be created for device: %@. Device has wrong state: %@", _device.UDID.UUIDString, device.stateString];
     return NO;
 }
 
@@ -118,22 +132,14 @@
     SimDeviceFramebufferService *service = [SimDeviceFramebufferService
                                             mainScreenFramebufferServiceForDevice: device
                                             error: &error];
+
     if (!service) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to create FrameBufferService for device: %@, error: %@", self.device.UDID.UUIDString, [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to create SimDeviceFramebufferService for device: %@, error: %@", _device.UDID.UUIDString, [error localizedDescription]]];
     }
     return service;
 }
 
-- (void)releaseOldIOSurface {
-    if (self.ioSurface != NULL) {
-        [BPUtils printInfo:DEBUGINFO withString:@"Removing old IO surface from SimulatorScreenshotService"];
-        IOSurfaceDecrementUseCount(self.ioSurface);
-        CFRelease(self.ioSurface);
-        self.ioSurface = nil;
-    }
-}
-
-#pragma mark - SimDisplayIOSurfaceRenderableDelegate
+#pragma mark - protocol methods called from SimDeviceFramebufferService
 
 - (void)setIOSurface:(IOSurfaceRef)surface {
     [self releaseOldIOSurface];
@@ -142,28 +148,12 @@
         IOSurfaceIncrementUseCount(surface);
         CFRetain(surface);
         [BPUtils printInfo:DEBUGINFO withString:@"Retaining new IO surface for SimulatorScreenshotService"];
-        self.ioSurface = surface;
+        _ioSurface = surface;
     }
-}
+ }
 
-- (void)didChangeIOSurface:(nullable id)unknown {
-
-}
-
-#pragma mark - SimDisplayDamageRectangleDelegate
-
-- (void)didReceiveDamageRect:(CGRect)rect {
-    // Nothing to do here
-}
-
-#pragma mark - SimDeviceIOPortConsumer
-
-- (NSString *)consumerIdentifier {
-    return NSStringFromClass(self.class);
-}
-
-- (NSString *)consumerUUID {
-    return NSUUID.UUID.UUIDString;
+- (void)framebufferService:(SimDeviceFramebufferService *)service didRotateToAngle:(double)angle {
+    // Nothing to do here?
 }
 
 @end

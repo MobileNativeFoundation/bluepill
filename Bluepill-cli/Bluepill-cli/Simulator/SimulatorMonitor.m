@@ -53,7 +53,6 @@
 
 - (void)onAllTestsBegan {
     self.simulatorState = Running;
-    [self.screenshotService startService];
     // Don't overwrite the original start time on secondary attempts
     if ([BPStats sharedStats].cleanRun) {
         [BPStats sharedStats].cleanRun = NO;
@@ -64,7 +63,7 @@
 
 - (void)onAllTestsEnded {
     self.simulatorState = Completed;
-    [self.screenshotService stopService];
+
     if (self.failureCount) {
         self.exitStatus = BPExitStatusTestsFailed;
     } else {
@@ -113,9 +112,12 @@
 }
 
 - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass
-                          inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
-    NSDate *currentTime = [NSDate date];
+                          inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException saveScreenshot:(BOOL)saveScreenshot {
+    if (saveScreenshot) {
+        [self saveScreenshotForFailedTestWithName:testName inClass:testClass];
+    }
 
+    NSDate *currentTime = [NSDate date];
     NSString *fullTestName = [NSString stringWithFormat:@"%@/%@", testClass, testName];
 
     BOOL additionalFailure = NO;
@@ -158,10 +160,8 @@
     }
 }
 
-- (void)onTestCaseAssertionFailedWithName:(NSString *)testName inClass:(NSString *)testClass inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber {
-    // Save screenshot for failed test
-    NSString *fullTestName = [NSString stringWithFormat:@"%@_%@", testClass, testName];
-    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
+- (void)onTestCaseAssertionFailedWithName:(NSString *)testName inClass:(NSString *)testClass {
+    [self saveScreenshotForFailedTestWithName:testName inClass:testClass];
 }
 
 - (void)updateExecutedTestCaseList:(NSString *)testName inClass:(NSString *)testClass {
@@ -273,6 +273,12 @@
 
 - (BOOL)didTestsStart {
     return (self.simulatorState >= Running);
+}
+
+- (void)saveScreenshotForFailedTestWithName:(NSString *)testName inClass:(NSString *)testClass {
+    // Save screenshot for failed test
+    NSString *fullTestName = [NSString stringWithFormat:@"%@_%@", testClass, testName];
+    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
 }
 
 @end

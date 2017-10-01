@@ -44,7 +44,4 @@
  */
 - (void)saveScreenshotForFailedTestWithName:(NSString *)name;
 
-- (void)startService;
-- (void)stopService;
-
 @end
