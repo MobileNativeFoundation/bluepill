@@ -6,8 +6,10 @@
 
 @class NSString, Protocol;
 
-/*
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wduplicate-protocol"
 @protocol NSObject
+#pragma clang diagnostic pop
 @property(readonly, copy) NSString *description;
 @property(readonly) Class superclass;
 @property(readonly) unsigned long long hash;
@@ -31,4 +33,4 @@
 @optional
 @property(readonly, copy) NSString *debugDescription;
 @end
-*/
+

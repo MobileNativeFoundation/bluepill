@@ -4,9 +4,9 @@
 //     class-dump is Copyright (C) 1997-1998, 2000-2001, 2004-2013 by Steve Nygard.
 //
 
-#import "SimPasteboardItem.h"
-
 #import "SimPasteboardItemDataProvider-Protocol.h"
+
+#import "SimPasteboardItem.h"
 
 @class NSString;
 
@@ -19,10 +19,13 @@
 - (id)initWithNSPasteboardItem:(id)arg1 resolvedCount:(long long)arg2;
 
 // Remaining properties
-//@property(readonly, copy) NSString *debugDescription;
-//@property(readonly, copy) NSString *description;
-//@property(readonly) unsigned long long hash;
-//@property(readonly) Class superclass;
+@property(readonly, copy) NSString *debugDescription;
+@property(readonly, copy) NSString *description;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-property-type"
+@property(readonly) unsigned long long hash;
+#pragma clang diagnostic pop
+@property(readonly) Class superclass;
 
 @end
 

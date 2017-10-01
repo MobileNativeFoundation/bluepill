@@ -122,6 +122,7 @@ typedef NS_ENUM(int, BPKind) {
  * @return return the shell output
  */
 + (NSString *)runShell:(NSString *)command;
++ (NSString *)getXcodeRuntimeVersion;
 
 typedef BOOL (^BPRunBlock)(void);
 
@@ -132,5 +133,11 @@ typedef BOOL (^BPRunBlock)(void);
  * @return return whether the block returns YES or not.
  */
 + (BOOL)runWithTimeOut:(NSTimeInterval)time until:(BPRunBlock)block;
+
+/*!
+ * @discussion save debugging statistics in output directory
+ * @param outputDirectory where to save the diagnostics
+ */
++ (void)saveDebuggingDiagnostics:(NSString *)outputDirectory;
 
 @end

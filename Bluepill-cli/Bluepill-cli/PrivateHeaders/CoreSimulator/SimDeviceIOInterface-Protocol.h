@@ -4,10 +4,17 @@
 //     class-dump is Copyright (C) 1997-1998, 2000-2001, 2004-2013 by Steve Nygard.
 //
 
-@class NSString;
+//#import "FXPCImpersonateable.h"
 
+@class NSArray, NSString;
+// <FXPCImpersonateable>
 @protocol SimDeviceIOInterface
+- (BOOL)notificationSetState:(unsigned long long)arg1 name:(NSString *)arg2 error:(id *)arg3;
+- (BOOL)notificationGetState:(unsigned long long *)arg1 name:(NSString *)arg2 error:(id *)arg3;
+- (BOOL)postNotification:(NSString *)arg1 error:(id *)arg2;
 - (BOOL)unregisterService:(NSString *)arg1 error:(id *)arg2;
 - (BOOL)registerPort:(unsigned int)arg1 service:(NSString *)arg2 error:(id *)arg3;
+- (NSArray *)ioPorts;
 @end
 
+ 

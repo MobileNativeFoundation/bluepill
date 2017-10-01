@@ -14,6 +14,7 @@
 #import "BPVersion.h"
 #include <sys/sysctl.h>
 #include <pwd.h>
+#import <AppKit/AppKit.h>
 
 
 static int volatile interrupted = 0;
@@ -142,6 +143,29 @@ maxprocs(void)
     return task;
 }
 
+- (NSRunningApplication *)openSimulatorAppWithConfiguration:(BPConfiguration *)config andError:(NSError **)error {
+    NSURL *simulatorURL = [NSURL fileURLWithPath:
+                           [NSString stringWithFormat:@"%@/Applications/Simulator.app/Contents/MacOS/Simulator",
+                            config.xcodePath]];
+    
+    NSWorkspaceLaunchOptions launchOptions = NSWorkspaceLaunchAsync |
+                                             NSWorkspaceLaunchWithoutActivation |
+                                             NSWorkspaceLaunchAndHide;
+    //launch Simulator.app without booting a simulator
+    NSDictionary *configuration = @{NSWorkspaceLaunchConfigurationArguments:@[@"-StartLastDeviceOnLaunch",@"0"]};
+    NSRunningApplication *app = [[NSWorkspace sharedWorkspace]
+                                 launchApplicationAtURL:simulatorURL
+                                 options:launchOptions
+                                 configuration:configuration
+                                 error:error];
+    if (!app) {
+        [BPUtils printInfo:ERROR withString:@"Launch Simulator.app returned error: %@", [*error localizedDescription]];
+        return nil;
+    }
+    return app;
+}
+
+
 - (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
     // Set up our SIGINT handler
     signal(SIGINT, onInterrupt);
@@ -176,6 +200,14 @@ maxprocs(void)
     __block NSMutableArray *deviceList = [[NSMutableArray alloc] init];
     self.nsTaskList = [[NSMutableArray alloc] init];
     int old_interrupted = interrupted;
+    NSRunningApplication *app;
+    if (_config.headlessMode == NO) {
+        app = [self openSimulatorAppWithConfiguration:_config andError:&error];
+        if (!app) {
+            [BPUtils printInfo:ERROR withString:@"Could not launch Simulator.app due to error: %@", [error localizedDescription]];
+            return -1;
+        }
+    }
     while (1) {
         if (interrupted) {
             if (interrupted >=5) {
@@ -221,7 +253,7 @@ maxprocs(void)
                 rc = (rc || [task terminationStatus]);
             }];
             if (!task) {
-                NSLog(@"Failed to launch: %@ %@", [task launchPath], [task arguments]);
+                [BPUtils printInfo:ERROR withString:@"task is nil!"];
                 exit(1);
             }
             [task launch];
@@ -255,7 +287,9 @@ maxprocs(void)
     
     [BPUtils printInfo:INFO withString:@"All simulators have finished."];
     // Process the generated report and create 1 single junit xml file.
-
+    if (app) {
+        [app terminate];
+    }
     if (self.config.outputDirectory) {
         NSString *outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
         NSFileManager *fm = [NSFileManager new];

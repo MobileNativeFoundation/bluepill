@@ -26,11 +26,11 @@
 - (instancetype)initWithConfiguration:(BPConfiguration *)config forDevice:(SimDevice *)device {
     self = [super init];
     if (self) {
-        self.config = config;
-        self.device = device;
+        _config = config;
+        _device = device;
 
         if ([self meetsPreconditionsForConnectingToDevice:device]) {
-            self.frameBufferService = [self createMainScreenServiceForDevice:device];
+            _frameBufferService = [self createMainScreenServiceForDevice:device];
         }
     }
 
@@ -89,7 +89,7 @@
     [BPUtils printInfo:INFO withString:@"Starting SimulatorScreenshotService for device: %@", self.device.UDID.UUIDString];
 
     NSString *queueName = [NSString stringWithFormat:@"com.linkedin.bluepill.SimulatorScreenshotService-%@", self.device.UDID.UUIDString];
-    self.frameBufferQueue = dispatch_queue_create(queueName.UTF8String, DISPATCH_QUEUE_SERIAL);
+    _frameBufferQueue = dispatch_queue_create(queueName.UTF8String, DISPATCH_QUEUE_SERIAL);
 
     [self.frameBufferService registerClient:self onQueue:self.frameBufferQueue];
     [self.frameBufferService resume];
@@ -102,7 +102,7 @@
     [self releaseOldIOSurface];
 }
 
-#pragma mark Private Methods
+#pragma mark - Private Methods
 
 - (BOOL)meetsPreconditionsForConnectingToDevice:(SimDevice *)device {
     if ([device.stateString isEqualToString:@"Booted"] || [device.stateString isEqualToString:@"Shutdown"]) {
@@ -133,7 +133,7 @@
     }
 }
 
-#pragma mark SimDisplayIOSurfaceRenderableDelegate
+#pragma mark - SimDisplayIOSurfaceRenderableDelegate
 
 - (void)setIOSurface:(IOSurfaceRef)surface {
     [self releaseOldIOSurface];
@@ -150,13 +150,13 @@
 
 }
 
-#pragma mark SimDisplayDamageRectangleDelegate
+#pragma mark - SimDisplayDamageRectangleDelegate
 
 - (void)didReceiveDamageRect:(CGRect)rect {
     // Nothing to do here
 }
 
-#pragma mark SimDeviceIOPortConsumer
+#pragma mark - SimDeviceIOPortConsumer
 
 - (NSString *)consumerIdentifier {
     return NSStringFromClass(self.class);

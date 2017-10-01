@@ -39,14 +39,10 @@
     config.xcodePath = @"/Applications/Xcode.app/Contents/Developer";
     config.outputDirectory = @"/Users/test/output";
     NSDictionary *appLaunchEnvironment = [SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:nil config:config];
-    XCTAssert([appLaunchEnvironment[@"AppTargetLocation"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_FALLBACK_FRAMEWORK_PATH"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_FRAMEWORK_PATH"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
-    XCTAssert([appLaunchEnvironment[@"DYLD_INSERT_LIBRARIES"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/IDEBundleInjection.framework/IDEBundleInjection"]);
+    XCTAssert([appLaunchEnvironment[@"DYLD_INSERT_LIBRARIES"] containsString:@"Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/Developer/usr/lib/libXCTTargetBootstrapInject.dylib"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_LIBRARY_PATH"] containsString:@"/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
-    XCTAssert([appLaunchEnvironment[@"TestBundleLocation"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app/PlugIns/BPSampleAppTests.xctest"]);
-    XCTAssert([appLaunchEnvironment[@"XCInjectBundle"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app/PlugIns/BPSampleAppTests.xctest"]);
-    XCTAssert([appLaunchEnvironment[@"XCInjectBundleInto"] containsString:@"Build/Products/Debug-iphonesimulator/BPSampleApp.app"]);
     XCTAssert([appLaunchEnvironment[@"XCTestConfigurationFilePath"] containsString:@"T/BPSampleAppTests-"]);
     XCTAssertEqualObjects(appLaunchEnvironment[@"LLVM_PROFILE_FILE"], @"/Users/test/output/%p.profraw");
     XCTAssertEqualObjects(appLaunchEnvironment[@"__XPC_LLVM_PROFILE_FILE"], @"/Users/test/output/%p.profraw");

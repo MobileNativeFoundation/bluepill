@@ -13,7 +13,6 @@
 
 + (id)throwableWithData:(id)arg1;
 @property(retain, nonatomic) id data; // @synthesize data=_data;
-//- (void).cxx_destruct;
 - (id)initWithData:(id)arg1;
 
 @end

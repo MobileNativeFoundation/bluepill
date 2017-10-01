@@ -6,25 +6,16 @@
 //  Copyright © 2017 LinkedIn. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
-
+@import XCTest;
 @interface BPSampleAppUITests : XCTestCase
-
+@property XCUIApplication *app;
 @end
 
 @implementation BPSampleAppUITests
-
 - (void)setUp {
     [super setUp];
-
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-
-    // In UI tests it is usually best to stop immediately when a failure occurs.
     self.continueAfterFailure = NO;
-    // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-    [[[XCUIApplication alloc] init] launch];
-
-    // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+    self.app = [[XCUIApplication alloc] init];
 }
 
 - (void)tearDown {
@@ -33,18 +24,17 @@
 }
 
 - (void)testExample {
-    XCUIApplication *app = [[XCUIApplication alloc] init];
-    [app.buttons[@"Tap Me"] tap];
-
-    XCUIElement *textField = [[app.otherElements containingType:XCUIElementTypeButton identifier:@"Tap Me"] childrenMatchingType:XCUIElementTypeTextField].element;
+    [self.app launch];
+    [self.app.buttons[@"Tap Me"] tap];
+    XCUIElement *textField = [[self.app.otherElements containingType:XCUIElementTypeButton identifier:@"Tap Me"] childrenMatchingType:XCUIElementTypeTextField].element;
     [textField tap];
     [textField typeText:@"keqiu"];
 }
 
 - (void)testExample2 {
-    XCUIApplication *app = [[XCUIApplication alloc] init];
-    [app.buttons[@"Tap Me"] tap];
-    XCUIElement *textField = [[app.otherElements containingType:XCUIElementTypeButton identifier:@"Tap Me"] childrenMatchingType:XCUIElementTypeTextField].element;
+    [self.app launch];
+    [self.app.buttons[@"Tap Me"] tap];
+    XCUIElement *textField = [[self.app.otherElements containingType:XCUIElementTypeButton identifier:@"Tap Me"] childrenMatchingType:XCUIElementTypeTextField].element;
     [textField tap];
     [textField typeText:@"huhuhu"];
 }

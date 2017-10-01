@@ -10,6 +10,7 @@
 #import "BPUtils.h"
 #import "BPTestDaemonConnection.h"
 #import "BPConstants.h"
+#import "SimulatorHelper.h"
 
 // XCTest framework
 #import "XCTestManager_IDEInterface-Protocol.h"
@@ -31,8 +32,6 @@
 
 // runtime
 #import <objc/runtime.h>
-
-#define BP_PROTOCOL_VERSION 22
 
 static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
@@ -105,7 +104,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
                                                            _IDE_initiateSessionWithIdentifier:self.config.sessionIdentifier
                                                            forClient:[self clientProcessUniqueIdentifier]
                                                            atPath:path
-                                                           protocolVersion:@(22)];
+                                                           protocolVersion:@(BP_DAEMON_PROTOCOL_VERSION)];
             [receipt handleCompletion:^(NSNumber *version, NSError *error){
                 if (error || !version) {
                     [BPUtils printInfo:ERROR withString:@"Retry count: %@", error];
@@ -120,7 +119,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 - (void)startTestPlan {
     dispatch_async(self.queue, ^{
         [BPUtils printInfo:INFO withString:@"Test plan started!"];
-        [self.testBundleProxy _IDE_startExecutingTestPlanWithProtocolVersion:@(BP_PROTOCOL_VERSION)];
+        [self.testBundleProxy _IDE_startExecutingTestPlanWithProtocolVersion:@(BP_TM_PROTOCOL_VERSION)];
     });
 }
 
@@ -181,16 +180,18 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 #pragma mark XCTestDriverInterface
 
 - (id)_XCT_didBeginExecutingTestPlan {
+    [BPUtils printInfo:INFO withString:@"_XCT_didBeginExecutingTestPlan"];
     return nil;
 }
 
 - (id)_XCT_didFinishExecutingTestPlan {
+    [BPUtils printInfo:INFO withString:@"_XCT_didFinishExecutingTestPlan"];
     return nil;
 }
 
 - (id)_XCT_testBundleReadyWithProtocolVersion:(NSNumber *)protocolVersion minimumVersion:(NSNumber *)minimumVersion {
     self.connected = YES;
-    [BPUtils printInfo:INFO withString:@"Test bundle is connected."];
+    [BPUtils printInfo:INFO withString:@"Test bundle is connected.protocolVersion= %d, minimumVersion = %d", protocolVersion, minimumVersion];
     return nil;
 }
 
@@ -200,6 +201,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 }
 
 - (id)_XCT_initializationForUITestingDidFailWithError:(NSError *)error {
+    [BPUtils printInfo:INFO withString:@"_XCT_initializationForUITestingDidFailWithError is %@", error];
     return nil;
 }
 
@@ -209,9 +211,12 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment
 {
+    NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
+    [env addEntriesFromDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:bundleID device:nil config:_config]];
+    [env addEntriesFromDictionary:environment];
     NSDictionary *options = @{
                               @"arguments": arguments,
-                              @"environment": environment,
+                              @"environment": env,
                               };
     NSError *error;
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
@@ -221,8 +226,9 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
         [BPUtils printInfo:ERROR withString:@"Launch application during UI tests failed %@", error];
         return nil;
     }
-    [BPUtils printInfo:DEBUGINFO withString:@"Launching app: %@", bundleID];
-    self.appProcessPID = [self.simulator.device launchApplicationWithID:bundleID options:options error:nil];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection Launching app: %@ with options %@", bundleID, options];
+    
+    self.appProcessPID = [self.simulator.device launchApplicationWithID:bundleID options:options error:&error];
     self.bundleID = bundleID;
     if (error) {
         [BPUtils printInfo:ERROR withString:@"Launch application during UI tests failed %@", error];
@@ -234,7 +240,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 }
 
 - (id)_XCT_getProgressForLaunch:(id)token {
-    [BPUtils printInfo:INFO withString:@"Test process requested launch process status with token %@", token];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnectionTest process requested launch process status with token %@", token];
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
     [receipt invokeCompletionWithReturnValue:@1 error:nil];
     return receipt;
@@ -245,118 +251,145 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     kill(self.appProcessPID, SIGKILL);
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
     [receipt invokeCompletionWithReturnValue:token error:error];
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_terminateProcess with token %@", token];
     return receipt;
 }
 
 #pragma mark iOS 10.x
 - (id)_XCT_handleCrashReportData:(NSData *)arg1 fromFileWithName:(NSString *)arg2 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_handleCrashReportData : %@, from file with name: %@", arg1, arg2];
     return nil;
 }
 
 #pragma mark Test Suite Progress
 
 - (id)_XCT_testSuite:(NSString *)tests didStartAt:(NSString *)time {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testSuite: %@, start %@", tests, time];
     return nil;
 }
 
 - (id)_XCT_testCaseDidStartForTestClass:(NSString *)testClass method:(NSString *)method {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testCaseDidStartForTestClass: %@ and method: %@", testClass, method];
     return nil;
 }
 
 - (id)_XCT_testCaseDidFailForTestClass:(NSString *)testClass method:(NSString *)method withMessage:(NSString *)message file:(NSString *)file line:(NSNumber *)line {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testCaseDidFailForTestClass: %@, method: %@, withMessage: %@, file: %@, line: %@", testClass, method, message, file, line];
     return nil;
 }
 
 // This looks like tested application logs
 - (id)_XCT_logDebugMessage:(NSString *)debugMessage {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection debug message: %@", debugMessage];
     return nil;
 }
 
 - (id)_XCT_logMessage:(NSString *)message {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection log message: %@", message];
     return nil;
 }
 
 - (id)_XCT_testCaseDidFinishForTestClass:(NSString *)testClass method:(NSString *)method withStatus:(NSString *)statusString duration:(NSNumber *)duration {
+    [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testCaseDidFinishForTestClass: %@, method: %@, withStatus: %@, duration: %@", testClass, method, statusString, duration];
     return nil;
 }
 
 - (id)_XCT_testSuite:(NSString *)arg1 didFinishAt:(NSString *)time runCount:(NSNumber *)count withFailures:(NSNumber *)failureCount unexpected:(NSNumber *)unexpectedCount testDuration:(NSNumber *)testDuration totalDuration:(NSNumber *)totalTime {
+    [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testSuite: %@, didFinishAt: %@, runCount: %@, withFailures: %@, unexpectedCount: %@, testDuration: %@, totalDuration: %@", arg1, time, count, failureCount, unexpectedCount, testDuration, totalTime];
+
+    return nil;
+}
+
+- (id)_XCT_testMethod:(NSString *)arg1 ofClass:(NSString *)arg2 didMeasureMetric:(NSDictionary *)arg3 file:(NSString *)arg4 line:(NSNumber *)arg5 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testMethod: %@, ofClass: %@, didMeasureMetric: %@, file: %@, line: %@", arg1, arg2, arg3, arg4, arg5];
     return nil;
 }
 
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 didFinishActivity:(XCActivityRecord *)arg3 {
-
+    [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testCase %@, method: %@, didFinishActivity: %@", arg1, arg2, arg3];
     return nil;
 }
 
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 willStartActivity:(XCActivityRecord *)arg3 {
+    [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testCase %@, method: %@, willStartActivity: %@", arg1, arg2, arg3];
     return nil;
 }
 
 #pragma mark - Unimplemented
 
 - (id)_XCT_nativeFocusItemDidChangeAtTime:(NSNumber *)arg1 parameterSnapshot:(XCElementSnapshot *)arg2 applicationSnapshot:(XCElementSnapshot *)arg3 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection nativeFocusItemDidChangeAtATime"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedEventNames:(NSArray *)arg1 timestamp:(NSNumber *)arg2 duration:(NSNumber *)arg3 startLocation:(NSDictionary *)arg4 startElementSnapshot:(XCElementSnapshot *)arg5 startApplicationSnapshot:(XCElementSnapshot *)arg6 endLocation:(NSDictionary *)arg7 endElementSnapshot:(XCElementSnapshot *)arg8 endApplicationSnapshot:(XCElementSnapshot *)arg9 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection recordedEventNames, ag1: %@", arg1];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedOrientationChange:(NSString *)arg1 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: recordedOrientationChange: %@", arg1];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedFirstResponderChangedWithApplicationSnapshot:(XCElementSnapshot *)arg1 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: recordedFirstResponderChanged"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_exchangeCurrentProtocolVersion:(NSNumber *)arg1 minimumVersion:(NSNumber *)arg2 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: exhangeCurrentProtocolVersion: %@, minimumVersion: %@", arg1, arg2];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedKeyEventsWithApplicationSnapshot:(XCElementSnapshot *)arg1 characters:(NSString *)arg2 charactersIgnoringModifiers:(NSString *)arg3 modifierFlags:(NSNumber *)arg4 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: recordedKeyEventsWithApplicationSnapshot"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedEventNames:(NSArray *)arg1 duration:(NSNumber *)arg2 startLocation:(NSDictionary *)arg3 startElementSnapshot:(XCElementSnapshot *)arg4 startApplicationSnapshot:(XCElementSnapshot *)arg5 endLocation:(NSDictionary *)arg6 endElementSnapshot:(XCElementSnapshot *)arg7 endApplicationSnapshot:(XCElementSnapshot *)arg8 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: recordedEventNames: %@", arg1];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedKeyEventsWithCharacters:(NSString *)arg1 charactersIgnoringModifiers:(NSString *)arg2 modifierFlags:(NSNumber *)arg3 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: recordedKeyEventsWithCharacters: %@", arg1];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedEventNames:(NSArray *)arg1 duration:(NSNumber *)arg2 startElement:(XCAccessibilityElement *)arg3 startApplicationSnapshot:(XCElementSnapshot *)arg4 endElement:(XCAccessibilityElement *)arg5 endApplicationSnapshot:(XCElementSnapshot *)arg6 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: recordedEventsName: %@, duration: %@", arg1, arg2];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedEvent:(NSString *)arg1 targetElementID:(NSDictionary *)arg2 applicationSnapshot:(XCElementSnapshot *)arg3 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: recordedEvent: %@, targetElementID: %@", arg1, arg2];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_recordedEvent:(NSString *)arg1 forElement:(NSString *)arg2 {
-    return [self handleUnimplementedXCTRequest:_cmd];
-}
-
-- (id)_XCT_testMethod:(NSString *)arg1 ofClass:(NSString *)arg2 didMeasureMetric:(NSDictionary *)arg3 file:(NSString *)arg4 line:(NSNumber *)arg5 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: recordedEvent: %@, forElement: %@",arg1, arg2];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_testCase:(NSString *)arg1 method:(NSString *)arg2 didStallOnMainThreadInFile:(NSString *)arg3 line:(NSNumber *)arg4 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: testCase: %@, method: %@, didStallOnMainThreadInFile: %@, line: %@", arg1, arg2, arg3, arg4];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_testMethod:(NSString *)arg1 ofClass:(NSString *)arg2 didMeasureValues:(NSArray *)arg3 forPerformanceMetricID:(NSString *)arg4 name:(NSString *)arg5 withUnits:(NSString *)arg6 baselineName:(NSString *)arg7 baselineAverage:(NSNumber *)arg8 maxPercentRegression:(NSNumber *)arg9 maxPercentRelativeStandardDeviation:(NSNumber *)arg10 file:(NSString *)arg11 line:(NSNumber *)arg12
 {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: testMethod..."];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (id)_XCT_testBundleReady {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: testBundle Ready!"];
     return [self handleUnimplementedXCTRequest:_cmd];
 }
 
 - (NSString *)unknownMessageForSelector:(SEL)aSelector {
+    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection: unknownMessageForSelector: %@", NSStringFromSelector(aSelector)];
     return [NSString stringWithFormat:@"Received call for unhandled method (%@). Probably you should have a look at _IDETestManagerAPIMediator in IDEFoundation.framework and implement it. Good luck!", NSStringFromSelector(aSelector)];
 }
 

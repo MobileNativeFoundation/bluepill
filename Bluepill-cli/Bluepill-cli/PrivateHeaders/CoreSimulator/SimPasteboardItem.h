@@ -7,7 +7,6 @@
 @import Foundation;
 
 #import "NSPasteboardItemDataProvider-Protocol.h"
-
 @class NSArray, NSMapTable, NSMutableArray, NSMutableDictionary, NSPasteboardItem, NSString;
 
 @interface SimPasteboardItem : NSObject <NSPasteboardItemDataProvider>
@@ -28,19 +27,22 @@
 //- (void).cxx_destruct;
 - (void)resolveAllTypes;
 - (void)pasteboard:(id)arg1 item:(id)arg2 provideDataForType:(id)arg3;
-@property(readonly, copy) NSPasteboardItem *nsPasteboardRepresentation;
-@property(readonly, copy) NSArray *types;
+@property(readonly, copy, nonatomic) NSPasteboardItem *nsPasteboardRepresentation;
+@property(readonly, copy, nonatomic) NSArray *types;
 - (id)valueForType:(id)arg1;
 - (BOOL)setValue:(id)arg1 forType:(id)arg2;
 - (BOOL)setDataProvider:(id)arg1 forTypes:(id)arg2;
-//@property(readonly, copy) NSString *description;
+@property(readonly, copy) NSString *description;
 - (id)init;
 @property(readonly, copy, nonatomic) NSArray *internalRepresentation;
 
 // Remaining properties
-//@property(readonly, copy) NSString *debugDescription;
-//@property(readonly) unsigned long long hash;
-//@property(readonly) Class superclass;
+@property(readonly, copy) NSString *debugDescription;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-property-type"
+@property(readonly) unsigned long long hash;
+#pragma clang diagnostic pop
+@property(readonly) Class superclass;
 
 @end
 

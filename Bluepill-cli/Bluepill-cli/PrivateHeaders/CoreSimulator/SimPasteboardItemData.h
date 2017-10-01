@@ -5,7 +5,6 @@
 //
 
 @import Foundation;
-
 @class NSObject, NSString;
 
 @interface SimPasteboardItemData : NSObject
@@ -16,7 +15,6 @@
 
 @property(retain, nonatomic) NSObject<NSSecureCoding> *value; // @synthesize value=_value;
 @property(retain, nonatomic) NSString *type; // @synthesize type=_type;
-//- (void).cxx_destruct;
 - (id)initWithType:(id)arg1 value:(id)arg2;
 
 @end

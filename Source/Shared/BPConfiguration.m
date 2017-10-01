@@ -130,7 +130,9 @@ struct BPOptions {
     // New options
     {359, "xctestrun-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcTestRunPath",
         "The .xctestrun file with test information."},
-    {360, "screenshots-directory", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "screenshotsDirectory",
+    {360, "diagnostics", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "saveDiagnosticsOnError",
+        "Save Simulator diagnostics and useful debugging information in the output directory. If no output directory it doesn't do anything."},
+    {361, "screenshots-directory", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "screenshotsDirectory",
         "Directory where simulator screenshots for failed ui tests will be stored"},
 
     {0, 0, 0, 0, 0, 0, 0}
@@ -728,6 +730,7 @@ static NSUUID *sessionID;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.xcodePath error: err];
     if (!sc) {
         [BPUtils printInfo:ERROR withString:@"Failed to initialize SimServiceContext: %@", *err];
+        [BPUtils printInfo:ERROR withString:@"self.xcodePath is: %@", self.xcodePath];
         return NO;
     }
 

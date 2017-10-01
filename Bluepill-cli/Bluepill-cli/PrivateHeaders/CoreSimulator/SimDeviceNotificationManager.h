@@ -12,17 +12,18 @@
 
 @interface SimDeviceNotificationManager : NSObject <SimDeviceNotifier>
 {
-    NSObject *_handlersQueue;
+    NSObject<OS_dispatch_queue> *_handlersQueue;
     NSMutableDictionary *_handlers;
     unsigned long long _next_regID;
-    NSObject *_sendQueue;
+    NSObject<OS_dispatch_queue> *_sendQueue;
 }
 
-@property(retain, nonatomic) NSObject *sendQueue; // @synthesize sendQueue=_sendQueue;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *sendQueue; // @synthesize sendQueue=_sendQueue;
 @property(nonatomic) unsigned long long next_regID; // @synthesize next_regID=_next_regID;
 @property(retain, nonatomic) NSMutableDictionary *handlers; // @synthesize handlers=_handlers;
-@property(retain, nonatomic) NSObject *handlersQueue; // @synthesize handlersQueue=_handlersQueue;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *handlersQueue; // @synthesize handlersQueue=_handlersQueue;
 //- (void).cxx_destruct;
+- (void)sendNotification:(id)arg1 completionQueue:(id)arg2 completionBlock:(CDUnknownBlockType)arg3;
 - (void)sendNotification:(id)arg1;
 - (BOOL)unregisterNotificationHandler:(unsigned long long)arg1 error:(id *)arg2;
 - (unsigned long long)registerNotificationHandlerOnQueue:(id)arg1 handler:(CDUnknownBlockType)arg2;

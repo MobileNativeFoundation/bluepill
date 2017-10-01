@@ -171,17 +171,27 @@ static BOOL quiet = NO;
 
 + (NSString *)runShell:(NSString *)command {
     NSAssert(command, @"Command should not be nil");
-    NSTask *task = [NSTask new];
+    NSTask *task = [[NSTask alloc] init];
+    NSData *data;
     task.launchPath = @"/bin/sh";
     task.arguments = @[@"-c", command];
-    NSPipe *pipe = [NSPipe new];
+    NSPipe *pipe = [[NSPipe alloc] init];
     task.standardError = pipe;
     task.standardOutput = pipe;
     NSFileHandle *fh = pipe.fileHandleForReading;
-    [task launch];
-    NSData *data = [fh readDataToEndOfFile];
+    if (task) {
+        [task launch];
+    } else {
+        NSAssert(task, @"task should not be nil");
+    }
+    if (fh) {
+        data = [fh readDataToEndOfFile];
+    } else {
+        NSAssert(task, @"fh should not be nil");
+    }
     [task waitUntilExit];
-    return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    NSString *result = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    return result;
 }
 
 + (BOOL)runWithTimeOut:(NSTimeInterval)timeout until:(BPRunBlock)block {
@@ -227,6 +237,32 @@ static BOOL quiet = NO;
         }
     }
     return expandedTestCases;
+}
++ (NSString *)getXcodeRuntimeVersion {
+    NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
+    NSArray *versionStrArray = [xcodeVersion componentsSeparatedByString:@"\n"];
+    NSString *lineOne = [versionStrArray objectAtIndex:0];
+    NSString *lineTwo = [versionStrArray objectAtIndex:1];
+    NSRange xcodeRange = [lineOne rangeOfString:@"Xcode"];
+    NSString *xcodeVer = [lineOne substringFromIndex:xcodeRange.location + 6]; //Xcode version string
+    NSRange versionRange = [lineTwo rangeOfString:@"version"];
+    NSString *buildVer = [lineTwo substringFromIndex:versionRange.location+8]; //build version string
+    NSString *runTimeVersion = [NSString stringWithFormat:@"%@ (%@)", xcodeVer, buildVer];
+    return runTimeVersion;
+}
+
++ (void)saveDebuggingDiagnostics:(NSString *)outputDirectory {
+  BOOL isDir = false;
+  NSFileManager *fm = [NSFileManager defaultManager];
+  if (outputDirectory == nil || !([fm fileExistsAtPath:outputDirectory isDirectory:&isDir] && isDir)) {
+    return;
+  }
+  NSString *cmd = [NSString stringWithFormat:@"xcrun simctl diagnose -l -b --output='%@/diagnostics' --data-container", outputDirectory];
+  [BPUtils runShell:cmd];
+  cmd = [NSString stringWithFormat:@"ps axuw > '%@'/ps-axuw.log", outputDirectory];
+  [BPUtils runShell:cmd];
+  cmd = [NSString stringWithFormat:@"df -h > '%@'/df-h.log", outputDirectory];
+  [BPUtils runShell:cmd];
 }
 
 @end

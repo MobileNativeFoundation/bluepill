@@ -25,6 +25,7 @@
 + (id)addressForSendPort:(unsigned int)arg1 receivePort:(unsigned int)arg2 inProcess:(int)arg3;
 + (id)transportForCommunicationWithTask:(unsigned int)arg1;
 + (id)schemes;
+- (void).cxx_destruct;
 - (id)localAddresses;
 - (void)disconnect;
 - (unsigned long long)transmit:(const void *)arg1 ofLength:(unsigned long long)arg2;
@@ -32,8 +33,8 @@
 - (id)initWithRemoteAddress:(id)arg1;
 - (id)initWithLocalAddress:(id)arg1;
 - (id)initWithSendPort:(unsigned int)arg1 receivePort:(unsigned int)arg2 publishedAddress:(id)arg3;
-- (_Bool)_setupWithAddress:(id)arg1;
-- (_Bool)_setupWithSendPort:(unsigned int)arg1 receivePort:(unsigned int)arg2 publishedAddress:(id)arg3;
+- (BOOL)_setupWithAddress:(id)arg1;
+- (BOOL)_setupWithSendPort:(unsigned int)arg1 receivePort:(unsigned int)arg2 publishedAddress:(id)arg3;
 
 @end
 

@@ -6,9 +6,10 @@
 
 @class NSCoder;
 
-/*
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wduplicate-protocol"
 @protocol NSCoding
 - (id)initWithCoder:(NSCoder *)arg1;
 - (void)encodeWithCoder:(NSCoder *)arg1;
 @end
-*/
+#pragma clang diagnostic pop

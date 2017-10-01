@@ -18,6 +18,8 @@
     NSMutableDictionary *_supportedRuntimesByAlias;
     NSString *_developerDir;
     NSMutableDictionary *_allDeviceSets;
+    NSMutableDictionary *_supportedChromeBundles;
+    BOOL _valid;
     BOOL _initialized;
     long long _connectionType;
     NSObject<OS_xpc_object> *_serviceConnection;
@@ -33,14 +35,16 @@
 + (id)sharedServiceContextForDeveloperDir:(id)arg1 error:(id *)arg2;
 @property(retain, nonatomic) NSObject *allDeviceSetsQueue; // @synthesize allDeviceSetsQueue=_allDeviceSetsQueue;
 @property(nonatomic) BOOL initialized; // @synthesize initialized=_initialized;
-@property(retain, nonatomic) NSObject *profileQueue; // @synthesize profileQueue=_profileQueue;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *profileQueue; // @synthesize profileQueue=_profileQueue;
 @property(retain, nonatomic) SimProfilesPathMonitor *profileMonitor; // @synthesize profileMonitor=_profileMonitor;
 @property(retain, nonatomic) NSDate *lastConnectionTime; // @synthesize lastConnectionTime=_lastConnectionTime;
-@property(retain, nonatomic) NSObject *serviceConnectionQueue; // @synthesize serviceConnectionQueue=_serviceConnectionQueue;
+@property(retain, nonatomic) NSObject<OS_dispatch_queue> *serviceConnectionQueue; // @synthesize serviceConnectionQueue=_serviceConnectionQueue;
 @property(retain, nonatomic) NSObject<OS_xpc_object> *serviceConnection; // @synthesize serviceConnection=_serviceConnection;
+@property(nonatomic) BOOL valid; // @synthesize valid=_valid;
 @property(retain, nonatomic) NSString *developerDir; // @synthesize developerDir=_developerDir;
 @property(nonatomic) long long connectionType; // @synthesize connectionType=_connectionType;
-//- (void).cxx_destruct;
+@property(readonly, nonatomic) NSDictionary *supportedChromeBundles;
+- (void)supportedChromeBundlesAddProfilesAtPath:(id)arg1;
 - (void)handleXPCEvent:(id)arg1;
 - (void)handleReconnectionBookkeeping;
 - (void)addProfilesForDeveloperDir:(id)arg1;

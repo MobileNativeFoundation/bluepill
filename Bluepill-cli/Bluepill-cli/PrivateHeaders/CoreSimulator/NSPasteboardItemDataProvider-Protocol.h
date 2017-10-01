@@ -8,11 +8,13 @@
 
 @class NSPasteboard, NSPasteboardItem, NSString;
 
-/*
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wduplicate-protocol"
 @protocol NSPasteboardItemDataProvider <NSObject>
 - (void)pasteboard:(NSPasteboard *)arg1 item:(NSPasteboardItem *)arg2 provideDataForType:(NSString *)arg3;
+#pragma clang diagnostic pop
 
 @optional
 - (void)pasteboardFinishedWithDataProvider:(NSPasteboard *)arg1;
 @end
-*/
+

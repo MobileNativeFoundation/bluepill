@@ -6,6 +6,8 @@
 
 #import "DTXFileDescriptorTransport.h"
 
+@class NSArray, NSObject, NSObject;
+
 @interface DTXSocketTransport : DTXFileDescriptorTransport
 {
     NSObject<OS_dispatch_semaphore> *_socketAcceptedSem;
@@ -22,11 +24,10 @@
 - (void)disconnect;
 - (unsigned long long)transmit:(const void *)arg1 ofLength:(unsigned long long)arg2;
 - (id)initWithRemoteAddress:(id)arg1;
-- (void)dealloc;
 - (id)initWithLocalPort:(int)arg1;
 - (id)initWithConnectedSocket:(int)arg1 disconnectAction:(CDUnknownBlockType)arg2;
 - (void)_commonSocketTransportInit;
-- (void)_setupChannelWithConnectedSocket:(int)arg1 assumingOwnership:(_Bool)arg2 orDisconnectBlock:(CDUnknownBlockType)arg3;
+- (void)_setupChannelWithConnectedSocket:(int)arg1 assumingOwnership:(BOOL)arg2 orDisconnectBlock:(CDUnknownBlockType)arg3;
 - (id)initWithLocalAddress:(id)arg1;
 - (void)_setupWithLocalPort:(int)arg1;
 

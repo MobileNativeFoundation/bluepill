@@ -7,9 +7,6 @@
 @import Foundation;
 @import AppKit;
 
-#import "SimPasteboardItem.h"
-#import "NSPasteboardItem-SimPasteboardItem.h"
-
 @interface NSPasteboardItem (SimPasteboardItem)
 - (void)resolveAllTypes;
 - (BOOL)setSimPBItemValue:(id)arg1 forType:(id)arg2;

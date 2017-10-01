@@ -6,40 +6,56 @@
 
 @import Foundation;
 
-@class NSDictionary, NSSet, NSString, NSURL, NSUUID;
+@class NSArray, NSDictionary, NSSet, NSString, NSURL, NSUUID;
 
 @interface XCTestConfiguration : NSObject <NSSecureCoding>
 {
-    NSURL *_testBundleURL;
-    NSString *_testBundleRelativePath;
-    NSString *_absolutePath;
-    NSSet *_testsToSkip;
-    NSSet *_testsToRun;
     _Bool _reportResultsToIDE;
-    NSUUID *_sessionIdentifier;
-    NSString *_pathToXcodeReportingSocket;
     _Bool _disablePerformanceMetrics;
     _Bool _treatMissingBaselinesAsFailures;
+    _Bool _reportActivities;
+    _Bool _testsMustRunOnMainThread;
+    _Bool _initializeForUITesting;
+    _Bool _emitOSLogs;
+    NSString *_absolutePath;
+    NSString *_testBundleRelativePath;
+    NSURL *_testBundleURL;
+    NSSet *_testsToRun;
+    NSSet *_testsToSkip;
+    NSUUID *_sessionIdentifier;
+    NSString *_pathToXcodeReportingSocket;
     NSURL *_baselineFileURL;
     NSString *_baselineFileRelativePath;
     NSString *_targetApplicationPath;
     NSString *_targetApplicationBundleID;
+    NSDictionary *_testApplicationDependencies;
+    NSDictionary *_testApplicationUserOverrides;
     NSString *_productModuleName;
-    _Bool _reportActivities;
-    _Bool _testsMustRunOnMainThread;
-    _Bool _initializeForUITesting;
+    NSDictionary *_targetApplicationEnvironment;
+    NSArray *_targetApplicationArguments;
     NSDictionary *_aggregateStatisticsBeforeCrash;
+    NSString *_automationFrameworkPath;
+    long long _systemAttachmentLifetime;
+    long long _userAttachmentLifetime;
 }
 
 + (id)configurationWithContentsOfFile:(id)arg1;
 + (id)activeTestConfiguration;
 + (void)setActiveTestConfiguration:(id)arg1;
 + (_Bool)supportsSecureCoding;
+@property long long userAttachmentLifetime; // @synthesize userAttachmentLifetime=_userAttachmentLifetime;
+@property long long systemAttachmentLifetime; // @synthesize systemAttachmentLifetime=_systemAttachmentLifetime;
+@property _Bool emitOSLogs; // @synthesize emitOSLogs=_emitOSLogs;
+@property(copy) NSString *automationFrameworkPath; // @synthesize automationFrameworkPath=_automationFrameworkPath;
 @property(copy) NSDictionary *aggregateStatisticsBeforeCrash; // @synthesize aggregateStatisticsBeforeCrash=_aggregateStatisticsBeforeCrash;
+@property(copy) NSArray *targetApplicationArguments; // @synthesize targetApplicationArguments=_targetApplicationArguments;
+@property(copy) NSDictionary *targetApplicationEnvironment; // @synthesize targetApplicationEnvironment=_targetApplicationEnvironment;
 @property _Bool initializeForUITesting; // @synthesize initializeForUITesting=_initializeForUITesting;
 @property _Bool testsMustRunOnMainThread; // @synthesize testsMustRunOnMainThread=_testsMustRunOnMainThread;
 @property _Bool reportActivities; // @synthesize reportActivities=_reportActivities;
 @property(copy) NSString *productModuleName; // @synthesize productModuleName=_productModuleName;
+@property(copy) NSDictionary *testApplicationUserOverrides; // @synthesize testApplicationUserOverrides=_testApplicationUserOverrides;
+@property(copy) NSDictionary *testApplicationDependencies; // @synthesize testApplicationDependencies=_testApplicationDependencies;
 @property(copy) NSString *targetApplicationBundleID; // @synthesize targetApplicationBundleID=_targetApplicationBundleID;
 @property(copy) NSString *targetApplicationPath; // @synthesize targetApplicationPath=_targetApplicationPath;
 @property _Bool treatMissingBaselinesAsFailures; // @synthesize treatMissingBaselinesAsFailures=_treatMissingBaselinesAsFailures;
@@ -54,6 +70,7 @@
 @property(copy, nonatomic) NSURL *testBundleURL; // @synthesize testBundleURL=_testBundleURL;
 @property(copy) NSString *testBundleRelativePath; // @synthesize testBundleRelativePath=_testBundleRelativePath;
 @property(copy) NSString *absolutePath; // @synthesize absolutePath=_absolutePath;
+@property(readonly) long long testMode;
 - (_Bool)isEqual:(id)arg1;
 - (unsigned long long)hash;
 - (id)description;

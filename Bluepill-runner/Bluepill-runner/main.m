@@ -57,15 +57,28 @@ int main(int argc, char * argv[]) {
     @autoreleasepool {
         int c;
         BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
-
         struct option *lopts = [config getLongOptions];
         char *sopts = [config getShortOptions];
-
         if (argv[1] && (!strcmp(argv[1], "version") || (!strcmp(argv[1], "--version")))) {
             printf("Bluepill %s\n", BP_VERSION);
             exit(0);
         }
-
+        
+        //Check if xcode version running on the host match the intended Bluepill branch: Xcode 9 branch is not backward compatible
+        NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
+        if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
+            fprintf(stderr, "ERROR: Invalid Xcode version:\n%s;\nOnly %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
+            exit(1);
+        }
+        
+        //Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
+        //Senario to prevent: Bluepill is compiled with Xcode 8, but runs with host installed with Xcode 9
+        if ([[BPUtils getXcodeRuntimeVersion] isEqualToString:@XCODE_VERSION]) {
+            printf("Bluepill runtime version and compile time version are matched: %s\n", XCODE_VERSION);
+        } else {
+            fprintf(stderr, "ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n", [[BPUtils getXcodeRuntimeVersion] UTF8String], XCODE_VERSION);
+            exit(1);
+        }
         if (argv[1] && (!strcmp(argv[1], "--matrix"))) {
             m();
             exit(0);

@@ -18,7 +18,6 @@
 @property(nonatomic) unsigned long long maxPairs; // @synthesize maxPairs=_maxPairs;
 @property(copy, nonatomic) NSArray *supportedProductFamilies; // @synthesize supportedProductFamilies=_supportedProductFamilies;
 @property(nonatomic) unsigned int minOSVersion; // @synthesize minOSVersion=_minOSVersion;
-//- (void).cxx_destruct;
 
 @end
 

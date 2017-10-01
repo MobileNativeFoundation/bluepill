@@ -13,7 +13,7 @@
 @interface SimDeviceSet : NSObject <SimDeviceNotifier>
 {
     NSString *_setPath;
-    NSObject *_devicesQueue;
+    NSObject<OS_dispatch_queue> *_devicesQueue;
     NSMutableDictionary *__devicesByUDID;
     NSMutableDictionary *_devicesNotificationRegIDs;
     NSMutableDictionary *__devicePairsByUUID;
@@ -37,7 +37,6 @@
 @property(retain, nonatomic) NSMutableDictionary *_devicesByUDID; // @synthesize _devicesByUDID=__devicesByUDID;
 @property(retain, nonatomic) NSObject<OS_dispatch_queue> *devicesQueue; // @synthesize devicesQueue=_devicesQueue;
 @property(copy, nonatomic) NSString *setPath; // @synthesize setPath=_setPath;
-//- (void).cxx_destruct;
 - (void)handleXPCRequestUnpair:(struct NSDictionary *)arg1;
 - (void)handleXPCRequestPair:(struct NSDictionary *)arg1;
 - (void)handleXPCRequestDeleteDevice:(struct NSDictionary *)arg1 device:(id)arg2;
@@ -56,12 +55,12 @@
 - (void)createDevicePairAsyncWithGizmo:(id)arg1 companion:(id)arg2 completionHandler:(CDUnknownBlockType)arg3;
 - (void)createDevicePairAsyncWithGizmo:(id)arg1 companion:(id)arg2 completionQueue:(id)arg3 completionHandler:(CDUnknownBlockType)arg4;
 - (BOOL)testDevicePairingBetweenGizmo:(id)arg1 companion:(id)arg2 error:(id *)arg3;
-- (BOOL)deleteDevice:(SimDevice *)device error:(NSError **)error;
+- (BOOL)deleteDevice:(id)arg1 error:(id *)arg2;
 - (void)deleteDeviceAsync:(id)arg1 completionHandler:(void (^)(NSError *error))arg2;
 - (id)cloneDevice:(id)arg1 name:(id)arg2 error:(id *)arg3;
 - (void)cloneDeviceAsync:(id)arg1 name:(id)arg2 completionQueue:(id)arg3 completionHandler:(CDUnknownBlockType)arg4;
 - (void)deleteDeviceAsync:(id)arg1 completionQueue:(id)arg2 completionHandler:(CDUnknownBlockType)arg3;
-- (id)createDeviceWithType:(SimDeviceType *)deviceType runtime:(SimRuntime *)runtime name:(NSString *)name error:(NSError **)error;
+- (id)createDeviceWithType:(id)arg1 runtime:(id)arg2 name:(id)arg3 error:(id *)arg4;
 - (void)createDeviceAsyncWithType:(id)arg1 runtime:(id)arg2 name:(id)arg3 completionQueue:(id)arg4 completionHandler:(CDUnknownBlockType)arg5;
 - (void)createDeviceAsyncWithType:(id)arg1 runtime:(id)arg2 name:(id)arg3 completionHandler:(void (^)(NSError *, SimDevice *))arg4;
 - (BOOL)unregisterNotificationHandler:(unsigned long long)arg1 error:(id *)arg2;
@@ -69,14 +68,16 @@
 - (unsigned long long)registerNotificationHandlerOnQueue:(id)arg1 handler:(CDUnknownBlockType)arg2;
 - (unsigned long long)registerNotificationHandler:(CDUnknownBlockType)arg1;
 - (void)removeDevicePairAsync:(id)arg1;
+- (void)_onDevicesQueue_addDevicePair:(id)arg1;
 - (void)addDevicePair:(id)arg1;
 - (void)addDevicePairAsync:(id)arg1;
 - (void)removeDeviceAsync:(id)arg1;
+- (void)_onDeviceQueue_addDevice:(id)arg1;
 - (void)addDevice:(id)arg1;
 - (void)addDeviceAsync:(id)arg1;
 - (void)_onDefaultCreatedDevicesQueue_updateDefaultDevicePairingsForDeveloperDir:(id)arg1;
 - (void)_onDefaultCreatedDevicesQueue_updateDefaultDevicesForDeveloperDir:(id)arg1;
-- (void)updateDefaultDevicesAndPairingsForDeveloperDir:(id)arg1;
+- (void)updateDefaultDevicesAndPairingsForDeveloperDir:(id)arg1 force:(BOOL)arg2;
 - (id)devicePairsContainingDevice:(id)arg1;
 - (id)devicePairsContainingDeviceUDID:(id)arg1;
 @property(readonly, nonatomic) NSArray *availableDevicePairs;

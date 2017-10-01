@@ -14,7 +14,7 @@
 
 @implementation BPXCTestFile
 
-NSString *swiftNmCmdline = @"nm -gU '%@' | cut -d' ' -f3 | xargs xcrun swift-demangle | cut -d' ' -f3 | grep -e '[\\.|_]'test";
+NSString *swiftNmCmdline = @"nm -gU '%@' | cut -d' ' -f3 | xargs -s 131072 xcrun swift-demangle | cut -d' ' -f3 | grep -e '[\\.|_]'test";
 NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-' -f2 | cut -d'[' -f2 | cut -d']' -f1 | grep ' test'";
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
@@ -107,19 +107,40 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     NSString * const TESTROOT = @"__TESTROOT__";
     NSString * const TESTHOST = @"__TESTHOST__";
     NSString *testHostPath = [dict objectForKey:@"TestHostPath"];
+    NSString *testHostBundleIdentifier = [dict objectForKey:@"TestHostBundleIdentifier"];
     if (!testHostPath) {
         BP_SET_ERROR(error, @"No 'TestHostPath' found");
         return nil;
     }
     testHostPath = [testHostPath stringByReplacingOccurrencesOfString:TESTROOT withString:testRoot];
-
     NSString *testBundlePath = [dict objectForKey:@"TestBundlePath"];
     if (!testBundlePath) {
         BP_SET_ERROR(error, @"No 'TestBundlePath' found");
         return nil;
     }
-    testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTHOST withString:testHostPath];
-
+    /*testBundlePath is expected to be "__TESTHOST__/PlugIns/.."
+      temporal workaround for bug: 34135468, Xcode9beta5 Inconsistent TestBundlePath With "xcodebuild build-for-testing” Command
+      when it is "__TESTROOT__"
+      testHostPath path is: /Users/xzhang3/Desktop/Documents/Git/bluepill/build/Build/Products/Debug-iphonesimulator/bluepill/
+      testBundlePath is: __TESTROOT__/Debug-iphonesimulator/BPSampleApp.app/PlugIns/BPSampleAppHangingTests.xctest
+      expected path is: /Users/xzhang3/Desktop/Documents/Git/bluepill/build/Build/Products/Debug-iphonesimulator/BPSampleApp.app/
+      testHost path is: __TESTROOT__/Debug-iphonesimulator/BPSampleApp.app
+     */
+    if ([testBundlePath rangeOfString:TESTHOST].location != NSNotFound) {
+        testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTHOST withString:testHostPath];
+    } else if ([testBundlePath rangeOfString:TESTROOT].location != NSNotFound) {
+        testHostPath = [testHostPath stringByDeletingLastPathComponent]; //remove /bluepill
+        NSString *temp = [testHostPath stringByDeletingLastPathComponent]; //remove /iphonesimulator
+        //extract app name with .app extension
+        NSRange dotPosition = [testHostBundleIdentifier rangeOfString:@"." options:NSBackwardsSearch];
+        NSString *appName = [testHostBundleIdentifier substringFromIndex:dotPosition.location + 1];
+        NSString *appNameWithExtension = [appName stringByAppendingString:@".app"];
+        //append the app name to the direction
+        testHostPath = [testHostPath stringByAppendingString:appNameWithExtension];
+        testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTROOT withString:temp];
+    } else {
+        [BPUtils printInfo:ERROR withString:@"testBundlePath is incorrect, please check xctestrun file"];
+    }
     NSString * UITargetAppPath = [dict objectForKey:@"UITargetAppPath"];
     if (UITargetAppPath) {
         UITargetAppPath = [UITargetAppPath stringByReplacingOccurrencesOfString:TESTROOT withString:testRoot];
@@ -131,10 +152,8 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     if (!xcTestFile) {
         return nil;
     }
-    
     xcTestFile.testHostPath = testHostPath;
     xcTestFile.testBundlePath = testBundlePath;
-
     xcTestFile.testHostBundleIdentifier = [dict objectForKey:@"TestHostBundleIdentifier"];
     NSArray<NSString *> *commandLineArguments = [dict objectForKey:@"CommandLineArguments"];
     if (commandLineArguments) {

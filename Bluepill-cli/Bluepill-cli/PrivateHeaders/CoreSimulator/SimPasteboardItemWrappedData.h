@@ -5,7 +5,6 @@
 //
 
 @import Foundation;
-
 #import "NSSecureCoding-Protocol.h"
 
 @class NSData;
@@ -17,11 +16,9 @@
 
 + (BOOL)supportsSecureCoding;
 @property(retain, nonatomic) NSData *wrappedData; // @synthesize wrappedData=_wrappedData;
-//- (void).cxx_destruct;
 - (void)encodeWithCoder:(id)arg1;
 - (id)initWithCoder:(id)arg1;
 - (id)initWithData:(id)arg1;
-- (id)init;
 
 @end
 

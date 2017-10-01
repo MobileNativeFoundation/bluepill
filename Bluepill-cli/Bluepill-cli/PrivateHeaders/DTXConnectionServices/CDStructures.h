@@ -26,6 +26,15 @@ struct DTXMachMessage {
     char _field3[68];
 };
 
+struct DTXMessageHeader {
+    unsigned int _field1;
+    unsigned int _field2;
+    unsigned short _field3;
+    unsigned short _field4;
+    unsigned int _field5;
+    struct DTXMessageRoutingInfo _field6;
+};
+
 struct DTXMessageRoutingInfo {
     unsigned int _field1;
     unsigned int _field2;
@@ -40,3 +49,9 @@ struct __va_list_tag {
     void *_field3;
     void *_field4;
 };
+
+struct mach_timebase_info {
+    unsigned int numer;
+    unsigned int denom;
+};
+

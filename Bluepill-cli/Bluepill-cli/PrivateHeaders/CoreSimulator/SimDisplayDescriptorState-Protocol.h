@@ -3,10 +3,13 @@
 //
 //     class-dump is Copyright (C) 1997-1998, 2000-2001, 2004-2013 by Steve Nygard.
 //
-
 #import "SimDeviceIOPortDescriptorState-Protocol.h"
 
+@class NSURL;
+
 @protocol SimDisplayDescriptorState <SimDeviceIOPortDescriptorState>
+@property(readonly, nonatomic) NSURL *mask;
+@property(readonly, nonatomic) unsigned int defaultPixelFormat;
 @property(readonly, nonatomic) unsigned int defaultHeightForDisplay;
 @property(readonly, nonatomic) unsigned int defaultWidthForDisplay;
 @property(readonly, nonatomic) unsigned short displayClass;

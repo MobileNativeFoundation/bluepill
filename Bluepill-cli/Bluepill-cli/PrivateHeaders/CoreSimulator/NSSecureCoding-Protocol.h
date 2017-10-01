@@ -6,8 +6,9 @@
 
 @import Foundation;
 
-/*
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wduplicate-protocol"
 @protocol NSSecureCoding <NSCoding>
 + (BOOL)supportsSecureCoding;
 @end
-*/
+#pragma clang diagnostic pop

@@ -9,28 +9,36 @@
 #import "SimDeviceIOInterface-Protocol.h"
 #import "SimDeviceIOProtocol-Protocol.h"
 
-@class NSString, SimDevice;
+@class NSObject, NSString, SimDevice;
 
 @interface SimDeviceIO : NSObject <SimDeviceIOInterface, SimDeviceIOProtocol>
 {
     SimDevice *_device;
+    NSObject<OS_dispatch_queue> *_errorQueue;
+    CDUnknownBlockType _errorHandler;
 }
 
-+ (id)ioForSimDevice:(id)arg1;
++ (id)ioForSimDevice:(id)arg1 errorQueue:(id)arg2 errorHandler:(CDUnknownBlockType)arg3;
+@property(copy, nonatomic) CDUnknownBlockType errorHandler; // @synthesize errorHandler=_errorHandler;
+@property(retain, nonatomic) NSObject *errorQueue; // @synthesize errorQueue=_errorQueue;
 @property(nonatomic) __weak SimDevice *device; // @synthesize device=_device;
 //- (void).cxx_destruct;
-- (void)detachConsumer:(id)arg1 fromPort:(id)arg2;
-- (void)attachConsumer:(id)arg1 toPort:(id)arg2;
+- (BOOL)notificationSetState:(unsigned long long)arg1 name:(id)arg2 error:(id *)arg3;
+- (BOOL)notificationGetState:(unsigned long long *)arg1 name:(id)arg2 error:(id *)arg3;
+- (BOOL)postNotification:(id)arg1 error:(id *)arg2;
 - (BOOL)unregisterService:(id)arg1 error:(id *)arg2;
 - (BOOL)registerPort:(unsigned int)arg1 service:(id)arg2 error:(id *)arg3;
 - (id)ioPortForUUID:(id)arg1;
 - (id)ioPorts;
-- (id)initWithDevice:(id)arg1;
+- (id)initWithDevice:(id)arg1 errorQueue:(id)arg2 errorHandler:(CDUnknownBlockType)arg3;
 
 // Remaining properties
 @property(readonly, copy) NSString *debugDescription;
 @property(readonly, copy) NSString *description;
-//@property(readonly) unsigned long long hash;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-property-type"
+@property(readonly) unsigned long long hash;
+#pragma clang diagnostic pop
 @property(readonly) Class superclass;
 
 @end

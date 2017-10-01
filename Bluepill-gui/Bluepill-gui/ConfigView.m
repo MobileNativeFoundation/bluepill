@@ -49,7 +49,7 @@ typedef NS_ENUM(NSInteger, BrowseType) {
 
 @interface CheckboxCellView : NSTableCellView
 @property (nonatomic, weak) IBOutlet NSButton *checkbox;
-@property (nonatomic, copy) void (^onClickBlock)();
+@property (nonatomic, copy) void (^onClickBlock)(void);
 
 - (void)setupTarget;
 @end
