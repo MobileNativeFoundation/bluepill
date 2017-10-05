@@ -112,8 +112,8 @@
 }
 
 - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass
-                          inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException saveScreenshot:(BOOL)saveScreenshot {
-    if (saveScreenshot) {
+                          inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
+    if (self.config.screenshotsDirectory) {
         [self saveScreenshotForFailedTestWithName:testName inClass:testClass];
     }
 

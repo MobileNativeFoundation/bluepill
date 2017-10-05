@@ -133,7 +133,6 @@ static const NSString * const kPassed = @"passed";
 
     NSRange lineRange = NSMakeRange(0, [line length]);
     BOOL logLine = YES;
-    BOOL screenshotAlreadySaved = NO;
     NSRegularExpression *regex;
     NSArray *matches;
 
@@ -300,7 +299,6 @@ static const NSString * const kPassed = @"passed";
 
                 // Report assertion failure
                 [self onTestCaseAssertionFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass];
-                screenshotAlreadySaved = YES;
             } else {
                 [BPUtils printInfo:ERROR withString:
                  [NSString stringWithFormat:@"HOW DID WE GET AN ERROR THAT WASN'T PARSED? We received an error in a test case that wasn't started or did not parse properly.\nProblem line: %@",
@@ -328,9 +326,7 @@ static const NSString * const kPassed = @"passed";
                 if (!testCaseLogEntry.passed) {
                     [self onTestCaseFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass
                                             inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
-                                      wasException:testCaseLogEntry.unexpected
-                                    saveScreenshot:!screenshotAlreadySaved];
-                    screenshotAlreadySaved = YES;
+                                      wasException:testCaseLogEntry.unexpected];
                 }
             }
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
@@ -360,9 +356,7 @@ static const NSString * const kPassed = @"passed";
                 if (!testCaseLogEntry.passed) {
                     [self onTestCaseFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass
                                             inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
-                                      wasException:testCaseLogEntry.unexpected
-                                    saveScreenshot:!screenshotAlreadySaved];
-                    screenshotAlreadySaved = YES;
+                                      wasException:testCaseLogEntry.unexpected];
                 }
             }
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
@@ -389,9 +383,7 @@ static const NSString * const kPassed = @"passed";
                 if (!testCaseLogEntry.passed) {
                     [self onTestCaseFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass
                                             inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
-                                      wasException:testCaseLogEntry.unexpected
-                                    saveScreenshot:!screenshotAlreadySaved];
-                    screenshotAlreadySaved = YES;
+                                      wasException:testCaseLogEntry.unexpected];
                 }
             }
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
@@ -418,9 +410,7 @@ static const NSString * const kPassed = @"passed";
                 if (!testCaseLogEntry.passed) {
                     [self onTestCaseFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass
                                             inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
-                                      wasException:testCaseLogEntry.unexpected
-                                    saveScreenshot:!screenshotAlreadySaved];
-                    screenshotAlreadySaved = YES;
+                                      wasException:testCaseLogEntry.unexpected];
                 }
             }
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
@@ -450,9 +440,7 @@ static const NSString * const kPassed = @"passed";
                 } else {
                     [self onTestCaseFailedWithName:testCaseName inClass:testCaseClass
                                             inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
-                                      wasException:testCaseLogEntry.unexpected
-                                    saveScreenshot:!screenshotAlreadySaved];
-                    screenshotAlreadySaved = YES;
+                                      wasException:testCaseLogEntry.unexpected];
                 }
             } else {
                 [BPUtils printInfo:ERROR withString:
@@ -662,8 +650,8 @@ static const NSString * const kPassed = @"passed";
 }
 
 - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass
-                          inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException saveScreenshot:(BOOL)saveScreenshot {
-    [self.delegate onTestCaseFailedWithName:testName inClass:testClass inFile:filePath onLineNumber:lineNumber wasException:wasException saveScreenshot:saveScreenshot];
+                          inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
+    [self.delegate onTestCaseFailedWithName:testName inClass:testClass inFile:filePath onLineNumber:lineNumber wasException:wasException];
 }
 
 - (void)onTestCaseAssertionFailedWithName:(NSString *)testName inClass:(NSString *)testClass {

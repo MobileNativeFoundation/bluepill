@@ -44,16 +44,15 @@
 }
 
 - (CGImageRef)screenshot {
-    CIContext *context = [CIContext contextWithOptions: nil];
-    CIImage *ciImage = [CIImage imageWithIOSurface: _ioSurface];
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CIImage *ciImage = [CIImage imageWithIOSurface:_ioSurface];
 
-    CGImageRef cgImage = [context createCGImage: ciImage fromRect: ciImage.extent];
+    CGImageRef cgImage = [context createCGImage:ciImage fromRect:ciImage.extent];
     if (!cgImage) {
         [BPUtils printInfo:ERROR withString:@"Rendering simulator screenshot failed, returning null"];
         return NULL;
     }
 
-    CFAutorelease(cgImage);
     return cgImage;
 }
 
@@ -76,35 +75,35 @@
     CFURLRef cfURL = (__bridge CFURLRef)outputFileURL;
     CGImageDestinationRef destination = CGImageDestinationCreateWithURL(cfURL, kUTTypeJPEG, 1, NULL);
     if (!destination) {
-        [BPUtils printInfo:WARNING withString:@"Saving screenshot for failed test: %@, creating destination failed %@", name, destination];
+        [BPUtils printInfo:WARNING withString:@"Saving screenshot for failed test:%@, creating destination failed %@", name, destination];
         return;
     }
 
     CGImageDestinationAddImage(destination, screenshot, nil);
     if (!CGImageDestinationFinalize(destination)) {
-        [BPUtils printInfo:WARNING withString:@"Saving screenshot for failed test: %@ failed", name];
+        [BPUtils printInfo:WARNING withString:@"Saving screenshot for failed test:%@ failed", name];
         CFRelease(destination);
         return;
     }
 
     CFRelease(destination);
-    [BPUtils printInfo:INFO withString:@"Saved screenshot for failed test: %@", name];
+    [BPUtils printInfo:INFO withString:@"Saved screenshot for failed test:%@", name];
 }
 
 - (void)startService {
-    [BPUtils printInfo:INFO withString:@"Starting SimulatorScreenshotService for device: %@", _device.UDID.UUIDString];
+    [BPUtils printInfo:INFO withString:@"Starting SimulatorScreenshotService for device:%@", _device.UDID.UUIDString];
 
     NSString *queueName = [NSString stringWithFormat:@"com.linkedin.bluepill.SimulatorScreenshotService-%@", _device.UDID.UUIDString];
     _frameBufferQueue = dispatch_queue_create(queueName.UTF8String, DISPATCH_QUEUE_SERIAL);
 
-    [_frameBufferService registerClient: self onQueue: _frameBufferQueue];
+    [_frameBufferService registerClient:self onQueue:_frameBufferQueue];
     [_frameBufferService resume];
 }
 
 - (void)stopService {
-    [BPUtils printInfo:INFO withString:@"Stopping SimulatorScreenshotService for device: %@", _device.UDID.UUIDString];
+    [BPUtils printInfo:INFO withString:@"Stopping SimulatorScreenshotService for device:%@", _device.UDID.UUIDString];
 
-    [_frameBufferService unregisterClient: self];
+    [_frameBufferService unregisterClient:self];
     [self releaseOldIOSurface];
 }
 
@@ -124,18 +123,18 @@
         return YES;
     }
 
-    [BPUtils printInfo:ERROR withString:@"ScreenshotService can't be created for device: %@. Device has wrong state: %@", _device.UDID.UUIDString, device.stateString];
+    [BPUtils printInfo:ERROR withString:@"ScreenshotService can't be created for device:%@. Device has wrong state:%@", _device.UDID.UUIDString, device.stateString];
     return NO;
 }
 
 - (SimDeviceFramebufferService *)createMainScreenServiceForDevice:(SimDevice *)device {
     NSError *error = nil;
     SimDeviceFramebufferService *service = [SimDeviceFramebufferService
-                                            mainScreenFramebufferServiceForDevice: device
-                                            error: &error];
+                                            mainScreenFramebufferServiceForDevice:device
+                                            error:&error];
 
     if (!service) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to create SimDeviceFramebufferService for device: %@, error: %@", _device.UDID.UUIDString, [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to create SimDeviceFramebufferService for device:%@, error:%@", _device.UDID.UUIDString, [error localizedDescription]]];
     }
     return service;
 }

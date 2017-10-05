@@ -34,7 +34,7 @@
 
 - (void)onTestCasePassedWithName:(NSString *)testName inClass:(NSString *)testClass reportedDuration:(NSTimeInterval)duration;
 
-- (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException saveScreenshot:(BOOL)saveScreenshot;
+- (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException;
 
 - (void)onTestCaseAssertionFailedWithName:(NSString *)testName inClass:(NSString *)testClass;
 
