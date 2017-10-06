@@ -10,10 +10,7 @@ and the open source community subject to the BSD 2-Clause license.
 Responsible Disclosure of Security Vulnerabilities
 ==================================================
 
-Please do not file reports on Github for security issues.
-Please review the guidelines on at (link to more info).
-Reports should be encrypted using PGP (link to PGP key) and sent to
-security@linkedin.com preferably with the title "Github linkedin/<project> - <short summary>".
+Please do not file reports on Github for security issues. Please send report security issues to security@linkedin.com preferably with the title "Github linkedin/Bluepill - [ summary of issue]".
 
 Tips for Getting Your Pull Request Accepted
 ===========================================
