@@ -296,9 +296,6 @@ static const NSString * const kPassed = @"passed";
                 testCaseLogEntry.lineNumber = [lineNumber integerValue];
                 testCaseLogEntry.unexpected = isError;
                 testCaseLogEntry.errorMessage = errorMessage;
-
-                // Report assertion failure
-                [self onTestCaseAssertionFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass];
             } else {
                 [BPUtils printInfo:ERROR withString:
                  [NSString stringWithFormat:@"HOW DID WE GET AN ERROR THAT WASN'T PARSED? We received an error in a test case that wasn't started or did not parse properly.\nProblem line: %@",
@@ -652,10 +649,6 @@ static const NSString * const kPassed = @"passed";
 - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass
                           inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
     [self.delegate onTestCaseFailedWithName:testName inClass:testClass inFile:filePath onLineNumber:lineNumber wasException:wasException];
-}
-
-- (void)onTestCaseAssertionFailedWithName:(NSString *)testName inClass:(NSString *)testClass {
-    [self.delegate onTestCaseAssertionFailedWithName:testName inClass:testClass];
 }
 
 - (void)onOutputReceived:(NSString *)output {

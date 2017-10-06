@@ -160,10 +160,6 @@
     }
 }
 
-- (void)onTestCaseAssertionFailedWithName:(NSString *)testName inClass:(NSString *)testClass {
-    [self saveScreenshotForFailedTestWithName:testName inClass:testClass];
-}
-
 - (void)updateExecutedTestCaseList:(NSString *)testName inClass:(NSString *)testClass {
     if (testName == nil || testClass == nil) {
         [BPUtils printInfo:DEBUGINFO withString:@"Attempting to add empty test name or class to the executed list"];
