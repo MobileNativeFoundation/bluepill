@@ -63,6 +63,7 @@
 
 - (void)onAllTestsEnded {
     self.simulatorState = Completed;
+
     if (self.failureCount) {
         self.exitStatus = BPExitStatusTestsFailed;
     } else {
@@ -112,8 +113,11 @@
 
 - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass
                           inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
-    NSDate *currentTime = [NSDate date];
+    if (self.config.screenshotsDirectory) {
+        [self saveScreenshotForFailedTestWithName:testName inClass:testClass];
+    }
 
+    NSDate *currentTime = [NSDate date];
     NSString *fullTestName = [NSString stringWithFormat:@"%@/%@", testClass, testName];
 
     BOOL additionalFailure = NO;
@@ -265,6 +269,12 @@
 
 - (BOOL)didTestsStart {
     return (self.simulatorState >= Running);
+}
+
+- (void)saveScreenshotForFailedTestWithName:(NSString *)testName inClass:(NSString *)testClass {
+    // Save screenshot for failed test
+    NSString *fullTestName = [NSString stringWithFormat:@"%@_%@", testClass, testName];
+    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
 }
 
 @end

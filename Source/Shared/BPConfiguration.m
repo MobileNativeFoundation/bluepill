@@ -132,7 +132,8 @@ struct BPOptions {
         "The .xctestrun file with test information."},
     {360, "diagnostics", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "saveDiagnosticsOnError",
         "Save Simulator diagnostics and useful debugging information in the output directory. If no output directory it doesn't do anything."},
-    
+    {361, "screenshots-directory", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "screenshotsDirectory",
+        "Directory where simulator screenshots for failed ui tests will be stored"},
 
     {0, 0, 0, 0, 0, 0, 0}
 };
@@ -654,6 +655,23 @@ static NSUUID *sessionID;
         self.plainOutput = TRUE;
         self.junitOutput = TRUE;
         self.jsonOutput = TRUE;
+    }
+
+    if (self.screenshotsDirectory) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.screenshotsDirectory isDirectory:&isdir]) {
+            if (!isdir) {
+                BP_SET_ERROR(err, @"%@ is not a directory.", self.screenshotsDirectory);
+                return NO;
+            }
+        } else {
+            // create the directory
+            if (![[NSFileManager defaultManager] createDirectoryAtPath:self.screenshotsDirectory
+                                           withIntermediateDirectories:YES
+                                                            attributes:nil
+                                                                 error:err]) {
+                return NO;
+            }
+        }
     }
 
     if (!self.xcTestRunDict && self.schemePath) {

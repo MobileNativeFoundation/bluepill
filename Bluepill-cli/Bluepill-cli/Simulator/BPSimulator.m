@@ -59,6 +59,11 @@
                                     name:deviceName
                        completionHandler:^(NSError *error, SimDevice *device) {
                            __self.device = device;
+
+                           if (__self.config.screenshotsDirectory) {
+                               __self.screenshotService = [[SimulatorScreenshotService alloc] initWithConfiguration:__self.config forDevice:device];
+                           }
+
                            if (!__self.device || error) {
                                dispatch_async(dispatch_get_main_queue(), ^{
                                    completion(error);
@@ -95,9 +100,9 @@
             return NO;
         }
     }
+
     return YES;
 }
-
 
 - (void)bootWithCompletion:(void (^)(NSError *error))completion {
     // Now boot it.
@@ -273,6 +278,7 @@
         self.monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
     }
     self.monitor.device = self.device;
+    self.monitor.screenshotService = self.screenshotService;
     self.monitor.hostBundleId = hostBundleId;
     parser.delegate = self.monitor;
 

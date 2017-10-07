@@ -566,6 +566,68 @@
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
 }
 
+- (void)testTakingScreenshotWithFailingTestsSet {
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
+    self.config.outputDirectory = outputDir;
+    self.config.screenshotsDirectory = outputDir;
+
+    NSArray *expectedScreenshotsFileNames = @[@"BPAppNegativeTests_testAssertFailure_attempt_1.jpeg",
+                                              @"BPAppNegativeTests_testRaiseException_attempt_1.jpeg"];
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusTestsFailed);
+
+    for (NSString *filename in expectedScreenshotsFileNames) {
+        NSString *filePath = [outputDir stringByAppendingPathComponent:filename];
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
+        XCTAssert(fileExists);
+    }
+}
+
+- (void)testTakingScreenshotWithFailingTestsSetWithRetries {
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
+    self.config.outputDirectory = outputDir;
+    self.config.screenshotsDirectory = outputDir;
+    self.config.failureTolerance = @(1);
+
+    NSArray *expectedScreenshotsFileNames = @[@"BPAppNegativeTests_testAssertFailure_attempt_1.jpeg",
+                                              @"BPAppNegativeTests_testAssertFailure_attempt_2.jpeg",
+                                              @"BPAppNegativeTests_testRaiseException_attempt_1.jpeg",
+                                              @"BPAppNegativeTests_testRaiseException_attempt_2.jpeg"];
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusTestsFailed);
+
+    for (NSString *filename in expectedScreenshotsFileNames) {
+        NSString *filePath = [outputDir stringByAppendingPathComponent:filename];
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
+        XCTAssert(fileExists);
+    }
+}
+
+- (void)testThatScreenshotAreNotTakenWithFailingTestsSetWithoutConfigOption {
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
+    self.config.outputDirectory = outputDir;
+
+    NSArray *expectedScreenshotsFileNames = @[@"BPAppNegativeTests_testAssertFailure_attempt_1.jpeg",
+                                              @"BPAppNegativeTests_testRaiseException_attempt_1.jpeg"];
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusTestsFailed);
+
+    for (NSString *filename in expectedScreenshotsFileNames) {
+        NSString *filePath = [outputDir stringByAppendingPathComponent:filename];
+        BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
+        XCTAssertFalse(fileExists);
+    }
+}
+
 #pragma mark - Test helpers
 
 - (void)compareReportAtPath:(NSString *)first withReportAtPath:(NSString *)second {

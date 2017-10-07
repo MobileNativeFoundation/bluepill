@@ -88,6 +88,7 @@ A full list supported options are listed here.
 |       diagnostics      |           n/a          | Enable collection of diagnostics in outputDir in case of test failures             |     N    | NO               |
 |          help          |           -h           | Help.                                                                              |     N    | n/a              |
 |     runner-app-path    |           -u           | The test runner for UI tests.                                                      |     N    | n/a              |
+| screenshots-directory  |           n/a          | Directory where simulator screenshots for failed ui tests will be stored           |     N    | n/a              |
 
 ## Demo
 
