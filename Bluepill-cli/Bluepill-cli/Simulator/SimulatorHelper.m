@@ -101,7 +101,7 @@
     xctConfig.treatMissingBaselinesAsFailures = NO;
     xctConfig.targetApplicationPath = config.appBundlePath;
     xctConfig.reportResultsToIDE = YES;
-    xctConfig.automationFrameworkPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework", config.xcodePath],
+    xctConfig.automationFrameworkPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework", config.xcodePath];
     testHostPath = config.appBundlePath;
 
     if (config.testRunnerAppPath) {

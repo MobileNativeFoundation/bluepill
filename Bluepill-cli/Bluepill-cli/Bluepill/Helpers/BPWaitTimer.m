@@ -29,7 +29,7 @@
     }];
 }
 
-- (void)startTimerFor:(NSTimeInterval)seconds withCompletion:(void (^)())block {
+- (void)startTimerFor:(NSTimeInterval)seconds withCompletion:(void (^)(void))block {
     self.timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0));
     __weak typeof(self) __self = self;
     dispatch_source_set_timer(self.timer, dispatch_time(DISPATCH_TIME_NOW, seconds * NSEC_PER_SEC), DISPATCH_TIME_FOREVER, 0.1 * NSEC_PER_SEC);
