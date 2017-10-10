@@ -70,7 +70,7 @@
     XCTAssert(self.config.simDeviceType != nil);
 
     for (SimRuntime *runtime in [sc supportedRuntimes]) {
-        if ([[runtime name] isEqualToString:self.config.runtime]) {
+        if ([[runtime name] rangeOfString:self.config.runtime].location != NSNotFound) {
             self.config.simRuntime = runtime;
             break;
         }
