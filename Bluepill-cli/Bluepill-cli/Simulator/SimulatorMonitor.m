@@ -250,7 +250,7 @@
         NSAssert(self.appPID > 0, @"Failed to find a valid PID");
         NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd_HH-mm-ss"];
-        NSString *sampleLogFile = [NSString stringWithFormat:@"/tmp/sampleLog_%@.txt", [dateFormatter stringFromDate:[NSDate date]]];
+        NSString *sampleLogFile = [NSString stringWithFormat:@"%@/sampleLog_PID_%d_%@.txt", self.config.outputDirectory, self.appPID, [dateFormatter stringFromDate:[NSDate date]]];
         [BPUtils printInfo:INFO withString:@"saving 'sample' command log to: %@", sampleLogFile];
         [BPUtils runShell:[NSString stringWithFormat:@"/usr/bin/sample %d -file %@", self.appPID, sampleLogFile]];
         if ((kill(self.appPID, 0) == 0) && (kill(self.appPID, SIGKILL) < 0)) {
