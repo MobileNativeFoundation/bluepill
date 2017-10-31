@@ -84,6 +84,10 @@ struct BPOptions {
         "Do not create a simulator but reuse the one with the UDID given. (BP INTERNAL USE ONLY). "},
     {'D', "delete-simulator", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "deleteSimUDID",
         "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE. (BP INTERNAL USE ONLY). "},
+    {'V', "video-paths", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "videoPaths",
+        "Paths to the videos to be uploaded."},
+    {'I', "image-paths", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "imagePaths",
+        "Paths to the images to be uploaded."},
 
     // options with no argument
     {'H', "headless", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",

@@ -66,6 +66,8 @@
 		BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */; };
 		BA53B16C1E30931E00FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16B1E30931E00FCED71 /* BPConstants.m */; };
 		BA53B1701E30A0F100FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16B1E30931E00FCED71 /* BPConstants.m */; };
+		BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53011FA8F9F100D80675 /* demo.mov */; };
+		BA6E53061FA8FA2500D80675 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53051FA8FA2000D80675 /* image.png */; };
 		BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
 		BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DDF1DD84A72007CB967 /* fatal_tests.xml */; };
 		BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */; };
@@ -180,6 +182,8 @@
 		BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = hanging_tests.xml; sourceTree = "<group>"; };
 		BA53B16A1E30931E00FCED71 /* BPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConstants.h; sourceTree = "<group>"; };
 		BA53B16B1E30931E00FCED71 /* BPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConstants.m; sourceTree = "<group>"; };
+		BA6E53011FA8F9F100D80675 /* demo.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = demo.mov; sourceTree = "<group>"; };
+		BA6E53051FA8FA2000D80675 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		BA944BCE1D76A39A00A4BDA3 /* Bluepill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bluepill.h; sourceTree = "<group>"; };
 		BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bluepill.m; sourceTree = "<group>"; };
 		BA954F571D6D1AB3007D011D /* CDStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDStructures.h; sourceTree = "<group>"; };
@@ -393,6 +397,8 @@
 		BA180A0A1DBB011200D7D130 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
+				BA6E53011FA8F9F100D80675 /* demo.mov */,
+				BA6E53051FA8FA2000D80675 /* image.png */,
 				C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */,
 				7AA4C2281E4A797E00FAA39E /* multiple_reports_for_one_error.log */,
 				7A4FB8E71DFB66980073F268 /* error_only_crash.log */,
@@ -649,7 +655,7 @@
 		7A79017A1D5CB679004D4325 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = LinkedIn;
 				TargetAttributes = {
 					7A7901811D5CB679004D4325 = {
@@ -686,6 +692,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA6E53061FA8FA2500D80675 /* image.png in Resources */,
+				BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */,
 				C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */,
 				BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */,
 				BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */,
@@ -796,7 +804,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -804,7 +814,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -845,7 +859,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -853,7 +869,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
