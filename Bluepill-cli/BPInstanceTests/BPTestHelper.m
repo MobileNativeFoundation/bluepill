@@ -57,6 +57,14 @@
     return [[self sampleAppUITestRunnerPath] stringByAppendingString:@"/PlugIns/BPSampleAppUITests.xctest"];
 }
 
++ (NSString *)sampleVideoPath {
+    return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"demo.mov"];
+}
+
++ (NSString *)samplePhotoPath {
+    return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"image.png"];
+}
+
 + (NSString *)bpExecutablePath {
     return [[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"bp"];
 }
