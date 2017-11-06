@@ -46,4 +46,11 @@
 
 // Return the derivedDataPath
 + (NSString *)derivedDataPath;
+
+// Return path to the sample video file.
++ (NSString *)sampleVideoPath;
+
+// Return the sample photo path.
++ (NSString *)samplePhotoPath;
+
 @end

@@ -48,6 +48,7 @@
     self.config.plainOutput = NO;
     self.config.jsonOutput = NO;
     self.config.headlessMode = YES;
+    self.config.videoPaths = @[[BPTestHelper sampleVideoPath]];
     self.config.junitOutput = NO;
     self.config.testRunnerAppPath = nil;
     self.config.testing_CrashAppOnLaunch = NO;
