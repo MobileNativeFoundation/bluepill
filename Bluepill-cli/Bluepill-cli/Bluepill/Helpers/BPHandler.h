@@ -15,7 +15,7 @@
     dispatch_once_t onceToken;
 }
 
-typedef void (^BasicHandlerBlock)();
+typedef void (^BasicHandlerBlock)(void);
 typedef void (^BasicErrorBlock)(NSError *error);
 
 @property (nonatomic, strong) BPWaitTimer *timer;

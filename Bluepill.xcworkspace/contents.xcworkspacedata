@@ -10,9 +10,6 @@
    <FileRef
       location = "group:Bluepill-cli/Bluepill-cli.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:Bluepill-gui/Bluepill-gui.xcodeproj">
-   </FileRef>
    <Group
       location = "group:Configurations"
       name = "Configurations">
