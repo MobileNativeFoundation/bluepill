@@ -75,7 +75,7 @@ A full list supported options are listed here.
 |      error-retries     |           -R           | Number of times to recover from simulator/app crashing/hanging and continue running|     N    | 5                |
 |    failure-tolerance   |           -f           | Number of times to retry on test failures                                          |     N    | 0                |
 |    only-retry-failed   |           -F           | When `failure-tolerance` > 0, only retry tests that failed                         |     N    | false            |
-|         runtime        |           -r           | What runtime to use.                                                               |     N    | iOS 10.3         |
+|         runtime        |           -r           | What runtime to use.                                                               |     N    | iOS 11.1         |
 |      stuck-timeout     |           -S           | Timeout in seconds for a test that seems stuck (no output).                        |     N    | 300s             |
 |      test-timeout      |           -T           | Timeout in seconds for a test that is producing output.                            |     N    | 300s             |
 |    test-bundle-path    |           -t           | The path to the test bundle to execute (single .xctest).                           |     N    | n/a              |
@@ -98,8 +98,10 @@ A full list supported options are listed here.
 
 ## Requirements
 
-Bluepill only works with **Xcode 9.0**. If you're looking for Xcode 8 support, please check out the
-[xcode8](https://github.com/linkedin/bluepill/tree/xcode8) branch.
+Bluepill only works with **Xcode 9.1**. If you're looking for old Xcode support, please check out the other branches:
+
+* [Xcode-8](https://github.com/linkedin/bluepill/tree/xcode8)
+* [Xcode-9.0](https://github.com/linkedin/bluepill/tree/xcode-9.0)
 
 ## Acknowledgement
 
