@@ -65,7 +65,7 @@
 
 + (NSArray <BPXCTestFile *>*)testsFromXCTestRunDict:(NSDictionary *)xcTestRunDict
                                    andXCTestRunPath:(NSString *)xcTestRunPath
-                                       andXcodePath: (NSString *)xcodePath
+                                       andXcodePath:(NSString *)xcodePath
                                           withError:(NSError *__autoreleasing *)error {
 
     NSMutableArray<BPXCTestFile *> *allTests = [[NSMutableArray alloc] init];
