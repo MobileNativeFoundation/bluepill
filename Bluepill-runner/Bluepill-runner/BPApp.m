@@ -65,6 +65,7 @@
 
 + (NSArray <BPXCTestFile *>*)testsFromXCTestRunDict:(NSDictionary *)xcTestRunDict
                                    andXCTestRunPath:(NSString *)xcTestRunPath
+                                       andXcodePath: (NSString *)xcodePath
                                           withError:(NSError *__autoreleasing *)error {
 
     NSMutableArray<BPXCTestFile *> *allTests = [[NSMutableArray alloc] init];
@@ -72,6 +73,7 @@
     for (NSString *key in xcTestRunDict) {
         BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromDictionary:[xcTestRunDict objectForKey:key]
                                                                withTestRoot:[xcTestRunPath stringByDeletingLastPathComponent]
+                                                               andXcodePath:xcodePath
                                                                              andError:error];
         if (!xcTestFile) {
             [BPUtils printInfo:ERROR withString:@"Failed to read data for %@", key];
@@ -98,6 +100,7 @@
         [BPUtils printInfo:INFO withString:@"Using xctestrun configuration"];
         NSArray<BPXCTestFile *> *loadedTests = [BPApp testsFromXCTestRunDict:config.xcTestRunDict
                                                            andXCTestRunPath:config.xcTestRunPath
+                                                                andXcodePath:config.xcodePath
                                                                   withError:error];
         if (loadedTests == nil) {
             return nil;
