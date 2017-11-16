@@ -46,6 +46,8 @@
 		7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */; };
 		7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
+		7D0D40981F80DB0A00F27A59 /* SimulatorScreenshotService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0D40971F80DB0A00F27A59 /* SimulatorScreenshotService.m */; };
+		7DD8D7FD1F80E526001E8AFF /* SimulatorScreenshotService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0D40971F80DB0A00F27A59 /* SimulatorScreenshotService.m */; };
 		B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */; };
 		B9357DCC1F5E604C007E7B22 /* BPSimulatorFifoFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B9357DCA1F5E604C007E7B22 /* BPSimulatorFifoFile.m */; };
 		B9D3D73A1F63B0A40082F6BF /* BPSimulatorFifoFile.m in Sources */ = {isa = PBXBuildFile; fileRef = B9357DCA1F5E604C007E7B22 /* BPSimulatorFifoFile.m */; };
@@ -66,6 +68,8 @@
 		BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */; };
 		BA53B16C1E30931E00FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16B1E30931E00FCED71 /* BPConstants.m */; };
 		BA53B1701E30A0F100FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16B1E30931E00FCED71 /* BPConstants.m */; };
+		BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53011FA8F9F100D80675 /* demo.mov */; };
+		BA6E53061FA8FA2500D80675 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53051FA8FA2000D80675 /* image.png */; };
 		BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
 		BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DDF1DD84A72007CB967 /* fatal_tests.xml */; };
 		BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */; };
@@ -153,6 +157,11 @@
 		7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitTimerTests.m; sourceTree = "<group>"; };
 		7ADBB1451DCBBC0E00DC4E8D /* BPTreeAssembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTreeAssembler.h; sourceTree = "<group>"; };
 		7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTreeAssembler.m; sourceTree = "<group>"; };
+		7D0D40961F80DB0A00F27A59 /* SimulatorScreenshotService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorScreenshotService.h; sourceTree = "<group>"; };
+		7D0D40971F80DB0A00F27A59 /* SimulatorScreenshotService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulatorScreenshotService.m; sourceTree = "<group>"; };
+		7DDFED931F8188CC00D1357C /* SimDeviceIOProtocol-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOProtocol-Protocol.h"; sourceTree = "<group>"; };
+		7DDFED941F8188EC00D1357C /* SimDeviceIOPortDescriptorState-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOPortDescriptorState-Protocol.h"; sourceTree = "<group>"; };
+		7DDFED961F81896C00D1357C /* SimDeviceFramebufferService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceFramebufferService.h; sourceTree = "<group>"; };
 		B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = ../../../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework; sourceTree = "<group>"; };
 		B9357DCA1F5E604C007E7B22 /* BPSimulatorFifoFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPSimulatorFifoFile.m; sourceTree = "<group>"; };
 		B9357DCB1F5E604C007E7B22 /* BPSimulatorFifoFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPSimulatorFifoFile.h; sourceTree = "<group>"; };
@@ -177,31 +186,28 @@
 		BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = hanging_tests.xml; sourceTree = "<group>"; };
 		BA53B16A1E30931E00FCED71 /* BPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConstants.h; sourceTree = "<group>"; };
 		BA53B16B1E30931E00FCED71 /* BPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConstants.m; sourceTree = "<group>"; };
+		BA6E53011FA8F9F100D80675 /* demo.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = demo.mov; sourceTree = "<group>"; };
+		BA6E53051FA8FA2000D80675 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		BA944BCE1D76A39A00A4BDA3 /* Bluepill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bluepill.h; sourceTree = "<group>"; };
 		BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bluepill.m; sourceTree = "<group>"; };
 		BA954F571D6D1AB3007D011D /* CDStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDStructures.h; sourceTree = "<group>"; };
 		BA954F581D6D1AB3007D011D /* CoreSimulator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreSimulator.h; sourceTree = "<group>"; };
-		BA954F591D6D1AB3007D011D /* DefaultDisplayDescriptorState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefaultDisplayDescriptorState.h; sourceTree = "<group>"; };
 		BA954F5A1D6D1AB3007D011D /* NSArray-SimArgv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray-SimArgv.h"; sourceTree = "<group>"; };
 		BA954F5B1D6D1AB3007D011D /* NSCoding-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSCoding-Protocol.h"; sourceTree = "<group>"; };
 		BA954F5C1D6D1AB3007D011D /* NSDictionary-SimEnvp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary-SimEnvp.h"; sourceTree = "<group>"; };
 		BA954F5D1D6D1AB3007D011D /* NSError-SimError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSError-SimError.h"; sourceTree = "<group>"; };
-		BA954F5E1D6D1AB3007D011D /* NSKeyedArchiver-SimPasteboardItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSKeyedArchiver-SimPasteboardItem.h"; sourceTree = "<group>"; };
-		BA954F5F1D6D1AB3007D011D /* NSKeyedUnarchiver-SimPasteboardItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSKeyedUnarchiver-SimPasteboardItem.h"; sourceTree = "<group>"; };
 		BA954F601D6D1AB3007D011D /* NSObject-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject-Protocol.h"; sourceTree = "<group>"; };
 		BA954F611D6D1AB3007D011D /* NSPasteboardItem-SimPasteboardItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSPasteboardItem-SimPasteboardItem.h"; sourceTree = "<group>"; };
 		BA954F621D6D1AB3007D011D /* NSPasteboardItemDataProvider-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSPasteboardItemDataProvider-Protocol.h"; sourceTree = "<group>"; };
 		BA954F631D6D1AB3007D011D /* NSSecureCoding-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSSecureCoding-Protocol.h"; sourceTree = "<group>"; };
 		BA954F641D6D1AB3007D011D /* NSString-SIMCPUType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString-SIMCPUType.h"; sourceTree = "<group>"; };
 		BA954F651D6D1AB3007D011D /* NSString-SIMPackedVersion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString-SIMPackedVersion.h"; sourceTree = "<group>"; };
-		BA954F661D6D1AB3007D011D /* NSString-SimServiceContextExtras.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString-SimServiceContextExtras.h"; sourceTree = "<group>"; };
 		BA954F671D6D1AB3007D011D /* NSUserDefaults-SimDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults-SimDefaults.h"; sourceTree = "<group>"; };
 		BA954F681D6D1AB3007D011D /* SimDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDevice.h; sourceTree = "<group>"; };
 		BA954F691D6D1AB3007D011D /* SimDeviceIO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceIO.h; sourceTree = "<group>"; };
 		BA954F6A1D6D1AB3007D011D /* SimDeviceIOClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceIOClient.h; sourceTree = "<group>"; };
 		BA954F6B1D6D1AB3007D011D /* SimDeviceIOInterface-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOInterface-Protocol.h"; sourceTree = "<group>"; };
 		BA954F6C1D6D1AB3007D011D /* SimDeviceIOLoadedBundle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceIOLoadedBundle.h; sourceTree = "<group>"; };
-		BA954F6D1D6D1AB3007D011D /* SimDeviceIOPortDescriptorState-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOPortDescriptorState-Protocol.h"; sourceTree = "<group>"; };
 		BA954F6E1D6D1AB3007D011D /* SimDeviceIOServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceIOServer.h; sourceTree = "<group>"; };
 		BA954F6F1D6D1AB3007D011D /* SimDeviceNotificationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceNotificationManager.h; sourceTree = "<group>"; };
 		BA954F701D6D1AB3007D011D /* SimDeviceNotifier-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimDeviceNotifier-Protocol.h"; sourceTree = "<group>"; };
@@ -386,9 +392,19 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		7DDFED951F81896C00D1357C /* SimulatorKit */ = {
+			isa = PBXGroup;
+			children = (
+				7DDFED961F81896C00D1357C /* SimDeviceFramebufferService.h */,
+			);
+			path = SimulatorKit;
+			sourceTree = "<group>";
+		};
 		BA180A0A1DBB011200D7D130 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
+				BA6E53011FA8F9F100D80675 /* demo.mov */,
+				BA6E53051FA8FA2000D80675 /* image.png */,
 				C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */,
 				7AA4C2281E4A797E00FAA39E /* multiple_reports_for_one_error.log */,
 				7A4FB8E71DFB66980073F268 /* error_only_crash.log */,
@@ -422,6 +438,8 @@
 		BA34F5DB1D6D70300063B17F /* Simulator */ = {
 			isa = PBXGroup;
 			children = (
+				7D0D40961F80DB0A00F27A59 /* SimulatorScreenshotService.h */,
+				7D0D40971F80DB0A00F27A59 /* SimulatorScreenshotService.m */,
 				BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */,
 				BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */,
 				7A4933131DAD63A50060D54F /* SimulatorMonitor.h */,
@@ -448,6 +466,7 @@
 		BA954F551D6D1AB3007D011D /* PrivateHeaders */ = {
 			isa = PBXGroup;
 			children = (
+				7DDFED951F81896C00D1357C /* SimulatorKit */,
 				BAFCCA381E36DBA900E33C31 /* DTXConnectionServices */,
 				BA34F5E51D6D78120063B17F /* XCTest */,
 				BA954F561D6D1AB3007D011D /* CoreSimulator */,
@@ -458,29 +477,26 @@
 		BA954F561D6D1AB3007D011D /* CoreSimulator */ = {
 			isa = PBXGroup;
 			children = (
+				7DDFED941F8188EC00D1357C /* SimDeviceIOPortDescriptorState-Protocol.h */,
+				7DDFED931F8188CC00D1357C /* SimDeviceIOProtocol-Protocol.h */,
 				BA954F571D6D1AB3007D011D /* CDStructures.h */,
 				BA954F581D6D1AB3007D011D /* CoreSimulator.h */,
-				BA954F591D6D1AB3007D011D /* DefaultDisplayDescriptorState.h */,
 				BA954F5A1D6D1AB3007D011D /* NSArray-SimArgv.h */,
 				BA954F5B1D6D1AB3007D011D /* NSCoding-Protocol.h */,
 				BA954F5C1D6D1AB3007D011D /* NSDictionary-SimEnvp.h */,
 				BA954F5D1D6D1AB3007D011D /* NSError-SimError.h */,
-				BA954F5E1D6D1AB3007D011D /* NSKeyedArchiver-SimPasteboardItem.h */,
-				BA954F5F1D6D1AB3007D011D /* NSKeyedUnarchiver-SimPasteboardItem.h */,
 				BA954F601D6D1AB3007D011D /* NSObject-Protocol.h */,
 				BA954F611D6D1AB3007D011D /* NSPasteboardItem-SimPasteboardItem.h */,
 				BA954F621D6D1AB3007D011D /* NSPasteboardItemDataProvider-Protocol.h */,
 				BA954F631D6D1AB3007D011D /* NSSecureCoding-Protocol.h */,
 				BA954F641D6D1AB3007D011D /* NSString-SIMCPUType.h */,
 				BA954F651D6D1AB3007D011D /* NSString-SIMPackedVersion.h */,
-				BA954F661D6D1AB3007D011D /* NSString-SimServiceContextExtras.h */,
 				BA954F671D6D1AB3007D011D /* NSUserDefaults-SimDefaults.h */,
 				BA954F681D6D1AB3007D011D /* SimDevice.h */,
 				BA954F691D6D1AB3007D011D /* SimDeviceIO.h */,
 				BA954F6A1D6D1AB3007D011D /* SimDeviceIOClient.h */,
 				BA954F6B1D6D1AB3007D011D /* SimDeviceIOInterface-Protocol.h */,
 				BA954F6C1D6D1AB3007D011D /* SimDeviceIOLoadedBundle.h */,
-				BA954F6D1D6D1AB3007D011D /* SimDeviceIOPortDescriptorState-Protocol.h */,
 				BA954F6E1D6D1AB3007D011D /* SimDeviceIOServer.h */,
 				BA954F6F1D6D1AB3007D011D /* SimDeviceNotificationManager.h */,
 				BA954F701D6D1AB3007D011D /* SimDeviceNotifier-Protocol.h */,
@@ -645,7 +661,7 @@
 		7A79017A1D5CB679004D4325 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = LinkedIn;
 				TargetAttributes = {
 					7A7901811D5CB679004D4325 = {
@@ -682,6 +698,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA6E53061FA8FA2500D80675 /* image.png in Resources */,
+				BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */,
 				C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */,
 				BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */,
 				BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */,
@@ -721,6 +739,7 @@
 				7A7E7BB51DF2163F007928F3 /* BPHandler.m in Sources */,
 				7A564C0D1DA817DE001BCEC2 /* BPReporters.m in Sources */,
 				BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
+				7D0D40981F80DB0A00F27A59 /* SimulatorScreenshotService.m in Sources */,
 				7A202A411DB0066100D935E3 /* BPWriter.m in Sources */,
 				7A4933151DAD63A50060D54F /* SimulatorMonitor.m in Sources */,
 				7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */,
@@ -763,6 +782,7 @@
 				BA1809B81DB89B5600D7D130 /* BluepillTests.m in Sources */,
 				BA1949371E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
 				BAD558D31DB6DC1C00C9A5CD /* SimulatorMonitor.m in Sources */,
+				7DD8D7FD1F80E526001E8AFF /* SimulatorScreenshotService.m in Sources */,
 				7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
 				BAD558D71DB6DCB100C9A5CD /* BPWriter.m in Sources */,
 				7AAE7AAF1DB7DC1E009B5549 /* BPRegexTests.m in Sources */,
@@ -792,7 +812,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -800,7 +822,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -841,7 +867,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -849,7 +877,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -887,6 +919,8 @@
 					CoreSimulator,
 					"-weak_framework",
 					XCTest,
+					"-weak_framework",
+					SimulatorKit,
 				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -907,6 +941,8 @@
 					CoreSimulator,
 					"-weak_framework",
 					XCTest,
+					"-weak_framework",
+					SimulatorKit,
 				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -928,6 +964,8 @@
 					CoreSimulator,
 					"-weak_framework",
 					XCTest,
+					"-weak_framework",
+					SimulatorKit,
 				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
@@ -950,6 +988,8 @@
 					CoreSimulator,
 					"-weak_framework",
 					XCTest,
+					"-weak_framework",
+					SimulatorKit,
 				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;

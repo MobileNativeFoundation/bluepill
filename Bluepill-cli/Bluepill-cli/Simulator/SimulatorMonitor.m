@@ -63,6 +63,7 @@
 
 - (void)onAllTestsEnded {
     self.simulatorState = Completed;
+
     if (self.failureCount) {
         self.exitStatus = BPExitStatusTestsFailed;
     } else {
@@ -112,8 +113,11 @@
 
 - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass
                           inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
-    NSDate *currentTime = [NSDate date];
+    if (self.config.screenshotsDirectory) {
+        [self saveScreenshotForFailedTestWithName:testName inClass:testClass];
+    }
 
+    NSDate *currentTime = [NSDate date];
     NSString *fullTestName = [NSString stringWithFormat:@"%@/%@", testClass, testName];
 
     BOOL additionalFailure = NO;
@@ -241,10 +245,14 @@
     if (!self.config.onlyRetryFailed) {
         [self updateExecutedTestCaseList:testName inClass:testClass];
     }
-
     if (![[self.device stateString] isEqualToString:@"Shutdown"] && !self.config.testing_NoAppWillRun) {
         [BPUtils printInfo:ERROR withString:@"Will kill the process with appPID: %d", self.appPID];
         NSAssert(self.appPID > 0, @"Failed to find a valid PID");
+        NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd_HH-mm-ss"];
+        NSString *sampleLogFile = [NSString stringWithFormat:@"%@/sampleLog_PID_%d_%@.txt", self.config.outputDirectory, self.appPID, [dateFormatter stringFromDate:[NSDate date]]];
+        [BPUtils printInfo:INFO withString:@"saving 'sample' command log to: %@", sampleLogFile];
+        [BPUtils runShell:[NSString stringWithFormat:@"/usr/bin/sample %d -file %@", self.appPID, sampleLogFile]];
         if ((kill(self.appPID, 0) == 0) && (kill(self.appPID, SIGKILL) < 0)) {
             [BPUtils printInfo:ERROR withString:@"Failed to kill the process with appPID: %d: %s",
                 self.appPID, strerror(errno)];
@@ -265,6 +273,12 @@
 
 - (BOOL)didTestsStart {
     return (self.simulatorState >= Running);
+}
+
+- (void)saveScreenshotForFailedTestWithName:(NSString *)testName inClass:(NSString *)testClass {
+    // Save screenshot for failed test
+    NSString *fullTestName = [NSString stringWithFormat:@"%@_%@", testClass, testName];
+    [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
 }
 
 @end

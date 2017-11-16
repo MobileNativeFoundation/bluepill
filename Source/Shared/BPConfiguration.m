@@ -84,6 +84,10 @@ struct BPOptions {
         "Do not create a simulator but reuse the one with the UDID given. (BP INTERNAL USE ONLY). "},
     {'D', "delete-simulator", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "deleteSimUDID",
         "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE. (BP INTERNAL USE ONLY). "},
+    {'V', "video-paths", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "videoPaths",
+        "Paths to the videos to be uploaded."},
+    {'I', "image-paths", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "imagePaths",
+        "Paths to the images to be uploaded."},
 
     // options with no argument
     {'H', "headless", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
@@ -130,7 +134,10 @@ struct BPOptions {
     // New options
     {359, "xctestrun-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcTestRunPath",
         "The .xctestrun file with test information."},
-    
+    {360, "diagnostics", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "saveDiagnosticsOnError",
+        "Save Simulator diagnostics and useful debugging information in the output directory. If no output directory it doesn't do anything."},
+    {361, "screenshots-directory", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "screenshotsDirectory",
+        "Directory where simulator screenshots for failed ui tests will be stored"},
 
     {0, 0, 0, 0, 0, 0, 0}
 };
@@ -652,6 +659,23 @@ static NSUUID *sessionID;
         self.plainOutput = TRUE;
         self.junitOutput = TRUE;
         self.jsonOutput = TRUE;
+    }
+
+    if (self.screenshotsDirectory) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.screenshotsDirectory isDirectory:&isdir]) {
+            if (!isdir) {
+                BP_SET_ERROR(err, @"%@ is not a directory.", self.screenshotsDirectory);
+                return NO;
+            }
+        } else {
+            // create the directory
+            if (![[NSFileManager defaultManager] createDirectoryAtPath:self.screenshotsDirectory
+                                           withIntermediateDirectories:YES
+                                                            attributes:nil
+                                                                 error:err]) {
+                return NO;
+            }
+        }
     }
 
     if (!self.xcTestRunDict && self.schemePath) {

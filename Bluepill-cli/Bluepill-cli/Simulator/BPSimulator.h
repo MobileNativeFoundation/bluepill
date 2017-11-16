@@ -11,6 +11,7 @@
 #import "BPExitStatus.h"
 #import "BPSimulatorFifoFile.h"
 #import "SimulatorMonitor.h"
+#import "SimulatorScreenshotService.h"
 
 @class BPConfiguration;
 @class BPTreeParser;
@@ -20,6 +21,7 @@
 
 @property (nonatomic, strong) SimulatorMonitor *monitor;
 @property (nonatomic, strong) BPSimulatorFifoFile *stdOutAndErrorFifoFile;
+@property (nonatomic, strong) SimulatorScreenshotService *screenshotService;
 @property (nonatomic, assign, readonly) BOOL needsRetry;
 @property (nonatomic, readonly) NSString *UDID;
 @property (nonatomic, strong) SimDevice *device;

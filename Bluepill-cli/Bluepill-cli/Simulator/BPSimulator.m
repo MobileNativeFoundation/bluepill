@@ -59,6 +59,11 @@
                                     name:deviceName
                        completionHandler:^(NSError *error, SimDevice *device) {
                            __self.device = device;
+
+                           if (__self.config.screenshotsDirectory) {
+                               __self.screenshotService = [[SimulatorScreenshotService alloc] initWithConfiguration:__self.config forDevice:device];
+                           }
+
                            if (!__self.device || error) {
                                dispatch_async(dispatch_get_main_queue(), ^{
                                    completion(error);
@@ -95,9 +100,9 @@
             return NO;
         }
     }
+
     return YES;
 }
-
 
 - (void)bootWithCompletion:(void (^)(NSError *error))completion {
     // Now boot it.
@@ -153,8 +158,8 @@
  }
 
 - (NSRunningApplication *)findSimGUIApp {
-    NSString * cmd = [NSString stringWithFormat:@"ps -A | grep 'Simulator\\.app'"];
-    NSString * output = [[BPUtils runShell:cmd] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *cmd = [NSString stringWithFormat:@"ps -A | grep 'Simulator\\.app'"];
+    NSString *output = [[BPUtils runShell:cmd] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSArray *fields = [output componentsSeparatedByString: @" "];
     if ([fields count] > 0) {
         NSString *pidStr = [fields objectAtIndex:0];
@@ -165,7 +170,34 @@
     return nil;
 }
 
+- (void)addVideosToSimulator {
+    for (NSString *urlString in self.config.videoPaths) {
+        NSURL *videoUrl = [NSURL URLWithString:urlString];
+        NSError *error;
+        BOOL uploadResult = [self.device addVideo:videoUrl error:&error];
+        if (!uploadResult) {
+            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to upload video at path: %@, error message: %@", urlString, [error description]]];
+        }
+    }
+}
+
+- (void)addPhotosToSimulator {
+    for (NSString *urlString in self.config.imagePaths) {
+        NSURL *photoUrl = [NSURL URLWithString:urlString];
+        NSError *error;
+        BOOL uploadResult = [self.device addPhoto:photoUrl error:&error];
+        if (!uploadResult) {
+            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to upload photo at path: %@, error message: %@", urlString, [error description]]];
+        }
+    }
+}
+
 - (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error {
+    // Add photos and videos to the simulator.
+    [self addPhotosToSimulator];
+    [self addVideosToSimulator];
+
+    // Install the app
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostBundlePath = self.config.appBundlePath;
 
@@ -269,6 +301,7 @@
         self.monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
     }
     self.monitor.device = self.device;
+    self.monitor.screenshotService = self.screenshotService;
     self.monitor.hostBundleId = hostBundleId;
     parser.delegate = self.monitor;
 

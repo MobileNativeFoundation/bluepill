@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 #import "BPExecutionPhaseProtocol.h"
 #import "BPExitStatus.h"
+#import "SimulatorScreenshotService.h"
 
 typedef NS_ENUM(NSInteger, SimulatorState) {
     Idle,
@@ -27,6 +28,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 @property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) NSString *hostBundleId;
 @property (nonatomic, assign) SimulatorState simulatorState;
+@property (nonatomic, strong) SimulatorScreenshotService *screenshotService;
 @property (nonatomic) pid_t appPID;
 
 /*!
