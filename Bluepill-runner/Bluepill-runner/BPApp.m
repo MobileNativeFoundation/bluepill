@@ -74,7 +74,7 @@
         BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromDictionary:[xcTestRunDict objectForKey:key]
                                                                withTestRoot:[xcTestRunPath stringByDeletingLastPathComponent]
                                                                andXcodePath:xcodePath
-                                                                             andError:error];
+                                                                   andError:error];
         if (!xcTestFile) {
             [BPUtils printInfo:ERROR withString:@"Failed to read data for %@", key];
             errorCount++;
@@ -101,7 +101,7 @@
         NSArray<BPXCTestFile *> *loadedTests = [BPApp testsFromXCTestRunDict:config.xcTestRunDict
                                                            andXCTestRunPath:config.xcTestRunPath
                                                                 andXcodePath:config.xcodePath
-                                                                  withError:error];
+                                                                   withError:error];
         if (loadedTests == nil) {
             return nil;
         }
