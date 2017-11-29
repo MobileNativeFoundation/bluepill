@@ -63,14 +63,14 @@ int main(int argc, char * argv[]) {
             printf("Bluepill %s\n", BP_VERSION);
             exit(0);
         }
-        
+
         // Check if xcode version running on the host match the intended Bluepill branch: Xcode 9 branch is not backward compatible
         NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
         if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
             fprintf(stderr, "ERROR: Invalid Xcode version:\n%s;\nOnly %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
             exit(1);
         }
-        
+
         // Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
         // Senario to prevent: Bluepill is compiled with Xcode 8, but runs with host installed with Xcode 9
         // Only compare major and minor version version Exg. 9.1 == 9.1
@@ -85,7 +85,7 @@ int main(int argc, char * argv[]) {
             m();
             exit(0);
         }
-       
+
         while((c = getopt_long(argc, argv, sopts, lopts, NULL)) != -1) {
             if (!optarg) optarg = "";
             [config saveOpt:[NSNumber numberWithInt:c] withArg:[NSString stringWithUTF8String:optarg]];
@@ -109,7 +109,7 @@ int main(int argc, char * argv[]) {
             [app listTests];
             exit(0);
         }
-        
+
         BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:config withTestFiles:app.testBundles];
         // start a runner and let it fly
         BPRunner *runner = [BPRunner BPRunnerWithConfig:normalizedConfig withBpPath:nil];

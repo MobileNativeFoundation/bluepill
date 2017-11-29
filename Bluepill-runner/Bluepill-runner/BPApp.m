@@ -137,7 +137,7 @@
             [allTests addObject:testFile];
         }
     }
-    
+
     app.testBundles = allTests;
     return app;
 }
