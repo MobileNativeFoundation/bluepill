@@ -101,6 +101,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 
 + (instancetype)BPXCTestFileFromDictionary:(NSDictionary *)dict
                               withTestRoot:(NSString *)testRoot
+                              andXcodePath:(NSString *)xcodePath
                                   andError:(NSError *__autoreleasing *)error {
     NSAssert(dict, @"A dictionary should be provided");
     NSAssert(testRoot, @"A testRoot argument must be supplied");
@@ -131,7 +132,8 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTHOST withString:testHostPath];
     } else if ([testBundlePath rangeOfString:TESTROOT].location != NSNotFound) {
         if ([testHostPath rangeOfString:PLATFORMS].location != NSNotFound) {
-            
+            NSString *platformsPath = [xcodePath stringByAppendingPathComponent:@"Platforms"];
+            testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:PLATFORMS withString:platformsPath];
         } else {
             testHostPath = [testHostPath stringByDeletingLastPathComponent]; //remove /bluepill
             NSString *temp = [testHostPath stringByDeletingLastPathComponent]; //remove /iphonesimulator
