@@ -34,6 +34,7 @@
 
 + (instancetype)BPXCTestFileFromDictionary:(NSDictionary<NSString *, NSString *>*) dict
                               withTestRoot:(NSString *)testRoot
+                              andXcodePath:(NSString *)xcodePath
                                   andError:(NSError **)error;
 
 - (NSUInteger)numTests;

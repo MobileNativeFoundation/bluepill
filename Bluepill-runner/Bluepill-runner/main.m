@@ -64,19 +64,21 @@ int main(int argc, char * argv[]) {
             exit(0);
         }
         
-        //Check if xcode version running on the host match the intended Bluepill branch: Xcode 9 branch is not backward compatible
+        // Check if xcode version running on the host match the intended Bluepill branch: Xcode 9 branch is not backward compatible
         NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
         if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
             fprintf(stderr, "ERROR: Invalid Xcode version:\n%s;\nOnly %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
             exit(1);
         }
         
-        //Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
-        //Senario to prevent: Bluepill is compiled with Xcode 8, but runs with host installed with Xcode 9
-        if ([[BPUtils getXcodeRuntimeVersion] isEqualToString:@XCODE_VERSION]) {
-            printf("Bluepill runtime version and compile time version are matched: %s\n", XCODE_VERSION);
+        // Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
+        // Senario to prevent: Bluepill is compiled with Xcode 8, but runs with host installed with Xcode 9
+        // Only compare major and minor version version Exg. 9.1 == 9.1
+        if ([[[BPUtils getXcodeRuntimeVersion] substringToIndex:3] isEqualToString:[@XCODE_VERSION substringToIndex:3]]) {
+            printf("Bluepill runtime version and compile time version are matched: %s\n", [[@XCODE_VERSION substringToIndex:3] UTF8String]);
         } else {
-            fprintf(stderr, "ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n", [[BPUtils getXcodeRuntimeVersion] UTF8String], XCODE_VERSION);
+            fprintf(stderr, "ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n",
+                    [[[BPUtils getXcodeRuntimeVersion] substringToIndex:3] UTF8String], [[@XCODE_VERSION substringToIndex:3] UTF8String]);
             exit(1);
         }
         if (argv[1] && (!strcmp(argv[1], "--matrix"))) {

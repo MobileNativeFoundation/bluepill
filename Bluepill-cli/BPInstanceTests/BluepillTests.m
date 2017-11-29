@@ -71,7 +71,7 @@
     XCTAssert(self.config.simDeviceType != nil);
 
     for (SimRuntime *runtime in [sc supportedRuntimes]) {
-        if ([[runtime name] isEqualToString:self.config.runtime]) {
+        if ([[runtime name] containsString:self.config.runtime]) {
             self.config.simRuntime = runtime;
             break;
         }

@@ -277,7 +277,7 @@
 		BAEF4B2C1DAC539400E68294 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = LinkedIn;
 				TargetAttributes = {
 					BA1809DF1DBA8FB100D7D130 = {
