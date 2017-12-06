@@ -108,7 +108,7 @@
         xctConfig.targetApplicationBundleID = [self bundleIdForPath:config.appBundlePath];
         xctConfig.initializeForUITesting = YES;
         xctConfig.disablePerformanceMetrics = NO;
-        xctConfig.reportActivities = NO;
+        xctConfig.reportActivities = YES;
         xctConfig.testsMustRunOnMainThread = YES;
         xctConfig.pathToXcodeReportingSocket = nil;
         testHostPath = config.testRunnerAppPath;

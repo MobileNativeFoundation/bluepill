@@ -658,7 +658,7 @@
 		7A79017A1D5CB679004D4325 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = LinkedIn;
 				TargetAttributes = {
 					7A7901811D5CB679004D4325 = {

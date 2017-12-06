@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
             [app listTests];
             exit(0);
         }
-        
+
         BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:config withTestFiles:app.testBundles];
         // start a runner and let it fly
         BPRunner *runner = [BPRunner BPRunnerWithConfig:normalizedConfig withBpPath:nil];
