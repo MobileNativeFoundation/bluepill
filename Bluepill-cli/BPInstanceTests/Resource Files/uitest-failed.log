@@ -1,0 +1,51 @@
+--------------------------------------------------------------------------------
+Tests started: 2017-12-05 23:13:49 +0000
+--------------------------------------------------------------------------------
+DEBUG_FLAG_TOBEREMOVED.
+2017-12-05 15:14:05.820559-0800 BPSampleAppUITests-Runner[10618:1544990] +[CATransaction synchronize] called within transaction
+2017-12-05 15:14:05.855536-0800 BPSampleAppUITests-Runner[10618:1544990] Running tests...
+2017-12-05 15:14:07.997672-0800 BPSampleAppUITests-Runner[10618:1544990] Continuing to run tests in the background with task ID 1
+Test Suite 'Selected tests' started at 2017-12-05 15:14:08.689
+XCTestOutputBarrierTest Suite 'BPSampleAppUITests.xctest' started at 2017-12-05 15:14:08.690
+XCTestOutputBarrierTest Suite 'BPSampleAppUITests' started at 2017-12-05 15:14:08.690
+XCTestOutputBarrierTest Case '-[BPSampleAppUITests testExampleToFail]' started.
+XCTestOutputBarrier    t =     0.00s Start Test at 2017-12-05 15:14:08.691
+    t =     0.03s Set Up
+    t =     0.04s Open LI.BPSampleApp
+    t =     0.06s     Launch LI.BPSampleApp
+    t =     1.64s         Wait for LI.BPSampleApp to idle
+    t =     3.30s Tap "Tap Me" Button
+    t =     3.30s     Wait for LI.BPSampleApp to idle
+    t =     3.31s     Find the "Tap Me" Button
+    t =     3.44s         Wait for LI.BPSampleApp to idle
+    t =     3.46s     Synthesize event
+    t =     3.55s     Wait for LI.BPSampleApp to idle
+    t =     4.02s Tap TextField
+    t =     4.02s     Wait for LI.BPSampleApp to idle
+    t =     4.04s     Find the TextField
+    t =     4.15s         Wait for LI.BPSampleApp to idle
+    t =     5.17s         Find the TextField (retry 1)
+    t =     5.29s             Wait for LI.BPSampleApp to idle
+    t =     6.30s         Find the TextField (retry 2)
+    t =     6.41s             Wait for LI.BPSampleApp to idle
+XCTestOutputBarrier    t =     6.50s         Assertion Failure: BPSampleAppUITests.m:30: No matches found for Find: Elements containing elements matching type Button with identifier 'Tap Me 2' from input {(
+    Other, 0x60000018b2c0, traits: 8589934592,
+    Other, 0x604000189c00, traits: 8589934592,
+    Other, 0x60000018af80, traits: 8589934592,
+    Other, 0x6040001897f0,
+    Other, 0x60400018a0e0,
+    Other, 0x604000189e70, traits: 8388608,
+    Other, 0x604000189f40, traits: 8388608, label: '3 of 3 Wi-Fi bars', value: SSID,
+    Other, 0x604000189da0, traits: 8389120, label: '3:14 PM',
+    Other, 0x60400018a010, traits: 8388608, label: '-100% battery power'
+)}
+    t =     6.52s Tear Down
+Test Case '-[BPSampleAppUITests testExampleToFail]' failed (6.720 seconds).
+XCTestOutputBarrierTest Suite 'BPSampleAppUITests' failed at 2017-12-05 15:14:15.410.
+	 Executed 1 test, with 1 failure (0 unexpected) in 6.720 (6.720) seconds
+XCTestOutputBarrierTest Suite 'BPSampleAppUITests.xctest' failed at 2017-12-05 15:14:15.411.
+	 Executed 1 test, with 1 failure (0 unexpected) in 6.720 (6.721) seconds
+XCTestOutputBarrierTest Suite 'Selected tests' failed at 2017-12-05 15:14:15.411.
+	 Executed 1 test, with 1 failure (0 unexpected) in 6.720 (6.722) seconds
+XCTestOutputBarrierXCTestOutputBarrier
+BP_APP_PROC_ENDED
