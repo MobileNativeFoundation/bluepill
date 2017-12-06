@@ -620,8 +620,10 @@ static NSUUID *sessionID;
     
     //Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
     //Senario to prevent: Bluepill is compiled with Xcode 8, but runs with host installed with Xcode 9
-    if (![[BPUtils getXcodeRuntimeVersion] isEqualToString:@XCODE_VERSION]) {
-        BP_SET_ERROR(err, @"ERROR: Bluepill runtime version %@ and compile time version %s are mismatched\n", [BPUtils getXcodeRuntimeVersion], XCODE_VERSION);
+    //Only compare major and minor version version Exg. 9.1 == 9.1
+    if (![[[BPUtils getXcodeRuntimeVersion] substringToIndex:3] isEqualToString:[@XCODE_VERSION substringToIndex:3]]) {
+        BP_SET_ERROR(err, @"ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n",
+                     [[[BPUtils getXcodeRuntimeVersion] substringToIndex:3] UTF8String], [[@XCODE_VERSION substringToIndex:3] UTF8String]);
         return NO;
     }
 
