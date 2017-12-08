@@ -166,8 +166,10 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     if (commandLineArguments) {
         xcTestFile.commandLineArguments = [[NSArray alloc] initWithArray:commandLineArguments];
     }
-    NSDictionary<NSString *, NSString *> *environment = [dict objectForKey:@"EnvironmentVariables"];
+    NSMutableDictionary<NSString *, NSString *> *environment = [dict objectForKey:@"EnvironmentVariables"];
     if (environment) {
+        [environment removeObjectForKey:@"DYLD_FRAMEWORK_PATH"];
+        [environment removeObjectForKey:@"DYLD_LIBRARY_PATH"];
         xcTestFile.environmentVariables = [[NSDictionary alloc] initWithDictionary:environment];
     }
     NSArray<NSString *> *skipTestIdentifiers = [dict objectForKey:@"SkipTestIdentifiers"];

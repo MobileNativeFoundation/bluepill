@@ -405,8 +405,8 @@
     return [self checkFinished];
 }
 
-- (BOOL)isApplicationStarted {
-    return self.appProcessFinished || [self.monitor isApplicationStarted];
+- (BOOL)isApplicationLaunched {
+    return !self.appProcessFinished || [self.monitor isApplicationLaunched];
 }
 
 - (BOOL)didTestStart {
