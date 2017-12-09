@@ -413,6 +413,29 @@ static const NSString * const kPassed = @"passed";
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
         }
     }
+    // XCTestOutputBarrier    t =     6.50s         Assertion Failure: BPSampleAppUITests.m:30: No matches found for Find: Elements containing elements matching type Button with identifier 'Tap Me 2' from input {(
+    regex = [NSRegularExpression regularExpressionWithPattern:UITEST_CASE_FAILED options:0 error:nil];
+    matches = [regex matchesInString:line options:0 range:lineRange];
+    for (NSTextCheckingResult *result in matches) {
+        if ([result numberOfRanges] == 4) {
+            logLine = YES;
+            NSString *filename = [line substringWithRange:[result rangeAtIndex:1]];
+            NSString *lineNumber = [line substringWithRange:[result rangeAtIndex:2]];
+            NSString *errorMessage = [line substringWithRange:[result rangeAtIndex:3]];
+            
+            BPTestCaseLogEntry *testCaseLogEntry = self.currentTest;
+            if (testCaseLogEntry) {
+                testCaseLogEntry.filename = filename;
+                testCaseLogEntry.lineNumber = [lineNumber integerValue];
+                testCaseLogEntry.errorMessage = errorMessage;
+                if (!testCaseLogEntry.passed) {
+                    [self onTestCaseFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass
+                                            inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
+                                      wasException:testCaseLogEntry.unexpected];
+                }
+            }
+        }
+    }
 
     // Test Case '-[mntf_iosUITests.mntf_UISwiftTests testWaitForCheckpoint]' passed (1.037 seconds).
     // Test Case '-[mntf_iosUITests.mntf_UISwiftTests testWaitForCheckpoint]' failed (1.037 seconds).
