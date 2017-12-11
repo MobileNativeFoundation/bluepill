@@ -24,6 +24,10 @@
 #import <objc/runtime.h>
 
 #define NEXT(x)     { [Bluepill setDiagnosticFunction:#x from:__FUNCTION__ line:__LINE__]; CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ (x); }); }
+#define NEXT_AFTER(delay, x) { \
+    [Bluepill setDiagnosticFunction: #x from:__FUNCTION__ line:__LINE__]; \
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((delay) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ (x); }); \
+}
 
 static int volatile interrupted = 0;
 
@@ -482,7 +486,7 @@ void onInterrupt(int ignore) {
         return;
     }
 
-    NEXT([self checkProcessWithContext:context]);
+    NEXT_AFTER(1, [self checkProcessWithContext:context]);
 }
 
 - (BOOL)isProcessRunningWithContext:(BPExecutionContext *)context {
