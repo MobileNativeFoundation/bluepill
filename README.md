@@ -109,7 +109,7 @@ Bluepill was inspired by [parallel iOS test](https://github.com/plu/parallel_ios
 
 ## Fastlane Support
 
-If you're using [Fastlane](https://github.com/fastlane/fastlane) to run your tests, you're in luck! You can integrate Bluepill into your project with very little change to your existing setup. Just intetgrate one of the following Fastlane plugins, and you'll be on your way:
+If you're using [Fastlane](https://github.com/fastlane/fastlane) to run your tests, you're in luck! You can integrate Bluepill into your project with very little change to your existing setup. Just integrate one of the following Fastlane plugins, and you'll be on your way:
 
 - [Redpill](https://github.com/omniprojects/fastlane-plugin-redpill) - The most up-to-date plugin; it's is maintained by [Omni](https://github.com/omniprojects) and offers a full set of options to hook into Bluepill. As of this writing, Redpill is compiled against Xcode 9.1, and intended for use with [CircleCI](https://circleci.com). It will be updated with newer versions of Xcode when CircleCI supports them.
 - [fastlane-plugin-bluepill](https://github.com/tbrand/fastlane-plugin-bluepill) - Last updated Nov. 7th, offers basic support for working with the Bluepill binary.
