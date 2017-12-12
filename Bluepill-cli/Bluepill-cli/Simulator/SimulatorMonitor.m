@@ -268,7 +268,7 @@
 }
 
 - (BOOL)isApplicationLaunched {
-    return (self.simulatorState > Idle);
+    return (self.simulatorState > Idle && self.simulatorState < Completed);
 }
 
 - (BOOL)didTestsStart {
