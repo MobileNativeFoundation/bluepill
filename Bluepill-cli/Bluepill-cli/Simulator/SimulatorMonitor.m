@@ -28,8 +28,8 @@
 @property (nonatomic, assign) NSUInteger failureCount;
 @property (nonatomic, assign) BOOL testsBegan;
 @property (nonatomic, strong) BPConfiguration *config;
-@property (nonatomic, strong) NSMutableArray *executedTests;
-@property (nonatomic, strong) NSMutableArray *failedTestCases;
+@property (nonatomic, strong) NSMutableSet *executedTests;
+@property (nonatomic, strong) NSMutableSet *failedTestCases;
 
 @end
 
@@ -129,7 +129,7 @@
     }
 
     if (self.failedTestCases == nil) {
-        self.failedTestCases = [[NSMutableArray alloc] init];
+        self.failedTestCases = [[NSMutableSet alloc] init];
     }
 
     [self.failedTestCases addObject:fullTestName];
@@ -166,15 +166,15 @@
         return;
     }
     if (self.executedTests == nil) {
-        self.executedTests = [[NSMutableArray alloc] init];
+        self.executedTests = [[NSMutableSet alloc] init];
     }
     [self.executedTests addObject:[testClass stringByAppendingFormat:@"/%@", testName]];
-    if (self.config.testCasesToSkip == nil) {
-        self.config.testCasesToSkip = @[];
-    }
-    // If we crash, on the re-execution, we'll have a new list of tests to skip because we already ran these to completion.
 
-    self.config.testCasesToSkip = [self.config.testCasesToSkip arrayByAddingObjectsFromArray:self.executedTests];
+    // If we crash, on the re-execution, we'll have a new list of tests to skip because we already ran these to completion.
+    NSSet *testsToSkip = [[NSSet alloc] initWithArray:self.config.testCasesToSkip ?: @[]];
+    
+    self.config.testCasesToSkip = [[testsToSkip setByAddingObjectsFromSet:self.executedTests] allObjects];
+
 }
 
 - (void)onTestSuiteBegan:(NSString *)testSuiteName onDate:(NSDate *)startDate isRoot:(BOOL)isRoot {
