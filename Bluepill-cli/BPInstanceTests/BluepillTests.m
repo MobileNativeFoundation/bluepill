@@ -634,8 +634,11 @@
 - (void)compareReportAtPath:(NSString *)first withReportAtPath:(NSString *)second {
     NSURL *reportUrl = [NSURL fileURLWithPath:first];
     NSURL *expectedReportUrl = [NSURL fileURLWithPath:second];
-    NSXMLDocument *reportXML = [[NSXMLDocument alloc] initWithContentsOfURL:reportUrl options:0 error:nil];
-    NSXMLDocument *expectedReportXML = [[NSXMLDocument alloc] initWithContentsOfURL:expectedReportUrl options:0 error:nil];
+    NSError *error;
+    NSXMLDocument *reportXML = [[NSXMLDocument alloc] initWithContentsOfURL:reportUrl options:0 error:&error];
+    XCTAssert(reportXML != nil, @"%@", [error localizedDescription]);
+    NSXMLDocument *expectedReportXML = [[NSXMLDocument alloc] initWithContentsOfURL:expectedReportUrl options:0 error:&error];
+    XCTAssert(expectedReportXML != nil, @"%@", [error localizedDescription]);
     [self compareElement:[reportXML nodesForXPath:@".//testsuites" error:nil][0] withElement:[expectedReportXML nodesForXPath:@".//testsuites" error:nil][0]];
 }
 - (void)compareElement:(NSXMLElement *)first withElement:(NSXMLElement *)second {
@@ -654,7 +657,9 @@
     }
     NSArray *firstNodeChildren = [first children];
     NSArray *secondNodeChildren = [second children];
-    XCTAssert([firstNodeChildren count] == [secondNodeChildren count]);
+    XCTAssert([firstNodeChildren count] == [secondNodeChildren count], @"Wanted: %@: %lu, Got: %@: %lu",
+              [first name], [firstNodeChildren count],
+              [second name], [secondNodeChildren count]);
     for (int i = 0; i < [firstNodeChildren count]; i++) {
         [self compareElement:firstNodeChildren[i] withElement:secondNodeChildren[i]];
     }
