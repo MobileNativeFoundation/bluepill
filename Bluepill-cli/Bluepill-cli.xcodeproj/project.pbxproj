@@ -282,6 +282,7 @@
 		C45476AB1FD762B4006C7D9E /* uitest-failed.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "uitest-failed.log"; sourceTree = "<group>"; };
 		C467E5491DC930D200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
 		C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = crash_tests_with_retry.xml; sourceTree = "<group>"; };
+		C48AE3821FBCC59D00997BA0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -352,6 +353,7 @@
 		7A7901841D5CB679004D4325 /* Bluepill-cli */ = {
 			isa = PBXGroup;
 			children = (
+				C48AE3821FBCC59D00997BA0 /* BPVersion.h */,
 				BA954F551D6D1AB3007D011D /* PrivateHeaders */,
 				BA9552171D6D1C00007D011D /* Bluepill */,
 				BA34F5DB1D6D70300063B17F /* Simulator */,
@@ -625,6 +627,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7A7901891D5CB679004D4325 /* Build configuration list for PBXNativeTarget "bp" */;
 			buildPhases = (
+				C48AE3811FBCC53600997BA0 /* Save Git SHA1 and Xcode Version */,
 				7A79017E1D5CB679004D4325 /* Sources */,
 				7A79017F1D5CB679004D4325 /* Frameworks */,
 				7A7901801D5CB679004D4325 /* CopyFiles */,
@@ -721,6 +724,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C48AE3811FBCC53600997BA0 /* Save Git SHA1 and Xcode Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Save Git SHA1 and Xcode Version";
+			outputPaths = (
+				"$(SOURCE_ROOT)/BPVersion.h",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "VERSION=`git describe`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7A79017E1D5CB679004D4325 /* Sources */ = {

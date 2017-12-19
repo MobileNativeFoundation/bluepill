@@ -63,7 +63,7 @@
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
-    XCTAssert(rc == 0);
+    XCTAssert(rc == 0, @"Wanted 0, got %d", rc);
     XCTAssert([runner.nsTaskList count] == 0);
 }
 

@@ -191,7 +191,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_testBundleReadyWithProtocolVersion:(NSNumber *)protocolVersion minimumVersion:(NSNumber *)minimumVersion {
     self.connected = YES;
-    [BPUtils printInfo:INFO withString:@"Test bundle is connected.protocolVersion= %d, minimumVersion = %d", protocolVersion, minimumVersion];
+    [BPUtils printInfo:INFO withString:@"Test bundle is connected.protocolVersion= %@, minimumVersion = %@", protocolVersion, minimumVersion];
     return nil;
 }
 

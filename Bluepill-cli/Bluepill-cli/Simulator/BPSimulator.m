@@ -44,12 +44,12 @@
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
     if (!sc) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [error localizedDescription]];
         return;
     }
     SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
     if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [error localizedDescription]];
         return;
     }
 
@@ -83,20 +83,20 @@
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
     self.device = [self findDeviceWithConfig:self.config andDeviceID:deviceUDID];
     if (!self.device) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice not found: %@", [deviceUDID UUIDString]]];
+        [BPUtils printInfo:ERROR withString:@"SimDevice not found: %@", [deviceUDID UUIDString]];
         return NO;
     }
 
     if (![self.device.stateString isEqualToString:@"Booted"]) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]]];
+        [BPUtils printInfo:ERROR withString:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]];
         return NO;
     }
 
     if (!self.config.headlessMode) {
         self.app = [self findSimGUIApp];
         if (!self.app) {
-            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
-                                                 [deviceUDID UUIDString]]];
+            [BPUtils printInfo:ERROR withString:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
+                                                 [deviceUDID UUIDString]];
             return NO;
         }
     }
@@ -136,7 +136,7 @@
         [BPUtils printInfo:ERROR withString:@"Simulator %@ failed to boot. State: %@", self.device.UDID.UUIDString, self.device.stateString];
         return [NSError errorWithDomain:@"Simulator failed to boot" code:-1 userInfo:nil];
     }
-    [BPUtils printInfo:INFO withString:@"Simulator %@ achieved the BOOTED state", self.device.UDID.UUIDString, self.device.stateString];
+    [BPUtils printInfo:INFO withString:@"Simulator %@ achieved the BOOTED state %@", self.device.UDID.UUIDString, self.device.stateString];
     return nil;
 }
 
@@ -144,12 +144,12 @@
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
     if (!sc) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [error localizedDescription]];
         return nil;
     }
     SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
     if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [error localizedDescription]];
         return nil;
     }
 
@@ -176,7 +176,7 @@
         NSError *error;
         BOOL uploadResult = [self.device addVideo:videoUrl error:&error];
         if (!uploadResult) {
-            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to upload video at path: %@, error message: %@", urlString, [error description]]];
+            [BPUtils printInfo:ERROR withString:@"Failed to upload video at path: %@, error message: %@", urlString, [error description]];
         }
     }
 }
@@ -187,7 +187,7 @@
         NSError *error;
         BOOL uploadResult = [self.device addPhoto:photoUrl error:&error];
         if (!uploadResult) {
-            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to upload photo at path: %@, error message: %@", urlString, [error description]]];
+            [BPUtils printInfo:ERROR withString:@"Failed to upload photo at path: %@, error message: %@", urlString, [error description]];
         }
     }
 }
@@ -405,8 +405,8 @@
     return [self checkFinished];
 }
 
-- (BOOL)isApplicationStarted {
-    return self.appProcessFinished || [self.monitor isApplicationStarted];
+- (BOOL)isApplicationLaunched {
+    return [self.monitor isApplicationLaunched];
 }
 
 - (BOOL)didTestStart {

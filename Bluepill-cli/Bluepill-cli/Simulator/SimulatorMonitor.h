@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 @class SimDevice;
 @class BPConfiguration;
 
-@interface SimulatorMonitor : NSObject<BPExecutionPhaseProtocol, BPExitStatusProtocl>
+@interface SimulatorMonitor : NSObject<BPExecutionPhaseProtocol, BPExitStatusProtocol>
 
 @property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) NSString *hostBundleId;
