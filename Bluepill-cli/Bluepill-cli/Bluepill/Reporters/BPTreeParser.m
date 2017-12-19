@@ -110,8 +110,8 @@ static const NSString * const kPassed = @"passed";
             [self.log writeLine:@"%@", self.line];
             [self parseLine:self.line];
             if (numLines++ > maxLines) {
-                [BPUtils printInfo:ERROR withString:@"Infinite Loop Averted!: range {%d, %d}, %d, %@",
-                 range.length, range.location, [chunk length], str];
+                [BPUtils printInfo:ERROR withString:@"Infinite Loop Averted!: range {%lu, %lu}, %lu, %@",
+                 (unsigned long)range.length, (unsigned long)range.location, (unsigned long)[chunk length], str];
                 [BPUtils printInfo:ERROR withString:@"Data: %@", chunk];
                 // Fail hard.
                 exit(1);
@@ -237,11 +237,11 @@ static const NSString * const kPassed = @"passed";
                     self.current = node.parent;
                 } else {
                     [BPUtils printInfo:ERROR withString:
-                     [NSString stringWithFormat:@"ERROR: WHERE ARE WE??? We're closing a node for a test suite that hasn't been started [Expected: %@, Current: %@]. Ended: %@\nProblem line: %@",
+                     @"ERROR: WHERE ARE WE??? We're closing a node for a test suite that hasn't been started [Expected: %@, Current: %@]. Ended: %@\nProblem line: %@",
                       testSuiteName,
                       node.testSuiteName,
                       node.ended ? @"YES" : @"NO",
-                      line]];
+                      line];
                 }
                 self.current.endTime = date;
                 self.current.ended = YES;
@@ -298,8 +298,8 @@ static const NSString * const kPassed = @"passed";
                 testCaseLogEntry.errorMessage = errorMessage;
             } else {
                 [BPUtils printInfo:ERROR withString:
-                 [NSString stringWithFormat:@"HOW DID WE GET AN ERROR THAT WASN'T PARSED? We received an error in a test case that wasn't started or did not parse properly.\nProblem line: %@",
-                  line]];
+                 @"HOW DID WE GET AN ERROR THAT WASN'T PARSED? We received an error in a test case that wasn't started or did not parse properly.\nProblem line: %@",
+                  line];
             }
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
         }
@@ -464,8 +464,8 @@ static const NSString * const kPassed = @"passed";
                 }
             } else {
                 [BPUtils printInfo:ERROR withString:
-                 [NSString stringWithFormat:@"HOW ON EARTH DID THIS HAPPEN? The test case passed but we failed to handle it properly\nProblem line: %@",
-                  line]];
+                 @"HOW ON EARTH DID THIS HAPPEN? The test case passed but we failed to handle it properly\nProblem line: %@",
+                  line];
             }
             self.currentTest = nil;
         }
