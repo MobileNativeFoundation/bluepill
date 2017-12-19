@@ -63,11 +63,6 @@ void Output(NSMutableString *appendTo, NSString *fmt, ...);
 
 @implementation JUnitReporter
 
-+ (BOOL)useXCToolOutputCompatibility {
-    // XCTool seems to output an <Error/> block even for failures. Set this to true to mimic that behavior.
-    return NO;
-}
-
 + (BOOL)suppressStackTracesInOutput {
     // Change this to true if you do not want stack traces to appear in the junit output
     return NO;
@@ -79,7 +74,7 @@ void Output(NSMutableString *appendTo, NSString *fmt, ...);
         NSMutableString *output = [NSMutableString string];
         Output(output, @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         Output(output, @"<testsuites name=\"%@\" tests=\"%lu\" failures=\"%lu\" errors=\"%lu\" time=\"%f\">",
-               self.root.testSuiteName, self.root.numberOfTests, self.root.numberOfFailures, self.root.numberOfUnexpected, self.root.totalTime);
+               self.root.testSuiteName, self.root.numberOfTests, self.root.numberOfFailures, self.root.numberOfErrors, self.root.totalTime);
         [self generateJunitAt:self.root withIndentLevel:0 intoString:output];
         Output(output, @"</testsuites>");
         return output;
@@ -96,7 +91,7 @@ void Output(NSMutableString *appendTo, NSString *fmt, ...);
             dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]; // Always get nil for stringFromDate: without this
             Output(output, @"%@<testsuite tests=\"%lu\" failures=\"%lu\" errors=\"%lu\" time=\"%f\" timestamp=\"%@\" name=\"%@\">",
                    [@"" stringByPaddingToLength:(indent*2) withString:@" " startingAtIndex:0],
-                   suiteLogEntry.numberOfTests, suiteLogEntry.numberOfFailures, suiteLogEntry.numberOfUnexpected,
+                   suiteLogEntry.numberOfTests, suiteLogEntry.numberOfFailures, suiteLogEntry.numberOfErrors,
                    suiteLogEntry.totalTime,
                    [dateFormatter stringFromDate:suiteLogEntry.startTime],
                    [JUnitReporter xmlSimpleEscape:suiteLogEntry.testSuiteName]);
@@ -117,17 +112,20 @@ void Output(NSMutableString *appendTo, NSString *fmt, ...);
                caseLogEntry.totalTime);
 
         if (!caseLogEntry.passed) {
-            Output(output, @"%@<failure type=\"Failure\" message=\"%@\">\n%@:%lu\n%@</failure>",
+            NSString *entity = @"error";
+            NSString *attribute = @"Error";
+            if (caseLogEntry.failure) {
+                entity = @"failure";
+                attribute = @"Failure";
+            }
+            Output(output, @"%@<%@ type=\"%@\" message=\"%@\">\n%@:%lu\n%@</%@>",
                    [@"" stringByPaddingToLength:((indent+1)*2) withString:@" " startingAtIndex:0],
+                   entity, attribute,
                    [JUnitReporter xmlSimpleEscape:caseLogEntry.errorMessage] ?: [@"UNKNOWN ERROR - PARSING FAILED: " stringByAppendingString:caseLogEntry.line],
                    [JUnitReporter xmlSimpleEscape:caseLogEntry.filename ?: @"Unknown File"],
                    caseLogEntry.lineNumber,
-                   [@"" stringByPaddingToLength:((indent+1)*2) withString:@" " startingAtIndex:0]);
-
-            if (caseLogEntry.unexpected || [JUnitReporter useXCToolOutputCompatibility]) {
-                Output(output, @"%@<error type=\"Error\"/>",
-                       [@"" stringByPaddingToLength:((indent+1)*2) withString:@" " startingAtIndex:0]);
-            }
+                   [@"" stringByPaddingToLength:((indent+1)*2) withString:@" " startingAtIndex:0],
+                   entity);
         }
 
         if (caseLogEntry.log) {

@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="All tests" tests="5" failures="2" errors="2" time="0.003000">
-    <testsuite tests="2" failures="1" errors="1" time="0.028852" timestamp="2016-11-12T23:25:02GMT-08:00" name="BPSampleAppFatalErrorTests.xctest">
-        <testsuite tests="2" failures="1" errors="1" time="0.014429" timestamp="2016-11-12T23:25:02GMT-08:00" name="BPSampleAppFatalErrorTests">
-            <testcase classname="BPSampleAppFatalErrorTests" name="test0" time="0.000000">
+<testsuites name="All tests" tests="5" failures="2" errors="0">
+    <testsuite tests="2" failures="1" errors="0" name="BPSampleAppFatalErrorTests.xctest">
+        <testsuite tests="2" failures="1" errors="0" name="BPSampleAppFatalErrorTests">
+            <testcase classname="BPSampleAppFatalErrorTests" name="test0">
             </testcase>
-            <testcase classname="BPSampleAppFatalErrorTests" name="testCrashAppError" time="0.000000">
+            <testcase classname="BPSampleAppFatalErrorTests" name="testCrashAppError">
                 <failure type="Failure" message="App Crashed">
-                    Unknown File:0
                 </failure>
-                <error type="Error"/>
+                <system-out>
+                </system-out>
             </testcase>
         </testsuite>
     </testsuite>
-    <testsuite tests="2" failures="1" errors="1" time="0.055236" timestamp="2016-11-12T23:25:35GMT-08:00" name="BPSampleAppFatalErrorTests.xctest">
-        <testsuite tests="1" failures="0" errors="0" time="0.000000" timestamp="2016-11-12T23:25:35GMT-08:00" name="BPSampleAppFatalErrorTests">
-            <testcase classname="BPSampleAppFatalErrorTests" name="testCZ" time="0.000000">
+    <testsuite tests="2" failures="1" errors="0" name="BPSampleAppFatalErrorTests.xctest">
+        <testsuite tests="1" failures="0" errors="0" name="BPSampleAppFatalErrorTests">
+            <testcase classname="BPSampleAppFatalErrorTests" name="testCZ">
             </testcase>
         </testsuite>
-        <testsuite tests="1" failures="1" errors="1" time="0.027620" timestamp="2016-11-12T23:25:35GMT-08:00" name="BPSampleAppSwiftFatalErrorTests">
-            <testcase classname="BPSampleAppSwiftFatalErrorTests" name="testForceUnwrap" time="0.000000">
+        <testsuite tests="1" failures="1" errors="0" name="BPSampleAppSwiftFatalErrorTests">
+            <testcase classname="BPSampleAppSwiftFatalErrorTests" name="testForceUnwrap">
                 <failure type="Failure" message="App Crashed">
-                    Unknown File:0
                 </failure>
-                <error type="Error"/>
+                <system-out>
+                </system-out>
             </testcase>
         </testsuite>
     </testsuite>
-    <testsuite tests="1" failures="0" errors="0" time="0.002000" timestamp="2016-11-12T23:26:05GMT-08:00" name="BPSampleAppFatalErrorTests.xctest">
-        <testsuite tests="1" failures="0" errors="0" time="0.002000" timestamp="2016-11-12T23:26:05GMT-08:00" name="BPSampleAppSwiftFatalErrorTests">
+    <testsuite tests="1" failures="0" errors="0" name="BPSampleAppFatalErrorTests.xctest">
+        <testsuite tests="1" failures="0" errors="0" name="BPSampleAppSwiftFatalErrorTests">
             <testcase classname="BPSampleAppSwiftFatalErrorTests" name="testZPass" time="0.002000">
             </testcase>
         </testsuite>

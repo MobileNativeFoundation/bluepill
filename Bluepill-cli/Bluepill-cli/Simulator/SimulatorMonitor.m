@@ -154,9 +154,9 @@
     self.currentTestName = nil;
     self.currentClassName = nil;
     [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
-    [[BPStats sharedStats] addTestFailure];
+    [[BPStats sharedStats] addTestError];
     if (wasException) {
-        [[BPStats sharedStats] addTestError];
+        [[BPStats sharedStats] addTestFailure];
     }
 }
 
@@ -182,12 +182,6 @@
 }
 
 - (void)onTestSuiteEnded:(NSString *)testSuiteName
-                fromDate:(NSDate *)startDate
-                  toDate:(NSDate *)endDate
-                  passed:(BOOL)wholeSuitePassed
-               withTotal:(NSUInteger)totalTestCount
-                  failed:(NSUInteger)failedCount
-              unexpected:(NSUInteger)unexpectedFailures
                   isRoot:(BOOL)isRoot {
     [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_SUITE_FORMAT, isRoot ? 1 : [BPStats sharedStats].attemptNumber, testSuiteName]];
 }
@@ -230,7 +224,7 @@
             }
             // Set exit status before stopping the tests because stopping the tests will set the SimulatorState to Completed
             __self.exitStatus = testsReallyStarted ? BPExitStatusTestTimeout : BPExitStatusSimulatorCrashed;
-            [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aboorted."
+            [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aborted."
                                   forTestName:testName
                                       inClass:testClass];
             [[BPStats sharedStats] addTestOutputTimeout];
