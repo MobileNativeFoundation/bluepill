@@ -512,7 +512,7 @@ void onInterrupt(int ignore) {
     NSInteger maxRetries = [context.config.errorRetriesCount integerValue];
 
     [context.parser completed];
-    if ((context.attemptNumber > maxRetries) || ![self testsRemainingInContext:context]) {
+    if ((context.attemptNumber > maxRetries) || ![self hasRemainingTestsInContext:context]) {
         // This is the final retry, so we should force a calculation if we error'd
         [context.parser completedFinalRun];
     }
@@ -644,7 +644,7 @@ void onInterrupt(int ignore) {
     }
 }
 
-- (BOOL)testsRemainingInContext:(BPExecutionContext *)context {
+- (BOOL)hasRemainingTestsInContext:(BPExecutionContext *)context {
     // Make sure we're not doing unnecessary work on the next run.
     NSMutableSet *testsRemaining = [[NSMutableSet alloc] initWithArray:context.config.allTestCases];
     NSSet *testsToSkip = [[NSSet alloc] initWithArray:context.config.testCasesToSkip];
@@ -665,7 +665,7 @@ void onInterrupt(int ignore) {
     // Because BPExitStatusTestsAllPassed is 0, we must check it explicitly against
     // the run rather than the aggregate bitmask built with finalExitStatus
 
-    if (![self testsRemainingInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
+    if (![self hasRemainingTestsInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
         [BPUtils printInfo:INFO withString:@"No more tests to run."];
         self.finalExitStatus = context.finalExitStatus | context.exitStatus;
         self.exitLoop = YES;
