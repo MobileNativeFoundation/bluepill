@@ -12,12 +12,22 @@
 #import "BPExitStatus.h"
 #import "SimulatorScreenshotService.h"
 
-typedef NS_ENUM(NSInteger, SimulatorState) {
-    Idle,
-    AppLaunched,
-    Running,
-    TestsStarted,
-    Completed
+typedef NS_ENUM(NSInteger, TestsState) {
+    TestsIdle,
+    TestsRunning,
+    TestsCompleted
+};
+
+typedef NS_ENUM(NSInteger, AppState) {
+    AppIdle,
+    AppRunning,
+    AppFinished
+};
+
+typedef NS_ENUM(NSInteger, ParserState) {
+    ParserIdle,
+    ParserRunning,
+    ParserFinished
 };
 
 @class SimDevice;
@@ -27,7 +37,9 @@ typedef NS_ENUM(NSInteger, SimulatorState) {
 
 @property (nonatomic, strong) SimDevice *device;
 @property (nonatomic, strong) NSString *hostBundleId;
-@property (nonatomic, assign) SimulatorState simulatorState;
+@property (nonatomic, assign) AppState appState;
+@property (nonatomic, assign) ParserState parserState;
+@property (nonatomic, assign) TestsState testsState;
 @property (nonatomic, strong) SimulatorScreenshotService *screenshotService;
 @property (nonatomic) pid_t appPID;
 

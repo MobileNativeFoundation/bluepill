@@ -4,8 +4,9 @@
         <testsuite tests="1" failures="1" errors="0" name="BPSampleAppHangingTests">
             <testcase classname="BPSampleAppHangingTests" name="testAppHanging">
                 <failure type="Failure" message="Timed out waiting for the test to produce output. Test was aborted.">
-Unknown File:0
                 </failure>
+                <system-out>
+                </system-out>
             </testcase>
         </testsuite>
     </testsuite>
