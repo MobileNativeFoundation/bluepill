@@ -56,6 +56,7 @@
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils quietMode:[BPUtils isBuildScript]];
+    [BPUtils enableDebugOutput:NO];
 
     NSError *err;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&err];
@@ -202,6 +203,7 @@
 }
 
 - (void)testReportWithAppCrashingTestsSet {
+    [BPUtils enableDebugOutput:NO];
     NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     NSString *tempDir = NSTemporaryDirectory();
@@ -213,9 +215,10 @@
     self.config.errorRetriesCount = @1;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppCrashingTests-results.xml"];
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-results.xml"];
+    NSLog(@"JUnit-REPORT: %@", junitReportPath);
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests.xml"];
-    [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
+    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
 - (void)testReportWithAppCrashingAndRetryOnlyFailedTestsSet {
@@ -234,9 +237,10 @@
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
 
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppCrashingTests-results.xml"];
-    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests.xml"];
-    [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-results.xml"];
+    NSLog(@"JUnit file: %@", junitReportPath);
+    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests_with_retry.xml"];
+    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
 - (void)testReportWithFatalErrorTestsSet {
@@ -248,21 +252,22 @@
     NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
-    self.config.errorRetriesCount = @5;
+    self.config.errorRetriesCount = @2;
+    self.config.testCaseTimeout = @60; // make sure we don't time-out
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    // BUG: Sometimes the app crashes instead of timing out
-    XCTAssertTrue(exitCode == BPExitStatusAppCrashed || exitCode == BPExitStatusAppCrashed);
+    XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
 
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppFatalErrorTests-results.xml"];
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppFatalErrorTests-results.xml"];
+    NSLog(@"JUnit file: %@", junitReportPath);
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"fatal_tests.xml"];
-    [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
+    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
 - (void)testReportWithAppHangingTestsSet {
     self.config.stuckTimeout = @3;
     self.config.plainOutput = YES;
-    self.config.errorRetriesCount = @4;
+    self.config.errorRetriesCount = @0;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     NSString *tempDir = NSTemporaryDirectory();
@@ -273,12 +278,11 @@
     self.config.junitOutput = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    // BUG: Sometimes the app crashes instead of timing out
-    XCTAssertTrue(exitCode == BPExitStatusTestTimeout || exitCode == BPExitStatusAppCrashed);
+    XCTAssertTrue(exitCode == BPExitStatusTestTimeout);
 
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppHangingTests-results.xml"];
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppHangingTests-results.xml"];
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"hanging_tests.xml"];
-    [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
+    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
 /**
@@ -300,12 +304,11 @@
     self.config.junitOutput = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    // BUG: Sometimes the app crashes instead of timing out
-    XCTAssertTrue(exitCode == BPExitStatusTestTimeout || exitCode == BPExitStatusAppCrashed);
+    XCTAssertTrue(exitCode == BPExitStatusTestTimeout);
 
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPSampleAppHangingTests-results.xml"];
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppHangingTests-results.xml"];
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"hanging_tests.xml"];
-    [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
+    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
 - (void)testReportWithFailingTestsSetAndDiagnostics {
@@ -317,49 +320,6 @@
     self.config.junitOutput = YES;
     self.config.saveDiagnosticsOnError = YES;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPAppNegativeTests-results.xml"];
-    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"BPAppNegativeTests-results.xml"];
-    [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
-    NSFileManager *fm = [NSFileManager defaultManager];
-    [BPUtils runShell:[NSString stringWithFormat:@"find %@", outputDir]];
-    BOOL diagFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/diagnostics.tar.gz", outputDir]];
-    XCTAssert(diagFileFound);
-    BOOL psFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/ps-axuw.log", outputDir]];
-    XCTAssert(psFileFound);
-    BOOL dfFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/df-h.log", outputDir]];
-    XCTAssert(dfFileFound);
-    XCTAssert(exitCode == BPExitStatusTestsFailed);
-}
-
-- (void)testRetryWithFailingTestsSet {
-    NSString *tempDir = NSTemporaryDirectory();
-    NSError *error;
-    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
-    // NSLog(@"output directory is %@", outputDir);
-    self.config.outputDirectory = outputDir;
-    self.config.errorRetriesCount = @100;
-    self.config.junitOutput = YES;
-    self.config.failureTolerance = @1;
-    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    XCTAssert(exitCode == BPExitStatusTestsFailed);
-    // validate the report
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"BPAppNegativeTests-results.xml"];
-    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"failure_retry_report.xml"];
-    [self compareReportAtPath:junitReportPath withReportAtPath:expectedFilePath];
-
-}
-
-- (void)testRetryWithFailingTestsRetriesAll {
-    NSString *tempDir = NSTemporaryDirectory();
-    NSError *error;
-    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
-    // NSLog(@"output directory is %@", outputDir);
-    self.config.outputDirectory = outputDir;
-    self.config.errorRetriesCount = @100;
-    self.config.junitOutput = YES;
-    self.config.failureTolerance = @1;
-    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    XCTAssert(exitCode == BPExitStatusTestsFailed);
     // Make sure all tests started on the first run
     NSString *simulator1Path = [outputDir stringByAppendingPathComponent:@"1-simulator.log"];
     NSString *log1 = [NSString stringWithContentsOfFile:simulator1Path encoding:NSUTF8StringEncoding error:nil];
@@ -372,6 +332,19 @@
     XCTAssert([log2 rangeOfString:@"Test Case '-[BPAppNegativeTests testAssertFailure]' started."].location != NSNotFound);
     XCTAssert([log2 rangeOfString:@"Test Case '-[BPAppNegativeTests testAssertTrue]' started."].location != NSNotFound);
     XCTAssert([log2 rangeOfString:@"Test Case '-[BPAppNegativeTests testRaiseException]' started."].location != NSNotFound);
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPAppNegativeTests-results.xml"];
+    NSLog(@"Junit report: %@", junitReportPath);
+    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"BPAppNegativeTests-results.xml"];
+    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [BPUtils runShell:[NSString stringWithFormat:@"find %@", outputDir]];
+    BOOL diagFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/diagnostics.tar.gz", outputDir]];
+    XCTAssert(diagFileFound);
+    BOOL psFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/ps-axuw.log", outputDir]];
+    XCTAssert(psFileFound);
+    BOOL dfFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/df-h.log", outputDir]];
+    XCTAssert(dfFileFound);
+    XCTAssert(exitCode == BPExitStatusTestsFailed);
 }
 
 - (void)testRetryOnlyFailures {
@@ -631,34 +604,46 @@
 
 #pragma mark - Test helpers
 
-- (void)compareReportAtPath:(NSString *)first withReportAtPath:(NSString *)second {
-    NSURL *reportUrl = [NSURL fileURLWithPath:first];
-    NSURL *expectedReportUrl = [NSURL fileURLWithPath:second];
-    NSXMLDocument *reportXML = [[NSXMLDocument alloc] initWithContentsOfURL:reportUrl options:0 error:nil];
-    NSXMLDocument *expectedReportXML = [[NSXMLDocument alloc] initWithContentsOfURL:expectedReportUrl options:0 error:nil];
-    [self compareElement:[reportXML nodesForXPath:@".//testsuites" error:nil][0] withElement:[expectedReportXML nodesForXPath:@".//testsuites" error:nil][0]];
+- (NSString *)sanitizeXMLFile:(NSString *)atPath {
+    NSString *XSLTemplate = @" \
+    <xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"> \
+    <!--empty template suppresses these attributes --> \
+    <xsl:template match=\"@time\" /> \
+    <xsl:template match=\"@timestamp\" /> \
+    <!--empty template suppresses these elements --> \
+    <xsl:template match=\"system-out/text()\"/> \
+    <xsl:template match=\"failure/text()\"/> \
+    <xsl:template match=\"error/text()\"/> \
+    <!--identity template copies everything forward by default--> \
+    <xsl:template match=\"@*|node()\"> \
+    <xsl:copy> \
+    <xsl:apply-templates select=\"@*|node()\"/> \
+    </xsl:copy> \
+    </xsl:template> \
+    </xsl:stylesheet> \
+    ";
+    NSError *error;
+    NSURL *sourceURL = [NSURL fileURLWithPath:atPath];
+    NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:sourceURL options:0 error:&error];
+    XCTAssert(xmlDoc != nil, @"%@", [error localizedDescription]);
+    NSData *XSLTransform = [XSLTemplate dataUsingEncoding:NSUTF8StringEncoding];
+    NSXMLDocument *sanitizedXMLDoc = [xmlDoc objectByApplyingXSLT:XSLTransform arguments:nil error:&error];
+    XCTAssert(sanitizedXMLDoc != nil, @"%@", [error localizedDescription]);
+    NSString *outFile = [BPUtils mkstemp:@"outXXX.xslt" withError:&error];
+    XCTAssert(outFile != nil, @"%@", [error localizedDescription]);
+    NSData *outData = [sanitizedXMLDoc XMLDataWithOptions:NSXMLNodePrettyPrint];
+    if (![outData writeToFile:outFile atomically:YES]) {
+        XCTAssert(false, @"Failed to write file: %@", outFile);
+    }
+    return outFile;
 }
-- (void)compareElement:(NSXMLElement *)first withElement:(NSXMLElement *)second {
-    if ([first name] == nil) {
-        return;
-    }
-    XCTAssertTrue([[first name] isEqualToString:[second name]]);
-    if ([[first name] isEqualToString:@"testsuite"] || [[first name] isEqualToString:@"testsuites"]) {
-        XCTAssertEqual([first attributeForName:@"tests"], [first attributeForName:@"tests"]);
-        XCTAssertEqual([first attributeForName:@"failures"], [first attributeForName:@"failures"]);
-        XCTAssertEqual([first attributeForName:@"errors"], [first attributeForName:@"errors"]);
-        XCTAssertEqual([first attributeForName:@"name"], [first attributeForName:@"name"]);
-    }
-    if ([[first name] isEqualToString:@"failure"]) {
-        XCTAssertEqual([first attributeForName:@"message"], [first attributeForName:@"message"]);
-    }
-    NSArray *firstNodeChildren = [first children];
-    NSArray *secondNodeChildren = [second children];
-    XCTAssert([firstNodeChildren count] == [secondNodeChildren count]);
-    for (int i = 0; i < [firstNodeChildren count]; i++) {
-        [self compareElement:firstNodeChildren[i] withElement:secondNodeChildren[i]];
-    }
 
+- (void)assertGotReport:(NSString *)Got isEqualToWantReport:(NSString *)Want {
+    NSString *sanitizedGot = [self sanitizeXMLFile:Got];
+    NSString *sanitizedWant = [self sanitizeXMLFile:Want];
+    // we ignore white space (-b) just as a convenience to test writers
+    NSString *diffOutput = [BPUtils runShell:[NSString stringWithFormat:@"diff -u -b '%@' '%@'", sanitizedWant, sanitizedGot]];
+    XCTAssert(diffOutput != nil && [diffOutput isEqualToString:@""], @"\ndiff -u -b '%@' '%@':\n%@", sanitizedWant, sanitizedGot, diffOutput);
 }
 
 @end

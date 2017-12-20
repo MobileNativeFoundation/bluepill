@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="All tests" tests="3" failures="1" errors="0">
+<testsuites name="All tests" tests="3" failures="2" errors="0">
     <testsuite tests="2" failures="1" errors="0" name="BPSampleAppCrashingTests.xctest">
         <testsuite tests="2" failures="1" errors="0" name="BPSampleAppCrashingTests">
             <testcase classname="BPSampleAppCrashingTests" name="testAppCrash0">
@@ -13,9 +13,12 @@ Unknown File:0
             </testcase>
         </testsuite>
     </testsuite>
-    <testsuite tests="1" failures="0" errors="0" name="BPSampleAppCrashingTests.xctest">
-        <testsuite tests="1" failures="0" errors="0" name="BPSampleAppCrashingTests">
-            <testcase classname="BPSampleAppCrashingTests" name="testAppCrash2"></testcase>
+    <testsuite tests="1" failures="1" errors="0" name="BPSampleAppCrashingTests.xctest">
+        <testsuite tests="1" failures="1" errors="0" name="BPSampleAppCrashingTests">
+            <testcase classname="BPSampleAppCrashingTests" name="testAppCrash1">
+                <failure type="Failure" message="App Crashed"></failure>
+                <system-out></system-out>
+            </testcase>
         </testsuite>
     </testsuite>
 </testsuites>

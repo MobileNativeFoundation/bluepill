@@ -21,6 +21,7 @@
 #import <libproc.h>
 #import "BPTestBundleConnection.h"
 #import "BPTestDaemonConnection.h"
+#import "BPXCTestFile.h"
 #import <objc/runtime.h>
 
 #define NEXT(x)     { [Bluepill setDiagnosticFunction:#x from:__FUNCTION__ line:__LINE__]; CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ (x); }); }
@@ -209,6 +210,15 @@ void onInterrupt(int ignore) {
 - (void)createContext {
     BPExecutionContext *context = [[BPExecutionContext alloc] init];
     context.config = self.executionConfigCopy;
+    NSError *error;
+    NSString *testHostPath = context.config.testRunnerAppPath ?: context.config.appBundlePath;
+    BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:context.config.testBundlePath
+                                                          andHostAppBundle:testHostPath
+                                                                 withError:&error];
+    NSAssert(xctTestFile != nil, @"Failed to load testcases from %@", [error localizedDescription]);
+    context.config.allTestCases = [[NSArray alloc] initWithArray: xctTestFile.allTestCases];
+
+
     context.attemptNumber = self.retries + 1;
     self.context = context; // Store the context on self so that it's accessible to the interrupt handler in the loop
 }
@@ -502,7 +512,7 @@ void onInterrupt(int ignore) {
     NSInteger maxRetries = [context.config.errorRetriesCount integerValue];
 
     [context.parser completed];
-    if (context.attemptNumber > maxRetries) {
+    if ((context.attemptNumber > maxRetries) || ![self hasRemainingTestsInContext:context]) {
         // This is the final retry, so we should force a calculation if we error'd
         [context.parser completedFinalRun];
     }
@@ -634,6 +644,14 @@ void onInterrupt(int ignore) {
     }
 }
 
+- (BOOL)hasRemainingTestsInContext:(BPExecutionContext *)context {
+    // Make sure we're not doing unnecessary work on the next run.
+    NSMutableSet *testsRemaining = [[NSMutableSet alloc] initWithArray:context.config.allTestCases];
+    NSSet *testsToSkip = [[NSSet alloc] initWithArray:context.config.testCasesToSkip];
+    [testsRemaining minusSet:testsToSkip];
+    return ([testsRemaining count] > 0);
+}
+
 /**
  Scenarios:
  1. crash/time out and proceed passes -> Crash/Timeout
@@ -646,6 +664,13 @@ void onInterrupt(int ignore) {
 
     // Because BPExitStatusTestsAllPassed is 0, we must check it explicitly against
     // the run rather than the aggregate bitmask built with finalExitStatus
+
+    if (![self hasRemainingTestsInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
+        [BPUtils printInfo:INFO withString:@"No more tests to run."];
+        self.finalExitStatus = context.finalExitStatus | context.exitStatus;
+        self.exitLoop = YES;
+        return;
+    }
 
     switch (context.exitStatus) {
         // BP exit handler
