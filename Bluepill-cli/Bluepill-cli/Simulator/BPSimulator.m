@@ -69,6 +69,11 @@
                                    completion(error);
                                });
                            } else {
+                               if (__self.config.simulatorPreferencesFile) {
+                                   [__self copySimulatorPreferencesFile:__self.config.simulatorPreferencesFile
+                                                               dataPath:__self.device.dataPath];
+                               }
+
                                dispatch_async(dispatch_get_main_queue(), ^{
                                    [__self bootWithCompletion:^(NSError *error) {
                                        dispatch_async(dispatch_get_main_queue(), ^{
@@ -78,6 +83,29 @@
                                });
                            }
                        }];
+}
+
+- (void)copySimulatorPreferencesFile:(NSString *)preferencesFile dataPath:(NSString *)dataPath  {
+
+    NSURL *source = [NSURL fileURLWithPath:preferencesFile];
+    NSURL *destination = [NSURL fileURLWithPath:@"Library/Preferences/.GlobalPreferences.plist"
+                                  relativeToURL:[NSURL fileURLWithPath:dataPath]];
+
+
+    [NSFileManager.defaultManager
+            createDirectoryAtURL:destination.URLByDeletingLastPathComponent
+     withIntermediateDirectories:YES
+                      attributes:nil
+                           error:nil];
+
+    [NSFileManager.defaultManager removeItemAtURL:destination error:nil];
+
+    NSError *copyError = nil;
+    [NSFileManager.defaultManager copyItemAtURL:source toURL:destination error:&copyError];
+
+    if (copyError) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed copying GlobalPreferences plist: %@", [copyError localizedDescription]]];
+    }
 }
 
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {

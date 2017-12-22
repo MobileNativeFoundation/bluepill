@@ -138,6 +138,8 @@ struct BPOptions {
         "Save Simulator diagnostics and useful debugging information in the output directory. If no output directory it doesn't do anything."},
     {361, "screenshots-directory", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "screenshotsDirectory",
         "Directory where simulator screenshots for failed ui tests will be stored"},
+    {362, "simulator-preferences-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "simulatorPreferencesFile",
+            "A .GlobalPreferences.plist simulator preferences file to be copied to any newly created simulators before booting"},
 
     {0, 0, 0, 0, 0, 0, 0}
 };
@@ -675,6 +677,18 @@ static NSUUID *sessionID;
                                                                  error:err]) {
                 return NO;
             }
+        }
+    }
+
+    if (self.simulatorPreferencesFile) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.simulatorPreferencesFile isDirectory:&isdir]) {
+            if (isdir) {
+                BP_SET_ERROR(err, @"%@ is a directory.", self.simulatorPreferencesFile);
+                return NO;
+            }
+        } else {
+            BP_SET_ERROR(err, @"%@ doesn't exist", self.simulatorPreferencesFile);
+            return NO;
         }
     }
 

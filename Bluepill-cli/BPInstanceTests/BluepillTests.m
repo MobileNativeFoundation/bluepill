@@ -587,6 +587,13 @@
     }
 }
 
+- (void)testSimulatorPreferencesFile {
+    self.config.simulatorPreferencesFile = [BPTestHelper.resourceFolderPath stringByAppendingPathComponent:@"simulator-preferences.plist"];
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+}
+
 - (void)testTakingScreenshotWithFailingTestsSetWithRetries {
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
