@@ -130,7 +130,7 @@ If you're using [Fastlane](https://github.com/fastlane/fastlane) to run your tes
 
 - How to get Bluepill binary from source?
 
-  Run `./bluepill.sh build` to test and build Bluepill. The binary will be output in the ./build folder.
+  Run `./scripts/bluepill.sh build` to test and build Bluepill. The binary will be output in the ./build folder.
 
 - How to test my changes to Bluepill?
 
