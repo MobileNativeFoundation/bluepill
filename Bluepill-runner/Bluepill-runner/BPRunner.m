@@ -274,7 +274,9 @@ maxprocs(void)
             [BPUtils printInfo:INFO withString:@"%lu Simulator%s still running. [%@]",
              launchedTasks, launchedTasks == 1 ? "" : "s", listString];
             [BPUtils printInfo:INFO withString:@"Using %d of %d processes.", numprocs(), maxProcs];
-
+            if (numprocs() > maxProcs/2) {
+                [BPUtils printInfo:WARNING withString:@"!!!The number of processes is more than half of maxProcs!!! it may fail with error: Unable to boot device due to insufficient system resources. Please check with system admin to restart this node and for proper mainantance routine"];
+            }
         }
         seconds += 1;
     }
