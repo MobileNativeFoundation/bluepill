@@ -12,7 +12,7 @@
 @class BPWaitTimer;
 
 typedef void (^BPWaitTimerBlock)(BPWaitTimer *timer);
-typedef void (^BPWaitTimerTimeoutBlock)();
+typedef void (^BPWaitTimerTimeoutBlock)(void);
 
 /**
  This class will call the specified timeout block if the

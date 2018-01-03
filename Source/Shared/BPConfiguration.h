@@ -62,6 +62,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic) BOOL onlyRetryFailed;
 @property (nonatomic, strong) NSArray *testCasesToSkip;
 @property (nonatomic, strong) NSArray *testCasesToRun;
+@property (nonatomic, strong) NSArray *allTestCases;
 @property (nonatomic, strong) NSString *configOutputFile;
 @property (nonatomic, strong) NSString *outputDirectory;
 @property (nonatomic, strong) NSString *screenshotsDirectory;
@@ -85,6 +86,9 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSArray<NSString *> *commandLineArguments; // command line arguments for the app
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environmentVariables;
 
+// Media Assets
+@property (nonatomic, strong) NSArray<NSString *> *videoPaths; // The videos to be pushed into each simulator.
+@property (nonatomic, strong) NSArray<NSString *> *imagePaths; // The images to be pushed into each simulator.
 
 // These fields are for testing.
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;

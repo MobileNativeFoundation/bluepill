@@ -75,7 +75,7 @@ A full list supported options are listed here.
 |      error-retries     |           -R           | Number of times to recover from simulator/app crashing/hanging and continue running|     N    | 5                |
 |    failure-tolerance   |           -f           | Number of times to retry on test failures                                          |     N    | 0                |
 |    only-retry-failed   |           -F           | When `failure-tolerance` > 0, only retry tests that failed                         |     N    | false            |
-|         runtime        |           -r           | What runtime to use.                                                               |     N    | iOS 10.3         |
+|         runtime        |           -r           | What runtime to use.                                                               |     N    | iOS 11.1         |
 |      stuck-timeout     |           -S           | Timeout in seconds for a test that seems stuck (no output).                        |     N    | 300s             |
 |      test-timeout      |           -T           | Timeout in seconds for a test that is producing output.                            |     N    | 300s             |
 |    test-bundle-path    |           -t           | The path to the test bundle to execute (single .xctest).                           |     N    | n/a              |
@@ -89,6 +89,8 @@ A full list supported options are listed here.
 |          help          |           -h           | Help.                                                                              |     N    | n/a              |
 |     runner-app-path    |           -u           | The test runner for UI tests.                                                      |     N    | n/a              |
 | screenshots-directory  |           n/a          | Directory where simulator screenshots for failed ui tests will be stored           |     N    | n/a              |
+|       video-paths      |           -V           | A list of videos that will be saved in the simulators                              |     N    | n/a              |
+|       image-paths      |           -I           | A list of images that will be saved in the simulators                              |     N    | n/a              |
 
 ## Demo
 
@@ -96,12 +98,22 @@ A full list supported options are listed here.
 
 ## Requirements
 
-Bluepill only works with **Xcode 9.0**. If you're looking for Xcode 8 support, please check out the
-[xcode8](https://github.com/linkedin/bluepill/tree/xcode8) branch.
+Bluepill only works with **Xcode 9.1**. If you're looking for old Xcode support, please check out the other branches:
+
+* [Xcode-8](https://github.com/linkedin/bluepill/tree/xcode8)
+* [Xcode-9.0](https://github.com/linkedin/bluepill/tree/xcode-9.0)
 
 ## Acknowledgement
 
 Bluepill was inspired by [parallel iOS test](https://github.com/plu/parallel_ios_tests) and Facebook’s [xctool](https://github.com/facebook/xctool) and [FBSimulatorControl](https://github.com/facebook/FBSimulatorControl). The Bluepill icon was created by [Maria Iu](https://www.linkedin.com/in/mariaiu/).
+
+## Fastlane Support
+
+If you're using [Fastlane](https://github.com/fastlane/fastlane) to run your tests, you're in luck! You can integrate Bluepill into your project with very little change to your existing setup. Just integrate one of the following Fastlane plugins, and you'll be on your way:
+
+- [Redpill](https://github.com/omniprojects/fastlane-plugin-redpill) - The most up-to-date plugin; it's is maintained by [Omni](https://github.com/omniprojects) and offers a full set of options to hook into Bluepill. As of this writing, Redpill is compiled against Xcode 9.1, and intended for use with [CircleCI](https://circleci.com). It will be updated with newer versions of Xcode when CircleCI supports them.
+- [fastlane-plugin-bluepill](https://github.com/tbrand/fastlane-plugin-bluepill) - Last updated Nov. 7th, offers basic support for working with the Bluepill binary.
+- [Bluepillar](https://github.com/Shashikant86/fastlane-plugin-bluepillar) - Last updated May 29th, it's the original fastlane plugin for working with Bluepill. It was inspired by [this blog post](https://medium.com/@shashikant.jagtap/running-xcuitests-in-parallel-with-fastlane-and-bluepill-370e8ba90958).
 
 ## Q & A
 - Are we able to run Xcode UI Testing bundle with Bluepill
@@ -118,7 +130,7 @@ Bluepill was inspired by [parallel iOS test](https://github.com/plu/parallel_ios
 
 - How to get Bluepill binary from source?
 
-  Run `./bluepill.sh build` to test and build Bluepill. The binary will be output in the ./build folder.
+  Run `./scripts/bluepill.sh build` to test and build Bluepill. The binary will be output in the ./build folder.
 
 - How to test my changes to Bluepill?
 

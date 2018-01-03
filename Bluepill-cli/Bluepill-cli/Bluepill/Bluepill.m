@@ -21,9 +21,14 @@
 #import <libproc.h>
 #import "BPTestBundleConnection.h"
 #import "BPTestDaemonConnection.h"
+#import "BPXCTestFile.h"
 #import <objc/runtime.h>
 
 #define NEXT(x)     { [Bluepill setDiagnosticFunction:#x from:__FUNCTION__ line:__LINE__]; CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ (x); }); }
+#define NEXT_AFTER(delay, x) { \
+    [Bluepill setDiagnosticFunction: #x from:__FUNCTION__ line:__LINE__]; \
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((delay) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{ (x); }); \
+}
 
 static int volatile interrupted = 0;
 
@@ -205,6 +210,15 @@ void onInterrupt(int ignore) {
 - (void)createContext {
     BPExecutionContext *context = [[BPExecutionContext alloc] init];
     context.config = self.executionConfigCopy;
+    NSError *error;
+    NSString *testHostPath = context.config.testRunnerAppPath ?: context.config.appBundlePath;
+    BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:context.config.testBundlePath
+                                                          andHostAppBundle:testHostPath
+                                                                 withError:&error];
+    NSAssert(xctTestFile != nil, @"Failed to load testcases from %@", [error localizedDescription]);
+    context.config.allTestCases = [[NSArray alloc] initWithArray: xctTestFile.allTestCases];
+
+
     context.attemptNumber = self.retries + 1;
     self.context = context; // Store the context on self so that it's accessible to the interrupt handler in the loop
 }
@@ -263,7 +277,7 @@ void onInterrupt(int ignore) {
 
     __weak typeof(self) __self = self;
     [[BPStats sharedStats] startTimer:stepName];
-    [BPUtils printInfo:INFO withString:stepName];
+    [BPUtils printInfo:INFO withString:@"%@", stepName];
 
     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.createTimeout doubleValue]];
     [timer start];
@@ -274,7 +288,7 @@ void onInterrupt(int ignore) {
     handler.beginWith = ^{
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:(__handler.error ? ERROR : INFO)
-                withString:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
+                withString:@"Completed: %@ %@", stepName, context.runner.UDID];
     };
 
     handler.onSuccess = ^{
@@ -299,7 +313,7 @@ void onInterrupt(int ignore) {
     handler.onTimeout = ^{
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:ERROR withString:[@"Timeout: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:ERROR withString:@"Timeout: %@", stepName];
     };
 
     [context.runner createSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
@@ -309,7 +323,7 @@ void onInterrupt(int ignore) {
     NSString *stepName = REUSE_SIMULATOR(context.attemptNumber);
     
     [[BPStats sharedStats] startTimer:stepName];
-    [BPUtils printInfo:INFO withString:stepName];
+    [BPUtils printInfo:INFO withString:@"%@", stepName];
     
     if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.useSimUDID]]) {
         
@@ -332,14 +346,14 @@ void onInterrupt(int ignore) {
 - (void)installApplicationWithContext:(BPExecutionContext *)context {
     NSString *stepName = INSTALL_APPLICATION(context.attemptNumber);
     [[BPStats sharedStats] startTimer:stepName];
-    [BPUtils printInfo:INFO withString:stepName];
+    [BPUtils printInfo:INFO withString:@"%@", stepName];
 
     NSError *error = nil;
     BOOL success = [context.runner installApplicationAndReturnError:&error];
 
     __weak typeof(self) __self = self;
     [[BPStats sharedStats] endTimer:stepName];
-    [BPUtils printInfo:(success ? INFO : ERROR) withString:[@"Completed: " stringByAppendingString:stepName]];
+    [BPUtils printInfo:(success ? INFO : ERROR) withString:@"Completed: %@", stepName];
 
     if (!success) {
         [[BPStats sharedStats] addSimulatorInstallFailure];
@@ -369,7 +383,7 @@ void onInterrupt(int ignore) {
 - (void)uninstallApplicationWithContext:(BPExecutionContext *)context {
     NSString *stepName = UNINSTALL_APPLICATION(context.attemptNumber);
     [[BPStats sharedStats] startTimer:stepName];
-    [BPUtils printInfo:INFO withString:stepName];
+    [BPUtils printInfo:INFO withString:@"%@", stepName];
 
     NSError *error = nil;
     BOOL success = [context.runner uninstallApplicationAndReturnError:&error];
@@ -388,7 +402,7 @@ void onInterrupt(int ignore) {
 
 - (void)launchApplicationWithContext:(BPExecutionContext *)context {
     NSString *stepName = LAUNCH_APPLICATION(context.attemptNumber);
-    [BPUtils printInfo:INFO withString:stepName];
+    [BPUtils printInfo:INFO withString:@"%@", stepName];
 
     [[BPStats sharedStats] startTimer:stepName];
     [[BPStats sharedStats] startTimer:RUN_TESTS(context.attemptNumber)];
@@ -402,7 +416,7 @@ void onInterrupt(int ignore) {
     __weak typeof(handler) __handler = handler;
 
     handler.beginWith = ^{
-        [BPUtils printInfo:((__handler.pid > -1) ? INFO : ERROR) withString:[@"Completed: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:((__handler.pid > -1) ? INFO : ERROR) withString:@"Completed: %@", stepName];
     };
 
     handler.onSuccess = ^{
@@ -426,7 +440,7 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] addSimulatorLaunchFailure];
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [[BPStats sharedStats] endTimer:stepName];
-        [BPUtils printInfo:FAILED withString:[@"Timeout: " stringByAppendingString:stepName]];
+        [BPUtils printInfo:FAILED withString:@"Timeout: %@", stepName];
         NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
     };
 
@@ -473,7 +487,7 @@ void onInterrupt(int ignore) {
     // If it's not running and we passed the above checks (e.g., the tests are not yet completed)
     // then it must mean the app has crashed.
     // However, we have a short-circuit for tests because those may not actually run any app
-    if (!isRunning && context.pid > 0 && ![context.runner isApplicationStarted] && !self.config.testing_NoAppWillRun) {
+    if (!isRunning && context.pid > 0 && [context.runner isApplicationLaunched] && !self.config.testing_NoAppWillRun) {
         // The tests ended before they even got started or the process is gone for some other reason
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [BPUtils printInfo:ERROR withString:@"Application crashed before tests started!"];
@@ -482,7 +496,7 @@ void onInterrupt(int ignore) {
         return;
     }
 
-    NEXT([self checkProcessWithContext:context]);
+    NEXT_AFTER(1, [self checkProcessWithContext:context]);
 }
 
 - (BOOL)isProcessRunningWithContext:(BPExecutionContext *)context {
@@ -498,7 +512,7 @@ void onInterrupt(int ignore) {
     NSInteger maxRetries = [context.config.errorRetriesCount integerValue];
 
     [context.parser completed];
-    if (context.attemptNumber > maxRetries) {
+    if ((context.attemptNumber > maxRetries) || ![self hasRemainingTestsInContext:context]) {
         // This is the final retry, so we should force a calculation if we error'd
         [context.parser completedFinalRun];
     }
@@ -583,7 +597,7 @@ void onInterrupt(int ignore) {
     self.reuseSimAllowed = NO; //prevent reuse this device when RETRY
 
     [[BPStats sharedStats] startTimer:stepName];
-    [BPUtils printInfo:INFO withString:stepName];
+    [BPUtils printInfo:INFO withString:@"%@", stepName];
     
     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.deleteTimeout doubleValue]];
     [timer start];
@@ -610,7 +624,7 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] addSimulatorDeleteFailure];
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:ERROR
-                withString:[@"Timeout: " stringByAppendingString:stepName]];
+                withString:@"Timeout: %@", stepName];
         completion();
     };
 
@@ -623,11 +637,19 @@ void onInterrupt(int ignore) {
     if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.deleteSimUDID]]) {
         NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorDeleted]);
     } else {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to reconnect to simulator %@", context.config.deleteSimUDID]];
+        [BPUtils printInfo:ERROR withString:@"Failed to reconnect to simulator %@", context.config.deleteSimUDID];
         context.exitStatus = BPExitStatusSimulatorReuseFailed;
         
         NEXT([self finishWithContext:context]);
     }
+}
+
+- (BOOL)hasRemainingTestsInContext:(BPExecutionContext *)context {
+    // Make sure we're not doing unnecessary work on the next run.
+    NSMutableSet *testsRemaining = [[NSMutableSet alloc] initWithArray:context.config.allTestCases];
+    NSSet *testsToSkip = [[NSSet alloc] initWithArray:context.config.testCasesToSkip];
+    [testsRemaining minusSet:testsToSkip];
+    return ([testsRemaining count] > 0);
 }
 
 /**
@@ -642,6 +664,13 @@ void onInterrupt(int ignore) {
 
     // Because BPExitStatusTestsAllPassed is 0, we must check it explicitly against
     // the run rather than the aggregate bitmask built with finalExitStatus
+
+    if (![self hasRemainingTestsInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
+        [BPUtils printInfo:INFO withString:@"No more tests to run."];
+        self.finalExitStatus = context.finalExitStatus | context.exitStatus;
+        self.exitLoop = YES;
+        return;
+    }
 
     switch (context.exitStatus) {
         // BP exit handler
@@ -705,7 +734,7 @@ void onInterrupt(int ignore) {
     NSError *error;
     BOOL success = [idStr writeToFile:tempFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
     if (!success) {
-        [BPUtils printInfo:ERROR withString:@"ERROR: Failed to write the device ID file %@ with error:", tempFilePath, [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"ERROR: Failed to write the device ID file %@ with error: %@", tempFilePath, [error localizedDescription]];
     }
 }
 

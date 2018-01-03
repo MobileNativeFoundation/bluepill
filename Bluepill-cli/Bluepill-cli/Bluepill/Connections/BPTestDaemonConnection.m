@@ -272,7 +272,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 // This will add more logs when unimplemented method from XCTestManager_IDEInterface protocol is called
 - (id)handleUnimplementedXCTRequest:(SEL)aSelector {
-    [BPUtils printInfo:DEBUGINFO withString:@"TMD: unimplemented: %@", aSelector];
+    [BPUtils printInfo:DEBUGINFO withString:@"TMD: unimplemented: %s", sel_getName(aSelector)];
     NSAssert(nil, [self unknownMessageForSelector:_cmd]);
     return nil;
 }

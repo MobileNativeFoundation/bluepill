@@ -134,7 +134,7 @@
                                             error:&error];
 
     if (!service) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to create SimDeviceFramebufferService for device:%@, error:%@", _device.UDID.UUIDString, [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:@"Failed to create SimDeviceFramebufferService for device:%@, error:%@", _device.UDID.UUIDString, [error localizedDescription]];
     }
     return service;
 }

@@ -110,8 +110,8 @@ static const NSString * const kPassed = @"passed";
             [self.log writeLine:@"%@", self.line];
             [self parseLine:self.line];
             if (numLines++ > maxLines) {
-                [BPUtils printInfo:ERROR withString:@"Infinite Loop Averted!: range {%d, %d}, %d, %@",
-                 range.length, range.location, [chunk length], str];
+                [BPUtils printInfo:ERROR withString:@"Infinite Loop Averted!: range {%lu, %lu}, %lu, %@",
+                 (unsigned long)range.length, (unsigned long)range.location, (unsigned long)[chunk length], str];
                 [BPUtils printInfo:ERROR withString:@"Data: %@", chunk];
                 // Fail hard.
                 exit(1);
@@ -151,18 +151,14 @@ static const NSString * const kPassed = @"passed";
             NSString *numberOfUnexpectedString = [line substringWithRange:[result rangeAtIndex:3]];
             NSString *time2String = [line substringWithRange:[result rangeAtIndex:5]];
 
+            NSInteger failures = [numberOfFailuresString integerValue];
+            NSInteger unexpectedFailures = [numberOfUnexpectedString integerValue];
             self.current.reportedNumberOfTests = [numberOfTestsString integerValue];
-            self.current.reportedNumberOfFailures = [numberOfFailuresString integerValue];
-            self.current.reportedNumberOfUnexpected = [numberOfUnexpectedString integerValue];
+            self.current.reportedNumberOfErrors = failures - unexpectedFailures;
+            self.current.reportedNumberOfFailures = unexpectedFailures;
             self.current.reportedTotalTime = [time2String doubleValue];
 
             [self onTestSuiteEnded:self.current.testSuiteName
-                          fromDate:self.current.startTime
-                            toDate:self.current.endTime
-                            passed:self.current.passed
-                         withTotal:self.current.numberOfTests
-                            failed:self.current.numberOfUnexpected
-                        unexpected:self.current.numberOfUnexpected
                             isRoot:(self.current == self.root)];
         }
     }
@@ -237,11 +233,11 @@ static const NSString * const kPassed = @"passed";
                     self.current = node.parent;
                 } else {
                     [BPUtils printInfo:ERROR withString:
-                     [NSString stringWithFormat:@"ERROR: WHERE ARE WE??? We're closing a node for a test suite that hasn't been started [Expected: %@, Current: %@]. Ended: %@\nProblem line: %@",
+                     @"ERROR: WHERE ARE WE??? We're closing a node for a test suite that hasn't been started [Expected: %@, Current: %@]. Ended: %@\nProblem line: %@",
                       testSuiteName,
                       node.testSuiteName,
                       node.ended ? @"YES" : @"NO",
-                      line]];
+                      line];
                 }
                 self.current.endTime = date;
                 self.current.ended = YES;
@@ -282,24 +278,19 @@ static const NSString * const kPassed = @"passed";
             NSString *lineNumber = [line substringWithRange:[result rangeAtIndex:2]];
             NSString *testCaseClass = [self adjustClassName:[line substringWithRange:[result rangeAtIndex:3]]];
             NSString *testCaseName = [line substringWithRange:[result rangeAtIndex:4]];
-            BOOL isError = NO;
             NSRange rangeOfFailure = [result rangeAtIndex:5];
             NSString *errorMessage = [line substringWithRange:rangeOfFailure];
-
-            if (![errorMessage containsString:@"failed"]) {
-                isError = YES;
-            }
 
             BPTestCaseLogEntry *testCaseLogEntry = [self.current testCaseWithClass:testCaseClass andName:testCaseName];
             if (testCaseLogEntry) {
                 testCaseLogEntry.filename = filename;
                 testCaseLogEntry.lineNumber = [lineNumber integerValue];
-                testCaseLogEntry.unexpected = isError;
+                testCaseLogEntry.failure = NO; // failure means app crashed
                 testCaseLogEntry.errorMessage = errorMessage;
             } else {
                 [BPUtils printInfo:ERROR withString:
-                 [NSString stringWithFormat:@"HOW DID WE GET AN ERROR THAT WASN'T PARSED? We received an error in a test case that wasn't started or did not parse properly.\nProblem line: %@",
-                  line]];
+                 @"HOW DID WE GET AN ERROR THAT WASN'T PARSED? We received an error in a test case that wasn't started or did not parse properly.\nProblem line: %@",
+                  line];
             }
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
         }
@@ -317,13 +308,13 @@ static const NSString * const kPassed = @"passed";
             if (testCaseLogEntry) {
                 testCaseLogEntry.filename = @"Unknown File";
                 testCaseLogEntry.lineNumber = 0;
-                testCaseLogEntry.unexpected = YES;
+                testCaseLogEntry.failure = YES;
                 testCaseLogEntry.errorMessage = errorMessage;
                 // If we already reported the test as passing, we don't want to report it as a failure, but we want the log info
                 if (!testCaseLogEntry.passed) {
                     [self onTestCaseFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass
                                             inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
-                                      wasException:testCaseLogEntry.unexpected];
+                                      wasException:testCaseLogEntry.failure];
                 }
             }
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
@@ -347,13 +338,13 @@ static const NSString * const kPassed = @"passed";
             if (testCaseLogEntry) {
                 testCaseLogEntry.filename = @"Unknown File";
                 testCaseLogEntry.lineNumber = 0;
-                testCaseLogEntry.unexpected = YES;
+                testCaseLogEntry.failure = YES;
                 testCaseLogEntry.errorMessage = errorMessage;
                 // If we already reported the test as passing, we don't want to report it as a failure, but we want the log info
                 if (!testCaseLogEntry.passed) {
                     [self onTestCaseFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass
                                             inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
-                                      wasException:testCaseLogEntry.unexpected];
+                                      wasException:testCaseLogEntry.failure];
                 }
             }
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
@@ -374,13 +365,13 @@ static const NSString * const kPassed = @"passed";
             if (testCaseLogEntry) {
                 testCaseLogEntry.filename = filename;
                 testCaseLogEntry.lineNumber = [lineNumber integerValue];
-                testCaseLogEntry.unexpected = YES;
+                testCaseLogEntry.failure = YES;
                 testCaseLogEntry.errorMessage = errorMessage;
                 // If we already reported the test as passing, we don't want to report it as a failure, but we want the log info
                 if (!testCaseLogEntry.passed) {
                     [self onTestCaseFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass
                                             inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
-                                      wasException:testCaseLogEntry.unexpected];
+                                      wasException:testCaseLogEntry.failure];
                 }
             }
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
@@ -401,16 +392,40 @@ static const NSString * const kPassed = @"passed";
             if (testCaseLogEntry) {
                 testCaseLogEntry.filename = filename;
                 testCaseLogEntry.lineNumber = [lineNumber integerValue];
-                testCaseLogEntry.unexpected = YES;
+                testCaseLogEntry.failure = YES;
                 testCaseLogEntry.errorMessage = errorMessage;
                 // If we already reported the test as passing, we don't want to report it as a failure, but we want the log info
                 if (!testCaseLogEntry.passed) {
                     [self onTestCaseFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass
                                             inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
-                                      wasException:testCaseLogEntry.unexpected];
+                                      wasException:testCaseLogEntry.failure];
                 }
             }
             // Do not set currentTest to nil so that we pick up any stack trace at the end of the log
+        }
+    }
+    // XCTestOutputBarrier    t =     6.50s         Assertion Failure: BPSampleAppUITests.m:30: No matches found for Find: Elements containing elements matching type Button with identifier 'Tap Me 2' from input {(
+    regex = [NSRegularExpression regularExpressionWithPattern:UITEST_CASE_FAILED options:0 error:nil];
+    matches = [regex matchesInString:line options:0 range:lineRange];
+    for (NSTextCheckingResult *result in matches) {
+        if ([result numberOfRanges] == 4) {
+            logLine = YES;
+            NSString *filename = [line substringWithRange:[result rangeAtIndex:1]];
+            NSString *lineNumber = [line substringWithRange:[result rangeAtIndex:2]];
+            NSString *errorMessage = [line substringWithRange:[result rangeAtIndex:3]];
+            
+            BPTestCaseLogEntry *testCaseLogEntry = self.currentTest;
+            if (testCaseLogEntry) {
+                testCaseLogEntry.filename = filename;
+                testCaseLogEntry.lineNumber = [lineNumber integerValue];
+                testCaseLogEntry.errorMessage = errorMessage;
+                testCaseLogEntry.failure = NO;
+                if (!testCaseLogEntry.passed) {
+                    [self onTestCaseFailedWithName:testCaseLogEntry.testCaseName inClass:testCaseLogEntry.testCaseClass
+                                            inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
+                                      wasException:testCaseLogEntry.failure];
+                }
+            }
         }
     }
 
@@ -432,17 +447,18 @@ static const NSString * const kPassed = @"passed";
                 testCaseLogEntry.ended = YES;
                 testCaseLogEntry.endTime = [NSDate date];
                 testCaseLogEntry.passed = [kPassed isEqualToString:passed];
+                testCaseLogEntry.failure = NO;
                 if (testCaseLogEntry.passed) {
                     [self onTestCasePassedWithName:testCaseName inClass:testCaseClass reportedDuration:testCaseLogEntry.totalTime];
                 } else {
                     [self onTestCaseFailedWithName:testCaseName inClass:testCaseClass
                                             inFile:testCaseLogEntry.filename onLineNumber:testCaseLogEntry.lineNumber
-                                      wasException:testCaseLogEntry.unexpected];
+                                      wasException:testCaseLogEntry.failure];
                 }
             } else {
                 [BPUtils printInfo:ERROR withString:
-                 [NSString stringWithFormat:@"HOW ON EARTH DID THIS HAPPEN? The test case passed but we failed to handle it properly\nProblem line: %@",
-                  line]];
+                 @"HOW ON EARTH DID THIS HAPPEN? The test case passed but we failed to handle it properly\nProblem line: %@",
+                  line];
             }
             self.currentTest = nil;
         }
@@ -483,7 +499,7 @@ static const NSString * const kPassed = @"passed";
             testCaseLogEntry.errorMessage = message;
         }
         testCaseLogEntry.passed = NO;
-        testCaseLogEntry.unexpected = YES;
+        testCaseLogEntry.failure = YES;
     }
     self.aborted = YES;
 }
@@ -538,7 +554,7 @@ static const NSString * const kPassed = @"passed";
             [self calculateTotalsFor:suiteChild];
             logEntry.numberOfTests += suiteChild.numberOfTests;
             logEntry.numberOfFailures += suiteChild.numberOfFailures;
-            logEntry.numberOfUnexpected += suiteChild.numberOfUnexpected;
+            logEntry.numberOfErrors += suiteChild.numberOfErrors;
             if (logEntry.reportedTotalTime > 0) {
                 logEntry.totalTime = logEntry.reportedTotalTime;
             } else {
@@ -547,8 +563,8 @@ static const NSString * const kPassed = @"passed";
         } else if([child isKindOfClass:[BPTestCaseLogEntry class]]) {
             BPTestCaseLogEntry *caseChild = (BPTestCaseLogEntry *)child;
             logEntry.numberOfTests += 1;
-            logEntry.numberOfFailures += caseChild.passed ? 0 : 1;
-            logEntry.numberOfUnexpected += caseChild.unexpected ? 1 : 0;
+            logEntry.numberOfFailures += (!caseChild.passed && caseChild.failure) ? 1 : 0;
+            logEntry.numberOfErrors += (!caseChild.passed && !caseChild.failure) ? 1 : 0;
             if (logEntry.reportedTotalTime > 0) {
                 logEntry.totalTime = logEntry.reportedTotalTime;
             } else {
@@ -565,8 +581,8 @@ static const NSString * const kPassed = @"passed";
     if (logEntry.numberOfFailures != logEntry.reportedNumberOfFailures) {
         [BPUtils printInfo:DEBUGINFO withString:@"[%s] Mismatch numberOfFailures calculated (%lu) vs reported (%lu)", [logEntry.testSuiteName UTF8String], logEntry.numberOfFailures, logEntry.reportedNumberOfFailures];
     }
-    if (logEntry.numberOfUnexpected != logEntry.reportedNumberOfUnexpected) {
-        [BPUtils printInfo:DEBUGINFO withString:@"[%s] Mismatch numberOfUnexpected calculated (%lu) vs reported (%lu)", [logEntry.testSuiteName UTF8String], logEntry.numberOfUnexpected, logEntry.reportedNumberOfUnexpected];
+    if (logEntry.numberOfErrors != logEntry.reportedNumberOfErrors) {
+        [BPUtils printInfo:DEBUGINFO withString:@"[%s] Mismatch numberOfErrors calculated (%lu) vs reported (%lu)", [logEntry.testSuiteName UTF8String], logEntry.numberOfErrors, logEntry.reportedNumberOfErrors];
     }
     if (logEntry.totalTime != logEntry.reportedTotalTime) {
         [BPUtils printInfo:DEBUGINFO withString:@"[%s] Mismatch totalTime calculated (%f) vs reported (%f)", [logEntry.testSuiteName UTF8String], logEntry.totalTime, logEntry.reportedTotalTime];
@@ -618,20 +634,8 @@ static const NSString * const kPassed = @"passed";
 }
 
 - (void)onTestSuiteEnded:(NSString *)testSuiteName
-                fromDate:(NSDate *)startDate
-                  toDate:(NSDate *)endDate
-                  passed:(BOOL)wholeSuitePassed
-               withTotal:(NSUInteger)totalTestCount
-                  failed:(NSUInteger)failedCount
-              unexpected:(NSUInteger)unexpectedFailures
                   isRoot:(BOOL)isRoot {
     [self.delegate onTestSuiteEnded:testSuiteName
-                           fromDate:startDate
-                             toDate:endDate
-                             passed:wholeSuitePassed
-                          withTotal:totalTestCount
-                             failed:failedCount
-                         unexpected:unexpectedFailures
                              isRoot:isRoot];
     if (testSuiteName == self.root.testSuiteName || testSuiteName == self.currentRootName) {
         [self onAllTestsEnded];

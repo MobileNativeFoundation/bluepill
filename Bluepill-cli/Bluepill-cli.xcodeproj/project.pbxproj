@@ -66,6 +66,8 @@
 		BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */; };
 		BA53B16C1E30931E00FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16B1E30931E00FCED71 /* BPConstants.m */; };
 		BA53B1701E30A0F100FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16B1E30931E00FCED71 /* BPConstants.m */; };
+		BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53011FA8F9F100D80675 /* demo.mov */; };
+		BA6E53061FA8FA2500D80675 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53051FA8FA2000D80675 /* image.png */; };
 		BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
 		BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DDF1DD84A72007CB967 /* fatal_tests.xml */; };
 		BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */; };
@@ -86,7 +88,9 @@
 		C41A2C791E0B42E9005D9751 /* BPXCTestFile.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C711E0B2497005D9751 /* BPXCTestFile.m */; };
 		C41A2C7A1E0B4306005D9751 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C741E0B24E8005D9751 /* BPTestCase.m */; };
 		C41A2C7B1E0B4306005D9751 /* BPTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C761E0B24E8005D9751 /* BPTestClass.m */; };
+		C45476AC1FD762B5006C7D9E /* uitest-failed.log in Resources */ = {isa = PBXBuildFile; fileRef = C45476AB1FD762B4006C7D9E /* uitest-failed.log */; };
 		C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E5491DC930D200BC80EE /* BPCLITests.m */; };
+		C469B1581FE1A420002246BF /* crash_tests_with_retry.xml in Resources */ = {isa = PBXBuildFile; fileRef = C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */; };
 		C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */ = {isa = PBXBuildFile; fileRef = C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */; };
 /* End PBXBuildFile section */
 
@@ -180,6 +184,8 @@
 		BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = hanging_tests.xml; sourceTree = "<group>"; };
 		BA53B16A1E30931E00FCED71 /* BPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConstants.h; sourceTree = "<group>"; };
 		BA53B16B1E30931E00FCED71 /* BPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConstants.m; sourceTree = "<group>"; };
+		BA6E53011FA8F9F100D80675 /* demo.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = demo.mov; sourceTree = "<group>"; };
+		BA6E53051FA8FA2000D80675 /* image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = image.png; sourceTree = "<group>"; };
 		BA944BCE1D76A39A00A4BDA3 /* Bluepill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bluepill.h; sourceTree = "<group>"; };
 		BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bluepill.m; sourceTree = "<group>"; };
 		BA954F571D6D1AB3007D011D /* CDStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDStructures.h; sourceTree = "<group>"; };
@@ -273,7 +279,10 @@
 		C41A2C741E0B24E8005D9751 /* BPTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestCase.m; sourceTree = "<group>"; };
 		C41A2C751E0B24E8005D9751 /* BPTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestClass.h; sourceTree = "<group>"; };
 		C41A2C761E0B24E8005D9751 /* BPTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestClass.m; sourceTree = "<group>"; };
+		C45476AB1FD762B4006C7D9E /* uitest-failed.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "uitest-failed.log"; sourceTree = "<group>"; };
 		C467E5491DC930D200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
+		C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = crash_tests_with_retry.xml; sourceTree = "<group>"; };
+		C48AE3821FBCC59D00997BA0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -344,6 +353,7 @@
 		7A7901841D5CB679004D4325 /* Bluepill-cli */ = {
 			isa = PBXGroup;
 			children = (
+				C48AE3821FBCC59D00997BA0 /* BPVersion.h */,
 				BA954F551D6D1AB3007D011D /* PrivateHeaders */,
 				BA9552171D6D1C00007D011D /* Bluepill */,
 				BA34F5DB1D6D70300063B17F /* Simulator */,
@@ -393,6 +403,10 @@
 		BA180A0A1DBB011200D7D130 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
+				C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */,
+				C45476AB1FD762B4006C7D9E /* uitest-failed.log */,
+				BA6E53011FA8F9F100D80675 /* demo.mov */,
+				BA6E53051FA8FA2000D80675 /* image.png */,
 				C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */,
 				7AA4C2281E4A797E00FAA39E /* multiple_reports_for_one_error.log */,
 				7A4FB8E71DFB66980073F268 /* error_only_crash.log */,
@@ -613,6 +627,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7A7901891D5CB679004D4325 /* Build configuration list for PBXNativeTarget "bp" */;
 			buildPhases = (
+				C48AE3811FBCC53600997BA0 /* Save Git SHA1 and Xcode Version */,
 				7A79017E1D5CB679004D4325 /* Sources */,
 				7A79017F1D5CB679004D4325 /* Frameworks */,
 				7A7901801D5CB679004D4325 /* CopyFiles */,
@@ -649,7 +664,7 @@
 		7A79017A1D5CB679004D4325 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = LinkedIn;
 				TargetAttributes = {
 					7A7901811D5CB679004D4325 = {
@@ -686,17 +701,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA6E53061FA8FA2500D80675 /* image.png in Resources */,
+				BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */,
 				C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */,
 				BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */,
 				BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */,
 				BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */,
 				7A4D7A831DDA5FEA001E085D /* parse_crash.log in Resources */,
 				BA4BCFAC1DC3FA3D00592FA4 /* crash_tests.xml in Resources */,
+				C469B1581FE1A420002246BF /* crash_tests_with_retry.xml in Resources */,
 				7A4FB8E81DFB66980073F268 /* error_only_crash.log in Resources */,
 				7A4D7A891DDE3A85001E085D /* intermixed_crash.log in Resources */,
 				BA0096FE1DCA5D810000DD45 /* testConfigRelativePath.json in Resources */,
 				7A7E7BC31DF5BA45007928F3 /* badfilename.log in Resources */,
 				BA180A0C1DBB011200D7D130 /* testConfig.json in Resources */,
+				C45476AC1FD762B5006C7D9E /* uitest-failed.log in Resources */,
 				7AA4C2291E4A797E00FAA39E /* multiple_reports_for_one_error.log in Resources */,
 				BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */,
 				BA4800EA1DC2C74600026972 /* BPAppNegativeTests-results.xml in Resources */,
@@ -705,6 +724,25 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C48AE3811FBCC53600997BA0 /* Save Git SHA1 and Xcode Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Save Git SHA1 and Xcode Version";
+			outputPaths = (
+				"$(SOURCE_ROOT)/BPVersion.h",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "VERSION=`git describe`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7A79017E1D5CB679004D4325 /* Sources */ = {
@@ -796,7 +834,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -804,7 +844,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -845,7 +889,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -853,7 +899,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;

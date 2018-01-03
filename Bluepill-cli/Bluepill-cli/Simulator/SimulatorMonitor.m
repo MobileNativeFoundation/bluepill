@@ -28,8 +28,8 @@
 @property (nonatomic, assign) NSUInteger failureCount;
 @property (nonatomic, assign) BOOL testsBegan;
 @property (nonatomic, strong) BPConfiguration *config;
-@property (nonatomic, strong) NSMutableArray *executedTests;
-@property (nonatomic, strong) NSMutableArray *failedTestCases;
+@property (nonatomic, strong) NSMutableSet *executedTests;
+@property (nonatomic, strong) NSMutableSet *failedTestCases;
 
 @end
 
@@ -129,7 +129,7 @@
     }
 
     if (self.failedTestCases == nil) {
-        self.failedTestCases = [[NSMutableArray alloc] init];
+        self.failedTestCases = [[NSMutableSet alloc] init];
     }
 
     [self.failedTestCases addObject:fullTestName];
@@ -154,9 +154,9 @@
     self.currentTestName = nil;
     self.currentClassName = nil;
     [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
-    [[BPStats sharedStats] addTestFailure];
+    [[BPStats sharedStats] addTestError];
     if (wasException) {
-        [[BPStats sharedStats] addTestError];
+        [[BPStats sharedStats] addTestFailure];
     }
 }
 
@@ -166,15 +166,15 @@
         return;
     }
     if (self.executedTests == nil) {
-        self.executedTests = [[NSMutableArray alloc] init];
+        self.executedTests = [[NSMutableSet alloc] init];
     }
     [self.executedTests addObject:[testClass stringByAppendingFormat:@"/%@", testName]];
-    if (self.config.testCasesToSkip == nil) {
-        self.config.testCasesToSkip = @[];
-    }
-    // If we crash, on the re-execution, we'll have a new list of tests to skip because we already ran these to completion.
 
-    self.config.testCasesToSkip = [self.config.testCasesToSkip arrayByAddingObjectsFromArray:self.executedTests];
+    // If we crash, on the re-execution, we'll have a new list of tests to skip because we already ran these to completion.
+    NSSet *testsToSkip = [[NSSet alloc] initWithArray:self.config.testCasesToSkip ?: @[]];
+    
+    self.config.testCasesToSkip = [[testsToSkip setByAddingObjectsFromSet:self.executedTests] allObjects];
+
 }
 
 - (void)onTestSuiteBegan:(NSString *)testSuiteName onDate:(NSDate *)startDate isRoot:(BOOL)isRoot {
@@ -182,12 +182,6 @@
 }
 
 - (void)onTestSuiteEnded:(NSString *)testSuiteName
-                fromDate:(NSDate *)startDate
-                  toDate:(NSDate *)endDate
-                  passed:(BOOL)wholeSuitePassed
-               withTotal:(NSUInteger)totalTestCount
-                  failed:(NSUInteger)failedCount
-              unexpected:(NSUInteger)unexpectedFailures
                   isRoot:(BOOL)isRoot {
     [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_SUITE_FORMAT, isRoot ? 1 : [BPStats sharedStats].attemptNumber, testSuiteName]];
 }
@@ -230,7 +224,7 @@
             }
             // Set exit status before stopping the tests because stopping the tests will set the SimulatorState to Completed
             __self.exitStatus = testsReallyStarted ? BPExitStatusTestTimeout : BPExitStatusSimulatorCrashed;
-            [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aboorted."
+            [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aborted."
                                   forTestName:testName
                                       inClass:testClass];
             [[BPStats sharedStats] addTestOutputTimeout];
@@ -267,8 +261,8 @@
     return (self.simulatorState == Completed);
 }
 
-- (BOOL)isApplicationStarted {
-    return (self.simulatorState != Idle);
+- (BOOL)isApplicationLaunched {
+    return (self.simulatorState > Idle && self.simulatorState < Completed);
 }
 
 - (BOOL)didTestsStart {

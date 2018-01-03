@@ -24,10 +24,10 @@ typedef NS_ENUM(NSInteger, BPExitStatus) {
     BPExitStatusSimulatorReuseFailed = 11,
 };
 
-@protocol BPExitStatusProtocl <NSObject>
+@protocol BPExitStatusProtocol <NSObject>
 
 - (BOOL)isExecutionComplete;
-- (BOOL)isApplicationStarted;
+- (BOOL)isApplicationLaunched;
 - (BOOL)didTestsStart;
 
 - (BPExitStatus)exitStatus;

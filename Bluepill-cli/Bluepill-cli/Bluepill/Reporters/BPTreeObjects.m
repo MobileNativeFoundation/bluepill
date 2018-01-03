@@ -21,7 +21,7 @@
 
 - (NSString *)description {
     NSString *str = [NSString stringWithFormat:
-                     @"\nTestClass: %@\ntestName: %@\nTime: %f\nEnded: %@\nPassed: %@\nFilename: %@\nLine number: %lu\nError Message: %@\nLog:\n%@\n",
+                     @"%@/%@ Time: %f Ended: %@ Passed: %@ Filename: %@ Line number: %lu Error Message: %@ Log: %@\n",
                      self.testCaseClass, self.testCaseName, self.totalTime, self.ended ? @"YES" : @"NO", self.passed ? @"YES" : @"NO",
                      self.filename, self.lineNumber, self.errorMessage, self.log];
     return str;
@@ -52,11 +52,13 @@
 }
 
 - (NSString *)description {
-    NSString *str = [NSString stringWithFormat:@"\nTest: %@\nStart: %@\nEnd: %@\nEnded: %@\nPassed: %@\nTotal: %lu\nFail: %lu\nUnexpected: %lu\nTime: %f\nLog:\n%@\n",
+    NSString *str = [NSString stringWithFormat:@"\nTestSuite: %@ Start: %@ End: %@ Ended: %@ Passed: %@ "
+                     "Total: %lu Fail: %lu Errors: %lu Time: %f Log: \n---\n%@\n---\n",
                      self.testSuiteName, self.startTime, self.endTime, self.ended ? @"YES" : @"NO", self.passed ? @"YES" : @"NO",
-                     self.numberOfTests, self.numberOfFailures, self.numberOfUnexpected, self.totalTime, self.log];
+                     self.numberOfTests, self.numberOfFailures, self.numberOfErrors, self.totalTime, self.log];
     for (BPLogEntry *child in self.children) {
-        str = [str stringByAppendingString:[child description]];
+        NSString *childDescription = [@"\n    " stringByAppendingString:[child description]];
+        str = [str stringByAppendingString:childDescription];
     }
     return str;
 }
