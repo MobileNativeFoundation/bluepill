@@ -14,6 +14,7 @@
 #define BP_DEFAULT_XCODE_VERSION "Xcode 9.1"
 #define BP_TM_PROTOCOL_VERSION 17
 #define BP_DAEMON_PROTOCOL_VERSION 24
+#define BP_MAX_PROCESSES_PERCENT 0.75
 
 
 static const NSString * kCFBundleIdentifier = @"CFBundleIdentifier";
