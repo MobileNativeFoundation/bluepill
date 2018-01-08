@@ -70,8 +70,7 @@
                                });
                            } else {
                                if (__self.config.simulatorPreferencesFile) {
-                                   [__self copySimulatorPreferencesFile:__self.config.simulatorPreferencesFile
-                                                               dataPath:__self.device.dataPath];
+                                   [__self copySimulatorPreferencesFile:__self.config.simulatorPreferencesFile];
                                }
 
                                dispatch_async(dispatch_get_main_queue(), ^{
@@ -85,11 +84,15 @@
                        }];
 }
 
-- (void)copySimulatorPreferencesFile:(NSString *)preferencesFile dataPath:(NSString *)dataPath  {
+- (NSURL *)preferencesFile {
+    return [NSURL fileURLWithPath:@"Library/Preferences/.GlobalPreferences.plist"
+                    relativeToURL:[NSURL fileURLWithPath:self.device.dataPath]];
+}
 
-    NSURL *source = [NSURL fileURLWithPath:preferencesFile];
-    NSURL *destination = [NSURL fileURLWithPath:@"Library/Preferences/.GlobalPreferences.plist"
-                                  relativeToURL:[NSURL fileURLWithPath:dataPath]];
+- (void)copySimulatorPreferencesFile:(NSString *)newPreferencesFile {
+
+    NSURL *source = [NSURL fileURLWithPath:newPreferencesFile];
+    NSURL *destination = self.preferencesFile;
 
 
     [NSFileManager.defaultManager

@@ -15,6 +15,7 @@
 #import "BPUtils.h"
 #import <stdio.h>
 #import "BPConstants.h"
+#import "BPSimulator.h"
 
 /**
  * This test suite is the integration tests to make sure Bluepill instance is working properly
@@ -587,11 +588,32 @@
     }
 }
 
-- (void)testSimulatorPreferencesFile {
+- (void)testCopySimulatorPreferencesFile {
     self.config.simulatorPreferencesFile = [BPTestHelper.resourceFolderPath stringByAppendingPathComponent:@"simulator-preferences.plist"];
 
-    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.keepSimulator = YES;
+
+    Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+    XCTAssertNotNil(bp.test_simulatorUDID);
+
+    NSURL *preferencesFile = bp.test_simulator.preferencesFile;
+
+    NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfURL:preferencesFile];
+    XCTAssert([plist[@"AppleLocale"] isEqual:@"en_CH"]);
+
+    self.config.deleteSimUDID = bp.test_simulatorUDID;
+    XCTAssertNotNil(self.config.deleteSimUDID);
+
+    Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode2 = [bp2 run];
+    XCTAssert(exitCode2 == BPExitStatusSimulatorDeleted);
+    XCTAssertEqualObjects(self.config.deleteSimUDID, bp2.test_simulatorUDID);
+
+    XCTAssert([[NSDictionary alloc] initWithContentsOfURL:preferencesFile] == nil);
 }
 
 - (void)testTakingScreenshotWithFailingTestsSetWithRetries {
