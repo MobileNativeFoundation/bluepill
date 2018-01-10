@@ -273,8 +273,8 @@ maxprocs(void)
             }
             [BPUtils printInfo:INFO withString:@"%lu Simulator%s still running. [%@]",
              launchedTasks, launchedTasks == 1 ? "" : "s", listString];
-            [BPUtils printInfo:INFO withString:@"Using %d of %d processes.", numprocs(), maxProcs];
             if (numprocs() > maxProcs * BP_MAX_PROCESSES_PERCENT) {
+                [BPUtils printInfo:INFO withString:@"Using %d of %d processes.", numprocs(), maxProcs];
                 [BPUtils printInfo:WARNING withString:@"!!!The number of processes is more than  %f percent of maxProcs!!! it may fail with error: Unable to boot device due to insufficient system resources. Please check with system admin to restart this node and for proper mainantance routine", BP_MAX_PROCESSES_PERCENT*100];
                 NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
                 [dateFormatter setDateFormat:@"yyyy-MM-dd_HH-mm-ss"];

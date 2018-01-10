@@ -119,31 +119,22 @@
         [self saveScreenshotForFailedTestWithName:testName inClass:testClass];
     }
 
-    NSDate *currentTime = [NSDate date];
     NSString *fullTestName = [NSString stringWithFormat:@"%@/%@", testClass, testName];
-
-    BOOL additionalFailure = NO;
-    for (NSString *fullName in self.failedTestCases) {
-        if([fullTestName isEqualToString:fullName]) {
-            additionalFailure = YES;
-            break;
-        }
-    }
 
     if (self.failedTestCases == nil) {
         self.failedTestCases = [[NSMutableSet alloc] init];
     }
 
-    [self.failedTestCases addObject:fullTestName];
-
-    [BPUtils printInfo:FAILED withString:@"%@%10.6fs %@",
-     additionalFailure ? @"[ADDITIONAL FAILURE] " : @"",
-     [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
-     fullTestName];
-
-    if (additionalFailure) {
+    if ([self.failedTestCases containsObject:fullTestName]) {
+        // We've already logged this test as _failed_, this is an additional 'XCTAssert'
+        // comming from the parser so count it again.
         return;
     }
+
+    NSDate *currentTime = [NSDate date];
+    [BPUtils printInfo:FAILED withString:@"%10.6fs %@", [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate], fullTestName];
+
+    [self.failedTestCases addObject:fullTestName];
 
     self.failureCount++;
 
