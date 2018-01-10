@@ -314,7 +314,7 @@
     [self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid) {
         // Save the process ID to the monitor
         blockSelf.monitor.appPID = pid;
-        blockSelf.monitor.appState = AppRunning;
+        blockSelf.monitor.appState = Running;
 
         [blockSelf.stdOutHandle writeData:[@"DEBUG_FLAG_TOBEREMOVED.\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
@@ -327,7 +327,7 @@
                 dispatch_source_cancel(source);
             });
             dispatch_source_set_cancel_handler(source, ^{
-                blockSelf.monitor.appState = AppFinished;
+                blockSelf.monitor.appState = Completed;
                 // Post a APPCLOSED signal to the fifo
                 [blockSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
             });
