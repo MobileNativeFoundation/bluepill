@@ -8,6 +8,7 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <XCTest/XCTest.h>
+#include "SigHandler.h"
 
 @interface BPSampleAppCrashingTests : XCTestCase
 
@@ -17,8 +18,9 @@
 
 - (void)setUp {
     [super setUp];
+    initsighandler();
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    
+
 }
 
 - (void)tearDown {
@@ -32,7 +34,18 @@
 
 - (void)testAppCrash1 {
     int *pointer = nil;
-    *pointer = 1;
+    NSInteger counter = 1;
+    NSString* testCounter = [[[NSProcessInfo processInfo]environment]objectForKey:@"_BP_TEST_ATTEMPT_NUMBER"];
+    if (testCounter != nil) {
+        counter = [testCounter integerValue];
+    }
+    if (counter == 1) {
+        // crash the first time
+        *pointer = 1;
+    } else {
+        // pass the second time
+        XCTAssert(YES);
+    }
 }
 
 - (void)testAppCrash2 {

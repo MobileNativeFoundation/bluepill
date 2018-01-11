@@ -20,6 +20,7 @@
 		BAB24F4C1DB5D45E00867756 /* BPSampleAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F4B1DB5D45E00867756 /* BPSampleAppTests.m */; };
 		BAB24F5D1DB5D83C00867756 /* BPAppNegativeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F5C1DB5D83C00867756 /* BPAppNegativeTests.m */; };
 		BAFCCA601E36DC2000E33C31 /* BPSampleAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFCCA5F1E36DC2000E33C31 /* BPSampleAppUITests.m */; };
+		C497EC882006F0B9003CB36E /* SigHandler.c in Sources */ = {isa = PBXBuildFile; fileRef = C497EC872006F0B9003CB36E /* SigHandler.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +99,8 @@
 		BAFCCA5D1E36DC2000E33C31 /* BPSampleAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAFCCA5F1E36DC2000E33C31 /* BPSampleAppUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppUITests.m; sourceTree = "<group>"; };
 		BAFCCA611E36DC2000E33C31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C497EC862006F0B9003CB36E /* SigHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigHandler.h; sourceTree = "<group>"; };
+		C497EC872006F0B9003CB36E /* SigHandler.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = SigHandler.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +181,8 @@
 			children = (
 				BAA4DA391DC3C02B00A58BCC /* BPSampleAppCrashingTests.m */,
 				BAA4DA3B1DC3C02B00A58BCC /* Info.plist */,
+				C497EC862006F0B9003CB36E /* SigHandler.h */,
+				C497EC872006F0B9003CB36E /* SigHandler.c */,
 			);
 			path = BPSampleAppCrashingTests;
 			sourceTree = "<group>";
@@ -542,6 +547,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C497EC882006F0B9003CB36E /* SigHandler.c in Sources */,
 				BAA4DA3A1DC3C02B00A58BCC /* BPSampleAppCrashingTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

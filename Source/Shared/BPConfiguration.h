@@ -91,6 +91,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSArray<NSString *> *imagePaths; // The images to be pushed into each simulator.
 
 // These fields are for testing.
+@property (nonatomic) BOOL testing_Environment;
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;
 @property (nonatomic) BOOL testing_HangAppOnLaunch;
 @property (nonatomic) BOOL testing_NoAppWillRun;

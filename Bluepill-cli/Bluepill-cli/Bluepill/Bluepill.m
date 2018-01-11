@@ -444,7 +444,7 @@ void onInterrupt(int ignore) {
         NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
     };
 
-    [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
+    [context.runner launchApplicationAndExecuteTestsWithParser:context.parser forAttempt:context.attemptNumber andCompletion:handler.defaultHandlerBlock];
 }
 
 - (void)connectTestBundleAndTestDaemonWithContext:(BPExecutionContext *)context {
@@ -666,8 +666,7 @@ void onInterrupt(int ignore) {
     // the run rather than the aggregate bitmask built with finalExitStatus
 
     if (![self hasRemainingTestsInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
-        [BPUtils printInfo:INFO withString:@"No more tests to run."];
-        self.finalExitStatus = context.finalExitStatus | context.exitStatus;
+        self.finalExitStatus = context.exitStatus;
         self.exitLoop = YES;
         return;
     }

@@ -231,7 +231,7 @@
                                        error:error];
 }
 
-- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {
+- (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser forAttempt:(NSInteger)attemptNumber andCompletion:(void (^)(NSError *, pid_t))completion {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.appBundlePath];
 
@@ -264,6 +264,10 @@
     argsAndEnv[@"env"] = self.config.environmentVariables ?: @{};
     NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config]];
     [appLaunchEnvironment addEntriesFromDictionary:argsAndEnv[@"env"]];
+
+    if (self.config.testing_Environment) {
+        appLaunchEnvironment[@"_BP_TEST_ATTEMPT_NUMBER"] = [NSString stringWithFormat:@"%ld", (long)attemptNumber];
+    }
 
     if (self.config.testing_CrashAppOnLaunch) {
         appLaunchEnvironment[@"_BP_TEST_CRASH_ON_LAUNCH"] = @"YES";

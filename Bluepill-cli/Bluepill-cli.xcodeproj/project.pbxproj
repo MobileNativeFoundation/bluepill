@@ -91,6 +91,7 @@
 		C45476AC1FD762B5006C7D9E /* uitest-failed.log in Resources */ = {isa = PBXBuildFile; fileRef = C45476AB1FD762B4006C7D9E /* uitest-failed.log */; };
 		C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E5491DC930D200BC80EE /* BPCLITests.m */; };
 		C469B1581FE1A420002246BF /* crash_tests_with_retry.xml in Resources */ = {isa = PBXBuildFile; fileRef = C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */; };
+		C497EC852006DBD5003CB36E /* crash_tests_with_retry_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C497EC842006DBD5003CB36E /* crash_tests_with_retry_2.xml */; };
 		C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */ = {isa = PBXBuildFile; fileRef = C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */; };
 /* End PBXBuildFile section */
 
@@ -283,6 +284,7 @@
 		C467E5491DC930D200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
 		C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = crash_tests_with_retry.xml; sourceTree = "<group>"; };
 		C48AE3821FBCC59D00997BA0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
+		C497EC842006DBD5003CB36E /* crash_tests_with_retry_2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = crash_tests_with_retry_2.xml; sourceTree = "<group>"; };
 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -403,6 +405,7 @@
 		BA180A0A1DBB011200D7D130 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
+				C497EC842006DBD5003CB36E /* crash_tests_with_retry_2.xml */,
 				C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */,
 				C45476AB1FD762B4006C7D9E /* uitest-failed.log */,
 				BA6E53011FA8F9F100D80675 /* demo.mov */,
@@ -704,6 +707,7 @@
 				BA6E53061FA8FA2500D80675 /* image.png in Resources */,
 				BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */,
 				C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */,
+				C497EC852006DBD5003CB36E /* crash_tests_with_retry_2.xml in Resources */,
 				BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */,
 				BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */,
 				BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */,

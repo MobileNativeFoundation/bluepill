@@ -32,7 +32,6 @@
 - (void)setUp {
     [super setUp];
     
-    self.continueAfterFailure = NO;
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
     self.config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
@@ -52,6 +51,8 @@
     self.config.junitOutput = NO;
     self.config.testRunnerAppPath = nil;
     self.config.testing_CrashAppOnLaunch = NO;
+    self.config.testing_Environment = NO;
+    self.config.testing_NoAppWillRun = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils quietMode:[BPUtils isBuildScript]];
@@ -102,6 +103,8 @@
     XCTAssert(exitCode == BPExitStatusSimulatorCrashed);
 }
 
+
+// TODO: This is NOT Testing that the simulator crashed. the App hung and we killed it three times, nothing to do with the simulator.
 - (void)testRecoverSimulatorOnCrash {
     NSString *tempDir = NSTemporaryDirectory();
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/RecoverSimulatorOnCrash", tempDir] withError:nil];
@@ -114,6 +117,7 @@
     self.config.failureTolerance = @0;
     self.config.errorRetriesCount = @1;
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
+    // TODO: This exit status is BS... the Simulator never crashed... I don't know where it's coming from...
     XCTAssert(exitCode == BPExitStatusSimulatorCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusSimulatorCrashed, (long)exitCode);
 
     NSString *simulator1Path = [outputDir stringByAppendingPathComponent:@"1-simulator.log"];
@@ -208,6 +212,28 @@
     NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-results.xml"];
     NSLog(@"JUnit-REPORT: %@", junitReportPath);
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests.xml"];
+    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
+}
+
+- (void)testReportWithAppCrashingAndThenPassingTestsSet {
+    [BPUtils enableDebugOutput:NO];
+    NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppCrashingTestsSetTempDir", tempDir] withError:&error];
+    // NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+    self.config.junitOutput = YES;
+    self.config.errorRetriesCount = @3;
+    self.config.failureTolerance = @1;
+    self.config.onlyRetryFailed = YES;
+    self.config.testing_Environment = YES;
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssertTrue(exitCode == BPExitStatusTestsAllPassed);
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-results.xml"];
+    NSLog(@"JUnit-REPORT: %@", junitReportPath);
+    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests_with_retry_2.xml"];
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
