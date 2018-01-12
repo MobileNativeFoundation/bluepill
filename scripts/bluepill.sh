@@ -137,6 +137,7 @@ bluepill_integration_tests()
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
     echo See result.txt for details
+    cat results.txt
     exit 1
   fi
 }
