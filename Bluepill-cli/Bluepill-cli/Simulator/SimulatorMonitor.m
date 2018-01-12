@@ -225,6 +225,7 @@
                 [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
             }
             // Set exit status before stopping the tests because stopping the tests will set the SimulatorState to Completed
+            // TODO: This is BS, the Simulator didn't crash, the app hung before the tests started.
             __self.exitStatus = testsReallyStarted ? BPExitStatusTestTimeout : BPExitStatusSimulatorCrashed;
             [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aborted."
                                   forTestName:testName

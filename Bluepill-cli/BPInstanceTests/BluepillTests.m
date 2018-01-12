@@ -94,7 +94,9 @@
     XCTAssert(exitCode == BPExitStatusAppCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusAppCrashed, (long)exitCode);
 }
 
+// TODO: THe exit status is WRONG here, the simulator didn't crash.
 - (void)testAppThatHangsOnLaunch {
+    [BPUtils enableDebugOutput:YES];
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.testing_HangAppOnLaunch = YES;

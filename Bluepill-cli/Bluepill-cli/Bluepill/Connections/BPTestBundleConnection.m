@@ -107,7 +107,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
                                                            protocolVersion:@(BP_DAEMON_PROTOCOL_VERSION)];
             [receipt handleCompletion:^(NSNumber *version, NSError *error){
                 if (error || !version) {
-                    [BPUtils printInfo:ERROR withString:@"Retry count: %@", error];
+                    [BPUtils printInfo:ERROR withString:@"DTXProxyChannel failed with: %@", [error localizedDescription]];
                     return;
                 }
                 [proxyChannel cancel];
