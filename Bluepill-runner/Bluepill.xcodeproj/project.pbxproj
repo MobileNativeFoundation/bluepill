@@ -257,7 +257,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BAEF4B3B1DAC539400E68294 /* Build configuration list for PBXNativeTarget "bluepill" */;
 			buildPhases = (
-				C432D41D1DDCED6100FB27D0 /* Saving Git HEAD's SHA1 */,
+				C432D41D1DDCED6100FB27D0 /* Saving Git HEAD's SHA1 and Xcode Version */,
 				BAEF4B301DAC539400E68294 /* Sources */,
 				BAEF4B311DAC539400E68294 /* Frameworks */,
 				BAEF4B321DAC539400E68294 /* CopyFiles */,
@@ -326,15 +326,16 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		C432D41D1DDCED6100FB27D0 /* Saving Git HEAD's SHA1 */ = {
+		C432D41D1DDCED6100FB27D0 /* Saving Git HEAD's SHA1 and Xcode Version */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Saving Git HEAD's SHA1";
+			name = "Saving Git HEAD's SHA1 and Xcode Version";
 			outputPaths = (
+				"$(SOURCE_ROOT)/BPVersion.h",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

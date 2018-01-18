@@ -168,6 +168,33 @@
     XCTAssert(monitor.exitStatus == BPExitStatusAppCrashed);
 }
 
+-(void)testUITestFailure {
+    NSString *logPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"uitest-failed.log"];
+    NSError *error;
+    NSString *wholeFile = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:&error];
+    if (!wholeFile) {
+        NSLog(@"%@", [error localizedDescription]);
+        XCTAssert(wholeFile != nil);
+    }
+    
+    BPWriter *writer = [self writer];
+    BPTreeParser *parser = [[BPTreeParser alloc] initWithWriter:writer];
+    SimulatorMonitor *monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
+    
+    parser.delegate = monitor;
+    
+    [BPStats sharedStats].attemptNumber = 1;
+    
+    [parser handleChunkData:[wholeFile dataUsingEncoding:NSUTF8StringEncoding]];
+    [parser completed];
+    [parser completedFinalRun];
+    NSString *report = [parser generateLog:[[JUnitReporter alloc] init]];
+    NSLog(@"%@", report);
+    
+    
+    XCTAssert(monitor.exitStatus == BPExitStatusTestsFailed);
+}
+
 - (void)testErrorOnlyCrash {
     NSString *logPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"error_only_crash.log"];
     NSString *wholeFile = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];

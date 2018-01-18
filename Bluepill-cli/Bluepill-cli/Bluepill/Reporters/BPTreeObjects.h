@@ -16,6 +16,7 @@
 @property (nonatomic, strong, nullable) NSString *log;
 @property (nonatomic, assign) BOOL ended;
 @property (nonatomic, assign) BOOL passed;
+@property (nonatomic, assign) BOOL failure;
 @property (nonatomic, strong, nullable) NSDate *startTime;
 @property (nonatomic, strong, nullable) NSDate *endTime;
 
@@ -25,7 +26,6 @@
 
 @property (nonatomic, strong, nullable) NSString *testCaseClass;
 @property (nonatomic, strong, nullable) NSString *testCaseName;
-@property (nonatomic, assign) BOOL unexpected;
 
 @property (nonatomic, strong, nullable) NSString *filename;
 @property (nonatomic, assign) NSUInteger lineNumber;
@@ -37,19 +37,22 @@
 
 @property (nonatomic, strong, nullable) NSString *testSuiteName;
 
+// These are computed by the parser as it reads the output
 @property (nonatomic, assign) NSUInteger numberOfTests;
-@property (nonatomic, assign) NSUInteger numberOfFailures;
-@property (nonatomic, assign) NSUInteger numberOfUnexpected;
+@property (nonatomic, assign) NSUInteger numberOfFailures; // Failures == crashes, unhandled exceptions, etc
+@property (nonatomic, assign) NSUInteger numberOfErrors; // Errors == XCTAsserts that fail
 
 @property (nonatomic, strong, nullable) NSMutableArray<BPLogEntry*> *testCases;
 
 @property (nonatomic, strong, nullable) NSMutableArray<BPLogEntry*> *children;
 @property (nonatomic, weak, nullable) BPTestSuiteLogEntry *parent;
 
+// These next come from XCTest's own summarizer and are used to do verify we are getting the same counts
+// as the ones above
 @property (nonatomic, assign) NSTimeInterval reportedTotalTime;
 @property (nonatomic, assign) NSUInteger reportedNumberOfTests;
 @property (nonatomic, assign) NSUInteger reportedNumberOfFailures;
-@property (nonatomic, assign) NSUInteger reportedNumberOfUnexpected;
+@property (nonatomic, assign) NSUInteger reportedNumberOfErrors;
 
 - (void)addChild:(nonnull BPLogEntry *)logEntry;
 - (nullable BPTestCaseLogEntry *)testCaseWithClass:(nonnull NSString *)testCaseClass andName:(nonnull NSString *)testCaseName;

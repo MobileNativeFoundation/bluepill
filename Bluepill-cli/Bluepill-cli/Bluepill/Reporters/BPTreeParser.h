@@ -25,6 +25,8 @@
 // /export/home/tester/hudson/data/workspace/MP_TRUNKDEV_DISTRIBUTED_TEST/voyager-ios_7dee32c1fdb9facfff35737351eeab72cfa90126/Testing/VoyagerIntTestsLib/Shared/VoyagerIntTestCase.swift:172: error: -[VoyagerFeedIndividualPageTests.FeedEmptyFeedVariant1SplashTest testHighlightedDeepLinkEmptyFeedHidden] : The step timed out after 10.00 seconds: Waiting for notification "concurrent_dispatch_queue_finish"
 #define TEST_CASE_FAILED @"(.*):(\\d+): error: -\\[(.*) (.*)\\] : (.*)"
 
+#define UITEST_CASE_FAILED @".*Assertion Failure:([^:]*):(\\d+): (.*) .*"
+
 // fatal error: unexpectedly found nil while unwrapping an Optional value
 #define TEST_CASE_CRASHED @"fatal error: (.*)"
 

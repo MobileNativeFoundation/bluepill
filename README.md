@@ -108,6 +108,14 @@ Bluepill only works with **Xcode 9.2**. If you're looking for old Xcode support,
 
 Bluepill was inspired by [parallel iOS test](https://github.com/plu/parallel_ios_tests) and Facebook’s [xctool](https://github.com/facebook/xctool) and [FBSimulatorControl](https://github.com/facebook/FBSimulatorControl). The Bluepill icon was created by [Maria Iu](https://www.linkedin.com/in/mariaiu/).
 
+## Fastlane Support
+
+If you're using [Fastlane](https://github.com/fastlane/fastlane) to run your tests, you're in luck! You can integrate Bluepill into your project with very little change to your existing setup. Just integrate one of the following Fastlane plugins, and you'll be on your way:
+
+- [Redpill](https://github.com/omniprojects/fastlane-plugin-redpill) - The most up-to-date plugin; it's is maintained by [Omni](https://github.com/omniprojects) and offers a full set of options to hook into Bluepill. As of this writing, Redpill is compiled against Xcode 9.1, and intended for use with [CircleCI](https://circleci.com). It will be updated with newer versions of Xcode when CircleCI supports them.
+- [fastlane-plugin-bluepill](https://github.com/tbrand/fastlane-plugin-bluepill) - Last updated Nov. 7th, offers basic support for working with the Bluepill binary.
+- [Bluepillar](https://github.com/Shashikant86/fastlane-plugin-bluepillar) - Last updated May 29th, it's the original fastlane plugin for working with Bluepill. It was inspired by [this blog post](https://medium.com/@shashikant.jagtap/running-xcuitests-in-parallel-with-fastlane-and-bluepill-370e8ba90958).
+
 ## Q & A
 - Are we able to run Xcode UI Testing bundle with Bluepill
 
@@ -123,7 +131,7 @@ Bluepill was inspired by [parallel iOS test](https://github.com/plu/parallel_ios
 
 - How to get Bluepill binary from source?
 
-  Run `./bluepill.sh build` to test and build Bluepill. The binary will be output in the ./build folder.
+  Run `./scripts/bluepill.sh build` to test and build Bluepill. The binary will be output in the ./build folder.
 
 - How to test my changes to Bluepill?
 

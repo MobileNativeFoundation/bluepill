@@ -9,6 +9,7 @@
 
 #import "BPConfiguration.h"
 #import "BPUtils.h"
+#import "BPVersion.h"
 #import <getopt.h>
 #import <objc/runtime.h>
 #import "BPConstants.h"
@@ -607,6 +608,22 @@ static NSUUID *sessionID;
 
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.xcodePath isDirectory:&isdir] || !isdir) {
         BP_SET_ERROR(err, @"Could not find Xcode at %@", self.xcodePath);
+        return NO;
+    }
+    
+    //Check if xcode version running on the host match the intended Bluepill branch: Xcode 9 branch is not backward compatible
+    NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
+    if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
+        BP_SET_ERROR(err, @"ERROR: Invalid Xcode version:\n%s;\nOnly %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
+        return NO;
+    }
+    
+    //Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
+    //Senario to prevent: Bluepill is compiled with Xcode 8, but runs with host installed with Xcode 9
+    //Only compare major and minor version version Exg. 9.1 == 9.1
+    if (![[[BPUtils getXcodeRuntimeVersion] substringToIndex:3] isEqualToString:[@XCODE_VERSION substringToIndex:3]]) {
+        BP_SET_ERROR(err, @"ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n",
+                     [[[BPUtils getXcodeRuntimeVersion] substringToIndex:3] UTF8String], [[@XCODE_VERSION substringToIndex:3] UTF8String]);
         return NO;
     }
 
