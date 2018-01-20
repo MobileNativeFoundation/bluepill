@@ -85,8 +85,7 @@
 }
 
 - (NSURL *)preferencesFile {
-    return [NSURL fileURLWithPath:@"Library/Preferences/.GlobalPreferences.plist"
-                    relativeToURL:[NSURL fileURLWithPath:self.device.dataPath]];
+    return [NSURL fileURLWithPath:kSimulatorLibraryPath relativeToURL:[NSURL fileURLWithPath:self.device.dataPath]];
 }
 
 - (void)copySimulatorPreferencesFile:(NSString *)newPreferencesFile {

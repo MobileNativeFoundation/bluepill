@@ -603,7 +603,7 @@
     NSURL *preferencesFile = bp.test_simulator.preferencesFile;
 
     NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfURL:preferencesFile];
-    XCTAssert([plist[@"AppleLocale"] isEqual:@"en_CH"]);
+    XCTAssertEqualObjects(@"en_CH", plist[@"AppleLocale"]);
 
     self.config.deleteSimUDID = bp.test_simulatorUDID;
     XCTAssertNotNil(self.config.deleteSimUDID);
