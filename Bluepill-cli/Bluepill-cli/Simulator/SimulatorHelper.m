@@ -63,8 +63,10 @@
                                             config:(BPConfiguration *)config {
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:config.appBundlePath];
     NSString *testSimulatorFrameworkPath = [[hostAppExecPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
-    NSString *dyldLibraryPath = [NSString stringWithFormat:@"%@:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", testSimulatorFrameworkPath, config.xcodePath];
+    NSString *dyldLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath];
     NSMutableDictionary<NSString *, NSString *> *environment = [@{
+//                                                                  @"DYLD_PRINT_ENV": @YES,
+//                                                                  @"DYLD_PRINT_LIBRARIES": @YES,
                                                                   @"DYLD_FALLBACK_FRAMEWORK_PATH" : [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath],
                                                                   @"DYLD_FRAMEWORK_PATH" : dyldLibraryPath,
                                                                   @"DYLD_INSERT_LIBRARIES" : [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/Developer/usr/lib/libXCTTargetBootstrapInject.dylib", config.xcodePath],
@@ -121,13 +123,8 @@
     if (config.testCasesToRun) {
         // According to @khu, we can't just pass the right setTestsToRun and have it work, so what we do instead
         // is get the full list of tests from the XCTest bundle, then skip everything we don't want to run.
-        NSError *error;
 
-        BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
-                                                              andHostAppBundle:testHostPath
-                                                                     withError:&error];
-        NSAssert(xctTestFile != nil, @"Failed to load testcases from %@", [error localizedDescription]);
-        NSMutableSet *testsToSkip = [[NSMutableSet alloc] initWithArray:xctTestFile.allTestCases];
+        NSMutableSet *testsToSkip = [[NSMutableSet alloc] initWithArray:config.allTestCases];
         NSSet *testsToRun = [[NSSet alloc] initWithArray:config.testCasesToRun];
         [testsToSkip minusSet:testsToRun];
         if (xctConfig.testsToSkip) {

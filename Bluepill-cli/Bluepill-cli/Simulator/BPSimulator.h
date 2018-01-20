@@ -52,5 +52,5 @@
 - (BOOL)isFinished;
 - (BOOL)needsRetry;
 - (BPExitStatus)exitStatus;
-- (BOOL)isApplicationStarted;
+- (BOOL)isApplicationLaunched;
 @end

@@ -1,20 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="All tests" tests="3" failures="2" errors="0" time="0.111000">
-    <testsuite tests="3" failures="2" errors="0" time="0.110000" timestamp="2016-11-14T22:21:50GMT-08:00" name="BPAppNegativeTests.xctest">
-        <testsuite tests="3" failures="2" errors="0" time="0.110000" timestamp="2016-11-14T22:21:50GMT-08:00" name="BPAppNegativeTests">
-            <testcase classname="BPAppNegativeTests" name="testAssertFailure" time="0.000000">
-                <failure type="Failure" message="((NO) is true) failed - THIS_TEST_SHOULD_FAIL">
-                    /Users/khu/ios/bluepill/BPSampleApp/BPAppNegativeTests/BPAppNegativeTests.m:38
-                </failure>
+<testsuites name="All tests" tests="3" failures="0" errors="2">
+    <testsuite tests="3" failures="0" errors="2" name="BPAppNegativeTests.xctest">
+        <testsuite tests="3" failures="0" errors="2" name="BPAppNegativeTests">
+            <testcase classname="BPAppNegativeTests" name="testAssertFailure">
+                <error type="Error" message="-[BPAppNegativeTests testAssertFailure] : ((NO) is true) failed - THIS_TEST_SHOULD_FAIL">
+                    /Users/obonilla/o/bluepill/BPSampleApp/BPAppNegativeTests/BPAppNegativeTests.m:40
+                </error>
+                <system-out>
+                    XCTestOutputBarrier/Users/obonilla/o/bluepill/BPSampleApp/BPAppNegativeTests/BPAppNegativeTests.m:40: error: -[BPAppNegativeTests testAssertFailure] : ((NO) is true) failed - THIS_TEST_SHOULD_FAIL
+                </system-out>
             </testcase>
-            <testcase classname="BPAppNegativeTests" name="testAssertTrue" time="0.000000">
+            <testcase classname="BPAppNegativeTests" name="testAssertTrue">
             </testcase>
-            <testcase classname="BPAppNegativeTests" name="testRaiseException" time="0.109000">
-                <failure type="Failure" message="failed: caught &quot;Invalid foo value&quot;, &quot;foo of 1 is invalid&quot;">
-                    /Users/khu/ios/bluepill/BPSampleApp/BPAppNegativeTests/BPAppNegativeTests.m:46
-                </failure>
+            <testcase classname="BPAppNegativeTests" name="testRaiseException">
+                <error type="Error" message="-[BPAppNegativeTests testRaiseException] : failed: caught &quot;Invalid foo value&quot;, &quot;foo of 1 is invalid&quot;">
+                    /Users/obonilla/o/bluepill/BPSampleApp/BPAppNegativeTests/BPAppNegativeTests.m:48
+                </error>
+                <system-out>
+                    XCTestOutputBarrier/Users/obonilla/o/bluepill/BPSampleApp/BPAppNegativeTests/BPAppNegativeTests.m:48: error: -[BPAppNegativeTests testRaiseException] : failed: caught &quot;Invalid foo value&quot;, &quot;foo of 1 is invalid&quot;
+                    (
+                    0   CoreFoundation                      0x0000000103d001ab __exceptionPreprocess + 171
+                    1   libobjc.A.dylib                     0x0000000103395f41 objc_exception_throw + 48
+                    2   CoreFoundation                      0x0000000103d74cb5 +[NSException raise:format:] + 197
+                    3   BPAppNegativeTests                  0x000000011714e967 -[BPAppNegativeTests testRaiseException] + 71
+                    4   CoreFoundation                      0x0000000103c8449c __invoking___ + 140
+                    5   CoreFoundation                      0x0000000103c84370 -[NSInvocation invoke] + 320
+                    6   XCTest                              0x0000000113d65125 __24-[XCTestCase invokeTest]_block_invoke + 591
+                    7   XCTest                              0x0000000113dada52 -[XCUITestContext performInScope:] + 183
+                    8   XCTest                              0x0000000113d64ecb -[XCTestCase invokeTest] + 141
+                    9   XCTest                              0x0000000113d65e8c __26-[XCTestCase performTest:]_block_invoke.369 + 42
+                    10  XCTest                              0x0000000113db27f9 +[XCTContext runInContextForTestCase:block:] + 163
+                    11  XCTest                              0x0000000113d65828 -[XCTestCase performTest:] + 608
+                    12  XCTest                              0x0000000113d6182e __27-[XCTestSuite performTest:]_block_invoke + 363
+                    13  XCTest                              0x0000000113d61195 -[XCTestSuite _performProtectedSectionForTest:testSection:] + 26
+                    14  XCTest                              0x0000000113d61392 -[XCTestSuite performTest:] + 239
+                    15  XCTest                              0x0000000113d6182e __27-[XCTestSuite performTest:]_block_invoke + 363
+                    16  XCTest                              0x0000000113d61195 -[XCTestSuite _performProtectedSectionForTest:testSection:] + 26
+                    17  XCTest                              0x0000000113d61392 -[XCTestSuite performTest:] + 239
+                    18  XCTest                              0x0000000113d6182e __27-[XCTestSuite performTest:]_block_invoke + 363
+                    19  XCTest                              0x0000000113d61195 -[XCTestSuite _performProtectedSectionForTest:testSection:] + 26
+                    20  XCTest                              0x0000000113d61392 -[XCTestSuite performTest:] + 239
+                    21  XCTest                              0x0000000113db9f23 __44-[XCTTestRunSession runTestsAndReturnError:]_block_invoke + 40
+                    22  XCTest                              0x0000000113d74a0e -[XCTestObservationCenter _observeTestExecutionForBlock:] + 475
+                    23  XCTest                              0x0000000113db9dc2 -[XCTTestRunSession runTestsAndReturnError:] + 281
+                    24  XCTest                              0x0000000113d50e87 -[XCTestDriver runTestsAndReturnError:] + 314
+                    25  XCTest                              0x0000000113db1a64 _XCTestMain + 619
+                    26  CoreFoundation                      0x0000000103ca318c __CFRUNLOOP_IS_CALLING_OUT_TO_A_BLOCK__ + 12
+                    27  CoreFoundation                      0x0000000103c8796b __CFRunLoopDoBlocks + 203
+                    28  CoreFoundation                      0x0000000103c87144 __CFRunLoopRun + 1300
+                    29  CoreFoundation                      0x0000000103c869b9 CFRunLoopRunSpecific + 409
+                    30  GraphicsServices                    0x0000000108ccd9c6 GSEventRunModal + 62
+                    31  UIKit                               0x000000010417b5e8 UIApplicationMain + 159
+                    32  BPSampleApp                         0x0000000102cdb95f main + 111
+                    33  libdyld.dylib                       0x000000010768cd81 start + 1
+                    )
+                </system-out>
             </testcase>
         </testsuite>
     </testsuite>
 </testsuites>
-

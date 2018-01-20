@@ -8,8 +8,5 @@ compile:
 
 test:
   override:
-    - ./scripts/bluepill.sh instance_tests1 
-    - ./scripts/bluepill.sh instance_tests2 
-    - ./scripts/bluepill.sh instance_tests3 
-    - ./scripts/bluepill.sh runner_tests 
+    - ./scripts/bluepill.sh test
 

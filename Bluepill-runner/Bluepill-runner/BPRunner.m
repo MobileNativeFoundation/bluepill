@@ -180,11 +180,11 @@ maxprocs(void)
     }
     if (bundles.count < numSims) {
         [BPUtils printInfo:WARNING
-                withString:[NSString stringWithFormat:@"Lowering number of simulators from %lu to %lu because there aren't enough tests.",
-                            numSims, bundles.count]];
+                withString:@"Lowering number of simulators from %lu to %lu because there aren't enough tests.",
+                            numSims, bundles.count];
     }
-    [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Running with %lu simulator%s.",
-                                        (unsigned long)numSims, (numSims > 1) ? "s" : ""]];
+    [BPUtils printInfo:INFO withString:@"Running with %lu simulator%s.",
+     (unsigned long)numSims, (numSims > 1) ? "s" : ""];
     NSArray *copyBundles = [NSMutableArray arrayWithArray:bundles];
     for (int i = 1; i < [self.config.repeatTestsCount integerValue]; i++) {
         [bundles addObjectsFromArray:copyBundles];
@@ -215,7 +215,7 @@ maxprocs(void)
                 exit(0);
             }
             if (interrupted != old_interrupted) {
-                [BPUtils printInfo:WARNING withString:[NSString stringWithFormat:@"Received interrupt (Ctrl-C) %d times, waiting for child processes to finish.", interrupted]];
+                [BPUtils printInfo:WARNING withString:@"Received interrupt (Ctrl-C) %d times, waiting for child processes to finish.", interrupted];
                 old_interrupted = interrupted;
             }
             [self interrupt];
@@ -273,8 +273,15 @@ maxprocs(void)
             }
             [BPUtils printInfo:INFO withString:@"%lu Simulator%s still running. [%@]",
              launchedTasks, launchedTasks == 1 ? "" : "s", listString];
-            [BPUtils printInfo:INFO withString:[NSString stringWithFormat:@"Using %d of %d processes.", numprocs(), maxProcs]];
-
+            [BPUtils printInfo:INFO withString:@"Using %d of %d processes.", numprocs(), maxProcs];
+            if (numprocs() > maxProcs * BP_MAX_PROCESSES_PERCENT) {
+                [BPUtils printInfo:WARNING withString:@"!!!The number of processes is more than  %f percent of maxProcs!!! it may fail with error: Unable to boot device due to insufficient system resources. Please check with system admin to restart this node and for proper mainantance routine", BP_MAX_PROCESSES_PERCENT*100];
+                NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
+                [dateFormatter setDateFormat:@"yyyy-MM-dd_HH-mm-ss"];
+                NSString *psLogFile = [NSString stringWithFormat:@"%@/allProcesses_%@.txt", self.config.outputDirectory, [dateFormatter stringFromDate:[NSDate date]]];
+                [BPUtils printInfo:INFO withString:@"saving 'ps aux' command log to: %@", psLogFile];
+                [BPUtils runShell:[NSString stringWithFormat:@"/bin/ps aux >> %@", psLogFile]];
+            }
         }
         seconds += 1;
     }
@@ -323,7 +330,7 @@ maxprocs(void)
     NSError *error;
     NSString *idStr = [NSString stringWithContentsOfFile:tempFilePath encoding:NSUTF8StringEncoding error:&error];
     if (!idStr) {
-        [BPUtils printInfo:ERROR withString:@"ERROR: Failed to read the device ID file %@ with error:", tempFilePath, [error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"ERROR: Failed to read the device ID file %@ with error: %@", tempFilePath, [error localizedDescription]];
     }
     return idStr;
 }

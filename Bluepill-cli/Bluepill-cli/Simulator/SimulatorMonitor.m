@@ -28,8 +28,8 @@
 @property (nonatomic, assign) NSUInteger failureCount;
 @property (nonatomic, assign) BOOL testsBegan;
 @property (nonatomic, strong) BPConfiguration *config;
-@property (nonatomic, strong) NSMutableArray *executedTests;
-@property (nonatomic, strong) NSMutableArray *failedTestCases;
+@property (nonatomic, strong) NSMutableSet *executedTests;
+@property (nonatomic, strong) NSMutableSet *failedTestCases;
 
 @end
 
@@ -41,7 +41,9 @@
         self.config = config;
         self.maxTimeWithNoOutput = [config.stuckTimeout integerValue];
         self.maxTestExecutionTime = [config.testCaseTimeout integerValue];
-        self.simulatorState = Idle;
+        self.appState = Idle;
+        self.parserState = Idle;
+        self.testsState = Idle;
         self.exitStatus = 0;
     }
     return self;
@@ -52,7 +54,7 @@
 }
 
 - (void)onAllTestsBegan {
-    self.simulatorState = Running;
+    self.testsState = Running;
     // Don't overwrite the original start time on secondary attempts
     if ([BPStats sharedStats].cleanRun) {
         [BPStats sharedStats].cleanRun = NO;
@@ -62,7 +64,7 @@
 }
 
 - (void)onAllTestsEnded {
-    self.simulatorState = Completed;
+    self.testsState = Completed;
 
     if (self.failureCount) {
         self.exitStatus = BPExitStatusTestsFailed;
@@ -77,14 +79,14 @@
     [[BPStats sharedStats] startTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
     self.lastTestCaseStartDate = [NSDate date];
 
-    self.simulatorState = TestsStarted;
+    self.testsState = Running;
 
     self.currentTestName = testName;
     self.currentClassName = testClass;
 
     __weak typeof(self) __self = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.maxTestExecutionTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if ([__self.currentTestName isEqualToString:testName] && [__self.currentClassName isEqualToString:testClass] && __self.simulatorState == TestsStarted) {
+        if ([__self.currentTestName isEqualToString:testName] && [__self.currentClassName isEqualToString:testClass] && __self.testsState == Running) {
             [BPUtils printInfo:TIMEOUT withString:@"%10.6fs %@/%@", __self.maxTestExecutionTime, testClass, testName];
             [__self stopTestsWithErrorMessage:@"Test took too long to execute and was aborted." forTestName:testName inClass:testClass];
             __self.exitStatus = BPExitStatusTestTimeout;
@@ -129,7 +131,7 @@
     }
 
     if (self.failedTestCases == nil) {
-        self.failedTestCases = [[NSMutableArray alloc] init];
+        self.failedTestCases = [[NSMutableSet alloc] init];
     }
 
     [self.failedTestCases addObject:fullTestName];
@@ -154,9 +156,9 @@
     self.currentTestName = nil;
     self.currentClassName = nil;
     [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
-    [[BPStats sharedStats] addTestFailure];
+    [[BPStats sharedStats] addTestError];
     if (wasException) {
-        [[BPStats sharedStats] addTestError];
+        [[BPStats sharedStats] addTestFailure];
     }
 }
 
@@ -166,15 +168,15 @@
         return;
     }
     if (self.executedTests == nil) {
-        self.executedTests = [[NSMutableArray alloc] init];
+        self.executedTests = [[NSMutableSet alloc] init];
     }
     [self.executedTests addObject:[testClass stringByAppendingFormat:@"/%@", testName]];
-    if (self.config.testCasesToSkip == nil) {
-        self.config.testCasesToSkip = @[];
-    }
-    // If we crash, on the re-execution, we'll have a new list of tests to skip because we already ran these to completion.
 
-    self.config.testCasesToSkip = [self.config.testCasesToSkip arrayByAddingObjectsFromArray:self.executedTests];
+    // If we crash, on the re-execution, we'll have a new list of tests to skip because we already ran these to completion.
+    NSSet *testsToSkip = [[NSSet alloc] initWithArray:self.config.testCasesToSkip ?: @[]];
+    
+    self.config.testCasesToSkip = [[testsToSkip setByAddingObjectsFromSet:self.executedTests] allObjects];
+
 }
 
 - (void)onTestSuiteBegan:(NSString *)testSuiteName onDate:(NSDate *)startDate isRoot:(BOOL)isRoot {
@@ -182,12 +184,6 @@
 }
 
 - (void)onTestSuiteEnded:(NSString *)testSuiteName
-                fromDate:(NSDate *)startDate
-                  toDate:(NSDate *)endDate
-                  passed:(BOOL)wholeSuitePassed
-               withTotal:(NSUInteger)totalTestCount
-                  failed:(NSUInteger)failedCount
-              unexpected:(NSUInteger)unexpectedFailures
                   isRoot:(BOOL)isRoot {
     [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_SUITE_FORMAT, isRoot ? 1 : [BPStats sharedStats].attemptNumber, testSuiteName]];
 }
@@ -195,8 +191,9 @@
 - (void)onOutputReceived:(NSString *)output {
     NSDate *currentTime = [NSDate date];
 
-    if (self.simulatorState == Idle) {
-        self.simulatorState = AppLaunched;
+    assert(self.parserState != Completed);
+    if (self.parserState == Idle) {
+        self.parserState = Running;
     }
 
     self.currentOutputId++; // Increment the Output ID for this instance since we've moved on to the next bit of output
@@ -205,22 +202,30 @@
     __weak typeof(self) __self = self;
 
     // App crashed
-    if ([output isEqualToString:@"BP_APP_PROC_ENDED"] && __self.simulatorState == TestsStarted) {
-        [BPUtils printInfo:CRASH withString:@"%@/%@ crashed app.",
-                                             (self.currentClassName ?: self.previousClassName),
-                                             (self.currentTestName ?: self.previousTestName)];
-        [self stopTestsWithErrorMessage:@"App Crashed"
-                              forTestName:(self.currentTestName ?: self.previousTestName)
-                                  inClass:(self.currentClassName ?: self.previousClassName)];
-        self.exitStatus = BPExitStatusAppCrashed;
-        [[BPStats sharedStats] addApplicationCrash];
+    if ([output isEqualToString:@"BP_APP_PROC_ENDED"]) {
+        __self.parserState = Completed;
+        if (__self.testsState == Running || __self.testsState == Idle) {
+            if (__self.testsState == Running) {
+                [BPUtils printInfo:CRASH withString:@"%@/%@ crashed app.",
+                 (self.currentClassName ?: self.previousClassName),
+                 (self.currentTestName ?: self.previousTestName)];
+            } else {
+                assert(__self.testsState == Idle);
+                [BPUtils printInfo:CRASH withString:@"App crashed before tests started."];
+            }
+            [self stopTestsWithErrorMessage:@"App Crashed"
+                                forTestName:(self.currentTestName ?: self.previousTestName)
+                                    inClass:(self.currentClassName ?: self.previousClassName)];
+            self.exitStatus = BPExitStatusAppCrashed;
+            [[BPStats sharedStats] addApplicationCrash];
+        }
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(__self.maxTimeWithNoOutput * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (__self.currentOutputId == previousOutputId && (__self.simulatorState >= AppLaunched && __self.simulatorState != Completed)) {
+        if (__self.currentOutputId == previousOutputId && (__self.appState == Running)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
             NSString *testName = (__self.currentTestName ?: __self.previousTestName);
             BOOL testsReallyStarted = [self didTestsStart];
-            if (testClass == nil && testName == nil && (__self.simulatorState < TestsStarted)) {
+            if (testClass == nil && testName == nil && (__self.appState == Running)) {
                 testsReallyStarted = false;
                 [BPUtils printInfo:ERROR withString:@"It appears that tests have not yet started. The test app has frozen prior to the first test."];
             } else {
@@ -230,7 +235,7 @@
             }
             // Set exit status before stopping the tests because stopping the tests will set the SimulatorState to Completed
             __self.exitStatus = testsReallyStarted ? BPExitStatusTestTimeout : BPExitStatusSimulatorCrashed;
-            [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aboorted."
+            [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aborted."
                                   forTestName:testName
                                       inClass:testClass];
             [[BPStats sharedStats] addTestOutputTimeout];
@@ -245,7 +250,7 @@
     if (!self.config.onlyRetryFailed) {
         [self updateExecutedTestCaseList:testName inClass:testClass];
     }
-    if (![[self.device stateString] isEqualToString:@"Shutdown"] && !self.config.testing_NoAppWillRun) {
+    if (self.appState == Running && !self.config.testing_NoAppWillRun) {
         [BPUtils printInfo:ERROR withString:@"Will kill the process with appPID: %d", self.appPID];
         NSAssert(self.appPID > 0, @"Failed to find a valid PID");
         NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
@@ -259,20 +264,20 @@
         }
     }
 
-    self.simulatorState = Completed;
+    self.testsState = Completed;
     [self.callback onTestAbortedWithName:testName inClass:testClass errorMessage:message];
 }
 
 - (BOOL)isExecutionComplete {
-    return (self.simulatorState == Completed);
+    return (self.parserState == Completed && self.testsState == Completed && self.appState == Completed);
 }
 
-- (BOOL)isApplicationStarted {
-    return (self.simulatorState != Idle);
+- (BOOL)isApplicationLaunched {
+    return (self.appState == Running);
 }
 
 - (BOOL)didTestsStart {
-    return (self.simulatorState >= Running);
+    return (self.testsState == Running);
 }
 
 - (void)saveScreenshotForFailedTestWithName:(NSString *)testName inClass:(NSString *)testClass {
