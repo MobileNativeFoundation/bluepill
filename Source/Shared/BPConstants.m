@@ -9,7 +9,16 @@
 
 #import "BPConstants.h"
 
+NSString * const kCFBundleIdentifier = @"CFBundleIdentifier";
+NSString * const kOptionsArgumentsKey = @"arguments";
+NSString * const kOptionsEnvironmentKey = @"environment";
+NSString * const kOptionsStderrKey = @"stderr";
+NSString * const kOptionsStdoutKey = @"stdout";
+NSString * const kOptionsWaitForDebuggerKey = @"wait_for_debugger";
+NSString * const kSimulatorLibraryPath = @"Library/Preferences/.GlobalPreferences.plist";
+
 NSString * const BPErrorDomain = @"org.linkedin.bluepill.ErrorDomain";
+
 NSString * const XCODE_BUILT_PRODUCTS_DIR = @"BUILT_PRODUCTS_DIR";
 NSString * const XCODE_EFFECTIVE_PLATFORM_NAME = @"EFFECTIVE_PLATFORM_NAME";
 NSString * const XCODE_FULL_PRODUCT_NAME = @"FULL_PRODUCT_NAME";

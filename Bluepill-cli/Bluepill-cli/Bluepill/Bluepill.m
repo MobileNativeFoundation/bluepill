@@ -748,6 +748,10 @@ void onInterrupt(int ignore) {
     return self.context.runner.UDID;
 }
 
+- (BPSimulator *)test_simulator {
+    return self.context.runner;
+}
+
 int __line;
 NSString *__function;
 NSString *__from;
