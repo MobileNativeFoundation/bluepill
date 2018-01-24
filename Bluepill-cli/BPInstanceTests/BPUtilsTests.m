@@ -100,4 +100,14 @@
     XCTAssertFalse([[NSSet setWithArray:normalizedConfig.testCasesToRun] isEqualToSet:testCasesNotToRun]);
 }
 
+- (void) testTrailingParanthesesInTestNames {
+    NSMutableSet *testCasesWithParantheses = [NSMutableSet new];
+    for (NSString *testCase in self.xcTestFile.allTestCases) {
+        if ([testCase containsString:@"("] || [testCase containsString:@")"]) {
+            [testCasesWithParantheses addObject:testCase];
+        }
+    }
+    XCTAssert([testCasesWithParantheses count] == 0);
+}
+
 @end
