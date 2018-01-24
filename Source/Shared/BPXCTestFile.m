@@ -69,7 +69,11 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
             [allClasses addObject:testClass];
         }
         if (![parts[2] containsString:@"DISABLE"]) {
-            [testClass addTestCase:[[BPTestCase alloc] initWithName:parts[2]]];
+            NSString *trimmedTestName = [BPUtils trimTrailingParanthesesFromTestName:parts[2]];
+            if (trimmedTestName == nil) {
+                continue;
+            }
+            [testClass addTestCase:[[BPTestCase alloc] initWithName:trimmedTestName]];
         }
     }
     if (pclose(p) == -1) {

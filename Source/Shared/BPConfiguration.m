@@ -439,11 +439,21 @@ static NSUUID *sessionID;
         id value = [configDict objectForKey:key];
         for (int i = 0; BPOptions[i].name; i++) {
             if (!strcmp([key UTF8String], BPOptions[i].name)) {
-
                 if (BPOptions[i].kind & BP_LIST && ![value isKindOfClass:[NSArray class]]) {
                     BP_SET_ERROR(error, @"Expected type %@ for key '%@', got %@. Parsing failed.",
                                           [NSArray className], key, [value className]);
                     return NO;
+                }
+                if (BPOptions[i].kind & BP_LIST && [value isKindOfClass:[NSArray class]] && (strcmp(@"include".UTF8String, BPOptions[i].name) || strcmp(@"exclude".UTF8String, BPOptions[i].name))) {
+                    NSMutableArray *testCases = [NSMutableArray new];
+                    for (NSString *testCase in value) {
+                        NSString *trimmedTestName = [BPUtils trimTrailingParanthesesFromTestName:testCase];
+                        if (trimmedTestName == nil) {
+                            continue;
+                        }
+                        [testCases addObject:trimmedTestName];
+                    }
+                    value = [NSArray arrayWithArray:testCases];
                 }
                 if (BPOptions[i].kind & BP_PATH) {
                     NSString *currentPath = [[NSFileManager defaultManager] currentDirectoryPath];
