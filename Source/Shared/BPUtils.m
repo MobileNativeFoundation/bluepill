@@ -265,4 +265,17 @@ static BOOL quiet = NO;
   [BPUtils runShell:cmd];
 }
 
++ (NSString *)trimTrailingParanthesesFromTestName:(NSString *)testName {
+    // Recently, the extracted symbols from Swift apps began having parenthesis at the end.
+    // Extracting just the name of the test by reading up to the occurrence of the first open brace.
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[^\(]+"
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:nil];
+    NSArray<NSTextCheckingResult *> *regexMatches = [regex matchesInString:testName options:NSMatchingWithoutAnchoringBounds range:NSMakeRange(0, [testName length])];
+    if (regexMatches.count == 0) {
+        return nil;
+    }
+    return [testName substringWithRange:regexMatches.firstObject.range];
+}
+
 @end

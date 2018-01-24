@@ -57,6 +57,15 @@
     XCTAssert([config.schemePath isEqualToString:@"/Users/khu/ios/dev/voyager-ios_trunk/Voyager.xcodeproj/xcshareddata/xcschemes/VoyagerScenarioTests4.xcscheme"]);
     XCTAssertEqual(config.headlessMode, NO);
     XCTAssert([config.outputDirectory isEqualToString:@"/Users/khu/tmp/simulator"]);
+
+    XCTAssert([config.testCasesToRun count] == 3);
+    XCTAssert([config.testCasesToRun containsObject:@"FeedControlMenuActionsShareViaTests/testShareViaOnArticleShareUpdate"]);
+    XCTAssert([config.testCasesToRun containsObject:@"FeedLoadMoreCommentsTrackingTest/testLoadMoreCommentsInFeedDetail"]);
+    XCTAssert([config.testCasesToRun containsObject:@"FeedSponsoredDownVariantTrackingTest/testTapOnCompanyPictureInDetail"]);
+
+    XCTAssert([config.testCasesToSkip count] == 2);
+    XCTAssert([config.testCasesToSkip containsObject:@"FeedShareActorActionTrackingTest/testShareActorDescriptionTrackingInFeedDetail"]);
+    XCTAssert([config.testCasesToSkip containsObject:@"FeedAnnotationActionTrackingTest/testMentionAnnotationTrackingInFeedDetail"]);
 }
 
 - (void)testConfigFileWithRelativePathLoading {

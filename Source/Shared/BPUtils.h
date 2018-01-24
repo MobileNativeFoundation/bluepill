@@ -140,4 +140,10 @@ typedef BOOL (^BPRunBlock)(void);
  */
 + (void)saveDebuggingDiagnostics:(NSString *)outputDirectory;
 
+/*!
+ * @discussion removing trailing parantheses from test names from the extracted symbols
+ * @param testName the name of the test to trim
+ * @return trimmed test name
+ */
++ (NSString *)trimTrailingParanthesesFromTestName:(NSString *)testName;
 @end
