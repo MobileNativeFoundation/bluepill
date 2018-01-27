@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, BPExitStatus) {
     BPExitStatusSimulatorDeleted = 9,
     BPExitStatusUninstallAppFailed = 10,
     BPExitStatusSimulatorReuseFailed = 11,
+    BPExitStatusAppHangsBeforeTestStart = 12,
 };
 
 // TODO: I think we whould rip out the BPExitStatusProtocol thingy

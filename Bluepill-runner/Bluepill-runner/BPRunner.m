@@ -210,7 +210,7 @@ maxprocs(void)
     }
     while (1) {
         if (interrupted) {
-            if (interrupted >=5) {
+            if (interrupted >=2) {
                 [BPUtils printInfo:ERROR withString:@"You really want to terminate, OK!"];
                 exit(0);
             }

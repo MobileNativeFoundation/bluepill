@@ -131,7 +131,7 @@ void onInterrupt(int ignore) {
     // There were test failures. If our failure tolerance is 0, then we're good with that.
     if (self.failureTolerance == 0) {
         // If there is no more retries, set the final exitCode to current context's exitCode
-        self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+        self.finalExitStatus = self.context.exitStatus;
         self.exitLoop = YES;
         return;
     }
@@ -141,6 +141,7 @@ void onInterrupt(int ignore) {
     // If we're not retrying only failed tests, we need to get rid of our saved tests, so that we re-execute everything. Recopy config.
     if (self.executionConfigCopy.onlyRetryFailed == NO) {
         self.executionConfigCopy = [self.config copy];
+        [BPUtils printInfo:WARNING withString:@"onlyRetryFailed is set to NO!"];
     }
 
     // First increment the retry count
@@ -165,7 +166,7 @@ void onInterrupt(int ignore) {
 - (void)recover {
   // If error retry reach to the max, then return
   if (self.retries == [self.config.errorRetriesCount integerValue]) {
-      self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+      self.finalExitStatus = self.context.exitStatus;
       self.exitLoop = YES;
       [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
       return;
@@ -192,7 +193,7 @@ void onInterrupt(int ignore) {
 // Proceed to next test case
 - (void)proceed {
     if (self.retries == [self.config.errorRetriesCount integerValue]) {
-        self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+        self.finalExitStatus = self.context.exitStatus;
         self.exitLoop = YES;
         [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
         return;
@@ -231,14 +232,14 @@ void onInterrupt(int ignore) {
 
     NSString *simulatorLogPath;
     if (context.config.outputDirectory) {
-        simulatorLogPath = [context.config.outputDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%lu-simulator.log", context.attemptNumber]];
+        simulatorLogPath = [context.config.outputDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"attempt_%lu-simulator.log", context.attemptNumber]];
     } else {
         NSError *err;
         NSString *tmpFileName = [BPUtils mkstemp:[NSString stringWithFormat:@"%@/%lu-bp-stdout-%u", NSTemporaryDirectory(), context.attemptNumber, getpid()]
                                        withError:&err];
         simulatorLogPath = tmpFileName;
         if (!tmpFileName) {
-            simulatorLogPath = [NSString stringWithFormat:@"/tmp/%lu-simulator.log", context.attemptNumber];
+            simulatorLogPath = [NSString stringWithFormat:@"/tmp/attempt_%lu-simulator.log", context.attemptNumber];
             [BPUtils printInfo:ERROR withString:@"ERROR: %@\nLeaving log in %@", [err localizedDescription], simulatorLogPath];
         }
     }
@@ -665,18 +666,10 @@ void onInterrupt(int ignore) {
  */
 - (void)finishWithContext:(BPExecutionContext *)context {
 
-    // Because BPExitStatusTestsAllPassed is 0, we must check it explicitly against
-    // the run rather than the aggregate bitmask built with finalExitStatus
-
-    if (![self hasRemainingTestsInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
-        self.finalExitStatus = context.exitStatus;
-        self.exitLoop = YES;
-        return;
-    }
-
     switch (context.exitStatus) {
         // BP exit handler
         case BPExitStatusInterrupted:
+            self.finalExitStatus = self.context.exitStatus;
             self.exitLoop = YES;
             return;
 
@@ -684,27 +677,23 @@ void onInterrupt(int ignore) {
 
         // If there is no test crash/time out, we retry from scratch
         case BPExitStatusTestsFailed:
+        // Do not toggle self.finalExitStatus here as retry may pass
             NEXT([self retry]);
             return;
 
         case BPExitStatusTestsAllPassed:
-            // Check previous result
-            if (context.finalExitStatus != BPExitStatusTestsAllPassed) {
-                // If there is a test crashed/timed out before, retry from scratch
-                NEXT([self retry]);
-            } else {
-                // If it is a real all pass, exit
-                self.exitLoop = YES;
-                return;
-            }
+            // capture the failure if any stored in self.context.finalExitStatus
+            self.finalExitStatus = self.context.finalExitStatus;
+            self.exitLoop = YES;
             return;
-
         // Recover from scratch if there is tooling failure.
         case BPExitStatusSimulatorCreationFailed:
         case BPExitStatusSimulatorCrashed:
         case BPExitStatusInstallAppFailed:
         case BPExitStatusUninstallAppFailed:
         case BPExitStatusLaunchAppFailed:
+        case BPExitStatusAppHangsBeforeTestStart:
+        // context.exitStatus is not passed to finalExitStatus, because if recover succeeds, we should still consider exit with test all pass if no other failure happens
             NEXT([self recover]);
             return;
 

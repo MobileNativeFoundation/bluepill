@@ -38,6 +38,8 @@
             return @"BPExitStatusSimulatorDeleted";
         case BPExitStatusSimulatorReuseFailed:
             return @"BPExitStatusSimulatorReuseFailed";
+        case BPExitStatusAppHangsBeforeTestStart:
+            return @"BPExitStatusAppHangsBeforeTestStart";
         default:
             return @"UNKNOWN_BPEXITSTATUS";
     }
