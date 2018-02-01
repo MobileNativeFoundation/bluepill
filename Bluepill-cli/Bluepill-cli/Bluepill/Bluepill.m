@@ -131,7 +131,11 @@ void onInterrupt(int ignore) {
     // There were test failures. If our failure tolerance is 0, then we're good with that.
     if (self.failureTolerance == 0) {
         // If there is no more retries, set the final exitCode to current context's exitCode
-        self.finalExitStatus = self.context.exitStatus;
+        if (self.context.exitStatus != BPExitStatusTestsAllPassed) {
+            self.finalExitStatus = self.context.exitStatus;
+        } else {
+            self.finalExitStatus = self.context.finalExitStatus;
+        }
         self.exitLoop = YES;
         return;
     }
@@ -166,8 +170,11 @@ void onInterrupt(int ignore) {
 - (void)recover {
   // If error retry reach to the max, then return
   if (self.retries == [self.config.errorRetriesCount integerValue]) {
-      self.finalExitStatus = self.context.exitStatus;
-      self.exitLoop = YES;
+      if (self.context.exitStatus != BPExitStatusTestsAllPassed) {
+          self.finalExitStatus = self.context.exitStatus;
+      } else {
+          self.finalExitStatus = self.context.finalExitStatus;
+      }      self.exitLoop = YES;
       [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
       return;
   }
@@ -193,8 +200,11 @@ void onInterrupt(int ignore) {
 // Proceed to next test case
 - (void)proceed {
     if (self.retries == [self.config.errorRetriesCount integerValue]) {
-        self.finalExitStatus = self.context.exitStatus;
-        self.exitLoop = YES;
+        if (self.context.exitStatus != BPExitStatusTestsAllPassed) {
+            self.finalExitStatus = self.context.exitStatus;
+        } else {
+            self.finalExitStatus = self.context.finalExitStatus;
+        }        self.exitLoop = YES;
         [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
         return;
     }
@@ -666,10 +676,18 @@ void onInterrupt(int ignore) {
  */
 - (void)finishWithContext:(BPExecutionContext *)context {
 
+    // Because BPExitStatusTestsAllPassed is 0, we must check it explicitly against
+    // the run rather than the aggregate bitmask built with finalExitStatus
+
+    if (![self hasRemainingTestsInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
+        self.finalExitStatus = context.exitStatus;
+        self.exitLoop = YES;
+        return;
+    }
+
     switch (context.exitStatus) {
         // BP exit handler
         case BPExitStatusInterrupted:
-            self.finalExitStatus = self.context.exitStatus;
             self.exitLoop = YES;
             return;
 
@@ -677,14 +695,19 @@ void onInterrupt(int ignore) {
 
         // If there is no test crash/time out, we retry from scratch
         case BPExitStatusTestsFailed:
-        // Do not toggle self.finalExitStatus here as retry may pass
             NEXT([self retry]);
             return;
 
         case BPExitStatusTestsAllPassed:
-            // capture the failure if any stored in self.context.finalExitStatus
-            self.finalExitStatus = self.context.finalExitStatus;
-            self.exitLoop = YES;
+            // Check previous result
+            if (context.finalExitStatus != BPExitStatusTestsAllPassed) {
+                // If there is a test crashed/timed out before, retry from scratch
+                NEXT([self retry]);
+            } else {
+                // If it is a real all pass, exit
+                self.exitLoop = YES;
+                return;
+            }
             return;
         // Recover from scratch if there is tooling failure.
         case BPExitStatusSimulatorCreationFailed:
