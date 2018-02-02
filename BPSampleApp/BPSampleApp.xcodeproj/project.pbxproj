@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B3878B1A20251E6000511055 /* BPSampleAppTestTimeout.m in Sources */ = {isa = PBXBuildFile; fileRef = B3878B0720250E7500511055 /* BPSampleAppTestTimeout.m */; };
 		BA4BCFC91DC47EC800592FA4 /* BPSampleAppHangingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4BCFC81DC47EC800592FA4 /* BPSampleAppHangingTests.m */; };
 		BA9C2DD51DD7F182007CB967 /* BPSampleAppFatalErrorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9C2DD41DD7F182007CB967 /* BPSampleAppFatalErrorTests.m */; };
 		BA9C2DDE1DD7F7D9007CB967 /* BPSampleAppSwiftFatalErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C2DDD1DD7F7D9007CB967 /* BPSampleAppSwiftFatalErrorTests.swift */; };
@@ -24,6 +25,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		B3878B1020251DF000511055 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BAB24F261DB5D45E00867756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BAB24F2D1DB5D45E00867756;
+			remoteInfo = BPSampleApp;
+		};
 		BA4BCFCB1DC47EC800592FA4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BAB24F261DB5D45E00867756 /* Project object */;
@@ -69,6 +77,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B3878B0720250E7500511055 /* BPSampleAppTestTimeout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppTestTimeout.m; sourceTree = "<group>"; };
+		B3878B0C20251DC800511055 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B3878B1820251DF000511055 /* BPSampleAppTestTimeoutTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppTestTimeoutTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA4BCFC61DC47EC700592FA4 /* BPSampleAppHangingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppHangingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA4BCFC81DC47EC800592FA4 /* BPSampleAppHangingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppHangingTests.m; sourceTree = "<group>"; };
 		BA4BCFCA1DC47EC800592FA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -104,6 +115,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B3878B1320251DF000511055 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BA4BCFC31DC47EC700592FA4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -156,6 +174,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B3878AF42024DE8F00511055 /* BPSampleAppTestTimeoutTests */ = {
+			isa = PBXGroup;
+			children = (
+				B3878B0720250E7500511055 /* BPSampleAppTestTimeout.m */,
+				B3878B0C20251DC800511055 /* Info.plist */,
+			);
+			path = BPSampleAppTestTimeoutTests;
+			sourceTree = "<group>";
+		};
 		BA4BCFC71DC47EC800592FA4 /* BPSampleAppHangingTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -196,6 +223,7 @@
 				BAA4DA381DC3C02B00A58BCC /* BPSampleAppCrashingTests */,
 				BA4BCFC71DC47EC800592FA4 /* BPSampleAppHangingTests */,
 				BA9C2DD31DD7F182007CB967 /* BPSampleAppFatalErrorTests */,
+				B3878AF42024DE8F00511055 /* BPSampleAppTestTimeoutTests */,
 				BAFCCA5E1E36DC2000E33C31 /* BPSampleAppUITests */,
 				BAB24F2F1DB5D45E00867756 /* Products */,
 			);
@@ -211,6 +239,7 @@
 				BA4BCFC61DC47EC700592FA4 /* BPSampleAppHangingTests.xctest */,
 				BA9C2DD21DD7F182007CB967 /* BPSampleAppFatalErrorTests.xctest */,
 				BAFCCA5D1E36DC2000E33C31 /* BPSampleAppUITests.xctest */,
+				B3878B1820251DF000511055 /* BPSampleAppTestTimeoutTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -269,6 +298,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B3878B0E20251DF000511055 /* BPSampleAppTestTimeoutTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B3878B1520251DF000511055 /* Build configuration list for PBXNativeTarget "BPSampleAppTestTimeoutTests" */;
+			buildPhases = (
+				B3878B1120251DF000511055 /* Sources */,
+				B3878B1320251DF000511055 /* Frameworks */,
+				B3878B1420251DF000511055 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B3878B0F20251DF000511055 /* PBXTargetDependency */,
+			);
+			name = BPSampleAppTestTimeoutTests;
+			productName = BPSampleAppHangingTests;
+			productReference = B3878B1820251DF000511055 /* BPSampleAppTestTimeoutTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		BA4BCFC51DC47EC700592FA4 /* BPSampleAppHangingTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BA4BCFCF1DC47EC800592FA4 /* Build configuration list for PBXNativeTarget "BPSampleAppHangingTests" */;
@@ -403,6 +450,9 @@
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = LinkedIn;
 				TargetAttributes = {
+					B3878B0E20251DF000511055 = {
+						DevelopmentTeam = 57Y47U492U;
+					};
 					BA4BCFC51DC47EC700592FA4 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 57Y47U492U;
@@ -466,11 +516,19 @@
 				BA4BCFC51DC47EC700592FA4 /* BPSampleAppHangingTests */,
 				BA9C2DD11DD7F182007CB967 /* BPSampleAppFatalErrorTests */,
 				BAFCCA5C1E36DC2000E33C31 /* BPSampleAppUITests */,
+				B3878B0E20251DF000511055 /* BPSampleAppTestTimeoutTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B3878B1420251DF000511055 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BA4BCFC41DC47EC700592FA4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -526,6 +584,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B3878B1120251DF000511055 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3878B1A20251E6000511055 /* BPSampleAppTestTimeout.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BA4BCFC21DC47EC700592FA4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -589,6 +655,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		B3878B0F20251DF000511055 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BAB24F2D1DB5D45E00867756 /* BPSampleApp */;
+			targetProxy = B3878B1020251DF000511055 /* PBXContainerItemProxy */;
+		};
 		BA4BCFCC1DC47EC800592FA4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BAB24F2D1DB5D45E00867756 /* BPSampleApp */;
@@ -641,6 +712,32 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		B3878B1620251DF000511055 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				INFOPLIST_FILE = BPSampleAppTestTimeoutTests/info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTestTimeoutTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
+			};
+			name = Debug;
+		};
+		B3878B1720251DF000511055 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				INFOPLIST_FILE = BPSampleAppTestTimeoutTests/info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTestTimeoutTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
+			};
+			name = Release;
+		};
 		BA4BCFCD1DC47EC800592FA4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -938,6 +1035,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B3878B1520251DF000511055 /* Build configuration list for PBXNativeTarget "BPSampleAppTestTimeoutTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B3878B1620251DF000511055 /* Debug */,
+				B3878B1720251DF000511055 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BA4BCFCF1DC47EC800592FA4 /* Build configuration list for PBXNativeTarget "BPSampleAppHangingTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

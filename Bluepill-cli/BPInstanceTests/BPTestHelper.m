@@ -39,6 +39,10 @@
     return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppHangingTests.xctest"];
 }
 
++ (NSString *)sampleAppTestTimeoutTests {
+    return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppTestTimeoutTests.xctest"];
+}
+
 + (NSString *)sampleAppFatalTestsBundlePath {
     return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppFatalErrorTests.xctest"];
 }

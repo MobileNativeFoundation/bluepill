@@ -29,6 +29,9 @@
 // Return the path to the sample app's xctest with crashing tests.
 + (NSString *)sampleAppHangingTestsBundlePath;
 
+// Return the path to the sample app's xctest with testcase timeout tests.
++ (NSString *)sampleAppTestTimeoutTests;
+
 // Return the path to the sample app's xctest with crashing tests.
 + (NSString *)sampleAppFatalTestsBundlePath;
 

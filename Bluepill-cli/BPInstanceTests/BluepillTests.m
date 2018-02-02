@@ -104,6 +104,20 @@
     XCTAssert(exitCode == BPExitStatusAppHangsBeforeTestStart);
 }
 
+- (void)testTestcaseTimeout {
+    [BPUtils enableDebugOutput:YES];
+    NSString *testBundlePath = [BPTestHelper sampleAppTestTimeoutTests];
+    self.config.testBundlePath = testBundlePath;
+    self.config.stuckTimeout = @8;
+    self.config.testCaseTimeout = @15;
+    self.config.failureTolerance = @2;
+    self.config.errorRetriesCount = @3;
+    self.config.onlyRetryFailed = YES;
+    BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode == BPExitStatusTestTimeout);
+}
+
+
 - (void)testRecoverSimulatorOnAppHangsBeforeTestStart {
     NSString *tempDir = NSTemporaryDirectory();
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/RecoverSimulatorOnCrash", tempDir] withError:nil];

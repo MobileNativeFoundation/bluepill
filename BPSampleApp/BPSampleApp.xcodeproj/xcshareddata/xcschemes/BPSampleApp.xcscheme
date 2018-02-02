@@ -104,6 +104,20 @@
                ReferencedContainer = "container:BPSampleApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B3878B0E20251DF000511055"
+               BuildableName = "BPSampleAppTestTimeoutTests.xctest"
+               BlueprintName = "BPSampleAppTestTimeoutTests"
+               ReferencedContainer = "container:BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -193,6 +207,16 @@
                BlueprintIdentifier = "BAFCCA5C1E36DC2000E33C31"
                BuildableName = "BPSampleAppUITests.xctest"
                BlueprintName = "BPSampleAppUITests"
+               ReferencedContainer = "container:BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B3878B0E20251DF000511055"
+               BuildableName = "BPSampleAppTestTimeoutTests.xctest"
+               BlueprintName = "BPSampleAppTestTimeoutTests"
                ReferencedContainer = "container:BPSampleApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
