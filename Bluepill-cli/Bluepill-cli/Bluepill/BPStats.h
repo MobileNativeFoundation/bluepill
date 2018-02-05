@@ -14,11 +14,10 @@
 #define INSTALL_APPLICATION(x)   [NSString stringWithFormat:@"[Attempt %lu] Install Application", (x)]
 #define UNINSTALL_APPLICATION(x) [NSString stringWithFormat:@"[Attempt %lu] Uninstall Application", (x)]
 #define LAUNCH_APPLICATION(x)    [NSString stringWithFormat:@"[Attempt %lu] Launch Application", (x)]
-#define RUN_TESTS(x)             [NSString stringWithFormat:@"[Attempt %lu] Run Tests", (x)]
+#define TOTAL_TEST_TIME(x)             [NSString stringWithFormat:@"[Attempt %lu] Total Test Time(including clean-up after test)", (x)]
 #define DELETE_SIMULATOR(x)      [NSString stringWithFormat:@"[Attempt %lu] Delete Simulator", (x)]
 #define DELETE_SIMULATOR_CB(x)   [NSString stringWithFormat:@"[Attempt %lu] Delete Simulator due to BAD STATE", (x)]
 
-#define ALL_TESTS              @"All Tests"
 #define TEST_CASE_FORMAT       @"[Attempt %lu] [%@/%@]"
 #define TEST_SUITE_FORMAT      @"[Attempt %lu] {[%@]}"
 
@@ -32,7 +31,8 @@
 + (instancetype)sharedStats;
 
 - (void)startTimer:(NSString *)name;
-- (void)endTimer:(NSString *)name;
+- (void)startTimer:(NSString *)name withAttemptNumber:(NSInteger)attemptNumber;
+- (void)endTimer:(NSString *)name withErrorMessage: (NSString *)errorMessage;
 - (void)outputTimerStats:(NSString *)name toWriter:(BPWriter *)writer;
 
 - (void)addTest;
@@ -44,9 +44,11 @@
 - (void)addTestRuntimeTimeout;
 - (void)addTestOutputTimeout;
 - (void)addSimulatorCreateFailure;
+- (void)addSimulatorReuseFailure;
 - (void)addSimulatorDeleteFailure;
 - (void)addSimulatorInstallFailure;
 - (void)addSimulatorLaunchFailure;
+- (void)generateCSVreportWithPath:(NSString *)path;
 
 - (void)exitWithWriter:(BPWriter *)writer exitCode:(int)exitCode andCreateFullReport:(BOOL)fullReport;
 

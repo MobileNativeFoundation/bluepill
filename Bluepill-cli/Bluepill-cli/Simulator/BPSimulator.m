@@ -79,15 +79,18 @@
                        }];
 }
 
-- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
+- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID withError:(NSError **)error {
     self.device = [self findDeviceWithConfig:self.config andDeviceID:deviceUDID];
     if (!self.device) {
         [BPUtils printInfo:ERROR withString:@"SimDevice not found: %@", [deviceUDID UUIDString]];
+        *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"SimDevice not found: %@", [deviceUDID UUIDString]]}];
         return NO;
     }
 
     if (![self.device.stateString isEqualToString:@"Booted"]) {
         [BPUtils printInfo:ERROR withString:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]];
+        *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]]}];
+
         return NO;
     }
 
@@ -96,6 +99,7 @@
         if (!self.app) {
             [BPUtils printInfo:ERROR withString:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
                                                  [deviceUDID UUIDString]];
+            *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
             return NO;
         }
     }

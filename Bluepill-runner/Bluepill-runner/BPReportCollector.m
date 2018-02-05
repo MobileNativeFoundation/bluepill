@@ -85,4 +85,50 @@
     [xmlData writeToFile:finalReportPath atomically:YES];
 }
 
++ (void)collectCSVFromPath:(NSString *)reportsPath
+             onReportCollected:(void (^)(NSURL *fileUrl))fileHandler
+                  outputAtPath:(NSString *)finalReportPath {
+    
+    NSMutableString *csvString = [[NSMutableString alloc] initWithCapacity:0];
+
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSURL *directoryURL = [NSURL fileURLWithPath:reportsPath isDirectory:YES];
+    NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
+    NSDirectoryEnumerator *enumerator = [fileManager
+                                         enumeratorAtURL:directoryURL
+                                         includingPropertiesForKeys:keys
+                                         options:0
+                                         errorHandler:^(NSURL *url, NSError *error) {
+                                             fprintf(stderr, "Failed to process url %s", [[url absoluteString] UTF8String]);
+                                             return YES;
+                                         }];
+    
+    for (NSURL *url in enumerator) {
+        NSError *error;
+        NSNumber *isDirectory = nil;
+        if (![url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error]) {
+            fprintf(stderr, "Failed to get resource from url %s", [[url absoluteString] UTF8String]);
+        }
+        else if (![isDirectory boolValue]) {
+            if ([[url pathExtension] isEqualToString:@"csv"]) {
+                
+                NSString* filePath = [url.absoluteString stringByDeletingLastPathComponent];
+                NSString* bpNum = [filePath lastPathComponent];
+                NSString* fileContents = [NSString stringWithContentsOfURL:url encoding:NSASCIIStringEncoding error:nil];
+                NSArray* rows = [fileContents componentsSeparatedByString:@"\n"];
+                // add header
+                if ([csvString length] == 0) {
+                    [csvString appendString:[NSString stringWithFormat:@"bp Number,%@",[rows objectAtIndex:0]]];
+                }
+                for (int row = 1; row < [rows count]; row++) {
+                    [csvString appendString:@"\n"];
+                    [csvString appendString:[NSString stringWithFormat:@"%@,%@", bpNum, [rows objectAtIndex:row]]];
+                }
+            }
+        }
+    }
+    [csvString writeToFile:finalReportPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+}
+
+
 @end

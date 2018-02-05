@@ -106,6 +106,7 @@ int main(int argc, char * argv[]) {
             NSString *outputFile = [config.outputDirectory stringByAppendingPathComponent:fileName];
             BPWriter *statsWriter = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
             [[BPStats sharedStats] exitWithWriter:statsWriter exitCode:exitCode andCreateFullReport:YES];
+            [[BPStats sharedStats] generateCSVreportWithPath:[NSString stringWithFormat:@"%@/bp.csv", config.outputDirectory]];
         }
 
         [BPUtils printInfo:INFO withString:@"BP exiting %ld", (long)exitCode];

@@ -31,7 +31,7 @@
                 }
                 // call timeout block first and then execute the onError block
                 if (__self.onError) {
-                    NSError *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:nil];
+                    NSError *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:@{@"NSLocalizedDescriptionKey" : @"timeout"}];
                     __self.onError(error);
                 }
             });

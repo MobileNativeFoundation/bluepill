@@ -9,11 +9,16 @@
 
 #import "BPStats.h"
 #import "BPWriter.h"
+#import "BPExitStatus.h"
 
 @interface BPStat : NSObject
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSDate *startTime;
 @property (nonatomic, strong) NSDate *endTime;
+@property (nonatomic, assign) float duration;
+@property (nonatomic, strong) NSString *errorMessage;
+@property (nonatomic, assign) NSInteger attemptNum;
+
 @end
 
 @interface BPStats()
@@ -33,6 +38,7 @@
 @property (nonatomic, assign) NSInteger simulatorDeleteFailures;
 @property (nonatomic, assign) NSInteger simulatorInstallFailures;
 @property (nonatomic, assign) NSInteger simulatorLaunchFailures;
+@property (nonatomic, assign) NSInteger simulatorReuseFailures;
 
 @end
 
@@ -59,14 +65,20 @@
 }
 
 - (void)startTimer:(NSString *)name {
+    [self startTimer:name withAttemptNumber:0];
+}
+
+- (void)startTimer:(NSString *)name withAttemptNumber:(NSInteger)attemptNumber {
     BPStat *stat = [self statForName:name createIfNotExist:YES];
     stat.name = name;
     if (stat.startTime == nil) {
         stat.startTime = [NSDate date];
     }
+    stat.attemptNum = attemptNumber;
 }
 
-- (void)endTimer:(NSString *)name {
+
+- (void)endTimer:(NSString *)name withErrorMessage:(NSString *)errorMessage {
     BPStat *stat = [self statForName:name createIfNotExist:NO];
     if (!stat) {
         fprintf(stderr, "EndTimerFailure: EndTimer called without starting a timer for '%s'\n", [name UTF8String]);
@@ -83,7 +95,10 @@
         }
     }
     stat.endTime = [NSDate date];
+    stat.errorMessage = [[NSString alloc] initWithString:errorMessage];
+    stat.duration = [stat.endTime timeIntervalSinceDate:stat.startTime];
 }
+
 
 - (void)outputTimerStats:(NSString *)name toWriter:(BPWriter *)writer {
     BPStat *stat = [self statForName:name createIfNotExist:NO];
@@ -157,6 +172,10 @@
     self.simulatorCreateFailures++;
 }
 
+- (void)addSimulatorReuseFailure {
+    self.simulatorReuseFailures++;
+}
+
 - (void)addSimulatorDeleteFailure {
     self.simulatorDeleteFailures++;
 }
@@ -168,6 +187,17 @@
 - (void)addSimulatorLaunchFailure {
     self.simulatorLaunchFailures++;
 }
+
+
+- (void)generateCSVreportWithPath:(NSString *)path {
+    NSMutableString *csvString = [[NSMutableString alloc]initWithCapacity:0];
+    [csvString appendString:@"AttemptNum, EventName, Duration, FinalStatus, TimeStamp"];
+    for (BPStat *stat in self.stats) {
+        [csvString appendString:[NSString stringWithFormat:@"\n%ld, %@, %f, %@, %@", stat.attemptNum, stat.name, stat.duration, stat.errorMessage, stat.startTime]];
+    }
+    [csvString writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
+}
+
 
 - (void)generateFullReportWithWriter:(BPWriter *)writer exitCode:(int)exitCode {
     [writer writeLine:@"--------------"];
@@ -199,6 +229,7 @@
     [writer writeLine:@"Simulator Deletion Failures:    %d", self.simulatorDeleteFailures];
     [writer writeLine:@"App Install Failures:           %d", self.simulatorInstallFailures];
     [writer writeLine:@"App Launch Failures:            %d", self.simulatorLaunchFailures];
+    [writer writeLine:@"App Launch Failures:            %d", self.simulatorReuseFailures];
 
     [writer writeLine:@""];
     [writer writeLine:@"Exit Code: %d", exitCode];

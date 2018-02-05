@@ -310,6 +310,16 @@ maxprocs(void)
         } outputAtPath:outputPath];
     }
 
+    if (self.config.outputDirectory) {
+        NSString *outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"bluepill.csv"];
+        NSFileManager *fm = [NSFileManager new];
+        if ([fm fileExistsAtPath:outputPath]) {
+            [fm removeItemAtPath:outputPath error:nil];
+        }
+        [BPReportCollector collectCSVFromPath:self.config.outputDirectory onReportCollected:^(NSURL *fileUrl) {
+        } outputAtPath:outputPath];
+    }
+    
     return rc;
 }
 

@@ -20,4 +20,8 @@
              onReportCollected:(void (^)(NSURL *fileUrl))fileHandler
                   outputAtPath:(NSString *)finalReportPath;
 
++ (void)collectCSVFromPath:(NSString *)reportsPath
+             onReportCollected:(void (^)(NSURL *fileUrl))fileHandler
+                  outputAtPath:(NSString *)finalReportPath;
+
 @end

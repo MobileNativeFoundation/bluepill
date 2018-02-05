@@ -28,7 +28,7 @@
 
 - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
 
-- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID;
+- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID withError:(NSError **)error;
 
 - (BOOL)uninstallApplicationAndReturnError:(NSError **)error;
 
