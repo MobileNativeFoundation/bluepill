@@ -97,9 +97,9 @@
     if (!self.config.headlessMode) {
         self.app = [self findSimGUIApp];
         if (!self.app) {
-            [BPUtils printInfo:ERROR withString:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
-                                                 [deviceUDID UUIDString]];
-            *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
+            NSString *errMsg = [NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",[deviceUDID UUIDString]];
+            [BPUtils printInfo:ERROR withString:@"SimDevice running, but no running Simulator App in non-headless mode: %@",[deviceUDID UUIDString]];
+            *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey:errMsg}];
             return NO;
         }
     }
