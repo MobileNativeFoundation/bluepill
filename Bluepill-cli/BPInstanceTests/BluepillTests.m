@@ -15,6 +15,7 @@
 #import "BPUtils.h"
 #import <stdio.h>
 #import "BPConstants.h"
+#import "BPSimulator.h"
 
 /**
  * This test suite is the integration tests to make sure Bluepill instance is working properly
@@ -52,7 +53,6 @@
     self.config.junitOutput = NO;
     self.config.testRunnerAppPath = nil;
     self.config.testing_CrashAppOnLaunch = NO;
-    self.config.testing_NoAppWillRun = YES;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils quietMode:[BPUtils isBuildScript]];
@@ -89,24 +89,18 @@
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.testing_CrashAppOnLaunch = YES;
-    self.config.testing_NoAppWillRun = NO;
     self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    XCTAssert(exitCode == BPExitStatusSimulatorCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusAppCrashed, (long)exitCode);
-
-    self.config.testing_NoAppWillRun = YES;
+    XCTAssert(exitCode == BPExitStatusAppCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusAppCrashed, (long)exitCode);
 }
 
 - (void)testAppThatHangsOnLaunch {
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.testing_HangAppOnLaunch = YES;
-    self.config.testing_NoAppWillRun = NO;
     self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusSimulatorCrashed);
-
-    self.config.testing_NoAppWillRun = YES;
 }
 
 - (void)testRecoverSimulatorOnCrash {
@@ -117,14 +111,11 @@
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.testing_HangAppOnLaunch = YES;
-    self.config.testing_NoAppWillRun = NO;
     self.config.stuckTimeout = @3;
     self.config.failureTolerance = @0;
     self.config.errorRetriesCount = @1;
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusSimulatorCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusSimulatorCrashed, (long)exitCode);
-
-    self.config.testing_NoAppWillRun = YES;
 
     NSString *simulator1Path = [outputDir stringByAppendingPathComponent:@"1-simulator.log"];
     NSString *simulator2Path = [outputDir stringByAppendingPathComponent:@"2-simulator.log"];
@@ -558,6 +549,34 @@
         BOOL fileExists = [[NSFileManager defaultManager] fileExistsAtPath:filePath];
         XCTAssert(fileExists);
     }
+}
+
+- (void)testCopySimulatorPreferencesFile {
+    self.config.simulatorPreferencesFile = [BPTestHelper.resourceFolderPath stringByAppendingPathComponent:@"simulator-preferences.plist"];
+
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.keepSimulator = YES;
+
+    Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode = [bp run];
+    XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+    XCTAssertNotNil(bp.test_simulatorUDID);
+
+    NSURL *preferencesFile = bp.test_simulator.preferencesFile;
+
+    NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfURL:preferencesFile];
+    XCTAssertEqualObjects(@"en_CH", plist[@"AppleLocale"]);
+
+    self.config.deleteSimUDID = bp.test_simulatorUDID;
+    XCTAssertNotNil(self.config.deleteSimUDID);
+
+    Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode2 = [bp2 run];
+    XCTAssert(exitCode2 == BPExitStatusSimulatorDeleted);
+    XCTAssertEqualObjects(self.config.deleteSimUDID, bp2.test_simulatorUDID);
+
+    XCTAssert([[NSDictionary alloc] initWithContentsOfURL:preferencesFile] == nil);
 }
 
 - (void)testTakingScreenshotWithFailingTestsSetWithRetries {

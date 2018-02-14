@@ -85,7 +85,6 @@ bluepill_build_sample_app()
     -workspace Bluepill.xcworkspace \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
-    -destination 'platform=iOS Simulator,name=iPhone 7,OS=11.1' \
     -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   test $? == 0 || {
@@ -137,6 +136,7 @@ bluepill_integration_tests()
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
     echo See result.txt for details
+    cat results.txt
     exit 1
   fi
 }

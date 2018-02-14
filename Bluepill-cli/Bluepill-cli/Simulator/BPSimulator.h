@@ -23,6 +23,7 @@
 @property (nonatomic, assign, readonly) BOOL needsRetry;
 @property (nonatomic, readonly) NSString *UDID;
 @property (nonatomic, strong) SimDevice *device;
+@property (nonatomic, strong) NSURL *preferencesFile;
 
 + (instancetype)simulatorWithConfiguration:(BPConfiguration *)config;
 

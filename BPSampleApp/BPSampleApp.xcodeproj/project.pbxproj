@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		32FEEBBD2012B93D005916EF /* BPSampleAppSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FEEBBC2012B93D005916EF /* BPSampleAppSwiftTests.swift */; };
 		BA4BCFC91DC47EC800592FA4 /* BPSampleAppHangingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4BCFC81DC47EC800592FA4 /* BPSampleAppHangingTests.m */; };
 		BA9C2DD51DD7F182007CB967 /* BPSampleAppFatalErrorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9C2DD41DD7F182007CB967 /* BPSampleAppFatalErrorTests.m */; };
 		BA9C2DDE1DD7F7D9007CB967 /* BPSampleAppSwiftFatalErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA9C2DDD1DD7F7D9007CB967 /* BPSampleAppSwiftFatalErrorTests.swift */; };
@@ -68,6 +69,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		32FEEBBB2012B93D005916EF /* BPSampleAppTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BPSampleAppTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		32FEEBBC2012B93D005916EF /* BPSampleAppSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BPSampleAppSwiftTests.swift; sourceTree = "<group>"; };
 		BA4BCFC61DC47EC700592FA4 /* BPSampleAppHangingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppHangingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA4BCFC81DC47EC800592FA4 /* BPSampleAppHangingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppHangingTests.m; sourceTree = "<group>"; };
 		BA4BCFCA1DC47EC800592FA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -239,6 +242,8 @@
 			children = (
 				BAB24F4B1DB5D45E00867756 /* BPSampleAppTests.m */,
 				BAB24F4D1DB5D45E00867756 /* Info.plist */,
+				32FEEBBC2012B93D005916EF /* BPSampleAppSwiftTests.swift */,
+				32FEEBBB2012B93D005916EF /* BPSampleAppTests-Bridging-Header.h */,
 			);
 			path = BPSampleAppTests;
 			sourceTree = "<group>";
@@ -424,6 +429,7 @@
 					BAB24F461DB5D45E00867756 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 57Y47U492U;
+						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						TestTargetID = BAB24F2D1DB5D45E00867756;
 					};
@@ -561,6 +567,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAB24F4C1DB5D45E00867756 /* BPSampleAppTests.m in Sources */,
+				32FEEBBD2012B93D005916EF /* BPSampleAppSwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -855,11 +862,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				INFOPLIST_FILE = BPSampleAppTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
 			};
 			name = Debug;
@@ -868,11 +879,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				INFOPLIST_FILE = BPSampleAppTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
 			};
 			name = Release;

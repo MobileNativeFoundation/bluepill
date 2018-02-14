@@ -98,10 +98,11 @@ A full list supported options are listed here.
 
 ## Requirements
 
-Bluepill only works with **Xcode 9.1**. If you're looking for old Xcode support, please check out the other branches:
+Bluepill only works with **Xcode 9.2**. If you're looking for old Xcode support, please check out the other branches:
 
 * [Xcode-8](https://github.com/linkedin/bluepill/tree/xcode8)
 * [Xcode-9.0](https://github.com/linkedin/bluepill/tree/xcode-9.0)
+* [Xcode-9.1](https://github.com/linkedin/bluepill/tree/xcode-9.1)
 
 ## Acknowledgement
 
@@ -114,6 +115,10 @@ If you're using [Fastlane](https://github.com/fastlane/fastlane) to run your tes
 - [Redpill](https://github.com/omniprojects/fastlane-plugin-redpill) - The most up-to-date plugin; it's is maintained by [Omni](https://github.com/omniprojects) and offers a full set of options to hook into Bluepill. As of this writing, Redpill is compiled against Xcode 9.1, and intended for use with [CircleCI](https://circleci.com). It will be updated with newer versions of Xcode when CircleCI supports them.
 - [fastlane-plugin-bluepill](https://github.com/tbrand/fastlane-plugin-bluepill) - Last updated Nov. 7th, offers basic support for working with the Bluepill binary.
 - [Bluepillar](https://github.com/Shashikant86/fastlane-plugin-bluepillar) - Last updated May 29th, it's the original fastlane plugin for working with Bluepill. It was inspired by [this blog post](https://medium.com/@shashikant.jagtap/running-xcuitests-in-parallel-with-fastlane-and-bluepill-370e8ba90958).
+- [XBluepill](https://github.com/kisialiu/fastlane-plugin-xbluepill) - Last updated Jan 27th. It supports all Bluepill options. Thera are some differences from other plugins:
+   - Support XCode 9.2
+   - No need to build your project before using the plugin. Builds you project by itself and put xctestrun file automatically;
+   - Can reset all simulators if needed (removes all current simulators and recreates default from scratch);
 
 ## Q & A
 - Are we able to run Xcode UI Testing bundle with Bluepill

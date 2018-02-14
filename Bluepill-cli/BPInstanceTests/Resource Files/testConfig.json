@@ -2,10 +2,19 @@
     "app": "/Users/khu/Library/Developer/Xcode/DerivedData/voyager-frhgmrtfxqiflycndwcgfpqkbhdy/Build/Products/Debug-iphonesimulator/LinkedIn.app",
     "no-split": [
                  "VoyagerTests"
-                 ],
+    ],
     "error-retries": 0,
     "scheme-path": "/Users/khu/ios/dev/voyager-ios_trunk/Voyager.xcodeproj/xcshareddata/xcschemes/VoyagerScenarioTests4.xcscheme",
     "repeat-count": 1,
     "output-dir": "/Users/khu/tmp/simulator",
-    "headless": false
+    "headless": false,
+    "include": [
+                "FeedControlMenuActionsShareViaTests/testShareViaOnArticleShareUpdate",
+                "FeedLoadMoreCommentsTrackingTest/testLoadMoreCommentsInFeedDetail()",
+                "FeedSponsoredDownVariantTrackingTest/testTapOnCompanyPictureInDetail(Swift.Int)"
+    ],
+    "exclude": [
+                "FeedShareActorActionTrackingTest/testShareActorDescriptionTrackingInFeedDetail",
+                "FeedAnnotationActionTrackingTest/testMentionAnnotationTrackingInFeedDetail()",
+    ]
 }

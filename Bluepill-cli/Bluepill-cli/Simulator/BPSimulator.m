@@ -25,7 +25,6 @@
 @property (nonatomic, strong) NSRunningApplication *app;
 @property (nonatomic, strong) NSFileHandle *stdOutHandle;
 @property (nonatomic, assign) BOOL needsRetry;
-@property (nonatomic, assign) BOOL appProcessFinished;
 
 @end
 
@@ -69,6 +68,10 @@
                                    completion(error);
                                });
                            } else {
+                               if (__self.config.simulatorPreferencesFile) {
+                                   [__self copySimulatorPreferencesFile:__self.config.simulatorPreferencesFile];
+                               }
+
                                dispatch_async(dispatch_get_main_queue(), ^{
                                    [__self bootWithCompletion:^(NSError *error) {
                                        dispatch_async(dispatch_get_main_queue(), ^{
@@ -78,6 +81,32 @@
                                });
                            }
                        }];
+}
+
+- (NSURL *)preferencesFile {
+    return [NSURL fileURLWithPath:kSimulatorLibraryPath relativeToURL:[NSURL fileURLWithPath:self.device.dataPath]];
+}
+
+- (void)copySimulatorPreferencesFile:(NSString *)newPreferencesFile {
+
+    NSURL *source = [NSURL fileURLWithPath:newPreferencesFile];
+    NSURL *destination = self.preferencesFile;
+
+
+    [NSFileManager.defaultManager
+            createDirectoryAtURL:destination.URLByDeletingLastPathComponent
+     withIntermediateDirectories:YES
+                      attributes:nil
+                           error:nil];
+
+    [NSFileManager.defaultManager removeItemAtURL:destination error:nil];
+
+    NSError *copyError = nil;
+    [NSFileManager.defaultManager copyItemAtURL:source toURL:destination error:&copyError];
+
+    if (copyError) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed copying GlobalPreferences plist: %@", [copyError localizedDescription]]];
+    }
 }
 
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
@@ -315,7 +344,7 @@
     [self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid) {
         // Save the process ID to the monitor
         blockSelf.monitor.appPID = pid;
-        blockSelf.monitor.simulatorState = AppLaunched;
+        blockSelf.monitor.appState = Running;
 
         [blockSelf.stdOutHandle writeData:[@"DEBUG_FLAG_TOBEREMOVED.\n" dataUsingEncoding:NSUTF8StringEncoding]];
 
@@ -328,8 +357,8 @@
                 dispatch_source_cancel(source);
             });
             dispatch_source_set_cancel_handler(source, ^{
+                blockSelf.monitor.appState = Completed;
                 // Post a APPCLOSED signal to the fifo
-                blockSelf.appProcessFinished = YES;
                 [blockSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
             });
             dispatch_resume(source);
