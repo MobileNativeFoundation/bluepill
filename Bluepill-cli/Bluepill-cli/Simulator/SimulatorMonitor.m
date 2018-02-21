@@ -286,4 +286,8 @@
     [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
 }
 
+- (void)setParserStateCompleted {
+    self.parserState = Completed;
+}
+
 @end
