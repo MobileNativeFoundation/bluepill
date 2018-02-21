@@ -9,4 +9,3 @@ compile:
 test:
   override:
     - ./scripts/bluepill.sh test
-
