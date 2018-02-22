@@ -191,7 +191,6 @@
 - (void)onOutputReceived:(NSString *)output {
     NSDate *currentTime = [NSDate date];
 
-    assert(self.parserState != Completed);
     if (self.parserState == Idle) {
         self.parserState = Running;
     }
