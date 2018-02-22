@@ -32,6 +32,8 @@
 
 - (void)onOutputReceived:(NSString *)output;
 
+- (void)setParserStateCompleted;
+
 @end
 
 @protocol BPMonitorCallbackProtocol <NSObject>

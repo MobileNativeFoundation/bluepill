@@ -358,6 +358,7 @@
             });
             dispatch_source_set_cancel_handler(source, ^{
                 blockSelf.monitor.appState = Completed;
+                [parser.delegate setParserStateCompleted];
                 // Post a APPCLOSED signal to the fifo
                 [blockSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
             });
@@ -468,6 +469,9 @@
 - (NSDictionary *)appInfo:(NSString *)bundleID error:(NSError **)error {
     NSDictionary *appInfo = [self.device propertiesOfApplication:bundleID error:error];
     return appInfo;
+}
+
+- (void)setParserStateCompleted {
 }
 
 @end

@@ -191,7 +191,6 @@
 - (void)onOutputReceived:(NSString *)output {
     NSDate *currentTime = [NSDate date];
 
-    assert(self.parserState != Completed);
     if (self.parserState == Idle) {
         self.parserState = Running;
     }
@@ -284,6 +283,10 @@
     // Save screenshot for failed test
     NSString *fullTestName = [NSString stringWithFormat:@"%@_%@", testClass, testName];
     [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
+}
+
+- (void)setParserStateCompleted {
+    self.parserState = Completed;
 }
 
 @end
