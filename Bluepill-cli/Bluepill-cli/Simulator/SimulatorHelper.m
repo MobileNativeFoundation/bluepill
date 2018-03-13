@@ -142,6 +142,7 @@
     if (![NSKeyedArchiver archiveRootObject:xctConfig toFile:XCTestConfigurationFilePath]) {
         NSAssert(NO, @"Couldn't archive XCTestConfiguration to file at path %@", XCTestConfigurationFilePath);
     }
+    NSLog(@"hello XCTestConfigurationFilePath: %@", XCTestConfigurationFilePath);
     return XCTestConfigurationFilePath;
 }
 

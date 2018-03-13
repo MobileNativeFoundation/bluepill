@@ -41,6 +41,9 @@ typedef NS_ENUM(NSInteger, State) {
  */
 @property (nonatomic, assign) NSTimeInterval maxTestExecutionTime;
 
++ (SimulatorMonitor*)sharedInstanceWithConfig:(BPConfiguration *)config;
 - (instancetype)initWithConfiguration:(BPConfiguration *)config;
+- (void)onOutputReceived;
+- (void)onAppEnded;
 
 @end

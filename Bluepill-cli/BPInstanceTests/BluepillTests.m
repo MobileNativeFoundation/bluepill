@@ -105,7 +105,7 @@
 }
 
 - (void)testTestcaseTimeout {
-    [BPUtils enableDebugOutput:YES];
+    [BPUtils enableDebugOutput:NO];
     NSString *testBundlePath = [BPTestHelper sampleAppTestTimeoutTests];
     self.config.testBundlePath = testBundlePath;
     self.config.stuckTimeout = @8;

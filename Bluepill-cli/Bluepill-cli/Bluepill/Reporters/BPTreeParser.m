@@ -126,7 +126,7 @@ static const NSString * const kPassed = @"passed";
 
 - (void)parseLine:(nullable NSString *)line {
     [BPUtils printInfo:DEBUGINFO withString:@"[OUTPUT] %@", line];
-    [self onOutputReceived:line];
+    //[self onOutputReceived:line];
     if (!line || ![line length]) {
         return;
     }
@@ -623,36 +623,31 @@ static const NSString * const kPassed = @"passed";
     if (!self.testsBegan) {
         return;
     }
-
     [self.delegate onAllTestsEnded];
     self.testsBegan = NO;
 }
 
 - (void)onTestSuiteBegan:(NSString *)testSuiteName onDate:(NSDate *)startDate isRoot:(BOOL)isRoot {
-    [self onAllTestsBegan];
-    [self.delegate onTestSuiteBegan:testSuiteName onDate:startDate isRoot:isRoot];
+    //[self onAllTestsBegan];
+    //[self.delegate onTestSuiteBegan:testSuiteName onDate:startDate isRoot:isRoot];
 }
 
 - (void)onTestSuiteEnded:(NSString *)testSuiteName
                   isRoot:(BOOL)isRoot {
-    [self.delegate onTestSuiteEnded:testSuiteName
-                             isRoot:isRoot];
-    if (testSuiteName == self.root.testSuiteName || testSuiteName == self.currentRootName) {
-        [self onAllTestsEnded];
-    }
+    //[self.delegate onTestSuiteEnded:testSuiteName isRoot:isRoot];
 }
 
 - (void)onTestCaseBeganWithName:(NSString *)testName inClass:(NSString *)testClass {
-    [self.delegate onTestCaseBeganWithName:testName inClass:testClass];
+    //[self.delegate onTestCaseBeganWithName:testName inClass:testClass];
 }
 
 - (void)onTestCasePassedWithName:(NSString *)testName inClass:(NSString *)testClass reportedDuration:(NSTimeInterval)duration {
-    [self.delegate onTestCasePassedWithName:testName inClass:testClass reportedDuration:duration];
+    //[self.delegate onTestCasePassedWithName:testName inClass:testClass reportedDuration:duration];
 }
 
 - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass
                           inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
-    [self.delegate onTestCaseFailedWithName:testName inClass:testClass inFile:filePath onLineNumber:lineNumber wasException:wasException];
+    //[self.delegate onTestCaseFailedWithName:testName inClass:testClass inFile:filePath onLineNumber:lineNumber wasException:wasException];
 }
 
 - (void)onOutputReceived:(NSString *)output {

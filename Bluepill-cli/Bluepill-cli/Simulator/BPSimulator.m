@@ -33,6 +33,7 @@
 + (instancetype)simulatorWithConfiguration:(BPConfiguration *)config {
     BPSimulator *sim = [[self alloc] init];
     sim.config = config;
+    sim.monitor = [SimulatorMonitor sharedInstanceWithConfig:config];
     return sim;
 }
 
@@ -330,20 +331,21 @@
 
         if (error == nil) {
             [BPUtils printInfo:INFO withString:@"No error"];
+            __weak typeof(self) weakSelf = self;
             dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC, pid, DISPATCH_PROC_EXIT, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
             dispatch_source_set_event_handler(source, ^{
                 dispatch_source_cancel(source);
             });
             dispatch_source_set_cancel_handler(source, ^{
                 blockSelf.monitor.appState = Completed;
-                // Post a APPCLOSED signal to the fifo
-                [blockSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                [weakSelf.monitor onAppEnded];
             });
             dispatch_resume(source);
             self.stdOutHandle.readabilityHandler = ^(NSFileHandle *handle) {
                 // This callback occurs on a background thread
                 NSData *chunk = [handle availableData];
                 [parser handleChunkData:chunk];
+                [weakSelf.monitor onOutputReceived];
             };
         }
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -447,5 +449,6 @@
     NSDictionary *appInfo = [self.device propertiesOfApplication:bundleID error:error];
     return appInfo;
 }
+
 
 @end

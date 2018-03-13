@@ -1,0 +1,730 @@
+diff --git a/Bluepill-cli/Bluepill-cli.xcodeproj/xcshareddata/xcschemes/bluepill-cli.xcscheme b/Bluepill-cli/Bluepill-cli.xcodeproj/xcshareddata/xcschemes/bluepill-cli.xcscheme
+index 30742cb..cfb1990 100644
+--- a/Bluepill-cli/Bluepill-cli.xcodeproj/xcshareddata/xcschemes/bluepill-cli.xcscheme
++++ b/Bluepill-cli/Bluepill-cli.xcodeproj/xcshareddata/xcschemes/bluepill-cli.xcscheme
+@@ -43,17 +43,17 @@
+       <MacroExpansion>
+          <BuildableReference
+             BuildableIdentifier = "primary"
+-            BlueprintIdentifier = "7A7901811D5CB679004D4325"
+-            BuildableName = "bp"
+-            BlueprintName = "bp"
+-            ReferencedContainer = "container:Bluepill-cli.xcodeproj">
++            BlueprintIdentifier = "BAEF4B331DAC539400E68294"
++            BuildableName = "bluepill"
++            BlueprintName = "bluepill"
++            ReferencedContainer = "container:../Bluepill-runner/Bluepill.xcodeproj">
+          </BuildableReference>
+       </MacroExpansion>
+       <AdditionalOptions>
+       </AdditionalOptions>
+    </TestAction>
+    <LaunchAction
+-      buildConfiguration = "Debug"
++      buildConfiguration = "Release"
+       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+       language = ""
+@@ -67,10 +67,10 @@
+          runnableDebuggingMode = "0">
+          <BuildableReference
+             BuildableIdentifier = "primary"
+-            BlueprintIdentifier = "7A7901811D5CB679004D4325"
+-            BuildableName = "bp"
+-            BlueprintName = "bp"
+-            ReferencedContainer = "container:Bluepill-cli.xcodeproj">
++            BlueprintIdentifier = "BAEF4B331DAC539400E68294"
++            BuildableName = "bluepill"
++            BlueprintName = "bluepill"
++            ReferencedContainer = "container:../Bluepill-runner/Bluepill.xcodeproj">
+          </BuildableReference>
+       </BuildableProductRunnable>
+       <AdditionalOptions>
+diff --git a/Bluepill-cli/Bluepill-cli/Bluepill/BPStats.h b/Bluepill-cli/Bluepill-cli/Bluepill/BPStats.h
+index dbdf5d2..390f79b 100644
+--- a/Bluepill-cli/Bluepill-cli/Bluepill/BPStats.h
++++ b/Bluepill-cli/Bluepill-cli/Bluepill/BPStats.h
+@@ -14,11 +14,10 @@
+ #define INSTALL_APPLICATION(x)   [NSString stringWithFormat:@"[Attempt %lu] Install Application", (x)]
+ #define UNINSTALL_APPLICATION(x) [NSString stringWithFormat:@"[Attempt %lu] Uninstall Application", (x)]
+ #define LAUNCH_APPLICATION(x)    [NSString stringWithFormat:@"[Attempt %lu] Launch Application", (x)]
+-#define RUN_TESTS(x)             [NSString stringWithFormat:@"[Attempt %lu] Run Tests", (x)]
++#define TOTAL_TEST_TIME(x)             [NSString stringWithFormat:@"[Attempt %lu] Total Test Time(including clean-up after test)", (x)]
+ #define DELETE_SIMULATOR(x)      [NSString stringWithFormat:@"[Attempt %lu] Delete Simulator", (x)]
+ #define DELETE_SIMULATOR_CB(x)   [NSString stringWithFormat:@"[Attempt %lu] Delete Simulator due to BAD STATE", (x)]
+ 
+-#define ALL_TESTS              @"All Tests"
+ #define TEST_CASE_FORMAT       @"[Attempt %lu] [%@/%@]"
+ #define TEST_SUITE_FORMAT      @"[Attempt %lu] {[%@]}"
+ 
+@@ -32,6 +31,8 @@
+ + (instancetype)sharedStats;
+ 
+ - (void)startTimer:(NSString *)name;
++- (void)startTimer:(NSString *)name withAttemptNumber:(NSInteger)attemptNumber;
++- (void)endTimer:(NSString *)name withErrorMessage: (NSString *)errorMessage;
+ - (void)endTimer:(NSString *)name;
+ - (void)outputTimerStats:(NSString *)name toWriter:(BPWriter *)writer;
+ 
+@@ -44,9 +45,11 @@
+ - (void)addTestRuntimeTimeout;
+ - (void)addTestOutputTimeout;
+ - (void)addSimulatorCreateFailure;
++- (void)addSimulatorReuseFailure;
+ - (void)addSimulatorDeleteFailure;
+ - (void)addSimulatorInstallFailure;
+ - (void)addSimulatorLaunchFailure;
++- (void)generateCSVreportWithPath:(NSString *)path;
+ 
+ - (void)exitWithWriter:(BPWriter *)writer exitCode:(int)exitCode andCreateFullReport:(BOOL)fullReport;
+ 
+diff --git a/Bluepill-cli/Bluepill-cli/Bluepill/BPStats.m b/Bluepill-cli/Bluepill-cli/Bluepill/BPStats.m
+index 4580ff6..16122a7 100644
+--- a/Bluepill-cli/Bluepill-cli/Bluepill/BPStats.m
++++ b/Bluepill-cli/Bluepill-cli/Bluepill/BPStats.m
+@@ -9,11 +9,16 @@
+ 
+ #import "BPStats.h"
+ #import "BPWriter.h"
++#import "BPExitStatus.h"
+ 
+ @interface BPStat : NSObject
+ @property (nonatomic, strong) NSString *name;
+ @property (nonatomic, strong) NSDate *startTime;
+ @property (nonatomic, strong) NSDate *endTime;
++@property (nonatomic, assign) float duration;
++@property (nonatomic, strong) NSString *errorMessage;
++@property (nonatomic, assign) NSInteger attemptNum;
++
+ @end
+ 
+ @interface BPStats()
+@@ -33,6 +38,7 @@
+ @property (nonatomic, assign) NSInteger simulatorDeleteFailures;
+ @property (nonatomic, assign) NSInteger simulatorInstallFailures;
+ @property (nonatomic, assign) NSInteger simulatorLaunchFailures;
++@property (nonatomic, assign) NSInteger simulatorReuseFailures;
+ 
+ @end
+ 
+@@ -59,14 +65,20 @@
+ }
+ 
+ - (void)startTimer:(NSString *)name {
++    [self startTimer:name withAttemptNumber:0];
++}
++
++- (void)startTimer:(NSString *)name withAttemptNumber:(NSInteger)attemptNumber {
+     BPStat *stat = [self statForName:name createIfNotExist:YES];
+     stat.name = name;
+     if (stat.startTime == nil) {
+         stat.startTime = [NSDate date];
+     }
++    stat.attemptNum = attemptNumber;
+ }
+ 
+-- (void)endTimer:(NSString *)name {
++
++- (void)endTimer:(NSString *)name withErrorMessage:(NSString *)errorMessage {
+     BPStat *stat = [self statForName:name createIfNotExist:NO];
+     if (!stat) {
+         fprintf(stderr, "EndTimerFailure: EndTimer called without starting a timer for '%s'\n", [name UTF8String]);
+@@ -83,8 +95,15 @@
+         }
+     }
+     stat.endTime = [NSDate date];
++    stat.errorMessage = [[NSString alloc] initWithString:errorMessage];
++    stat.duration = [stat.endTime timeIntervalSinceDate:stat.startTime];
+ }
+ 
++- (void)endTimer:(NSString *)name {
++    [self endTimer:name withErrorMessage:@"no error message reported for now"];
++}
++
++
+ - (void)outputTimerStats:(NSString *)name toWriter:(BPWriter *)writer {
+     BPStat *stat = [self statForName:name createIfNotExist:NO];
+     if (!stat) {
+@@ -157,6 +176,10 @@
+     self.simulatorCreateFailures++;
+ }
+ 
++- (void)addSimulatorReuseFailure {
++    self.simulatorReuseFailures++;
++}
++
+ - (void)addSimulatorDeleteFailure {
+     self.simulatorDeleteFailures++;
+ }
+@@ -169,6 +192,17 @@
+     self.simulatorLaunchFailures++;
+ }
+ 
++
++- (void)generateCSVreportWithPath:(NSString *)path {
++    NSMutableString *csvString = [[NSMutableString alloc]initWithCapacity:0];
++    [csvString appendString:@"AttemptNum, EventName, Duration, FinalStatus, TimeStamp\n\n\n"];
++    for (BPStat *stat in self.stats) {
++        [csvString appendString:[NSString stringWithFormat:@"%ld, %@, %f, %@, %@\n", stat.attemptNum, stat.name, stat.duration, stat.errorMessage, stat.startTime]];
++    }
++    [csvString writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
++}
++
++
+ - (void)generateFullReportWithWriter:(BPWriter *)writer exitCode:(int)exitCode {
+     [writer writeLine:@"--------------"];
+     [writer writeLine:@"Run Statistics"];
+@@ -199,6 +233,7 @@
+     [writer writeLine:@"Simulator Deletion Failures:    %d", self.simulatorDeleteFailures];
+     [writer writeLine:@"App Install Failures:           %d", self.simulatorInstallFailures];
+     [writer writeLine:@"App Launch Failures:            %d", self.simulatorLaunchFailures];
++    [writer writeLine:@"App Launch Failures:            %d", self.simulatorReuseFailures];
+ 
+     [writer writeLine:@""];
+     [writer writeLine:@"Exit Code: %d", exitCode];
+diff --git a/Bluepill-cli/Bluepill-cli/Bluepill/Bluepill.m b/Bluepill-cli/Bluepill-cli/Bluepill/Bluepill.m
+index e8c7b16..a123f30 100644
+--- a/Bluepill-cli/Bluepill-cli/Bluepill/Bluepill.m
++++ b/Bluepill-cli/Bluepill-cli/Bluepill/Bluepill.m
+@@ -276,7 +276,7 @@ void onInterrupt(int ignore) {
+     NSString *deviceName = [NSString stringWithFormat:@"BP%d-%lu-%lu", getpid(), context.attemptNumber, self.maxCreateTries];
+ 
+     __weak typeof(self) __self = self;
+-    [[BPStats sharedStats] startTimer:stepName];
++    [[BPStats sharedStats] startTimer:stepName withAttemptNumber:context.attemptNumber];
+     [BPUtils printInfo:INFO withString:@"%@", stepName];
+ 
+     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.createTimeout doubleValue]];
+@@ -286,18 +286,21 @@ void onInterrupt(int ignore) {
+     __weak typeof(handler) __handler = handler;
+ 
+     handler.beginWith = ^{
+-        [[BPStats sharedStats] endTimer:stepName];
+         [BPUtils printInfo:(__handler.error ? ERROR : INFO)
+-                withString:@"Completed: %@ %@", stepName, context.runner.UDID];
++                withString:@"Started: %@ %@", stepName, context.runner.UDID];
+     };
+ 
+     handler.onSuccess = ^{
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:[NSString stringWithFormat:@"Successfully %@: %@", stepName, context.runner.UDID]];
++        [BPUtils printInfo:(__handler.error ? ERROR : INFO)
++                withString:@"Successfully %@: %@", stepName, context.runner.UDID];
+         NEXT([__self installApplicationWithContext:context]);
+     };
+ 
+     handler.onError = ^(NSError *error) {
+         [[BPStats sharedStats] addSimulatorCreateFailure];
+         [BPUtils printInfo:ERROR withString:@"%@", [error localizedDescription]];
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:[NSString stringWithFormat:@"Failed %@ with error %@", stepName, [error localizedDescription]]];
+         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
+         if (--__self.maxCreateTries > 0) {
+             [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+@@ -311,8 +314,7 @@ void onInterrupt(int ignore) {
+     };
+ 
+     handler.onTimeout = ^{
+-        [[BPStats sharedStats] addSimulatorCreateFailure];
+-        [[BPStats sharedStats] endTimer:stepName];
++        //when timeout, onError block will run
+         [BPUtils printInfo:ERROR withString:@"Timeout: %@", stepName];
+     };
+ 
+@@ -322,20 +324,17 @@ void onInterrupt(int ignore) {
+ - (void)reuseSimulatorWithContext:(BPExecutionContext *)context {
+     NSString *stepName = REUSE_SIMULATOR(context.attemptNumber);
+     
+-    [[BPStats sharedStats] startTimer:stepName];
++    [[BPStats sharedStats] startTimer:stepName withAttemptNumber:context.attemptNumber];
+     [BPUtils printInfo:INFO withString:@"%@", stepName];
+-    
+-    if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.useSimUDID]]) {
+-        
+-        [[BPStats sharedStats] endTimer:stepName];
++    NSError* useSimulatorError;
++    if ([context.runner useSimulatorWithDeviceUDID:[[NSUUID alloc] initWithUUIDString:context.config.useSimUDID] withError:&useSimulatorError]) {
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:[NSString stringWithFormat:@"Completed: %@ %@", stepName, context.runner.UDID]];
+         [BPUtils printInfo:INFO withString:@"Completed: %@ %@", stepName, context.runner.UDID];
+-
+         NEXT([self uninstallApplicationWithContext:context]);
+     } else {
+         self.reuseSimAllowed = NO; //prevent reuse this device when RETRY
+-        
+-        [[BPStats sharedStats] endTimer:stepName];
+-        [[BPStats sharedStats] addSimulatorCreateFailure];
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:[NSString stringWithFormat:@"Failed to reuse simulator because %@", [useSimulatorError localizedDescription]]];
++        [[BPStats sharedStats] addSimulatorReuseFailure];
+         [BPUtils printInfo:ERROR withString:@"Failed to reuse simulator"];
+         context.exitStatus = BPExitStatusSimulatorCreationFailed;
+         
+@@ -345,19 +344,19 @@ void onInterrupt(int ignore) {
+ 
+ - (void)installApplicationWithContext:(BPExecutionContext *)context {
+     NSString *stepName = INSTALL_APPLICATION(context.attemptNumber);
+-    [[BPStats sharedStats] startTimer:stepName];
++    [[BPStats sharedStats] startTimer:stepName withAttemptNumber:context.attemptNumber];
+     [BPUtils printInfo:INFO withString:@"%@", stepName];
+ 
+     NSError *error = nil;
+     BOOL success = [context.runner installApplicationAndReturnError:&error];
+ 
+     __weak typeof(self) __self = self;
+-    [[BPStats sharedStats] endTimer:stepName];
+     [BPUtils printInfo:(success ? INFO : ERROR) withString:@"Completed: %@", stepName];
+ 
+     if (!success) {
+         [[BPStats sharedStats] addSimulatorInstallFailure];
+         [BPUtils printInfo:ERROR withString:@"Could not install app in simulator: %@", [error localizedDescription]];
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:[NSString stringWithFormat:@"Could not install app in simulator: %@", [error localizedDescription]]];
+         if (--__self.maxInstallTries > 0) {
+             if ([[error description] containsString:@"Booting"]) {
+                 [BPUtils printInfo:INFO withString:@"Simulator is still booting. Will defer install for 1 minute."];
+@@ -376,26 +375,27 @@ void onInterrupt(int ignore) {
+         }
+         return;
+     } else {
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:@"successfully intalled Application"];
+         NEXT([self launchApplicationWithContext:context]);
+     }
+ }
+ 
+ - (void)uninstallApplicationWithContext:(BPExecutionContext *)context {
+     NSString *stepName = UNINSTALL_APPLICATION(context.attemptNumber);
+-    [[BPStats sharedStats] startTimer:stepName];
++    [[BPStats sharedStats] startTimer:stepName withAttemptNumber:context.attemptNumber];
+     [BPUtils printInfo:INFO withString:@"%@", stepName];
+ 
+     NSError *error = nil;
+     BOOL success = [context.runner uninstallApplicationAndReturnError:&error];
+ 
+-    [[BPStats sharedStats] endTimer:stepName];
+     [BPUtils printInfo:(success ? INFO : ERROR) withString:@"Completed: %@", stepName];
+-
+     if (!success) {
+         [[BPStats sharedStats] addSimulatorInstallFailure];
+         [BPUtils printInfo:ERROR withString:@"Could not uninstall app in simulator: %@", [error localizedDescription]];
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:[NSString stringWithFormat:@"Could not uninstall app in simulator: %@", [error localizedDescription]]];
+         NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusUninstallAppFailed]);
+     } else {
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:@"successfully uninstalled application"];
+         NEXT([self installApplicationWithContext:context]);
+     }
+ }
+@@ -404,9 +404,7 @@ void onInterrupt(int ignore) {
+     NSString *stepName = LAUNCH_APPLICATION(context.attemptNumber);
+     [BPUtils printInfo:INFO withString:@"%@", stepName];
+ 
+-    [[BPStats sharedStats] startTimer:stepName];
+-    [[BPStats sharedStats] startTimer:RUN_TESTS(context.attemptNumber)];
+-
++    [[BPStats sharedStats] startTimer:stepName withAttemptNumber:context.attemptNumber];
+     __weak typeof(self) __self = self;
+ 
+     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.launchTimeout doubleValue]];
+@@ -420,13 +418,16 @@ void onInterrupt(int ignore) {
+     };
+ 
+     handler.onSuccess = ^{
++        [[BPStats sharedStats] startTimer:TOTAL_TEST_TIME(context.attemptNumber) withAttemptNumber:context.attemptNumber];
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:@"Successfully launched application"];
+         context.pid = __handler.pid;
+         NEXT([__self connectTestBundleAndTestDaemonWithContext:context]);
+     };
+ 
+     handler.onError = ^(NSError *error) {
+-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
+         [BPUtils printInfo:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:[error localizedDescription]];
++        [[BPStats sharedStats] addSimulatorLaunchFailure];
+         if (--__self.maxLaunchTries > 0) {
+             [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
+             context.runner = [__self createSimulatorRunnerWithContext:context];
+@@ -437,11 +438,8 @@ void onInterrupt(int ignore) {
+     };
+ 
+     handler.onTimeout = ^{
+-        [[BPStats sharedStats] addSimulatorLaunchFailure];
+-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
+-        [[BPStats sharedStats] endTimer:stepName];
+-        [BPUtils printInfo:FAILED withString:@"Timeout: %@", stepName];
+-        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
++        //TODO: Need to test this code path
++        [BPUtils printInfo:ERROR withString:@"Timeout launching app"];
+     };
+ 
+     [context.runner launchApplicationAndExecuteTestsWithParser:context.parser forAttempt:context.attemptNumber andCompletion:handler.defaultHandlerBlock];
+@@ -470,14 +468,13 @@ void onInterrupt(int ignore) {
+     BOOL isRunning = [self isProcessRunningWithContext:context];
+     
+     if (!isRunning && [context.runner isFinished]) {
+-        [BPUtils printInfo:INFO withString:@"BPDEBUGGING finished"];
+-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
++        [[BPStats sharedStats] endTimer:TOTAL_TEST_TIME(context.attemptNumber) withErrorMessage:@"no error detected"];
+         [self runnerCompletedWithContext:context];
+         return;
+     }
+ 
+     if (![context.runner isSimulatorRunning]) {
+-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
++        [[BPStats sharedStats] endTimer:TOTAL_TEST_TIME(context.attemptNumber) withErrorMessage:@"SIMULATOR CRASHED!!!"];
+         [BPUtils printInfo:ERROR withString:@"SIMULATOR CRASHED!!!"];
+         context.simulatorCrashed = YES;
+         [[BPStats sharedStats] addSimulatorCrash];
+@@ -492,7 +489,7 @@ void onInterrupt(int ignore) {
+     // However, we have a short-circuit for tests because those may not actually run any app
+     if (!isRunning && context.pid > 0 && [context.runner isApplicationLaunched] && !self.config.testing_NoAppWillRun) {
+         // The tests ended before they even got started or the process is gone for some other reason
+-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
++        [[BPStats sharedStats] endTimer:TOTAL_TEST_TIME(context.attemptNumber) withErrorMessage:@"Application crashed!"];
+         [BPUtils printInfo:ERROR withString:@"Application crashed!"];
+         [[BPStats sharedStats] addApplicationCrash];
+         [self deleteSimulatorWithContext:context andStatus:BPExitStatusAppCrashed];
+@@ -587,11 +584,14 @@ void onInterrupt(int ignore) {
+ 
+ - (void)deleteSimulatorWithContext:(BPExecutionContext *)context andStatus:(BPExitStatus)status {
+     context.exitStatus = status;
++    NSDate *deleteStart = [NSDate date];
+     __weak typeof(self) __self = self;
+-    
+     [self deleteSimulatorWithContext:context completion:^{
+         NEXT([__self finishWithContext:context]);
+     }];
++    NSDate *deleteFinish = [NSDate date];
++    NSTimeInterval deleteTime = [deleteFinish timeIntervalSinceDate:deleteStart];
++    NSLog(@"Delete Simulator Takes %f seconds", deleteTime);
+ }
+ 
+ - (void)deleteSimulatorWithContext:(BPExecutionContext *)context completion:(void (^)(void))completion {
+@@ -599,7 +599,7 @@ void onInterrupt(int ignore) {
+ 
+     self.reuseSimAllowed = NO; //prevent reuse this device when RETRY
+ 
+-    [[BPStats sharedStats] startTimer:stepName];
++    [[BPStats sharedStats] startTimer:stepName withAttemptNumber:context.attemptNumber];
+     [BPUtils printInfo:INFO withString:@"%@", stepName];
+     
+     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.deleteTimeout doubleValue]];
+@@ -609,23 +609,22 @@ void onInterrupt(int ignore) {
+     __weak typeof(handler) __handler = handler;
+ 
+     handler.beginWith = ^{
+-        [[BPStats sharedStats] endTimer:stepName];
+-        [BPUtils printInfo:(__handler.error ? ERROR : INFO) withString:@"Completed: %@ %@", stepName, context.runner.UDID];
++        [BPUtils printInfo:(__handler.error ? ERROR : INFO) withString:@"Started: %@ %@", stepName, context.runner.UDID];
+     };
+ 
+     handler.onSuccess = ^{
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:[NSString stringWithFormat:@"Deleted simulator due to %@. Simulator is deleted successfully", [BPExitStatusHelper stringFromExitStatus: context.exitStatus]]];
+         completion();
+     };
+ 
+     handler.onError = ^(NSError *error) {
+         [[BPStats sharedStats] addSimulatorDeleteFailure];
++        [[BPStats sharedStats] endTimer:stepName withErrorMessage:[NSString stringWithFormat:@"Tried to delete simulator due to %@. Error occurred when deleting simulator %@", [BPExitStatusHelper stringFromExitStatus: context.exitStatus], [error localizedDescription]]];
+         [BPUtils printInfo:ERROR withString:@"%@", [error localizedDescription]];
+         completion();
+     };
+ 
+     handler.onTimeout = ^{
+-        [[BPStats sharedStats] addSimulatorDeleteFailure];
+-        [[BPStats sharedStats] endTimer:stepName];
+         [BPUtils printInfo:ERROR
+                 withString:@"Timeout: %@", stepName];
+         completion();
+@@ -637,7 +636,7 @@ void onInterrupt(int ignore) {
+ // Only called when bp is running in the delete only mode.
+ - (void)deleteSimulatorOnlyTaskWithContext:(BPExecutionContext *)context {
+     
+-    if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.deleteSimUDID]]) {
++    if ([context.runner useSimulatorWithDeviceUDID:[[NSUUID alloc] initWithUUIDString:context.config.deleteSimUDID] withError:nil]) {
+         NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorDeleted]);
+     } else {
+         [BPUtils printInfo:ERROR withString:@"Failed to reconnect to simulator %@", context.config.deleteSimUDID];
+diff --git a/Bluepill-cli/Bluepill-cli/Bluepill/Connections/BPTestBundleConnection.m b/Bluepill-cli/Bluepill-cli/Bluepill/Connections/BPTestBundleConnection.m
+index dec2569..6434137 100644
+--- a/Bluepill-cli/Bluepill-cli/Bluepill/Connections/BPTestBundleConnection.m
++++ b/Bluepill-cli/Bluepill-cli/Bluepill/Connections/BPTestBundleConnection.m
+@@ -39,12 +39,13 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
+ 
+ @property (atomic, nullable, strong) id<XCTestDriverInterface> testBundleProxy;
+ @property (atomic, nullable, strong, readwrite) DTXConnection *testBundleConnection;
+-
++@property (nonatomic, strong) SimulatorMonitor *monitor;
+ @property (nonatomic, weak) id<BPTestBundleConnectionDelegate> interface;
+ @property (nonatomic, assign) BOOL connected;
+ @property (nonatomic, strong) dispatch_queue_t queue;
+ @property (nonatomic, strong) NSString *bundleID;
+ @property (nonatomic, assign) pid_t appProcessPID;
++@property (nonatomic, weak, nullable) id<BPExecutionPhaseProtocol> delegate;
+ 
+ @end
+ 
+@@ -53,6 +54,10 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
+ - (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<BPTestBundleConnectionDelegate>)interface {
+     self = [super init];
+     if (self) {
++        if (!self.monitor) {
++            self.monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
++        }
++        self.delegate = self.monitor;
+         self.simulator = simulator;
+         self.interface = interface;
+         self.queue = dispatch_queue_create("com.linkedin.bluepill.connection.queue", DISPATCH_QUEUE_PRIORITY_DEFAULT);
+@@ -269,12 +274,18 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
+ }
+ 
+ - (id)_XCT_testCaseDidStartForTestClass:(NSString *)testClass method:(NSString *)method {
++    NSLog(@"I am calling from here: start");
+     [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testCaseDidStartForTestClass: %@ and method: %@", testClass, method];
++    //[self.delegate onTestCaseBeganWithName:method inClass:testClass];
++
+     return nil;
+ }
+ 
+ - (id)_XCT_testCaseDidFailForTestClass:(NSString *)testClass method:(NSString *)method withMessage:(NSString *)message file:(NSString *)file line:(NSNumber *)line {
+-    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testCaseDidFailForTestClass: %@, method: %@, withMessage: %@, file: %@, line: %@", testClass, method, message, file, line];
++    NSLog(@"I am calling from here: failed");
++    [BPUtils printInfo:DEBUGINFO withString:@"DidFailForTestClass: %@, method: %@, withMessage: %@, file: %@, line: %@", testClass, method, message, file, line];
++    [self.delegate onTestCaseFailedWithName:method inClass:testClass inFile:file onLineNumber:[line unsignedIntegerValue] wasException:NO];
++
+     return nil;
+ }
+ 
+@@ -291,6 +302,9 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
+ 
+ - (id)_XCT_testCaseDidFinishForTestClass:(NSString *)testClass method:(NSString *)method withStatus:(NSString *)statusString duration:(NSNumber *)duration {
+     [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testCaseDidFinishForTestClass: %@, method: %@, withStatus: %@, duration: %@", testClass, method, statusString, duration];
++    if ([statusString isEqualToString:@"passed"]) {
++        //[self.delegate onTestCasePassedWithName:method inClass:testClass reportedDuration:[duration doubleValue]];
++    }
+     return nil;
+ }
+ 
+diff --git a/Bluepill-cli/Bluepill-cli/Bluepill/Helpers/BPHandler.m b/Bluepill-cli/Bluepill-cli/Bluepill/Helpers/BPHandler.m
+index edeccb2..8015883 100644
+--- a/Bluepill-cli/Bluepill-cli/Bluepill/Helpers/BPHandler.m
++++ b/Bluepill-cli/Bluepill-cli/Bluepill/Helpers/BPHandler.m
+@@ -31,7 +31,7 @@
+                 }
+                 // call timeout block first and then execute the onError block
+                 if (__self.onError) {
+-                    NSError *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:nil];
++                    NSError *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:@{@"NSLocalizedDescriptionKey" : @"timeout"}];
+                     __self.onError(error);
+                 }
+             });
+diff --git a/Bluepill-cli/Bluepill-cli/Bluepill/Reporters/BPTreeParser.m b/Bluepill-cli/Bluepill-cli/Bluepill/Reporters/BPTreeParser.m
+index c3aac0d..b1bc709 100644
+--- a/Bluepill-cli/Bluepill-cli/Bluepill/Reporters/BPTreeParser.m
++++ b/Bluepill-cli/Bluepill-cli/Bluepill/Reporters/BPTreeParser.m
+@@ -643,6 +643,7 @@ static const NSString * const kPassed = @"passed";
+ }
+ 
+ - (void)onTestCaseBeganWithName:(NSString *)testName inClass:(NSString *)testClass {
++    NSLog(@"not calling from here");
+     [self.delegate onTestCaseBeganWithName:testName inClass:testClass];
+ }
+ 
+diff --git a/Bluepill-cli/Bluepill-cli/Simulator/BPSimulator.h b/Bluepill-cli/Bluepill-cli/Simulator/BPSimulator.h
+index f575fae..4d6b79c 100644
+--- a/Bluepill-cli/Bluepill-cli/Simulator/BPSimulator.h
++++ b/Bluepill-cli/Bluepill-cli/Simulator/BPSimulator.h
+@@ -28,7 +28,7 @@
+ 
+ - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
+ 
+-- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID;
++- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID withError:(NSError **)error;
+ 
+ - (BOOL)uninstallApplicationAndReturnError:(NSError **)error;
+ 
+diff --git a/Bluepill-cli/Bluepill-cli/Simulator/BPSimulator.m b/Bluepill-cli/Bluepill-cli/Simulator/BPSimulator.m
+index 9308301..eeac7e2 100644
+--- a/Bluepill-cli/Bluepill-cli/Simulator/BPSimulator.m
++++ b/Bluepill-cli/Bluepill-cli/Simulator/BPSimulator.m
+@@ -79,15 +79,18 @@
+                        }];
+ }
+ 
+-- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
++- (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID withError:(NSError **)error {
+     self.device = [self findDeviceWithConfig:self.config andDeviceID:deviceUDID];
+     if (!self.device) {
+         [BPUtils printInfo:ERROR withString:@"SimDevice not found: %@", [deviceUDID UUIDString]];
++        *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"SimDevice not found: %@", [deviceUDID UUIDString]]}];
+         return NO;
+     }
+ 
+     if (![self.device.stateString isEqualToString:@"Booted"]) {
+         [BPUtils printInfo:ERROR withString:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]];
++        *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]]}];
++
+         return NO;
+     }
+ 
+@@ -96,6 +99,8 @@
+         if (!self.app) {
+             [BPUtils printInfo:ERROR withString:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
+                                                  [deviceUDID UUIDString]];
++            *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
++                                                                                                          [deviceUDID UUIDString]]}];
+             return NO;
+         }
+     }
+diff --git a/Bluepill-cli/Bluepill-cli/Simulator/SimulatorMonitor.m b/Bluepill-cli/Bluepill-cli/Simulator/SimulatorMonitor.m
+index 528317b..af06f68 100644
+--- a/Bluepill-cli/Bluepill-cli/Simulator/SimulatorMonitor.m
++++ b/Bluepill-cli/Bluepill-cli/Simulator/SimulatorMonitor.m
+@@ -58,7 +58,6 @@
+     // Don't overwrite the original start time on secondary attempts
+     if ([BPStats sharedStats].cleanRun) {
+         [BPStats sharedStats].cleanRun = NO;
+-        [[BPStats sharedStats] startTimer:ALL_TESTS];
+     }
+     [BPUtils printInfo:INFO withString:@"All Tests started."];
+ }
+@@ -71,11 +70,11 @@
+     } else {
+         self.exitStatus = BPExitStatusTestsAllPassed;
+     }
+-    [[BPStats sharedStats] endTimer:ALL_TESTS];
+     [BPUtils printInfo:INFO withString:@"All Tests Completed."];
+ }
+ 
+ - (void)onTestCaseBeganWithName:(NSString *)testName inClass:(NSString *)testClass {
++    NSLog(@"hello, get a call:test begin");
+     [[BPStats sharedStats] startTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
+     self.lastTestCaseStartDate = [NSDate date];
+ 
+@@ -98,6 +97,7 @@
+ }
+ 
+ - (void)onTestCasePassedWithName:(NSString *)testName inClass:(NSString *)testClass reportedDuration:(NSTimeInterval)duration {
++    NSLog(@"hello get a call: pass");
+     NSDate *currentTime = [NSDate date];
+     [BPUtils printInfo:PASSED withString:@"%10.6fs %@/%@",
+                                           [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
+@@ -115,6 +115,7 @@
+ 
+ - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass
+                           inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
++    NSLog(@"hello get a call: failed");
+     if (self.config.screenshotsDirectory) {
+         [self saveScreenshotForFailedTestWithName:testName inClass:testClass];
+     }
+@@ -234,8 +235,11 @@
+     self.lastOutput = currentTime;
+ }
+ 
+-- (void)stopTestsWithErrorMessage:(NSString *)message forTestName:(NSString *)testName inClass:(NSString *)testClass {
+ 
++
++
++- (void)stopTestsWithErrorMessage:(NSString *)message forTestName:(NSString *)testName inClass:(NSString *)testClass {
++    
+     // Timeout or crash on a test means we should skip it when we rerun the tests, unless we've enabled re-running failed tests
+     if (!self.config.onlyRetryFailed) {
+         [self updateExecutedTestCaseList:testName inClass:testClass];
+@@ -250,10 +254,9 @@
+         [BPUtils runShell:[NSString stringWithFormat:@"/usr/bin/sample %d -file %@", self.appPID, sampleLogFile]];
+         if ((kill(self.appPID, 0) == 0) && (kill(self.appPID, SIGKILL) < 0)) {
+             [BPUtils printInfo:ERROR withString:@"Failed to kill the process with appPID: %d: %s",
+-                self.appPID, strerror(errno)];
++             self.appPID, strerror(errno)];
+         }
+     }
+-
+     self.testsState = Completed;
+     [self.callback onTestAbortedWithName:testName inClass:testClass errorMessage:message];
+ }
+@@ -270,6 +273,8 @@
+     return (self.testsState == Running);
+ }
+ 
++
++
+ - (void)saveScreenshotForFailedTestWithName:(NSString *)testName inClass:(NSString *)testClass {
+     // Save screenshot for failed test
+     NSString *fullTestName = [NSString stringWithFormat:@"%@_%@", testClass, testName];
+diff --git a/Bluepill-cli/Bluepill-cli/main.m b/Bluepill-cli/Bluepill-cli/main.m
+index 940daba..3e1a424 100644
+--- a/Bluepill-cli/Bluepill-cli/main.m
++++ b/Bluepill-cli/Bluepill-cli/main.m
+@@ -101,12 +101,15 @@ int main(int argc, char * argv[]) {
+         BPExitStatus exitCode;
+         Bluepill *bp = [[Bluepill alloc] initWithConfiguration:config];
+         exitCode = [bp run];
++        NSLog(@"hello here");
+         if (config.outputDirectory) {
+             NSString *fileName = [NSString stringWithFormat:@"%@-stats.txt", [[config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
+             NSString *outputFile = [config.outputDirectory stringByAppendingPathComponent:fileName];
+             BPWriter *statsWriter = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
+             [[BPStats sharedStats] exitWithWriter:statsWriter exitCode:exitCode andCreateFullReport:YES];
++            [[BPStats sharedStats] generateCSVreportWithPath:[NSString stringWithFormat:@"%@/bluepill.csv", config.outputDirectory]];
+         }
++        NSLog(@"hello log path: %@", config.outputDirectory);
+ 
+         [BPUtils printInfo:INFO withString:@"BP exiting %ld", (long)exitCode];
+         return exitCode;
+diff --git a/Bluepill-runner/Bluepill-runner/BPRunner.m b/Bluepill-runner/Bluepill-runner/BPRunner.m
+index 8a00ee9..d76076f 100644
+--- a/Bluepill-runner/Bluepill-runner/BPRunner.m
++++ b/Bluepill-runner/Bluepill-runner/BPRunner.m
+@@ -210,7 +210,7 @@ maxprocs(void)
+     }
+     while (1) {
+         if (interrupted) {
+-            if (interrupted >=5) {
++            if (interrupted >=2) {
+                 [BPUtils printInfo:ERROR withString:@"You really want to terminate, OK!"];
+                 exit(0);
+             }
+diff --git a/Bluepill-runner/Bluepill-runner/main.m b/Bluepill-runner/Bluepill-runner/main.m
+index af62d35..7c56d1e 100644
+--- a/Bluepill-runner/Bluepill-runner/main.m
++++ b/Bluepill-runner/Bluepill-runner/main.m
+@@ -59,6 +59,7 @@ int main(int argc, char * argv[]) {
+         BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
+         struct option *lopts = [config getLongOptions];
+         char *sopts = [config getShortOptions];
++        
+         if (argv[1] && (!strcmp(argv[1], "version") || (!strcmp(argv[1], "--version")))) {
+             printf("Bluepill %s\n", BP_VERSION);
+             exit(0);
+diff --git a/Bluepill-runner/Bluepill.xcodeproj/project.pbxproj b/Bluepill-runner/Bluepill.xcodeproj/project.pbxproj
+index b1c7ea5..cd3ca21 100644
+--- a/Bluepill-runner/Bluepill.xcodeproj/project.pbxproj
++++ b/Bluepill-runner/Bluepill.xcodeproj/project.pbxproj
+@@ -328,7 +328,7 @@
+ /* Begin PBXShellScriptBuildPhase section */
+ 		C432D41D1DDCED6100FB27D0 /* Saving Git HEAD's SHA1 and Xcode Version */ = {
+ 			isa = PBXShellScriptBuildPhase;
+-			buildActionMask = 2147483647;
++			buildActionMask = 12;
+ 			files = (
+ 			);
+ 			inputPaths = (
+diff --git a/Bluepill-runner/Bluepill.xcodeproj/xcshareddata/xcschemes/bluepill.xcscheme b/Bluepill-runner/Bluepill.xcodeproj/xcshareddata/xcschemes/bluepill.xcscheme
+index b6279e4..6aab4cc 100644
+--- a/Bluepill-runner/Bluepill.xcodeproj/xcshareddata/xcschemes/bluepill.xcscheme
++++ b/Bluepill-runner/Bluepill.xcodeproj/xcshareddata/xcschemes/bluepill.xcscheme
+@@ -91,6 +91,20 @@
+             ReferencedContainer = "container:Bluepill.xcodeproj">
+          </BuildableReference>
+       </BuildableProductRunnable>
++      <CommandLineArguments>
++         <CommandLineArgument
++            argument = "--xctestrun-path /Users/xzhang3/Library/Developer/Xcode/DerivedData/Bluepill-buevehajollooterunkmtycgrhif/Build/Products/BPSampleApp_iphonesimulator11.1-x86_64.xctestrun"
++            isEnabled = "YES">
++         </CommandLineArgument>
++         <CommandLineArgument
++            argument = "-H"
++            isEnabled = "YES">
++         </CommandLineArgument>
++         <CommandLineArgument
++            argument = "-o ./output"
++            isEnabled = "YES">
++         </CommandLineArgument>
++      </CommandLineArguments>
+       <AdditionalOptions>
+       </AdditionalOptions>
+    </LaunchAction>

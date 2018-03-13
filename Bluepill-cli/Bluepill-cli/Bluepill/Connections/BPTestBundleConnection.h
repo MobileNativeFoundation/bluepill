@@ -21,7 +21,7 @@
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) BPSimulator *simulator;
 @property (nonatomic, copy) void (^completionBlock)(NSError *, pid_t);
-- (instancetype)initWithDevice:(BPSimulator *)device andInterface:(id<BPTestBundleConnectionDelegate>)interface;
+- (instancetype)initWithDevice:(BPSimulator *)device andInterface:(id<BPTestBundleConnectionDelegate>)interface andConfig:(BPConfiguration *)config;
 - (void)connectWithTimeout:(NSTimeInterval)timeout;
 - (void)startTestPlan;
 @end

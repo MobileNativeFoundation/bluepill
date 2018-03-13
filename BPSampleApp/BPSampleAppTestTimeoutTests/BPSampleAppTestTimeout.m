@@ -26,14 +26,30 @@
 // This test testcase timetout. App hang timeout is going through a different code path
 - (void)testCaseTimeout {
     int timer = 0;
-    while (timer++ < 100) {
-        NSLog(@"keep producing output until test case timeout");
-        [NSThread sleepForTimeInterval:2.0];
-    }
+    XCTAssert(NO);
+//    while (timer++ < 100) {
+//        NSLog(@"keep producing output until test case timeout");
+//        [NSThread sleepForTimeInterval:2.0];
+//    }
 }
+
+//- (void)testAppCrash1 {
+//    int *pointer = nil;
+//    NSInteger counter = 1;
+//    NSString* testCounter = [[[NSProcessInfo processInfo]environment]objectForKey:@"_BP_TEST_ATTEMPT_NUMBER"];
+//    if (testCounter != nil) {
+//        counter = [testCounter integerValue];
+//    }
+//    if (counter == 1) {
+//        // crash the first time
+//        *pointer = 1;
+//    }
+//}
 
 - (void)testExample2 {
     NSLog(@"hi2");
+    XCTAssert(YES);
 }
+
 
 @end

@@ -35,30 +35,37 @@
 
 static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
-@interface BPTestBundleConnection()<XCTestManager_IDEInterface>
+@interface BPTestBundleConnection()<XCTestManager_IDEInterface, BPMonitorCallbackProtocol>
 
 @property (atomic, nullable, strong) id<XCTestDriverInterface> testBundleProxy;
 @property (atomic, nullable, strong, readwrite) DTXConnection *testBundleConnection;
-
+@property (atomic, strong) SimulatorMonitor *monitor;
 @property (nonatomic, weak) id<BPTestBundleConnectionDelegate> interface;
 @property (nonatomic, assign) BOOL connected;
 @property (nonatomic, strong) dispatch_queue_t queue;
 @property (nonatomic, strong) NSString *bundleID;
 @property (nonatomic, assign) pid_t appProcessPID;
+@property (atomic, strong, nullable) id<BPExecutionPhaseProtocol> delegate;
 
 @end
 
 @implementation BPTestBundleConnection
 
-- (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<BPTestBundleConnectionDelegate>)interface {
+- (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<BPTestBundleConnectionDelegate>)interface andConfig:(BPConfiguration *)config {
     self = [super init];
     if (self) {
+        self.config = config;
+        if (!self.monitor) {
+            self.monitor = [SimulatorMonitor sharedInstanceWithConfig:self.config];
+        }
+        self.delegate = self.monitor;
         self.simulator = simulator;
         self.interface = interface;
         self.queue = dispatch_queue_create("com.linkedin.bluepill.connection.queue", DISPATCH_QUEUE_PRIORITY_DEFAULT);
     }
     return self;
 }
+
 
 - (void)connectWithTimeout:(NSTimeInterval)timeout {
     NSAssert(NSThread.isMainThread, @"-[%@ %@] should be called from the main thread", NSStringFromClass(self.class), NSStringFromSelector(_cmd));
@@ -181,11 +188,13 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_didBeginExecutingTestPlan {
     [BPUtils printInfo:INFO withString:@"_XCT_didBeginExecutingTestPlan"];
+    [self.monitor onAllTestsBegan];
     return nil;
 }
 
 - (id)_XCT_didFinishExecutingTestPlan {
     [BPUtils printInfo:INFO withString:@"_XCT_didFinishExecutingTestPlan"];
+    [self.monitor onAllTestsEnded];
     return nil;
 }
 
@@ -265,16 +274,24 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_testSuite:(NSString *)tests didStartAt:(NSString *)time {
     [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testSuite: %@, start %@", tests, time];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"YYYY-MM-dd HH:mm:ss.SSS";
+    NSDate *date = [dateFormatter dateFromString:time];
+    [self.monitor onTestSuiteBegan:tests onDate:date isRoot:NO];
     return nil;
 }
 
 - (id)_XCT_testCaseDidStartForTestClass:(NSString *)testClass method:(NSString *)method {
     [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testCaseDidStartForTestClass: %@ and method: %@", testClass, method];
+    [self.monitor onTestCaseBeganWithName:method inClass:testClass];
+
     return nil;
 }
 
 - (id)_XCT_testCaseDidFailForTestClass:(NSString *)testClass method:(NSString *)method withMessage:(NSString *)message file:(NSString *)file line:(NSNumber *)line {
-    [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testCaseDidFailForTestClass: %@, method: %@, withMessage: %@, file: %@, line: %@", testClass, method, message, file, line];
+    [BPUtils printInfo:DEBUGINFO withString:@"DidFailForTestClass: %@, method: %@, withMessage: %@, file: %@, line: %@", testClass, method, message, file, line];
+    [self.monitor onTestCaseFailedWithName:method inClass:testClass inFile:file onLineNumber:[line unsignedIntegerValue] wasException:NO];
+    
     return nil;
 }
 
@@ -291,11 +308,16 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_testCaseDidFinishForTestClass:(NSString *)testClass method:(NSString *)method withStatus:(NSString *)statusString duration:(NSNumber *)duration {
     [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testCaseDidFinishForTestClass: %@, method: %@, withStatus: %@, duration: %@", testClass, method, statusString, duration];
+    if ([statusString isEqualToString:@"passed"]) {
+        [self.monitor onTestCasePassedWithName:method inClass:testClass reportedDuration:[duration doubleValue]];
+    }
     return nil;
 }
 
 - (id)_XCT_testSuite:(NSString *)arg1 didFinishAt:(NSString *)time runCount:(NSNumber *)count withFailures:(NSNumber *)failureCount unexpected:(NSNumber *)unexpectedCount testDuration:(NSNumber *)testDuration totalDuration:(NSNumber *)totalTime {
-    [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testSuite: %@, didFinishAt: %@, runCount: %@, withFailures: %@, unexpectedCount: %@, testDuration: %@, totalDuration: %@", arg1, time, count, failureCount, unexpectedCount, testDuration, totalTime];
+    [BPUtils printInfo:INFO withString: @"BPTestBundleConnection_XCT_testSuite: %@, didFinishAt: %@, runCount: %@, withFailures: %@, unexpectedCount: %@, testDuration: %@, totalDuration: %@", arg1, time, count, failureCount, unexpectedCount, testDuration, totalTime];
+    [self.monitor onTestSuiteEnded:arg1
+                             isRoot:NO];
 
     return nil;
 }
@@ -397,6 +419,11 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 - (id)handleUnimplementedXCTRequest:(SEL)aSelector {
     NSAssert(nil, [self unknownMessageForSelector:_cmd]);
     return nil;
+}
+
+- (void)onTestAbortedWithName:(NSString *)testName inClass:(NSString *)testClass errorMessage:(NSString *)message {
+    [BPUtils printInfo:INFO withString:@"BPTestBundleConnection: test aborted"];
+
 }
 
 @end
