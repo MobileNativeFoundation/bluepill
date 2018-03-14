@@ -1,3 +1,0 @@
-Test Suite 'mntf_UISwiftTests' started at 2016-10-07 12:52:05.091
-Test Suite 'Debug-iphonesimulator' passed at 2016-10-07 12:52:05.091.
-Test Suite 'mntf_UISwiftTests' failed at 2016-10-07 12:52:08.297.
