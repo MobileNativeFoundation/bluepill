@@ -86,10 +86,11 @@
 }
 
 - (void)testAppThatCrashesOnLaunch {
+    [BPUtils enableDebugOutput:YES];
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.testing_CrashAppOnLaunch = YES;
-    self.config.stuckTimeout = @3;
+    self.config.stuckTimeout = @30;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusAppCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusAppCrashed, (long)exitCode);
 }

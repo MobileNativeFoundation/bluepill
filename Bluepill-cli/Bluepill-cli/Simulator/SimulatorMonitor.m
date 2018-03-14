@@ -39,7 +39,10 @@ static SimulatorMonitor *monitorSingleton = nil;
 
 + (SimulatorMonitor*)sharedInstanceWithConfig:(BPConfiguration *)config {
     if (monitorSingleton != nil) {
-       return monitorSingleton;
+        monitorSingleton.config = config;
+        monitorSingleton.maxTimeWithNoOutput = [config.stuckTimeout integerValue];
+        monitorSingleton.maxTestExecutionTime = [config.testCaseTimeout integerValue];
+        return monitorSingleton;
     }
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -56,7 +59,6 @@ static SimulatorMonitor *monitorSingleton = nil;
         self.maxTimeWithNoOutput = [config.stuckTimeout integerValue];
         self.maxTestExecutionTime = [config.testCaseTimeout integerValue];
         self.appState = Idle;
-        self.parserState = Idle;
         self.testsState = Idle;
         self.exitStatus = 0;
     }
@@ -199,17 +201,15 @@ static SimulatorMonitor *monitorSingleton = nil;
 
 
 - (void)onAppEnded {
-    NSDate *currentTime = [NSDate date];    
-    __weak typeof(self) __self = self;
     // App crashed
-    __self.parserState = Completed;
-    if (__self.testsState == Running || __self.testsState == Idle) {
-        if (__self.testsState == Running) {
+    NSLog(@"hello app crashed");
+    if (self.testsState == Running || self.testsState == Idle) {
+        if (self.testsState == Running) {
             [BPUtils printInfo:CRASH withString:@"%@/%@ crashed app.",
              (self.currentClassName ?: self.previousClassName),
              (self.currentTestName ?: self.previousTestName)];
         } else {
-            assert(__self.testsState == Idle);
+            assert(self.testsState == Idle);
             [BPUtils printInfo:CRASH withString:@"App crashed before tests started."];
         }
         [self stopTestsWithErrorMessage:@"App Crashed"
@@ -218,23 +218,20 @@ static SimulatorMonitor *monitorSingleton = nil;
         self.exitStatus = BPExitStatusAppCrashed;
         [[BPStats sharedStats] addApplicationCrash];
     }
-    self.lastOutput = currentTime;
 }
 
 
 - (void)onOutputReceived {
     NSDate *currentTime = [NSDate date];
     
-    if (self.parserState == Idle) {
-        self.parserState = Running;
-    }
-    
+    NSLog(@"hello received output");
     self.currentOutputId++; // Increment the Output ID for this instance since we've moved on to the next bit of output
     
     __block NSUInteger previousOutputId = self.currentOutputId;
     __weak typeof(self) __self = self;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(__self.maxTimeWithNoOutput * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSLog(@"hello maxTimeWithNoOutput: %f", __self.maxTimeWithNoOutput);
         if (__self.currentOutputId == previousOutputId && (__self.appState == Running)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
             NSString *testName = (__self.currentTestName ?: __self.previousTestName);
@@ -339,7 +336,7 @@ static SimulatorMonitor *monitorSingleton = nil;
 }
 
 - (BOOL)isExecutionComplete {
-    return (self.parserState == Completed && self.testsState == Completed && self.appState == Completed);
+    return (self.testsState == Completed && self.appState == Completed);
 }
 
 - (BOOL)isApplicationLaunched {
