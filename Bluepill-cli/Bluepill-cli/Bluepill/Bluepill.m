@@ -425,7 +425,7 @@ void onInterrupt(int ignore) {
     __weak typeof(handler) __handler = handler;
 
     handler.beginWith = ^{
-        [BPUtils printInfo:((__handler.pid > -1) ? INFO : ERROR) withString:@"Completed: %@", stepName];
+        [BPUtils printInfo:((__handler.pid > -1) ? INFO : ERROR) withString:@"Started: %@", stepName];
     };
 
     handler.onSuccess = ^{

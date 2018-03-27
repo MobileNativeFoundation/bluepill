@@ -39,6 +39,7 @@ static SimulatorMonitor *monitorSingleton = nil;
 
 + (SimulatorMonitor*)sharedInstanceWithConfig:(BPConfiguration *)config {
     if (monitorSingleton != nil) {
+        NSLog(@"hihi sharing monitor");
         monitorSingleton.config = config;
         monitorSingleton.maxTimeWithNoOutput = [config.stuckTimeout integerValue];
         monitorSingleton.maxTestExecutionTime = [config.testCaseTimeout integerValue];
@@ -215,6 +216,7 @@ static SimulatorMonitor *monitorSingleton = nil;
         [self stopTestsWithErrorMessage:@"App Crashed"
                             forTestName:(self.currentTestName ?: self.previousTestName)
                                 inClass:(self.currentClassName ?: self.previousClassName)];
+        NSLog(@"hello, assigning exitStatus");
         self.exitStatus = BPExitStatusAppCrashed;
         [[BPStats sharedStats] addApplicationCrash];
     }
@@ -245,6 +247,7 @@ static SimulatorMonitor *monitorSingleton = nil;
                 [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName] withErrorMessage:[NSString stringWithFormat:@"Test timeout after %10.6fs without any output.", __self.maxTimeWithNoOutput]];
             }
             __self.exitStatus = testsReallyStarted ? BPExitStatusTestTimeout : BPExitStatusAppHangsBeforeTestStart;
+            NSLog(@"hello2 assigning exit status to :%ld", __self.exitStatus);
             [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aborted."
                                   forTestName:testName
                                       inClass:testClass];
@@ -336,6 +339,7 @@ static SimulatorMonitor *monitorSingleton = nil;
 }
 
 - (BOOL)isExecutionComplete {
+    NSLog(@"hello testState: %ld, appState: %ld", self.testsState, self.appState);
     return (self.testsState == Completed && self.appState == Completed);
 }
 

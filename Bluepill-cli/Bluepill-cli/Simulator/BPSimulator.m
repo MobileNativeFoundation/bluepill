@@ -33,7 +33,7 @@
 + (instancetype)simulatorWithConfiguration:(BPConfiguration *)config {
     BPSimulator *sim = [[self alloc] init];
     sim.config = config;
-    sim.monitor = [SimulatorMonitor sharedInstanceWithConfig:config];
+    //sim.monitor = [SimulatorMonitor sharedInstanceWithConfig:config];
     return sim;
 }
 
@@ -312,6 +312,7 @@
                               };
 
     if (!self.monitor) {
+        NSLog(@"hihi, allocating monitor");
         self.monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
     }
     self.monitor.device = self.device;
