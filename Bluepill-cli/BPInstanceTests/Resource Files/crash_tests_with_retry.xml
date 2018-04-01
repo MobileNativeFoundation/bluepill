@@ -5,7 +5,7 @@
             <testcase classname="BPSampleAppCrashingTests" name="testAppCrash0">
             </testcase>
             <testcase classname="BPSampleAppCrashingTests" name="testAppCrash1">
-                <failure type="Failure" message="App Crashed">
+                <failure type="Failure" message="stack trace for SIGNAL 11 (Segmentation fault: 11):">
 Unknown File:0
                 </failure>
                 <system-out>
@@ -16,7 +16,7 @@ Unknown File:0
     <testsuite tests="1" failures="1" errors="0" name="BPSampleAppCrashingTests.xctest">
         <testsuite tests="1" failures="1" errors="0" name="BPSampleAppCrashingTests">
             <testcase classname="BPSampleAppCrashingTests" name="testAppCrash1">
-                <failure type="Failure" message="App Crashed"></failure>
+                <failure type="Failure" message="stack trace for SIGNAL 11 (Segmentation fault: 11):"></failure>
                 <system-out></system-out>
             </testcase>
         </testsuite>

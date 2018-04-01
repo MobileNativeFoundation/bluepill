@@ -33,7 +33,6 @@
 + (instancetype)simulatorWithConfiguration:(BPConfiguration *)config {
     BPSimulator *sim = [[self alloc] init];
     sim.config = config;
-    NSLog(@"hihi printing monitorSingleton1: %p\n", monitorSingleton);
     sim.monitor = [SimulatorMonitor sharedInstanceWithConfig:config];
     return sim;
 }
@@ -312,10 +311,6 @@
                               kOptionsStderrKey: simStdoutRelativePath
                               };
 
-//    if (!self.monitor) {
-//        NSLog(@"hihi, allocating monitor");
-//        self.monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
-//    }
     self.monitor.device = self.device;
     self.monitor.screenshotService = self.screenshotService;
     self.monitor.hostBundleId = hostBundleId;

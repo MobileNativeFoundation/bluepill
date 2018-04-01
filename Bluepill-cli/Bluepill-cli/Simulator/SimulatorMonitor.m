@@ -37,13 +37,11 @@
 
 
 + (SimulatorMonitor*)sharedInstanceWithConfig:(BPConfiguration *)config {
-    NSLog(@"hihi printing monitorSingleton2: %p\n", monitorSingleton);
 
     if (monitorSingleton != nil) {
         monitorSingleton.config = config;
         monitorSingleton.maxTimeWithNoOutput = [config.stuckTimeout integerValue];
         monitorSingleton.maxTestExecutionTime = [config.testCaseTimeout integerValue];
-        NSLog(@"hihi sharing monitorSingleton: %p\n", monitorSingleton);
         return monitorSingleton;
     } else {
         monitorSingleton = [[self alloc] initWithConfiguration:config];
@@ -216,7 +214,6 @@
         [self stopTestsWithErrorMessage:@"App Crashed"
                             forTestName:(self.currentTestName ?: self.previousTestName)
                                 inClass:(self.currentClassName ?: self.previousClassName)];
-        NSLog(@"hello, assigning exitStatus");
         self.exitStatus = BPExitStatusAppCrashed;
         [[BPStats sharedStats] addApplicationCrash];
     }
@@ -231,10 +228,8 @@
     
     __block NSUInteger previousOutputId = self.currentOutputId;
     __block BOOL testsReallyStarted = [self didTestsStart];
-    NSLog(@"hello2 test state: %ld", self.testsState);
     __weak typeof(self) __self = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(__self.maxTimeWithNoOutput * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSLog(@"hello maxTimeWithNoOutput: %f", __self.maxTimeWithNoOutput);
         if (__self.currentOutputId == previousOutputId && (__self.appState == Running)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
             NSString *testName = (__self.currentTestName ?: __self.previousTestName);
@@ -246,7 +241,6 @@
                 [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName] withErrorMessage:[NSString stringWithFormat:@"Test timeout after %10.6fs without any output.", __self.maxTimeWithNoOutput]];
             }
             __self.exitStatus = testsReallyStarted ? BPExitStatusTestTimeout : BPExitStatusAppHangsBeforeTestStart;
-            NSLog(@"hello2 assigning exit status to :%ld", __self.exitStatus);
             [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aborted."
                                   forTestName:testName
                                       inClass:testClass];
