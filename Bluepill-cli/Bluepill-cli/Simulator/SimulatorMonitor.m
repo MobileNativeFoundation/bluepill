@@ -90,7 +90,6 @@
     } else {
         self.exitStatus = BPExitStatusTestsAllPassed;
     }
-    NSLog(@"hello1 test state: %ld", self.testsState);
     [BPUtils printInfo:INFO withString:@"All Tests Completed."];
 }
 
