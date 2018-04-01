@@ -57,6 +57,8 @@ void onInterrupt(int ignore) {
 
 - (instancetype)initWithConfiguration:(BPConfiguration *)config {
     if (self = [super init]) {
+        NSLog(@"hello reset the monitorSingleton: %p", monitorSingleton);
+        monitorSingleton = nil;
         self.config = config;
         unsigned int numProps = 0;
         objc_property_t *props = class_copyPropertyList([config class], &numProps);
@@ -79,6 +81,7 @@ void onInterrupt(int ignore) {
     signal(SIGINT, onInterrupt);
     // Because failed tests are stored in the config so that they are not rerun,
     // We need to copy this here and any time we retry due to a test failure (not crash)
+    NSLog(@"hello copying config");
     self.executionConfigCopy = [self.config copy];
 
     // Save our failure tolerance because we're going to be changing this
@@ -461,7 +464,7 @@ void onInterrupt(int ignore) {
         // If the isTestRunnerContext is flipped on, don't connect testbundle again.
         return;
     }
-    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:context.runner andInterface:self andConfig:self.config];
+    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:context.runner andInterface:self andConfig:self.context.config];
     bConnection.simulator = context.runner;
     BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:context.runner andInterface:nil];
     [bConnection connectWithTimeout:30];

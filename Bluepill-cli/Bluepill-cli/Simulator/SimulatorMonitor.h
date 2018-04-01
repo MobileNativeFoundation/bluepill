@@ -11,6 +11,7 @@
 #import "BPExecutionPhaseProtocol.h"
 #import "BPExitStatus.h"
 #import "SimulatorScreenshotService.h"
+#import "BPConstants.h"
 
 typedef NS_ENUM(NSInteger, State) {
     Idle,
@@ -41,9 +42,10 @@ typedef NS_ENUM(NSInteger, State) {
  */
 @property (nonatomic, assign) NSTimeInterval maxTestExecutionTime;
 
+
 + (SimulatorMonitor*)sharedInstanceWithConfig:(BPConfiguration *)config;
 - (instancetype)initWithConfiguration:(BPConfiguration *)config;
-- (void)onOutputReceived;
+- (void)onChunkReceived:(nonnull NSData *)chunk;
 - (void)onAppEnded;
 
 @end

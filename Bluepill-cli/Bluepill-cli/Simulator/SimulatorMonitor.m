@@ -35,21 +35,21 @@
 
 @implementation SimulatorMonitor
 
-static SimulatorMonitor *monitorSingleton = nil;
 
 + (SimulatorMonitor*)sharedInstanceWithConfig:(BPConfiguration *)config {
+    NSLog(@"hihi printing monitorSingleton2: %p\n", monitorSingleton);
+
     if (monitorSingleton != nil) {
-        NSLog(@"hihi sharing monitor");
         monitorSingleton.config = config;
         monitorSingleton.maxTimeWithNoOutput = [config.stuckTimeout integerValue];
         monitorSingleton.maxTestExecutionTime = [config.testCaseTimeout integerValue];
+        NSLog(@"hihi sharing monitorSingleton: %p\n", monitorSingleton);
+        return monitorSingleton;
+    } else {
+        monitorSingleton = [[self alloc] initWithConfiguration:config];
+        NSLog(@"reallocating monitorSingleton %p\n", monitorSingleton);
         return monitorSingleton;
     }
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        monitorSingleton = [[self alloc] initWithConfiguration:config];
-    });
-    return monitorSingleton;
 }
 
 
@@ -105,6 +105,7 @@ static SimulatorMonitor *monitorSingleton = nil;
 
     __weak typeof(self) __self = self;
     NSLog(@"hi maxTestExecutionTime is: %f", self.maxTestExecutionTime);
+    NSLog(@"Hi test started, test state is: %ld", self.testsState);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.maxTestExecutionTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if ([__self.currentTestName isEqualToString:testName] && [__self.currentClassName isEqualToString:testClass] && __self.testsState == Running) {
             [BPUtils printInfo:TIMEOUT withString:@"%10.6fs %@/%@", __self.maxTestExecutionTime, testClass, testName];
@@ -223,23 +224,22 @@ static SimulatorMonitor *monitorSingleton = nil;
 }
 
 
-- (void)onOutputReceived {
+- (void)onChunkReceived:(nonnull NSData *)chunk {
+    
     NSDate *currentTime = [NSDate date];
     
-    NSLog(@"hello received output");
     self.currentOutputId++; // Increment the Output ID for this instance since we've moved on to the next bit of output
     
     __block NSUInteger previousOutputId = self.currentOutputId;
+    __block BOOL testsReallyStarted = [self didTestsStart];
+    NSLog(@"hello2 test state: %ld", self.testsState);
     __weak typeof(self) __self = self;
-    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(__self.maxTimeWithNoOutput * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSLog(@"hello maxTimeWithNoOutput: %f", __self.maxTimeWithNoOutput);
         if (__self.currentOutputId == previousOutputId && (__self.appState == Running)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
             NSString *testName = (__self.currentTestName ?: __self.previousTestName);
-            BOOL testsReallyStarted = [self didTestsStart];
-            if (testClass == nil && testName == nil && (__self.appState == Running)) {
-                testsReallyStarted = false;
+            if (!testsReallyStarted) {
                 [BPUtils printInfo:ERROR withString:@"It appears that tests have not yet started. The test app has frozen prior to the first test."];
             } else {
                 [BPUtils printInfo:TIMEOUT withString:@" %10.6fs waiting for output from %@/%@",

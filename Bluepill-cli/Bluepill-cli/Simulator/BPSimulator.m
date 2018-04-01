@@ -33,7 +33,8 @@
 + (instancetype)simulatorWithConfiguration:(BPConfiguration *)config {
     BPSimulator *sim = [[self alloc] init];
     sim.config = config;
-    //sim.monitor = [SimulatorMonitor sharedInstanceWithConfig:config];
+    NSLog(@"hihi printing monitorSingleton1: %p\n", monitorSingleton);
+    sim.monitor = [SimulatorMonitor sharedInstanceWithConfig:config];
     return sim;
 }
 
@@ -311,10 +312,10 @@
                               kOptionsStderrKey: simStdoutRelativePath
                               };
 
-    if (!self.monitor) {
-        NSLog(@"hihi, allocating monitor");
-        self.monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
-    }
+//    if (!self.monitor) {
+//        NSLog(@"hihi, allocating monitor");
+//        self.monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
+//    }
     self.monitor.device = self.device;
     self.monitor.screenshotService = self.screenshotService;
     self.monitor.hostBundleId = hostBundleId;
@@ -348,7 +349,7 @@
                 // This callback occurs on a background thread
                 NSData *chunk = [handle availableData];
                 [parser handleChunkData:chunk];
-                [weakSelf.monitor onOutputReceived];
+                [weakSelf.monitor onChunkReceived:chunk];
             };
         }
         dispatch_async(dispatch_get_main_queue(), ^{

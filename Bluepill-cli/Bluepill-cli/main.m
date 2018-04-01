@@ -101,6 +101,7 @@ int main(int argc, char * argv[]) {
         BPExitStatus exitCode;
         Bluepill *bp = [[Bluepill alloc] initWithConfiguration:config];
         exitCode = [bp run];
+        
         if (config.outputDirectory) {
             NSString *fileName = [NSString stringWithFormat:@"%@-stats.txt", [[config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
             NSString *outputFile = [config.outputDirectory stringByAppendingPathComponent:fileName];

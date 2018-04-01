@@ -9,9 +9,11 @@
 
 #import <Foundation/Foundation.h>
 
-#define BP_DEFAULT_RUNTIME "iOS 11.1"
+@class SimulatorMonitor;
+
+#define BP_DEFAULT_RUNTIME "iOS 11.3"
 #define BP_DEFAULT_DEVICE_TYPE "iPhone 7"
-#define BP_DEFAULT_XCODE_VERSION "Xcode 9.1"
+#define BP_DEFAULT_XCODE_VERSION "Xcode 9.3"
 #define BP_TM_PROTOCOL_VERSION 17
 #define BP_DAEMON_PROTOCOL_VERSION 24
 #define BP_MAX_PROCESSES_PERCENT 0.75
@@ -45,3 +47,5 @@ extern NSString * const XCODE_SYMROOT;
 extern NSString * const XCODE_TARGET_BUILD_DIR;
 extern NSString * const XCODE_TARGETED_DEVICE_FAMILY;
 extern NSString * const XCODE_TEST_FRAMEWORK_SEARCH_PATHS;
+extern SimulatorMonitor* _Nullable monitorSingleton;
+

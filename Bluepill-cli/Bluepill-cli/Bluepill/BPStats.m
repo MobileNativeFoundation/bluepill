@@ -69,6 +69,7 @@
 }
 
 - (void)startTimer:(NSString *)name withAttemptNumber:(NSInteger)attemptNumber {
+    NSLog(@"hello start timer: %@", name);
     BPStat *stat = [self statForName:name createIfNotExist:YES];
     stat.name = name;
     if (stat.startTime == nil) {
