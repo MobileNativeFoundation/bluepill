@@ -205,7 +205,8 @@ void onInterrupt(int ignore) {
             self.finalExitStatus = self.context.exitStatus;
         } else {
             self.finalExitStatus = self.context.finalExitStatus;
-        }        self.exitLoop = YES;
+        }
+        self.exitLoop = YES;
         [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
         return;
     }
@@ -671,15 +672,12 @@ void onInterrupt(int ignore) {
  */
 - (void)finishWithContext:(BPExecutionContext *)context {
 
-    // Because BPExitStatusTestsAllPassed is 0, we must check it explicitly against
-    // the run rather than the aggregate bitmask built with finalExitStatus
-
-    if (![self hasRemainingTestsInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
+    // When it is timeout or crash and only retry failed
+    if (![self hasRemainingTestsInContext:self.context] && self.context.config.onlyRetryFailed == YES) {
         self.finalExitStatus = context.exitStatus;
         self.exitLoop = YES;
         return;
     }
-
     switch (context.exitStatus) {
         // BP exit handler
         case BPExitStatusInterrupted:
@@ -717,13 +715,16 @@ void onInterrupt(int ignore) {
 
         // If it is test hanging or crashing, we set final exit code of current context and proceed.
         case BPExitStatusTestTimeout:
-            context.finalExitStatus = BPExitStatusTestTimeout;
-            NEXT([self proceed]);
-            return;
         case BPExitStatusAppCrashed:
-            context.finalExitStatus = BPExitStatusAppCrashed;
-            NEXT([self proceed]);
+            context.finalExitStatus = context.exitStatus;
+            if ([self hasRemainingTestsInContext:self.context]){
+                // when this is no test left to proceed
+                NEXT([self proceed]);
+            } else {
+                NEXT([self retry]);
+            }
             return;
+
         case BPExitStatusSimulatorDeleted:
         case BPExitStatusSimulatorReuseFailed:
             self.finalExitStatus = context.exitStatus;

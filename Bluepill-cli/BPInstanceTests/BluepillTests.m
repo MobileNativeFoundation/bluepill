@@ -95,7 +95,7 @@
     XCTAssert(exitCode == BPExitStatusAppCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusAppCrashed, (long)exitCode);
 }
 
-- (void)testAppHangsOnBeforeTestStart {
+- (void)testAppHangsBeforeTestStart {
     [BPUtils enableDebugOutput:YES];
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
@@ -293,7 +293,7 @@
 }
 
 - (void)testReportWithAppHangingTestsSet {
-    self.config.stuckTimeout = @3;
+    self.config.stuckTimeout = @4;
     self.config.plainOutput = YES;
     self.config.errorRetriesCount = @0;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
@@ -301,7 +301,6 @@
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppHangingTestsSetTempDir", tempDir] withError:&error];
-    NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
 
@@ -318,7 +317,7 @@
  - if a test timeout or crashed, even if we proceed to the next test, we should still return error exit code.
  */
 - (void)testReportWithAppHangingTestsShouldReturnFailure {
-    self.config.stuckTimeout = @3;
+    self.config.stuckTimeout = @4;
     self.config.plainOutput = YES;
     self.config.failureTolerance = @0;
     self.config.errorRetriesCount = @4;

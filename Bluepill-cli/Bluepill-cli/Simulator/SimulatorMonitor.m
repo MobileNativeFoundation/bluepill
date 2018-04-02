@@ -77,9 +77,6 @@
     [BPUtils printInfo:INFO withString:@"All Tests started."];
 }
 
-- (void)printFailure {
-    NSLog(@"hihi failure count: %ld", self.failureCount);
-}
 
 - (void)onAllTestsEnded {
     self.testsState = Completed;
@@ -92,6 +89,7 @@
 }
 
 - (void)onTestCaseBeganWithName:(NSString *)testName inClass:(NSString *)testClass {
+    testClass = [self adjustClassName:testClass];
     [[BPStats sharedStats] startTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName] withAttemptNumber:[BPStats sharedStats].attemptNumber];
     self.lastTestCaseStartDate = [NSDate date];
 
@@ -116,6 +114,7 @@
 }
 
 - (void)onTestCasePassedWithName:(NSString *)testName inClass:(NSString *)testClass reportedDuration:(NSTimeInterval)duration {
+    testClass = [self adjustClassName:testClass];
     NSDate *currentTime = [NSDate date];
     [BPUtils printInfo:PASSED withString:@"%10.6fs %@/%@",
                                           [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
@@ -134,7 +133,7 @@
 
 - (void)onTestCaseFailedWithName:(NSString *)testName inClass:(NSString *)testClass
                           inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
-    
+    testClass = [self adjustClassName:testClass];
     if (self.config.screenshotsDirectory) {
         [self saveScreenshotForFailedTestWithName:testName inClass:testClass];
     }
@@ -201,7 +200,6 @@
 
 - (void)onAppEnded {
     // App crashed
-    NSLog(@"hello app crashed");
     if (self.testsState == Running || self.testsState == Idle) {
         if (self.testsState == Running) {
             [BPUtils printInfo:CRASH withString:@"%@/%@ crashed app.",
@@ -227,13 +225,14 @@
     self.currentOutputId++; // Increment the Output ID for this instance since we've moved on to the next bit of output
     
     __block NSUInteger previousOutputId = self.currentOutputId;
-    __block BOOL testsReallyStarted = [self didTestsStart];
     __weak typeof(self) __self = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(__self.maxTimeWithNoOutput * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (__self.currentOutputId == previousOutputId && (__self.appState == Running)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
             NSString *testName = (__self.currentTestName ?: __self.previousTestName);
-            if (!testsReallyStarted) {
+            BOOL testsReallyStarted = [self didTestsStart];
+            if (testClass == nil && testName == nil && (__self.appState == Running)) {
+                testsReallyStarted = false;
                 [BPUtils printInfo:ERROR withString:@"It appears that tests have not yet started. The test app has frozen prior to the first test."];
             } else {
                 [BPUtils printInfo:TIMEOUT withString:@" %10.6fs waiting for output from %@/%@",
@@ -264,7 +263,6 @@
     __block NSUInteger previousOutputId = self.currentOutputId;
     __weak typeof(self) __self = self;
 
-    NSLog(@"hello test state: %ld", __self.testsState);
     // App crashed
     if ([output isEqualToString:@"BP_APP_PROC_ENDED"]) {
         __self.parserState = Completed;
@@ -332,7 +330,6 @@
 }
 
 - (BOOL)isExecutionComplete {
-    NSLog(@"hello testState: %ld, appState: %ld", self.testsState, self.appState);
     return (self.testsState == Completed && self.appState == Completed);
 }
 
@@ -348,6 +345,13 @@
     // Save screenshot for failed test
     NSString *fullTestName = [NSString stringWithFormat:@"%@_%@", testClass, testName];
     [self.screenshotService saveScreenshotForFailedTestWithName:fullTestName];
+}
+
+- (NSString *)adjustClassName:(NSString *)inClassName {
+    if ([inClassName containsString:@"."]) {
+        return [inClassName componentsSeparatedByString:@"."].lastObject;
+    }
+    return inClassName;
 }
 
 @end
