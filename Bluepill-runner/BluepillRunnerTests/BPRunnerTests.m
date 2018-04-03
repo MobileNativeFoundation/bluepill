@@ -86,7 +86,6 @@
         NSLog(@"%@", err);
         XCTAssert(false);
     }
-    XCTAssert(false);
 }
 
 @end

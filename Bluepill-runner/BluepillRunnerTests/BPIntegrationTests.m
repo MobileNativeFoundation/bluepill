@@ -116,10 +116,14 @@
     NSError *err;
     [self.config validateConfigWithError:&err];
     BPApp *app = [BPApp appWithConfig:self.config withError:&err];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name == %@", @"BPSampleAppTests"];
+    NSArray *filteredArray = [app.testBundles filteredArrayUsingPredicate:predicate];
+    BPXCTestFile* firstFoundObject = filteredArray.count > 0 ? filteredArray.firstObject : nil;
+    XCTAssert(firstFoundObject != nil);
+    XCTAssert(firstFoundObject.skipTestIdentifiers.count == 7);
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
-    XCTAssert(app.testBundles[1].skipTestIdentifiers.count == 7);
     XCTAssert(rc != 0); // this runs tests that fail
 }
 
