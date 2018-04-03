@@ -45,7 +45,6 @@
         return monitorSingleton;
     } else {
         monitorSingleton = [[self alloc] initWithConfiguration:config];
-        NSLog(@"reallocating monitorSingleton %p\n", monitorSingleton);
         return monitorSingleton;
     }
 }
@@ -99,8 +98,6 @@
     self.currentClassName = testClass;
 
     __weak typeof(self) __self = self;
-    NSLog(@"hi maxTestExecutionTime is: %f", self.maxTestExecutionTime);
-    NSLog(@"Hi test started, test state is: %ld", self.testsState);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.maxTestExecutionTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if ([__self.currentTestName isEqualToString:testName] && [__self.currentClassName isEqualToString:testClass] && __self.testsState == Running) {
             [BPUtils printInfo:TIMEOUT withString:@"%10.6fs %@/%@", __self.maxTestExecutionTime, testClass, testName];
