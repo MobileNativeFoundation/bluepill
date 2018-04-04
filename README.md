@@ -103,7 +103,7 @@ Bluepill only works with **Xcode 9.3**. If you're looking for old Xcode support,
 * [Xcode-8](https://github.com/linkedin/bluepill/tree/xcode8)
 * [Xcode-9.0](https://github.com/linkedin/bluepill/tree/xcode-9.0)
 * [Xcode-9.1](https://github.com/linkedin/bluepill/tree/xcode-9.1)
-* [Xcode-9.2](https://github.com/linkedin/bluepill/tree/xcode-9.2-branch)
+* [Xcode-9.2](https://github.com/linkedin/bluepill/tree/xcode-9.2)
 
 ## Acknowledgement
 
