@@ -339,7 +339,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "VERSION=`git describe`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"";
+			shellScript = "VERSION=`git describe`\ntest -z \"$VERSION\" && VERSION=`cat \"$SOURCE_ROOT/../VERSION\"`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
