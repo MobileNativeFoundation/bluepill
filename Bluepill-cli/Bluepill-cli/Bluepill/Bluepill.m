@@ -57,7 +57,9 @@ void onInterrupt(int ignore) {
 
 - (instancetype)initWithConfiguration:(BPConfiguration *)config {
     if (self = [super init]) {
+        // initialized monitor singleton and dispatchonce token
         monitorSingleton = nil;
+        simMononitorDispatchOnceToken = 0;
         self.config = config;
         unsigned int numProps = 0;
         objc_property_t *props = class_copyPropertyList([config class], &numProps);

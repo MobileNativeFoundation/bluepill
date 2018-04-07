@@ -30,3 +30,4 @@ NSString * const XCODE_TARGET_BUILD_DIR = @"TARGET_BUILD_DIR";
 NSString * const XCODE_TARGETED_DEVICE_FAMILY = @"TARGETED_DEVICE_FAMILY";
 NSString * const XCODE_TEST_FRAMEWORK_SEARCH_PATHS = @"TEST_FRAMEWORK_SEARCH_PATHS";
 SimulatorMonitor* _Nullable monitorSingleton = nil;
+dispatch_once_t simMononitorDispatchOnceToken = 0;

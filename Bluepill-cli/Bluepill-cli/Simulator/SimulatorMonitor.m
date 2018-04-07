@@ -44,7 +44,9 @@
         monitorSingleton.maxTestExecutionTime = [config.testCaseTimeout integerValue];
         return monitorSingleton;
     } else {
-        monitorSingleton = [[self alloc] initWithConfiguration:config];
+        dispatch_once(&simMononitorDispatchOnceToken, ^{
+            monitorSingleton = [[self alloc] initWithConfiguration:config];
+        });
         return monitorSingleton;
     }
 }
@@ -206,6 +208,7 @@
             assert(self.testsState == Idle);
             [BPUtils printInfo:CRASH withString:@"App crashed before tests started."];
         }
+        
         [self stopTestsWithErrorMessage:@"App Crashed"
                             forTestName:(self.currentTestName ?: self.previousTestName)
                                 inClass:(self.currentClassName ?: self.previousClassName)];

@@ -48,4 +48,5 @@ extern NSString * const XCODE_TARGET_BUILD_DIR;
 extern NSString * const XCODE_TARGETED_DEVICE_FAMILY;
 extern NSString * const XCODE_TEST_FRAMEWORK_SEARCH_PATHS;
 extern SimulatorMonitor* _Nullable monitorSingleton;
+extern dispatch_once_t simMononitorDispatchOnceToken;
 
