@@ -98,11 +98,12 @@ A full list supported options are listed here.
 
 ## Requirements
 
-Bluepill only works with **Xcode 9.2**. If you're looking for old Xcode support, please check out the other branches:
+Bluepill only works with **Xcode 9.3**. If you're looking for old Xcode support, please check out the other branches:
 
 * [Xcode-8](https://github.com/linkedin/bluepill/tree/xcode8)
 * [Xcode-9.0](https://github.com/linkedin/bluepill/tree/xcode-9.0)
 * [Xcode-9.1](https://github.com/linkedin/bluepill/tree/xcode-9.1)
+* [Xcode-9.2](https://github.com/linkedin/bluepill/tree/xcode-9.2)
 
 ## Acknowledgement
 
