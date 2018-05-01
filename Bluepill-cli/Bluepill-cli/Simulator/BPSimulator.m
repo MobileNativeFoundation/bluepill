@@ -337,6 +337,7 @@
             });
             dispatch_source_set_cancel_handler(source, ^{
                 blockSelf.monitor.appState = Completed;
+                sleep(3);
                 [weakSelf.monitor onAppEnded];
             });
             dispatch_resume(source);
