@@ -78,7 +78,6 @@
 - (void)onTestCaseBeganWithName:(NSString *)testName inClass:(NSString *)testClass {
     [[BPStats sharedStats] startTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName]];
     self.lastTestCaseStartDate = [NSDate date];
-
     self.testsState = Running;
 
     self.currentTestName = testName;
@@ -202,7 +201,6 @@
 
     // App crashed
     if ([output isEqualToString:@"BP_APP_PROC_ENDED"]) {
-        __self.parserState = Completed;
         if (__self.testsState == Running || __self.testsState == Idle) {
             if (__self.testsState == Running) {
                 [BPUtils printInfo:CRASH withString:@"%@/%@ crashed app.",
@@ -219,11 +217,12 @@
             [[BPStats sharedStats] addApplicationCrash];
         }
     }
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(__self.maxTimeWithNoOutput * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (__self.currentOutputId == previousOutputId && (__self.appState == Running)) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
             NSString *testName = (__self.currentTestName ?: __self.previousTestName);
-            BOOL testsReallyStarted = [self didTestsStart];
+            BOOL testsReallyStarted = [__self didTestsStart];
             if (testClass == nil && testName == nil && (__self.appState == Running)) {
                 testsReallyStarted = false;
                 [BPUtils printInfo:ERROR withString:@"It appears that tests have not yet started. The test app has frozen prior to the first test."];
@@ -276,7 +275,7 @@
 }
 
 - (BOOL)didTestsStart {
-    return (self.testsState == Running);
+    return (self.testsState >= Running);
 }
 
 - (void)saveScreenshotForFailedTestWithName:(NSString *)testName inClass:(NSString *)testClass {

@@ -44,7 +44,7 @@
     self.config.runtime = @BP_DEFAULT_RUNTIME;
     self.config.repeatTestsCount = @1;
     self.config.errorRetriesCount = @0;
-    self.config.testCaseTimeout = @5;
+    self.config.testCaseTimeout = @10;
     self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
     self.config.plainOutput = NO;
     self.config.jsonOutput = NO;
@@ -256,7 +256,8 @@
 }
 
 - (void)testReportWithAppHangingTestsSet {
-    self.config.stuckTimeout = @3;
+    // Testcase timeout should be set larger than the stuck timeout
+    self.config.stuckTimeout = @6;
     self.config.plainOutput = YES;
     self.config.errorRetriesCount = @0;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
@@ -281,7 +282,7 @@
  - if a test timeout or crashed, even if we proceed to the next test, we should still return error exit code.
  */
 - (void)testReportWithAppHangingTestsShouldReturnFailure {
-    self.config.stuckTimeout = @3;
+    self.config.stuckTimeout = @6;
     self.config.plainOutput = YES;
     self.config.failureTolerance = @0;
     self.config.errorRetriesCount = @4;
