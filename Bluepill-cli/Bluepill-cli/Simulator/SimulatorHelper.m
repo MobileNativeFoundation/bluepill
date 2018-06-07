@@ -112,7 +112,6 @@
         xctConfig.disablePerformanceMetrics = NO;
         xctConfig.reportActivities = YES;
         xctConfig.testsMustRunOnMainThread = YES;
-        xctConfig.pathToXcodeReportingSocket = nil;
         testHostPath = config.testRunnerAppPath;
     }
 

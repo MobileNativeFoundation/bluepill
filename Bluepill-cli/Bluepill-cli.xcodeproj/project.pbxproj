@@ -46,8 +46,6 @@
 		7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */; };
 		7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
-		7D0D40981F80DB0A00F27A59 /* SimulatorScreenshotService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0D40971F80DB0A00F27A59 /* SimulatorScreenshotService.m */; };
-		7DD8D7FD1F80E526001E8AFF /* SimulatorScreenshotService.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0D40971F80DB0A00F27A59 /* SimulatorScreenshotService.m */; };
 		B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */; };
 		BA0096FE1DCA5D810000DD45 /* testConfigRelativePath.json in Resources */ = {isa = PBXBuildFile; fileRef = BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */; };
 		BA0097001DCA61210000DD45 /* BPConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */; };
@@ -158,8 +156,6 @@
 		7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitTimerTests.m; sourceTree = "<group>"; };
 		7ADBB1451DCBBC0E00DC4E8D /* BPTreeAssembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTreeAssembler.h; sourceTree = "<group>"; };
 		7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTreeAssembler.m; sourceTree = "<group>"; };
-		7D0D40961F80DB0A00F27A59 /* SimulatorScreenshotService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorScreenshotService.h; sourceTree = "<group>"; };
-		7D0D40971F80DB0A00F27A59 /* SimulatorScreenshotService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulatorScreenshotService.m; sourceTree = "<group>"; };
 		7DDFED931F8188CC00D1357C /* SimDeviceIOProtocol-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOProtocol-Protocol.h"; sourceTree = "<group>"; };
 		7DDFED941F8188EC00D1357C /* SimDeviceIOPortDescriptorState-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOPortDescriptorState-Protocol.h"; sourceTree = "<group>"; };
 		7DDFED961F81896C00D1357C /* SimDeviceFramebufferService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceFramebufferService.h; sourceTree = "<group>"; };
@@ -443,8 +439,6 @@
 		BA34F5DB1D6D70300063B17F /* Simulator */ = {
 			isa = PBXGroup;
 			children = (
-				7D0D40961F80DB0A00F27A59 /* SimulatorScreenshotService.h */,
-				7D0D40971F80DB0A00F27A59 /* SimulatorScreenshotService.m */,
 				BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */,
 				BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */,
 				7A4933131DAD63A50060D54F /* SimulatorMonitor.h */,
@@ -766,7 +760,6 @@
 				7A7E7BB51DF2163F007928F3 /* BPHandler.m in Sources */,
 				7A564C0D1DA817DE001BCEC2 /* BPReporters.m in Sources */,
 				BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
-				7D0D40981F80DB0A00F27A59 /* SimulatorScreenshotService.m in Sources */,
 				7A202A411DB0066100D935E3 /* BPWriter.m in Sources */,
 				7A4933151DAD63A50060D54F /* SimulatorMonitor.m in Sources */,
 				7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */,
@@ -808,7 +801,6 @@
 				BA1809B81DB89B5600D7D130 /* BluepillTests.m in Sources */,
 				BA1949371E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
 				BAD558D31DB6DC1C00C9A5CD /* SimulatorMonitor.m in Sources */,
-				7DD8D7FD1F80E526001E8AFF /* SimulatorScreenshotService.m in Sources */,
 				7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
 				BAD558D71DB6DCB100C9A5CD /* BPWriter.m in Sources */,
 				7AAE7AAF1DB7DC1E009B5549 /* BPRegexTests.m in Sources */,
