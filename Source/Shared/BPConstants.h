@@ -9,9 +9,9 @@
 
 #import <Foundation/Foundation.h>
 
-#define BP_DEFAULT_RUNTIME "iOS 11.3"
+#define BP_DEFAULT_RUNTIME "iOS 11.4"
 #define BP_DEFAULT_DEVICE_TYPE "iPhone 7"
-#define BP_DEFAULT_XCODE_VERSION "Xcode 9.3"
+#define BP_DEFAULT_XCODE_VERSION "Xcode 9.4.1"
 #define BP_TM_PROTOCOL_VERSION 17
 #define BP_DAEMON_PROTOCOL_VERSION 24
 #define BP_MAX_PROCESSES_PERCENT 0.75
