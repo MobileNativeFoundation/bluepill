@@ -31,7 +31,7 @@
     self.config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
     self.config.testBundlePath = testBundlePath;
     self.config.appBundlePath = hostApplicationPath;
-    self.config.stuckTimeout = @30;
+    self.config.stuckTimeout = @60;
     self.config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
     self.config.runtime = @BP_DEFAULT_RUNTIME;
     self.config.repeatTestsCount = @1;

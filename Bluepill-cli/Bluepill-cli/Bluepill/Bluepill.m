@@ -460,7 +460,7 @@ void onInterrupt(int ignore) {
     [bConnection connectWithTimeout:30];
 
     dConnection.testRunnerPid = context.pid;
-    [dConnection connectWithTimeout:30];
+    [dConnection connectWithTimeout:80];
     [bConnection startTestPlan];
     NEXT([self checkProcessWithContext:context]);
 
