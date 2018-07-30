@@ -291,6 +291,8 @@
     NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config]];
     [appLaunchEnvironment addEntriesFromDictionary:argsAndEnv[@"env"]];
 
+    appLaunchEnvironment[@"XPC_SIMULATOR_LAUNCHD_NAME"] = [NSString stringWithFormat:@"Failed copying GlobalPreferences plist: %@", self.device.UDID.UUIDString];
+    appLaunchEnvironment[@"SIMULATOR_UDID"] = self.device.UDID.UUIDString;
     if (self.config.testing_CrashAppOnLaunch) {
         appLaunchEnvironment[@"_BP_TEST_CRASH_ON_LAUNCH"] = @"YES";
     }
