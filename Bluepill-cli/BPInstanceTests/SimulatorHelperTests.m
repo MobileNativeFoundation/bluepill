@@ -40,7 +40,6 @@
     config.outputDirectory = @"/Users/test/output";
     NSDictionary *appLaunchEnvironment = [SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:nil config:config];
     XCTAssert([appLaunchEnvironment[@"DYLD_FALLBACK_FRAMEWORK_PATH"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
-    XCTAssert([appLaunchEnvironment[@"DYLD_FRAMEWORK_PATH"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_INSERT_LIBRARIES"] containsString:@"Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/Developer/usr/lib/libXCTTargetBootstrapInject.dylib"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_LIBRARY_PATH"] containsString:@"/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
     XCTAssert([appLaunchEnvironment[@"XCTestConfigurationFilePath"] containsString:@"T/BPSampleAppTests-"]);

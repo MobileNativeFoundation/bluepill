@@ -57,7 +57,6 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     }];
     if (!self.connected) {
         [BPUtils printInfo:ERROR withString:@"Timeout establishing a control session!"];
-        exit(1);
     }
 }
 

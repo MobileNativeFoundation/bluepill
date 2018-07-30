@@ -66,7 +66,6 @@
             [bundles insertObject:bundle atIndex:0];
             continue;
         }
-
         // We don't want to pack tests from different xctest bundles so we just split
         // the current test bundle in chunks and pack those.
         NSArray *allTestCases = [[xctFile allTestCases] sortedArrayUsingSelector:@selector(compare:)];
