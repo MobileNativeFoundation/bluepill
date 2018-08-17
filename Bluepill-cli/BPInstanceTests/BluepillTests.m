@@ -53,6 +53,7 @@
     self.config.junitOutput = NO;
     self.config.testRunnerAppPath = nil;
     self.config.testing_CrashAppOnLaunch = NO;
+    self.config.cloneSimulator = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils quietMode:[BPUtils isBuildScript]];
@@ -566,6 +567,7 @@
 
     NSURL *preferencesFile = bp.test_simulator.preferencesFile;
 
+    // The plist file need to be a non-default value to test the simulator load the plist file
     NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfURL:preferencesFile];
     XCTAssertEqualObjects(@"en_CH", plist[@"AppleLocale"]);
 

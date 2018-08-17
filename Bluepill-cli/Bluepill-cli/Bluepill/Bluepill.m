@@ -23,6 +23,7 @@
 #import "BPTestDaemonConnection.h"
 #import "BPXCTestFile.h"
 #import <objc/runtime.h>
+#import "SimulatorHelper.h"
 
 #define NEXT(x)     { [Bluepill setDiagnosticFunction:#x from:__FUNCTION__ line:__LINE__]; CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ (x); }); }
 #define NEXT_AFTER(delay, x) { \
@@ -50,6 +51,7 @@ void onInterrupt(int ignore) {
 @property (nonatomic, assign) NSInteger maxCreateTries;
 @property (nonatomic, assign) NSInteger maxInstallTries;
 @property (nonatomic, assign) NSInteger maxLaunchTries;
+@property (nonatomic, strong) SimDevice *templateSim;
 
 @end
 
@@ -210,6 +212,8 @@ void onInterrupt(int ignore) {
 - (void)createContext {
     BPExecutionContext *context = [[BPExecutionContext alloc] init];
     context.config = self.executionConfigCopy;
+    context.config.cloneSimulator = self.config.cloneSimulator;
+    context.config.templateSimUDID = self.config.templateSimUDID;
     NSError *error;
     NSString *testHostPath = context.config.testRunnerAppPath ?: context.config.appBundlePath;
     BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:context.config.testBundlePath
@@ -292,7 +296,13 @@ void onInterrupt(int ignore) {
     };
 
     handler.onSuccess = ^{
-        NEXT([__self installApplicationWithContext:context]);
+        if (self.config.cloneSimulator == NO) {
+            // For Bluepill-cli testing, install applicationn as usual
+            NEXT([__self installApplicationWithContext:context]);
+        } else {
+            // launch application directly
+            NEXT([__self launchApplicationWithContext:context]);
+        }
     };
 
     handler.onError = ^(NSError *error) {

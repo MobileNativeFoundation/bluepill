@@ -10,12 +10,19 @@
 #import <Foundation/Foundation.h>
 #import "BPXCTestFile.h"
 #import "BPConfiguration.h"
+#import "SimDevice.h"
+#import "SimDeviceType.h"
+#import "SimRuntime.h"
 
 @interface BPRunner : NSObject
 
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) NSString *bpExecutable;
 @property (nonatomic, strong) NSMutableArray *nsTaskList;
+@property (nonatomic, strong) SimDeviceType* simDeviceType;
+@property (nonatomic, strong) SimRuntime* simRuntime;
+@property (nonatomic, strong) NSMutableDictionary* testHostForSimUDID;
+@property (nonatomic, strong) NSMutableArray* simDeviceTemplates;
 /*!
  * @discussion get a BPRunnner to run tests
  * @param config the config to run tests
@@ -45,5 +52,8 @@
 - (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *>*)xcTestFiles;
 
 - (void) interrupt;
+
+- (void)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles;
+- (NSString *)installApplicationwithHost:(NSString *)testHost withError:(NSError *)error;
 
 @end
