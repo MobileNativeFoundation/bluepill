@@ -15,6 +15,9 @@
 #include <sys/sysctl.h>
 #include <pwd.h>
 #import <AppKit/AppKit.h>
+#import "SimServiceContext.h"
+#import "SimDeviceSet.h"
+#import "SimulatorHelper.h"
 
 
 static int volatile interrupted = 0;
@@ -51,6 +54,7 @@ maxprocs(void)
 + (instancetype)BPRunnerWithConfig:(BPConfiguration *)config
                         withBpPath:(NSString *)bpPath {
     BPRunner *runner = [[BPRunner alloc] init];
+    runner.testHostForSimUDID = [[NSMutableDictionary alloc] init];
     runner.config = config;
     // Find the `bp` binary.
 
@@ -81,6 +85,128 @@ maxprocs(void)
     return runner;
 }
 
+- (void)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles {
+    NSString *simulatorUDIDString = nil;
+    if (self.config.appBundlePath) {
+        // This is for integration testing inside Xcode
+        simulatorUDIDString = [self installApplicationwithHost:self.config.appBundlePath withError:nil];
+        [self.testHostForSimUDID setValue:simulatorUDIDString forKey:self.config.appBundlePath];
+        [BPUtils printInfo:INFO withString:@"created sim template: %@ for app host: %@", simulatorUDIDString, self.config.appBundlePath];
+    } else {
+        // This is for testing in command line when we pass the xctestrun file
+        NSMutableSet *hostBundles = [[NSMutableSet alloc] init];
+        for (BPXCTestFile* bundle in testBundles) {
+            [hostBundles addObject:bundle.testHostPath];
+        }
+        if ([testBundles count] == 0) {
+            [BPUtils printInfo:ERROR withString:@"no host bundle founnd!"];
+        }
+        for (NSString *appPath in hostBundles) {
+            NSError *error = nil;
+            simulatorUDIDString = [self installApplicationwithHost:appPath withError:error];
+            [BPUtils printInfo:INFO withString:@"created sim template: %@ for app host: %@", simulatorUDIDString, appPath];
+            [self.testHostForSimUDID setValue:simulatorUDIDString forKey:appPath];
+        }
+    }
+    return;
+}
+
+- (NSString *)installApplicationwithHost:(NSString *)testHost withError:(NSError *)error {
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+    if (!sc) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        exit(1);
+    }
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (!deviceSet) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        exit(1);
+    }
+    
+    self.simDeviceType = nil;
+    for (SimDeviceType *type in [sc supportedDeviceTypes]) {
+        if ([[type name] isEqualToString:@BP_DEFAULT_DEVICE_TYPE]) {
+            self.simDeviceType = type;
+            break;
+        }
+    }
+    
+    if (!self.simDeviceType) {
+        [BPUtils printInfo:ERROR withString:@"Invalid Device Type!"];
+        exit(1);
+    }
+    
+    self.simRuntime = nil;
+    for (SimRuntime *runtime in [sc supportedRuntimes]) {
+        if ([[runtime name] isEqualToString:self.config.runtime]) {
+            self.simRuntime = runtime;
+            break;
+        }
+    }
+    
+    if (!self.simRuntime) {
+        [BPUtils printInfo:ERROR withString:@"Invalid runtime Type!"];
+        exit(1);
+    }
+    
+    SimDevice *simDevice = [deviceSet createDeviceWithType:self.simDeviceType
+                                                   runtime:self.simRuntime
+                                                      name:@"BP_Simultator_Blueprint"
+                                                     error:&error];
+    if (!simDevice || error) {
+        [BPUtils printInfo:ERROR withString:@"create simulator failed with error: %@", error];
+    } else {
+        [simDevice bootWithOptions:nil error:&error];
+        if (error) {
+            [BPUtils printInfo:ERROR withString:@"boot simulator failed with error: %@", error];
+            exit(1);
+        }
+        // Add photos and videos to the simulator.
+        [self addPhotosToSimulator:simDevice];
+        [self addVideosToSimulator:simDevice];
+        NSString *hostBundleId = [SimulatorHelper bundleIdForPath:testHost];
+        
+        // Install the host application
+        NSError *__autoreleasing *installError = nil;
+        bool installed = [simDevice installApplication:[NSURL fileURLWithPath:testHost]
+                          withOptions:@{kCFBundleIdentifier: hostBundleId}
+                          error:installError];
+        if (!installed) {
+            [BPUtils printInfo:ERROR withString:@"install application failed with error: %@", installError];
+            exit(1);
+        } else {
+            [simDevice shutdownWithError:&error];
+            if(error) {
+                [BPUtils printInfo:ERROR withString:@"shutdown simulator failed with error: %@", error];
+                exit(1);
+            }
+        }
+    }
+    return simDevice.UDID.UUIDString;
+}
+
+- (void)addVideosToSimulator:(SimDevice *)simDevice {
+    for (NSString *urlString in self.config.videoPaths) {
+        NSURL *videoUrl = [NSURL URLWithString:urlString];
+        NSError *error;
+        BOOL uploadResult = [simDevice addVideo:videoUrl error:&error];
+        if (!uploadResult) {
+            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to upload video at path: %@, error message: %@", urlString, [error description]]];
+        }
+    }
+}
+
+- (void)addPhotosToSimulator:(SimDevice *)simDevice {
+    for (NSString *urlString in self.config.imagePaths) {
+        NSURL *photoUrl = [NSURL URLWithString:urlString];
+        NSError *error;
+        BOOL uploadResult = [simDevice addPhoto:photoUrl error:&error];
+        if (!uploadResult) {
+            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to upload photo at path: %@, error message: %@", urlString, [error description]]];
+        }
+    }
+}
+
 - (NSTask *)newTaskWithBundle:(BPXCTestFile *)bundle
                     andNumber:(NSUInteger)number
                     andDevice:(NSString *)deviceID
@@ -95,7 +221,7 @@ maxprocs(void)
     cfg.environmentVariables = bundle.environmentVariables;
     cfg.useSimUDID = deviceID;
     cfg.keepSimulator = cfg.reuseSimulator;
-
+    cfg.templateSimUDID = [self.testHostForSimUDID valueForKey:bundle.testHostPath];
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
                              NSTemporaryDirectory(),

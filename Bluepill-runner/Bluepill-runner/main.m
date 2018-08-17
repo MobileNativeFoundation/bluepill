@@ -96,6 +96,7 @@ int main(int argc, char * argv[]) {
         BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:config withTestFiles:app.testBundles];
         // start a runner and let it fly
         BPRunner *runner = [BPRunner BPRunnerWithConfig:normalizedConfig withBpPath:nil];
+        [runner createSimulatorAndInstallAppWithBundles:app.testBundles];
         exit([runner runWithBPXCTestFiles:app.testBundles]);
     }
     return 0;

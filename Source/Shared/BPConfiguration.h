@@ -93,9 +93,11 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic) BOOL testing_CrashAppOnLaunch;
 @property (nonatomic) BOOL testing_HangAppOnLaunch;
 @property (nonatomic) BOOL testing_NoAppWillRun;
+@property (nonatomic) BOOL testing_BluepillCliTest;
 
 // Generated fields
 @property (nonatomic, strong) NSString *xcodePath;
+@property (nonatomic, strong) NSString *templateSimUDID;
 
 #ifdef BP_USE_PRIVATE_FRAMEWORKS
 @property (nonatomic, strong) SimDeviceType *simDeviceType;

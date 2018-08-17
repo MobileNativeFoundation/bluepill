@@ -22,6 +22,7 @@
 #import "BPTestBundleConnection.h"
 #import "BPTestDaemonConnection.h"
 #import <objc/runtime.h>
+#import "SimulatorHelper.h"
 
 #define NEXT(x)     { [Bluepill setDiagnosticFunction:#x from:__FUNCTION__ line:__LINE__]; CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ (x); }); }
 
@@ -63,6 +64,100 @@ void onInterrupt(int ignore) {
     }
     return self;
 }
+
+- (void)createSimulatorAndInstallApp {
+    NSError *error;
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+    if (!sc) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        exit(1);
+    }
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (!deviceSet) {
+        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        exit(1);
+    }
+   SimDevice *simDevice = [deviceSet createDeviceWithType:self.config.simDeviceType
+                                                        runtime:self.config.simRuntime
+                                                           name:@"BP_Simultator_Blueprint"
+                                                          error:&error];
+    if (!simDevice || error) {
+        [BPUtils printInfo:ERROR withString:@"create simulator failed with error: %@", error];
+        exit(1);
+    } else {
+        [simDevice bootWithOptions:nil error:&error];
+        if (error) {
+            [BPUtils printInfo:ERROR withString:@"boot simulator failed with error: %@", error];
+            exit(1);
+        }
+        if(![self installApplicationToSimDevice:simDevice WithError:&error]) {
+            [BPUtils printInfo:ERROR withString:@"install application failed with error: %@", error];
+            exit(1);
+        } else {
+            [simDevice shutdownWithError:&error];
+            if(error) {
+                [BPUtils printInfo:ERROR withString:@"shutdown simulator failed with error: %@", error];
+                exit(1);
+            }
+        }
+    }
+}
+
+- (BOOL)installApplicationToSimDevice:(SimDevice *)simDevice WithError:(NSError *__autoreleasing *)error {
+    // Add photos and videos to the simulator.
+    [self addPhotosToSimulator:simDevice];
+    [self addVideosToSimulator:simDevice];
+    
+    // Install the app
+    NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
+    NSString *hostBundlePath = self.config.appBundlePath;
+    
+    if (self.config.testRunnerAppPath) {
+        NSString *hostAppPath = self.config.testRunnerAppPath;
+        hostBundleId = [SimulatorHelper bundleIdForPath:hostAppPath];
+        hostBundlePath = hostAppPath;
+    }
+    if (!hostBundleId || !hostBundlePath) {
+        [BPUtils printInfo:ERROR withString:@"hostBundleId: %@ or hostBundlePath: %@ is null",
+         hostBundleId, hostBundlePath];
+        return NO;
+    }
+    [BPUtils printInfo:DEBUGINFO withString: @"installApplication: host bundleId: %@, host BundlePath: %@, testRunnerAppPath: %@", hostBundleId, hostBundlePath, self.config.testRunnerAppPath];
+    // Install the host application
+    BOOL installed = [simDevice
+                      installApplication:[NSURL fileURLWithPath:hostBundlePath]
+                      withOptions:@{kCFBundleIdentifier: hostBundleId}
+                      error:error];
+    if (!installed) {
+        [BPUtils printInfo:ERROR withString:@"install application to simulator failed with %@", error];
+        return NO;
+    }
+    self.context.config.templateSimUDID = simDevice.UDID.UUIDString;
+    return YES;
+}
+
+- (void)addVideosToSimulator:(SimDevice *)simDevice {
+    for (NSString *urlString in self.config.videoPaths) {
+        NSURL *videoUrl = [NSURL URLWithString:urlString];
+        NSError *error;
+        BOOL uploadResult = [simDevice addVideo:videoUrl error:&error];
+        if (!uploadResult) {
+            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to upload video at path: %@, error message: %@", urlString, [error description]]];
+        }
+    }
+}
+
+- (void)addPhotosToSimulator:(SimDevice *)simDevice {
+    for (NSString *urlString in self.config.imagePaths) {
+        NSURL *photoUrl = [NSURL URLWithString:urlString];
+        NSError *error;
+        BOOL uploadResult = [simDevice addPhoto:photoUrl error:&error];
+        if (!uploadResult) {
+            [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed to upload photo at path: %@, error message: %@", urlString, [error description]]];
+        }
+    }
+}
+
 
 /**
  Kicks off the tests and loops until they're complete
@@ -205,6 +300,8 @@ void onInterrupt(int ignore) {
 - (void)createContext {
     BPExecutionContext *context = [[BPExecutionContext alloc] init];
     context.config = self.executionConfigCopy;
+    context.config.testing_BluepillCliTest = self.config.testing_BluepillCliTest;
+    context.config.templateSimUDID = self.config.templateSimUDID;
     context.attemptNumber = self.retries + 1;
     self.context = context; // Store the context on self so that it's accessible to the interrupt handler in the loop
 }
@@ -278,7 +375,8 @@ void onInterrupt(int ignore) {
     };
 
     handler.onSuccess = ^{
-        NEXT([__self installApplicationWithContext:context]);
+        // launch application directly
+        NEXT([__self launchApplicationWithContext:context]);
     };
 
     handler.onError = ^(NSError *error) {
@@ -302,6 +400,11 @@ void onInterrupt(int ignore) {
         [BPUtils printInfo:ERROR withString:[@"Timeout: " stringByAppendingString:stepName]];
     };
 
+    if (self.config.testing_BluepillCliTest == true) {
+        // For Bluepill-cli testing, we have to generate template sim here
+        [self createSimulatorAndInstallApp];
+    }
+    
     [context.runner createSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
 }
 
