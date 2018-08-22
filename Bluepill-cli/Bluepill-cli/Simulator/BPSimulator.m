@@ -88,7 +88,7 @@
                        }];
 }
 
-- (void) cloneSimulatorWithDeviceSet:(SimDeviceSet *)deviceSet withDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
+- (void)cloneSimulatorWithDeviceSet:(SimDeviceSet *)deviceSet withDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
     // find simulator template and clone it
     SimDevice *simulatorWithAppInstalled = [self findDeviceWithConfig:self.config andDeviceID:[[NSUUID alloc] initWithUUIDString:self.config.templateSimUDID]];
     [BPUtils printInfo:DEBUGINFO withString:@"clone with simulator template: %@", self.config.templateSimUDID];
@@ -113,7 +113,6 @@
         }
     }];
 }
-
 
 - (NSURL *)preferencesFile {
     return [NSURL fileURLWithPath:kSimulatorLibraryPath relativeToURL:[NSURL fileURLWithPath:self.device.dataPath]];
