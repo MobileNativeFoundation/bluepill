@@ -63,9 +63,6 @@
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
-    if (self.config.cloneSimulator == YES) {
-        [runner createSimulatorAndInstallAppWithBundles:nil];
-    }
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0, @"Wanted 0, got %d", rc);
     XCTAssert([runner.nsTaskList count] == 0);
@@ -82,9 +79,6 @@
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
-    if (self.config.cloneSimulator == YES) {
-        [runner createSimulatorAndInstallAppWithBundles:nil];
-    }
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
     XCTAssert([runner.nsTaskList count] == 0);
@@ -100,17 +94,11 @@
     self.config.testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
     self.config.testRunnerAppPath = [BPTestHelper sampleAppPath];
     self.config.appBundlePath = [BPTestHelper sampleAppUITestRunnerPath];
-
-
     NSError *err;
     BPApp *app = [BPApp appWithConfig:self.config
                             withError:&err];
-
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
-    if (self.config.cloneSimulator == YES) {
-        [runner createSimulatorAndInstallAppWithBundles:nil];
-    }
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
     XCTAssert([runner.nsTaskList count] == 0);
@@ -128,9 +116,6 @@
     BPApp *app = [BPApp appWithConfig:self.config withError:&err];
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
-    if (self.config.cloneSimulator == YES) {
-        [runner createSimulatorAndInstallAppWithBundles:nil];
-    }
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(app.testBundles[1].skipTestIdentifiers.count == 7);
     XCTAssert(rc != 0); // this runs tests that fail
@@ -145,9 +130,6 @@
                             withError:&err];
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
-    if (self.config.cloneSimulator == YES) {
-        [runner createSimulatorAndInstallAppWithBundles:nil];
-    }
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc != 0);
     XCTAssert([runner.nsTaskList count] == 0);
@@ -161,12 +143,8 @@
     NSError *err;
     BPApp *app = [BPApp appWithConfig:self.config
                             withError:&err];
-
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
-    if (self.config.cloneSimulator == YES) {
-        [runner createSimulatorAndInstallAppWithBundles:nil];
-    }
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
     XCTAssert([runner.nsTaskList count] == 0);

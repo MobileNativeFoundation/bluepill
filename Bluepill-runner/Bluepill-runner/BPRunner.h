@@ -53,7 +53,7 @@
 
 - (void) interrupt;
 
-- (void)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles;
+- (BOOL)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles;
 - (NSString *)installApplicationwithHost:(NSString *)testHost withError:(NSError *)error;
 
 @end

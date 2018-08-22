@@ -296,12 +296,12 @@ void onInterrupt(int ignore) {
     };
 
     handler.onSuccess = ^{
-        if (self.config.cloneSimulator == NO) {
-            // For Bluepill-cli testing, install applicationn as usual
-            NEXT([__self installApplicationWithContext:context]);
-        } else {
-            // launch application directly
+        if (self.config.cloneSimulator) {
+            // launch application directly when clone simulator
             NEXT([__self launchApplicationWithContext:context]);
+        } else {
+            // Install application when test without clone
+            NEXT([__self installApplicationWithContext:context]);
         }
     };
 

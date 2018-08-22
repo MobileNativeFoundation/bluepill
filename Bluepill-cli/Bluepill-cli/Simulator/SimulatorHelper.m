@@ -157,7 +157,7 @@
     NSString *bundleId = [dic objectForKey:(NSString *)kCFBundleIdentifierKey];
     if (!bundleId) {
         [BPUtils printInfo:ERROR withString:@"Could not extract bundleID: %@", dic];
-        exit(1);
+        return nil;
     }
     return bundleId;
 }

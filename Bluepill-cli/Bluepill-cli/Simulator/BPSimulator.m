@@ -51,11 +51,10 @@
         [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [error localizedDescription]];
         return;
     }
-    if (self.config.cloneSimulator == NO) {
-        [self createSimulatorWithDeviceSet:deviceSet withDeviceName:deviceName completion:completion];
-
-    } else {
+    if (self.config.cloneSimulator) {
         [self cloneSimulatorWithDeviceSet:deviceSet withDeviceName:deviceName completion:completion];
+    } else {
+        [self createSimulatorWithDeviceSet:deviceSet withDeviceName:deviceName completion:completion];
     }
 }
 

@@ -86,11 +86,16 @@ maxprocs(void)
     return runner;
 }
 
-- (void)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles {
+- (BOOL)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles {
     NSString *simulatorUDIDString = nil;
+    NSError *error = nil;
     if (self.config.appBundlePath) {
-        // This is for integration testing inside Xcode
-        simulatorUDIDString = [self installApplicationwithHost:self.config.appBundlePath withError:nil];
+        // This is for integration testing for bluepill and bluepill-cli when we assign self.config.appBundlePath
+        simulatorUDIDString = [self installApplicationwithHost:self.config.appBundlePath withError:error];
+        if (!simulatorUDIDString || !error) {
+            [BPUtils printInfo:ERROR withString:@"Create simualtor and install application failed with error: %@", error];
+            return FALSE;
+        }
         self.testHostForSimUDID[self.config.appBundlePath] = simulatorUDIDString;
         [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, self.config.appBundlePath];
     } else {
@@ -107,13 +112,13 @@ maxprocs(void)
             simulatorUDIDString = [self installApplicationwithHost:appPath withError:error];
             if (!simulatorUDIDString || !error) {
                 [BPUtils printInfo:ERROR withString:@"Created simulator template and innstall applicationn failed with error: %@", error];
-                exit(1);
+                return FALSE;
             }
             [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, appPath];
             self.testHostForSimUDID[appPath] = simulatorUDIDString;
         }
     }
-    return;
+    return TRUE;
 }
 
 - (NSString *)installApplicationwithHost:(NSString *)testHost withError:(NSError *)error {
@@ -171,7 +176,9 @@ maxprocs(void)
         [self addPhotosToSimulator:simDevice];
         [self addVideosToSimulator:simDevice];
         NSString *hostBundleId = [SimulatorHelper bundleIdForPath:testHost];
-        
+        if (!hostBundleId) {
+            return nil;
+        }
         // Install the host application
         NSError *__autoreleasing *installError = nil;
         bool installed = [simDevice installApplication:[NSURL fileURLWithPath:testHost]
@@ -324,6 +331,11 @@ maxprocs(void)
         [BPUtils printInfo:WARNING
                 withString:@"Lowering number of simulators from %lu to %lu because there aren't enough tests.",
                             numSims, bundles.count];
+    }
+    if (self.config.cloneSimulator) {
+        if (![self createSimulatorAndInstallAppWithBundles:xcTestFiles]) {
+            return 1;
+        }
     }
     [BPUtils printInfo:INFO withString:@"Running with %lu simulator%s.",
      (unsigned long)numSims, (numSims > 1) ? "s" : ""];
