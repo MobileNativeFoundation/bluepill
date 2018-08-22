@@ -166,6 +166,7 @@ maxprocs(void)
     [self.simDeviceTemplates addObject:simDevice];
     if (!simDevice || error) {
         [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", error];
+        return nil;
     } else {
         [simDevice bootWithOptions:nil error:&error];
         if (error) {
@@ -446,9 +447,11 @@ maxprocs(void)
         //fire & forget, DON'T WAIT
     }
     
-    [BPUtils printInfo:INFO withString:@"All simulators have finished, deleting template simulator.."];
-    [self deleteTemplateSimulator];
-    
+    [BPUtils printInfo:INFO withString:@"All simulators have finished"];
+    if (self.config.cloneSimulator) {
+        [BPUtils printInfo:INFO withString:@"Deleting template simulator.."];
+        [self deleteTemplateSimulator];
+    }
     // Process the generated report and create 1 single junit xml file.
     if (app) {
         [app terminate];
