@@ -14,6 +14,22 @@
 		7A6672C01E0B0BB400AC6778 /* BPXCTestFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */; };
 		7A6672C11E0B0BBC00AC6778 /* BPTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */; };
 		7A6672C21E0B0BBF00AC6778 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */; };
+		B3199F672121E89900787BF6 /* SimDevice.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F662121E89800787BF6 /* SimDevice.h */; };
+		B3199F692121E8AA00787BF6 /* SimServiceContext.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F682121E8AA00787BF6 /* SimServiceContext.h */; };
+		B3199F6B2121E8BB00787BF6 /* SimDeviceSet.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F6A2121E8BB00787BF6 /* SimDeviceSet.h */; };
+		B3199F6D2121E8D200787BF6 /* SimulatorHelper.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F6C2121E8D200787BF6 /* SimulatorHelper.h */; };
+		B3199F6F2121E8E800787BF6 /* SimulatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B3199F6E2121E8E800787BF6 /* SimulatorHelper.m */; };
+		B3199F712121E91200787BF6 /* XCTestConfiguration.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F702121E91200787BF6 /* XCTestConfiguration.h */; };
+		B3199F722121E99F00787BF6 /* XCTestConfiguration.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F702121E91200787BF6 /* XCTestConfiguration.h */; };
+		B3199F732121E99F00787BF6 /* SimulatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B3199F6E2121E8E800787BF6 /* SimulatorHelper.m */; };
+		B3199F742121E99F00787BF6 /* SimulatorHelper.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F6C2121E8D200787BF6 /* SimulatorHelper.h */; };
+		B3199F752121E99F00787BF6 /* SimDeviceSet.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F6A2121E8BB00787BF6 /* SimDeviceSet.h */; };
+		B3199F762121E99F00787BF6 /* SimServiceContext.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F682121E8AA00787BF6 /* SimServiceContext.h */; };
+		B3199F772121E99F00787BF6 /* SimDevice.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F662121E89800787BF6 /* SimDevice.h */; };
+		B3199F7C2121EC9200787BF6 /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3199F792121EA5E00787BF6 /* CoreSimulator.framework */; };
+		B3199F802121FABC00787BF6 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3199F7F2121FABC00787BF6 /* XCTest.framework */; };
+		B3199F812122019000787BF6 /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3199F792121EA5E00787BF6 /* CoreSimulator.framework */; };
+		B3199F842122231000787BF6 /* SimRuntime.h in Sources */ = {isa = PBXBuildFile; fileRef = B3199F832122230D00787BF6 /* SimRuntime.h */; };
 		BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */; };
 		BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809EA1DBA910400D7D130 /* BPAppTests.m */; };
 		BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809ED1DBA929600D7D130 /* BPTestHelper.m */; };
@@ -62,6 +78,17 @@
 		7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestCase.m; sourceTree = "<group>"; };
 		7A4FB8DB1DF89B1A0073F268 /* BPTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestClass.h; sourceTree = "<group>"; };
 		7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestClass.m; sourceTree = "<group>"; };
+		B3199F662121E89800787BF6 /* SimDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimDevice.h; path = "../Bluepill-cli/Bluepill-cli/PrivateHeaders/CoreSimulator/SimDevice.h"; sourceTree = "<group>"; };
+		B3199F682121E8AA00787BF6 /* SimServiceContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimServiceContext.h; path = "../Bluepill-cli/Bluepill-cli/PrivateHeaders/CoreSimulator/SimServiceContext.h"; sourceTree = "<group>"; };
+		B3199F6A2121E8BB00787BF6 /* SimDeviceSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimDeviceSet.h; path = "../Bluepill-cli/Bluepill-cli/PrivateHeaders/CoreSimulator/SimDeviceSet.h"; sourceTree = "<group>"; };
+		B3199F6C2121E8D200787BF6 /* SimulatorHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimulatorHelper.h; path = "../Bluepill-cli/Bluepill-cli/Simulator/SimulatorHelper.h"; sourceTree = "<group>"; };
+		B3199F6E2121E8E800787BF6 /* SimulatorHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = SimulatorHelper.m; path = "../Bluepill-cli/Bluepill-cli/Simulator/SimulatorHelper.m"; sourceTree = "<group>"; };
+		B3199F702121E91200787BF6 /* XCTestConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XCTestConfiguration.h; path = "../Bluepill-cli/Bluepill-cli/PrivateHeaders/XCTest/XCTestConfiguration.h"; sourceTree = "<group>"; };
+		B3199F792121EA5E00787BF6 /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = ../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework; sourceTree = "<group>"; };
+		B3199F7D2121FAB000787BF6 /* Xcode.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = Xcode.app; path = ../../../../../Applications/xcode9.4/Xcode.app; sourceTree = "<group>"; };
+		B3199F7F2121FABC00787BF6 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		B3199F822122219D00787BF6 /* SimDeviceType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimDeviceType.h; path = "../Bluepill-cli/Bluepill-cli/PrivateHeaders/CoreSimulator/SimDeviceType.h"; sourceTree = "<group>"; };
+		B3199F832122230D00787BF6 /* SimRuntime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SimRuntime.h; path = "../Bluepill-cli/Bluepill-cli/PrivateHeaders/CoreSimulator/SimRuntime.h"; sourceTree = "<group>"; };
 		BA1809E01DBA8FB100D7D130 /* BluepillRunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BluepillRunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA1809E41DBA8FB100D7D130 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPRunnerTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -101,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3199F812122019000787BF6 /* CoreSimulator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +136,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3199F7C2121EC9200787BF6 /* CoreSimulator.framework in Frameworks */,
+				B3199F802121FABC00787BF6 /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +162,16 @@
 			);
 			name = Shared;
 			path = ../../Source/Shared;
+			sourceTree = "<group>";
+		};
+		B3199F782121EA5E00787BF6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B3199F7F2121FABC00787BF6 /* XCTest.framework */,
+				B3199F7D2121FAB000787BF6 /* Xcode.app */,
+				B3199F792121EA5E00787BF6 /* CoreSimulator.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */ = {
@@ -198,10 +238,19 @@
 		BAEF4B2B1DAC539400E68294 = {
 			isa = PBXGroup;
 			children = (
+				B3199F832122230D00787BF6 /* SimRuntime.h */,
+				B3199F822122219D00787BF6 /* SimDeviceType.h */,
+				B3199F702121E91200787BF6 /* XCTestConfiguration.h */,
+				B3199F6E2121E8E800787BF6 /* SimulatorHelper.m */,
+				B3199F6C2121E8D200787BF6 /* SimulatorHelper.h */,
+				B3199F6A2121E8BB00787BF6 /* SimDeviceSet.h */,
+				B3199F682121E8AA00787BF6 /* SimServiceContext.h */,
+				B3199F662121E89800787BF6 /* SimDevice.h */,
 				BAFCCA361E33595F00E33C31 /* bluepill.xcconfig */,
 				BAEF4B361DAC539400E68294 /* Bluepill */,
 				BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */,
 				BAEF4B351DAC539400E68294 /* Products */,
+				B3199F782121EA5E00787BF6 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -348,6 +397,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3199F722121E99F00787BF6 /* XCTestConfiguration.h in Sources */,
+				B3199F732121E99F00787BF6 /* SimulatorHelper.m in Sources */,
+				B3199F742121E99F00787BF6 /* SimulatorHelper.h in Sources */,
+				B3199F752121E99F00787BF6 /* SimDeviceSet.h in Sources */,
+				B3199F762121E99F00787BF6 /* SimServiceContext.h in Sources */,
+				B3199F772121E99F00787BF6 /* SimDevice.h in Sources */,
 				C42A401E1E31865D00B83FCC /* BPConstants.m in Sources */,
 				BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */,
 				BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */,
@@ -372,6 +427,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3199F842122231000787BF6 /* SimRuntime.h in Sources */,
+				B3199F712121E91200787BF6 /* XCTestConfiguration.h in Sources */,
+				B3199F6F2121E8E800787BF6 /* SimulatorHelper.m in Sources */,
+				B3199F6D2121E8D200787BF6 /* SimulatorHelper.h in Sources */,
+				B3199F6B2121E8BB00787BF6 /* SimDeviceSet.h in Sources */,
+				B3199F692121E8AA00787BF6 /* SimServiceContext.h in Sources */,
+				B3199F672121E89900787BF6 /* SimDevice.h in Sources */,
 				C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */,
 				7A4FB8DD1DF89B1A0073F268 /* BPTestCase.m in Sources */,
 				BAEF4B381DAC539400E68294 /* main.m in Sources */,
@@ -394,6 +456,14 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+					"$(DEVELOPER_DIR)/../SharedFrameworks",
+					"$(DEVELOPER_DIR)/Library/PrivateFrameworks",
+					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+					"$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)",
+					"$(PRIVATE_FRAMEWORKS_DIR)",
+				);
 				INFOPLIST_FILE = BluepillRunnerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -408,6 +478,14 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+					"$(DEVELOPER_DIR)/../SharedFrameworks",
+					"$(DEVELOPER_DIR)/Library/PrivateFrameworks",
+					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+					"$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)",
+					"$(PRIVATE_FRAMEWORKS_DIR)",
+				);
 				INFOPLIST_FILE = BluepillRunnerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -449,6 +527,8 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks";
+				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -468,6 +548,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRIVATE_FRAMEWORKS_DIR = "$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks";
+				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -504,6 +586,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -516,6 +599,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRIVATE_FRAMEWORKS_DIR = "$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks";
+				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -525,6 +610,20 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+					"$(DEVELOPER_DIR)/../SharedFrameworks",
+					"$(DEVELOPER_DIR)/Library/PrivateFrameworks",
+					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+					"$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)",
+					"$(PRIVATE_FRAMEWORKS_DIR)",
+				);
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -534,6 +633,14 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+					"$(DEVELOPER_DIR)/../SharedFrameworks",
+					"$(DEVELOPER_DIR)/Library/PrivateFrameworks",
+					"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks",
+					"$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)",
+					"$(PRIVATE_FRAMEWORKS_DIR)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -51,27 +51,31 @@
         [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [error localizedDescription]];
         return;
     }
+    if (self.config.cloneSimulator) {
+        [self cloneSimulatorWithDeviceSet:deviceSet withDeviceName:deviceName completion:completion];
+    } else {
+        [self createSimulatorWithDeviceSet:deviceSet withDeviceName:deviceName completion:completion];
+    }
+}
 
+- (void)createSimulatorWithDeviceSet:(SimDeviceSet *)deviceSet withDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
     __weak typeof(self) __self = self;
     [deviceSet createDeviceAsyncWithType:self.config.simDeviceType
                                  runtime:self.config.simRuntime
                                     name:deviceName
                        completionHandler:^(NSError *error, SimDevice *device) {
                            __self.device = device;
-
-                           if (__self.config.screenshotsDirectory) {
-                               __self.screenshotService = [[SimulatorScreenshotService alloc] initWithConfiguration:__self.config forDevice:device];
-                           }
-
                            if (!__self.device || error) {
                                dispatch_async(dispatch_get_main_queue(), ^{
                                    completion(error);
                                });
                            } else {
+                               if (__self.config.screenshotsDirectory) {
+                                   __self.screenshotService = [[SimulatorScreenshotService alloc] initWithConfiguration:__self.config forDevice:device];
+                               }
                                if (__self.config.simulatorPreferencesFile) {
                                    [__self copySimulatorPreferencesFile:__self.config.simulatorPreferencesFile];
                                }
-
                                dispatch_async(dispatch_get_main_queue(), ^{
                                    [__self bootWithCompletion:^(NSError *error) {
                                        dispatch_async(dispatch_get_main_queue(), ^{
@@ -81,6 +85,32 @@
                                });
                            }
                        }];
+}
+
+- (void)cloneSimulatorWithDeviceSet:(SimDeviceSet *)deviceSet withDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
+    // find simulator template and clone it
+    SimDevice *simulatorWithAppInstalled = [self findDeviceWithConfig:self.config andDeviceID:[[NSUUID alloc] initWithUUIDString:self.config.templateSimUDID]];
+    [BPUtils printInfo:DEBUGINFO withString:@"Clone with simulator template: %@", self.config.templateSimUDID];
+    __weak typeof(self) __self = self;
+    [deviceSet cloneDeviceAsync:simulatorWithAppInstalled name:deviceName completionQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) completionHandler:^(NSError *error, SimDevice *device){
+        __self.device = device;
+        if (__self.config.screenshotsDirectory) {
+            __self.screenshotService = [[SimulatorScreenshotService alloc] initWithConfiguration:__self.config forDevice:device];
+        }
+        if (!__self.device || error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(error);
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [__self bootWithCompletion:^(NSError *error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        completion(error);
+                    });
+                }];
+            });
+        }
+    }];
 }
 
 - (NSURL *)preferencesFile {
@@ -135,7 +165,7 @@
 
 - (void)bootWithCompletion:(void (^)(NSError *error))completion {
     // Now boot it.
-    [BPUtils printInfo:INFO withString:@"Booting a simulator without launching Simulator app"];
+    [BPUtils printInfo:INFO withString:@"Done with create simulator and start booting without launching Simulator app"];
     [self openSimulatorHeadlessWithCompletion:completion];
 }
 

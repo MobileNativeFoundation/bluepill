@@ -42,6 +42,7 @@
     self.config.jsonOutput = NO;
     self.config.headlessMode = YES;
     self.config.junitOutput = NO;
+    self.config.cloneSimulator = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
@@ -93,12 +94,9 @@
     self.config.testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
     self.config.testRunnerAppPath = [BPTestHelper sampleAppPath];
     self.config.appBundlePath = [BPTestHelper sampleAppUITestRunnerPath];
-
-
     NSError *err;
     BPApp *app = [BPApp appWithConfig:self.config
                             withError:&err];
-
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
@@ -145,7 +143,6 @@
     NSError *err;
     BPApp *app = [BPApp appWithConfig:self.config
                             withError:&err];
-
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
     int rc = [runner runWithBPXCTestFiles:app.testBundles];

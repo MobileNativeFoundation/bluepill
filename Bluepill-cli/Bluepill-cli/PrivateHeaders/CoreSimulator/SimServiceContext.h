@@ -22,7 +22,7 @@
     BOOL _valid;
     BOOL _initialized;
     long long _connectionType;
-    NSObject<OS_xpc_object> *_serviceConnection;
+    NSObject *_serviceConnection;
     NSObject *_serviceConnectionQueue;
     NSDate *_lastConnectionTime;
     SimProfilesPathMonitor *_profileMonitor;
@@ -39,7 +39,7 @@
 @property(retain, nonatomic) SimProfilesPathMonitor *profileMonitor; // @synthesize profileMonitor=_profileMonitor;
 @property(retain, nonatomic) NSDate *lastConnectionTime; // @synthesize lastConnectionTime=_lastConnectionTime;
 @property(retain, nonatomic) NSObject<OS_dispatch_queue> *serviceConnectionQueue; // @synthesize serviceConnectionQueue=_serviceConnectionQueue;
-@property(retain, nonatomic) NSObject<OS_xpc_object> *serviceConnection; // @synthesize serviceConnection=_serviceConnection;
+@property(retain, nonatomic) NSObject *serviceConnection; // @synthesize serviceConnection=_serviceConnection;
 @property(nonatomic) BOOL valid; // @synthesize valid=_valid;
 @property(retain, nonatomic) NSString *developerDir; // @synthesize developerDir=_developerDir;
 @property(nonatomic) long long connectionType; // @synthesize connectionType=_connectionType;
