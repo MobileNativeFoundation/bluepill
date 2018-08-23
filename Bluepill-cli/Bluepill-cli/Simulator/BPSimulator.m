@@ -58,7 +58,7 @@
     }
 }
 
-- (void) createSimulatorWithDeviceSet:(SimDeviceSet *)deviceSet withDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
+- (void)createSimulatorWithDeviceSet:(SimDeviceSet *)deviceSet withDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
     __weak typeof(self) __self = self;
     [deviceSet createDeviceAsyncWithType:self.config.simDeviceType
                                  runtime:self.config.simRuntime
