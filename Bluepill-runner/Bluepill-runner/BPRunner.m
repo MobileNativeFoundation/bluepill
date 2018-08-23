@@ -91,7 +91,7 @@ maxprocs(void)
     NSError *error = nil;
     if (self.config.appBundlePath) {
         // This is for integration testing for bluepill and bluepill-cli when we assign self.config.appBundlePath
-        simulatorUDIDString = [self installApplicationwithHost:self.config.appBundlePath withError:error];
+        simulatorUDIDString = [self installApplicationWithHost:self.config.appBundlePath withError:error];
         if (!simulatorUDIDString || !error) {
             [BPUtils printInfo:ERROR withString:@"Create simualtor and install application failed with error: %@", error];
             return FALSE;
@@ -109,7 +109,7 @@ maxprocs(void)
         }
         for (NSString *appPath in hostBundles) {
             NSError *error = nil;
-            simulatorUDIDString = [self installApplicationwithHost:appPath withError:error];
+            simulatorUDIDString = [self installApplicationWithHost:appPath withError:error];
             if (!simulatorUDIDString || !error) {
                 [BPUtils printInfo:ERROR withString:@"Created simulator template and innstall applicationn failed with error: %@", error];
                 return FALSE;
@@ -121,7 +121,7 @@ maxprocs(void)
     return TRUE;
 }
 
-- (NSString *)installApplicationwithHost:(NSString *)testHost withError:(NSError *)error {
+- (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *)error {
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
     if (!sc) {
         [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
