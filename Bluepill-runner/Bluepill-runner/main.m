@@ -9,10 +9,10 @@
 
 #import <Foundation/Foundation.h>
 #import "BPApp.h"
-#import "BPConfiguration.h"
+#import <BlueLib/BPConfiguration.h>
 #import "BPRunner.h"
 #import "BPVersion.h"
-#import "BPUtils.h"
+#import <BlueLib/BPUtils.h>
 #import <getopt.h>
 #import <libgen.h>
 

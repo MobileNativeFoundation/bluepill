@@ -328,10 +328,8 @@ static NSUUID *sessionID;
         id value = [self valueForKey:key];
         [newConfig setValue:[value copy] forKey:key];
     }
-#ifdef BP_USE_PRIVATE_FRAMEWORKS
     newConfig.simRuntime = self.simRuntime;
     newConfig.simDeviceType = self.simDeviceType;
-#endif
     newConfig.xcodePath = self.xcodePath;
     newConfig.testing_CrashAppOnLaunch = self.testing_CrashAppOnLaunch;
     newConfig.testing_HangAppOnLaunch = self.testing_HangAppOnLaunch;
@@ -768,10 +766,8 @@ static NSUUID *sessionID;
     }
 
 
-#ifdef BP_USE_PRIVATE_FRAMEWORKS
     // Validate we were passed a valid device and runtime
     self.simDeviceType = nil;
-
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.xcodePath error: err];
     if (!sc) {
         [BPUtils printInfo:ERROR withString:@"Failed to initialize SimServiceContext: %@", *err];
@@ -808,7 +804,6 @@ static NSUUID *sessionID;
                      self.runtime);
         return NO;
     }
-#endif
     return TRUE;
 }
 

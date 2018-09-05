@@ -8,8 +8,8 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import "BPXCTestFile.h"
-#import "BPConfiguration.h"
+#import <BlueLib/BPXCTestFile.h>
+#import <BlueLib/BPConfiguration.h>
 
 @interface BPRunner : NSObject
 
