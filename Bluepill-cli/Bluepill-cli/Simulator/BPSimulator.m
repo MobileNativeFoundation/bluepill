@@ -59,10 +59,6 @@
                        completionHandler:^(NSError *error, SimDevice *device) {
                            __self.device = device;
 
-                           if (__self.config.screenshotsDirectory) {
-                               __self.screenshotService = [[SimulatorScreenshotService alloc] initWithConfiguration:__self.config forDevice:device];
-                           }
-
                            if (!__self.device || error) {
                                dispatch_async(dispatch_get_main_queue(), ^{
                                    completion(error);
@@ -295,6 +291,8 @@
     NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config]];
     [appLaunchEnvironment addEntriesFromDictionary:argsAndEnv[@"env"]];
 
+    appLaunchEnvironment[@"XPC_SIMULATOR_LAUNCHD_NAME"] = [NSString stringWithFormat:@"Failed copying GlobalPreferences plist: %@", self.device.UDID.UUIDString];
+    appLaunchEnvironment[@"SIMULATOR_UDID"] = self.device.UDID.UUIDString;
     if (self.config.testing_CrashAppOnLaunch) {
         appLaunchEnvironment[@"_BP_TEST_CRASH_ON_LAUNCH"] = @"YES";
     }
@@ -315,8 +313,9 @@
     NSMutableDictionary *appLaunchEnv = [appLaunchEnvironment mutableCopy];
     [appLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStdoutKey];
     [appLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStderrKey];
-    NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/IDEBundleInjection.framework/IDEBundleInjection", self.config.xcodePath];
+    NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib", self.config.xcodePath];
     [appLaunchEnv setObject:insertLibraryPath forKey:@"DYLD_INSERT_LIBRARIES"];
+    [appLaunchEnv setObject:insertLibraryPath forKey:@"XCInjectBundleInto"];
     int fd = open([simStdoutPath UTF8String], O_RDWR);
     self.stdOutHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd];
 
@@ -334,7 +333,6 @@
         self.monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
     }
     self.monitor.device = self.device;
-    self.monitor.screenshotService = self.screenshotService;
     self.monitor.hostBundleId = hostBundleId;
     parser.delegate = self.monitor;
 

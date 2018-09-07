@@ -63,18 +63,16 @@
                                             config:(BPConfiguration *)config {
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:config.appBundlePath];
     NSString *testSimulatorFrameworkPath = [[hostAppExecPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
-    NSString *dyldLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath];
     NSMutableDictionary<NSString *, NSString *> *environment = [@{
-//                                                                  @"DYLD_PRINT_ENV": @YES,
-//                                                                  @"DYLD_PRINT_LIBRARIES": @YES,
                                                                   @"DYLD_FALLBACK_FRAMEWORK_PATH" : [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath],
-                                                                  @"DYLD_FRAMEWORK_PATH" : dyldLibraryPath,
+                                                                  @"DYLD_FALLBACK_LIBRARY_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib", config.xcodePath],
                                                                   @"DYLD_INSERT_LIBRARIES" : [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/Developer/usr/lib/libXCTTargetBootstrapInject.dylib", config.xcodePath],
-                                                                  @"DYLD_LIBRARY_PATH" : dyldLibraryPath,
+                                                                  @"DYLD_LIBRARY_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath],
+                                                                  @"DYLD_ROOT_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot", config.xcodePath],
                                                                   @"NSUnbufferedIO" : @YES,
                                                                   @"OS_ACTIVITY_DT_MODE" : @YES,
-                                                                  @"MNTF_TINKER_DELAY": @0.01,
                                                                   @"XCODE_DBG_XPC_EXCLUSIONS" : @"com.apple.dt.xctestSymbolicator",
+                                                                  @"XPC_FLAGS" : @0x0,
                                                                   @"XCTestConfigurationFilePath" : [SimulatorHelper testEnvironmentWithConfiguration:config],
                                                                   @"__XCODE_BUILT_PRODUCTS_DIR_PATHS" : testSimulatorFrameworkPath,
                                                                   @"__XPC_DYLD_FRAMEWORK_PATH" : testSimulatorFrameworkPath,
@@ -112,7 +110,6 @@
         xctConfig.disablePerformanceMetrics = NO;
         xctConfig.reportActivities = YES;
         xctConfig.testsMustRunOnMainThread = YES;
-        xctConfig.pathToXcodeReportingSocket = nil;
         testHostPath = config.testRunnerAppPath;
     }
 
