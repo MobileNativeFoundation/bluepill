@@ -126,7 +126,7 @@ bluepill_runner_tests()
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BluepillRunnerTests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
+    -derivedDataPath "build/" 2>&1 | tee result.txt
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
