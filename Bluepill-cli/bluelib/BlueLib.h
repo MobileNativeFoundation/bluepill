@@ -11,7 +11,6 @@
 #import "BPExitStatus.h"
 #import "BPExecutionPhaseProtocol.h"
 #import "SimulatorMonitor.h"
-#import "SimulatorScreenshotService.h"
 #import "BPConfiguration.h"
 #import "BPConstants.h"
 #import "BPTestCase.h"

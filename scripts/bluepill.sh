@@ -126,8 +126,8 @@ bluepill_runner_tests()
   xcodebuild \
     -project Bluepill-cli/Bluepill-cli.xcodeproj \
     -scheme BlueLib \
-    -configuration Release \
-    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
+    -configuration Debug \
+    -derivedDataPath "build/" | tee result.txt
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BluepillRunnerTests \
@@ -141,21 +141,6 @@ bluepill_runner_tests()
   fi
 }
 
-bluepill_integration_tests()
-{
-  xcodebuild test \
-    -workspace Bluepill.xcworkspace \
-    -scheme BluepillIntegrationTests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt
-
-  if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
-    echo 'Test failed'
-    echo See result.txt for details
-    cat results.txt
-    exit 1
-  fi
-}
-
 bluepill_verbose_tests()
 {
     BPBuildScript=NO
@@ -165,11 +150,10 @@ bluepill_verbose_tests()
 
 bluepill_test()
 {
+  bluepill_runner_tests
   bluepill_instance_tests 1
   bluepill_instance_tests 2
   bluepill_instance_tests 3
-  bluepill_runner_tests
-  bluepill_build
 }
 
 conf=$1
