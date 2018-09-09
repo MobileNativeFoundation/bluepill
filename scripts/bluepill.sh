@@ -123,6 +123,11 @@ bluepill_instance_tests()
 
 bluepill_runner_tests()
 {
+  xcodebuild \
+    -project Bluepill-cli/Bluepill-cli.xcodeproj \
+    -scheme BlueLib \
+    -configuration Release \
+    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BluepillRunnerTests \
