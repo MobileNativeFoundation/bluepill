@@ -623,7 +623,7 @@ static NSUUID *sessionID;
     
     //Check if xcode version running on the host match the intended Bluepill branch: Xcode 9 branch is not backward compatible
     NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
-    [BPUtils printInfo:INFO withString:@"hello xcode build version: %@", xcodeVersion];
+    [BPUtils printInfo:DEBUGINFO withString:@"xcode build version: %@", xcodeVersion];
     if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
         BP_SET_ERROR(err, @"ERROR: Invalid Xcode version:\n%s;\nOnly %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
         return NO;
