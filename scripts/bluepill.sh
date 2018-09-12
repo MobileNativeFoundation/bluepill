@@ -150,10 +150,10 @@ bluepill_verbose_tests()
 
 bluepill_test()
 {
-  bluepill_runner_tests
   bluepill_instance_tests 1
   bluepill_instance_tests 2
   bluepill_instance_tests 3
+  bluepill_runner_tests
 }
 
 conf=$1
