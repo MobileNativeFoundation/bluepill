@@ -57,6 +57,12 @@ test_runtime()
   }
 }
 
+simulator_cleanup()
+{
+echo "Clean up simulators"
+xcrun simctl list | grep BP | sed 's/).*$//g;s/^.*(//g;' | while read x; do xcrun simctl shutdown $x >/dev/null; xcrun simctl delete $x >/dev/null; done
+}
+
 bluepill_build()
 {
   set -o pipefail
@@ -150,9 +156,11 @@ bluepill_verbose_tests()
 
 bluepill_test()
 {
+  simulator_cleanup
   bluepill_instance_tests 1
   bluepill_instance_tests 2
   bluepill_instance_tests 3
+  simulator_cleanup
   bluepill_runner_tests
 }
 
