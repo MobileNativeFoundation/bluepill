@@ -9,11 +9,11 @@
 
 #import <XCTest/XCTest.h>
 #import "BPTestHelper.h"
-#import <BlueLib/BPConfiguration.h>
+#import <BluepillLib/BPConfiguration.h>
 #import "BPApp.h"
-#import <BlueLib/BPXCTestFile.h>
-#import <BlueLib/BPUtils.h>
-#import <BlueLib/BPConstants.h>
+#import <BluepillLib/BPXCTestFile.h>
+#import <BluepillLib/BPUtils.h>
+#import <BluepillLib/BPConstants.h>
 
 @interface BPAppTests : XCTestCase
 @property (nonatomic, strong) BPConfiguration* config;

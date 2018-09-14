@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */; };
+		B3103CEE2151ABBC00C5643C /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3380AEE2150BD8700752E1B /* CoreSimulator.framework */; };
+		B3109F792151F72F00B9309C /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3380AEE2150BD8700752E1B /* CoreSimulator.framework */; };
 		BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */; };
 		BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809EA1DBA910400D7D130 /* BPAppTests.m */; };
 		BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809ED1DBA929600D7D130 /* BPTestHelper.m */; };
@@ -44,6 +46,7 @@
 
 /* Begin PBXFileReference section */
 		56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPIntegrationTests.m; sourceTree = "<group>"; };
+		B3380AEE2150BD8700752E1B /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = ../../../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework; sourceTree = "<group>"; };
 		BA1809E01DBA8FB100D7D130 /* BluepillRunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BluepillRunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA1809E41DBA8FB100D7D130 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPRunnerTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -77,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3109F792151F72F00B9309C /* CoreSimulator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,12 +88,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3103CEE2151ABBC00C5643C /* CoreSimulator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B3380AED2150BD8600752E1B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B3380AEE2150BD8700752E1B /* CoreSimulator.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -158,6 +171,7 @@
 				BAEF4B361DAC539400E68294 /* Bluepill */,
 				BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */,
 				BAEF4B351DAC539400E68294 /* Products */,
+				B3380AED2150BD8600752E1B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -294,7 +308,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "VERSION=`git describe`\ntest -z \"$VERSION\" && VERSION=`cat \"$SOURCE_ROOT/../VERSION\"`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"";
+			shellScript = "VERSION=`git describe`\ntest -z \"$VERSION\" && VERSION=`cat \"$SOURCE_ROOT/../VERSION\"`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -337,6 +351,7 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks/;
 				INFOPLIST_FILE = BluepillRunnerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -351,6 +366,7 @@
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks/;
 				INFOPLIST_FILE = BluepillRunnerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -364,7 +380,7 @@
 		BAEF4B391DAC539400E68294 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -419,7 +435,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BAFCCA361E33595F00E33C31 /* bluepill.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -467,7 +483,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
+				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks";
+				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				FRAMEWORK_SEARCH_PATHS = (
+					/Library/Developer/PrivateFrameworks,
+					"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+				);
+				PRIVATE_FRAMEWORKS_DIR = /Library/Developer/PrivateFrameworks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -476,7 +499,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
+				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks";
+				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				FRAMEWORK_SEARCH_PATHS = (
+					/Library/Developer/PrivateFrameworks,
+					"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
+				);
+				PRIVATE_FRAMEWORKS_DIR = /Library/Developer/PrivateFrameworks;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

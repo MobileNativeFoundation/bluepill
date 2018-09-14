@@ -79,6 +79,43 @@
                        }];
 }
 
+- (void)cloneSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
+    assert(!self.device);
+    deviceName = deviceName ?: [NSString stringWithFormat:@"BP%d", getpid()];
+    // Create a new simulator with the given device/runtime
+    NSError *error;
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+    if (!sc) {
+        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [error localizedDescription]];
+        return;
+    }
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (!deviceSet) {
+        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [error localizedDescription]];
+        return;
+    }
+    SimDevice *simulatorWithAppInstalled = [self findDeviceWithConfig:self.config andDeviceID:[[NSUUID alloc] initWithUUIDString:self.config.templateSimUDID]];
+    [BPUtils printInfo:DEBUGINFO withString:@"Clone with simulator template: %@", self.config.templateSimUDID];
+    __weak typeof(self) __self = self;
+    [deviceSet cloneDeviceAsync:simulatorWithAppInstalled name:deviceName completionQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) completionHandler:^(NSError *error, SimDevice *device){
+        __self.device = device;
+        if (!__self.device || error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(error);
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [__self bootWithCompletion:^(NSError *error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        completion(error);
+                    });
+                }];
+            });
+        }
+    }];
+}
+
+
 - (NSURL *)preferencesFile {
     return [NSURL fileURLWithPath:kSimulatorLibraryPath relativeToURL:[NSURL fileURLWithPath:self.device.dataPath]];
 }

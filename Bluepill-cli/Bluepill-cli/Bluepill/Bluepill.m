@@ -210,6 +210,7 @@ void onInterrupt(int ignore) {
 - (void)createContext {
     BPExecutionContext *context = [[BPExecutionContext alloc] init];
     context.config = self.executionConfigCopy;
+    context.config.cloneSimulator = self.config.cloneSimulator;
     NSError *error;
     NSString *testHostPath = context.config.testRunnerAppPath ?: context.config.appBundlePath;
     BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:context.config.testBundlePath
@@ -292,7 +293,13 @@ void onInterrupt(int ignore) {
     };
 
     handler.onSuccess = ^{
-        NEXT([__self installApplicationWithContext:context]);
+        if (self.config.cloneSimulator) {
+            // launch application directly when clone simulator
+            NEXT([__self launchApplicationWithContext:context]);
+        } else {
+            // Install application when test without clone
+            NEXT([__self installApplicationWithContext:context]);
+        };
     };
 
     handler.onError = ^(NSError *error) {
@@ -316,7 +323,11 @@ void onInterrupt(int ignore) {
         [BPUtils printInfo:ERROR withString:@"Timeout: %@", stepName];
     };
 
-    [context.runner createSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
+    if (self.config.cloneSimulator) {
+        [context.runner cloneSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
+    } else {
+        [context.runner createSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
+    }
 }
 
 - (void)reuseSimulatorWithContext:(BPExecutionContext *)context {

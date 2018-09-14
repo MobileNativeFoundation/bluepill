@@ -46,15 +46,24 @@
 		7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */; };
 		7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
+		B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BAB24F721DB5DFA200867756 /* BPTestHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3103CEA2151774500C5643C /* BPXCTestFile.m in Headers */ = {isa = PBXBuildFile; fileRef = C41A2C711E0B2497005D9751 /* BPXCTestFile.m */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3103CEB21519FFE00C5643C /* SimulatorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */; };
-		B368E563213F8D2F00B4DEA3 /* BlueLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B368E55A213F8D2E00B4DEA3 /* BlueLib.framework */; };
+		B3520CDF214C5DE3003DC68F /* BPHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7E7BAE1DF2066B007928F3 /* BPHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3520CE0214C5DE3003DC68F /* BPApplicationLaunchHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7E7BB11DF20F81007928F3 /* BPApplicationLaunchHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3520CE1214C5DE3003DC68F /* BPCreateSimulatorHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7E7BB61DF2173C007928F3 /* BPCreateSimulatorHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3520CE2214C5DE3003DC68F /* BPDeleteSimulatorHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7E7BBA1DF21749007928F3 /* BPDeleteSimulatorHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3520CE3214C70EF003DC68F /* BPWaitTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7ACE1F6D1DD397F800C0FA73 /* BPWaitTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3520CE4215021D8003DC68F /* SimDeviceSet.h in Headers */ = {isa = PBXBuildFile; fileRef = BA954F751D6D1AB3007D011D /* SimDeviceSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B368E563213F8D2F00B4DEA3 /* BluepillLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B368E55A213F8D2E00B4DEA3 /* BluepillLib.framework */; };
 		B368E568213F8D2F00B4DEA3 /* bluelibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B368E567213F8D2F00B4DEA3 /* bluelibTests.m */; };
-		B368E56A213F8D2F00B4DEA3 /* BlueLib.h in Headers */ = {isa = PBXBuildFile; fileRef = B368E55C213F8D2E00B4DEA3 /* BlueLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B368E56A213F8D2F00B4DEA3 /* BluepillLib.h in Headers */ = {isa = PBXBuildFile; fileRef = B368E55C213F8D2E00B4DEA3 /* BluepillLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E571213F8E8F00B4DEA3 /* BPConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = BA53B16A1E30931E00FCED71 /* BPConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E572213F8E8F00B4DEA3 /* BPConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A4FB8CD1DF89A790073F268 /* BPConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E573213F8E8F00B4DEA3 /* BPExecutionPhaseProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A4933121DAD28C70060D54F /* BPExecutionPhaseProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E574213F8E8F00B4DEA3 /* BPExitStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A202A3D1DAED04900D935E3 /* BPExitStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B368E575213F8E8F00B4DEA3 /* SimulatorScreenshotService.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D0D40961F80DB0A00F27A59 /* SimulatorScreenshotService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B368E575213F8E8F00B4DEA3 /* (null) in Headers */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E576213F8E8F00B4DEA3 /* SimulatorMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A4933131DAD63A50060D54F /* SimulatorMonitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E577213F8E8F00B4DEA3 /* BPSimulator.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFA2F771E567EE80072C69B /* BPSimulator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E578213F952D00B4DEA3 /* SimRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = BA954F831D6D1AB3007D011D /* SimRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -72,6 +81,14 @@
 		B368E584213F9DE200B4DEA3 /* SimServiceContext.h in Headers */ = {isa = PBXBuildFile; fileRef = BA954F851D6D1AB3007D011D /* SimServiceContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E585213FA28F00B4DEA3 /* SimDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = BA954F681D6D1AB3007D011D /* SimDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E586213FA2E100B4DEA3 /* SimDeviceNotifier-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = BA954F701D6D1AB3007D011D /* SimDeviceNotifier-Protocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3DAF8372151CA8A00210286 /* BPSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFA2F781E567EE80072C69B /* BPSimulator.m */; };
+		B3DAF8382151CAAB00210286 /* SimulatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */; };
+		B3DAF8392151CACA00210286 /* SimulatorMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4933141DAD63A50060D54F /* SimulatorMonitor.m */; };
+		B3DAF83A2151CAEA00210286 /* BPStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7D66011DB679820015C937 /* BPStats.m */; };
+		B3DAF83B2151CB3300210286 /* BPCreateSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB71DF2173C007928F3 /* BPCreateSimulatorHandler.m */; };
+		B3DAF83C2151CB4100210286 /* BPDeleteSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBB1DF21749007928F3 /* BPDeleteSimulatorHandler.m */; };
+		B3DAF83D2151CB7000210286 /* BPHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BAF1DF2066B007928F3 /* BPHandler.m */; };
+		B3DAF83E2151CB9700210286 /* BPWaitTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F6E1DD397F800C0FA73 /* BPWaitTimer.m */; };
 		BA0096FE1DCA5D810000DD45 /* testConfigRelativePath.json in Resources */ = {isa = PBXBuildFile; fileRef = BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */; };
 		BA0097001DCA61210000DD45 /* BPConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */; };
 		BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA0C554C1DDAE241009E1377 /* failure_retry_report.xml */; };
@@ -195,8 +212,8 @@
 		7DDFED941F8188EC00D1357C /* SimDeviceIOPortDescriptorState-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOPortDescriptorState-Protocol.h"; sourceTree = "<group>"; };
 		7DDFED961F81896C00D1357C /* SimDeviceFramebufferService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceFramebufferService.h; sourceTree = "<group>"; };
 		B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = ../../../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework; sourceTree = "<group>"; };
-		B368E55A213F8D2E00B4DEA3 /* BlueLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BlueLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B368E55C213F8D2E00B4DEA3 /* BlueLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlueLib.h; sourceTree = "<group>"; };
+		B368E55A213F8D2E00B4DEA3 /* BluepillLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BluepillLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B368E55C213F8D2E00B4DEA3 /* BluepillLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BluepillLib.h; sourceTree = "<group>"; };
 		B368E55D213F8D2E00B4DEA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B368E562213F8D2F00B4DEA3 /* bluelibTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bluelibTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B368E567213F8D2F00B4DEA3 /* bluelibTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bluelibTests.m; sourceTree = "<group>"; };
@@ -348,7 +365,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B368E563213F8D2F00B4DEA3 /* BlueLib.framework in Frameworks */,
+				B368E563213F8D2F00B4DEA3 /* BluepillLib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,9 +405,8 @@
 				7A7901841D5CB679004D4325 /* Bluepill-cli */,
 				7A7901851D5CB679004D4325 /* main.m */,
 				BAB24F691DB5DB2300867756 /* BPInstanceTests */,
-				B368E55B213F8D2E00B4DEA3 /* bluelib */,
+				B368E55B213F8D2E00B4DEA3 /* BluepillLib */,
 				B368E566213F8D2F00B4DEA3 /* bluelibTests */,
-				7A7901831D5CB679004D4325 /* Products */,
 				BAFCCA371E335E0300E33C31 /* bluepill-cli-release.xcconfig */,
 				7A79018C1D5CF113004D4325 /* bluepill-cli.xcconfig */,
 				7A79018D1D5D136F004D4325 /* Frameworks */,
@@ -402,10 +418,11 @@
 			children = (
 				7A7901821D5CB679004D4325 /* bp */,
 				BAB24F681DB5DB2300867756 /* BPInstanceTests.xctest */,
-				B368E55A213F8D2E00B4DEA3 /* BlueLib.framework */,
+				B368E55A213F8D2E00B4DEA3 /* BluepillLib.framework */,
 				B368E562213F8D2F00B4DEA3 /* bluelibTests.xctest */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		7A7901841D5CB679004D4325 /* Bluepill-cli */ = {
@@ -458,18 +475,19 @@
 			path = SimulatorKit;
 			sourceTree = "<group>";
 		};
-		B368E55B213F8D2E00B4DEA3 /* bluelib */ = {
+		B368E55B213F8D2E00B4DEA3 /* BluepillLib */ = {
 			isa = PBXGroup;
 			children = (
-				B368E55C213F8D2E00B4DEA3 /* BlueLib.h */,
+				B368E55C213F8D2E00B4DEA3 /* BluepillLib.h */,
 				B368E55D213F8D2E00B4DEA3 /* Info.plist */,
 			);
-			path = bluelib;
+			path = BluepillLib;
 			sourceTree = "<group>";
 		};
 		B368E566213F8D2F00B4DEA3 /* bluelibTests */ = {
 			isa = PBXGroup;
 			children = (
+				7A7901831D5CB679004D4325 /* Products */,
 				B368E567213F8D2F00B4DEA3 /* bluelibTests.m */,
 				B368E569213F8D2F00B4DEA3 /* Info.plist */,
 			);
@@ -702,6 +720,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3103CEB21519FFE00C5643C /* SimulatorHelper.h in Headers */,
+				B3103CEA2151774500C5643C /* BPXCTestFile.m in Headers */,
+				B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */,
+				B3520CE4215021D8003DC68F /* SimDeviceSet.h in Headers */,
+				B3520CE3214C70EF003DC68F /* BPWaitTimer.h in Headers */,
+				B3520CDF214C5DE3003DC68F /* BPHandler.h in Headers */,
+				B3520CE0214C5DE3003DC68F /* BPApplicationLaunchHandler.h in Headers */,
+				B3520CE1214C5DE3003DC68F /* BPCreateSimulatorHandler.h in Headers */,
+				B3520CE2214C5DE3003DC68F /* BPDeleteSimulatorHandler.h in Headers */,
 				B368E586213FA2E100B4DEA3 /* SimDeviceNotifier-Protocol.h in Headers */,
 				B368E585213FA28F00B4DEA3 /* SimDevice.h in Headers */,
 				B368E584213F9DE200B4DEA3 /* SimServiceContext.h in Headers */,
@@ -715,10 +742,10 @@
 				B368E572213F8E8F00B4DEA3 /* BPConfiguration.h in Headers */,
 				B368E573213F8E8F00B4DEA3 /* BPExecutionPhaseProtocol.h in Headers */,
 				B368E574213F8E8F00B4DEA3 /* BPExitStatus.h in Headers */,
-				B368E575213F8E8F00B4DEA3 /* SimulatorScreenshotService.h in Headers */,
+				B368E575213F8E8F00B4DEA3 /* (null) in Headers */,
 				B368E576213F8E8F00B4DEA3 /* SimulatorMonitor.h in Headers */,
 				B368E577213F8E8F00B4DEA3 /* BPSimulator.h in Headers */,
-				B368E56A213F8D2F00B4DEA3 /* BlueLib.h in Headers */,
+				B368E56A213F8D2F00B4DEA3 /* BluepillLib.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -743,9 +770,9 @@
 			productReference = 7A7901821D5CB679004D4325 /* bp */;
 			productType = "com.apple.product-type.tool";
 		};
-		B368E559213F8D2E00B4DEA3 /* BlueLib */ = {
+		B368E559213F8D2E00B4DEA3 /* BluepillLib */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B368E56F213F8D2F00B4DEA3 /* Build configuration list for PBXNativeTarget "BlueLib" */;
+			buildConfigurationList = B368E56F213F8D2F00B4DEA3 /* Build configuration list for PBXNativeTarget "BluepillLib" */;
 			buildPhases = (
 				B368E555213F8D2E00B4DEA3 /* Sources */,
 				B368E556213F8D2E00B4DEA3 /* Frameworks */,
@@ -756,9 +783,9 @@
 			);
 			dependencies = (
 			);
-			name = BlueLib;
+			name = BluepillLib;
 			productName = bluelib;
-			productReference = B368E55A213F8D2E00B4DEA3 /* BlueLib.framework */;
+			productReference = B368E55A213F8D2E00B4DEA3 /* BluepillLib.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		B368E561213F8D2F00B4DEA3 /* bluelibTests */ = {
@@ -838,7 +865,7 @@
 			targets = (
 				7A7901811D5CB679004D4325 /* bp */,
 				BAB24F671DB5DB2300867756 /* BPInstanceTests */,
-				B368E559213F8D2E00B4DEA3 /* BlueLib */,
+				B368E559213F8D2E00B4DEA3 /* BluepillLib */,
 				B368E561213F8D2F00B4DEA3 /* bluelibTests */,
 			);
 		};
@@ -945,6 +972,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3DAF83E2151CB9700210286 /* BPWaitTimer.m in Sources */,
+				B3DAF83D2151CB7000210286 /* BPHandler.m in Sources */,
+				B3DAF83C2151CB4100210286 /* BPDeleteSimulatorHandler.m in Sources */,
+				B3DAF83B2151CB3300210286 /* BPCreateSimulatorHandler.m in Sources */,
+				B3DAF83A2151CAEA00210286 /* BPStats.m in Sources */,
+				B3DAF8392151CACA00210286 /* SimulatorMonitor.m in Sources */,
+				B3DAF8382151CAAB00210286 /* SimulatorHelper.m in Sources */,
+				B3DAF8372151CA8A00210286 /* BPSimulator.m in Sources */,
 				B368E57D213F9AB800B4DEA3 /* BPConstants.m in Sources */,
 				B368E57E213F9ABE00B4DEA3 /* BPTestCase.m in Sources */,
 				B368E580213F9AC800B4DEA3 /* BPConfiguration.m in Sources */,
@@ -1008,7 +1043,7 @@
 /* Begin PBXTargetDependency section */
 		B368E565213F8D2F00B4DEA3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B368E559213F8D2E00B4DEA3 /* BlueLib */;
+			target = B368E559213F8D2E00B4DEA3 /* BluepillLib */;
 			targetProxy = B368E564213F8D2F00B4DEA3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1181,7 +1216,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = bluelib/Info.plist;
+				INFOPLIST_FILE = BluepillLib/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
@@ -1214,7 +1249,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = bluelib/Info.plist;
+				INFOPLIST_FILE = BluepillLib/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
@@ -1336,7 +1371,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B368E56F213F8D2F00B4DEA3 /* Build configuration list for PBXNativeTarget "BlueLib" */ = {
+		B368E56F213F8D2F00B4DEA3 /* Build configuration list for PBXNativeTarget "BluepillLib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B368E56B213F8D2F00B4DEA3 /* Debug */,

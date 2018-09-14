@@ -27,6 +27,8 @@
 
 - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
 
+- (void)cloneSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
+
 - (void)setParserStateCompleted;
 
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID;
@@ -40,6 +42,10 @@
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion;
 
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion;
+
+- (void)addPhotosToSimulator;
+
+- (void)addVideosToSimulator;
 
 /*!
  * @discussion returns true if the simulator is still running -- useful for detecting simulator crashes

@@ -8,14 +8,16 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import <BlueLib/BPXCTestFile.h>
-#import <BlueLib/BPConfiguration.h>
+#import <BluepillLib/BPXCTestFile.h>
+#import <BluepillLib/BPConfiguration.h>
 
 @interface BPRunner : NSObject
 
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) NSString *bpExecutable;
 @property (nonatomic, strong) NSMutableArray *nsTaskList;
+@property (nonatomic, strong) NSMutableDictionary* testHostForSimUDID;
+@property (nonatomic, strong) NSMutableArray* simDeviceTemplates;
 /*!
  * @discussion get a BPRunnner to run tests
  * @param config the config to run tests
@@ -43,7 +45,8 @@
  @return 1: test failures 0: pass -1: failed to run tests
  */
 - (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *>*)xcTestFiles;
-
 - (void) interrupt;
+- (BOOL)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles;
+- (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *)error;
 
 @end
