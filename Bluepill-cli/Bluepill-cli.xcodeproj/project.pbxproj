@@ -47,14 +47,14 @@
 		7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */; };
-		B368E563213F8D2F00B4DEA3 /* BlueLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B368E55A213F8D2E00B4DEA3 /* BlueLib.framework */; };
+		B368E563213F8D2F00B4DEA3 /* BluepillLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B368E55A213F8D2E00B4DEA3 /* BluepillLib.framework */; };
 		B368E568213F8D2F00B4DEA3 /* bluelibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B368E567213F8D2F00B4DEA3 /* bluelibTests.m */; };
-		B368E56A213F8D2F00B4DEA3 /* BlueLib.h in Headers */ = {isa = PBXBuildFile; fileRef = B368E55C213F8D2E00B4DEA3 /* BlueLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B368E56A213F8D2F00B4DEA3 /* BluepillLib.h in Headers */ = {isa = PBXBuildFile; fileRef = B368E55C213F8D2E00B4DEA3 /* BluepillLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E571213F8E8F00B4DEA3 /* BPConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = BA53B16A1E30931E00FCED71 /* BPConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E572213F8E8F00B4DEA3 /* BPConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A4FB8CD1DF89A790073F268 /* BPConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E573213F8E8F00B4DEA3 /* BPExecutionPhaseProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A4933121DAD28C70060D54F /* BPExecutionPhaseProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E574213F8E8F00B4DEA3 /* BPExitStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A202A3D1DAED04900D935E3 /* BPExitStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B368E575213F8E8F00B4DEA3 /* SimulatorScreenshotService.h in Headers */ = {isa = PBXBuildFile; fileRef = 7D0D40961F80DB0A00F27A59 /* SimulatorScreenshotService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B368E575213F8E8F00B4DEA3 /* (null) in Headers */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E576213F8E8F00B4DEA3 /* SimulatorMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A4933131DAD63A50060D54F /* SimulatorMonitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E577213F8E8F00B4DEA3 /* BPSimulator.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFA2F771E567EE80072C69B /* BPSimulator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E578213F952D00B4DEA3 /* SimRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = BA954F831D6D1AB3007D011D /* SimRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -195,8 +195,8 @@
 		7DDFED941F8188EC00D1357C /* SimDeviceIOPortDescriptorState-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOPortDescriptorState-Protocol.h"; sourceTree = "<group>"; };
 		7DDFED961F81896C00D1357C /* SimDeviceFramebufferService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceFramebufferService.h; sourceTree = "<group>"; };
 		B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = ../../../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework; sourceTree = "<group>"; };
-		B368E55A213F8D2E00B4DEA3 /* BlueLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BlueLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B368E55C213F8D2E00B4DEA3 /* BlueLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlueLib.h; sourceTree = "<group>"; };
+		B368E55A213F8D2E00B4DEA3 /* BluepillLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BluepillLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B368E55C213F8D2E00B4DEA3 /* BluepillLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BluepillLib.h; sourceTree = "<group>"; };
 		B368E55D213F8D2E00B4DEA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B368E562213F8D2F00B4DEA3 /* bluelibTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bluelibTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B368E567213F8D2F00B4DEA3 /* bluelibTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bluelibTests.m; sourceTree = "<group>"; };
@@ -348,7 +348,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B368E563213F8D2F00B4DEA3 /* BlueLib.framework in Frameworks */,
+				B368E563213F8D2F00B4DEA3 /* BluepillLib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,7 +402,7 @@
 			children = (
 				7A7901821D5CB679004D4325 /* bp */,
 				BAB24F681DB5DB2300867756 /* BPInstanceTests.xctest */,
-				B368E55A213F8D2E00B4DEA3 /* BlueLib.framework */,
+				B368E55A213F8D2E00B4DEA3 /* BluepillLib.framework */,
 				B368E562213F8D2F00B4DEA3 /* bluelibTests.xctest */,
 			);
 			name = Products;
@@ -461,7 +461,7 @@
 		B368E55B213F8D2E00B4DEA3 /* bluelib */ = {
 			isa = PBXGroup;
 			children = (
-				B368E55C213F8D2E00B4DEA3 /* BlueLib.h */,
+				B368E55C213F8D2E00B4DEA3 /* BluepillLib.h */,
 				B368E55D213F8D2E00B4DEA3 /* Info.plist */,
 			);
 			path = bluelib;
@@ -715,10 +715,10 @@
 				B368E572213F8E8F00B4DEA3 /* BPConfiguration.h in Headers */,
 				B368E573213F8E8F00B4DEA3 /* BPExecutionPhaseProtocol.h in Headers */,
 				B368E574213F8E8F00B4DEA3 /* BPExitStatus.h in Headers */,
-				B368E575213F8E8F00B4DEA3 /* SimulatorScreenshotService.h in Headers */,
+				B368E575213F8E8F00B4DEA3 /* (null) in Headers */,
 				B368E576213F8E8F00B4DEA3 /* SimulatorMonitor.h in Headers */,
 				B368E577213F8E8F00B4DEA3 /* BPSimulator.h in Headers */,
-				B368E56A213F8D2F00B4DEA3 /* BlueLib.h in Headers */,
+				B368E56A213F8D2F00B4DEA3 /* BluepillLib.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -743,9 +743,9 @@
 			productReference = 7A7901821D5CB679004D4325 /* bp */;
 			productType = "com.apple.product-type.tool";
 		};
-		B368E559213F8D2E00B4DEA3 /* BlueLib */ = {
+		B368E559213F8D2E00B4DEA3 /* BluepillLib */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B368E56F213F8D2F00B4DEA3 /* Build configuration list for PBXNativeTarget "BlueLib" */;
+			buildConfigurationList = B368E56F213F8D2F00B4DEA3 /* Build configuration list for PBXNativeTarget "BluepillLib" */;
 			buildPhases = (
 				B368E555213F8D2E00B4DEA3 /* Sources */,
 				B368E556213F8D2E00B4DEA3 /* Frameworks */,
@@ -756,9 +756,9 @@
 			);
 			dependencies = (
 			);
-			name = BlueLib;
+			name = BluepillLib;
 			productName = bluelib;
-			productReference = B368E55A213F8D2E00B4DEA3 /* BlueLib.framework */;
+			productReference = B368E55A213F8D2E00B4DEA3 /* BluepillLib.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		B368E561213F8D2F00B4DEA3 /* bluelibTests */ = {
@@ -838,7 +838,7 @@
 			targets = (
 				7A7901811D5CB679004D4325 /* bp */,
 				BAB24F671DB5DB2300867756 /* BPInstanceTests */,
-				B368E559213F8D2E00B4DEA3 /* BlueLib */,
+				B368E559213F8D2E00B4DEA3 /* BluepillLib */,
 				B368E561213F8D2F00B4DEA3 /* bluelibTests */,
 			);
 		};
@@ -1008,7 +1008,7 @@
 /* Begin PBXTargetDependency section */
 		B368E565213F8D2F00B4DEA3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B368E559213F8D2E00B4DEA3 /* BlueLib */;
+			target = B368E559213F8D2E00B4DEA3 /* BluepillLib */;
 			targetProxy = B368E564213F8D2F00B4DEA3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1336,7 +1336,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B368E56F213F8D2F00B4DEA3 /* Build configuration list for PBXNativeTarget "BlueLib" */ = {
+		B368E56F213F8D2F00B4DEA3 /* Build configuration list for PBXNativeTarget "BluepillLib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B368E56B213F8D2F00B4DEA3 /* Debug */,

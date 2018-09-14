@@ -1,6 +1,6 @@
 //
-//  BlueLibTests.m
-//  BlueLibTests
+//  BluepillLibTests.m
+//  BluepillLibTests
 //
 //  Created by Xiaobo Zhang(Tools Team) on 9/4/18.
 //  Copyright © 2018 LinkedIn. All rights reserved.
@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 
-@interface BlueLibTests : XCTestCase
+@interface BluepillLibTests : XCTestCase
 
 @end
 
-@implementation BlueLibTests
+@implementation BluepillLibTests
 
 - (void)setUp {
     [super setUp];

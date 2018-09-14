@@ -59,8 +59,8 @@ test_runtime()
 
 simulator_cleanup()
 {
-echo "Clean up simulators"
-xcrun simctl list | grep BP | sed 's/).*$//g;s/^.*(//g;' | while read x; do xcrun simctl shutdown $x >/dev/null; xcrun simctl delete $x >/dev/null; done
+  echo "Clean up simulators"
+  xcrun simctl list | grep BP | sed 's/).*$//g;s/^.*(//g;' | while read x; do xcrun simctl shutdown $x >/dev/null; xcrun simctl delete $x >/dev/null; done
 }
 
 bluepill_build()
@@ -137,7 +137,7 @@ bluepill_runner_tests()
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BluepillRunnerTests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt
+    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
