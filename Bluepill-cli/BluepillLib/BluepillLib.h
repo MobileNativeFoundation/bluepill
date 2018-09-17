@@ -6,7 +6,6 @@
 //  Copyright © 2018 LinkedIn. All rights reserved.
 //
 // In this header, you should import all the public headers of your framework using statements like #import <BluepillLib/PublicHeader.h>
-#import <Cocoa/Cocoa.h>
 #import "BPSimulator.h"
 #import "BPExitStatus.h"
 #import "BPExecutionPhaseProtocol.h"
