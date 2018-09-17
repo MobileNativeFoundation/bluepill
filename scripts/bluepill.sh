@@ -153,7 +153,7 @@ bluepill_verbose_tests()
     export BPBuildScript
     bluepill_test
 }
-
+# The simulator clean up is to workaound a Xcode10 beta5 bug(CircleCI is still using beta5)
 bluepill_test()
 {
   simulator_cleanup
