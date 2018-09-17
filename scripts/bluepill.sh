@@ -73,7 +73,7 @@ bluepill_build()
     -derivedDataPath "build/" | tee result.txt | $XCPRETTY
   xcodebuild \
     -project Bluepill-cli/Bluepill-cli.xcodeproj \
-    -scheme BlueLib \
+    -scheme BluepillLib \
     -configuration Release \
     -derivedDataPath "build/" | tee result.txt | $XCPRETTY
   xcodebuild \
@@ -131,7 +131,7 @@ bluepill_runner_tests()
 {
   xcodebuild \
     -project Bluepill-cli/Bluepill-cli.xcodeproj \
-    -scheme BlueLib \
+    -scheme BluepillLib \
     -configuration Debug \
     -derivedDataPath "build/" | tee result.txt
   xcodebuild test \
