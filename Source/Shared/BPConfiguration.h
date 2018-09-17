@@ -9,10 +9,10 @@
 
 #import <Foundation/Foundation.h>
 #import "BPConstants.h"
-// Only `bp` uses the CoreSimulator private frameworks.
-#ifdef BP_USE_PRIVATE_FRAMEWORKS
-#import "CoreSimulator.h"
-#endif
+#import <BluepillLib/SimRuntime.h>
+#import <BluepillLib/SimDeviceType.h>
+#import <BluepillLib/SimServiceContext.h>
+#import <BluepillLib/SimDevice.h>
 
 /**
  BPConfiguration stores necessary information for Simulator Runner to run
@@ -99,10 +99,8 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 // Generated fields
 @property (nonatomic, strong) NSString *xcodePath;
 
-#ifdef BP_USE_PRIVATE_FRAMEWORKS
 @property (nonatomic, strong) SimDeviceType *simDeviceType;
 @property (nonatomic, strong) SimRuntime *simRuntime;
-#endif
 
 
 /**

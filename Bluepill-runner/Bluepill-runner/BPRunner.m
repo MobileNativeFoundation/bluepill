@@ -9,13 +9,13 @@
 
 #import "BPRunner.h"
 #import "BPPacker.h"
-#import "BPUtils.h"
+#import <BluepillLib/BPUtils.h>
 #import "BPReportCollector.h"
 #import "BPVersion.h"
 #include <sys/sysctl.h>
 #include <pwd.h>
 #import <AppKit/AppKit.h>
-
+#import <BluepillLib/BPSimulator.h>
 
 static int volatile interrupted = 0;
 

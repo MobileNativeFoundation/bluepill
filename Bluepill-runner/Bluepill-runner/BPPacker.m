@@ -7,10 +7,10 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
-#import "BPConstants.h"
+#import <BluepillLib/BPConstants.h>
 #import "BPPacker.h"
-#import "BPXCTestFile.h"
-#import "BPUtils.h"
+#import <BluepillLib/BPXCTestFile.h>
+#import <BluepillLib/BPUtils.h>
 
 @implementation BPPacker
 

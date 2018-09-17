@@ -57,9 +57,25 @@ test_runtime()
   }
 }
 
+simulator_cleanup()
+{
+  echo "Clean up simulators"
+  xcrun simctl list | grep BP | sed 's/).*$//g;s/^.*(//g;' | while read x; do xcrun simctl shutdown $x >/dev/null; xcrun simctl delete $x >/dev/null; done
+}
+
 bluepill_build()
 {
   set -o pipefail
+  xcodebuild \
+    -project Bluepill-cli/Bluepill-cli.xcodeproj \
+    -scheme bluepill-cli \
+    -configuration Release \
+    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
+  xcodebuild \
+    -project Bluepill-cli/Bluepill-cli.xcodeproj \
+    -scheme BluepillLib \
+    -configuration Release \
+    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
   xcodebuild \
     -workspace Bluepill.xcworkspace \
     -scheme bluepill \
@@ -113,6 +129,11 @@ bluepill_instance_tests()
 
 bluepill_runner_tests()
 {
+  xcodebuild \
+    -project Bluepill-cli/Bluepill-cli.xcodeproj \
+    -scheme BluepillLib \
+    -configuration Debug \
+    -derivedDataPath "build/" | tee result.txt
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BluepillRunnerTests \
@@ -126,35 +147,23 @@ bluepill_runner_tests()
   fi
 }
 
-bluepill_integration_tests()
-{
-  xcodebuild test \
-    -workspace Bluepill.xcworkspace \
-    -scheme BluepillIntegrationTests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt
-
-  if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
-    echo 'Test failed'
-    echo See result.txt for details
-    cat results.txt
-    exit 1
-  fi
-}
-
 bluepill_verbose_tests()
 {
     BPBuildScript=NO
     export BPBuildScript
     bluepill_test
 }
-
+# The simulator clean up is to workaound a Xcode10 beta5 bug(CircleCI is still using beta5)
 bluepill_test()
 {
+  simulator_cleanup
   bluepill_instance_tests 1
+  simulator_cleanup
   bluepill_instance_tests 2
+  simulator_cleanup
   bluepill_instance_tests 3
+  simulator_cleanup
   bluepill_runner_tests
-  bluepill_build
 }
 
 conf=$1

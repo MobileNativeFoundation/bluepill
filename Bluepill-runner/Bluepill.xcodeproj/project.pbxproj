@@ -8,22 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */; };
-		7A4FB8CB1DF89A370073F268 /* BPXCTestFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */; };
-		7A4FB8DD1DF89B1A0073F268 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */; };
-		7A4FB8DE1DF89B1A0073F268 /* BPTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */; };
-		7A6672C01E0B0BB400AC6778 /* BPXCTestFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */; };
-		7A6672C11E0B0BBC00AC6778 /* BPTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */; };
-		7A6672C21E0B0BBF00AC6778 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */; };
 		BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */; };
 		BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809EA1DBA910400D7D130 /* BPAppTests.m */; };
 		BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809ED1DBA929600D7D130 /* BPTestHelper.m */; };
-		BA1809F91DBA949600D7D130 /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */; };
 		BA1809FA1DBA949600D7D130 /* BPRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F81DB14B5F001F32A2 /* BPRunner.m */; };
 		BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
 		BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
-		BA180A021DBA949600D7D130 /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C5D1DB80971000ED28C /* BPUtils.m */; };
 		BA23EF611EF8ACF10074A4EF /* BPPackerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23EF601EF8ACF10074A4EF /* BPPackerTests.m */; };
-		BA53B16F1E30932400FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16E1E30932400FCED71 /* BPConstants.m */; };
 		BA7031881DE4ED2F008B3539 /* result1.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031831DE4ED2F008B3539 /* result1.xml */; };
 		BA7031891DE4ED2F008B3539 /* result2.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031851DE4ED2F008B3539 /* result2.xml */; };
 		BA70318A1DE4ED2F008B3539 /* result3.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031871DE4ED2F008B3539 /* result3.xml */; };
@@ -35,11 +26,8 @@
 		BAEF4B381DAC539400E68294 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BAEF4B371DAC539400E68294 /* main.m */; };
 		C41C41F31DB04032001F32A2 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
 		C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F81DB14B5F001F32A2 /* BPRunner.m */; };
-		C42A401E1E31865D00B83FCC /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16E1E30932400FCED71 /* BPConstants.m */; };
 		C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E54B1DC94BB200BC80EE /* BPCLITests.m */; };
-		C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
-		C4FD8C5E1DB80971000ED28C /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C5D1DB80971000ED28C /* BPUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,12 +44,6 @@
 
 /* Begin PBXFileReference section */
 		56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPIntegrationTests.m; sourceTree = "<group>"; };
-		7A4FB8C91DF89A370073F268 /* BPXCTestFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPXCTestFile.h; sourceTree = "<group>"; };
-		7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPXCTestFile.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		7A4FB8D91DF89B1A0073F268 /* BPTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestCase.h; sourceTree = "<group>"; };
-		7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestCase.m; sourceTree = "<group>"; };
-		7A4FB8DB1DF89B1A0073F268 /* BPTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestClass.h; sourceTree = "<group>"; };
-		7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestClass.m; sourceTree = "<group>"; };
 		BA1809E01DBA8FB100D7D130 /* BluepillRunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BluepillRunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA1809E41DBA8FB100D7D130 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPRunnerTests.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -69,8 +51,6 @@
 		BA1809EC1DBA929600D7D130 /* BPTestHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BPTestHelper.h; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.h"; sourceTree = "<group>"; };
 		BA1809ED1DBA929600D7D130 /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BPTestHelper.m; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.m"; sourceTree = "<group>"; };
 		BA23EF601EF8ACF10074A4EF /* BPPackerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPackerTests.m; sourceTree = "<group>"; };
-		BA53B16D1E30932400FCED71 /* BPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConstants.h; sourceTree = "<group>"; };
-		BA53B16E1E30932400FCED71 /* BPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConstants.m; sourceTree = "<group>"; };
 		BA7031831DE4ED2F008B3539 /* result1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result1.xml; sourceTree = "<group>"; };
 		BA7031851DE4ED2F008B3539 /* result2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result2.xml; sourceTree = "<group>"; };
 		BA7031871DE4ED2F008B3539 /* result3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result3.xml; sourceTree = "<group>"; };
@@ -88,12 +68,8 @@
 		C41C41F81DB14B5F001F32A2 /* BPRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPRunner.m; sourceTree = "<group>"; };
 		C432D41F1DDCF05400FB27D0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
 		C467E54B1DC94BB200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
-		C4FD8C4D1DB692F8000ED28C /* BPConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConfiguration.h; sourceTree = "<group>"; };
-		C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPConfiguration.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C4FD8C561DB6E09B000ED28C /* BPPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPPacker.h; sourceTree = "<group>"; };
 		C4FD8C571DB6E09B000ED28C /* BPPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPacker.m; sourceTree = "<group>"; };
-		C4FD8C5C1DB80971000ED28C /* BPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPUtils.h; sourceTree = "<group>"; };
-		C4FD8C5D1DB80971000ED28C /* BPUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,26 +90,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7A4FB8C81DF899CB0073F268 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				BA53B16D1E30932400FCED71 /* BPConstants.h */,
-				BA53B16E1E30932400FCED71 /* BPConstants.m */,
-				C4FD8C4D1DB692F8000ED28C /* BPConfiguration.h */,
-				C4FD8C4E1DB692F8000ED28C /* BPConfiguration.m */,
-				7A4FB8D91DF89B1A0073F268 /* BPTestCase.h */,
-				7A4FB8DA1DF89B1A0073F268 /* BPTestCase.m */,
-				7A4FB8DB1DF89B1A0073F268 /* BPTestClass.h */,
-				7A4FB8DC1DF89B1A0073F268 /* BPTestClass.m */,
-				C4FD8C5C1DB80971000ED28C /* BPUtils.h */,
-				C4FD8C5D1DB80971000ED28C /* BPUtils.m */,
-				7A4FB8C91DF89A370073F268 /* BPXCTestFile.h */,
-				7A4FB8CA1DF89A370073F268 /* BPXCTestFile.m */,
-			);
-			name = Shared;
-			path = ../../Source/Shared;
-			sourceTree = "<group>";
-		};
 		BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */ = {
 			isa = PBXGroup;
 			children = (
@@ -217,7 +173,6 @@
 		BAEF4B361DAC539400E68294 /* Bluepill */ = {
 			isa = PBXGroup;
 			children = (
-				7A4FB8C81DF899CB0073F268 /* Shared */,
 				C432D41F1DDCF05400FB27D0 /* BPVersion.h */,
 				BAEF4B371DAC539400E68294 /* main.m */,
 				C41C41F71DB14B5F001F32A2 /* BPRunner.h */,
@@ -348,21 +303,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C42A401E1E31865D00B83FCC /* BPConstants.m in Sources */,
 				BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */,
 				BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */,
 				BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */,
 				BA1809FA1DBA949600D7D130 /* BPRunner.m in Sources */,
 				C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */,
-				7A6672C21E0B0BBF00AC6778 /* BPTestCase.m in Sources */,
 				BAD8484D1DBC6BA2007034CF /* BPReportCollectorTests.m in Sources */,
 				BA1809FD1DBA949600D7D130 /* BPApp.m in Sources */,
-				7A6672C01E0B0BB400AC6778 /* BPXCTestFile.m in Sources */,
 				BAD8484B1DBC6A86007034CF /* BPReportCollector.m in Sources */,
-				BA1809F91DBA949600D7D130 /* BPConfiguration.m in Sources */,
-				BA180A021DBA949600D7D130 /* BPUtils.m in Sources */,
 				BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */,
-				7A6672C11E0B0BBC00AC6778 /* BPTestClass.m in Sources */,
 				BA23EF611EF8ACF10074A4EF /* BPPackerTests.m in Sources */,
 				56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */,
 			);
@@ -373,16 +322,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */,
-				7A4FB8DD1DF89B1A0073F268 /* BPTestCase.m in Sources */,
 				BAEF4B381DAC539400E68294 /* main.m in Sources */,
-				C4FD8C4F1DB692F8000ED28C /* BPConfiguration.m in Sources */,
 				C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */,
 				BAD8484A1DBC6A83007034CF /* BPReportCollector.m in Sources */,
-				7A4FB8DE1DF89B1A0073F268 /* BPTestClass.m in Sources */,
 				C41C41F31DB04032001F32A2 /* BPApp.m in Sources */,
-				7A4FB8CB1DF89A370073F268 /* BPXCTestFile.m in Sources */,
-				C4FD8C5E1DB80971000ED28C /* BPUtils.m in Sources */,
-				BA53B16F1E30932400FCED71 /* BPConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
