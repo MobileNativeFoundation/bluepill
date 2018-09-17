@@ -158,7 +158,9 @@ bluepill_test()
 {
   simulator_cleanup
   bluepill_instance_tests 1
+  simulator_cleanup
   bluepill_instance_tests 2
+  simulator_cleanup
   bluepill_instance_tests 3
   simulator_cleanup
   bluepill_runner_tests
