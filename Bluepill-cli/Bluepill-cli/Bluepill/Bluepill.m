@@ -211,6 +211,7 @@ void onInterrupt(int ignore) {
     BPExecutionContext *context = [[BPExecutionContext alloc] init];
     context.config = self.executionConfigCopy;
     context.config.cloneSimulator = self.config.cloneSimulator;
+    context.config.templateSimUDID = self.config.templateSimUDID;
     NSError *error;
     NSString *testHostPath = context.config.testRunnerAppPath ?: context.config.appBundlePath;
     BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:context.config.testBundlePath

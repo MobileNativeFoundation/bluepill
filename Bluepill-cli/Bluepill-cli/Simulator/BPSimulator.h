@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 #import "BPExitStatus.h"
 #import "SimulatorMonitor.h"
+#import "BPXCTestFile.h"
 
 @class BPConfiguration;
 @class BPTreeParser;
@@ -46,6 +47,10 @@
 - (void)addPhotosToSimulator;
 
 - (void)addVideosToSimulator;
+
+- (NSMutableDictionary*)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles;
+
+- (void)deleteTemplateSimulator;
 
 /*!
  * @discussion returns true if the simulator is still running -- useful for detecting simulator crashes

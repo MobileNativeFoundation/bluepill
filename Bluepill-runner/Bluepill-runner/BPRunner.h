@@ -17,7 +17,7 @@
 @property (nonatomic, strong) NSString *bpExecutable;
 @property (nonatomic, strong) NSMutableArray *nsTaskList;
 @property (nonatomic, strong) NSMutableDictionary* testHostForSimUDID;
-@property (nonatomic, strong) NSMutableArray* simDeviceTemplates;
+
 /*!
  * @discussion get a BPRunnner to run tests
  * @param config the config to run tests

@@ -18,6 +18,8 @@
 #import <sys/stat.h>
 #import "BPTestBundleConnection.h"
 #import "BPTestDaemonConnection.h"
+#import "BPWaitTimer.h"
+#import "BPCreateSimulatorHandler.h"
 
 @interface BPSimulator()
 
@@ -25,6 +27,7 @@
 @property (nonatomic, strong) NSRunningApplication *app;
 @property (nonatomic, strong) NSFileHandle *stdOutHandle;
 @property (nonatomic, assign) BOOL needsRetry;
+@property (nonatomic, strong) NSMutableArray* simDeviceTemplates;
 
 @end
 
@@ -34,6 +37,117 @@
     BPSimulator *sim = [[self alloc] init];
     sim.config = config;
     return sim;
+}
+
+- (NSMutableDictionary*)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles {
+    NSMutableDictionary* testHostForSimUDID = [[NSMutableDictionary alloc] init];
+    NSString *simulatorUDIDString = nil;
+    NSError *error = nil;
+    if (self.config.appBundlePath) {
+        // This is for integration testing for bluepill and bluepill-cli when we assign self.config.appBundlePath
+        simulatorUDIDString = [self installApplicationWithHost:self.config.appBundlePath withError:error];
+        if (!simulatorUDIDString || !error) {
+            [BPUtils printInfo:ERROR withString:@"Create simualtor and install application failed with error: %@", error];
+            return FALSE;
+        }
+        testHostForSimUDID[self.config.appBundlePath] = simulatorUDIDString;
+        [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, self.config.appBundlePath];
+    } else {
+        // This is for testing in command line when we pass the xctestrun file
+        NSMutableSet *hostBundles = [[NSMutableSet alloc] init];
+        for (BPXCTestFile* bundle in testBundles) {
+            [hostBundles addObject:bundle.testHostPath];
+        }
+        if ([testBundles count] == 0) {
+            [BPUtils printInfo:ERROR withString:@"No host bundle founnd!"];
+        }
+        for (NSString *appPath in hostBundles) {
+            NSError *error = nil;
+            simulatorUDIDString = [self installApplicationWithHost:appPath withError:error];
+            if (!simulatorUDIDString || !error) {
+                [BPUtils printInfo:ERROR withString:@"Created simulator template and innstall applicationn failed with error: %@", error];
+                return FALSE;
+            }
+            [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, appPath];
+            testHostForSimUDID[appPath] = simulatorUDIDString;
+        }
+    }
+    return testHostForSimUDID;
+}
+
+- (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *)error {
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+    if (!sc) {
+        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        return nil;
+    }
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (!deviceSet) {
+        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        return nil;
+    }
+    BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.createTimeout doubleValue]];
+    [timer start];
+    BPCreateSimulatorHandler *handler = [BPCreateSimulatorHandler handlerWithTimer:timer];
+    handler.beginWith = ^{
+        [BPUtils printInfo:DEBUGINFO withString:@"Started create simulator"];
+    };
+    handler.onError = ^(NSError *error) {
+        [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", [error localizedDescription]];
+    };
+    handler.onTimeout = ^{
+        [BPUtils printInfo:ERROR withString:@"Timeout creating simulator"];
+    };
+    [self createSimulatorWithDeviceName:@"BP_Simultator_Template" completion:handler.defaultHandlerBlock];
+    if (self.device != nil) {
+        [self.simDeviceTemplates addObject:self.device];
+        [self.device bootWithOptions:nil error:&error];
+        if (error) {
+            [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", error];
+        }
+        // Add photos and videos to the simulator.
+        [self addPhotosToSimulator];
+        [self addVideosToSimulator];
+        NSString *hostBundleId = [SimulatorHelper bundleIdForPath:testHost];
+        // Install the host application
+        NSError *__autoreleasing *installError = nil;
+        bool installed = [self.device installApplication:[NSURL fileURLWithPath:testHost]
+                                                    withOptions:@{kCFBundleIdentifier: hostBundleId}
+                                                          error:installError];
+        if (!installed) {
+            [BPUtils printInfo:ERROR withString:@"Install application failed with error: %@", *installError];
+            [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
+                if (error) {
+                    [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+                }
+            }];
+        } else {
+            [self.device shutdownWithError:&error];
+            if(error) {
+                [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", error];
+                [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
+                    if (error) {
+                        [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+                    }
+                }];
+            }
+        }
+        return self.device.UDID.UUIDString;
+    }
+    return nil;
+}
+
+- (void)deleteTemplateSimulator {
+    NSError *error;
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    for(SimDevice *simDevice in self.simDeviceTemplates) {
+        [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
+            if (error) {
+                [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+            }
+        }];
+    }
 }
 
 - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
