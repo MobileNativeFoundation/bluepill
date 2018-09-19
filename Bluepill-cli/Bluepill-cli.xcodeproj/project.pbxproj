@@ -407,6 +407,7 @@
 				BAB24F691DB5DB2300867756 /* BPInstanceTests */,
 				B368E55B213F8D2E00B4DEA3 /* BluepillLib */,
 				B368E566213F8D2F00B4DEA3 /* bluelibTests */,
+				7A7901831D5CB679004D4325 /* Products */,
 				BAFCCA371E335E0300E33C31 /* bluepill-cli-release.xcconfig */,
 				7A79018C1D5CF113004D4325 /* bluepill-cli.xcconfig */,
 				7A79018D1D5D136F004D4325 /* Frameworks */,

@@ -28,7 +28,6 @@
 #import "SimDeviceSet.h"
 #import "SimServiceContext.h"
 #import "SimulatorHelper.h"
-
 //! Project version number for BluepillLib.
 FOUNDATION_EXPORT double BluepillLibVersionNumber;
 
