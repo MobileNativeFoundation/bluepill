@@ -8,12 +8,7 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #include "../Configurations/common.xcconfig"
-DEVELOPER_PRIVATE_FRAMEWORKS_DIR = $(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks
-//DEVELOPER_FRAMEWORKS = $(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks
-//SHARED_FRAMEWORKS_DIR = $(DEVELOPER_DIR)/Contents/SharedFrameworks
-PRIVATE_FRAMEWORKS_DIR = $(DEVELOPER_DIR)/Library/PrivateFrameworks
-CLANG_CXX_LIBRARY = "libc++"
 
-FRAMEWORK_SEARCH_PATHS = "$(PRIVATE_FRAMEWORKS_DIR)" "$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)" "$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks" "$(DEVELOPER_DIR)/Library/PrivateFrameworks" "$(DEVELOPER_DIR)/../SharedFrameworks" "$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks"
+FRAMEWORK_SEARCH_PATHS = "/Library/Developer/PrivateFrameworks"
 
 OTHER_LDFLAGS = -weak_framework CoreSimulator

@@ -778,6 +778,7 @@
 				B368E556213F8D2E00B4DEA3 /* Frameworks */,
 				B368E557213F8D2E00B4DEA3 /* Headers */,
 				B368E558213F8D2E00B4DEA3 /* Resources */,
+				B3109F7B21521EA200B9309C /* Save Git SHA1 and Xcode Version */,
 			);
 			buildRules = (
 			);
@@ -916,6 +917,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		B3109F7B21521EA200B9309C /* Save Git SHA1 and Xcode Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Save Git SHA1 and Xcode Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "VERSION=`git describe`\ntest -z \"$VERSION\" && VERSION=`cat \"$SOURCE_ROOT/../VERSION\"`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"\n\n";
+		};
 		C48AE3811FBCC53600997BA0 /* Save Git SHA1 and Xcode Version */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -929,7 +948,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "VERSION=`git describe`\ntest -z \"$VERSION\" && VERSION=`cat \"$SOURCE_ROOT/../VERSION\"`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"";
+			shellScript = "VERSION=`git describe`\ntest -z \"$VERSION\" && VERSION=`cat \"$SOURCE_ROOT/../VERSION\"`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

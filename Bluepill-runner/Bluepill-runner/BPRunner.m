@@ -150,7 +150,6 @@ maxprocs(void)
         [BPUtils printInfo:ERROR withString:@"Timeout creating simulator"];
     };
     [bpSimulator createSimulatorWithDeviceName:@"BP_Simultator_Template" completion:handler.defaultHandlerBlock];
-
     if (bpSimulator.device != nil) {
         [self.simDeviceTemplates addObject:bpSimulator.device];
         [bpSimulator.device bootWithOptions:nil error:&error];
@@ -167,7 +166,7 @@ maxprocs(void)
                                            withOptions:@{kCFBundleIdentifier: hostBundleId}
                                                  error:installError];
         if (!installed) {
-            [BPUtils printInfo:ERROR withString:@"Install application failed with error: %@", installError];
+            [BPUtils printInfo:ERROR withString:@"Install application failed with error: %@", *installError];
             [deviceSet deleteDeviceAsync:bpSimulator.device completionHandler:^(NSError *error) {
                 if (error) {
                     [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
@@ -188,8 +187,8 @@ maxprocs(void)
     } else {
         return nil;
     }
-    
 }
+
 - (NSTask *)newTaskWithBundle:(BPXCTestFile *)bundle
                     andNumber:(NSUInteger)number
                     andDevice:(NSString *)deviceID

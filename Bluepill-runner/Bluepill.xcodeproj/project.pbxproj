@@ -483,14 +483,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
-				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks";
-				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
+				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
-				FRAMEWORK_SEARCH_PATHS = (
-					/Library/Developer/PrivateFrameworks,
-					"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
-				);
-				PRIVATE_FRAMEWORKS_DIR = /Library/Developer/PrivateFrameworks;
+				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks;
+				PRIVATE_FRAMEWORKS_DIR = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -499,14 +495,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
-				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks";
-				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
+				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
-				FRAMEWORK_SEARCH_PATHS = (
-					/Library/Developer/PrivateFrameworks,
-					"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks",
-				);
-				PRIVATE_FRAMEWORKS_DIR = /Library/Developer/PrivateFrameworks;
+				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks;
+				PRIVATE_FRAMEWORKS_DIR = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
