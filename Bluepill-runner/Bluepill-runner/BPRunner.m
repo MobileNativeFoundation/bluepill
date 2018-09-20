@@ -191,7 +191,7 @@ maxprocs(void)
                 withString:@"Lowering number of simulators from %lu to %lu because there aren't enough tests.",
                             numSims, bundles.count];
     }
-    if (self.config.cloneSimulator) {
+    if (self.config.cloneSimulator) {        
         self.testHostForSimUDID = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles];
         if ([self.testHostForSimUDID count] == 0) {
             return 1;

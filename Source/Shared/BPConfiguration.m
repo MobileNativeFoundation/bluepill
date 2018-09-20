@@ -93,7 +93,7 @@ struct BPOptions {
         "Paths to the images to be uploaded."},
 
     // options with no argument
-    {'L', "clone-simulator", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "ON", BP_VALUE | BP_BOOL , "cloneSimulator",
+    {'L', "clone-simulator", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "", BP_VALUE | BP_BOOL , "cloneSimulator",
         "Run test with clone-simulator"},
     {'H', "headless", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
         "Run in headless mode (no GUI)."},
