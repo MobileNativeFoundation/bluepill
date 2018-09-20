@@ -207,7 +207,7 @@
         return;
     }
     SimDevice *simulatorWithAppInstalled = [self findDeviceWithConfig:self.config andDeviceID:[[NSUUID alloc] initWithUUIDString:self.config.templateSimUDID]];
-    [BPUtils printInfo:DEBUGINFO withString:@"Clone with simulator template: %@", self.config.templateSimUDID];
+    [BPUtils printInfo:INFO withString:@"Clone with simulator template: %@", self.config.templateSimUDID];
     __weak typeof(self) __self = self;
     [deviceSet cloneDeviceAsync:simulatorWithAppInstalled name:deviceName completionQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0) completionHandler:^(NSError *error, SimDevice *device){
         __self.device = device;
