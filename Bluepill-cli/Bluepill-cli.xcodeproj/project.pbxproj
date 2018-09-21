@@ -46,7 +46,16 @@
 		7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */; };
 		7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
+		B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BAB24F721DB5DFA200867756 /* BPTestHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3103CEA2151774500C5643C /* BPXCTestFile.m in Headers */ = {isa = PBXBuildFile; fileRef = C41A2C711E0B2497005D9751 /* BPXCTestFile.m */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3103CEB21519FFE00C5643C /* SimulatorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */; };
+		B3520CDF214C5DE3003DC68F /* BPHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7E7BAE1DF2066B007928F3 /* BPHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3520CE0214C5DE3003DC68F /* BPApplicationLaunchHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7E7BB11DF20F81007928F3 /* BPApplicationLaunchHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3520CE1214C5DE3003DC68F /* BPCreateSimulatorHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7E7BB61DF2173C007928F3 /* BPCreateSimulatorHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3520CE2214C5DE3003DC68F /* BPDeleteSimulatorHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7E7BBA1DF21749007928F3 /* BPDeleteSimulatorHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3520CE3214C70EF003DC68F /* BPWaitTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = 7ACE1F6D1DD397F800C0FA73 /* BPWaitTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3520CE4215021D8003DC68F /* SimDeviceSet.h in Headers */ = {isa = PBXBuildFile; fileRef = BA954F751D6D1AB3007D011D /* SimDeviceSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E563213F8D2F00B4DEA3 /* BluepillLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B368E55A213F8D2E00B4DEA3 /* BluepillLib.framework */; };
 		B368E568213F8D2F00B4DEA3 /* bluelibTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B368E567213F8D2F00B4DEA3 /* bluelibTests.m */; };
 		B368E56A213F8D2F00B4DEA3 /* BluepillLib.h in Headers */ = {isa = PBXBuildFile; fileRef = B368E55C213F8D2E00B4DEA3 /* BluepillLib.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -72,6 +81,14 @@
 		B368E584213F9DE200B4DEA3 /* SimServiceContext.h in Headers */ = {isa = PBXBuildFile; fileRef = BA954F851D6D1AB3007D011D /* SimServiceContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E585213FA28F00B4DEA3 /* SimDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = BA954F681D6D1AB3007D011D /* SimDevice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E586213FA2E100B4DEA3 /* SimDeviceNotifier-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = BA954F701D6D1AB3007D011D /* SimDeviceNotifier-Protocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3DAF8372151CA8A00210286 /* BPSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFA2F781E567EE80072C69B /* BPSimulator.m */; };
+		B3DAF8382151CAAB00210286 /* SimulatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */; };
+		B3DAF8392151CACA00210286 /* SimulatorMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4933141DAD63A50060D54F /* SimulatorMonitor.m */; };
+		B3DAF83A2151CAEA00210286 /* BPStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7D66011DB679820015C937 /* BPStats.m */; };
+		B3DAF83B2151CB3300210286 /* BPCreateSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB71DF2173C007928F3 /* BPCreateSimulatorHandler.m */; };
+		B3DAF83C2151CB4100210286 /* BPDeleteSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBB1DF21749007928F3 /* BPDeleteSimulatorHandler.m */; };
+		B3DAF83D2151CB7000210286 /* BPHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BAF1DF2066B007928F3 /* BPHandler.m */; };
+		B3DAF83E2151CB9700210286 /* BPWaitTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F6E1DD397F800C0FA73 /* BPWaitTimer.m */; };
 		BA0096FE1DCA5D810000DD45 /* testConfigRelativePath.json in Resources */ = {isa = PBXBuildFile; fileRef = BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */; };
 		BA0097001DCA61210000DD45 /* BPConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */; };
 		BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA0C554C1DDAE241009E1377 /* failure_retry_report.xml */; };
@@ -406,6 +423,7 @@
 				B368E562213F8D2F00B4DEA3 /* bluelibTests.xctest */,
 			);
 			name = Products;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		7A7901841D5CB679004D4325 /* Bluepill-cli */ = {
@@ -470,6 +488,7 @@
 		B368E566213F8D2F00B4DEA3 /* bluelibTests */ = {
 			isa = PBXGroup;
 			children = (
+				7A7901831D5CB679004D4325 /* Products */,
 				B368E567213F8D2F00B4DEA3 /* bluelibTests.m */,
 				B368E569213F8D2F00B4DEA3 /* Info.plist */,
 			);
@@ -702,6 +721,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3103CEB21519FFE00C5643C /* SimulatorHelper.h in Headers */,
+				B3103CEA2151774500C5643C /* BPXCTestFile.m in Headers */,
+				B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */,
+				B3520CE4215021D8003DC68F /* SimDeviceSet.h in Headers */,
+				B3520CE3214C70EF003DC68F /* BPWaitTimer.h in Headers */,
+				B3520CDF214C5DE3003DC68F /* BPHandler.h in Headers */,
+				B3520CE0214C5DE3003DC68F /* BPApplicationLaunchHandler.h in Headers */,
+				B3520CE1214C5DE3003DC68F /* BPCreateSimulatorHandler.h in Headers */,
+				B3520CE2214C5DE3003DC68F /* BPDeleteSimulatorHandler.h in Headers */,
 				B368E586213FA2E100B4DEA3 /* SimDeviceNotifier-Protocol.h in Headers */,
 				B368E585213FA28F00B4DEA3 /* SimDevice.h in Headers */,
 				B368E584213F9DE200B4DEA3 /* SimServiceContext.h in Headers */,
@@ -751,6 +779,7 @@
 				B368E556213F8D2E00B4DEA3 /* Frameworks */,
 				B368E557213F8D2E00B4DEA3 /* Headers */,
 				B368E558213F8D2E00B4DEA3 /* Resources */,
+				B3109F7B21521EA200B9309C /* Save Git SHA1 and Xcode Version */,
 			);
 			buildRules = (
 			);
@@ -889,6 +918,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		B3109F7B21521EA200B9309C /* Save Git SHA1 and Xcode Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Save Git SHA1 and Xcode Version";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "VERSION=`git describe`\ntest -z \"$VERSION\" && VERSION=`cat \"$SOURCE_ROOT/../VERSION\"`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"\n\n";
+		};
 		C48AE3811FBCC53600997BA0 /* Save Git SHA1 and Xcode Version */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -902,7 +949,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "VERSION=`git describe`\ntest -z \"$VERSION\" && VERSION=`cat \"$SOURCE_ROOT/../VERSION\"`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"";
+			shellScript = "VERSION=`git describe`\ntest -z \"$VERSION\" && VERSION=`cat \"$SOURCE_ROOT/../VERSION\"`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -945,6 +992,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3DAF83E2151CB9700210286 /* BPWaitTimer.m in Sources */,
+				B3DAF83D2151CB7000210286 /* BPHandler.m in Sources */,
+				B3DAF83C2151CB4100210286 /* BPDeleteSimulatorHandler.m in Sources */,
+				B3DAF83B2151CB3300210286 /* BPCreateSimulatorHandler.m in Sources */,
+				B3DAF83A2151CAEA00210286 /* BPStats.m in Sources */,
+				B3DAF8392151CACA00210286 /* SimulatorMonitor.m in Sources */,
+				B3DAF8382151CAAB00210286 /* SimulatorHelper.m in Sources */,
+				B3DAF8372151CA8A00210286 /* BPSimulator.m in Sources */,
 				B368E57D213F9AB800B4DEA3 /* BPConstants.m in Sources */,
 				B368E57E213F9ABE00B4DEA3 /* BPTestCase.m in Sources */,
 				B368E580213F9AC800B4DEA3 /* BPConfiguration.m in Sources */,

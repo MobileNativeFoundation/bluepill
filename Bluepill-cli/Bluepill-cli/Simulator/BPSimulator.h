@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 #import "BPExitStatus.h"
 #import "SimulatorMonitor.h"
+#import "BPXCTestFile.h"
 
 @class BPConfiguration;
 @class BPTreeParser;
@@ -27,6 +28,8 @@
 
 - (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
 
+- (void)cloneSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
+
 - (void)setParserStateCompleted;
 
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID;
@@ -40,6 +43,20 @@
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion;
 
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion;
+
+- (void)addPhotosToSimulator;
+
+- (void)addVideosToSimulator;
+
+/*!
+ @discussion create template simulators and install the test hosts
+ @param testBundles include the test hosts need to be installed.
+ The number of template simulators is equal to the number of test hosts
+ @return a dictionary with key to be the host bundle path and value to be the template simulator
+ */
+- (NSMutableDictionary*)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles;
+
+- (void)deleteTemplateSimulator;
 
 /*!
  * @discussion returns true if the simulator is still running -- useful for detecting simulator crashes

@@ -53,6 +53,7 @@
     self.config.junitOutput = NO;
     self.config.testRunnerAppPath = nil;
     self.config.testing_CrashAppOnLaunch = NO;
+    self.config.cloneSimulator = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils quietMode:[BPUtils isBuildScript]];

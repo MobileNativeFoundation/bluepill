@@ -42,6 +42,7 @@
     self.config.jsonOutput = NO;
     self.config.headlessMode = YES;
     self.config.junitOutput = NO;
+    self.config.junitOutput = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils enableDebugOutput:![BPUtils isBuildScript]];

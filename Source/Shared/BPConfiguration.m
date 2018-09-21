@@ -51,6 +51,8 @@ struct BPOptions {
     // Optional argument
     {'d', "device", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
         "On which device to run the app."},
+    {'U', "templateSimUDID", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "templateSimUDID",
+        "BP master use this flag to tell BP worker which template simulator to use"},
     {'c', "config", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "configFile",
         "Read options from the specified configuration file instead of the command line"},
     {'t', "test-bundle-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
@@ -91,6 +93,8 @@ struct BPOptions {
         "Paths to the images to be uploaded."},
 
     // options with no argument
+    {'L', "clone-simulator", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "cloneSimulator",
+        "Run test with clone-simulator"},
     {'H', "headless", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
         "Run in headless mode (no GUI)."},
     {'J', "json-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "jsonOutput",

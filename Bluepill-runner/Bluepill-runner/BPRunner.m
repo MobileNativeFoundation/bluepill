@@ -16,6 +16,12 @@
 #include <pwd.h>
 #import <AppKit/AppKit.h>
 #import <BluepillLib/BPSimulator.h>
+#import <BluepillLib/BPCreateSimulatorHandler.h>
+#import <BluepillLib/BPUtils.h>
+#import <BluepillLib/BPWaitTimer.h>
+#import <BluepillLib/SimDeviceSet.h>
+#import <BluepillLib/SimServiceContext.h>
+#import <BluepillLib/SimulatorHelper.h>
 
 static int volatile interrupted = 0;
 
@@ -51,6 +57,7 @@ maxprocs(void)
 + (instancetype)BPRunnerWithConfig:(BPConfiguration *)config
                         withBpPath:(NSString *)bpPath {
     BPRunner *runner = [[BPRunner alloc] init];
+    runner.testHostForSimUDID = [[NSMutableDictionary alloc] init];
     runner.config = config;
     // Find the `bp` binary.
 
@@ -95,7 +102,9 @@ maxprocs(void)
     cfg.environmentVariables = bundle.environmentVariables;
     cfg.useSimUDID = deviceID;
     cfg.keepSimulator = cfg.reuseSimulator;
-
+    if (self.config.cloneSimulator) {
+        cfg.templateSimUDID = self.testHostForSimUDID[bundle.testHostPath];
+    }
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
                              NSTemporaryDirectory(),
@@ -165,11 +174,10 @@ maxprocs(void)
     return app;
 }
 
-
 - (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
     // Set up our SIGINT handler
     signal(SIGINT, onInterrupt);
-    
+    BPSimulator *bpSimulator = [BPSimulator simulatorWithConfiguration:self.config];
     NSUInteger numSims = [self.config.numSims intValue];
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
     NSError *error;
@@ -182,6 +190,12 @@ maxprocs(void)
         [BPUtils printInfo:WARNING
                 withString:@"Lowering number of simulators from %lu to %lu because there aren't enough tests.",
                             numSims, bundles.count];
+    }
+    if (self.config.cloneSimulator) {        
+        self.testHostForSimUDID = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles];
+        if ([self.testHostForSimUDID count] == 0) {
+            return 1;
+        }
     }
     [BPUtils printInfo:INFO withString:@"Running with %lu simulator%s.",
      (unsigned long)numSims, (numSims > 1) ? "s" : ""];
@@ -293,6 +307,10 @@ maxprocs(void)
     }
     
     [BPUtils printInfo:INFO withString:@"All simulators have finished."];
+    if (self.config.cloneSimulator) {
+        [BPUtils printInfo:INFO withString:@"Deleting template simulator.."];
+        [bpSimulator deleteTemplateSimulator];
+    }
     // Process the generated report and create 1 single junit xml file.
     if (app) {
         [app terminate];

@@ -20,6 +20,14 @@
 #import "SimServiceContext.h"
 #import "SimDevice.h"
 #import "SimDeviceNotifier-Protocol.h"
+#import "BPCreateSimulatorHandler.h"
+#import "BPDeleteSimulatorHandler.h"
+#import "BPApplicationLaunchHandler.h"
+#import "BPHandler.h"
+#import "BPWaitTimer.h"
+#import "SimDeviceSet.h"
+#import "SimServiceContext.h"
+#import "SimulatorHelper.h"
 //! Project version number for BluepillLib.
 FOUNDATION_EXPORT double BluepillLibVersionNumber;
 

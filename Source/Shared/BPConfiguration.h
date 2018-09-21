@@ -68,6 +68,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *screenshotsDirectory;
 @property (nonatomic, strong) NSString *simulatorPreferencesFile;
 @property (nonatomic) BOOL headlessMode;
+@property (nonatomic) BOOL cloneSimulator;
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
@@ -98,6 +99,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 
 // Generated fields
 @property (nonatomic, strong) NSString *xcodePath;
+@property (nonatomic, strong) NSString *templateSimUDID;
 
 @property (nonatomic, strong) SimDeviceType *simDeviceType;
 @property (nonatomic, strong) SimRuntime *simRuntime;
