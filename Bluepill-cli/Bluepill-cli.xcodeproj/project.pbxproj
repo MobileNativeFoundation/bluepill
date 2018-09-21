@@ -488,7 +488,6 @@
 		B368E566213F8D2F00B4DEA3 /* bluelibTests */ = {
 			isa = PBXGroup;
 			children = (
-				7A7901831D5CB679004D4325 /* Products */,
 				B368E567213F8D2F00B4DEA3 /* bluelibTests.m */,
 				B368E569213F8D2F00B4DEA3 /* Info.plist */,
 			);
@@ -775,11 +774,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B368E56F213F8D2F00B4DEA3 /* Build configuration list for PBXNativeTarget "BluepillLib" */;
 			buildPhases = (
+				B3109F7B21521EA200B9309C /* Save Git SHA1 and Xcode Version */,
 				B368E555213F8D2E00B4DEA3 /* Sources */,
 				B368E556213F8D2E00B4DEA3 /* Frameworks */,
 				B368E557213F8D2E00B4DEA3 /* Headers */,
 				B368E558213F8D2E00B4DEA3 /* Resources */,
-				B3109F7B21521EA200B9309C /* Save Git SHA1 and Xcode Version */,
 			);
 			buildRules = (
 			);

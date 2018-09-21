@@ -83,8 +83,6 @@ struct BPOptions {
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
     {'X', "xcode-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
         "Path to xcode."},
-    {'u', "simulator-udid", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "useSimUDID",
-        "Do not create a simulator but reuse the one with the UDID given. (BP INTERNAL USE ONLY). "},
     {'D', "delete-simulator", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "deleteSimUDID",
         "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE. (BP INTERNAL USE ONLY). "},
     {'V', "video-paths", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "videoPaths",

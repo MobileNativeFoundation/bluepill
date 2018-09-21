@@ -68,11 +68,6 @@ bluepill_build()
   set -o pipefail
   xcodebuild \
     -project Bluepill-cli/Bluepill-cli.xcodeproj \
-    -scheme bluepill-cli \
-    -configuration Release \
-    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
-  xcodebuild \
-    -project Bluepill-cli/Bluepill-cli.xcodeproj \
     -scheme BluepillLib \
     -configuration Release \
     -derivedDataPath "build/" | tee result.txt | $XCPRETTY
