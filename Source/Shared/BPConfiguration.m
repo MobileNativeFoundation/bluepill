@@ -117,8 +117,6 @@ struct BPOptions {
         "Additional XCTest bundles to test."},
     {350, "additional-ui-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUITestBundles",
         "Additional XCUITest bundles to test."},
-    {351, "reuse-simulator", BP_MASTER, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "reuseSimulator",
-        "Enable reusing simulators between test bundles"},
     {352, "keep-simulator", BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
         "Don't delete the simulator device after one test bundle finish. (BP INTERNAL USE ONLY). "},
     {353, "max-sim-create-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxCreateTries",

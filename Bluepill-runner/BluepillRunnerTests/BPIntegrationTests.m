@@ -72,7 +72,6 @@
     self.config.numSims = @2;
     self.config.errorRetriesCount = @1;
     self.config.failureTolerance = @0;
-    self.config.reuseSimulator = NO;
     NSError *err;
     BPApp *app = [BPApp appWithConfig:self.config
                             withError:&err];
@@ -88,7 +87,6 @@
     self.config.numSims = @2;
     self.config.errorRetriesCount = @1;
     self.config.failureTolerance = @0;
-    self.config.reuseSimulator = NO;
     // This looks backwards but we want the main app to be the runner
     // and the sampleApp is launched from the callback.
     self.config.testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
@@ -127,7 +125,6 @@
 - (void)testTwoBPInstancesTestCaseFail {
     self.config.numSims = @2;
     self.config.testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
-    self.config.reuseSimulator = NO;
     NSError *err;
     BPApp *app = [BPApp appWithConfig:self.config
                             withError:&err];
@@ -137,39 +134,5 @@
     XCTAssert(rc != 0);
     XCTAssert([runner.nsTaskList count] == 0);
 }
-
-- (void)testTwoBPInstancesReuseSim {
-    self.config.numSims = @2;
-    [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
-    [BPUtils quietMode:[BPUtils isBuildScript]];
-    self.config.reuseSimulator = YES;
-    NSError *err;
-    BPApp *app = [BPApp appWithConfig:self.config
-                            withError:&err];
-
-    NSString *bpPath = [BPTestHelper bpExecutablePath];
-    BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
-    int rc = [runner runWithBPXCTestFiles:app.testBundles];
-    XCTAssert(rc == 0);
-    XCTAssert([runner.nsTaskList count] == 0);
-}
-
-// This test killed Travis, have to disable it.
-//- (void)testFourBPInstances {
-//    self.config.numSims = @4;
-//    [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
-//    [BPUtils quietMode:[BPUtils isBuildScript]];
-//    //self.config.reuseSimulator = YES;
-//
-//    NSError *err;
-//    BPApp *app = [BPApp appWithConfig:self.config
-//                            withError:&err];
-//
-//    NSString *bpPath = [BPTestHelper bpExecutablePath];
-//    BPRunner *runner = [BPRunner BPRunnerForApp:app withConfig:self.config withBpPath:bpPath];
-//    int rc = [runner run];
-//    XCTAssert(rc == 0);
-//    XCTAssert([runner.nsTaskList count] == 0);
-//}
 
 @end

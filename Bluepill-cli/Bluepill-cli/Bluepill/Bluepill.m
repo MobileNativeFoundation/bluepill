@@ -95,10 +95,6 @@ void onInterrupt(int ignore) {
         CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.01, NO);
     }
 
-    if (self.config.keepSimulator) {
-        [self writeSimUDIDFile];
-    }
-    
     // Tests completed or interruption received, show some quick stats as we exit
     [BPUtils printInfo:INFO withString:@"Number of Executions: %lu", self.retries + 1];
     [BPUtils printInfo:INFO withString:@"Final Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
@@ -699,20 +695,6 @@ void onInterrupt(int ignore) {
             return;
     }
 
-}
-
-- (void)writeSimUDIDFile {
-    NSString *idStr = self.context.runner.UDID;
-    if (!idStr) return;
-    
-    NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d", getpid()];
-    NSString *tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName];
-    
-    NSError *error;
-    BOOL success = [idStr writeToFile:tempFilePath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-    if (!success) {
-        [BPUtils printInfo:ERROR withString:@"ERROR: Failed to write the device ID file %@ with error: %@", tempFilePath, [error localizedDescription]];
-    }
 }
 
 // MARK: Helpers

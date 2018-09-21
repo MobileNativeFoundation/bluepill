@@ -251,12 +251,6 @@ maxprocs(void)
             NSTask *task = [self newTaskWithBundle:[bundles objectAtIndex:0] andNumber:++taskNumber andDevice:deviceID andCompletionBlock:^(NSTask * _Nonnull task) {
                 @synchronized (self) {
                     launchedTasks--;
-                    if (self.config.reuseSimulator) {
-                        NSString *deviceID = [self readSimUDIDFile:[task processIdentifier]];
-                        if (deviceID) {
-                            [deviceList addObject:deviceID];
-                        }
-                    }
                     [taskList removeObject:[NSString stringWithFormat:@"%lu", taskNumber]];
                     [self.nsTaskList removeObject:task];
                     rc = (rc || [task terminationStatus]);
@@ -339,15 +333,4 @@ maxprocs(void)
     [self.nsTaskList removeAllObjects];
 }
 
-- (NSString *)readSimUDIDFile:(int)pid {
-    NSString *tempFileName = [NSString stringWithFormat:@"bluepill-deviceid.%d",pid];
-    NSString *tempFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:tempFileName];
-    
-    NSError *error;
-    NSString *idStr = [NSString stringWithContentsOfFile:tempFilePath encoding:NSUTF8StringEncoding error:&error];
-    if (!idStr) {
-        [BPUtils printInfo:ERROR withString:@"ERROR: Failed to read the device ID file %@ with error: %@", tempFilePath, [error localizedDescription]];
-    }
-    return idStr;
-}
 @end

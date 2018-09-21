@@ -108,10 +108,9 @@ bluepill_build_sample_app()
 
 bluepill_instance_tests()
 {
-  n=$1
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
-    -scheme BPInstanceTests$n \
+    -scheme BPInstanceTests \
     -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
@@ -152,11 +151,7 @@ bluepill_verbose_tests()
 bluepill_test()
 {
   simulator_cleanup
-  bluepill_instance_tests 1
-  simulator_cleanup
-  bluepill_instance_tests 2
-  simulator_cleanup
-  bluepill_instance_tests 3
+  bluepill_instance_tests
   simulator_cleanup
   bluepill_runner_tests
 }
