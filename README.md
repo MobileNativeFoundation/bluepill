@@ -64,6 +64,7 @@ A full list supported options are listed here.
 |         device         |           -d           | On which device to run the app.                                                    |     N    | iPhone 6         |
 |         exclude        |           -x           | Exclude a testcase in the set of tests to run  (takes priority over `include`).    |     N    | empty            |
 |        headless        |           -H           | Run in headless mode (no GUI).                                                     |     N    | off              |
+|        clone-simulator        |           -L           | Spawn simulator by clone from simulator template.                                                     |     N    | off              |
 |        xcode-path      |           -X           | Path to xcode.                                                                     |     N    | xcode-select -p  |
 |         include        |           -i           | Include a testcase in the set of tests to run (unless specified in `exclude`).     |     N    | all tests        |
 |       json-output      |           -J           | Print test timing information in JSON format.                                      |     N    | off              |

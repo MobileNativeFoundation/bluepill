@@ -46,7 +46,6 @@
  */
 - (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *>*)xcTestFiles;
 - (void) interrupt;
-- (BOOL)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles;
 - (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *)error;
 
 @end
