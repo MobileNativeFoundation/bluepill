@@ -72,10 +72,8 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
-@property (nonatomic, strong) NSString *useSimUDID;
 @property (nonatomic, strong) NSString *deleteSimUDID;
 @property (nonatomic) BOOL keepSimulator;
-@property (nonatomic) BOOL reuseSimulator;
 @property (nonatomic) BPProgram program; // one of BP_MASTER or BP_SLAVE
 @property (nonatomic) BOOL verboseLogging;
 @property (nonatomic, strong) NSNumber *maxCreateTries;

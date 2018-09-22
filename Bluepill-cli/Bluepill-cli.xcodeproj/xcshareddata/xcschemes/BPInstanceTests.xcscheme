@@ -40,7 +40,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
@@ -54,31 +53,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "BPCLITests">
-               </Test>
-               <Test
-                  Identifier = "BPConfigurationTests">
-               </Test>
-               <Test
-                  Identifier = "BPTreeParserTests">
-               </Test>
-               <Test
-                  Identifier = "BPUtilsTests">
-               </Test>
-               <Test
-                  Identifier = "BluepillTests/testAppThatCrashesOnLaunch">
-               </Test>
-               <Test
-                  Identifier = "BluepillTests/testAppThatHangsOnLaunch">
-               </Test>
-               <Test
                   Identifier = "BluepillTests/testReportWithFailingTestsSet">
-               </Test>
-               <Test
-                  Identifier = "BluepillTests/testReportWithFatalErrorTestsSet">
-               </Test>
-               <Test
-                  Identifier = "BluepillTests/testRetryOnlyFailures">
                </Test>
                <Test
                   Identifier = "BluepillTests/testRetryWithFailingTestsRetriesAll">
@@ -87,28 +62,7 @@
                   Identifier = "BluepillTests/testRetryWithFailingTestsSet">
                </Test>
                <Test
-                  Identifier = "BluepillTests/testRunUITest">
-               </Test>
-               <Test
-                  Identifier = "BluepillTests/testRunWithPassingTestsSet">
-               </Test>
-               <Test
-                  Identifier = "BluepillTests/testRunningAndIgnoringCertainTestCases">
-               </Test>
-               <Test
-                  Identifier = "BluepillTests/testRunningOnlyCertainTestcases">
-               </Test>
-               <Test
                   Identifier = "BluepillTests/testVoyager">
-               </Test>
-               <Test
-                  Identifier = "RegexTests">
-               </Test>
-               <Test
-                  Identifier = "SimulatorHelperTests">
-               </Test>
-               <Test
-                  Identifier = "WaitTimerTests">
                </Test>
             </SkippedTests>
          </TestableReference>
@@ -129,7 +83,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
