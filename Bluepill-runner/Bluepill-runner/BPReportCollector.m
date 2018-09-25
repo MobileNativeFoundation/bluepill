@@ -47,7 +47,9 @@
                 NSXMLDocument *doc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:0 error:&error];
                 if (error) {
                     [BPUtils printInfo:ERROR withString:@"Failed to parse %@: %@", url, error.localizedDescription];
-                    return;
+                    // When app crash before test start, it can result in empty xml file
+                    // Test results from other BP workers should continue to parse
+                    continue;
                 }
 
                 // Don't withhold the parent object.
