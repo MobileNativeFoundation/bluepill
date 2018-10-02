@@ -8,28 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		7A202A411DB0066100D935E3 /* BPWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A202A401DB0066100D935E3 /* BPWriter.m */; };
-		7A4933151DAD63A50060D54F /* SimulatorMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4933141DAD63A50060D54F /* SimulatorMonitor.m */; };
 		7A4D7A811DDA5FA1001E085D /* BPTreeParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7A801DDA5FA1001E085D /* BPTreeParserTests.m */; };
 		7A4D7A831DDA5FEA001E085D /* parse_crash.log in Resources */ = {isa = PBXBuildFile; fileRef = 7A4D7A821DDA5FEA001E085D /* parse_crash.log */; };
 		7A4D7A861DDBB156001E085D /* BPExitStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7A851DDBB156001E085D /* BPExitStatus.m */; };
 		7A4D7A871DDBB156001E085D /* BPExitStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7A851DDBB156001E085D /* BPExitStatus.m */; };
 		7A4D7A891DDE3A85001E085D /* intermixed_crash.log in Resources */ = {isa = PBXBuildFile; fileRef = 7A4D7A881DDE3A85001E085D /* intermixed_crash.log */; };
-		7A4FB8D31DF89A790073F268 /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CE1DF89A790073F268 /* BPConfiguration.m */; };
-		7A4FB8D41DF89A790073F268 /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8D01DF89A790073F268 /* BPUtils.m */; };
 		7A4FB8E61DF8AD4F0073F268 /* missed-crash.log in Resources */ = {isa = PBXBuildFile; fileRef = 7A4FB8E51DF8AD4F0073F268 /* missed-crash.log */; };
 		7A4FB8E81DFB66980073F268 /* error_only_crash.log in Resources */ = {isa = PBXBuildFile; fileRef = 7A4FB8E71DFB66980073F268 /* error_only_crash.log */; };
 		7A564C0D1DA817DE001BCEC2 /* BPReporters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C081DA817DE001BCEC2 /* BPReporters.m */; };
 		7A564C0E1DA817DE001BCEC2 /* BPTreeObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0A1DA817DE001BCEC2 /* BPTreeObjects.m */; };
 		7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0C1DA817DE001BCEC2 /* BPTreeParser.m */; };
 		7A58D0751D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A58D0741D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework */; };
-		7A6672BE1E0B04D300AC6778 /* BPUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8D01DF89A790073F268 /* BPUtils.m */; };
-		7A6672BF1E0B04D500AC6778 /* BPConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4FB8CE1DF89A790073F268 /* BPConfiguration.m */; };
 		7A7901861D5CB679004D4325 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7901851D5CB679004D4325 /* main.m */; };
 		7A7D66021DB679820015C937 /* BPStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7D66011DB679820015C937 /* BPStats.m */; };
-		7A7E7BB01DF2066B007928F3 /* BPHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BAF1DF2066B007928F3 /* BPHandler.m */; };
 		7A7E7BB31DF20F81007928F3 /* BPApplicationLaunchHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB21DF20F81007928F3 /* BPApplicationLaunchHandler.m */; };
 		7A7E7BB41DF2163C007928F3 /* BPApplicationLaunchHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB21DF20F81007928F3 /* BPApplicationLaunchHandler.m */; };
-		7A7E7BB51DF2163F007928F3 /* BPHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BAF1DF2066B007928F3 /* BPHandler.m */; };
 		7A7E7BB81DF2173C007928F3 /* BPCreateSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB71DF2173C007928F3 /* BPCreateSimulatorHandler.m */; };
 		7A7E7BB91DF2173C007928F3 /* BPCreateSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB71DF2173C007928F3 /* BPCreateSimulatorHandler.m */; };
 		7A7E7BBC1DF21749007928F3 /* BPDeleteSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBB1DF21749007928F3 /* BPDeleteSimulatorHandler.m */; };
@@ -41,8 +34,6 @@
 		7AAE7AAF1DB7DC1E009B5549 /* BPRegexTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AAE7AAE1DB7DC1E009B5549 /* BPRegexTests.m */; };
 		7AB913001D5E209800621608 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB912FE1D5E209800621608 /* AppKit.framework */; };
 		7AB913011D5E209800621608 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB912FF1D5E209800621608 /* Foundation.framework */; };
-		7ACE1F6F1DD397F800C0FA73 /* BPWaitTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F6E1DD397F800C0FA73 /* BPWaitTimer.m */; };
-		7ACE1F701DD397F800C0FA73 /* BPWaitTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F6E1DD397F800C0FA73 /* BPWaitTimer.m */; };
 		7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */; };
 		7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
@@ -100,12 +91,9 @@
 		BA1949371E4AF82F00881887 /* BPTestBundleConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */; };
 		BA19493A1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
 		BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
-		BA34F5E41D6D75E30063B17F /* SimulatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */; };
 		BA4800EA1DC2C74600026972 /* BPAppNegativeTests-results.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4800E91DC2C74600026972 /* BPAppNegativeTests-results.xml */; };
 		BA4BCFAC1DC3FA3D00592FA4 /* crash_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFAB1DC3FA3D00592FA4 /* crash_tests.xml */; };
 		BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */; };
-		BA53B16C1E30931E00FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16B1E30931E00FCED71 /* BPConstants.m */; };
-		BA53B1701E30A0F100FCED71 /* BPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = BA53B16B1E30931E00FCED71 /* BPConstants.m */; };
 		BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53011FA8F9F100D80675 /* demo.mov */; };
 		BA6E53061FA8FA2500D80675 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53051FA8FA2000D80675 /* image.png */; };
 		BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
@@ -114,20 +102,10 @@
 		BAB24F741DB5DFA200867756 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F731DB5DFA200867756 /* BPTestHelper.m */; };
 		BAD558CF1DB6DC1C00C9A5CD /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
 		BAD558D01DB6DC1C00C9A5CD /* BPStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7D66011DB679820015C937 /* BPStats.m */; };
-		BAD558D21DB6DC1C00C9A5CD /* SimulatorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */; };
-		BAD558D31DB6DC1C00C9A5CD /* SimulatorMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4933141DAD63A50060D54F /* SimulatorMonitor.m */; };
 		BAD558D41DB6DCB100C9A5CD /* BPReporters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C081DA817DE001BCEC2 /* BPReporters.m */; };
 		BAD558D51DB6DCB100C9A5CD /* BPTreeObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0A1DA817DE001BCEC2 /* BPTreeObjects.m */; };
 		BAD558D61DB6DCB100C9A5CD /* BPTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0C1DA817DE001BCEC2 /* BPTreeParser.m */; };
 		BAD558D71DB6DCB100C9A5CD /* BPWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A202A401DB0066100D935E3 /* BPWriter.m */; };
-		BAFA2F791E567EE80072C69B /* BPSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFA2F781E567EE80072C69B /* BPSimulator.m */; };
-		BAFA2F7A1E567EE80072C69B /* BPSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFA2F781E567EE80072C69B /* BPSimulator.m */; };
-		C41A2C721E0B2497005D9751 /* BPXCTestFile.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C711E0B2497005D9751 /* BPXCTestFile.m */; };
-		C41A2C771E0B24E8005D9751 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C741E0B24E8005D9751 /* BPTestCase.m */; };
-		C41A2C781E0B24E8005D9751 /* BPTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C761E0B24E8005D9751 /* BPTestClass.m */; };
-		C41A2C791E0B42E9005D9751 /* BPXCTestFile.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C711E0B2497005D9751 /* BPXCTestFile.m */; };
-		C41A2C7A1E0B4306005D9751 /* BPTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C741E0B24E8005D9751 /* BPTestCase.m */; };
-		C41A2C7B1E0B4306005D9751 /* BPTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = C41A2C761E0B24E8005D9751 /* BPTestClass.m */; };
 		C45476AC1FD762B5006C7D9E /* uitest-failed.log in Resources */ = {isa = PBXBuildFile; fileRef = C45476AB1FD762B4006C7D9E /* uitest-failed.log */; };
 		C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E5491DC930D200BC80EE /* BPCLITests.m */; };
 		C469B1581FE1A420002246BF /* crash_tests_with_retry.xml in Resources */ = {isa = PBXBuildFile; fileRef = C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */; };
@@ -142,6 +120,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = B368E559213F8D2E00B4DEA3;
 			remoteInfo = bluelib;
+		};
+		BA9ADEA721642707001306F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A79017A1D5CB679004D4325 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B368E559213F8D2E00B4DEA3;
+			remoteInfo = BluepillLib;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -764,6 +749,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BA9ADEA821642707001306F5 /* PBXTargetDependency */,
 			);
 			name = bp;
 			productName = "Bluepill-cli";
@@ -959,31 +945,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A7E7BB81DF2173C007928F3 /* BPCreateSimulatorHandler.m in Sources */,
-				BA34F5E41D6D75E30063B17F /* SimulatorHelper.m in Sources */,
-				7A4FB8D31DF89A790073F268 /* BPConfiguration.m in Sources */,
 				7A7E7BC01DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
-				C41A2C771E0B24E8005D9751 /* BPTestCase.m in Sources */,
-				7A4FB8D41DF89A790073F268 /* BPUtils.m in Sources */,
 				7A7D66021DB679820015C937 /* BPStats.m in Sources */,
-				BAFA2F791E567EE80072C69B /* BPSimulator.m in Sources */,
-				C41A2C781E0B24E8005D9751 /* BPTestClass.m in Sources */,
 				7A7E7BBC1DF21749007928F3 /* BPDeleteSimulatorHandler.m in Sources */,
-				7A7E7BB51DF2163F007928F3 /* BPHandler.m in Sources */,
 				7A564C0D1DA817DE001BCEC2 /* BPReporters.m in Sources */,
 				BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
 				7A202A411DB0066100D935E3 /* BPWriter.m in Sources */,
-				7A4933151DAD63A50060D54F /* SimulatorMonitor.m in Sources */,
 				7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */,
 				BA19493A1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
 				7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */,
 				7A4D7A861DDBB156001E085D /* BPExitStatus.m in Sources */,
 				BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */,
-				7ACE1F6F1DD397F800C0FA73 /* BPWaitTimer.m in Sources */,
 				7A7E7BB41DF2163C007928F3 /* BPApplicationLaunchHandler.m in Sources */,
 				7A564C0E1DA817DE001BCEC2 /* BPTreeObjects.m in Sources */,
-				C41A2C721E0B2497005D9751 /* BPXCTestFile.m in Sources */,
 				7A7901861D5CB679004D4325 /* main.m in Sources */,
-				BA53B16C1E30931E00FCED71 /* BPConstants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1020,19 +995,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C41A2C7A1E0B4306005D9751 /* BPTestCase.m in Sources */,
 				BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
-				BAFA2F7A1E567EE80072C69B /* BPSimulator.m in Sources */,
-				C41A2C7B1E0B4306005D9751 /* BPTestClass.m in Sources */,
-				C41A2C791E0B42E9005D9751 /* BPXCTestFile.m in Sources */,
-				BAD558D21DB6DC1C00C9A5CD /* SimulatorHelper.m in Sources */,
 				BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */,
-				7A6672BF1E0B04D500AC6778 /* BPConfiguration.m in Sources */,
 				BAD558D01DB6DC1C00C9A5CD /* BPStats.m in Sources */,
 				7A4D7A811DDA5FA1001E085D /* BPTreeParserTests.m in Sources */,
 				7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */,
 				BAD558D61DB6DCB100C9A5CD /* BPTreeParser.m in Sources */,
-				7A7E7BB01DF2066B007928F3 /* BPHandler.m in Sources */,
 				7A7E7BBD1DF21749007928F3 /* BPDeleteSimulatorHandler.m in Sources */,
 				7A7E7BB91DF2173C007928F3 /* BPCreateSimulatorHandler.m in Sources */,
 				7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */,
@@ -1040,19 +1008,15 @@
 				7A4D7A871DDBB156001E085D /* BPExitStatus.m in Sources */,
 				BA1809B81DB89B5600D7D130 /* BluepillTests.m in Sources */,
 				BA1949371E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
-				BAD558D31DB6DC1C00C9A5CD /* SimulatorMonitor.m in Sources */,
 				7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
 				BAD558D71DB6DCB100C9A5CD /* BPWriter.m in Sources */,
 				7AAE7AAF1DB7DC1E009B5549 /* BPRegexTests.m in Sources */,
 				7A7E7BB31DF20F81007928F3 /* BPApplicationLaunchHandler.m in Sources */,
 				BAD558CF1DB6DC1C00C9A5CD /* Bluepill.m in Sources */,
-				BA53B1701E30A0F100FCED71 /* BPConstants.m in Sources */,
 				BAD558D41DB6DCB100C9A5CD /* BPReporters.m in Sources */,
 				C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */,
 				BAD558D51DB6DCB100C9A5CD /* BPTreeObjects.m in Sources */,
-				7ACE1F701DD397F800C0FA73 /* BPWaitTimer.m in Sources */,
 				BA0097001DCA61210000DD45 /* BPConfigurationTests.m in Sources */,
-				7A6672BE1E0B04D300AC6778 /* BPUtils.m in Sources */,
 				BAB24F741DB5DFA200867756 /* BPTestHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1064,6 +1028,11 @@
 			isa = PBXTargetDependency;
 			target = B368E559213F8D2E00B4DEA3 /* BluepillLib */;
 			targetProxy = B368E564213F8D2F00B4DEA3 /* PBXContainerItemProxy */;
+		};
+		BA9ADEA821642707001306F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B368E559213F8D2E00B4DEA3 /* BluepillLib */;
+			targetProxy = BA9ADEA721642707001306F5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
