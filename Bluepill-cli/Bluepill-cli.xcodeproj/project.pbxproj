@@ -128,6 +128,13 @@
 			remoteGlobalIDString = B368E559213F8D2E00B4DEA3;
 			remoteInfo = BluepillLib;
 		};
+		BA9ADEAB21642CCA001306F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A79017A1D5CB679004D4325 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B368E559213F8D2E00B4DEA3;
+			remoteInfo = BluepillLib;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -803,6 +810,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BA9ADEAC21642CCA001306F5 /* PBXTargetDependency */,
 			);
 			name = BPInstanceTests;
 			productName = BPInstanceTests;
@@ -1016,6 +1024,11 @@
 			isa = PBXTargetDependency;
 			target = B368E559213F8D2E00B4DEA3 /* BluepillLib */;
 			targetProxy = BA9ADEA721642707001306F5 /* PBXContainerItemProxy */;
+		};
+		BA9ADEAC21642CCA001306F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B368E559213F8D2E00B4DEA3 /* BluepillLib */;
+			targetProxy = BA9ADEAB21642CCA001306F5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
