@@ -67,11 +67,6 @@ bluepill_build()
 {
   set -o pipefail
   xcodebuild \
-    -project Bluepill-cli/Bluepill-cli.xcodeproj \
-    -scheme BluepillLib \
-    -configuration Release \
-    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
-  xcodebuild \
     -workspace Bluepill.xcworkspace \
     -scheme bluepill \
     -configuration Release \
@@ -123,11 +118,6 @@ bluepill_instance_tests()
 
 bluepill_runner_tests()
 {
-  xcodebuild \
-    -project Bluepill-cli/Bluepill-cli.xcodeproj \
-    -scheme BluepillLib \
-    -configuration Debug \
-    -derivedDataPath "build/" | tee result.txt
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme BluepillRunnerTests \

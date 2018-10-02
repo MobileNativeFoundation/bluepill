@@ -20,6 +20,7 @@
 		BA7031881DE4ED2F008B3539 /* result1.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031831DE4ED2F008B3539 /* result1.xml */; };
 		BA7031891DE4ED2F008B3539 /* result2.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031851DE4ED2F008B3539 /* result2.xml */; };
 		BA70318A1DE4ED2F008B3539 /* result3.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA7031871DE4ED2F008B3539 /* result3.xml */; };
+		BA9ADEAA216427CB001306F5 /* BluepillLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9ADEA9216427CB001306F5 /* BluepillLib.framework */; };
 		BA9C2DAF1DD674AD007CB967 /* BPSampleAppTests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */; };
 		BA9C2DB11DD67B66007CB967 /* testScheme.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */; };
 		BAD8484A1DBC6A83007034CF /* BPReportCollector.m in Sources */ = {isa = PBXBuildFile; fileRef = BAD848491DBC6A83007034CF /* BPReportCollector.m */; };
@@ -57,6 +58,7 @@
 		BA7031831DE4ED2F008B3539 /* result1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result1.xml; sourceTree = "<group>"; };
 		BA7031851DE4ED2F008B3539 /* result2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result2.xml; sourceTree = "<group>"; };
 		BA7031871DE4ED2F008B3539 /* result3.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = result3.xml; sourceTree = "<group>"; };
+		BA9ADEA9216427CB001306F5 /* BluepillLib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BluepillLib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPSampleAppTests.xctest; sourceTree = "<group>"; };
 		BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = testScheme.xcscheme; sourceTree = "<group>"; };
 		BAD848481DBC6A83007034CF /* BPReportCollector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPReportCollector.h; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA9ADEAA216427CB001306F5 /* BluepillLib.framework in Frameworks */,
 				B3103CEE2151ABBC00C5643C /* CoreSimulator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -98,6 +101,7 @@
 		B3380AED2150BD8600752E1B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BA9ADEA9216427CB001306F5 /* BluepillLib.framework */,
 				B3380AEE2150BD8700752E1B /* CoreSimulator.framework */,
 			);
 			name = Frameworks;
