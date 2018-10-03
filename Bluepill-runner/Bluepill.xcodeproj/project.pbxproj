@@ -10,6 +10,7 @@
 		56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */; };
 		B3103CEE2151ABBC00C5643C /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3380AEE2150BD8700752E1B /* CoreSimulator.framework */; };
 		B3109F792151F72F00B9309C /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3380AEE2150BD8700752E1B /* CoreSimulator.framework */; };
+		B38A186D21657CCE0054E464 /* BluepillLib.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BA9ADEA9216427CB001306F5 /* BluepillLib.framework */; };
 		BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */; };
 		BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809EA1DBA910400D7D130 /* BPAppTests.m */; };
 		BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809ED1DBA929600D7D130 /* BPTestHelper.m */; };
@@ -37,9 +38,10 @@
 		BAEF4B321DAC539400E68294 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			dstPath = Frameworks;
+			dstSubfolderSpec = 6;
 			files = (
+				B38A186D21657CCE0054E464 /* BluepillLib.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -490,7 +492,7 @@
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/ /usr/local/lib";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRIVATE_FRAMEWORKS_DIR = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -503,7 +505,7 @@
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/ /usr/local/lib";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				PRIVATE_FRAMEWORKS_DIR = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
