@@ -490,7 +490,7 @@
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/ /usr/local/lib";
 				PRIVATE_FRAMEWORKS_DIR = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -503,7 +503,7 @@
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/ /usr/local/lib";
 				PRIVATE_FRAMEWORKS_DIR = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

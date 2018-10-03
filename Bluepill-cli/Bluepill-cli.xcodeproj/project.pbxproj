@@ -20,13 +20,6 @@
 		7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0C1DA817DE001BCEC2 /* BPTreeParser.m */; };
 		7A58D0751D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A58D0741D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework */; };
 		7A7901861D5CB679004D4325 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7901851D5CB679004D4325 /* main.m */; };
-		7A7D66021DB679820015C937 /* BPStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7D66011DB679820015C937 /* BPStats.m */; };
-		7A7E7BB31DF20F81007928F3 /* BPApplicationLaunchHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB21DF20F81007928F3 /* BPApplicationLaunchHandler.m */; };
-		7A7E7BB41DF2163C007928F3 /* BPApplicationLaunchHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB21DF20F81007928F3 /* BPApplicationLaunchHandler.m */; };
-		7A7E7BB81DF2173C007928F3 /* BPCreateSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB71DF2173C007928F3 /* BPCreateSimulatorHandler.m */; };
-		7A7E7BB91DF2173C007928F3 /* BPCreateSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB71DF2173C007928F3 /* BPCreateSimulatorHandler.m */; };
-		7A7E7BBC1DF21749007928F3 /* BPDeleteSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBB1DF21749007928F3 /* BPDeleteSimulatorHandler.m */; };
-		7A7E7BBD1DF21749007928F3 /* BPDeleteSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBB1DF21749007928F3 /* BPDeleteSimulatorHandler.m */; };
 		7A7E7BC01DF22CE1007928F3 /* BPExecutionContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */; };
 		7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */; };
 		7A7E7BC31DF5BA45007928F3 /* badfilename.log in Resources */ = {isa = PBXBuildFile; fileRef = 7A7E7BC21DF5BA45007928F3 /* badfilename.log */; };
@@ -97,11 +90,11 @@
 		BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53011FA8F9F100D80675 /* demo.mov */; };
 		BA6E53061FA8FA2500D80675 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53051FA8FA2000D80675 /* image.png */; };
 		BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
+		BA9ADEB421657004001306F5 /* BPApplicationLaunchHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB21DF20F81007928F3 /* BPApplicationLaunchHandler.m */; };
 		BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DDF1DD84A72007CB967 /* fatal_tests.xml */; };
 		BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */; };
 		BAB24F741DB5DFA200867756 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F731DB5DFA200867756 /* BPTestHelper.m */; };
 		BAD558CF1DB6DC1C00C9A5CD /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
-		BAD558D01DB6DC1C00C9A5CD /* BPStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7D66011DB679820015C937 /* BPStats.m */; };
 		BAD558D41DB6DCB100C9A5CD /* BPReporters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C081DA817DE001BCEC2 /* BPReporters.m */; };
 		BAD558D51DB6DCB100C9A5CD /* BPTreeObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0A1DA817DE001BCEC2 /* BPTreeObjects.m */; };
 		BAD558D61DB6DCB100C9A5CD /* BPTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0C1DA817DE001BCEC2 /* BPTreeParser.m */; };
@@ -935,10 +928,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A7E7BB81DF2173C007928F3 /* BPCreateSimulatorHandler.m in Sources */,
 				7A7E7BC01DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
-				7A7D66021DB679820015C937 /* BPStats.m in Sources */,
-				7A7E7BBC1DF21749007928F3 /* BPDeleteSimulatorHandler.m in Sources */,
 				7A564C0D1DA817DE001BCEC2 /* BPReporters.m in Sources */,
 				BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
 				7A202A411DB0066100D935E3 /* BPWriter.m in Sources */,
@@ -947,7 +937,6 @@
 				7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */,
 				7A4D7A861DDBB156001E085D /* BPExitStatus.m in Sources */,
 				BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */,
-				7A7E7BB41DF2163C007928F3 /* BPApplicationLaunchHandler.m in Sources */,
 				7A564C0E1DA817DE001BCEC2 /* BPTreeObjects.m in Sources */,
 				7A7901861D5CB679004D4325 /* main.m in Sources */,
 			);
@@ -961,6 +950,7 @@
 				B3DAF83D2151CB7000210286 /* BPHandler.m in Sources */,
 				B3DAF83C2151CB4100210286 /* BPDeleteSimulatorHandler.m in Sources */,
 				B3DAF83B2151CB3300210286 /* BPCreateSimulatorHandler.m in Sources */,
+				BA9ADEB421657004001306F5 /* BPApplicationLaunchHandler.m in Sources */,
 				B3DAF83A2151CAEA00210286 /* BPStats.m in Sources */,
 				B3DAF8392151CACA00210286 /* SimulatorMonitor.m in Sources */,
 				B3DAF8382151CAAB00210286 /* SimulatorHelper.m in Sources */,
@@ -988,12 +978,9 @@
 			files = (
 				BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
 				BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */,
-				BAD558D01DB6DC1C00C9A5CD /* BPStats.m in Sources */,
 				7A4D7A811DDA5FA1001E085D /* BPTreeParserTests.m in Sources */,
 				7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */,
 				BAD558D61DB6DCB100C9A5CD /* BPTreeParser.m in Sources */,
-				7A7E7BBD1DF21749007928F3 /* BPDeleteSimulatorHandler.m in Sources */,
-				7A7E7BB91DF2173C007928F3 /* BPCreateSimulatorHandler.m in Sources */,
 				7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */,
 				BA180A091DBB00FA00D7D130 /* BPUtilsTests.m in Sources */,
 				7A4D7A871DDBB156001E085D /* BPExitStatus.m in Sources */,
@@ -1002,7 +989,6 @@
 				7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
 				BAD558D71DB6DCB100C9A5CD /* BPWriter.m in Sources */,
 				7AAE7AAF1DB7DC1E009B5549 /* BPRegexTests.m in Sources */,
-				7A7E7BB31DF20F81007928F3 /* BPApplicationLaunchHandler.m in Sources */,
 				BAD558CF1DB6DC1C00C9A5CD /* Bluepill.m in Sources */,
 				BAD558D41DB6DCB100C9A5CD /* BPReporters.m in Sources */,
 				C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */,
@@ -1141,7 +1127,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/";
+				LD_RUNPATH_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
@@ -1164,7 +1150,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/";
+				LD_RUNPATH_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
@@ -1199,11 +1185,11 @@
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BluepillLib/Info.plist;
 				INSTALL_PATH = /usr/local/lib;
+				LD_DYLIB_INSTALL_NAME = "$(INSTALL_PATH)/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
@@ -1232,11 +1218,11 @@
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BluepillLib/Info.plist;
 				INSTALL_PATH = /usr/local/lib;
+				LD_DYLIB_INSTALL_NAME = "$(INSTALL_PATH)/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
