@@ -1127,7 +1127,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				LD_RUNPATH_SEARCH_PATHS = /usr/local/lib;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/local/lib @executable_path/";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
@@ -1150,7 +1150,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				LD_RUNPATH_SEARCH_PATHS = /usr/local/lib;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/local/lib @executable_path/";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
