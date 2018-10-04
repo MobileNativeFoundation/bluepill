@@ -1129,7 +1129,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
@@ -1152,7 +1152,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
@@ -1190,14 +1190,14 @@
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BluepillLib/Info.plist;
-				INSTALL_PATH = /usr/local/lib;
+				INSTALL_PATH = $BLUEPILL_LIB_INSTALL_PATH;
 				LD_DYLIB_INSTALL_NAME = "$(INSTALL_PATH)/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bluelib;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1223,14 +1223,14 @@
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BluepillLib/Info.plist;
-				INSTALL_PATH = /usr/local/lib;
+				INSTALL_PATH = $BLUEPILL_LIB_INSTALL_PATH;
 				LD_DYLIB_INSTALL_NAME = "$(INSTALL_PATH)/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bluelib;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
+				SKIP_INSTALL = NO;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
