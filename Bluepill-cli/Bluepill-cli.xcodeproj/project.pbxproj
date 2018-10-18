@@ -1135,19 +1135,8 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
-				OTHER_LDFLAGS = (
-					"-weak_framework",
-					DVTiPhoneSimulatorRemoteClient,
-					"-weak_framework",
-					CoreSimulator,
-					"-weak_framework",
-					XCTest,
-					"-weak_framework",
-					SimulatorKit,
-				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1158,19 +1147,8 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
-				OTHER_LDFLAGS = (
-					"-weak_framework",
-					DVTiPhoneSimulatorRemoteClient,
-					"-weak_framework",
-					CoreSimulator,
-					"-weak_framework",
-					XCTest,
-					"-weak_framework",
-					SimulatorKit,
-				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1292,16 +1270,6 @@
 				INFOPLIST_FILE = BPInstanceTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
-				OTHER_LDFLAGS = (
-					"-weak_framework",
-					DVTiPhoneSimulatorRemoteClient,
-					"-framework",
-					CoreSimulator,
-					"-weak_framework",
-					XCTest,
-					"-weak_framework",
-					SimulatorKit,
-				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1316,16 +1284,6 @@
 				INFOPLIST_FILE = BPInstanceTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
-				OTHER_LDFLAGS = (
-					"-weak_framework",
-					DVTiPhoneSimulatorRemoteClient,
-					"-weak_framework",
-					CoreSimulator,
-					"-weak_framework",
-					XCTest,
-					"-weak_framework",
-					SimulatorKit,
-				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

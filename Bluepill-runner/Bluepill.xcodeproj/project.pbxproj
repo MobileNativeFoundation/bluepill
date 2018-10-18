@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */; };
-		B3103CEE2151ABBC00C5643C /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3380AEE2150BD8700752E1B /* CoreSimulator.framework */; };
 		B3109F792151F72F00B9309C /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3380AEE2150BD8700752E1B /* CoreSimulator.framework */; };
 		B38A186D21657CCE0054E464 /* BluepillLib.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BA9ADEA9216427CB001306F5 /* BluepillLib.framework */; };
 		BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */; };
@@ -94,7 +93,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA9ADEAA216427CB001306F5 /* BluepillLib.framework in Frameworks */,
-				B3103CEE2151ABBC00C5643C /* CoreSimulator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,7 +360,6 @@
 				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks/;
 				INFOPLIST_FILE = BluepillRunnerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BluepillRunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -377,7 +374,6 @@
 				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks/;
 				INFOPLIST_FILE = BluepillRunnerTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BluepillRunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -387,6 +383,7 @@
 		};
 		BAEF4B391DAC539400E68294 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BAFCCA361E33595F00E33C31 /* bluepill.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -493,7 +490,6 @@
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-weak_framework",
 					CoreSimulator,
@@ -511,7 +507,6 @@
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-weak_framework",
 					CoreSimulator,
