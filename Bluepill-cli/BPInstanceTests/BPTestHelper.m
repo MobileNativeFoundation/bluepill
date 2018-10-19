@@ -12,7 +12,7 @@
 
 // Return the path to the sample app directory (path to XX.app)
 + (NSString *)sampleAppPath {
-    return [[self derivedDataPath] stringByAppendingString:@"/BPSampleApp.app"];
+    return [[self debugIphoneSimulatorPath] stringByAppendingString:@"/BPSampleApp.app"];
 }
 
 + (NSString *)sampleTestScheme {
@@ -65,14 +65,21 @@
 }
 
 + (NSString *)bpExecutablePath {
-    return [[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"bp"];
+    return [[self debugMacOSPath] stringByAppendingPathComponent:@"bp"];
 }
 
 #pragma mark - Helpers
 
 + (NSString *)derivedDataPath {
-    NSString *currentPath = [[[[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
-    return [currentPath stringByAppendingPathComponent:@"Products/Debug-iphonesimulator"];
+    return [[[[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+}
+
++ (NSString *)debugIphoneSimulatorPath {
+    return [[self derivedDataPath] stringByAppendingPathComponent:@"Products/Debug-iphonesimulator"];
+}
+
++ (NSString *)debugMacOSPath {
+    return [[self derivedDataPath] stringByAppendingPathComponent:@"Products/Debug"];
 }
 
 @end
