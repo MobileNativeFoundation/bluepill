@@ -81,6 +81,7 @@
 		BA180A0C1DBB011200D7D130 /* testConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = BA180A0B1DBB011200D7D130 /* testConfig.json */; };
 		BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = BA180A131DBB088100D7D130 /* testScheme.xcscheme */; };
 		BA1896B5217916A5000CEC36 /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */; };
+		BA1896BA21795E06000CEC36 /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
 		BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */; };
 		BA1949371E4AF82F00881887 /* BPTestBundleConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */; };
 		BA19493A1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
@@ -96,7 +97,6 @@
 		BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DDF1DD84A72007CB967 /* fatal_tests.xml */; };
 		BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */; };
 		BAB24F741DB5DFA200867756 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F731DB5DFA200867756 /* BPTestHelper.m */; };
-		BAD558CF1DB6DC1C00C9A5CD /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
 		BAD558D41DB6DCB100C9A5CD /* BPReporters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C081DA817DE001BCEC2 /* BPReporters.m */; };
 		BAD558D51DB6DCB100C9A5CD /* BPTreeObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0A1DA817DE001BCEC2 /* BPTreeObjects.m */; };
 		BAD558D61DB6DCB100C9A5CD /* BPTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0C1DA817DE001BCEC2 /* BPTreeParser.m */; };
@@ -824,7 +824,7 @@
 		7A79017A1D5CB679004D4325 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = LinkedIn;
 				TargetAttributes = {
 					7A7901811D5CB679004D4325 = {
@@ -987,6 +987,7 @@
 				BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
 				BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */,
 				7A4D7A811DDA5FA1001E085D /* BPTreeParserTests.m in Sources */,
+				BA1896BA21795E06000CEC36 /* Bluepill.m in Sources */,
 				7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */,
 				BAD558D61DB6DCB100C9A5CD /* BPTreeParser.m in Sources */,
 				7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */,
@@ -997,7 +998,6 @@
 				7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
 				BAD558D71DB6DCB100C9A5CD /* BPWriter.m in Sources */,
 				7AAE7AAF1DB7DC1E009B5549 /* BPRegexTests.m in Sources */,
-				BAD558CF1DB6DC1C00C9A5CD /* Bluepill.m in Sources */,
 				BAD558D41DB6DCB100C9A5CD /* BPReporters.m in Sources */,
 				C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */,
 				BAD558D51DB6DCB100C9A5CD /* BPTreeObjects.m in Sources */,
@@ -1041,6 +1041,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1048,6 +1049,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1096,6 +1098,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1103,6 +1106,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

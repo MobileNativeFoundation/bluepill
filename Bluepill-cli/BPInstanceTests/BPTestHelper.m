@@ -8,7 +8,6 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import "BPTestHelper.h"
-
 @implementation BPTestHelper
 
 // Return the path to the sample app directory (path to XX.app)
@@ -72,9 +71,8 @@
 #pragma mark - Helpers
 
 + (NSString *)derivedDataPath {
-    NSString *currentPath = [[NSBundle bundleForClass:[self class]] bundlePath];
-    return [[[currentPath stringByDeletingLastPathComponent]
-            stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Debug-iphonesimulator"];
+    NSString *currentPath = [[[[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+    return [currentPath stringByAppendingPathComponent:@"Products/Debug-iphonesimulator"];
 }
 
 @end
