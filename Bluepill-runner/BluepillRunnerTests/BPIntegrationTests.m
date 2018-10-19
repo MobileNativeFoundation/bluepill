@@ -111,7 +111,7 @@
     self.config.testRunnerAppPath = nil;
     NSString *runtime = [[NSString stringWithUTF8String:BP_DEFAULT_RUNTIME] stringByReplacingOccurrencesOfString:@"iOS " withString:@""];
     NSString *xcTestRunFile = [NSString stringWithFormat:@"Build/Products/BPSampleApp_iphonesimulator%@-x86_64.xctestrun", runtime];
-    self.config.xcTestRunPath = [[[[BPTestHelper derivedDataPath] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByAppendingPathComponent:xcTestRunFile];
+    self.config.xcTestRunPath = [[[BPTestHelper derivedDataPath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:xcTestRunFile];
     NSError *err;
     [self.config validateConfigWithError:&err];
     BPApp *app = [BPApp appWithConfig:self.config withError:&err];
