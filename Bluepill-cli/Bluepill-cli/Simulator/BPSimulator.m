@@ -432,7 +432,8 @@
     // These are appended by Xcode so we do that here.
     [commandLineArgs addObjectsFromArray:@[
                                            @"-NSTreatUnknownArgumentsAsOpen", @"NO",
-                                           @"-ApplePersistenceIgnoreState", @"YES"
+                                           @"-ApplePersistenceIgnoreState", @"YES",
+                                           @"-XCTIDEConnectionTimeout", @180
                                            ]];
 
     argsAndEnv[@"args"] = [commandLineArgs copy];
