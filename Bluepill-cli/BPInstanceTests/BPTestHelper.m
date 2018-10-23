@@ -8,12 +8,11 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import "BPTestHelper.h"
-
 @implementation BPTestHelper
 
 // Return the path to the sample app directory (path to XX.app)
 + (NSString *)sampleAppPath {
-    return [[self derivedDataPath] stringByAppendingString:@"/BPSampleApp.app"];
+    return [[self debugIphoneSimulatorPath] stringByAppendingString:@"/BPSampleApp.app"];
 }
 
 + (NSString *)sampleTestScheme {
@@ -66,15 +65,22 @@
 }
 
 + (NSString *)bpExecutablePath {
-    return [[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"bp"];
+    return [[self debugMacOSPath] stringByAppendingPathComponent:@"bp"];
 }
 
 #pragma mark - Helpers
 
 + (NSString *)derivedDataPath {
-    NSString *currentPath = [[NSBundle bundleForClass:[self class]] bundlePath];
-    return [[[currentPath stringByDeletingLastPathComponent]
-            stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Debug-iphonesimulator"];
+    // As a result of moving BluepillLib to a separate target, it no longer sits together with bp or bluepill binary but inside a ./build/Bluepill/Build/Intermediates.noindex/UninstalledProducts/ directory.
+    return [[[[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+}
+
++ (NSString *)debugIphoneSimulatorPath {
+    return [[self derivedDataPath] stringByAppendingPathComponent:@"Products/Debug-iphonesimulator"];
+}
+
++ (NSString *)debugMacOSPath {
+    return [[self derivedDataPath] stringByAppendingPathComponent:@"Products/Debug"];
 }
 
 @end

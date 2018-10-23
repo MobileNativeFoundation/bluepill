@@ -32,7 +32,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
                                    withError:(NSError **)error {
     BOOL isDir = NO;
 
-    if (!path || ![[NSFileManager defaultManager] fileExistsAtPath: path isDirectory:&isDir] || !isDir) {
+    if (!path || ![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] || !isDir) {
         BP_SET_ERROR(error, @"Could not find test bundle at path %@.", path);
         return nil;
     }

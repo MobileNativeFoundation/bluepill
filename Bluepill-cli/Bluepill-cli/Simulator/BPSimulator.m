@@ -250,7 +250,7 @@
     [NSFileManager.defaultManager copyItemAtURL:source toURL:destination error:&copyError];
 
     if (copyError) {
-        [BPUtils printInfo:ERROR withString:[NSString stringWithFormat:@"Failed copying GlobalPreferences plist: %@", [copyError localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"Failed copying GlobalPreferences plist: %@", [copyError localizedDescription]]];
     }
 }
 
