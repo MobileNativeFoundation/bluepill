@@ -71,6 +71,7 @@
 #pragma mark - Helpers
 
 + (NSString *)derivedDataPath {
+    // As a result of moving BluepillLib to a separate target, it no longer sits together with bp or bluepill binary but inside a ./build/Bluepill/Build/Intermediates.noindex/UninstalledProducts/ directory.
     return [[[[[[NSBundle bundleForClass:[self class]] bundlePath] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
 }
 
