@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */; };
 		B3109F792151F72F00B9309C /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3380AEE2150BD8700752E1B /* CoreSimulator.framework */; };
-		B38A186D21657CCE0054E464 /* BluepillLib.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BA9ADEA9216427CB001306F5 /* BluepillLib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */; };
 		BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809EA1DBA910400D7D130 /* BPAppTests.m */; };
 		BA1809EE1DBA929600D7D130 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809ED1DBA929600D7D130 /* BPTestHelper.m */; };
@@ -32,19 +31,6 @@
 		C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E54B1DC94BB200BC80EE /* BPCLITests.m */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		BAEF4B321DAC539400E68294 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Frameworks;
-			dstSubfolderSpec = 6;
-			files = (
-				B38A186D21657CCE0054E464 /* BluepillLib.framework in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPIntegrationTests.m; sourceTree = "<group>"; };
@@ -235,7 +221,6 @@
 				C432D41D1DDCED6100FB27D0 /* Saving Git HEAD's SHA1 and Xcode Version */,
 				BAEF4B301DAC539400E68294 /* Sources */,
 				BAEF4B311DAC539400E68294 /* Frameworks */,
-				BAEF4B321DAC539400E68294 /* CopyFiles */,
 			);
 			buildRules = (
 			);

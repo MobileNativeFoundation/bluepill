@@ -1179,10 +1179,10 @@
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BluepillLib/Info.plist;
-				LD_DYLIB_INSTALL_NAME = "$(INSTALL_PATH)/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				OTHER_LDFLAGS = "";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bluelib;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1213,10 +1213,10 @@
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BluepillLib/Info.plist;
-				LD_DYLIB_INSTALL_NAME = "$(INSTALL_PATH)/$(EXECUTABLE_PATH)";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				OTHER_LDFLAGS = "";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bluelib;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
