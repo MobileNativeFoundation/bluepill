@@ -93,7 +93,6 @@
 		BA6E53061FA8FA2500D80675 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53051FA8FA2000D80675 /* image.png */; };
 		BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
 		BA9ADEB421657004001306F5 /* BPApplicationLaunchHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB21DF20F81007928F3 /* BPApplicationLaunchHandler.m */; };
-		BA9ADEB721657756001306F5 /* BluepillLib.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = B368E55A213F8D2E00B4DEA3 /* BluepillLib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DDF1DD84A72007CB967 /* fatal_tests.xml */; };
 		BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */; };
 		BAB24F741DB5DFA200867756 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F731DB5DFA200867756 /* BPTestHelper.m */; };
@@ -131,19 +130,6 @@
 			remoteInfo = BluepillLib;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		7A7901801D5CB679004D4325 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
-			dstPath = Framework;
-			dstSubfolderSpec = 6;
-			files = (
-				BA9ADEB721657756001306F5 /* BluepillLib.framework in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		7A202A3D1DAED04900D935E3 /* BPExitStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPExitStatus.h; sourceTree = "<group>"; };
@@ -751,7 +737,6 @@
 			buildPhases = (
 				7A79017E1D5CB679004D4325 /* Sources */,
 				7A79017F1D5CB679004D4325 /* Frameworks */,
-				7A7901801D5CB679004D4325 /* CopyFiles */,
 			);
 			buildRules = (
 			);
