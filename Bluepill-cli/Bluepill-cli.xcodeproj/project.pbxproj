@@ -30,7 +30,7 @@
 		7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */; };
 		7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
-		B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BAB24F721DB5DFA200867756 /* BPTestHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BAB24F721DB5DFA200867756 /* BPTestHelper.h */; };
 		B3103CEA2151774500C5643C /* BPXCTestFile.m in Headers */ = {isa = PBXBuildFile; fileRef = C41A2C711E0B2497005D9751 /* BPXCTestFile.m */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3103CEB21519FFE00C5643C /* SimulatorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */; };
@@ -314,6 +314,7 @@
 		C467E5491DC930D200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
 		C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = crash_tests_with_retry.xml; sourceTree = "<group>"; };
 		C48AE3821FBCC59D00997BA0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
+		C4C741EB21812570000B1B0F /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestHelper.m; sourceTree = "<group>"; };
 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 		C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "simulator-preferences.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -379,6 +380,7 @@
 		7A7901791D5CB679004D4325 = {
 			isa = PBXGroup;
 			children = (
+				C4C741EB21812570000B1B0F /* BPTestHelper.m */,
 				7A7901841D5CB679004D4325 /* Bluepill-cli */,
 				7A7901851D5CB679004D4325 /* main.m */,
 				BAB24F691DB5DB2300867756 /* BPInstanceTests */,
@@ -701,7 +703,6 @@
 			files = (
 				B3103CEB21519FFE00C5643C /* SimulatorHelper.h in Headers */,
 				B3103CEA2151774500C5643C /* BPXCTestFile.m in Headers */,
-				B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */,
 				B3520CE4215021D8003DC68F /* SimDeviceSet.h in Headers */,
 				B3520CE3214C70EF003DC68F /* BPWaitTimer.h in Headers */,
 				B3520CDF214C5DE3003DC68F /* BPHandler.h in Headers */,
@@ -725,6 +726,7 @@
 				B368E576213F8E8F00B4DEA3 /* SimulatorMonitor.h in Headers */,
 				B368E577213F8E8F00B4DEA3 /* BPSimulator.h in Headers */,
 				B368E56A213F8D2F00B4DEA3 /* BluepillLib.h in Headers */,
+				B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1062,7 +1064,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -1113,7 +1115,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};
@@ -1124,7 +1126,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1136,7 +1138,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_NAME = "$(TARGET_NAME)";
