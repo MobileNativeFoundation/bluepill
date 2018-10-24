@@ -64,6 +64,10 @@
     return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"image.png"];
 }
 
++ (NSString *)sampleScriptPath {
+    return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"script.sh"];
+}
+
 + (NSString *)bpExecutablePath {
     return [[self debugMacOSPath] stringByAppendingPathComponent:@"bp"];
 }

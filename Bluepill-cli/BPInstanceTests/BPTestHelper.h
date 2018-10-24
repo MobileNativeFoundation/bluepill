@@ -53,6 +53,9 @@
 // Return the sample photo path.
 + (NSString *)samplePhotoPath;
 
+// Return the sample script path.
++ (NSString *)sampleScriptPath;
+
 // Return the path to the Debug iphone-simulator folder
 + (NSString *)debugIphoneSimulatorPath;
 
