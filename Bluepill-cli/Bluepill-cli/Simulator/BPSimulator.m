@@ -254,6 +254,26 @@
     }
 }
 
+- (void)runScriptFile:(NSString *)scriptFilePath {
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:scriptFilePath];
+    NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
+    [env addEntriesFromDictionary:[[NSProcessInfo processInfo] environment]];
+    [env setObject:[NSString stringWithFormat:@"%@", self.device.UDID.UUIDString] forKey:@"BP_DEVICE_ID"];
+    [env setObject:[NSString stringWithFormat:@"%@", self.device.devicePath] forKey:@"BP_DEVICE_PATH"];
+    [task setEnvironment:env];
+
+    [task launch];
+    [task waitUntilExit];
+    int status = [task terminationStatus];
+    [BPUtils printInfo:INFO withString:@"Script (%@) has finished with exit code %d.",
+         scriptFilePath, [task terminationStatus]];
+
+    if (status != 0) {
+        [BPUtils printInfo:ERROR withString:@"Failed running script: %@", scriptFilePath];
+    }
+}
+
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
     self.device = [self findDeviceWithConfig:self.config andDeviceID:deviceUDID];
     if (!self.device) {

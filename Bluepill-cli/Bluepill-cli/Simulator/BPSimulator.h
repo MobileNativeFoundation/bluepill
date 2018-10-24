@@ -48,6 +48,8 @@
 
 - (void)addVideosToSimulator;
 
+- (void)runScriptFile:(NSString *)scriptFilePath;
+
 /*!
  @discussion create template simulators and install the test hosts
  @param testBundles include the test hosts need to be installed.
