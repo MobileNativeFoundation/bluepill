@@ -504,7 +504,10 @@
     XCTAssert(exitCode2 == BPExitStatusSimulatorDeleted);
     XCTAssertEqualObjects(self.config.deleteSimUDID, bp2.test_simulatorUDID);
 
-    XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:testFile]);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:testFile]) {
+        [[NSFileManager defaultManager] removeItemAtPath:testFile error:nil];
+        XCTFail(@"%@ was not deleted when the simulator was deleted", testFile);
+    }
 }
 
 - (void)testThatScreenshotAreNotTakenWithFailingTestsSetWithoutConfigOption {

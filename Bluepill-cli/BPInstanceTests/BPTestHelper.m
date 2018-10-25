@@ -65,7 +65,7 @@
 }
 
 + (NSString *)sampleScriptPath {
-    return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"script.sh"];
+    return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"test-script.sh"];
 }
 
 + (NSString *)bpExecutablePath {
