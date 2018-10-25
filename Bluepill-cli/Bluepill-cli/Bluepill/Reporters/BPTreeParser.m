@@ -659,4 +659,9 @@ static const NSString * const kPassed = @"passed";
     [self.delegate onOutputReceived:output];
 }
 
+- (void)setParserStateCompleted {
+    return;
+}
+
+
 @end
