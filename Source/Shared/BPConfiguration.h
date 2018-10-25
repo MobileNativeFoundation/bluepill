@@ -67,6 +67,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *outputDirectory;
 @property (nonatomic, strong) NSString *screenshotsDirectory;
 @property (nonatomic, strong) NSString *simulatorPreferencesFile;
+@property (nonatomic, strong) NSString *scriptFilePath;
 @property (nonatomic) BOOL headlessMode;
 @property (nonatomic) BOOL cloneSimulator;
 @property (nonatomic, strong) NSNumber *numSims;

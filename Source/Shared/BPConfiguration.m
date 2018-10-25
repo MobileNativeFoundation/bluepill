@@ -141,6 +141,8 @@ struct BPOptions {
         "Directory where simulator screenshots for failed ui tests will be stored"},
     {362, "simulator-preferences-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "simulatorPreferencesFile",
             "A .GlobalPreferences.plist simulator preferences file to be copied to any newly created simulators before booting"},
+    {363, "script-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "scriptFilePath",
+        "A script that will be called after the simulator is booted, but before tests are run. Can be used to do any setup (e.g. installing certs). The environment will contain $BP_DEVICE_ID with the ID of the simulator and $BP_DEVICE_PATH with its full path. Exit with zero for success and non-zero for failure."},
 
     {0, 0, 0, 0, 0, 0, 0}
 };
@@ -714,6 +716,24 @@ static NSUUID *sessionID;
             }
         } else {
             BP_SET_ERROR(err, @"%@ doesn't exist", self.simulatorPreferencesFile);
+            return NO;
+        }
+    }
+
+    if (self.scriptFilePath) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.scriptFilePath isDirectory:&isdir]) {
+            if (isdir) {
+                BP_SET_ERROR(err, @"%@ is a directory.", self.scriptFilePath);
+                return NO;
+            }
+
+            if (![[NSFileManager defaultManager] isExecutableFileAtPath:self.scriptFilePath]) {
+                BP_SET_ERROR(err, @"%@ is not executable.", self.scriptFilePath);
+                return NO;
+            }
+
+        } else {
+            BP_SET_ERROR(err, @"%@ doesn't exist", self.scriptFilePath);
             return NO;
         }
     }

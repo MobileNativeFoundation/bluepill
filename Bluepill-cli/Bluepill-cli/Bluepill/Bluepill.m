@@ -282,6 +282,9 @@ void onInterrupt(int ignore) {
     };
 
     handler.onSuccess = ^{
+        if (self.config.scriptFilePath) {
+            [context.runner runScriptFile:self.config.scriptFilePath];
+        }
         if (self.config.cloneSimulator) {
             // launch application directly when clone simulator
             NEXT([__self launchApplicationWithContext:context]);

@@ -477,6 +477,38 @@
     XCTAssert([[NSDictionary alloc] initWithContentsOfURL:preferencesFile] == nil);
 }
 
+- (void)testRunScript {
+    self.config.scriptFilePath = [BPTestHelper sampleScriptPath];
+
+    NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.keepSimulator = YES;
+
+    Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode = [bp run];
+    XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+    XCTAssertNotNil(bp.test_simulatorUDID);
+
+    NSString *devicePath = bp.test_simulator.device.devicePath;
+    NSString *deviceID = bp.test_simulator.device.UDID.UUIDString;
+
+    // The test script will create $(DEVICE_ID).txt in the device path
+    NSString *testFile = [NSString stringWithFormat:@"%@/%@.txt", devicePath, deviceID];
+    XCTAssertTrue([[NSFileManager defaultManager] fileExistsAtPath:testFile]);
+
+    self.config.deleteSimUDID = bp.test_simulatorUDID;
+    XCTAssertNotNil(self.config.deleteSimUDID);
+
+    Bluepill *bp2 = [[Bluepill alloc ] initWithConfiguration:self.config];
+    BPExitStatus exitCode2 = [bp2 run];
+    XCTAssert(exitCode2 == BPExitStatusSimulatorDeleted);
+    XCTAssertEqualObjects(self.config.deleteSimUDID, bp2.test_simulatorUDID);
+
+    if ([[NSFileManager defaultManager] fileExistsAtPath:testFile]) {
+        [[NSFileManager defaultManager] removeItemAtPath:testFile error:nil];
+        XCTFail(@"%@ was not deleted when the simulator was deleted", testFile);
+    }
+}
 
 - (void)testThatScreenshotAreNotTakenWithFailingTestsSetWithoutConfigOption {
     NSString *tempDir = NSTemporaryDirectory();
