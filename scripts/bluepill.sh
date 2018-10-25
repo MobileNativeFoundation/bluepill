@@ -82,6 +82,16 @@ bluepill_build()
           exit 1
   }
   set +o pipefail
+  # package bluepill
+  TAG=$(git describe)
+  DST="Bluepill-$TAG"
+  mkdir -p build/$DST/bin
+  cp build/Build/Products/Release/{bp,bluepill} build/$DST/bin
+  ## build the man page
+  mkdir -p build/$DST/man/man1
+  python scripts/man.py build/$DST/man/man1/bluepill.1
+  (cd build && zip -qr $DST.zip $DST)
+  echo Release in build/$DST.zip
 }
 
 bluepill_build_sample_app()
@@ -161,6 +171,5 @@ then
 else
     bluepill_$conf
 fi
-
 
 exit 0
