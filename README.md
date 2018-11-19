@@ -98,7 +98,7 @@ A full list supported options are listed here.
 
 ## Requirements
 
-Bluepill only works with **Xcode 10.0**. If you're looking for old Xcode support, please check out the other branches:
+Bluepill only works with **Xcode 10.1**. If you're looking for old Xcode support, please check out the other branches:
 
 * [Xcode-8](https://github.com/linkedin/bluepill/tree/xcode8)
 * [Xcode-9.0](https://github.com/linkedin/bluepill/tree/xcode-9.0)
@@ -106,6 +106,7 @@ Bluepill only works with **Xcode 10.0**. If you're looking for old Xcode support
 * [Xcode-9.2](https://github.com/linkedin/bluepill/tree/xcode-9.2)
 * [Xcode-9.3](https://github.com/linkedin/bluepill/tree/xcode-9.3)
 * [Xcode-9.4](https://github.com/linkedin/bluepill/tree/xcode-9.4)
+* [Xcode-10.0](https://github.com/linkedin/bluepill/tree/xcode-10.0)
 
 ## Acknowledgement
 

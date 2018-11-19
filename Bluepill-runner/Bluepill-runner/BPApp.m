@@ -71,6 +71,10 @@
     NSMutableArray<BPXCTestFile *> *allTests = [[NSMutableArray alloc] init];
     NSUInteger errorCount = 0;
     for (NSString *key in xcTestRunDict) {
+        if ([key isEqualToString:@"__xctestrun_metadata__"]) {
+            // Xcode 10.1 introduced this in the xctestrun file format.
+            continue;
+        }
         BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromDictionary:[xcTestRunDict objectForKey:key]
                                                                withTestRoot:[xcTestRunPath stringByDeletingLastPathComponent]
                                                                andXcodePath:xcodePath
