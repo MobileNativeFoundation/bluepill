@@ -409,7 +409,7 @@ void onInterrupt(int ignore) {
         if (--__self.maxLaunchTries > 0) {
             [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
             context.runner = [__self createSimulatorRunnerWithContext:context];
-            NEXT([__self createSimulatorWithContext:context]);
+            NEXT([__self launchApplicationWithContext:context]);
         } else {
             NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
         }
@@ -420,7 +420,8 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:FAILED withString:@"Timeout: %@", stepName];
-        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
+        [BPUtils printInfo:INFO withString:@"Saving Diagnostics for Debugging"];
+        [BPUtils saveDebuggingDiagnostics:context.config.outputDirectory];
     };
 
     [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
