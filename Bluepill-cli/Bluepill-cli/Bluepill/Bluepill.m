@@ -407,8 +407,7 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [BPUtils printInfo:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
         if (--__self.maxLaunchTries > 0) {
-            [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
-            context.runner = [__self createSimulatorRunnerWithContext:context];
+            [BPUtils printInfo:INFO withString:@"Relaunching the app due to a BAD STATE"];
             NEXT([__self launchApplicationWithContext:context]);
         } else {
             NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
