@@ -420,8 +420,6 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:FAILED withString:@"Timeout: %@", stepName];
-        [BPUtils printInfo:INFO withString:@"Saving Diagnostics for Debugging"];
-        [BPUtils saveDebuggingDiagnostics:context.config.outputDirectory];
     };
 
     [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
