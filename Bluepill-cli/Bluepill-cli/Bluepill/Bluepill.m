@@ -48,7 +48,6 @@ void onInterrupt(int ignore) {
 
 @property (nonatomic, assign) NSInteger maxCreateTries;
 @property (nonatomic, assign) NSInteger maxInstallTries;
-@property (nonatomic, assign) NSInteger maxLaunchTries;
 
 @end
 
@@ -247,8 +246,6 @@ void onInterrupt(int ignore) {
 
     // Set up retry counts.
     self.maxCreateTries = [self.config.maxCreateTries integerValue];
-    self.maxInstallTries = [self.config.maxInstallTries integerValue];
-    self.maxLaunchTries = [self.config.maxLaunchTries integerValue];
     
     if (context.config.deleteSimUDID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
