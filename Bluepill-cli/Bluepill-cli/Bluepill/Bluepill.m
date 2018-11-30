@@ -406,12 +406,7 @@ void onInterrupt(int ignore) {
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [BPUtils printInfo:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
-        if (--__self.maxLaunchTries > 0) {
-            [BPUtils printInfo:INFO withString:@"Relaunching the app due to a BAD STATE"];
-            NEXT([__self launchApplicationWithContext:context]);
-        } else {
-            NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
-        }
+        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
     };
 
     handler.onTimeout = ^{
