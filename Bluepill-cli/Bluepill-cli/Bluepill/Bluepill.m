@@ -246,6 +246,7 @@ void onInterrupt(int ignore) {
 
     // Set up retry counts.
     self.maxCreateTries = [self.config.maxCreateTries integerValue];
+    self.maxInstallTries = [self.config.maxInstallTries integerValue];
     
     if (context.config.deleteSimUDID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
