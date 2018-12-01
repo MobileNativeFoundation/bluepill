@@ -48,7 +48,6 @@ void onInterrupt(int ignore) {
 
 @property (nonatomic, assign) NSInteger maxCreateTries;
 @property (nonatomic, assign) NSInteger maxInstallTries;
-@property (nonatomic, assign) NSInteger maxLaunchTries;
 
 @end
 
@@ -248,7 +247,6 @@ void onInterrupt(int ignore) {
     // Set up retry counts.
     self.maxCreateTries = [self.config.maxCreateTries integerValue];
     self.maxInstallTries = [self.config.maxInstallTries integerValue];
-    self.maxLaunchTries = [self.config.maxLaunchTries integerValue];
     
     if (context.config.deleteSimUDID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
@@ -406,13 +404,7 @@ void onInterrupt(int ignore) {
     handler.onError = ^(NSError *error) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [BPUtils printInfo:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
-        if (--__self.maxLaunchTries > 0) {
-            [BPUtils printInfo:INFO withString:@"Relaunching the simulator due to a BAD STATE"];
-            context.runner = [__self createSimulatorRunnerWithContext:context];
-            NEXT([__self launchApplicationWithContext:context]);
-        } else {
-            NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
-        }
+        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
     };
 
     handler.onTimeout = ^{
@@ -420,8 +412,6 @@ void onInterrupt(int ignore) {
         [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
         [[BPStats sharedStats] endTimer:stepName];
         [BPUtils printInfo:FAILED withString:@"Timeout: %@", stepName];
-        [BPUtils printInfo:INFO withString:@"Saving Diagnostics for Debugging"];
-        [BPUtils saveDebuggingDiagnostics:context.config.outputDirectory];
     };
 
     [context.runner launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];

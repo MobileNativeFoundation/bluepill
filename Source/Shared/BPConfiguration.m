@@ -123,8 +123,6 @@ struct BPOptions {
         "The maximum number of times to attempt to create a simulator before failing a test attempt"},
     {354, "max-sim-install-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxInstallTries",
         "The maximum number of times to attempt to install the test app into a simulator before failing a test attempt"},
-    {355, "max-sim-launch-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxLaunchTries",
-        "The maximum number of times to attempt to launch the test app in a simulator before failing a test attempt"},
     {356, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "createTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator creation"},
     {357, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "launchTimeout",
