@@ -13,6 +13,7 @@
 @implementation BPReportCollector
 
 + (void)collectReportsFromPath:(NSString *)reportsPath
+                   applyXQuery:(NSString *)XQuery
              onReportCollected:(void (^)(NSURL *fileUrl))fileHandler
                   outputAtPath:(NSString *)finalReportPath {
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -42,7 +43,15 @@
             fprintf(stderr, "Failed to get resource from url %s", [[url absoluteString] UTF8String]);
         }
         else if (![isDirectory boolValue]) {
-            if ([[url pathExtension] isEqualToString:@"xml"]) {
+            if ([[url lastPathComponent] hasSuffix:@"results.xml"]) {
+                // Skipping over the failure logs for the total report
+                // so it only contains successes to maintain existing functionality
+                // todo: These logs actually need to be parsed for just the
+                // successes and added to the final report
+                if (!XQuery && [[url lastPathComponent] containsString:@"failure"]) {
+                    continue;
+                }
+                
                 NSError *error;
                 NSXMLDocument *doc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:0 error:&error];
                 if (error) {
@@ -51,21 +60,33 @@
                     // Test results from other BP workers should continue to parse
                     continue;
                 }
-
-                // Don't withhold the parent object.
-                @autoreleasepool {
-                    NSArray *testsuitesNodes =  [doc nodesForXPath:[NSString stringWithFormat:@".//%@", @"testsuites"] error:&error];
-                    for (NSXMLElement *element in testsuitesNodes) {
+                
+                NSArray *testsuiteNodes = nil;
+                // testcase/error, testcase/failure
+                if (XQuery) {
+                    testsuiteNodes = [doc objectsForXQuery:[NSString stringWithFormat:@".//testsuites/testsuite/testsuite/%@/../..", XQuery] error:&error];
+                    for (NSXMLElement *element in testsuiteNodes) {
                         totalTests += [[[element attributeForName:@"tests"] stringValue] integerValue];
                         totalErrors += [[[element attributeForName:@"errors"] stringValue] integerValue];
                         totalFailures += [[[element attributeForName:@"failures"] stringValue] integerValue];
                         totalTime += [[[element attributeForName:@"time"] stringValue] doubleValue];
                     }
+                    
+                } else {
+                    // Don't withhold the parent object.
+                    @autoreleasepool {
+                        NSArray *testsuitesNodes =  [doc nodesForXPath:[NSString stringWithFormat:@".//%@", @"testsuites"] error:&error];
+                        for (NSXMLElement *element in testsuitesNodes) {
+                            totalTests += [[[element attributeForName:@"tests"] stringValue] integerValue];
+                            totalErrors += [[[element attributeForName:@"errors"] stringValue] integerValue];
+                            totalFailures += [[[element attributeForName:@"failures"] stringValue] integerValue];
+                            totalTime += [[[element attributeForName:@"time"] stringValue] doubleValue];
+                        }
+                    }
+                    
+                    testsuiteNodes = [doc nodesForXPath:[NSString stringWithFormat:@".//%@/testsuite", @"testsuites"] error:&error];
                 }
-
-                NSArray *testsuiteNodes =
-                [doc nodesForXPath:[NSString stringWithFormat:@".//%@/testsuite", @"testsuites"] error:&error];
-
+                
                 [nodesArray addObjectsFromArray:testsuiteNodes];
                 if (fileHandler) {
                     fileHandler(url);
@@ -86,5 +107,5 @@
     NSData *xmlData = [xmlRequest XMLDataWithOptions:NSXMLDocumentIncludeContentTypeDeclaration];
     [xmlData writeToFile:finalReportPath atomically:YES];
 }
-
 @end
+

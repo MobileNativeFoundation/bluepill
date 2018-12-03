@@ -143,7 +143,16 @@ struct BPOptions {
             "A .GlobalPreferences.plist simulator preferences file to be copied to any newly created simulators before booting"},
     {363, "script-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "scriptFilePath",
         "A script that will be called after the simulator is booted, but before tests are run. Can be used to do any setup (e.g. installing certs). The environment will contain $BP_DEVICE_ID with the ID of the simulator and $BP_DEVICE_PATH with its full path. Exit with zero for success and non-zero for failure."},
-
+    
+    // Experimental Options
+    {364, "save-retry-xml", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "saveRetryXml",
+        "When retrying copy the previous XML file to /retries rather than overwrite it."},
+    {365, "failure-xml-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "failureXmlOutput",
+        "Create a separate XML report containing only test failures."},
+    {366, "error-xml-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "errorXmlOutput",
+        "Create a separate XML report containing only test errors."},
+    {367, "timeout-xml-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "timeoutXmlOutput",
+        "Create a separate XML report containing only test timeouts."},
     {0, 0, 0, 0, 0, 0, 0}
 };
 

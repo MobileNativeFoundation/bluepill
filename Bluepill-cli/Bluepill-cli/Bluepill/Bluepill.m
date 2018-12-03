@@ -518,6 +518,22 @@ void onInterrupt(int ignore) {
                 NSString *fileName = [NSString stringWithFormat:@"TEST-%@-results.xml",
                                       [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
                 NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
+                
+                NSFileManager *fileManager = [NSFileManager defaultManager];
+                if (context.config.saveRetryXml && [fileManager isReadableFileAtPath:outputFile]) {
+                    NSString *retryDir = [context.config.outputDirectory stringByAppendingPathComponent:@"failures/"];
+                    
+                    [fileManager createDirectoryAtPath:retryDir withIntermediateDirectories:YES attributes:nil error:NULL];
+
+                    NSArray *directoryContent  = [fileManager contentsOfDirectoryAtPath:retryDir error:nil];
+                    NSUInteger numberOfFileInFolder = [directoryContent count] + 1;
+                    NSString *copyFileName = [NSString stringWithFormat:@"TEST-%@-failure-%lu-results.xml",
+                                              [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension], numberOfFileInFolder];
+                    NSString *copyFilePath = [retryDir stringByAppendingPathComponent:copyFileName];
+                    
+                    [fileManager copyItemAtURL:[NSURL fileURLWithPath:outputFile] toURL:[NSURL fileURLWithPath:copyFilePath] error:nil];
+                }
+                
                 junitLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
             } else {
                 junitLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationStdout];

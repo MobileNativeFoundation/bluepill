@@ -313,11 +313,24 @@ maxprocs(void)
         if ([fm fileExistsAtPath:outputPath]) {
             [fm removeItemAtPath:outputPath error:nil];
         }
-        [BPReportCollector collectReportsFromPath:self.config.outputDirectory onReportCollected:^(NSURL *fileUrl) {
+        [BPReportCollector collectReportsFromPath:self.config.outputDirectory applyXQuery:nil onReportCollected:^(NSURL *fileUrl) {
 //            NSError *error;
 //            NSFileManager *fm = [NSFileManager new];
 //            [fm removeItemAtURL:fileUrl error:&error];
         } outputAtPath:outputPath];
+        if (self.config.failureXmlOutput) {
+            outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"FailureReport.xml"];
+            [BPReportCollector collectReportsFromPath:self.config.outputDirectory applyXQuery:@"testcase/failure[@message!=\"Timed out waiting for the test to produce output. Test was aborted.\"]" onReportCollected:^(NSURL *fileUrl) {} outputAtPath:outputPath];
+        }
+        
+        if (self.config.errorXmlOutput) {
+            outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"ErrorReport.xml"];
+            [BPReportCollector collectReportsFromPath:self.config.outputDirectory applyXQuery:@"testcase/error" onReportCollected:^(NSURL *fileUrl) {} outputAtPath:outputPath];
+        }
+        if (self.config.timeoutXmlOutput) {
+            outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"TimeoutReport.xml"];
+            [BPReportCollector collectReportsFromPath:self.config.outputDirectory applyXQuery:@"testcase/failure[@message=\"Timed out waiting for the test to produce output. Test was aborted.\"]" onReportCollected:^(NSURL *fileUrl) {} outputAtPath:outputPath];
+        }
     }
 
     return rc;
