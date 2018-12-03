@@ -61,7 +61,7 @@
                     continue;
                 }
                 
-                NSArray *testsuiteNodes = nil;g
+                NSArray *testsuiteNodes = nil;
                 if (XQuery) {
                     testsuiteNodes = [doc objectsForXQuery:[NSString stringWithFormat:@".//testsuites/testsuite/testsuite/%@/../..", XQuery] error:&error];
                     for (NSXMLElement *element in testsuiteNodes) {

@@ -20,4 +20,5 @@
                    applyXQuery:(NSString *)XQuery
              onReportCollected:(void (^)(NSURL *fileUrl))fileHandler
                   outputAtPath:(NSString *)finalReportPath;
+
 @end
