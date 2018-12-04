@@ -30,7 +30,7 @@
 - (void)testCollectReportsFromPath {
     NSString *path = [[NSBundle bundleForClass:[self class]] resourcePath];
     NSString *outputPath = [path stringByAppendingPathComponent:@"result.xml"];
-    [BPReportCollector collectReportsFromPath:path onReportCollected:^(NSURL *fileUrl) {
+    [BPReportCollector collectReportsFromPath:path applyXQuery:nil onReportCollected:^(NSURL *fileUrl) {
         NSError *error;
         NSFileManager *fm = [NSFileManager new];
         [fm removeItemAtURL:fileUrl error:&error];

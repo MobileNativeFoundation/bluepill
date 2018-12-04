@@ -43,7 +43,7 @@
             fprintf(stderr, "Failed to get resource from url %s", [[url absoluteString] UTF8String]);
         }
         else if (![isDirectory boolValue]) {
-            if ([[url lastPathComponent] hasSuffix:@"results.xml"]) {
+            if ([[url pathExtension] isEqualToString:@"xml"]) {
                 // Skipping over the failure logs for the total report
                 // so it only contains successes to maintain existing functionality
                 // todo: These logs actually need to be parsed for just the
