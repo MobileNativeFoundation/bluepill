@@ -67,6 +67,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *outputDirectory;
 @property (nonatomic, strong) NSString *screenshotsDirectory;
 @property (nonatomic, strong) NSString *simulatorPreferencesFile;
+@property (nonatomic, strong) NSString *scriptFilePath;
 @property (nonatomic) BOOL headlessMode;
 @property (nonatomic) BOOL cloneSimulator;
 @property (nonatomic, strong) NSNumber *numSims;
@@ -78,7 +79,6 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic) BOOL verboseLogging;
 @property (nonatomic, strong) NSNumber *maxCreateTries;
 @property (nonatomic, strong) NSNumber *maxInstallTries;
-@property (nonatomic, strong) NSNumber *maxLaunchTries;
 @property (nonatomic, strong) NSNumber *createTimeout;
 @property (nonatomic, strong) NSNumber *launchTimeout;
 @property (nonatomic, strong) NSNumber *deleteTimeout;

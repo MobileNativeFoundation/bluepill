@@ -123,8 +123,6 @@ struct BPOptions {
         "The maximum number of times to attempt to create a simulator before failing a test attempt"},
     {354, "max-sim-install-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxInstallTries",
         "The maximum number of times to attempt to install the test app into a simulator before failing a test attempt"},
-    {355, "max-sim-launch-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxLaunchTries",
-        "The maximum number of times to attempt to launch the test app in a simulator before failing a test attempt"},
     {356, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "createTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator creation"},
     {357, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "launchTimeout",
@@ -141,6 +139,8 @@ struct BPOptions {
         "Directory where simulator screenshots for failed ui tests will be stored"},
     {362, "simulator-preferences-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "simulatorPreferencesFile",
             "A .GlobalPreferences.plist simulator preferences file to be copied to any newly created simulators before booting"},
+    {363, "script-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "scriptFilePath",
+        "A script that will be called after the simulator is booted, but before tests are run. Can be used to do any setup (e.g. installing certs). The environment will contain $BP_DEVICE_ID with the ID of the simulator and $BP_DEVICE_PATH with its full path. Exit with zero for success and non-zero for failure."},
 
     {0, 0, 0, 0, 0, 0, 0}
 };
@@ -714,6 +714,24 @@ static NSUUID *sessionID;
             }
         } else {
             BP_SET_ERROR(err, @"%@ doesn't exist", self.simulatorPreferencesFile);
+            return NO;
+        }
+    }
+
+    if (self.scriptFilePath) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.scriptFilePath isDirectory:&isdir]) {
+            if (isdir) {
+                BP_SET_ERROR(err, @"%@ is a directory.", self.scriptFilePath);
+                return NO;
+            }
+
+            if (![[NSFileManager defaultManager] isExecutableFileAtPath:self.scriptFilePath]) {
+                BP_SET_ERROR(err, @"%@ is not executable.", self.scriptFilePath);
+                return NO;
+            }
+
+        } else {
+            BP_SET_ERROR(err, @"%@ doesn't exist", self.scriptFilePath);
             return NO;
         }
     }

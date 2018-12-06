@@ -73,6 +73,7 @@
 		B3DAF83C2151CB4100210286 /* BPDeleteSimulatorHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBB1DF21749007928F3 /* BPDeleteSimulatorHandler.m */; };
 		B3DAF83D2151CB7000210286 /* BPHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BAF1DF2066B007928F3 /* BPHandler.m */; };
 		B3DAF83E2151CB9700210286 /* BPWaitTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F6E1DD397F800C0FA73 /* BPWaitTimer.m */; };
+		B848CF51217E39060043D826 /* test-script.sh in Resources */ = {isa = PBXBuildFile; fileRef = B848CF4F217E38FB0043D826 /* test-script.sh */; };
 		BA0096FE1DCA5D810000DD45 /* testConfigRelativePath.json in Resources */ = {isa = PBXBuildFile; fileRef = BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */; };
 		BA0097001DCA61210000DD45 /* BPConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */; };
 		BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA0C554C1DDAE241009E1377 /* failure_retry_report.xml */; };
@@ -192,6 +193,7 @@
 		B368E562213F8D2F00B4DEA3 /* bluelibTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bluelibTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B368E567213F8D2F00B4DEA3 /* bluelibTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bluelibTests.m; sourceTree = "<group>"; };
 		B368E569213F8D2F00B4DEA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B848CF4F217E38FB0043D826 /* test-script.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "test-script.sh"; sourceTree = "<group>"; };
 		BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testConfigRelativePath.json; sourceTree = "<group>"; };
 		BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConfigurationTests.m; sourceTree = "<group>"; };
 		BA0097011DCA626F0000DD45 /* BPConfiguration+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BPConfiguration+Test.h"; sourceTree = "<group>"; };
@@ -496,6 +498,7 @@
 				BA180A131DBB088100D7D130 /* testScheme.xcscheme */,
 				BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */,
 				C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */,
+				B848CF4F217E38FB0043D826 /* test-script.sh */,
 			);
 			path = "Resource Files";
 			sourceTree = "<group>";
@@ -889,6 +892,7 @@
 				BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */,
 				BA4800EA1DC2C74600026972 /* BPAppNegativeTests-results.xml in Resources */,
 				7A4FB8E61DF8AD4F0073F268 /* missed-crash.log in Resources */,
+				B848CF51217E39060043D826 /* test-script.sh in Resources */,
 				C94DE0BB4360016D3D3061D9 /* simulator-preferences.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
