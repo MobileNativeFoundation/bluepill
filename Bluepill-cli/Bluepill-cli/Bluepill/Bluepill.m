@@ -526,9 +526,9 @@ void onInterrupt(int ignore) {
                     [fileManager createDirectoryAtPath:retryDir withIntermediateDirectories:YES attributes:nil error:NULL];
 
                     NSArray *directoryContent  = [fileManager contentsOfDirectoryAtPath:retryDir error:nil];
-                    NSUInteger numberOfFileInFolder = [directoryContent count] + 1;
+                    NSUInteger numberOfFilesInFolder = [directoryContent count] + 1;
                     NSString *copyFileName = [NSString stringWithFormat:@"TEST-%@-failure-%lu-results.xml",
-                                              [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension], numberOfFileInFolder];
+                                              [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension], numberOfFilesInFolder];
                     NSString *copyFilePath = [retryDir stringByAppendingPathComponent:copyFileName];
                     
                     [fileManager copyItemAtURL:[NSURL fileURLWithPath:outputFile] toURL:[NSURL fileURLWithPath:copyFilePath] error:nil];

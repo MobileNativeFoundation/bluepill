@@ -13,9 +13,9 @@
 @implementation BPReportCollector
 
 + (void)collectReportsFromPath:(NSString *)reportsPath
-                   applyXQuery:(NSString *)XQuery
              onReportCollected:(void (^)(NSURL *fileUrl))fileHandler
-                  outputAtPath:(NSString *)finalReportPath {
+                   applyXQuery:(NSString *)XQuery
+                  withOutputAtPath:(NSString *)finalReportPath {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     NSURL *directoryURL = [NSURL fileURLWithPath:reportsPath isDirectory:YES];
@@ -63,6 +63,7 @@
                 
                 NSArray *testsuiteNodes = nil;
                 if (XQuery) {
+                    // <testsuites> refer to each .xctest run, while the first <testsuite> refers to the bundle and the second <testsuite> refers to each file in that bundle. The provided XQuery string will filter down to specific testcases based on what they contain.
                     testsuiteNodes = [doc objectsForXQuery:[NSString stringWithFormat:@".//testsuites/testsuite/testsuite/%@/../..", XQuery] error:&error];
                     for (NSXMLElement *element in testsuiteNodes) {
                         totalTests += [[[element attributeForName:@"tests"] stringValue] integerValue];

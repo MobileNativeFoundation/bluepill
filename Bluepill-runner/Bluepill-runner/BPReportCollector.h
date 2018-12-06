@@ -17,8 +17,8 @@
  * @param finalReportPath the path to save the final report
  */
 + (void)collectReportsFromPath:(NSString *)reportsPath
-                   applyXQuery:(NSString *)XQuery
              onReportCollected:(void (^)(NSURL *fileUrl))fileHandler
-                  outputAtPath:(NSString *)finalReportPath;
+                   applyXQuery:(NSString *)XQuery
+                  withOutputAtPath:(NSString *)finalReportPath;
 
 @end
