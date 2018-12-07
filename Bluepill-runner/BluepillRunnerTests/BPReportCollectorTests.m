@@ -31,10 +31,10 @@
     NSString *path = [[NSBundle bundleForClass:[self class]] resourcePath];
     NSString *outputPath = [path stringByAppendingPathComponent:@"result.xml"];
     [BPReportCollector collectReportsFromPath:path onReportCollected:^(NSURL *fileUrl) {
-        NSError *error;
-        NSFileManager *fm = [NSFileManager new];
-        [fm removeItemAtURL:fileUrl error:&error];
-        XCTAssertNil(error);
+//        NSError *error;
+//        NSFileManager *fm = [NSFileManager new];
+//        [fm removeItemAtURL:fileUrl error:&error];
+//        XCTAssertNil(error);
     } applyXQuery:nil withOutputAtPath:outputPath];
     NSData *data = [NSData dataWithContentsOfFile:outputPath];
     NSError *error;
