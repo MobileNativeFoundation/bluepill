@@ -106,6 +106,7 @@
 		C469B1581FE1A420002246BF /* crash_tests_with_retry.xml in Resources */ = {isa = PBXBuildFile; fileRef = C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */; };
 		C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */ = {isa = PBXBuildFile; fileRef = C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */; };
 		C94DE0BB4360016D3D3061D9 /* simulator-preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */; };
+		E6056B9D21BAF6D300C6C31B /* save_retry.xml in Resources */ = {isa = PBXBuildFile; fileRef = E6056B9C21BAF6D300C6C31B /* save_retry.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -318,6 +319,7 @@
 		C48AE3821FBCC59D00997BA0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 		C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "simulator-preferences.plist"; sourceTree = "<group>"; };
+		E6056B9C21BAF6D300C6C31B /* save_retry.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = save_retry.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -493,6 +495,7 @@
 				BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */,
 				BA0C554C1DDAE241009E1377 /* failure_retry_report.xml */,
 				BA4BCFAB1DC3FA3D00592FA4 /* crash_tests.xml */,
+				E6056B9C21BAF6D300C6C31B /* save_retry.xml */,
 				BA4800E91DC2C74600026972 /* BPAppNegativeTests-results.xml */,
 				BA180A0B1DBB011200D7D130 /* testConfig.json */,
 				BA180A131DBB088100D7D130 /* testScheme.xcscheme */,
@@ -880,6 +883,7 @@
 				BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */,
 				BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */,
 				7A4D7A831DDA5FEA001E085D /* parse_crash.log in Resources */,
+				E6056B9D21BAF6D300C6C31B /* save_retry.xml in Resources */,
 				BA4BCFAC1DC3FA3D00592FA4 /* crash_tests.xml in Resources */,
 				C469B1581FE1A420002246BF /* crash_tests_with_retry.xml in Resources */,
 				7A4FB8E81DFB66980073F268 /* error_only_crash.log in Resources */,

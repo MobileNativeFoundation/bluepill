@@ -213,6 +213,28 @@
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
+- (void)testSaveRetryXml {
+    NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppSaveRetryXmlTestsSetTempDir", tempDir] withError:&error];
+
+    self.config.outputDirectory = outputDir;
+    self.config.junitOutput = YES;
+    self.config.errorRetriesCount = @1;
+    self.config.failureTolerance = @1;
+    self.config.onlyRetryFailed = YES;
+    self.config.saveRetryXml = YES;
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
+
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"failures/TEST-BPSampleAppCrashingTests-failure-1-results.xml"];
+    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"save_retry.xml"];
+    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
+}
+
 - (void)testReportWithAppCrashingAndRetryOnlyFailedTestsSet {
     NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
@@ -225,10 +247,10 @@
     self.config.errorRetriesCount = @1;
     self.config.failureTolerance = @1;
     self.config.onlyRetryFailed = YES;
-
+    
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
-
+    
     NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-results.xml"];
     NSLog(@"JUnit file: %@", junitReportPath);
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests_with_retry.xml"];

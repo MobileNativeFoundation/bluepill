@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites name="Selected tests" tests="148" failures="2" errors="1" time="1029.446000">
+    <testsuite tests="31" failures="2" errors="1" time="425.108000" timestamp="2018-12-03T12:43:05GMT-08:00" name="Test.xctest">
+        <testsuite tests="8" failures="0" errors="1" time="12.796000" timestamp="2018-12-03T13:07:05GMT-08:00" name="TestFileA">
+            <testcase classname="TestFileA" name="UnitTest1" time="0.061000">
+                <system-out></system-out>
+                <error type="Error" message="Some Error.">
+                </error>
+            </testcase>
+        </testsuite>
+        <testsuite tests="8" failures="2" errors="0" time="12.796000" timestamp="2018-12-03T13:07:05GMT-08:00" name="TestFileB">
+            <testcase classname="TestFileB" name="UnitTest2" time="0.061000">
+                <system-out></system-out>
+                <failure type="Failure" message="Some Failure.">
+                </failure>
+            </testcase>
+            <testcase classname="TestFileB" name="UnitTest3" time="0.061000">
+                <system-out></system-out>
+                <failure type="Failure" message="Timed out waiting for the test to produce output. Test was aborted.">
+                </failure>
+            </testcase>
+        </testsuite>
+    </testsuite>
 </testsuites>
 

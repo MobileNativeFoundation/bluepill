@@ -51,4 +51,30 @@
     [fm removeItemAtPath:outputPath error:&error];
     XCTAssertNil(error);
 }
+
+- (void)testCollectReportsFromPathWithXQuery {
+    NSString *path = [[NSBundle bundleForClass:[self class]] resourcePath];
+    NSString *outputPath = [path stringByAppendingPathComponent:@"result.xml"];
+    [BPReportCollector collectReportsFromPath:path onReportCollected:^(NSURL *fileUrl) {
+        NSError *error;
+        NSFileManager *fm = [NSFileManager new];
+        [fm removeItemAtURL:fileUrl error:&error];
+        XCTAssertNil(error);
+    } applyXQuery:@"testcase/error" withOutputAtPath:outputPath];
+    NSData *data = [NSData dataWithContentsOfFile:outputPath];
+    NSError *error;
+    NSXMLDocument *doc = [[NSXMLDocument alloc] initWithData:data options:0 error:&error];
+    XCTAssertNil(error);
+    NSArray *testsuitesNodes =  [doc nodesForXPath:[NSString stringWithFormat:@".//%@", @"testsuites"] error:&error];
+    NSXMLElement *root = testsuitesNodes[0];
+    XCTAssertTrue([[[root attributeForName:@"tests"] stringValue] isEqualToString:@"8"], @"test count is wrong");
+    XCTAssertTrue([[[root attributeForName:@"errors"] stringValue] isEqualToString:@"1"], @"test count is wrong");
+    XCTAssertTrue([[[root attributeForName:@"failures"] stringValue] isEqualToString:@"0"], @"test count is wrong");
+    
+    NSLog(@"%@, %@, %@", [[root attributeForName:@"tests"] stringValue], [[root attributeForName:@"errors"] stringValue], [[root attributeForName:@"failures"] stringValue]);
+    NSFileManager *fm = [NSFileManager new];
+    [fm removeItemAtPath:outputPath error:&error];
+    XCTAssertNil(error);
+}
+
 @end

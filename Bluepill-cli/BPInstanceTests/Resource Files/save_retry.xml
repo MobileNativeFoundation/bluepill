@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="All tests" tests="0" failures="0" errors="0" time="0.000000">
+    <testsuite tests="0" failures="0" errors="0" time="0.937023" timestamp="2018-12-06T15:35:23GMT-08:00" name="BPSampleAppCrashingTests.xctest">
+        <testsuite tests="0" failures="0" errors="0" time="0.936033" timestamp="2018-12-06T15:35:23GMT-08:00" name="BPSampleAppCrashingTests">
+            <testcase classname="BPSampleAppCrashingTests" name="testAppCrash0" time="0.001000">
+            </testcase>
+            <testcase classname="BPSampleAppCrashingTests" name="testAppCrash1" time="0.924852">
+                <failure type="Failure" message="App Crashed">
+                    Unknown File:0
+                </failure>
+                <system-out>
+                    XCTestOutputBarrier
+                </system-out>
+            </testcase>
+        </testsuite>
+    </testsuite>
+</testsuites>
+
