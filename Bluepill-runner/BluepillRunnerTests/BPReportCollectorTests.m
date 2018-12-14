@@ -30,12 +30,7 @@
 - (void)testCollectReportsFromPath {
     NSString *path = [[NSBundle bundleForClass:[self class]] resourcePath];
     NSString *outputPath = [path stringByAppendingPathComponent:@"result.xml"];
-    [BPReportCollector collectReportsFromPath:path onReportCollected:^(NSURL *fileUrl) {
-        NSError *error;
-        NSFileManager *fm = [NSFileManager new];
-        [fm removeItemAtURL:fileUrl error:&error];
-        XCTAssertNil(error);
-    }  outputAtPath:outputPath];
+    [BPReportCollector collectReportsFromPath:path onReportCollected:nil outputAtPath:outputPath];
     NSData *data = [NSData dataWithContentsOfFile:outputPath];
     NSError *error;
     NSXMLDocument *doc = [[NSXMLDocument alloc] initWithData:data options:0 error:&error];
@@ -51,4 +46,33 @@
     [fm removeItemAtPath:outputPath error:&error];
     XCTAssertNil(error);
 }
+
+- (void)testCollectReportsFromPathAndCreateTraceEvent {
+    NSString *path = [[NSBundle bundleForClass:[self class]] resourcePath];
+    NSString *outputPath = [path stringByAppendingPathComponent:@"result.json"];
+    NSDictionary *otherData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                               @"Voyager-iOS", @"Product Name",
+                               @"VoyagerTests", @"Batch Number",
+                               @"iPhone 6S", @"Device Type",
+                               @"iOS 12.0", @"iOS Version",
+                               @"XCODE_VERSION", @"XCode Version",
+                               @"BP_VERSION", @"BluePill Version",
+                               nil];
+
+    [BPReportCollector collectReportsFromPath:path withOtherData:otherData applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:YES withTraceEventAtPath:outputPath];
+    NSData *data = [NSData dataWithContentsOfFile:outputPath];
+    NSError *error;
+    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+
+    XCTAssertEqual([[result allKeys] count], 6);
+    XCTAssertEqual([result[@"traceEvents"] count], 3);
+    XCTAssertEqualObjects([result[@"traceEvents"] firstObject][@"dur"], @"0.061");
+    XCTAssertEqualObjects([result[@"traceEvents"] firstObject][@"ts"], @"1543871225000");
+    XCTAssertEqualObjects([result[@"traceEvents"] firstObject][@"name"], @"TestFileA/UnitTest1");
+
+    NSFileManager *fm = [NSFileManager new];
+    [fm removeItemAtPath:outputPath error:&error];
+    XCTAssertNil(error);
+}
+
 @end

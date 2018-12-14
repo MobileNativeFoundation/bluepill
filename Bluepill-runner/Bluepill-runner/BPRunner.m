@@ -307,6 +307,17 @@ maxprocs(void)
     if (app) {
         [app terminate];
     }
+    
+    NSDictionary *otherData = [[NSDictionary alloc] initWithObjectsAndKeys:
+                               [[self.config.testBundlePath componentsSeparatedByString:@"/"] lastObject], @"Test Bundle",
+                               self.config.deviceType, @"Device Type",
+                               self.config.runtime, @"iOS Version",
+                               @XCODE_VERSION, @"XCode Version",
+                               @BP_VERSION, @"BluePill Version",
+                               [NSHost currentHost], @"Host Name",
+                               [[NSProcessInfo processInfo] operatingSystemVersionString], @"OS Version",
+                               nil];
+
     if (self.config.outputDirectory) {
         NSString *outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
         NSFileManager *fm = [NSFileManager new];
@@ -314,10 +325,16 @@ maxprocs(void)
             [fm removeItemAtPath:outputPath error:nil];
         }
         [BPReportCollector collectReportsFromPath:self.config.outputDirectory onReportCollected:^(NSURL *fileUrl) {
-//            NSError *error;
-//            NSFileManager *fm = [NSFileManager new];
-//            [fm removeItemAtURL:fileUrl error:&error];
+            //            NSError *error;
+            //            NSFileManager *fm = [NSFileManager new];
+            //            [fm removeItemAtURL:fileUrl error:&error];
         } outputAtPath:outputPath];
+
+        if (self.config.traceEventOutput) {
+            outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"TraceReport.json"];
+            [BPReportCollector collectReportsFromPath:self.config.outputDirectory withOtherData:otherData applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:self.config.traceEventHideSuccesses withTraceEventAtPath:outputPath];
+        }
+
     }
 
     return rc;
