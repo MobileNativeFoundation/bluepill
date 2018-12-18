@@ -143,7 +143,7 @@ struct BPOptions {
         "A script that will be called after the simulator is booted, but before tests are run. Can be used to do any setup (e.g. installing certs). The environment will contain $BP_DEVICE_ID with the ID of the simulator and $BP_DEVICE_PATH with its full path. Exit with zero for success and non-zero for failure."},
     {368, "trace-event-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "traceEventOutput",
         "Create a TraceEvent JSON report."},
-    {369, "trace-event-hide-successes", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "traceEventHideSuccesses",
+    {369, "trace-event-error-only", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "traceEventErrorOnly",
         "Remove successful events from the TraceEvent output."},
 
     {0, 0, 0, 0, 0, 0, 0}

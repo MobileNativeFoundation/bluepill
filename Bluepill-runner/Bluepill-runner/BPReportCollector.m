@@ -8,6 +8,7 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import "BPReportCollector.h"
+#import "BPTraceEvent.h"
 #import <BluepillLib/BPUtils.h>
 
 @implementation BPReportCollector
@@ -88,10 +89,10 @@
 }
 
 + (void)collectReportsFromPath:(NSString *)reportsPath
-                                            withOtherData:(NSDictionary *)otherData
-                                              applyXQuery:(NSString *)XQuery
-                                            hideSuccesses:(BOOL)hideSuccesses
-                                     withTraceEventAtPath:(NSString *)finalReportPath {
+                 withOtherData:(NSDictionary *)otherData
+                   applyXQuery:(NSString *)XQuery
+                 hideSuccesses:(BOOL)hideSuccesses
+          withTraceEventAtPath:(NSString *)finalReportPath {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     NSURL *directoryURL = [NSURL fileURLWithPath:reportsPath isDirectory:YES];
@@ -114,15 +115,13 @@
         NSString *currentFolder = nil;
         if (![url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error]) {
             fprintf(stderr, "Failed to get resource from url %s", [[url absoluteString] UTF8String]);
-        }
-        // Getting which sim # folder we're currently in so we can attach that to all the tests in that folder
-        else if ([isDirectory boolValue]) {
-            currentFolder = [url pathComponents][[[url pathComponents] count] - 1 ];
+        } else if ([isDirectory boolValue]) {
+            // Getting which sim # folder we're currently in so we can attach that to all the tests in that folder
+            currentFolder = [url pathComponents][[[url pathComponents] count] - 1];
             if ([currentFolder rangeOfCharacterFromSet:notDigits].location == NSNotFound) {
                 currentSim = currentFolder;
             }
-        }
-        else if (![isDirectory boolValue]) {
+        } else if (![isDirectory boolValue]) {
             if ([[url pathExtension] isEqualToString:@"xml"]) {
                 NSError *error;
                 NSXMLDocument *doc = [[NSXMLDocument alloc] initWithContentsOfURL:url options:0 error:&error];
@@ -170,55 +169,4 @@
 
 }
 
-@end
-
-@implementation TraceEvent
-- (instancetype)init {
-    self = [self initWithData:nil];
-    return self;
-}
-
-- (instancetype)initWithData:(NSDictionary *)data {
-    self = [super init];
-    if (self) {
-        _displayTimeUnit = @"ns";
-        _systemTraceEvents = @"SystemTraceData";
-        _otherData = data;
-        _stackFrames = [[NSDictionary alloc] init];
-        _samples = [NSMutableArray array];
-        _traceEvents = [NSMutableArray array];
-    }
-    return self;
-}
-
-- (void)appendCompleteTraceEvent:(NSString *)name
-                                        :(NSString *)cat
-                                        :(NSInteger)ts
-                                        :(float)dur
-                                        :(NSInteger)pid
-                                        :(NSInteger)tid
-                                        :(NSDictionary *)args {
-    NSDictionary *newTraceEvent = [[NSDictionary alloc] initWithObjectsAndKeys:
-     name, @"name",
-     cat, @"cat",
-     @"X", @"ph", // Complete event type (with both a timestamp and duration)
-     [NSString stringWithFormat: @"%ld", (long)ts], @"ts",
-     [[NSNumber numberWithFloat:dur] stringValue], @"dur",
-     [NSString stringWithFormat: @"%ld", (long)pid], @"pid",
-     [NSString stringWithFormat: @"%ld", (long)tid], @"tid",
-     args, @"args",
-     nil];
-
-    [_traceEvents addObject:newTraceEvent];
-}
-- (NSDictionary *)toDict {
-    return [[NSDictionary alloc] initWithObjectsAndKeys:
-            _displayTimeUnit, @"displayTimeUnit",
-            _systemTraceEvents, @"systemTraceEvents",
-            _otherData, @"otherData",
-            _stackFrames, @"stackFrames",
-            _samples, @"samples",
-            _traceEvents, @"traceEvents",
-            nil];
-}
 @end

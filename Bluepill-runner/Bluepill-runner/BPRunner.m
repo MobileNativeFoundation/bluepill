@@ -324,15 +324,11 @@ maxprocs(void)
         if ([fm fileExistsAtPath:outputPath]) {
             [fm removeItemAtPath:outputPath error:nil];
         }
-        [BPReportCollector collectReportsFromPath:self.config.outputDirectory onReportCollected:^(NSURL *fileUrl) {
-            //            NSError *error;
-            //            NSFileManager *fm = [NSFileManager new];
-            //            [fm removeItemAtURL:fileUrl error:&error];
-        } outputAtPath:outputPath];
+        [BPReportCollector collectReportsFromPath:self.config.outputDirectory onReportCollected:nil outputAtPath:outputPath];
 
         if (self.config.traceEventOutput) {
             outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"TraceReport.json"];
-            [BPReportCollector collectReportsFromPath:self.config.outputDirectory withOtherData:otherData applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:self.config.traceEventHideSuccesses withTraceEventAtPath:outputPath];
+            [BPReportCollector collectReportsFromPath:self.config.outputDirectory withOtherData:otherData applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:self.config.traceEventErrorOnly withTraceEventAtPath:outputPath];
         }
 
     }

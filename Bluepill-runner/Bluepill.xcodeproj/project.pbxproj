@@ -30,6 +30,8 @@
 		C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E54B1DC94BB200BC80EE /* BPCLITests.m */; };
 		C4C614A421814C5C008A2C39 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C4C614A321814C5C008A2C39 /* BPTestHelper.m */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
+		E603C53921C8CF1F001EC0E4 /* BPTraceEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = E603C53821C8CF1F001EC0E4 /* BPTraceEvent.m */; };
+		E603C53A21C8CF2E001EC0E4 /* BPTraceEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = E603C53821C8CF1F001EC0E4 /* BPTraceEvent.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +65,8 @@
 		C4C614A321814C5C008A2C39 /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BPTestHelper.m; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.m"; sourceTree = "<group>"; };
 		C4FD8C561DB6E09B000ED28C /* BPPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPPacker.h; sourceTree = "<group>"; };
 		C4FD8C571DB6E09B000ED28C /* BPPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPacker.m; sourceTree = "<group>"; };
+		E603C53821C8CF1F001EC0E4 /* BPTraceEvent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPTraceEvent.m; sourceTree = "<group>"; };
+		E603C53B21C8CF48001EC0E4 /* BPTraceEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPTraceEvent.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +193,8 @@
 				C41C41F21DB04032001F32A2 /* BPApp.m */,
 				BAD848481DBC6A83007034CF /* BPReportCollector.h */,
 				BAD848491DBC6A83007034CF /* BPReportCollector.m */,
+				E603C53821C8CF1F001EC0E4 /* BPTraceEvent.m */,
+				E603C53B21C8CF48001EC0E4 /* BPTraceEvent.h */,
 			);
 			name = Bluepill;
 			path = "Bluepill-runner";
@@ -308,6 +314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E603C53A21C8CF2E001EC0E4 /* BPTraceEvent.m in Sources */,
 				BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */,
 				BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */,
 				BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */,
@@ -326,6 +333,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E603C53921C8CF1F001EC0E4 /* BPTraceEvent.m in Sources */,
 				C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */,
 				BAEF4B381DAC539400E68294 /* main.m in Sources */,
 				C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */,

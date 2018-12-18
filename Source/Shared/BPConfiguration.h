@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSNumber *deleteTimeout;
 
 @property (nonatomic) BOOL traceEventOutput;
-@property (nonatomic) BOOL traceEventHideSuccesses;
+@property (nonatomic) BOOL traceEventErrorOnly;
 
 @property (nonatomic, strong) NSArray<NSString *> *commandLineArguments; // command line arguments for the app
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environmentVariables;

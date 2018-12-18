@@ -9,25 +9,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TraceEvent  : NSObject
-@property (strong, nonatomic) NSMutableArray *traceEvents;
-@property (strong, nonatomic) NSString *displayTimeUnit;
-@property (strong, nonatomic) NSString *systemTraceEvents;
-@property (strong, nonatomic) NSDictionary *otherData;
-@property (strong, nonatomic) NSDictionary *stackFrames;
-@property (strong, nonatomic) NSArray *samples;
-- (id) init;
-- (instancetype)initWithData:(NSDictionary *)data;
-- (void)appendCompleteTraceEvent:(NSString *)name
-                                        :(NSString *)cat
-                                        :(NSInteger)ts
-                                        :(float)dur
-                                        :(NSInteger)pid
-                                        :(NSInteger)tid
-                                        :(NSDictionary *)args;
-- (NSDictionary *)toDict;
-@end
-
 @interface BPReportCollector : NSObject
 
 /*!
