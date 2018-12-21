@@ -162,7 +162,7 @@
                                               currentSim, @"simNum",
                                               nil];
 
-                        [traceEvent appendCompleteTraceEvent:[NSString stringWithFormat:@"%@/%@", className, testName] category:className timestamp:timestamp duration:duration processId:0 threadID:0 args:args]
+                        [traceEvent appendCompleteTraceEvent:[NSString stringWithFormat:@"%@/%@", className, testName] category:className timestamp:timestamp duration:duration processId:0 threadID:0 args:args];
                         currentTime = [currentTime dateByAddingTimeInterval:duration/1000];
                     }
                 }
