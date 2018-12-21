@@ -89,7 +89,7 @@
 }
 
 + (void)collectReportsFromPath:(NSString *)reportsPath
-                 withOtherData:(NSDictionary *)otherData
+                 withTestConfig:(NSDictionary *)testConfig
                    applyXQuery:(NSString *)XQuery
                  hideSuccesses:(BOOL)hideSuccesses
           withTraceEventAtPath:(NSString *)finalReportPath {
@@ -105,7 +105,7 @@
                                              fprintf(stderr, "Failed to process url %s", [[url absoluteString] UTF8String]);
                                              return YES;
                                          }];
-    TraceEvent *traceEvent = [[TraceEvent alloc] initWithData:otherData];
+    TraceEvent *traceEvent = [[TraceEvent alloc] initWithData:testConfig];
     NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
     NSString *currentSim = @"-1";
 
