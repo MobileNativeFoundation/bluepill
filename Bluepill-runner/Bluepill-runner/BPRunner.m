@@ -328,7 +328,7 @@ maxprocs(void)
 
         if (self.config.traceEventOutput) {
             outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"TraceReport.json"];
-            [BPReportCollector collectReportsFromPath:self.config.outputDirectory withOtherData:otherData applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:self.config.traceEventErrorOnly withTraceEventAtPath:outputPath];
+            [BPReportCollector collectReportsFromPath:self.config.outputDirectory withTestConfig:otherData applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:self.config.traceEventErrorOnly withTraceEventAtPath:outputPath];
         }
 
     }
