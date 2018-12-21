@@ -50,7 +50,7 @@
 - (void)testCollectReportsFromPathAndCreateTraceEvent {
     NSString *path = [[NSBundle bundleForClass:[self class]] resourcePath];
     NSString *outputPath = [path stringByAppendingPathComponent:@"result.json"];
-    NSDictionary *otherData = [[NSDictionary alloc] initWithObjectsAndKeys:
+    NSDictionary *testConfig = [[NSDictionary alloc] initWithObjectsAndKeys:
                                @"Voyager-iOS", @"Product Name",
                                @"VoyagerTests", @"Batch Number",
                                @"iPhone 6S", @"Device Type",
@@ -59,7 +59,7 @@
                                @"BP_VERSION", @"BluePill Version",
                                nil];
 
-    [BPReportCollector collectReportsFromPath:path withTestConfig:otherData applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:YES withTraceEventAtPath:outputPath];
+    [BPReportCollector collectReportsFromPath:path withTestConfig:testConfig applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:YES withTraceEventAtPath:outputPath];
     NSData *data = [NSData dataWithContentsOfFile:outputPath];
     NSError *error;
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];

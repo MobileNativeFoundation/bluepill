@@ -12,7 +12,7 @@
  Trace Event Format Definition: https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU
  */
 
-@interface TraceEvent : NSObject
+@interface BPTraceEvent : NSObject
 @property (strong, nonatomic) NSMutableArray *traceEvents;
 @property (strong, nonatomic) NSString *displayTimeUnit;
 @property (strong, nonatomic) NSString *systemTraceEvents;
@@ -28,17 +28,17 @@
  * @param category Type of the event, for complete events this will be 'X', indicating the event will contain a duration and implicitly it is an event that has both a beginning and an end (See Trace Event Definition document for more)
  * @param timestamp Unix timestamp indicating when the event started
  * @param duration Length of a complete event
- * @param process_id ID of the process the event occured on
- * @param thread_id ID of the thread the event ocurred on
+ * @param processId ID of the process the event occured on
+ * @param threadId ID of the thread the event ocurred on
  * @param args Additional key value pairs to attach to the event
  */
 - (void)appendCompleteTraceEvent:(NSString *)name
-                                :(NSString *)category
-                                :(NSInteger)timestamp
-                                :(NSInteger)duration
-                                :(NSInteger)process_id
-                                :(NSInteger)thread_id
-                                :(NSDictionary *)args;
+                        category:(NSString *)category
+                       timestamp:(NSInteger)timestamp
+                        duration:(NSInteger)duration
+                       processId:(NSInteger)processId
+                        threadID:(NSInteger)threadId
+                            args:(NSDictionary *)args;
 
 - (NSDictionary *)toDict;
 @end

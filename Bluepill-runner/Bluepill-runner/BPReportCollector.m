@@ -105,9 +105,9 @@
                                              fprintf(stderr, "Failed to process url %s", [[url absoluteString] UTF8String]);
                                              return YES;
                                          }];
-    TraceEvent *traceEvent = [[TraceEvent alloc] initWithData:testConfig];
+    BPTraceEvent *traceEvent = [[BPTraceEvent alloc] initWithData:testConfig];
     NSCharacterSet* notDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-    NSString *currentSim = @"-1";
+    NSString *currentSim = @"";
 
     for (NSURL *url in enumerator) {
         NSError *error;
