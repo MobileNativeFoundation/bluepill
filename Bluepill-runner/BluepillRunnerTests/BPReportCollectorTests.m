@@ -59,7 +59,7 @@
                                @"BP_VERSION", @"BluePill Version",
                                nil];
 
-    [BPReportCollector collectReportsFromPath:path withOtherData:otherData applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:YES withTraceEventAtPath:outputPath];
+    [BPReportCollector collectReportsFromPath:path withTestConfig:otherData applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:YES withTraceEventAtPath:outputPath];
     NSData *data = [NSData dataWithContentsOfFile:outputPath];
     NSError *error;
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];

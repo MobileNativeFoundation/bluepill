@@ -30,7 +30,7 @@
 - (void)appendCompleteTraceEvent:(NSString *)name
                                 :(NSString *)category
                                 :(NSInteger)timestamp
-                                :(float)duration
+                                :(NSInteger)duration
                                 :(NSInteger)process_id
                                 :(NSInteger)thread_id
                                 :(NSDictionary *)args {

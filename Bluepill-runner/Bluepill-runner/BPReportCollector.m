@@ -157,13 +157,13 @@
                         NSString *testName = [[testcaseChild attributeForName:@"name"] stringValue];
                         NSString *className = [[testcaseChild attributeForName:@"classname"] stringValue];
                         NSInteger timestamp = [[NSString stringWithFormat:@"%f", [currentTime timeIntervalSince1970] * 1000] integerValue];
-                        float duration = [[[testcaseChild attributeForName:@"time"] stringValue] floatValue];
+                        int duration = [[[testcaseChild attributeForName:@"time"] stringValue] floatValue] * 1000;
                         NSDictionary *args = [[NSDictionary alloc] initWithObjectsAndKeys:
                                               currentSim, @"simNum",
                                               nil];
 
                         [traceEvent appendCompleteTraceEvent:[NSString stringWithFormat:@"%@/%@", className, testName] :className :timestamp :duration :0 :0 :args];
-                        currentTime = [currentTime dateByAddingTimeInterval:duration];
+                        currentTime = [currentTime dateByAddingTimeInterval:duration/1000];
                     }
                 }
             }
