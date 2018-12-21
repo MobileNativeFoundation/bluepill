@@ -17,7 +17,7 @@
 - (instancetype)initWithData:(NSDictionary *)data {
     self = [super init];
     if (self) {
-        _displayTimeUnit = @"ns";
+        _displayTimeUnit = @"ms";
         _systemTraceEvents = @"SystemTraceData";
         _otherData = data;
         _stackFrames = [[NSDictionary alloc] init];

@@ -117,7 +117,15 @@
             fprintf(stderr, "Failed to get resource from url %s", [[url absoluteString] UTF8String]);
         } else if ([isDirectory boolValue]) {
             // Getting which sim # folder we're currently in so we can attach that to all the tests in that folder
+            // Because the sim outputs all go in a folder like "1", "2", etc. as we walk through the
+            // Subfolders in out output path, we'll either see a folder named "1" or a subfolder of it
+            // named "failures", when we see a number we know to update the current sim number, and if
+            // the directory isn't a number then we're in the failure folder
+
+            // We get the folder name as the last path component of the current path
             currentFolder = [url pathComponents][[[url pathComponents] count] - 1];
+
+            // When the current folder's name contains only digits, we've reached the next sim and update
             if ([currentFolder rangeOfCharacterFromSet:notDigits].location == NSNotFound) {
                 currentSim = currentFolder;
             }

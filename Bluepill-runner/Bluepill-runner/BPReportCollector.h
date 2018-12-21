@@ -20,8 +20,16 @@
              onReportCollected:(void (^)(NSURL *fileUrl))fileHandler
                   outputAtPath:(NSString *)finalReportPath;
 
+/*!
+ * @discussion collect xml reports from the reportsPath(recursive) and output a final TraceEvent report
+ * @param collectReportsFromPath parent path to the reports
+ * @param withTestConfig A dictionay containing any data to attach to the TraceEvent report
+ * @param applyXQuery apply this XQuery string to the
+ * @param hideSuccesses whether the final report should contain successful test events or only failures
+ * @param withTraceEventAtPath the path to save the TraceReport
+ */
 + (void)collectReportsFromPath:(NSString *)reportsPath
-                 withOtherData:(NSDictionary *)otherData
+                withTestConfig:(NSDictionary *)otherData
                    applyXQuery:(NSString *)XQuery
                  hideSuccesses:(BOOL)hideSuccesses
           withTraceEventAtPath:(NSString *)finalReportPath;
