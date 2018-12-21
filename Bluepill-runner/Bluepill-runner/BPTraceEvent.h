@@ -39,6 +39,8 @@
                        processId:(NSInteger)processId
                         threadID:(NSInteger)threadId
                             args:(NSDictionary *)args;
-
-- (NSDictionary *)toDict;
+/*!
+ * @discussion Outputs a dictionary representation of a TraceEvent for serialization
+*/
+- (NSDictionary *)toDictionary;
 @end

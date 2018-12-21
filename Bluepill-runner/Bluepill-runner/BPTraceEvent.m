@@ -47,7 +47,7 @@
 
     [_traceEvents addObject:newTraceEvent];
 }
-- (NSDictionary *)toDict {
+- (NSDictionary *)toDictionary {
     return [[NSDictionary alloc] initWithObjectsAndKeys:
             _displayTimeUnit, @"displayTimeUnit",
             _systemTraceEvents, @"systemTraceEvents",

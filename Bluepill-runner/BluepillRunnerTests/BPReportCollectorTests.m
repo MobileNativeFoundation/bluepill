@@ -59,14 +59,14 @@
                                @"BP_VERSION", @"BluePill Version",
                                nil];
 
-    [BPReportCollector collectReportsFromPath:path withTestConfig:testConfig applyXQuery:@".//testsuites/testsuite/testsuite" hideSuccesses:YES withTraceEventAtPath:outputPath];
+    [BPReportCollector collectReportsFromPath:path withTestConfig:testConfig applyXQuery:@".//testsuites/testsuite/testsuite" excludePassedTests:YES withTraceEventAtPath:outputPath];
     NSData *data = [NSData dataWithContentsOfFile:outputPath];
     NSError *error;
     NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
 
     XCTAssertEqual([[result allKeys] count], 6);
     XCTAssertEqual([result[@"traceEvents"] count], 3);
-    XCTAssertEqualObjects([result[@"traceEvents"] firstObject][@"dur"], @"0.061");
+    XCTAssertEqualObjects([result[@"traceEvents"] firstObject][@"dur"], @"61");
     XCTAssertEqualObjects([result[@"traceEvents"] firstObject][@"ts"], @"1543871225000");
     XCTAssertEqualObjects([result[@"traceEvents"] firstObject][@"name"], @"TestFileA/UnitTest1");
 

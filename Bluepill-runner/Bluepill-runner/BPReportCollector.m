@@ -89,9 +89,9 @@
 }
 
 + (void)collectReportsFromPath:(NSString *)reportsPath
-                 withTestConfig:(NSDictionary *)testConfig
+                withTestConfig:(NSDictionary *)testConfig
                    applyXQuery:(NSString *)XQuery
-                 hideSuccesses:(BOOL)hideSuccesses
+            excludePassedTests:(BOOL)excludePassedTests
           withTraceEventAtPath:(NSString *)finalReportPath {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
@@ -150,27 +150,28 @@
                     for (NSXMLElement *testcaseChild in [testsuite children]) {
 
                         // Tests with errors or failures will have more than 1 child node
-                        if (hideSuccesses && [testcaseChild childCount] == 1) {
+                        if (excludePassedTests && [testcaseChild childCount] == 1) {
                             continue;
                         }
 
                         NSString *testName = [[testcaseChild attributeForName:@"name"] stringValue];
                         NSString *className = [[testcaseChild attributeForName:@"classname"] stringValue];
                         NSInteger timestamp = [[NSString stringWithFormat:@"%f", [currentTime timeIntervalSince1970] * 1000] integerValue];
-                        int duration = [[[testcaseChild attributeForName:@"time"] stringValue] floatValue] * 1000;
+                        NSInteger duration = [[[testcaseChild attributeForName:@"time"] stringValue] floatValue] * 1000;
                         NSDictionary *args = [[NSDictionary alloc] initWithObjectsAndKeys:
                                               currentSim, @"simNum",
                                               nil];
 
                         [traceEvent appendCompleteTraceEvent:[NSString stringWithFormat:@"%@/%@", className, testName] category:className timestamp:timestamp duration:duration processId:0 threadID:0 args:args];
-                        currentTime = [currentTime dateByAddingTimeInterval:duration/1000];
+                        NSTimeInterval interval = duration/1000.0;
+                        currentTime = [currentTime dateByAddingTimeInterval:interval];
                     }
                 }
             }
         }
     }
     NSError *error;
-    NSDictionary *traceEventDict = [traceEvent toDict];
+    NSDictionary *traceEventDict = [traceEvent toDictionary];
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:traceEventDict options:0 error:&error];
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     [jsonString writeToFile:finalReportPath atomically:YES encoding:NSUTF8StringEncoding error:&error];

@@ -21,17 +21,17 @@
                   outputAtPath:(NSString *)finalReportPath;
 
 /*!
- * @discussion collect xml reports from the reportsPath(recursive) and output a final TraceEvent report
+ * @discussion collect xml reports from the reportsPath(recursive) and output a final json TraceEvent report
  * @param reportsPath parent path to the reports
- * @param testConfig A dictionay containing any data to attach to the TraceEvent report
+ * @param testConfig A dictionay containing test configuration data to attach to the TraceEvent report
  * @param XQuery apply this XQuery string to the
- * @param hideSuccesses whether the final report should contain successful test events or only failures
+ * @param excludePassedTests whether the final report should contain successful test events or only failures
  * @param finalReportPath the path to save the TraceReport
  */
 + (void)collectReportsFromPath:(NSString *)reportsPath
                 withTestConfig:(NSDictionary *)testConfig
                    applyXQuery:(NSString *)XQuery
-                 hideSuccesses:(BOOL)hideSuccesses
+            excludePassedTests:(BOOL)excludePassedTests
           withTraceEventAtPath:(NSString *)finalReportPath;
 @end
 
