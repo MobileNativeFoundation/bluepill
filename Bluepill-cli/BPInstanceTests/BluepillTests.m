@@ -92,7 +92,7 @@
     self.config.testing_CrashAppOnLaunch = YES;
     self.config.stuckTimeout = @3;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
-    XCTAssert(exitCode == BPExitStatusAppCrashed, @"Expected: %ld Got: %ld", (long)BPExitStatusAppCrashed, (long)exitCode);
+    XCTAssert(exitCode == BPExitStatusAppTerminatedBeforeTestStarted, @"Expected: %ld Got: %ld", (long)BPExitStatusAppTerminatedBeforeTestStarted, (long)exitCode);
 }
 
 - (void)testAppThatHangsOnLaunch {

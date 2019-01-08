@@ -681,6 +681,9 @@ void onInterrupt(int ignore) {
             context.finalExitStatus = BPExitStatusAppCrashed;
             NEXT([self proceed]);
             return;
+        case BPExitStatusAppTerminatedBeforeTestStarted:
+            NEXT([self proceed]);
+            return;
         case BPExitStatusSimulatorDeleted:
         case BPExitStatusSimulatorReuseFailed:
             self.finalExitStatus = context.exitStatus;

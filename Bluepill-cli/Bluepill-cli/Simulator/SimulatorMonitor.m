@@ -202,14 +202,15 @@
                 [BPUtils printInfo:CRASH withString:@"%@/%@ crashed app.",
                  (self.currentClassName ?: self.previousClassName),
                  (self.currentTestName ?: self.previousTestName)];
+                self.exitStatus = BPExitStatusAppCrashed;
             } else {
                 assert(__self.testsState == Idle);
                 [BPUtils printInfo:CRASH withString:@"App crashed before tests started."];
+                self.exitStatus = BPExitStatusAppTerminatedBeforeTestStarted;
             }
             [self stopTestsWithErrorMessage:@"App Crashed"
                                 forTestName:(self.currentTestName ?: self.previousTestName)
                                     inClass:(self.currentClassName ?: self.previousClassName)];
-            self.exitStatus = BPExitStatusAppCrashed;
             [[BPStats sharedStats] addApplicationCrash];
         }
     }
