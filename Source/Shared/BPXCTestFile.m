@@ -124,31 +124,16 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         BP_SET_ERROR(error, @"No 'TestBundlePath' found");
         return nil;
     }
-    /*testBundlePath is expected to be "__TESTHOST__/PlugIns/.."
-      temporal workaround for bug: 34135468, Xcode9beta5 Inconsistent TestBundlePath With "xcodebuild build-for-testing” Command
-      when it is "__TESTROOT__"
-      testHostPath path is: /Users/xzhang3/Desktop/Documents/Git/bluepill/build/Build/Products/Debug-iphonesimulator/bluepill/
-      testBundlePath is: __TESTROOT__/Debug-iphonesimulator/BPSampleApp.app/PlugIns/BPSampleAppHangingTests.xctest
-      expected path is: /Users/xzhang3/Desktop/Documents/Git/bluepill/build/Build/Products/Debug-iphonesimulator/BPSampleApp.app/
-      testHost path is: __TESTROOT__/Debug-iphonesimulator/BPSampleApp.app
+    /*testBundlePath is expected to be "__TESTHOST__/PlugIns/.." or "__TESTROOT__/Debug-iphonesimulator/BPSampleApp.app/PlugIns/BPSampleAppHangingTests.xctest" or contains "__PLATFORMS__"
+     The following code is to expand these into a full path
      */
     if ([testBundlePath rangeOfString:TESTHOST].location != NSNotFound) {
         testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTHOST withString:testHostPath];
     } else if ([testBundlePath rangeOfString:TESTROOT].location != NSNotFound) {
-        if ([testHostPath rangeOfString:PLATFORMS].location != NSNotFound) {
-            NSString *platformsPath = [xcodePath stringByAppendingPathComponent:@"Platforms"];
-            testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:PLATFORMS withString:platformsPath];
-        } else {
-            testHostPath = [testHostPath stringByDeletingLastPathComponent]; //remove /bluepill
-            NSString *temp = [testHostPath stringByDeletingLastPathComponent]; //remove /iphonesimulator
-            //extract app name with .app extension
-            NSRange dotPosition = [testHostBundleIdentifier rangeOfString:@"." options:NSBackwardsSearch];
-            NSString *appName = [testHostBundleIdentifier substringFromIndex:dotPosition.location + 1];
-            NSString *appNameWithExtension = [appName stringByAppendingString:@".app"];
-            //append the app name to the direction
-            testHostPath = [testHostPath stringByAppendingString:appNameWithExtension];
-            testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTROOT withString:temp];
-        }
+        testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:TESTROOT withString:testRoot];
+    } else if ([testHostPath rangeOfString:PLATFORMS].location != NSNotFound) {
+        NSString *platformsPath = [xcodePath stringByAppendingPathComponent:@"Platforms"];
+        testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:PLATFORMS withString:platformsPath];
     } else {
         [BPUtils printInfo:ERROR withString:@"testBundlePath is incorrect, please check xctestrun file"];
     }
