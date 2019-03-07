@@ -45,8 +45,8 @@
     NSError *error = nil;
     if (self.config.appBundlePath) {
         // This is for integration testing for bluepill and bluepill-cli when we assign self.config.appBundlePath
-        simulatorUDIDString = [self installApplicationWithHost:self.config.appBundlePath withError:error];
-        if (!simulatorUDIDString || !error) {
+        simulatorUDIDString = [self installApplicationWithHost:self.config.appBundlePath withError:&error];
+        if (!simulatorUDIDString || error) {
             [BPUtils printInfo:ERROR withString:@"Create simualtor and install application failed with error: %@", error];
             return FALSE;
         }
@@ -63,7 +63,7 @@
         }
         for (NSString *appPath in hostBundles) {
             NSError *error = nil;
-            simulatorUDIDString = [self installApplicationWithHost:appPath withError:error];
+            simulatorUDIDString = [self installApplicationWithHost:appPath withError:&error];
             if (!simulatorUDIDString || error) {
                 [BPUtils printInfo:ERROR withString:@"Created simulator template and install applicationn failed with error: %@", error];
                 return FALSE;
@@ -75,29 +75,33 @@
     return testHostForSimUDID;
 }
 
-- (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *)error {
-    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+- (NSString *)getErrorDescription:(NSError *__autoreleasing *)error {
+    return error != nil ? [*error localizedDescription] : nil;
+}
+
+- (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *__autoreleasing *)error {
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:error];
     if (!sc) {
-        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimServiceContext failed: %@", [self getErrorDescription:error]]];
         return nil;
     }
-    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:error];
     if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimDeviceSet failed: %@", [self getErrorDescription:error]]];
         return nil;
     }
     SimDevice *simDevice = [deviceSet createDeviceWithType:self.config.simDeviceType
                                                    runtime:self.config.simRuntime
                                                       name:@"BP_Simultator_Template"
-                                                     error:&error];
+                                                     error:error];
     [self.simDeviceTemplates addObject:simDevice];
     if (!simDevice || error) {
-        [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", error];
+        [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", [self getErrorDescription:error]];
         return nil;
     } else {
-        [simDevice bootWithOptions:nil error:&error];
+        [simDevice bootWithOptions:nil error:error];
         if (error) {
-            [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", error];
+            [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", [self getErrorDescription:error]];
             return nil;
         }
         // Add photos and videos to the simulator.
@@ -121,9 +125,9 @@
             }];
             return nil;
         } else {
-            [simDevice shutdownWithError:&error];
+            [simDevice shutdownWithError:error];
             if(error) {
-                [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", error];
+                [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [self getErrorDescription:error]];
                 [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
                     if (error) {
                         [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
