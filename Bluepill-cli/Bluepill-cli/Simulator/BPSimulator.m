@@ -46,7 +46,7 @@
     if (self.config.appBundlePath) {
         // This is for integration testing for bluepill and bluepill-cli when we assign self.config.appBundlePath
         simulatorUDIDString = [self installApplicationWithHost:self.config.appBundlePath withError:error];
-        if (!simulatorUDIDString || !error) {
+        if (!simulatorUDIDString || error) {
             [BPUtils printInfo:ERROR withString:@"Create simualtor and install application failed with error: %@", error];
             return FALSE;
         }
