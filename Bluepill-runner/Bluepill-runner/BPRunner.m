@@ -150,7 +150,7 @@ maxprocs(void)
     return task;
 }
 
-- (NSRunningApplication *)openSimulatorAppWithConfiguration:(BPConfiguration *)config andError:(NSError **)error {
+- (NSRunningApplication *)openSimulatorAppWithConfiguration:(BPConfiguration *)config andError:(NSError **)errPtr {
     NSURL *simulatorURL = [NSURL fileURLWithPath:
                            [NSString stringWithFormat:@"%@/Applications/Simulator.app/Contents/MacOS/Simulator",
                             config.xcodePath]];
@@ -164,9 +164,9 @@ maxprocs(void)
                                  launchApplicationAtURL:simulatorURL
                                  options:launchOptions
                                  configuration:configuration
-                                 error:error];
+                                 error:errPtr];
     if (!app) {
-        [BPUtils printInfo:ERROR withString:@"Launch Simulator.app returned error: %@", [*error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"Launch Simulator.app returned error: %@", [*errPtr localizedDescription]];
         return nil;
     }
     return app;

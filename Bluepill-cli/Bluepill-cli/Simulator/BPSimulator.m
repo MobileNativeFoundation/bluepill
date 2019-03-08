@@ -390,7 +390,7 @@
     }
 }
 
-- (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)errPtr {
+- (BOOL)installApplicationWithError:(NSError *__autoreleasing *)errPtr {
     // Add photos and videos to the simulator.
     [self addPhotosToSimulator];
     [self addVideosToSimulator];
@@ -421,7 +421,7 @@
     return YES;
 }
 
-- (BOOL)uninstallApplicationAndReturnError:(NSError *__autoreleasing *)errPtr {
+- (BOOL)uninstallApplicationWithError:(NSError *__autoreleasing *)errPtr {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
 
     // Install the host application
@@ -635,8 +635,8 @@
     return [self.device.UDID UUIDString];
 }
 
-- (NSDictionary *)appInfo:(NSString *)bundleID error:(NSError **)error {
-    NSDictionary *appInfo = [self.device propertiesOfApplication:bundleID error:error];
+- (NSDictionary *)appInfo:(NSString *)bundleID withError:(NSError **)errPtr {
+    NSDictionary *appInfo = [self.device propertiesOfApplication:bundleID error:errPtr];
     return appInfo;
 }
 

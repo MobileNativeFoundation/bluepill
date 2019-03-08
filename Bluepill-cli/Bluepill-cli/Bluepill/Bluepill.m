@@ -326,7 +326,7 @@ void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"%@", stepName];
 
     NSError *error = nil;
-    BOOL success = [context.runner installApplicationAndReturnError:&error];
+    BOOL success = [context.runner installApplicationWithError:&error];
 
     __weak typeof(self) __self = self;
     [[BPStats sharedStats] endTimer:stepName];
@@ -363,7 +363,7 @@ void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"%@", stepName];
 
     NSError *error = nil;
-    BOOL success = [context.runner uninstallApplicationAndReturnError:&error];
+    BOOL success = [context.runner uninstallApplicationWithError:&error];
 
     [[BPStats sharedStats] endTimer:stepName];
     [BPUtils printInfo:(success ? INFO : ERROR) withString:@"Completed: %@", stepName];
