@@ -116,10 +116,10 @@ static BOOL quiet = NO;
 }
 
 
-+ (NSString *)mkdtemp:(NSString *)template withError:(NSError **)error {
++ (NSString *)mkdtemp:(NSString *)template withError:(NSError **)errPtr {
     char *dir = strdup([[template stringByAppendingString:@"_XXXXXX"] UTF8String]);
     if (mkdtemp(dir) == NULL) {
-        BP_SET_ERROR(error, @"%s", strerror(errno));
+        BP_SET_ERROR(errPtr, @"%s", strerror(errno));
         free(dir);
         return nil;
     }
@@ -128,11 +128,11 @@ static BOOL quiet = NO;
     return ret;
 }
 
-+ (NSString *)mkstemp:(NSString *)template withError:(NSError **)error {
++ (NSString *)mkstemp:(NSString *)template withError:(NSError **)errPtr {
     char *file = strdup([[template stringByAppendingString:@".XXXXXX"] UTF8String]);
     int fd = mkstemp(file);
     if (fd < 0) {
-        BP_SET_ERROR(error, @"%s", strerror(errno));
+        BP_SET_ERROR(errPtr, @"%s", strerror(errno));
         free(file);
         return nil;
     }

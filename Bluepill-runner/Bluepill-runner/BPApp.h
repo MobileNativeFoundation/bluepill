@@ -17,7 +17,7 @@
 @property (nonatomic, strong) NSArray<BPXCTestFile *> *testBundles;
 
 + (instancetype)appWithConfig:(BPConfiguration *)config
-                    withError:(NSError **)error;
+                    withError:(NSError **)errPtr;
 
 /*! @discussion Print the test bundles in the App along with all of their test classes/cases (Basically the .xctest files inside the PlugIns directory in the .app bundle)
  */

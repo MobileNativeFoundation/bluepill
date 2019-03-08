@@ -10,5 +10,5 @@
 #import "BPConfiguration.h"
 
 @interface BPConfiguration (Test)
-- (BOOL)loadConfigFile:(NSString *)file withError:(NSError **)error;
+- (BOOL)loadConfigFile:(NSString *)file withError:(NSError **)errPtr;
 @end

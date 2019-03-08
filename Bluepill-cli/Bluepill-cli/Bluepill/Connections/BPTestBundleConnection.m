@@ -203,8 +203,8 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     return nil;
 }
 
-- (id)_XCT_initializationForUITestingDidFailWithError:(NSError *)error {
-    [BPUtils printInfo:INFO withString:@"_XCT_initializationForUITestingDidFailWithError is %@", error];
+- (id)_XCT_initializationForUITestingDidFailWithError:(NSError **)errPtr {
+    [BPUtils printInfo:INFO withString:@"_XCT_initializationForUITestingDidFailWithError is %@", errPtr];
     return nil;
 }
 
