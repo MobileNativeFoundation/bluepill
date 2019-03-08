@@ -75,8 +75,8 @@
     return testHostForSimUDID;
 }
 
-- (NSString *)getErrorDescription:(NSError *__autoreleasing *)error {
-    return error != nil ? [*error localizedDescription] : nil;
+- (NSString *)getErrorDescription:(NSError *__autoreleasing *)errPtr {
+    return errPtr != nil ? [*errPtr localizedDescription] : nil;
 }
 
 - (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *__autoreleasing *)errPtr {
@@ -390,7 +390,7 @@
     }
 }
 
-- (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error {
+- (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)errPtr {
     // Add photos and videos to the simulator.
     [self addPhotosToSimulator];
     [self addVideosToSimulator];
@@ -414,20 +414,20 @@
     BOOL installed = [self.device
                       installApplication:[NSURL fileURLWithPath:hostBundlePath]
                       withOptions:@{kCFBundleIdentifier: hostBundleId}
-                      error:error];
+                      error:errPtr];
     if (!installed) {
         return NO;
     }
     return YES;
 }
 
-- (BOOL)uninstallApplicationAndReturnError:(NSError *__autoreleasing *)error {
+- (BOOL)uninstallApplicationAndReturnError:(NSError *__autoreleasing *)errPtr {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
 
     // Install the host application
     return [self.device uninstallApplication:hostBundleId
                                  withOptions:@{kCFBundleIdentifier: hostBundleId}
-                                       error:error];
+                                       error:errPtr];
 }
 
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {

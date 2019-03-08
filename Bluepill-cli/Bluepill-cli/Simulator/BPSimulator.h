@@ -38,7 +38,7 @@
 
 - (void)bootWithCompletion:(void (^)(NSError *error))completion;
 
-- (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error;
+- (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)errPtr;
 
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion;
 
