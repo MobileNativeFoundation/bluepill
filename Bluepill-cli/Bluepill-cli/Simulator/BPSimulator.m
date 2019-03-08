@@ -95,46 +95,45 @@
                                                       name:@"BP_Simultator_Template"
                                                      error:errPtr];
     [self.simDeviceTemplates addObject:simDevice];
-    if (!simDevice || errPtr) {
+    if (!simDevice && *errPtr) {
         [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", [self getErrorDescription:errPtr]];
         return nil;
+    }
+    [simDevice bootWithOptions:nil error:errPtr];
+    if (errPtr) {
+        [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", [self getErrorDescription:errPtr]];
+        return nil;
+    }
+    // Add photos and videos to the simulator.
+    [self addPhotosToSimulator];
+    [self addVideosToSimulator];
+    NSString *hostBundleId = [SimulatorHelper bundleIdForPath:testHost];
+    if (!hostBundleId) {
+        return nil;
+    }
+    // Install the host application
+    NSError *__autoreleasing *installError = nil;
+    bool installed = [simDevice installApplication:[NSURL fileURLWithPath:testHost]
+                                       withOptions:@{kCFBundleIdentifier: hostBundleId}
+                                             error:installError];
+    if (!installed) {
+        [BPUtils printInfo:ERROR withString:@"Install application failed with error: %@", *installError];
+        [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
+            if (error) {
+                [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+            }
+        }];
+        return nil;
     } else {
-        [simDevice bootWithOptions:nil error:errPtr];
-        if (errPtr) {
-            [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", [self getErrorDescription:errPtr]];
-            return nil;
-        }
-        // Add photos and videos to the simulator.
-        [self addPhotosToSimulator];
-        [self addVideosToSimulator];
-        NSString *hostBundleId = [SimulatorHelper bundleIdForPath:testHost];
-        if (!hostBundleId) {
-            return nil;
-        }
-        // Install the host application
-        NSError *__autoreleasing *installError = nil;
-        bool installed = [simDevice installApplication:[NSURL fileURLWithPath:testHost]
-                                           withOptions:@{kCFBundleIdentifier: hostBundleId}
-                                                 error:installError];
-        if (!installed) {
-            [BPUtils printInfo:ERROR withString:@"Install application failed with error: %@", *installError];
+        [simDevice shutdownWithError:errPtr];
+        if(errPtr) {
+            [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [self getErrorDescription:errPtr]];
             [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
                 if (error) {
                     [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
                 }
             }];
             return nil;
-        } else {
-            [simDevice shutdownWithError:errPtr];
-            if(errPtr) {
-                [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [self getErrorDescription:errPtr]];
-                [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
-                    if (error) {
-                        [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
-                    }
-                }];
-                return nil;
-            }
         }
     }
     return simDevice.UDID.UUIDString;
