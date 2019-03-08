@@ -19,21 +19,21 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
                             andHostAppBundle:(NSString *)testHostPath
-                                   withError:(NSError *__autoreleasing *)error {
+                                   withError:(NSError *__autoreleasing *)errPtr {
     return [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
                                      andHostAppBundle:testHostPath
                                    andUITargetAppPath:nil
-                                            withError:error];
+                                            withError:errPtr];
 }
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)path
                             andHostAppBundle:(NSString *)testHostPath
                           andUITargetAppPath:(NSString *)UITargetAppPath
-                                   withError:(NSError **)error {
+                                   withError:(NSError **)errPtr {
     BOOL isDir = NO;
 
     if (!path || ![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] || !isDir) {
-        BP_SET_ERROR(error, @"Could not find test bundle at path %@.", path);
+        BP_SET_ERROR(errPtr, @"Could not find test bundle at path %@.", path);
         return nil;
     }
     NSString *baseName = [[path lastPathComponent] stringByDeletingPathExtension];
@@ -47,7 +47,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     NSString *cmd = [NSString stringWithFormat:swiftNmCmdline, path];
     FILE *p = popen([cmd UTF8String], "r");
     if (!p) {
-        BP_SET_ERROR(error, @"Failed to load test %@.\nERROR: %s\n", path, strerror(errno));
+        BP_SET_ERROR(errPtr, @"Failed to load test %@.\nERROR: %s\n", path, strerror(errno));
         return nil;
     }
     char *line = NULL;
@@ -77,7 +77,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         }
     }
     if (pclose(p) == -1) {
-        BP_SET_ERROR(error, @"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno));
+        BP_SET_ERROR(errPtr, @"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno));
         return nil;
     }
 

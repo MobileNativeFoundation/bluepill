@@ -1,0 +1,30 @@
+--------------
+Run Statistics
+--------------
+Start Time:           2019-03-04 06:53:54 +0000
+End Time:             2019-03-04 06:54:12 +0000
+Total execution time: 17.706826 seconds
+
+Times Taken
+-----------
+[Attempt 1] Create Simulator:                                0.293674 seconds
+[Attempt 1] Install Application:                             9.715075 seconds
+[Attempt 1] Delete Simulator:                                0.000000 seconds
+
+Summary
+-------
+Total Tests Executed:           0
+Failed Tests (includes errors): 0
+Error Tests:                    0
+Timeout due to test run-time:   0
+Timeout due to no output:       0
+Retries:                        0
+Application Crashes:            0
+Simulator Crashes:              0
+Simulator Creation Failures:    0
+Simulator Deletion Failures:    0
+App Install Failures:           0
+App Launch Failures:            0
+
+Exit Code: 0
+

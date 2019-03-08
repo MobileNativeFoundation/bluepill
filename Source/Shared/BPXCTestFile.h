@@ -25,17 +25,17 @@
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
                             andHostAppBundle:(NSString *)testHostPath
-                                   withError:(NSError **)error;
+                                   withError:(NSError **)errPtr;
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
                             andHostAppBundle:(NSString *)testHostPath
                           andUITargetAppPath:(NSString *)UITargetAppPath
-                                   withError:(NSError **)error;
+                                   withError:(NSError **)errPtr;
 
 + (instancetype)BPXCTestFileFromDictionary:(NSDictionary<NSString *, NSString *>*) dict
                               withTestRoot:(NSString *)testRoot
                               andXcodePath:(NSString *)xcodePath
-                                  andError:(NSError **)error;
+                                  andError:(NSError **)errPtr;
 
 - (NSUInteger)numTests;
 - (NSArray *)allTestCases;
