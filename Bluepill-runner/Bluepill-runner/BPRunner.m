@@ -314,9 +314,10 @@ maxprocs(void)
             [fm removeItemAtPath:outputPath error:nil];
         }
         [BPReportCollector collectReportsFromPath:self.config.outputDirectory onReportCollected:^(NSURL *fileUrl) {
-//            NSError *error;
-//            NSFileManager *fm = [NSFileManager new];
-//            [fm removeItemAtURL:fileUrl error:&error];
+            if (!self.config.keepIndividualTestReports) {
+                NSError *error;
+                [fm removeItemAtURL:fileUrl error:&error];
+            }
         } outputAtPath:outputPath];
     }
 
