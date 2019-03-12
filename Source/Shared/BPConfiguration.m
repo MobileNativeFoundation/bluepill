@@ -111,6 +111,8 @@ struct BPOptions {
         "Only list tests in bundle"},
     {'v', "verbose", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "verboseLogging",
         "Enable verbose logging"},
+    {'k', "keep-individual-test-reports", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepIndividualTestReports",
+        "Keep individual test reports, in addition to the aggregated final report"},
 
     // options without short-options
     {349, "additional-unit-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUnitTestBundles",
