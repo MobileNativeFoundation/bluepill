@@ -836,10 +836,11 @@
 			};
 			buildConfigurationList = 7A79017D1D5CB679004D4325 /* Build configuration list for PBXProject "Bluepill-cli" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 7A7901791D5CB679004D4325;
 			productRefGroup = 7A7901831D5CB679004D4325 /* Products */;

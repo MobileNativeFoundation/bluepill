@@ -400,7 +400,7 @@
 		BAB24F261DB5D45E00867756 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = LinkedIn;
 				TargetAttributes = {
 					BA4BCFC51DC47EC700592FA4 = {
@@ -412,7 +412,7 @@
 					BA9C2DD11DD7F182007CB967 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 57Y47U492U;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = BAB24F2D1DB5D45E00867756;
 					};
@@ -429,7 +429,7 @@
 					BAB24F461DB5D45E00867756 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 57Y47U492U;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = BAB24F2D1DB5D45E00867756;
 					};
@@ -449,7 +449,7 @@
 			};
 			buildConfigurationList = BAB24F291DB5D45E00867756 /* Build configuration list for PBXProject "BPSampleApp" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -680,7 +680,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppFatalErrorTests/BPSampleAppFatalErrorTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
 			};
 			name = Debug;
@@ -696,7 +696,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppFatalErrorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppFatalErrorTests/BPSampleAppFatalErrorTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
 			};
 			name = Release;
@@ -731,6 +731,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -787,6 +788,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -874,7 +876,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
 			};
 			name = Debug;
@@ -890,7 +892,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
 			};
 			name = Release;
