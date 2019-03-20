@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     macos:
-      xcode: 10.2
+      xcode: 10.2.0
     steps:
       - checkout
       - run: ./scripts/bluepill.sh build
