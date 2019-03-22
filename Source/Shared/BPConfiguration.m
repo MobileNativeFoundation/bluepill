@@ -609,6 +609,9 @@ static NSUUID *sessionID;
 
 - (BOOL)validateConfigWithError:(NSError *__autoreleasing *)errPtr {
     BOOL isdir;
+
+    [BPUtils enableDebugOutput:self.verboseLogging];
+
     if (!self.xcodePath) {
         self.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
     }
