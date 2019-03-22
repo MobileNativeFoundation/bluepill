@@ -153,11 +153,14 @@ static BOOL quiet = NO;
         if (config.testCasesToRun) {
             [testsToRun unionSet:[NSSet setWithArray:[BPUtils expandTests:config.testCasesToRun withTestFile:xctFile]]];
         }
-        if (config.testCasesToSkip) {
-            [testsToSkip unionSet:[NSSet setWithArray:[BPUtils expandTests:config.testCasesToSkip withTestFile:xctFile]]];
+        if (config.testCasesToSkip || xctFile.skipTestIdentifiers) {
+            NSMutableArray *allToSkip = [NSMutableArray new];
+            [allToSkip addObjectsFromArray:config.testCasesToSkip];
+            [allToSkip addObjectsFromArray:xctFile.skipTestIdentifiers];
+            [testsToSkip unionSet:[NSSet setWithArray:[BPUtils expandTests:allToSkip withTestFile:xctFile]]];
         }
     }
-    
+
     if (testsToRun.allObjects.count > 0) {
         config.testCasesToRun = testsToRun.allObjects;
     }
