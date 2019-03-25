@@ -25,7 +25,7 @@
 
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) NSRunningApplication *app;
-@property (nonatomic, strong) NSFileHandle *stdOutHandle;
+@property (nonatomic, strong) NSFileHandle *appOutput;
 @property (nonatomic, assign) BOOL needsRetry;
 @property (nonatomic, strong) NSMutableArray* simDeviceTemplates;
 
@@ -478,7 +478,10 @@
     NSString *simStdoutRelativePath = [simStdoutPath substringFromIndex:((NSString *)self.device.dataPath).length];
     [[NSFileManager defaultManager] removeItemAtPath:simStdoutPath error:nil];
 
-    mkfifo([simStdoutPath UTF8String], S_IWUSR | S_IRUSR | S_IRGRP);
+    // Create empty file so we can tail it and the app can write to it
+    [[NSFileManager defaultManager] createFileAtPath:simStdoutPath
+                                            contents:nil
+                                          attributes:nil];
 
     NSMutableDictionary *appLaunchEnv = [appLaunchEnvironment mutableCopy];
     [appLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStdoutKey];
@@ -486,8 +489,8 @@
     NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib", self.config.xcodePath];
     [appLaunchEnv setObject:insertLibraryPath forKey:@"DYLD_INSERT_LIBRARIES"];
     [appLaunchEnv setObject:insertLibraryPath forKey:@"XCInjectBundleInto"];
-    int fd = open([simStdoutPath UTF8String], O_RDWR);
-    self.stdOutHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd];
+
+    self.appOutput = [NSFileHandle fileHandleForReadingAtPath:simStdoutPath];
 
     appLaunchEnvironment = [appLaunchEnv copy];
 
@@ -514,8 +517,6 @@
         blockSelf.monitor.appPID = pid;
         blockSelf.monitor.appState = Running;
 
-        [blockSelf.stdOutHandle writeData:[@"DEBUG_FLAG_TOBEREMOVED.\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
         [BPUtils printInfo:INFO withString:@"Launch succeeded"];
 
         if (error == nil) {
@@ -527,11 +528,14 @@
             dispatch_source_set_cancel_handler(source, ^{
                 blockSelf.monitor.appState = Completed;
                 [parser.delegate setParserStateCompleted];
-                // Post a APPCLOSED signal to the fifo
-                [blockSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                // Post a APPCLOSED signal to the parser
+                NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:simStdoutPath];
+                [fileHandle seekToEndOfFile];
+                [fileHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                [fileHandle closeFile];
             });
             dispatch_resume(source);
-            self.stdOutHandle.readabilityHandler = ^(NSFileHandle *handle) {
+            self.appOutput.readabilityHandler = ^(NSFileHandle *handle) {
                 // This callback occurs on a background thread
                 NSData *chunk = [handle availableData];
                 [parser handleChunkData:chunk];

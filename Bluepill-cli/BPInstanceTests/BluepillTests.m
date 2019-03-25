@@ -312,6 +312,7 @@
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
     self.config.saveDiagnosticsOnError = YES;
+    self.config.testCasesToSkip = @[@"BPAppNegativeTests/testBPDoesNotHangWithBigOutput"];
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     // Make sure all tests started on the first run
     NSString *simulator1Path = [outputDir stringByAppendingPathComponent:@"1-simulator.log"];
@@ -381,6 +382,7 @@
     self.config.testBundlePath = testBundlePath;
     self.config.failureTolerance = @0;
     self.config.testCaseTimeout = @10;
+    self.config.testCasesToRun = @[@"BPAppNegativeTests/testBPDoesNotHangWithBigOutput"];
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppFailingTestsSetTempDir", tempDir] withError:&error];
