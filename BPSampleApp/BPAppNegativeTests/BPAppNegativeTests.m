@@ -48,4 +48,27 @@
     [NSException raise:@"Invalid foo value" format:@"foo of %d is invalid", 1];
 }
 
+- (NSString *)randomStringOfLength: (NSInteger)length {
+    NSString *alphabet  = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXZY0123456789";
+    NSMutableString *s = [NSMutableString stringWithCapacity:length];
+    for (NSUInteger i = 0U; i < length; i++) {
+        u_int32_t r = arc4random() % [alphabet length];
+        unichar c = [alphabet characterAtIndex:r];
+        [s appendFormat:@"%C", c];
+    }
+    return s;
+}
+
+- (void)testBPDoesNotHangWithBigOutput {
+    // we want to exceed the internal buffer of a named pipe
+    NSMutableArray *lines = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 1024 ; ++i) {
+        [lines addObject:[self randomStringOfLength:128]];
+    }
+    NSString *all = [NSString stringWithFormat:@"%@\n", [lines componentsJoinedByString:@"\n"]];
+    // we want a single write that puts all the data out
+    XCTAssert(false, @"%@", all);
+}
+
+
 @end
