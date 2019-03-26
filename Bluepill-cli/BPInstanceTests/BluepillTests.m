@@ -312,6 +312,7 @@
     self.config.outputDirectory = outputDir;
     self.config.junitOutput = YES;
     self.config.saveDiagnosticsOnError = YES;
+    self.config.testCasesToSkip = @[@"BPAppNegativeTests/testBPDoesNotHangWithBigOutput"];
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     // Make sure all tests started on the first run
     NSString *simulator1Path = [outputDir stringByAppendingPathComponent:@"1-simulator.log"];
@@ -374,6 +375,23 @@
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+}
+
+- (void)testRunWithFailingTestsSet {
+    NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.failureTolerance = @0;
+    self.config.testCaseTimeout = @10;
+    self.config.testCasesToRun = @[@"BPAppNegativeTests/testBPDoesNotHangWithBigOutput"];
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppFailingTestsSetTempDir", tempDir] withError:&error];
+    // NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+    self.config.junitOutput = YES;
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode != BPExitStatusTestTimeout);
+    XCTAssert(exitCode == BPExitStatusTestsFailed);
 }
 
 //simulator shouldn't be kept in this case

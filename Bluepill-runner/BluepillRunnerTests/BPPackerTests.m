@@ -121,16 +121,16 @@
     self.config.numSims = @4;
     self.config.noSplit = @[@"BPSampleAppTests"];
     bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:nil];// withNoSplitList:@[@"BPSampleAppTests"] intoBundles:4 andError:nil];
-    // When we prevent BPSampleTests from splitting, BPSampleAppFatalErrorTests gets split in two
+    // When we prevent BPSampleTests from splitting, BPSampleAppFatalErrorTests and BPAppNegativeTests gets split in two
     want = [[want arrayByAddingObject:@"BPSampleAppFatalErrorTests"] sortedArrayUsingSelector:@selector(compare:)];
-    XCTAssertEqual(bundles.count, app.testBundles.count + 1);
+    XCTAssertEqual(bundles.count, app.testBundles.count + 2);
 
     XCTAssertEqual([bundles[0].skipTestIdentifiers count], 0);
     XCTAssertEqual([bundles[1].skipTestIdentifiers count], 0);
     XCTAssertEqual([bundles[2].skipTestIdentifiers count], 0);
-    XCTAssertEqual([bundles[3].skipTestIdentifiers count], 0);
-    XCTAssertEqual([bundles[4].skipTestIdentifiers count], 2);
-    XCTAssertEqual([bundles[5].skipTestIdentifiers count], 3);
+    XCTAssertEqual([bundles[3].skipTestIdentifiers count], 2);
+    XCTAssertEqual([bundles[4].skipTestIdentifiers count], 3);
+    XCTAssertEqual([bundles[5].skipTestIdentifiers count], 1);
 
     self.config.numSims = @4;
     self.config.noSplit = nil;
