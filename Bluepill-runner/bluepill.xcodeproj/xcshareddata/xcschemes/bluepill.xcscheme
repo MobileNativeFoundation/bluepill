@@ -17,7 +17,35 @@
                BlueprintIdentifier = "7A7901811D5CB679004D4325"
                BuildableName = "bp"
                BlueprintName = "bp"
-               ReferencedContainer = "container:Bluepill-cli.xcodeproj">
+               ReferencedContainer = "container:../Bluepill-cli/bp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BAEF4B331DAC539400E68294"
+               BuildableName = "bluepill"
+               BlueprintName = "bluepill"
+               ReferencedContainer = "container:bluepill.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7A13E5A91DD22A3A004034BC"
+               BuildableName = "Bluepill-gui.app"
+               BlueprintName = "Bluepill-gui"
+               ReferencedContainer = "container:../Bluepill-gui/Bluepill-gui.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,24 +56,14 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BAB24F671DB5DB2300867756"
-               BuildableName = "BPInstanceTests.xctest"
-               BlueprintName = "BPInstanceTests"
-               ReferencedContainer = "container:Bluepill-cli.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7A7901811D5CB679004D4325"
-            BuildableName = "bp"
-            BlueprintName = "bp"
-            ReferencedContainer = "container:Bluepill-cli.xcodeproj">
+            BlueprintIdentifier = "BAEF4B331DAC539400E68294"
+            BuildableName = "bluepill"
+            BlueprintName = "bluepill"
+            ReferencedContainer = "container:bluepill.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,29 +73,24 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      enableASanStackUseAfterReturn = "YES"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
+      stopOnEveryUBSanitizerIssue = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7A7901811D5CB679004D4325"
-            BuildableName = "bp"
-            BlueprintName = "bp"
-            ReferencedContainer = "container:Bluepill-cli.xcodeproj">
+            BlueprintIdentifier = "BAEF4B331DAC539400E68294"
+            BuildableName = "bluepill"
+            BlueprintName = "bluepill"
+            ReferencedContainer = "container:bluepill.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "BPBuildScript"
-            value = "YES"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -91,10 +104,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7A7901811D5CB679004D4325"
-            BuildableName = "bp"
-            BlueprintName = "bp"
-            ReferencedContainer = "container:Bluepill-cli.xcodeproj">
+            BlueprintIdentifier = "BAEF4B331DAC539400E68294"
+            BuildableName = "bluepill"
+            BlueprintName = "bluepill"
+            ReferencedContainer = "container:bluepill.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

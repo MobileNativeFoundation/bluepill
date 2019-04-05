@@ -115,7 +115,7 @@ maxprocs(void)
     }
     cfg.outputDirectory = [self.config.outputDirectory
                            stringByAppendingPathComponent:
-                           [NSString stringWithFormat:@"%lu", (unsigned long)number]];
+                           [NSString stringWithFormat:@"BP-%lu", (unsigned long)number]];
     [cfg printConfig];
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:self.bpExecutable];
@@ -127,7 +127,7 @@ maxprocs(void)
     [task setTerminationHandler:^(NSTask *task) {
         [[NSFileManager defaultManager] removeItemAtPath:cfg.configOutputFile
                                                    error:nil];
-        [BPUtils printInfo:INFO withString:@"Simulator %lu (PID %u) has finished with exit code %d.",
+        [BPUtils printInfo:INFO withString:@"BP-%lu (PID %u) has finished with exit code %d.",
                                             number, [task processIdentifier], [task terminationStatus]];
         block(task);
     }];
@@ -144,7 +144,7 @@ maxprocs(void)
     [task setEnvironment:env];
 
     [task setTerminationHandler:^(NSTask * _Nonnull task) {
-        [BPUtils printInfo:INFO withString:@"Simulator %lu (PID %u) to delete device %@ has finished with exit code %d.",
+        [BPUtils printInfo:INFO withString:@"BP-%lu (PID %u) to delete device %@ has finished with exit code %d.",
          number, [task processIdentifier], deviceID, [task terminationStatus]];
     }];
     return task;
@@ -267,7 +267,7 @@ maxprocs(void)
                 [taskList addObject:[NSString stringWithFormat:@"%lu", taskNumber]];
                 [self.nsTaskList addObject:task];
                 [bundles removeObjectAtIndex:0];
-                [BPUtils printInfo:INFO withString:@"Started Simulator %lu (PID %d).", taskNumber, [task processIdentifier]];
+                [BPUtils printInfo:INFO withString:@"Started BP-%lu (PID %d).", taskNumber, [task processIdentifier]];
                 launchedTasks++;
             }
         }

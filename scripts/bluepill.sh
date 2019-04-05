@@ -105,7 +105,7 @@ bluepill_instance_tests()
 {
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
-    -scheme BPInstanceTests \
+    -scheme bp-tests \
     -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
@@ -118,7 +118,7 @@ bluepill_runner_tests()
 {
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
-    -scheme BluepillRunnerTests \
+    -scheme bluepill-tests \
     -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then

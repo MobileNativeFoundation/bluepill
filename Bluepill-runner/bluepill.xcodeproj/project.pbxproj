@@ -263,7 +263,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "Bluepill" */;
+			buildConfigurationList = BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "bluepill" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -535,7 +535,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "Bluepill" */ = {
+		BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "bluepill" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BAEF4B391DAC539400E68294 /* Debug */,

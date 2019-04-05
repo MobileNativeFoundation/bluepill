@@ -77,7 +77,7 @@ static BOOL quiet = NO;
 
 + (void)printTo:(FILE*)fd kind:(BPKind)kind withString:(NSString *)txt {
     Message message = Messages[kind];
-    NSString *simNum = @"";
+    NSString *simNum = @"BLUEPILL";
     char *s;
     if (bp_testing < 0) {
         bp_testing = (getenv("_BP_TEST_SUITE") != 0);
