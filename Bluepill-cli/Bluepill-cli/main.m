@@ -102,10 +102,10 @@ int main(int argc, char * argv[]) {
         Bluepill *bp = [[Bluepill alloc] initWithConfiguration:config];
         exitCode = [bp run];
         if (config.outputDirectory) {
-            NSString *fileName = [NSString stringWithFormat:@"%@-stats.txt", [[config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
+            NSString *fileName = [NSString stringWithFormat:@"%@-stats.json", [[config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
             NSString *outputFile = [config.outputDirectory stringByAppendingPathComponent:fileName];
             BPWriter *statsWriter = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
-            [[BPStats sharedStats] exitWithWriter:statsWriter exitCode:exitCode andCreateFullReport:YES];
+            [[BPStats sharedStats] exitWithWriter:statsWriter exitCode:exitCode];
         }
 
         [BPUtils printInfo:INFO withString:@"BP exiting %ld", (long)exitCode];

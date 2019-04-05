@@ -369,7 +369,7 @@
 
 - (void)addVideosToSimulator {
     for (NSString *urlString in self.config.videoPaths) {
-        NSURL *videoUrl = [NSURL URLWithString:urlString];
+        NSURL *videoUrl = [NSURL fileURLWithPath:urlString];
         NSError *error;
         BOOL uploadResult = [self.device addVideo:videoUrl error:&error];
         if (!uploadResult) {
@@ -380,7 +380,7 @@
 
 - (void)addPhotosToSimulator {
     for (NSString *urlString in self.config.imagePaths) {
-        NSURL *photoUrl = [NSURL URLWithString:urlString];
+        NSURL *photoUrl = [NSURL fileURLWithPath:urlString];
         NSError *error;
         BOOL uploadResult = [self.device addPhoto:photoUrl error:&error];
         if (!uploadResult) {

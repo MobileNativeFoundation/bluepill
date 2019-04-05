@@ -9,16 +9,18 @@
 
 #import "BPStats.h"
 #import "BPWriter.h"
+#import "BPUtils.h"
 
 @interface BPStat : NSObject
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSDate *startTime;
 @property (nonatomic, strong) NSDate *endTime;
+@property (nonatomic, strong) NSString *result;
 @end
 
 @interface BPStats()
 
-@property (nonatomic, strong) NSMutableArray *stats;
+@property (nonatomic, strong) NSMutableDictionary<NSString *,BPStat *> *stats;
 @property (nonatomic, strong) BPStat *applicationTime;
 
 @property (nonatomic, assign) NSInteger testsTotal;
@@ -52,73 +54,68 @@
     if (self) {
         self.applicationTime = [[BPStat alloc] init];
         self.applicationTime.startTime = [NSDate date];
-        self.stats = [[NSMutableArray alloc] init];
+        self.stats = [[NSMutableDictionary alloc] init];
         self.cleanRun = YES;
     }
     return self;
 }
 
 - (void)startTimer:(NSString *)name {
+    [self startTimer:name atTime:[NSDate date]];
+}
+
+-(void)startTimer:(NSString *)name atTime:(NSDate *)date {
     BPStat *stat = [self statForName:name createIfNotExist:YES];
     stat.name = name;
     if (stat.startTime == nil) {
-        stat.startTime = [NSDate date];
+        stat.startTime = date;
     }
 }
 
-- (void)endTimer:(NSString *)name {
+- (void)endTimer:(NSString *)name withResult:(NSString *) result {
     BPStat *stat = [self statForName:name createIfNotExist:NO];
     if (!stat) {
-        fprintf(stderr, "EndTimerFailure: EndTimer called without starting a timer for '%s'\n", [name UTF8String]);
-        if ([self.stats count] == 1) {
-            fprintf(stderr, "There is only one stat remaining to be closed, '%s'\n", [[self.stats.firstObject name] UTF8String]);
-            stat = self.stats.firstObject;
-            fprintf(stderr, "Will close with '%s' instead.\n", [stat.name UTF8String]);
-        }
+        [BPUtils printInfo:ERROR withString:@"EndTimerFailure: EndTimer called without starting a timer for '%@'", name];
 #ifdef DEBUG
         [NSException raise:@"EndTimerFailure" format:@"EndTimer called without starting a timer for '%@'", name];
 #endif
-        if (!stat) {
-            return; // We'll just ignore it
-        }
+        return; // We'll just ignore it
     }
     stat.endTime = [NSDate date];
+    stat.result = result;
 }
 
-- (void)outputTimerStats:(NSString *)name toWriter:(BPWriter *)writer {
+- (NSString *)getJsonStat:(NSString *)name {
     BPStat *stat = [self statForName:name createIfNotExist:NO];
     if (!stat) {
-        fprintf(stderr, "OutputTimerState called without starting a timer for '%s'\n", [name UTF8String]);
+        [BPUtils printInfo:ERROR withString:@"OutputTimerState called without starting a timer for '%@'", name];
 #ifdef DEBUG
         [NSException raise:@"OutputTimerFailure" format:@"OutputTimerState called without starting a timer for '%@'", name];
 #endif
     }
     NSTimeInterval time = [stat.endTime timeIntervalSinceDate:stat.startTime];
-    [writer writeLine:@"%@ %f seconds", [[name stringByAppendingString:@":"] stringByPaddingToLength:60 withString:@" " startingAtIndex:0], time];
+    NSString *cname = [self resultToCname: stat.result];
+    return [self completeEvent:stat.name
+                           cat:stat.result
+                            ts:[stat.startTime timeIntervalSince1970] * 1000000.0
+                           dur:time * 1000000.0
+                           arg:stat.result
+                         cname:cname
+            ];
 }
 
 - (BPStat *)statForName:(NSString *)name createIfNotExist:(BOOL)create {
-    BPStat *stat = nil;
-    for (BPStat *s in self.stats) {
-        if ([s.name isEqualToString:name]) {
-            stat = s;
-            break;
-        }
-    }
+    BPStat *stat = [self.stats valueForKey:name];
     if (!stat && create) {
         stat = [[BPStat alloc] init];
-        [self.stats addObject:stat];
+        [self.stats setObject:stat forKey:name];
     }
     return stat;
 }
 
-- (void)exitWithWriter:(BPWriter *)writer exitCode:(int)exitCode andCreateFullReport:(BOOL)fullReport {
+- (void)exitWithWriter:(BPWriter *)writer exitCode:(int)exitCode {
     self.applicationTime.endTime = [NSDate date];
-    if (!fullReport) {
-        [self outputTimerStats:@"Application Time" toWriter:writer];
-    } else {
-        [self generateFullReportWithWriter:writer exitCode:exitCode];
-    }
+    [self generateFullReportWithWriter:writer exitCode:exitCode];
 }
 
 - (void)addTest {
@@ -170,39 +167,75 @@
 }
 
 - (void)generateFullReportWithWriter:(BPWriter *)writer exitCode:(int)exitCode {
-    [writer writeLine:@"--------------"];
-    [writer writeLine:@"Run Statistics"];
-    [writer writeLine:@"--------------"];
-    [writer writeLine:@"Start Time:           %@", self.applicationTime.startTime];
-    [writer writeLine:@"End Time:             %@", self.applicationTime.endTime];
-    [writer writeLine:@"Total execution time: %f seconds", [self.applicationTime.endTime timeIntervalSinceDate:self.applicationTime.startTime]];
+    unsigned long bundleID = [self bundleID];
+    // Metadata
+    NSString *threadName = [NSString stringWithFormat:@"BP-%lu", bundleID];
+    [writer writeLine:[NSString stringWithFormat:@"{\"name\": \"thread_name\", \"ph\": \"M\", \"pid\": 1, \"tid\": %lu, \"args\": {\"name\": \"%@\"}},",
+                       bundleID,
+                       threadName
+                       ]];
 
-    [writer writeLine:@""];
-    [writer writeLine:@"Times Taken"];
-    [writer writeLine:@"-----------"];
-    for (BPStat *stat in self.stats) {
-        [self outputTimerStats:stat.name toWriter:writer];
+    [writer writeLine:[NSString stringWithFormat:@"{\"name\": \"thread_sort_index\", \"ph\": \"M\", \"pid\": 1, \"tid\": %lu, \"args\": {\"sort_index\": %lu}},",
+                       bundleID,
+                       bundleID
+                       ]];
+
+    NSString *name = [NSString stringWithFormat:@"bp-%d", getpid()];
+    [writer writeLine:[NSString stringWithFormat:@"%@,",
+                       [self completeEvent:name
+                                       cat:@"process"
+                                        ts:[self.applicationTime.startTime timeIntervalSince1970] * 1000000.0
+                                       dur:[self.applicationTime.endTime timeIntervalSinceDate:self.applicationTime.startTime] * 1000000.0
+                                       arg:[NSString stringWithFormat:@"Exit Code %d", exitCode]
+                                     cname:exitCode == 0 ? @"good" : @"bad"
+                        ]]];
+
+
+    NSMutableArray<NSString *> *allStatStrings = [[NSMutableArray alloc] init];
+
+    // now output all the stats...
+    for (NSString *name in self.stats) {
+        [allStatStrings addObject:[self getJsonStat:name]];
     }
+    [writer writeLine:@"%@", [allStatStrings componentsJoinedByString:@",\n"]];
+}
 
-    [writer writeLine:@""];
-    [writer writeLine:@"Summary"];
-    [writer writeLine:@"-------"];
-    [writer writeLine:@"Total Tests Executed:           %d", self.testsTotal];
-    [writer writeLine:@"Failed Tests (includes errors): %d", self.testFailures];
-    [writer writeLine:@"Error Tests:                    %d", self.testErrors];
-    [writer writeLine:@"Timeout due to test run-time:   %d", self.runtimeTimeout];
-    [writer writeLine:@"Timeout due to no output:       %d", self.outputTimeout];
-    [writer writeLine:@"Retries:                        %d", self.retries];
-    [writer writeLine:@"Application Crashes:            %d", self.appCrashes];
-    [writer writeLine:@"Simulator Crashes:              %d", self.simCrashes];
-    [writer writeLine:@"Simulator Creation Failures:    %d", self.simulatorCreateFailures];
-    [writer writeLine:@"Simulator Deletion Failures:    %d", self.simulatorDeleteFailures];
-    [writer writeLine:@"App Install Failures:           %d", self.simulatorInstallFailures];
-    [writer writeLine:@"App Launch Failures:            %d", self.simulatorLaunchFailures];
+#pragma mark Trace Event Formatting
 
-    [writer writeLine:@""];
-    [writer writeLine:@"Exit Code: %d", exitCode];
-    [writer writeLine:@""];
+-(unsigned long)bundleID {
+    char *s = getenv("_BP_NUM");
+    if (!s) {
+        s = "0";
+    }
+    unsigned long bundleID = strtoul(s, 0, 10);
+    return bundleID;
+}
+
+- (NSString *)resultToCname:(NSString *)result {
+    if ([result isEqualToString:@"PASSED"] || [result isEqualToString:@"BPExitStatusTestsAllPassed"]) {
+        return @"good";
+    } else if ([result isEqualToString:@"FAILED"] || [result isEqualToString:@"BPExitStatusTestsFailed"]) {
+        return @"bad";
+    } else if ([result isEqualToString:@"INFO"] || [result isEqualToString:@""]) {
+        return @"";
+    }
+    return @"terrible";
+}
+
+- (NSString *)completeEvent:(NSString *)name cat:(NSString *)cat ts:(double)ts dur:(double)dur arg:(NSString *)argName cname:(NSString *)cname {
+    NSString *cnameString = @"";
+    if (cname && ![cname isEqualToString:@""]) {
+        cnameString = [NSString stringWithFormat:@", \"cname\": \"%@\"", cname];
+    }
+    return [NSString stringWithFormat:@"{\"name\": \"%@\", \"cat\": \"%@\", \"ph\": \"X\", \"ts\": %.0lf, \"dur\": %.0lf, \"pid\": 1, \"tid\": %lu, \"args\": {\"name\": \"%@\"}%@}",
+            name,
+            cat,
+            ts,
+            dur,
+            [self bundleID],
+            argName,
+            cnameString
+            ];
 }
 
 @end

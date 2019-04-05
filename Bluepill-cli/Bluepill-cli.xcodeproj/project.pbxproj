@@ -88,13 +88,13 @@
 		BA19493A1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
 		BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
 		BA4800EA1DC2C74600026972 /* BPAppNegativeTests-results.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4800E91DC2C74600026972 /* BPAppNegativeTests-results.xml */; };
-		BA4BCFAC1DC3FA3D00592FA4 /* crash_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFAB1DC3FA3D00592FA4 /* crash_tests.xml */; };
+		BA4BCFAC1DC3FA3D00592FA4 /* crash_tests_attempt_1.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFAB1DC3FA3D00592FA4 /* crash_tests_attempt_1.xml */; };
 		BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */; };
 		BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53011FA8F9F100D80675 /* demo.mov */; };
 		BA6E53061FA8FA2500D80675 /* image.png in Resources */ = {isa = PBXBuildFile; fileRef = BA6E53051FA8FA2000D80675 /* image.png */; };
 		BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
 		BA9ADEB421657004001306F5 /* BPApplicationLaunchHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BB21DF20F81007928F3 /* BPApplicationLaunchHandler.m */; };
-		BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DDF1DD84A72007CB967 /* fatal_tests.xml */; };
+		BA9C2DE01DD84A72007CB967 /* fatal_tests_attempt_1.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA9C2DDF1DD84A72007CB967 /* fatal_tests_attempt_1.xml */; };
 		BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */; };
 		BAB24F741DB5DFA200867756 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F731DB5DFA200867756 /* BPTestHelper.m */; };
 		BAD558D41DB6DCB100C9A5CD /* BPReporters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C081DA817DE001BCEC2 /* BPReporters.m */; };
@@ -103,7 +103,12 @@
 		BAD558D71DB6DCB100C9A5CD /* BPWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A202A401DB0066100D935E3 /* BPWriter.m */; };
 		C45476AC1FD762B5006C7D9E /* uitest-failed.log in Resources */ = {isa = PBXBuildFile; fileRef = C45476AB1FD762B4006C7D9E /* uitest-failed.log */; };
 		C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E5491DC930D200BC80EE /* BPCLITests.m */; };
-		C469B1581FE1A420002246BF /* crash_tests_with_retry.xml in Resources */ = {isa = PBXBuildFile; fileRef = C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */; };
+		C469B1581FE1A420002246BF /* crash_tests_with_retry_attempt_1.xml in Resources */ = {isa = PBXBuildFile; fileRef = C469B1571FE1A41F002246BF /* crash_tests_with_retry_attempt_1.xml */; };
+		C49EEB7B2254142B002CC956 /* crash_tests_attempt_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB7A2254142B002CC956 /* crash_tests_attempt_2.xml */; };
+		C49EEB7D2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB7C2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml */; };
+		C49EEB7F2254177F002CC956 /* fatal_tests_attempt_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB7E2254177F002CC956 /* fatal_tests_attempt_2.xml */; };
+		C49EEB812254179E002CC956 /* fatal_tests_attempt_3.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB802254179E002CC956 /* fatal_tests_attempt_3.xml */; };
+		C4F08F75224C45750001AD2A /* BPExitStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7A851DDBB156001E085D /* BPExitStatus.m */; };
 		C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */ = {isa = PBXBuildFile; fileRef = C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */; };
 		C94DE0BB4360016D3D3061D9 /* simulator-preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */; };
 /* End PBXBuildFile section */
@@ -213,7 +218,7 @@
 		BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulatorHelper.m; sourceTree = "<group>"; };
 		BA34F5E61D6D78120063B17F /* XCTestConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XCTestConfiguration.h; sourceTree = "<group>"; };
 		BA4800E91DC2C74600026972 /* BPAppNegativeTests-results.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "BPAppNegativeTests-results.xml"; sourceTree = "<group>"; };
-		BA4BCFAB1DC3FA3D00592FA4 /* crash_tests.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = crash_tests.xml; sourceTree = "<group>"; };
+		BA4BCFAB1DC3FA3D00592FA4 /* crash_tests_attempt_1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = crash_tests_attempt_1.xml; sourceTree = "<group>"; };
 		BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = hanging_tests.xml; sourceTree = "<group>"; };
 		BA53B16A1E30931E00FCED71 /* BPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPConstants.h; sourceTree = "<group>"; };
 		BA53B16B1E30931E00FCED71 /* BPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConstants.m; sourceTree = "<group>"; };
@@ -263,7 +268,7 @@
 		BA954F831D6D1AB3007D011D /* SimRuntime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimRuntime.h; sourceTree = "<group>"; };
 		BA954F841D6D1AB3007D011D /* SimRuntimePairingReuirements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimRuntimePairingReuirements.h; sourceTree = "<group>"; };
 		BA954F851D6D1AB3007D011D /* SimServiceContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimServiceContext.h; sourceTree = "<group>"; };
-		BA9C2DDF1DD84A72007CB967 /* fatal_tests.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = fatal_tests.xml; sourceTree = "<group>"; };
+		BA9C2DDF1DD84A72007CB967 /* fatal_tests_attempt_1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = fatal_tests_attempt_1.xml; sourceTree = "<group>"; };
 		BAB24F681DB5DB2300867756 /* BPInstanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPInstanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAB24F6C1DB5DB2300867756 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulatorHelperTests.m; sourceTree = "<group>"; };
@@ -314,8 +319,12 @@
 		C41A2C761E0B24E8005D9751 /* BPTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestClass.m; sourceTree = "<group>"; };
 		C45476AB1FD762B4006C7D9E /* uitest-failed.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "uitest-failed.log"; sourceTree = "<group>"; };
 		C467E5491DC930D200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
-		C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = crash_tests_with_retry.xml; sourceTree = "<group>"; };
+		C469B1571FE1A41F002246BF /* crash_tests_with_retry_attempt_1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = crash_tests_with_retry_attempt_1.xml; sourceTree = "<group>"; };
 		C48AE3821FBCC59D00997BA0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
+		C49EEB7A2254142B002CC956 /* crash_tests_attempt_2.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = crash_tests_attempt_2.xml; sourceTree = "<group>"; };
+		C49EEB7C2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = crash_tests_with_retry_attempt_2.xml; sourceTree = "<group>"; };
+		C49EEB7E2254177F002CC956 /* fatal_tests_attempt_2.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = fatal_tests_attempt_2.xml; sourceTree = "<group>"; };
+		C49EEB802254179E002CC956 /* fatal_tests_attempt_3.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = fatal_tests_attempt_3.xml; sourceTree = "<group>"; };
 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 		C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "simulator-preferences.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -478,27 +487,31 @@
 		BA180A0A1DBB011200D7D130 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
-				C469B1571FE1A41F002246BF /* crash_tests_with_retry.xml */,
-				C45476AB1FD762B4006C7D9E /* uitest-failed.log */,
-				BA6E53011FA8F9F100D80675 /* demo.mov */,
-				BA6E53051FA8FA2000D80675 /* image.png */,
-				C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */,
-				7AA4C2281E4A797E00FAA39E /* multiple_reports_for_one_error.log */,
-				7A4FB8E71DFB66980073F268 /* error_only_crash.log */,
-				7A4FB8E51DF8AD4F0073F268 /* missed-crash.log */,
 				7A7E7BC21DF5BA45007928F3 /* badfilename.log */,
-				7A4D7A881DDE3A85001E085D /* intermixed_crash.log */,
-				7A4D7A821DDA5FEA001E085D /* parse_crash.log */,
-				BA9C2DDF1DD84A72007CB967 /* fatal_tests.xml */,
-				BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */,
-				BA0C554C1DDAE241009E1377 /* failure_retry_report.xml */,
-				BA4BCFAB1DC3FA3D00592FA4 /* crash_tests.xml */,
 				BA4800E91DC2C74600026972 /* BPAppNegativeTests-results.xml */,
-				BA180A0B1DBB011200D7D130 /* testConfig.json */,
-				BA180A131DBB088100D7D130 /* testScheme.xcscheme */,
-				BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */,
+				BA4BCFAB1DC3FA3D00592FA4 /* crash_tests_attempt_1.xml */,
+				C49EEB7A2254142B002CC956 /* crash_tests_attempt_2.xml */,
+				C469B1571FE1A41F002246BF /* crash_tests_with_retry_attempt_1.xml */,
+				C49EEB7C2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml */,
+				BA6E53011FA8F9F100D80675 /* demo.mov */,
+				7A4FB8E71DFB66980073F268 /* error_only_crash.log */,
+				BA0C554C1DDAE241009E1377 /* failure_retry_report.xml */,
+				BA9C2DDF1DD84A72007CB967 /* fatal_tests_attempt_1.xml */,
+				C49EEB7E2254177F002CC956 /* fatal_tests_attempt_2.xml */,
+				C49EEB802254179E002CC956 /* fatal_tests_attempt_3.xml */,
+				BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */,
+				BA6E53051FA8FA2000D80675 /* image.png */,
+				7A4D7A881DDE3A85001E085D /* intermixed_crash.log */,
+				7A4FB8E51DF8AD4F0073F268 /* missed-crash.log */,
+				7AA4C2281E4A797E00FAA39E /* multiple_reports_for_one_error.log */,
+				7A4D7A821DDA5FEA001E085D /* parse_crash.log */,
 				C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */,
 				B848CF4F217E38FB0043D826 /* test-script.sh */,
+				C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */,
+				BA180A0B1DBB011200D7D130 /* testConfig.json */,
+				BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */,
+				BA180A131DBB088100D7D130 /* testScheme.xcscheme */,
+				C45476AB1FD762B4006C7D9E /* uitest-failed.log */,
 			);
 			path = "Resource Files";
 			sourceTree = "<group>";
@@ -874,23 +887,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA6E53061FA8FA2500D80675 /* image.png in Resources */,
+				C49EEB7F2254177F002CC956 /* fatal_tests_attempt_2.xml in Resources */,
 				BA6E53021FA8F9FD00D80675 /* demo.mov in Resources */,
 				C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */,
 				BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */,
 				BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */,
-				BA9C2DE01DD84A72007CB967 /* fatal_tests.xml in Resources */,
+				C49EEB812254179E002CC956 /* fatal_tests_attempt_3.xml in Resources */,
+				BA9C2DE01DD84A72007CB967 /* fatal_tests_attempt_1.xml in Resources */,
 				7A4D7A831DDA5FEA001E085D /* parse_crash.log in Resources */,
-				BA4BCFAC1DC3FA3D00592FA4 /* crash_tests.xml in Resources */,
-				C469B1581FE1A420002246BF /* crash_tests_with_retry.xml in Resources */,
+				BA4BCFAC1DC3FA3D00592FA4 /* crash_tests_attempt_1.xml in Resources */,
+				C469B1581FE1A420002246BF /* crash_tests_with_retry_attempt_1.xml in Resources */,
 				7A4FB8E81DFB66980073F268 /* error_only_crash.log in Resources */,
 				7A4D7A891DDE3A85001E085D /* intermixed_crash.log in Resources */,
 				BA0096FE1DCA5D810000DD45 /* testConfigRelativePath.json in Resources */,
+				C49EEB7D2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml in Resources */,
 				7A7E7BC31DF5BA45007928F3 /* badfilename.log in Resources */,
 				BA180A0C1DBB011200D7D130 /* testConfig.json in Resources */,
 				C45476AC1FD762B5006C7D9E /* uitest-failed.log in Resources */,
 				7AA4C2291E4A797E00FAA39E /* multiple_reports_for_one_error.log in Resources */,
 				BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */,
 				BA4800EA1DC2C74600026972 /* BPAppNegativeTests-results.xml in Resources */,
+				C49EEB7B2254142B002CC956 /* crash_tests_attempt_2.xml in Resources */,
 				7A4FB8E61DF8AD4F0073F268 /* missed-crash.log in Resources */,
 				B848CF51217E39060043D826 /* test-script.sh in Resources */,
 				C94DE0BB4360016D3D3061D9 /* simulator-preferences.plist in Resources */,
@@ -943,6 +960,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4F08F75224C45750001AD2A /* BPExitStatus.m in Sources */,
 				B3DAF83E2151CB9700210286 /* BPWaitTimer.m in Sources */,
 				B3DAF83D2151CB7000210286 /* BPHandler.m in Sources */,
 				B3DAF83C2151CB4100210286 /* BPDeleteSimulatorHandler.m in Sources */,

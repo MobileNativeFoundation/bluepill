@@ -38,10 +38,7 @@
     self.config.errorRetriesCount = @0;
     self.config.failureTolerance = @0;
     self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
-    self.config.plainOutput = NO;
-    self.config.jsonOutput = NO;
     self.config.headlessMode = NO;
-    self.config.junitOutput = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
 }

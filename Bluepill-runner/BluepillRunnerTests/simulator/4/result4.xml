@@ -2,7 +2,7 @@
 <testsuites name="Selected tests" tests="1" failures="0" errors="0">
     <testsuite tests="1" failures="0" errors="0" name="Testsuite.xctest">
         <testsuite tests="1" failures="0" errors="0" name="Testsuite">
-            <testcase classname="Class1" name="test2">
+            <testcase classname="Class1" name="test3">
                 <system-out>
                 </system-out>
             </testcase>

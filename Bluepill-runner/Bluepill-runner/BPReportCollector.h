@@ -17,7 +17,8 @@
  * @param finalReportPath the path to save the final report
  */
 + (void)collectReportsFromPath:(NSString *)reportsPath
-             onReportCollected:(void (^)(NSURL *fileUrl))fileHandler
-                  outputAtPath:(NSString *)finalReportPath;
+               deleteCollected:(BOOL)deleteCollected
+                  withOutputAtPath:(NSString *)finalReportPath
+                andTraceProfileAtPath:(NSString *)finalTracePath;
 
 @end

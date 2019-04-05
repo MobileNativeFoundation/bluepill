@@ -27,28 +27,65 @@
     [super tearDown];
 }
 
+void fixTimestamps(NSString *path) {
+    NSURL *directoryURL = [NSURL fileURLWithPath:path isDirectory:YES];
+    NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
+    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager]
+                                         enumeratorAtURL:directoryURL
+                                         includingPropertiesForKeys:keys
+                                         options:0
+                                         errorHandler:^(NSURL *url, NSError *error) {
+                                             NSLog(@"Failed to process url %@: %@", url, [error localizedDescription]);
+                                             return YES;
+                                         }];
+    NSMutableArray *allURLS = [[NSMutableArray alloc] init];
+    for (NSURL *url in enumerator) {
+        NSNumber *isDirectory = nil;
+        if (![url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil]) {
+            NSLog(@"Failed to get resource from url %@", url);
+        }
+        else if (![isDirectory boolValue]) {
+            if ([[url pathExtension] isEqualToString:@"xml"]) {
+                [allURLS addObject:url];
+            }
+        }
+    }
+    // sort the files by name
+    NSMutableArray *sortedURLS;
+    sortedURLS = [NSMutableArray arrayWithArray:[allURLS sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+        NSString *first = [(NSURL *)a path];
+        NSString *second = [(NSURL *)b path];
+        return [first compare:second];
+    }]];
+    // finally touch them
+    for (NSURL *url in sortedURLS) {
+        [[NSFileManager defaultManager] setAttributes:@{NSFileModificationDate:[NSDate date]} ofItemAtPath:[url path] error:nil];
+    }
+
+
+}
+
 - (void)testCollectReportsFromPath {
     NSString *path = [[NSBundle bundleForClass:[self class]] resourcePath];
+    // we need to have the timestamps ordered by file name
+    fixTimestamps(path);
     NSString *outputPath = [path stringByAppendingPathComponent:@"result.xml"];
-    [BPReportCollector collectReportsFromPath:path onReportCollected:^(NSURL *fileUrl) {
-        NSError *error;
-        NSFileManager *fm = [NSFileManager new];
-        [fm removeItemAtURL:fileUrl error:&error];
-        XCTAssertNil(error);
-    }  outputAtPath:outputPath];
+    XCTAssert([[NSFileManager defaultManager] fileExistsAtPath:path]);
+    [BPReportCollector collectReportsFromPath:path deleteCollected:YES withOutputAtPath:outputPath andTraceProfileAtPath:nil];
     NSData *data = [NSData dataWithContentsOfFile:outputPath];
     NSError *error;
     NSXMLDocument *doc = [[NSXMLDocument alloc] initWithData:data options:0 error:&error];
     XCTAssertNil(error);
     NSArray *testsuitesNodes =  [doc nodesForXPath:[NSString stringWithFormat:@".//%@", @"testsuites"] error:&error];
     NSXMLElement *root = testsuitesNodes[0];
-    XCTAssertTrue([[[root attributeForName:@"tests"] stringValue] isEqualToString:@"271"], @"test count is wrong");
-    XCTAssertTrue([[[root attributeForName:@"errors"] stringValue] isEqualToString:@"2"], @"test count is wrong");
-    XCTAssertTrue([[[root attributeForName:@"failures"] stringValue] isEqualToString:@"4"], @"test count is wrong");
-
-    NSLog(@"%@, %@, %@", [[root attributeForName:@"tests"] stringValue], [[root attributeForName:@"errors"] stringValue], [[root attributeForName:@"failures"] stringValue]);
-    NSFileManager *fm = [NSFileManager new];
-    [fm removeItemAtPath:outputPath error:&error];
-    XCTAssertNil(error);
+    NSString *got = [[root attributeForName:@"tests"] stringValue];
+    XCTAssertTrue([got isEqualToString:@"24"], @"test count is wrong, wanted 24, got %@", got);
+    got = [[root attributeForName:@"errors"] stringValue];
+    XCTAssertTrue([got isEqualToString:@"2"], @"error count is wrong, wanted 2, got %@", got);
+    got = [[root attributeForName:@"failures"] stringValue];
+    XCTAssertTrue([got isEqualToString:@"1"], @"failure count is wrong, wanted 4, got %@", got);
+    BOOL collatedReport = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:@"1/report1.xml"]];
+    XCTAssert(collatedReport == NO);
 }
+
 @end

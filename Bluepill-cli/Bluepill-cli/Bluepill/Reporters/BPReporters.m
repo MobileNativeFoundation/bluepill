@@ -20,41 +20,6 @@ void Output(NSMutableString *appendTo, NSString *fmt, ...);
 
 @end
 
-@implementation JSONReporter
-
-- (nullable NSString *)generate:(nonnull BPLogEntry *)root {
-    if ([root isKindOfClass:[BPTestSuiteLogEntry class]]) {
-        NSMutableString *output = [NSMutableString string];
-        [self generateJSONAt:root intoString:output];
-        // Remove the last comma
-        if ([output length] > 1) { // Remove the ",\n" at the end
-            [output replaceCharactersInRange:NSMakeRange([output length]-2, 2) withString:@""];
-        }
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'GMT'ZZZZZ";
-        dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"]; // Always get nil for stringFromDate: without this
-        return [NSString stringWithFormat:@"{\"date\" : \"%@\",\n\"results\" : [%@]}", [dateFormatter stringFromDate:[NSDate date]], output];
-    }
-    return nil;
-}
-
-- (void)generateJSONAt:(nonnull BPLogEntry *)logEntry intoString:(nonnull NSMutableString *)output {
-    if ([logEntry isKindOfClass:[BPTestSuiteLogEntry class]]) {
-        BPTestSuiteLogEntry *suiteLogEntry = (BPTestSuiteLogEntry *)logEntry;
-        for (BPLogEntry *suiteChild in suiteLogEntry.children) {
-            [self generateJSONAt:suiteChild intoString:output];
-        }
-    } else if([logEntry isKindOfClass:[BPTestCaseLogEntry class]]) {
-        BPTestCaseLogEntry *caseLogEntry = (BPTestCaseLogEntry *)logEntry;
-        if (caseLogEntry.passed) {
-            Output(output, @"{\"testCaseFullName\" : \"%@/%@\", \"time\" : %f},",
-                   caseLogEntry.testCaseClass, caseLogEntry.testCaseName, caseLogEntry.totalTime);
-        }
-    }
-}
-
-@end
-
 @interface JUnitReporter ()
 
 @property (nonatomic, strong, nullable) BPTestSuiteLogEntry *root;

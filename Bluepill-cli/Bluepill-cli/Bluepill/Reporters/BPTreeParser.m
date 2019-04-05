@@ -505,22 +505,15 @@ static const NSString * const kPassed = @"passed";
 }
 
 - (void)completed {
+    [BPUtils printInfo:INFO withString:@"BPTree parser completed"];
     if (self.aborted) {
         [self closeOffAllSuites];
-        return; // We don't want the normal calculations if the tests were aborted because we're just going to overwrite the log anyway.
     }
     [self calculateTotals];
 }
 
-- (void)completedFinalRun {
-    // On the final run, we should calculate totals if we previously didn't
-    // due to a crash/abort
-    if (self.aborted) {
-        [self calculateTotals];
-    }
-}
-
 - (void)cleanup {
+    [BPUtils printInfo:INFO withString:@"BPTree parser reset BPTAssembler"];
     [[BPTreeAssembler sharedInstance] reset];
 }
 
