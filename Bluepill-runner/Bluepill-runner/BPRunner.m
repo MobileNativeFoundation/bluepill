@@ -308,19 +308,9 @@ maxprocs(void)
         [app terminate];
     }
     if (self.config.outputDirectory) {
-        NSString *outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
-        NSString *traceFilePath = [self.config.outputDirectory stringByAppendingPathComponent:@"trace-profile.json"];
-        NSFileManager *fm = [NSFileManager new];
-        if ([fm fileExistsAtPath:outputPath]) {
-            [fm removeItemAtPath:outputPath error:nil];
-        }
-        if ([fm fileExistsAtPath:traceFilePath]) {
-            [fm removeItemAtPath:traceFilePath error:nil];
-        }
         [BPReportCollector collectReportsFromPath:self.config.outputDirectory
                                   deleteCollected:(!self.config.keepIndividualTestReports)
-                                 withOutputAtPath:outputPath
-                                   andTraceProfileAtPath:traceFilePath];
+                                  withOutputAtDir:self.config.outputDirectory];
     }
 
     return rc;

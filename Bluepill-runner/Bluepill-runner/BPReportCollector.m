@@ -32,11 +32,16 @@
 
 + (void)collectReportsFromPath:(NSString *)reportsPath
                deleteCollected:(BOOL)deleteCollected
-              withOutputAtPath:(NSString *)finalReportPath
-         andTraceProfileAtPath:(NSString *)traceFileOutput {
+               withOutputAtDir:(NSString *)finalReportsDir {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
+    NSString *finalReportPath = [finalReportsDir stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
+    NSString *finalErrorReportPath = [finalReportsDir stringByAppendingPathComponent:@"TEST-FailureReport.xml"];
+    NSString *traceFilePath = [finalReportsDir stringByAppendingPathComponent:@"trace-profile.json"];
+
     [fileManager removeItemAtPath:finalReportPath error:nil];
+    [fileManager removeItemAtPath:finalErrorReportPath error:nil];
+    [fileManager removeItemAtPath:traceFilePath error:nil];
 
     NSURL *directoryURL = [NSURL fileURLWithPath:reportsPath isDirectory:YES];
     NSArray *keys = [NSArray arrayWithObject:NSURLIsDirectoryKey];
@@ -71,7 +76,7 @@
                 [reports addObject:report];
                 continue;
             }
-            if (traceFileOutput && [[url pathExtension] isEqualToString:@"json"]) {
+            if ([[url pathExtension] isEqualToString:@"json"]) {
                 [BPUtils printInfo:DEBUGINFO withString:@"Collecting trace report: %@", [url path]];
                 NSData *data = [fileManager contentsAtPath:[url path]];
                 if (!traceData) {
@@ -89,20 +94,17 @@
     }
     if (traceData) {
         [traceData appendData:[@"]\n" dataUsingEncoding:NSUTF8StringEncoding]];
-        [traceData writeToFile:traceFileOutput atomically:YES];
-        [BPUtils printInfo:DEBUGINFO withString:@"Trace profile: %@", traceFileOutput];
+        [traceData writeToFile:traceFilePath atomically:YES];
+        [BPUtils printInfo:INFO withString:@"Trace profile: %@", traceFilePath];
     }
-    NSXMLDocument *finalReport = [self collateReports:reports andDeleteCollated:deleteCollected];
-    NSData *xmlData = [finalReport XMLDataWithOptions:NSXMLNodePrettyPrint];
-    [xmlData writeToFile:finalReportPath atomically:YES];
+    [self collateReports:reports andDeleteCollated:deleteCollected withOutputAt:finalReportPath andFailureOutputAt:finalErrorReportPath];
 }
 
-+ (NSXMLDocument *)collateReports:(NSMutableArray <BPXMLReport *> *)reports andDeleteCollated:(BOOL)deleteCollated {
++ (void)collateReports:(NSMutableArray <BPXMLReport *> *)reports
+                andDeleteCollated:(BOOL)deleteCollated
+                     withOutputAt:(NSString *)finalReportPath
+               andFailureOutputAt:(NSString *)finalErrorReportPath {
     NSError *err;
-
-    if ([reports count] == 1) {
-        return [[NSXMLDocument alloc] initWithContentsOfURL:[[reports firstObject] url] options:0 error:nil];
-    }
 
     // sort them by modification date, newer reports trump old reports
     NSMutableArray *sortedReports;
@@ -112,13 +114,17 @@
         return [first compare:second];
     }]];
 
-    // pick the first report as the target, we'll merge all others into this one
-    BPXMLReport *BPTargetReport = [sortedReports firstObject];
-    [sortedReports removeObjectAtIndex:0];
+    NSXMLElement *rootElement = [[NSXMLElement alloc] initWithName:@"testsuites"];
+    [rootElement addAttribute:[NSXMLNode attributeWithName:@"name" stringValue:@"All tests"]];
+    [rootElement addAttribute:[NSXMLNode attributeWithName:@"tests" stringValue:@"0"]];
+    [rootElement addAttribute:[NSXMLNode attributeWithName:@"failures" stringValue:@"0"]];
+    [rootElement addAttribute:[NSXMLNode attributeWithName:@"errors" stringValue:@"0"]];
+    [rootElement addAttribute:[NSXMLNode attributeWithName:@"time" stringValue:@"0.0"]];
 
-    [BPUtils printInfo:DEBUGINFO withString:@"BASE REPORT: %@", [[BPTargetReport url] path]];
-    NSXMLDocument *targetReport = [[NSXMLDocument alloc] initWithContentsOfURL:[BPTargetReport url] options:0 error:nil];
-    [self clearRetries:targetReport];
+    NSXMLDocument *targetReport = [[NSXMLDocument alloc] initWithRootElement:rootElement];
+    [targetReport setCharacterEncoding:@"UTF-8"];
+    [targetReport setVersion:@"1.0"];
+    [targetReport setStandalone:YES];
     for (BPXMLReport *report in sortedReports) {
         [BPUtils printInfo:DEBUGINFO withString:@"MERGING REPORT: %@", [[report url] path]];
         @autoreleasepool {
@@ -155,7 +161,8 @@
         [self updateTestSuiteCounts:testSuite];
     }
     [self updateTestSuiteCounts:[[targetReport objectsForXQuery:@"//testsuites" error:nil] firstObject]];
-    return targetReport;
+    NSData *xmlData = [targetReport XMLDataWithOptions:NSXMLNodePrettyPrint];
+    [xmlData writeToFile:finalReportPath atomically:YES];
 }
 
 + (void) collateTestSuite:(NSXMLElement *)testSuite into:(NSXMLElement *)targetTestSuite {

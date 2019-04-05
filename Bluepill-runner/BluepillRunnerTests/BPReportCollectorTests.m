@@ -69,10 +69,10 @@ void fixTimestamps(NSString *path) {
     NSString *path = [[NSBundle bundleForClass:[self class]] resourcePath];
     // we need to have the timestamps ordered by file name
     fixTimestamps(path);
-    NSString *outputPath = [path stringByAppendingPathComponent:@"result.xml"];
     XCTAssert([[NSFileManager defaultManager] fileExistsAtPath:path]);
-    [BPReportCollector collectReportsFromPath:path deleteCollected:YES withOutputAtPath:outputPath andTraceProfileAtPath:nil];
-    NSData *data = [NSData dataWithContentsOfFile:outputPath];
+    NSString *finalReport = [path stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
+    [BPReportCollector collectReportsFromPath:path deleteCollected:YES withOutputAtDir:path];
+    NSData *data = [NSData dataWithContentsOfFile:finalReport];
     NSError *error;
     NSXMLDocument *doc = [[NSXMLDocument alloc] initWithData:data options:0 error:&error];
     XCTAssertNil(error);
