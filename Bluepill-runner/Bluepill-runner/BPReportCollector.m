@@ -114,17 +114,9 @@
         return [first compare:second];
     }]];
 
-    NSXMLElement *rootElement = [[NSXMLElement alloc] initWithName:@"testsuites"];
-    [rootElement addAttribute:[NSXMLNode attributeWithName:@"name" stringValue:@"All tests"]];
-    [rootElement addAttribute:[NSXMLNode attributeWithName:@"tests" stringValue:@"0"]];
-    [rootElement addAttribute:[NSXMLNode attributeWithName:@"failures" stringValue:@"0"]];
-    [rootElement addAttribute:[NSXMLNode attributeWithName:@"errors" stringValue:@"0"]];
-    [rootElement addAttribute:[NSXMLNode attributeWithName:@"time" stringValue:@"0.0"]];
+    NSXMLDocument *targetReport = [self newEmptyXMLDocumentWithName:@"All tests"];
+    NSXMLDocument *failureReport = [self newEmptyXMLDocumentWithName:@"All failures"];
 
-    NSXMLDocument *targetReport = [[NSXMLDocument alloc] initWithRootElement:rootElement];
-    [targetReport setCharacterEncoding:@"UTF-8"];
-    [targetReport setVersion:@"1.0"];
-    [targetReport setStandalone:YES];
     for (BPXMLReport *report in sortedReports) {
         [BPUtils printInfo:DEBUGINFO withString:@"MERGING REPORT: %@", [[report url] path]];
         @autoreleasepool {
@@ -135,6 +127,7 @@
                 continue;
             }
             [self clearRetries:xmlDoc];
+            [self collectFailures:xmlDoc into:failureReport];
             // grab all the test suites
             for (NSXMLElement *testSuite in [xmlDoc nodesForXPath:@"/testsuites/testsuite" error:nil]) {
                 NSString *testSuiteName = [[testSuite attributeForName:@"name"] stringValue];
@@ -161,8 +154,26 @@
         [self updateTestSuiteCounts:testSuite];
     }
     [self updateTestSuiteCounts:[[targetReport objectsForXQuery:@"//testsuites" error:nil] firstObject]];
+
     NSData *xmlData = [targetReport XMLDataWithOptions:NSXMLNodePrettyPrint];
     [xmlData writeToFile:finalReportPath atomically:YES];
+    xmlData = [failureReport XMLDataWithOptions:NSXMLNodePrettyPrint];
+    [xmlData writeToFile:finalErrorReportPath atomically:YES];
+}
+
++ (NSXMLDocument *)newEmptyXMLDocumentWithName:(NSString *)name {
+    NSXMLElement *rootElement = [[NSXMLElement alloc] initWithName:@"testsuites"];
+    [rootElement addAttribute:[NSXMLNode attributeWithName:@"name" stringValue:name]];
+    [rootElement addAttribute:[NSXMLNode attributeWithName:@"tests" stringValue:@"0"]];
+    [rootElement addAttribute:[NSXMLNode attributeWithName:@"failures" stringValue:@"0"]];
+    [rootElement addAttribute:[NSXMLNode attributeWithName:@"errors" stringValue:@"0"]];
+    [rootElement addAttribute:[NSXMLNode attributeWithName:@"time" stringValue:@"0.0"]];
+
+    NSXMLDocument *doc = [[NSXMLDocument alloc] initWithRootElement:rootElement];
+    [doc setCharacterEncoding:@"UTF-8"];
+    [doc setVersion:@"1.0"];
+    [doc setStandalone:YES];
+    return doc;
 }
 
 + (void) collateTestSuite:(NSXMLElement *)testSuite into:(NSXMLElement *)targetTestSuite {
@@ -227,6 +238,38 @@
         [targetTestSuite addAttribute:testsAttr];
     }
     [testsAttr setStringValue:[NSString stringWithFormat:@"%d", testCaseCount]];
+}
+
++ (void)collectFailures:(NSXMLDocument *)report into:(NSXMLDocument *)failureReport {
+    NSArray *failures = [report nodesForXPath:@"//failure | //error" error:nil];
+    for (NSXMLElement *failure in failures) {
+        NSXMLElement *testSuite = (NSXMLElement *)[[failure parent] parent];
+        NSString *testSuiteName = [[testSuite attributeForName:@"name"] stringValue];
+        NSXMLElement *targetTestSuite = [[failureReport nodesForXPath:[NSString stringWithFormat:@"//testsuite[@name=%@']", testSuiteName] error:nil] firstObject];
+        if (!targetTestSuite) {
+            NSXMLElement *parent = (NSXMLElement *)[testSuite parent];
+            NSString *parentName = [[parent attributeForName:@"name"] stringValue];
+            NSXMLElement *targetParent = [[failureReport nodesForXPath:[NSString stringWithFormat:@"//testsuite[@name='%@']", parentName]
+                                                                 error:nil] firstObject];
+            if (!targetParent) {
+                targetParent = [parent copy];
+                [targetParent setChildren:nil];
+                [[failureReport rootElement] addChild:targetParent];
+            }
+            targetTestSuite = [testSuite copy];
+            [targetTestSuite setChildren:nil];
+            [targetParent addChild:targetTestSuite];
+        }
+        [targetTestSuite addChild:[[failure parent] copy]];
+    }
+    // update counts
+    for (NSXMLElement *testSuite in [failureReport nodesForXPath:@"/testsuites/testsuite/testsuite" error:nil]) {
+        [self updateTestCaseCounts:testSuite];
+    }
+    for (NSXMLElement *testSuite in [failureReport nodesForXPath:@"/testsuites/testsuite" error:nil]) {
+        [self updateTestSuiteCounts:testSuite];
+    }
+    [self updateTestSuiteCounts:[[failureReport objectsForXQuery:@"//testsuites" error:nil] firstObject]];
 }
 
 + (void)updateTestCaseCounts:(NSXMLElement *)testSuite {
