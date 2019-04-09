@@ -104,6 +104,9 @@
 		C45476AC1FD762B5006C7D9E /* uitest-failed.log in Resources */ = {isa = PBXBuildFile; fileRef = C45476AB1FD762B4006C7D9E /* uitest-failed.log */; };
 		C467E54A1DC930D200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E5491DC930D200BC80EE /* BPCLITests.m */; };
 		C469B1581FE1A420002246BF /* crash_tests_with_retry_attempt_1.xml in Resources */ = {isa = PBXBuildFile; fileRef = C469B1571FE1A41F002246BF /* crash_tests_with_retry_attempt_1.xml */; };
+		C47B2DB222580FF20068C5CA /* BPStats.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7D66001DB679820015C937 /* BPStats.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C47B2DB3225813C70068C5CA /* BPWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A202A401DB0066100D935E3 /* BPWriter.m */; };
+		C47B2DB4225813DC0068C5CA /* BPWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A202A3F1DB0066100D935E3 /* BPWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C49EEB7B2254142B002CC956 /* crash_tests_attempt_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB7A2254142B002CC956 /* crash_tests_attempt_2.xml */; };
 		C49EEB7D2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB7C2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml */; };
 		C49EEB7F2254177F002CC956 /* fatal_tests_attempt_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB7E2254177F002CC956 /* fatal_tests_attempt_2.xml */; };
@@ -370,6 +373,8 @@
 		7A4FB8CC1DF89A790073F268 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				7A7D66001DB679820015C937 /* BPStats.h */,
+				7A7D66011DB679820015C937 /* BPStats.m */,
 				BA53B16A1E30931E00FCED71 /* BPConstants.h */,
 				BA53B16B1E30931E00FCED71 /* BPConstants.m */,
 				C41A2C731E0B24E8005D9751 /* BPTestCase.h */,
@@ -624,8 +629,6 @@
 				BA9552191D6D1C00007D011D /* Reporters */,
 				BA944BCE1D76A39A00A4BDA3 /* Bluepill.h */,
 				BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */,
-				7A7D66001DB679820015C937 /* BPStats.h */,
-				7A7D66011DB679820015C937 /* BPStats.m */,
 				7A7E7BBE1DF22CE1007928F3 /* BPExecutionContext.h */,
 				7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */,
 			);
@@ -736,9 +739,11 @@
 				B368E572213F8E8F00B4DEA3 /* BPConfiguration.h in Headers */,
 				B368E573213F8E8F00B4DEA3 /* BPExecutionPhaseProtocol.h in Headers */,
 				B368E574213F8E8F00B4DEA3 /* BPExitStatus.h in Headers */,
+				C47B2DB4225813DC0068C5CA /* BPWriter.h in Headers */,
 				B368E575213F8E8F00B4DEA3 /* (null) in Headers */,
 				B368E576213F8E8F00B4DEA3 /* SimulatorMonitor.h in Headers */,
 				B368E577213F8E8F00B4DEA3 /* BPSimulator.h in Headers */,
+				C47B2DB222580FF20068C5CA /* BPStats.h in Headers */,
 				B368E56A213F8D2F00B4DEA3 /* BluepillLib.h in Headers */,
 				B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */,
 			);
@@ -960,6 +965,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C47B2DB3225813C70068C5CA /* BPWriter.m in Sources */,
 				C4F08F75224C45750001AD2A /* BPExitStatus.m in Sources */,
 				B3DAF83E2151CB9700210286 /* BPWaitTimer.m in Sources */,
 				B3DAF83D2151CB7000210286 /* BPHandler.m in Sources */,

@@ -35,6 +35,7 @@
 - (void)startTimer:(NSString *)name;
 - (void)startTimer:(NSString *)name atTime:(NSDate *)date;
 - (void)endTimer:(NSString *)name withResult:(NSString *)result;
+- (void)addCounter:(NSString *)name withValues:(NSDictionary <NSString *, NSNumber *>*)counters;
 
 - (void)addTest;
 - (void)addTestFailure;

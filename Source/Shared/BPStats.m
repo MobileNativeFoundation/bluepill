@@ -18,9 +18,16 @@
 @property (nonatomic, strong) NSString *result;
 @end
 
+@interface BPCounter : NSObject
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic, strong) NSDate *timeStamp;
+@property (nonatomic, strong) NSDictionary <NSString *, NSNumber *> *counters;
+@end
+
 @interface BPStats()
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *,BPStat *> *stats;
+@property (nonatomic, strong) NSMutableArray <BPCounter *> *counters;
 @property (nonatomic, strong) BPStat *applicationTime;
 
 @property (nonatomic, assign) NSInteger testsTotal;
@@ -55,6 +62,7 @@
         self.applicationTime = [[BPStat alloc] init];
         self.applicationTime.startTime = [NSDate date];
         self.stats = [[NSMutableDictionary alloc] init];
+        self.counters = [[NSMutableArray alloc] init];
         self.cleanRun = YES;
     }
     return self;
@@ -83,6 +91,14 @@
     }
     stat.endTime = [NSDate date];
     stat.result = result;
+}
+
+- (void)addCounter:(NSString *)name withValues:(NSDictionary <NSString *, NSNumber *>*)counters {
+    BPCounter *event = [[BPCounter alloc] init];
+    event.name = name;
+    event.timeStamp = [NSDate date];
+    event.counters = counters;
+    [self.counters addObject:event];
 }
 
 - (NSString *)getJsonStat:(NSString *)name {
@@ -169,7 +185,10 @@
 - (void)generateFullReportWithWriter:(BPWriter *)writer exitCode:(int)exitCode {
     unsigned long bundleID = [self bundleID];
     // Metadata
-    NSString *threadName = [NSString stringWithFormat:@"BP-%lu", bundleID];
+    NSString *threadName = @"Bluepill";
+    if (bundleID > 0) {
+        threadName = [NSString stringWithFormat:@"BP-%lu", bundleID];
+    }
     [writer writeLine:[NSString stringWithFormat:@"{\"name\": \"thread_name\", \"ph\": \"M\", \"pid\": 1, \"tid\": %lu, \"args\": {\"name\": \"%@\"}},",
                        bundleID,
                        threadName
@@ -180,7 +199,7 @@
                        bundleID
                        ]];
 
-    NSString *name = [NSString stringWithFormat:@"bp-%d", getpid()];
+    NSString *name = [NSString stringWithFormat:@"%s (%d)", (bundleID > 0) ? "bp" : "bluepill", getpid()];
     [writer writeLine:[NSString stringWithFormat:@"%@,",
                        [self completeEvent:name
                                        cat:@"process"
@@ -196,6 +215,15 @@
     // now output all the stats...
     for (NSString *name in self.stats) {
         [allStatStrings addObject:[self getJsonStat:name]];
+    }
+    // finally, print counters
+    for (BPCounter *counter in self.counters) {
+        NSMutableArray *args = [[NSMutableArray alloc] init];
+        for (NSString *key in counter.counters) {
+            [args addObject:[NSString stringWithFormat:@"\"%@\": %@", key, counter.counters[key]]];
+        }
+        [allStatStrings addObject:[NSString stringWithFormat:@"{\"name\":\"%@\", \"ph\": \"C\", \"ts\": \"%.0lf\", \"pid\": 1, \"args\": {%@}}",
+                                   counter.name, [counter.timeStamp timeIntervalSince1970] * 1000000.0, [args componentsJoinedByString:@", "]]];
     }
     [writer writeLine:@"%@", [allStatStrings componentsJoinedByString:@",\n"]];
 }
@@ -241,5 +269,9 @@
 @end
 
 @implementation BPStat
+
+@end
+
+@implementation BPCounter
 
 @end

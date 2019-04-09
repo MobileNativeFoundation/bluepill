@@ -10,9 +10,13 @@
 #import "BPRunner.h"
 #import "BPPacker.h"
 #import <BluepillLib/BPUtils.h>
-#import "BPReportCollector.h"
 #import "BPVersion.h"
 #include <sys/sysctl.h>
+#include <sys/types.h>
+#include <mach/mach.h>
+#include <mach/processor_info.h>
+#include <mach/mach_host.h>
+#include <signal.h>
 #include <pwd.h>
 #import <AppKit/AppKit.h>
 #import <BluepillLib/BPSimulator.h>
@@ -22,6 +26,7 @@
 #import <BluepillLib/SimDeviceSet.h>
 #import <BluepillLib/SimServiceContext.h>
 #import <BluepillLib/SimulatorHelper.h>
+#import <BluepillLib/BPStats.h>
 
 static int volatile interrupted = 0;
 
@@ -174,7 +179,21 @@ maxprocs(void)
 
 - (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
     // Set up our SIGINT handler
-    signal(SIGINT, onInterrupt);
+    struct sigaction new_action;
+    new_action.sa_handler = onInterrupt;
+    sigemptyset(&new_action.sa_mask);
+    new_action.sa_flags = 0;
+
+    if (sigaction(SIGINT, &new_action, NULL) != 0) {
+        [BPUtils printInfo:ERROR withString:@"Could not install SIGINT handler: %s", strerror(errno)];
+    }
+    if (sigaction(SIGTERM, &new_action, NULL) != 0) {
+        [BPUtils printInfo:ERROR withString:@"Could not install SIGTERM handler: %s", strerror(errno)];
+    }
+    if (sigaction(SIGHUP, &new_action, NULL) != 0) {
+        [BPUtils printInfo:ERROR withString:@"Could not install SIGHUP handler: %s", strerror(errno)];
+    }
+
     BPSimulator *bpSimulator = [BPSimulator simulatorWithConfiguration:self.config];
     NSUInteger numSims = [self.config.numSims intValue];
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
@@ -290,6 +309,7 @@ maxprocs(void)
             }
         }
         seconds += 1;
+        [self addCounters];
     }
 
     for (int i = 0; i < [deviceList count]; i++) {
@@ -307,12 +327,6 @@ maxprocs(void)
     if (app) {
         [app terminate];
     }
-    if (self.config.outputDirectory) {
-        [BPReportCollector collectReportsFromPath:self.config.outputDirectory
-                                  deleteCollected:(!self.config.keepIndividualTestReports)
-                                  withOutputAtDir:self.config.outputDirectory];
-    }
-
     return rc;
 }
 
@@ -324,6 +338,68 @@ maxprocs(void)
     }
 
     [self.nsTaskList removeAllObjects];
+}
+
+- (void)addCounters {
+    // get CPU info
+    static uint64 lastSystemTime = 0, lastUserTime = 0, lastIdleTime = 0;
+    processor_cpu_load_info_t cpuLoad;
+    mach_msg_type_number_t count;
+    natural_t procCount;
+    kern_return_t kr;
+
+    kr = host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &procCount, (processor_info_array_t *)&cpuLoad, &count);
+    if (kr == KERN_SUCCESS) {
+        uint64 totalSystemTime = 0, totalUserTime = 0, totalIdleTime = 0;
+        for (natural_t i = 0; i < procCount ; ++i) {
+            uint64_t system = 0, user = 0, idle = 0;
+            system = cpuLoad[i].cpu_ticks[CPU_STATE_SYSTEM];
+            user = cpuLoad[i].cpu_ticks[CPU_STATE_USER] + cpuLoad[i].cpu_ticks[CPU_STATE_NICE];
+            idle = cpuLoad[i].cpu_ticks[CPU_STATE_IDLE];
+            totalSystemTime += system;
+            totalUserTime += user;
+            totalIdleTime += idle;
+        }
+        if (lastSystemTime != 0) {
+            uint64_t system = totalSystemTime - lastSystemTime;
+            uint64_t user = totalUserTime - lastUserTime;
+            uint64_t idle = totalIdleTime - lastIdleTime;
+
+            uint64_t total = system + user + idle;
+
+            double onePercent = total/100.0f;
+            [[BPStats sharedStats] addCounter:@"CPU" withValues:@{
+                                                                  @"sys": @((double)system/onePercent),
+                                                                  @"usr": @((double)user/onePercent),
+                                                                  @"idle": @((double)idle/onePercent)
+                                                                  }];
+        }
+        lastSystemTime = totalSystemTime;
+        lastUserTime = totalUserTime;
+        lastIdleTime = totalIdleTime;
+    } else {
+        [BPUtils printInfo:ERROR withString:@"Failed to get CPU stats: %s", mach_error_string(kr)];
+    }
+    // get memory info
+    count = HOST_VM_INFO_COUNT;
+    vm_statistics_data_t vmstat;
+    kr = host_statistics(mach_host_self(), HOST_VM_INFO, (host_info_t)&vmstat, &count);
+    if(kr == KERN_SUCCESS) {
+        double total = vmstat.wire_count + vmstat.active_count + vmstat.inactive_count + vmstat.free_count;
+        double wired = vmstat.wire_count / total;
+        double active = vmstat.active_count / total;
+        double inactive = vmstat.inactive_count / total;
+        double free = vmstat.free_count / total;
+
+        [[BPStats sharedStats] addCounter:@"Memory" withValues:@{
+                                                                 @"wired": @(wired * 100.0f),
+                                                                 @"active": @(active * 100.0f),
+                                                                 @"inactive": @(inactive * 100.0f),
+                                                                 @"free": @(free * 100.0f)
+                                                                 }];
+    } else {
+        [BPUtils printInfo:ERROR withString:@"Failed to get Memory info: %s", mach_error_string(kr)];
+    }
 }
 
 @end
