@@ -117,11 +117,10 @@
     NSDate *currentTime = [NSDate date];
     NSString *fullTestName = [NSString stringWithFormat:@"%@/%@", testClass, testName];
 
-    BOOL additionalFailure = NO;
     for (NSString *fullName in self.failedTestCases) {
         if([fullTestName isEqualToString:fullName]) {
-            additionalFailure = YES;
-            break;
+            // this test has already failed once
+            return;
         }
     }
 
@@ -131,14 +130,9 @@
 
     [self.failedTestCases addObject:fullTestName];
 
-    [BPUtils printInfo:FAILED withString:@"%@%10.6fs %@",
-     additionalFailure ? @"[ADDITIONAL FAILURE] " : @"",
+    [BPUtils printInfo:FAILED withString:@"%10.6fs %@",
      [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
      fullTestName];
-
-    if (additionalFailure) {
-        return;
-    }
 
     self.failureCount++;
 
