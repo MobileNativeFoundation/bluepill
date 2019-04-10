@@ -27,6 +27,7 @@
 		BAEF4B381DAC539400E68294 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BAEF4B371DAC539400E68294 /* main.m */; };
 		C41C41F31DB04032001F32A2 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
 		C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F81DB14B5F001F32A2 /* BPRunner.m */; };
+		C454DD71225E50B900F0ED8E /* BluepillLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9ADEA9216427CB001306F5 /* BluepillLib.framework */; };
 		C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E54B1DC94BB200BC80EE /* BPCLITests.m */; };
 		C49EEB84225570EC002CC956 /* result4.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB83225570EC002CC956 /* result4.xml */; };
 		C4C614A421814C5C008A2C39 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C4C614A321814C5C008A2C39 /* BPTestHelper.m */; };
@@ -72,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C454DD71225E50B900F0ED8E /* BluepillLib.framework in Frameworks */,
 				B3109F792151F72F00B9309C /* CoreSimulator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

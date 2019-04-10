@@ -71,7 +71,6 @@ void fixTimestamps(NSString *path) {
     fixTimestamps(path);
     XCTAssert([[NSFileManager defaultManager] fileExistsAtPath:path]);
     NSString *finalReport = [path stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
-    NSString *failureReport = [path stringByAppendingPathComponent:@"TEST-FailureReport.xml"];
     [BPReportCollector collectReportsFromPath:path deleteCollected:YES withOutputAtDir:path];
     NSData *data = [NSData dataWithContentsOfFile:finalReport];
     NSError *error;
@@ -80,19 +79,12 @@ void fixTimestamps(NSString *path) {
     NSArray *testsuitesNodes =  [doc nodesForXPath:[NSString stringWithFormat:@".//%@", @"testsuites"] error:&error];
     NSXMLElement *root = testsuitesNodes[0];
     NSString *got = [[root attributeForName:@"tests"] stringValue];
-    XCTAssertTrue([got isEqualToString:@"24"], @"test count is wrong, wanted 24, got %@", got);
+
+    XCTAssertTrue([got isEqualToString:@"25"], @"test count is wrong, wanted 25, got %@", got);
     got = [[root attributeForName:@"errors"] stringValue];
     XCTAssertTrue([got isEqualToString:@"2"], @"error count is wrong, wanted 2, got %@", got);
     got = [[root attributeForName:@"failures"] stringValue];
-    XCTAssertTrue([got isEqualToString:@"1"], @"failure count is wrong, wanted 4, got %@", got);
-
-    // now check the failure report
-    NSXMLDocument *failureDoc = [[NSXMLDocument alloc] initWithContentsOfURL:[NSURL fileURLWithPath:failureReport] options:0 error:nil];
-    XCTAssertNotNil(failureDoc, @"Could not find the failure report");
-    root = [failureDoc rootElement];
-    XCTAssertTrue([@"4" isEqualToString:[[root attributeForName:@"tests"] stringValue]]);
-    XCTAssertTrue([@"2" isEqualToString:[[root attributeForName:@"failures"] stringValue]]);
-    XCTAssertTrue([@"2" isEqualToString:[[root attributeForName:@"errors"] stringValue]]);
+    XCTAssertTrue([got isEqualToString:@"2"], @"failure count is wrong, wanted 2, got %@", got);
 
     BOOL collatedReport = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:@"1/report1.xml"]];
     XCTAssert(collatedReport == NO);

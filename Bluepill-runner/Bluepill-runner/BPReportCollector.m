@@ -36,11 +36,9 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     NSString *finalReportPath = [finalReportsDir stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
-    NSString *finalErrorReportPath = [finalReportsDir stringByAppendingPathComponent:@"TEST-FailureReport.xml"];
     NSString *traceFilePath = [finalReportsDir stringByAppendingPathComponent:@"trace-profile.json"];
 
     [fileManager removeItemAtPath:finalReportPath error:nil];
-    [fileManager removeItemAtPath:finalErrorReportPath error:nil];
     [fileManager removeItemAtPath:traceFilePath error:nil];
 
     NSURL *directoryURL = [NSURL fileURLWithPath:reportsPath isDirectory:YES];
@@ -97,13 +95,12 @@
         [traceData writeToFile:traceFilePath atomically:YES];
         [BPUtils printInfo:INFO withString:@"Trace profile: %@", traceFilePath];
     }
-    [self collateReports:reports andDeleteCollated:deleteCollected withOutputAt:finalReportPath andFailureOutputAt:finalErrorReportPath];
+    [self collateReports:reports andDeleteCollated:deleteCollected withOutputAt:finalReportPath];
 }
 
 + (void)collateReports:(NSMutableArray <BPXMLReport *> *)reports
-                andDeleteCollated:(BOOL)deleteCollated
-                     withOutputAt:(NSString *)finalReportPath
-               andFailureOutputAt:(NSString *)finalErrorReportPath {
+     andDeleteCollated:(BOOL)deleteCollated
+          withOutputAt:(NSString *)finalReportPath {
     NSError *err;
 
     // sort them by modification date, newer reports trump old reports
@@ -115,7 +112,6 @@
     }]];
 
     NSXMLDocument *targetReport = [self newEmptyXMLDocumentWithName:@"All tests"];
-    NSXMLDocument *failureReport = [self newEmptyXMLDocumentWithName:@"All failures"];
 
     for (BPXMLReport *report in sortedReports) {
         [BPUtils printInfo:DEBUGINFO withString:@"MERGING REPORT: %@", [[report url] path]];
@@ -126,8 +122,6 @@
                 [BPUtils printInfo:ERROR withString:@"SOME TESTS MIGHT BE MISSING"];
                 continue;
             }
-            [self clearRetries:xmlDoc];
-            [self collectFailures:xmlDoc into:failureReport];
             // grab all the test suites
             for (NSXMLElement *testSuite in [xmlDoc nodesForXPath:@"/testsuites/testsuite" error:nil]) {
                 NSString *testSuiteName = [[testSuite attributeForName:@"name"] stringValue];
@@ -157,8 +151,6 @@
 
     NSData *xmlData = [targetReport XMLDataWithOptions:NSXMLNodePrettyPrint];
     [xmlData writeToFile:finalReportPath atomically:YES];
-    xmlData = [failureReport XMLDataWithOptions:NSXMLNodePrettyPrint];
-    [xmlData writeToFile:finalErrorReportPath atomically:YES];
 }
 
 + (NSXMLDocument *)newEmptyXMLDocumentWithName:(NSString *)name {
@@ -217,12 +209,8 @@
         if (targetTestCase) {
             [BPUtils printInfo:DEBUGINFO withString:@"testcase match: %@", [[targetTestCase attributeForName:@"name"] stringValue]];
             parent = (NSXMLElement *)[targetTestCase parent];
-            unsigned long retries = [[[targetTestCase attributeForName:@"retries"] stringValue] intValue];
-            retries++;
-            [[testCase attributeForName:@"retries"] setStringValue:[NSString stringWithFormat:@"%lu", retries]];
-            // and use the latest result
+            // append the latest result
             [parent insertChild:[testCase copy] atIndex:[targetTestCase index] + 1];
-            [parent removeChildAtIndex:[targetTestCase index]];
         } else {
             [BPUtils printInfo:DEBUGINFO withString:@"testcase insertion: %@", [[testCase attributeForName:@"name"] stringValue]];
             [targetTestSuite addChild:[testCase copy]];
@@ -238,38 +226,6 @@
         [targetTestSuite addAttribute:testsAttr];
     }
     [testsAttr setStringValue:[NSString stringWithFormat:@"%d", testCaseCount]];
-}
-
-+ (void)collectFailures:(NSXMLDocument *)report into:(NSXMLDocument *)failureReport {
-    NSArray *failures = [report nodesForXPath:@"//failure | //error" error:nil];
-    for (NSXMLElement *failure in failures) {
-        NSXMLElement *testSuite = (NSXMLElement *)[[failure parent] parent];
-        NSString *testSuiteName = [[testSuite attributeForName:@"name"] stringValue];
-        NSXMLElement *targetTestSuite = [[failureReport nodesForXPath:[NSString stringWithFormat:@"//testsuite[@name=%@']", testSuiteName] error:nil] firstObject];
-        if (!targetTestSuite) {
-            NSXMLElement *parent = (NSXMLElement *)[testSuite parent];
-            NSString *parentName = [[parent attributeForName:@"name"] stringValue];
-            NSXMLElement *targetParent = [[failureReport nodesForXPath:[NSString stringWithFormat:@"//testsuite[@name='%@']", parentName]
-                                                                 error:nil] firstObject];
-            if (!targetParent) {
-                targetParent = [parent copy];
-                [targetParent setChildren:nil];
-                [[failureReport rootElement] addChild:targetParent];
-            }
-            targetTestSuite = [testSuite copy];
-            [targetTestSuite setChildren:nil];
-            [targetParent addChild:targetTestSuite];
-        }
-        [targetTestSuite addChild:[[failure parent] copy]];
-    }
-    // update counts
-    for (NSXMLElement *testSuite in [failureReport nodesForXPath:@"/testsuites/testsuite/testsuite" error:nil]) {
-        [self updateTestCaseCounts:testSuite];
-    }
-    for (NSXMLElement *testSuite in [failureReport nodesForXPath:@"/testsuites/testsuite" error:nil]) {
-        [self updateTestSuiteCounts:testSuite];
-    }
-    [self updateTestSuiteCounts:[[failureReport objectsForXQuery:@"//testsuites" error:nil] firstObject]];
 }
 
 + (void)updateTestCaseCounts:(NSXMLElement *)testSuite {
@@ -315,12 +271,6 @@
     [[testSuites attributeForName:@"failures"] setStringValue:[NSString stringWithFormat:@"%lu", failureCount]];
     [[testSuites attributeForName:@"errors"] setStringValue:[NSString stringWithFormat:@"%lu", errorCount]];
     [[testSuites attributeForName:@"time"] setStringValue:[NSString stringWithFormat:@"%f", totalTime]];
-}
-
-+ (void)clearRetries:(NSXMLDocument *)report {
-    for (NSXMLElement *testCase in [report nodesForXPath:@"//testcase" error:nil]) {
-        [testCase addAttribute:[NSXMLNode attributeWithName:@"retries" stringValue:@"0"]];
-    }
 }
 
 @end
