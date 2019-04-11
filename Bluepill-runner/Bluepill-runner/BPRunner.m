@@ -205,7 +205,7 @@ maxprocs(void)
     }
     if (bundles.count < numSims) {
         [BPUtils printInfo:WARNING
-                withString:@"Lowering number of simulators from %lu to %lu because there aren't enough tests.",
+                withString:@"Lowering number of parallel simulators from %lu to %lu because there aren't enough tests.",
                             numSims, bundles.count];
     }
     if (self.config.cloneSimulator) {
@@ -214,7 +214,7 @@ maxprocs(void)
             return 1;
         }
     }
-    [BPUtils printInfo:INFO withString:@"Running with %lu simulator%s.",
+    [BPUtils printInfo:INFO withString:@"Running with %lu parallel simulator%s.",
      (unsigned long)numSims, (numSims > 1) ? "s" : ""];
     NSArray *copyBundles = [NSMutableArray arrayWithArray:bundles];
     for (int i = 1; i < [self.config.repeatTestsCount integerValue]; i++) {
@@ -296,7 +296,7 @@ maxprocs(void)
             @synchronized (self) {
                 listString = [taskList componentsJoinedByString:@", "];
             }
-            [BPUtils printInfo:INFO withString:@"%lu Simulator%s still running. [%@]",
+            [BPUtils printInfo:INFO withString:@"%lu BP%s still running. [%@]",
              launchedTasks, launchedTasks == 1 ? "" : "s", listString];
             [BPUtils printInfo:INFO withString:@"Using %d of %d processes.", numprocs(), maxProcs];
             if (numprocs() > maxProcs * BP_MAX_PROCESSES_PERCENT) {
@@ -318,7 +318,7 @@ maxprocs(void)
         //fire & forget, DON'T WAIT
     }
 
-    [BPUtils printInfo:INFO withString:@"All simulators have finished."];
+    [BPUtils printInfo:INFO withString:@"All BPs have finished."];
     if (self.config.cloneSimulator) {
         [BPUtils printInfo:INFO withString:@"Deleting template simulator.."];
         [bpSimulator deleteTemplateSimulator];
