@@ -169,6 +169,7 @@
 }
 
 - (void)onTestSuiteBegan:(NSString *)testSuiteName onDate:(NSDate *)startDate isRoot:(BOOL)isRoot {
+    [BPUtils printInfo:INFO withString:@"Starting TestSuite %@", testSuiteName];
     [[BPStats sharedStats] startTimer:[NSString stringWithFormat:TEST_SUITE_FORMAT, isRoot ? 1 : [BPStats sharedStats].attemptNumber, testSuiteName]];
 }
 
