@@ -81,27 +81,30 @@
 
 - (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *__autoreleasing *)errPtr {
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:errPtr];
-    if (!sc) {
-        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimServiceContext failed: %@", [self getErrorDescription:errPtr]]];
+    if (!sc && *errPtr) {
+        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [*errPtr localizedDescription]];
         return nil;
     }
     SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:errPtr];
-    if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimDeviceSet failed: %@", [self getErrorDescription:errPtr]]];
+    if (!deviceSet && *errPtr) {
+        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [*errPtr localizedDescription]];
         return nil;
     }
     SimDevice *simDevice = [deviceSet createDeviceWithType:self.config.simDeviceType
                                                    runtime:self.config.simRuntime
-                                                      name:@"BP_Simultator_Template"
+                                                      name:[NSString stringWithFormat:@"BP-Template-%u", getpid()]
                                                      error:errPtr];
+    if (!self.simDeviceTemplates) {
+        self.simDeviceTemplates = [[NSMutableArray alloc] init];
+    }
     [self.simDeviceTemplates addObject:simDevice];
     if (!simDevice && *errPtr) {
-        [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", [self getErrorDescription:errPtr]];
+        [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", [*errPtr localizedDescription]];
         return nil;
     }
     [simDevice bootWithOptions:nil error:errPtr];
-    if (errPtr) {
-        [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", [self getErrorDescription:errPtr]];
+    if (*errPtr) {
+        [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", [*errPtr localizedDescription]];
         return nil;
     }
     // Add photos and videos to the simulator.
@@ -109,15 +112,16 @@
     [self addVideosToSimulator];
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:testHost];
     if (!hostBundleId) {
+        [BPUtils printInfo:ERROR withString:@"Could not find test bundle id for %@", testHost];
         return nil;
     }
     // Install the host application
-    NSError *__autoreleasing *installError = nil;
+    NSError *installError = nil;
     bool installed = [simDevice installApplication:[NSURL fileURLWithPath:testHost]
                                        withOptions:@{kCFBundleIdentifier: hostBundleId}
-                                             error:installError];
+                                             error:&installError];
     if (!installed) {
-        [BPUtils printInfo:ERROR withString:@"Install application failed with error: %@", *installError];
+        [BPUtils printInfo:ERROR withString:@"Install application failed with error: %@", [installError localizedDescription]];
         [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
             if (error) {
                 [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
@@ -126,8 +130,8 @@
         return nil;
     } else {
         [simDevice shutdownWithError:errPtr];
-        if(errPtr) {
-            [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [self getErrorDescription:errPtr]];
+        if(*errPtr) {
+            [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [*errPtr localizedDescription]];
             [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
                 if (error) {
                     [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
@@ -372,7 +376,7 @@
         NSURL *videoUrl = [NSURL fileURLWithPath:urlString];
         NSError *error;
         BOOL uploadResult = [self.device addVideo:videoUrl error:&error];
-        if (!uploadResult) {
+        if (!uploadResult && error) {
             [BPUtils printInfo:ERROR withString:@"Failed to upload video at path: %@, error message: %@", urlString, [error description]];
         }
     }
@@ -383,7 +387,7 @@
         NSURL *photoUrl = [NSURL fileURLWithPath:urlString];
         NSError *error;
         BOOL uploadResult = [self.device addPhoto:photoUrl error:&error];
-        if (!uploadResult) {
+        if (!uploadResult && error) {
             [BPUtils printInfo:ERROR withString:@"Failed to upload photo at path: %@, error message: %@", urlString, [error description]];
         }
     }
