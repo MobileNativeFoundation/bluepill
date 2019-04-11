@@ -74,7 +74,7 @@ bluepill_build()
 
   test $? == 0 || {
           echo Build failed
-          xcodebuild -list Bluepill.xcworkspace
+          xcodebuild -list -workspace Bluepill.xcworkspace
           cat result.txt
           exit 1
   }
