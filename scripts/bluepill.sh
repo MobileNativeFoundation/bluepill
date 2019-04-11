@@ -68,7 +68,7 @@ bluepill_build()
   set -o pipefail
   xcodebuild \
     -workspace Bluepill.xcworkspace \
-    -scheme bluepill \
+    -scheme Bluepill \
     -configuration Release \
     -derivedDataPath "build/" | tee result.txt | $XCPRETTY
 
