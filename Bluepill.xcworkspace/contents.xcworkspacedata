@@ -5,10 +5,10 @@
       location = "group:BPSampleApp/BPSampleApp.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:/Users/obonilla/o/bluepill/Bluepill-runner/bluepill.xcodeproj">
+      location = "group:Bluepill-runner/bluepill.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:/Users/obonilla/o/bluepill/Bluepill-cli/bp.xcodeproj">
+      location = "group:Bluepill-cli/bp.xcodeproj">
    </FileRef>
    <Group
       location = "group:Configurations"
