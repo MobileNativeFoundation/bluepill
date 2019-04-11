@@ -11,7 +11,7 @@
 #import "BPTreeObjects.h"
 #import "BPReporters.h"
 #import "BPExecutionPhaseProtocol.h"
-#import "BPWriter.h"
+#import "BluepillLib/BPWriter.h"
 #import "BPUtils.h"
 #import "BPTreeAssembler.h"
 #import <time.h>
@@ -505,7 +505,6 @@ static const NSString * const kPassed = @"passed";
 }
 
 - (void)completed {
-    [BPUtils printInfo:INFO withString:@"BPTree parser completed"];
     if (self.aborted) {
         [self closeOffAllSuites];
     }
@@ -513,7 +512,6 @@ static const NSString * const kPassed = @"passed";
 }
 
 - (void)cleanup {
-    [BPUtils printInfo:INFO withString:@"BPTree parser reset BPTAssembler"];
     [[BPTreeAssembler sharedInstance] reset];
 }
 

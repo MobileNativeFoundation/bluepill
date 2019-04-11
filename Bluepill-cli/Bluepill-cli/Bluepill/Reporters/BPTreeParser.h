@@ -8,7 +8,6 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import "BPExecutionContext.h"
 
 // Test Suite 'mntf_UISwiftTests' started at 2016-10-07 12:52:05.091
 // Test Suite 'Debug-iphonesimulator' passed at 2016-10-07 12:52:05.091.
