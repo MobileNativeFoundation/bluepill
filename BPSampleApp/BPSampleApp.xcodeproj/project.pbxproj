@@ -412,7 +412,7 @@
 					BA9C2DD11DD7F182007CB967 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 57Y47U492U;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 						TestTargetID = BAB24F2D1DB5D45E00867756;
 					};
@@ -429,7 +429,7 @@
 					BAB24F461DB5D45E00867756 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 57Y47U492U;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 						TestTargetID = BAB24F2D1DB5D45E00867756;
 					};
@@ -680,7 +680,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppFatalErrorTests/BPSampleAppFatalErrorTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
 			};
 			name = Debug;
@@ -696,7 +697,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppFatalErrorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppFatalErrorTests/BPSampleAppFatalErrorTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
 			};
 			name = Release;
@@ -874,7 +876,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
 			};
 			name = Debug;
@@ -890,7 +893,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BPSampleApp.app/BPSampleApp";
 			};
 			name = Release;

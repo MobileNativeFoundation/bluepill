@@ -95,16 +95,10 @@ struct BPOptions {
         "Run test with clone-simulator"},
     {'H', "headless", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
         "Run in headless mode (no GUI)."},
-    {'J', "json-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "jsonOutput",
-        "Print test timing information in JSON format."},
     {'h', "help", BP_MASTER | BP_SLAVE, NO, NO, no_argument, NULL, BP_VALUE, NULL,
         "This help."},
-    {'p', "plain-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "plainOutput",
-        "Print results in plain text."},
     {'q', "quiet", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "quiet",
         "Turn off all output except fatal errors."},
-    {'j', "junit-output", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "junitOutput",
-        "Print results in JUnit format."},
     {'F', "only-retry-failed", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "onlyRetryFailed",
         "If `failure-`tolerance` is > 0, only retry tests that failed."},
     {'l', "list-tests", BP_MASTER, NO, NO, no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
@@ -688,10 +682,6 @@ static NSUUID *sessionID;
                 return NO;
             }
         }
-        // If we have an output directory, turn on all the bells and whistles
-        self.plainOutput = TRUE;
-        self.junitOutput = TRUE;
-        self.jsonOutput = TRUE;
     }
 
     if (self.screenshotsDirectory) {
@@ -814,8 +804,10 @@ static NSUUID *sessionID;
     }
 
     self.simRuntime = nil;
+    NSMutableArray *allRuntimes = [[NSMutableArray alloc] init];
 
     for (SimRuntime *runtime in [sc supportedRuntimes]) {
+        [allRuntimes addObject:[runtime name]];
         if ([[runtime name] isEqualToString:self.runtime]) {
             self.simRuntime = runtime;
             break;
@@ -824,8 +816,8 @@ static NSUUID *sessionID;
 
     if (!self.simRuntime) {
         BP_SET_ERROR(errPtr, @"%@ is not a valid runtime.\n"
-                     "Use `xcrun simctl list runtimes` for a list of valid runtimes.",
-                     self.runtime);
+                     "These are the supported runtimes:\n%@\n",
+                     self.runtime, [allRuntimes componentsJoinedByString:@"\n"]);
         return NO;
     }
     return TRUE;

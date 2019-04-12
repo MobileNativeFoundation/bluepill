@@ -55,7 +55,6 @@
 
 - (void)handleChunkData:(nonnull NSData *)chunk;
 - (void)completed;
-- (void)completedFinalRun;
 - (void)cleanup;
 - (nullable NSString *)generateLog:(nonnull id<BPReporter>)reporter;
 - (void)setParserStateCompleted;

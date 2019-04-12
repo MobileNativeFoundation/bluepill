@@ -1,4 +1,59 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="Selected tests" tests="148" failures="2" errors="1" time="1029.446000">
+<testsuites name="All tests" tests="21" failures="1" errors="2" time="981.715212">
+    <testsuite tests="21" failures="1" errors="3" time="981.715212" timestamp="2019-04-02T13:07:46GMT-07:00" name="VoyagerTests.xctest">
+        <testsuite tests="14" failures="0" errors="0" time="0.168000" timestamp="2019-04-02T13:07:46GMT-07:00" name="ABIActionsTests">
+            <testcase classname="ABIActionsTests" name="testBatchInviteGuest" time="0.039000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testBatchInviteMember" time="0.010000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testBuildInvitationFromGuestEmail" time="0.007000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testBuildInvitationFromGuestSMS" time="0.007000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testBuildInvitationFromMemberProfileId" time="0.007000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testConvertAddress" time="0.008000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testConvertContact" time="0.008000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testConvertEmail" time="0.007000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testConvertIM" time="0.007000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testConvertPhoneNumber" time="0.006000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testInviteGuest" time="0.012000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testInviteMember" time="0.010000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testUploadContact" time="0.011000">
+            </testcase>
+            <testcase classname="ABIActionsTests" name="testUploadNewContact" time="0.012000">
+            </testcase>
+        </testsuite>
+        <testsuite tests="3" failures="0" errors="2" time="4.597000" timestamp="2019-04-02T13:09:51GMT-07:00" name="LINDebounceTests">
+            <testcase classname="LINDebounceTests" name="testMultipleTasks" time="3.592000">
+                <error type="Error" message="Some error message">
+                </error>
+            </testcase>
+            <testcase classname="LINDebounceTests" name="testSingleTask" time="0.001000">
+            </testcase>
+            <testcase classname="LINDebounceTests" name="testTwoTasks" time="1.003000">
+                <error type="Error" message="Some error message.">
+                </error>
+            </testcase>
+        </testsuite>
+        <testsuite tests="4" failures="1" errors="0" time="7.275933" timestamp="2019-04-02T13:15:51GMT-07:00" name="ProfileActionsTest">
+            <testcase classname="ProfileActionsTest" name="testAcceptMemberInvite" time="1.006000">
+            </testcase>
+            <testcase classname="ProfileActionsTest" name="testDisconnectFromMember" time="0.197000">
+            </testcase>
+            <testcase classname="ProfileActionsTest" name="testFollowMember" time="0.203000">
+            </testcase>
+            <testcase classname="ProfileActionsTest" name="testInviteMemberToConnect" time="0.126051">
+                <failure type="Failure" message="App Crashed">
+                    Unknown File:0
+                </failure>
+            </testcase>
+        </testsuite>
+    </testsuite>
 </testsuites>
-

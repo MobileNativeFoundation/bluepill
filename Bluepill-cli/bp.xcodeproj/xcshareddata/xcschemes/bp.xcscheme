@@ -17,7 +17,7 @@
                BlueprintIdentifier = "7A7901811D5CB679004D4325"
                BuildableName = "bp"
                BlueprintName = "bp"
-               ReferencedContainer = "container:Bluepill-cli.xcodeproj">
+               ReferencedContainer = "container:bp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "BAB24F671DB5DB2300867756"
                BuildableName = "BPInstanceTests.xctest"
                BlueprintName = "BPInstanceTests"
-               ReferencedContainer = "container:Bluepill-cli.xcodeproj">
+               ReferencedContainer = "container:bp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -45,7 +45,7 @@
             BlueprintIdentifier = "7A7901811D5CB679004D4325"
             BuildableName = "bp"
             BlueprintName = "bp"
-            ReferencedContainer = "container:Bluepill-cli.xcodeproj">
+            ReferencedContainer = "container:bp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -68,7 +68,7 @@
             BlueprintIdentifier = "7A7901811D5CB679004D4325"
             BuildableName = "bp"
             BlueprintName = "bp"
-            ReferencedContainer = "container:Bluepill-cli.xcodeproj">
+            ReferencedContainer = "container:bp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -94,7 +94,7 @@
             BlueprintIdentifier = "7A7901811D5CB679004D4325"
             BuildableName = "bp"
             BlueprintName = "bp"
-            ReferencedContainer = "container:Bluepill-cli.xcodeproj">
+            ReferencedContainer = "container:bp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
