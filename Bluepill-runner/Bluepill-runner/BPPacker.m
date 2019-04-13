@@ -16,7 +16,7 @@
 
 + (NSMutableArray<BPXCTestFile *> *)packTests:(NSArray<BPXCTestFile *> *)xcTestFiles
                 configuration:(BPConfiguration *)config
-                     andError:(NSError **)error {
+                     andError:(NSError **)errPtr {
 
     NSArray *testCasesToRun = config.testCasesToRun;
     NSArray *noSplit = config.noSplit;
@@ -27,7 +27,7 @@
         return numTests2 - numTests1;
     }];
     if (sortedXCTestFiles.count == 0) {
-        BP_SET_ERROR(error, @"Found no XCTest files.\n"
+        BP_SET_ERROR(errPtr, @"Found no XCTest files.\n"
                      "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode.");
         return NULL;
     }

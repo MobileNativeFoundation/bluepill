@@ -54,9 +54,6 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSNumber *stuckTimeout;
 @property (nonatomic, strong) NSNumber *testCaseTimeout;
 @property (nonatomic, strong) NSArray *noSplit;
-@property (nonatomic) BOOL junitOutput;
-@property (nonatomic) BOOL plainOutput;
-@property (nonatomic) BOOL jsonOutput;
 @property (nonatomic) BOOL saveDiagnosticsOnError;
 @property (nonatomic, strong) NSNumber *failureTolerance;
 @property (nonatomic) BOOL onlyRetryFailed;
@@ -82,6 +79,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSNumber *createTimeout;
 @property (nonatomic, strong) NSNumber *launchTimeout;
 @property (nonatomic, strong) NSNumber *deleteTimeout;
+@property (nonatomic) BOOL keepIndividualTestReports;
 
 @property (nonatomic, strong) NSArray<NSString *> *commandLineArguments; // command line arguments for the app
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environmentVariables;
@@ -134,22 +132,22 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 /**
  Handle the deferred processing of options. See `saveOpt`.
 
- @param err The error message in case processing the options fails.
+ @param errPtr The error message in case processing the options fails.
 
  @return True if we managed to process the options successfully. False otherwise.
  */
-- (BOOL)processOptionsWithError:(NSError **)err;
+- (BOOL)processOptionsWithError:(NSError **)errPtr;
 
 /**
  Validate that the current configuration would work with Bluepill.
  
  This tests simple things like paths are valid, devices/runtimes exist, etc.
 
- @param err The error message in case of failure.
+ @param errPtr The error message in case of failure.
 
  @return True if the configuration is valid. False otherwise.
  */
-- (BOOL)validateConfigWithError:(NSError **)err;
+- (BOOL)validateConfigWithError:(NSError **)errPtr;
 
 /**
  Create a new configuration object with default values.
@@ -168,11 +166,11 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 
  @param file The file to load (nil will init a config object with defaults)
  @param program Which program is calling this? Bluepill or Bp
- @param err  The error in case loading the config file fails.
+ @param errPtr  The error in case loading the config file fails.
 
  @return An instance of `BPConfiguration` on success. Nil on failure.
  */
-- (instancetype)initWithConfigFile:(NSString *)file forProgram:(BPProgram)program withError:(NSError **)err;
+- (instancetype)initWithConfigFile:(NSString *)file forProgram:(BPProgram)program withError:(NSError **)errPtr;
 
 /**
  Save a command line option for later processing.

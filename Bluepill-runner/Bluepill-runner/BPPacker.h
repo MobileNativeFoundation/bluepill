@@ -21,6 +21,6 @@
  */
 + (NSMutableArray<BPXCTestFile *> *)packTests:(NSArray *)xcTestFiles
                 configuration:(BPConfiguration *)config
-                     andError:(NSError **)error;
+                     andError:(NSError **)errPtr;
 
 @end

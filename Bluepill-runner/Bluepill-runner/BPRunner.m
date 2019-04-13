@@ -10,9 +10,13 @@
 #import "BPRunner.h"
 #import "BPPacker.h"
 #import <BluepillLib/BPUtils.h>
-#import "BPReportCollector.h"
 #import "BPVersion.h"
 #include <sys/sysctl.h>
+#include <sys/types.h>
+#include <mach/mach.h>
+#include <mach/processor_info.h>
+#include <mach/mach_host.h>
+#include <signal.h>
 #include <pwd.h>
 #import <AppKit/AppKit.h>
 #import <BluepillLib/BPSimulator.h>
@@ -22,6 +26,7 @@
 #import <BluepillLib/SimDeviceSet.h>
 #import <BluepillLib/SimServiceContext.h>
 #import <BluepillLib/SimulatorHelper.h>
+#import <BluepillLib/BPStats.h>
 
 static int volatile interrupted = 0;
 
@@ -34,7 +39,7 @@ numprocs(void)
 {
     int mib[] = {CTL_KERN, KERN_PROC, KERN_PROC_ALL, 0};
     size_t len = 0;
-    
+
     if (sysctl(mib, 4, NULL, &len, NULL, 0)) {
         perror("Failed to call sysctl");
         return 0;
@@ -115,7 +120,7 @@ maxprocs(void)
     }
     cfg.outputDirectory = [self.config.outputDirectory
                            stringByAppendingPathComponent:
-                           [NSString stringWithFormat:@"%lu", (unsigned long)number]];
+                           [NSString stringWithFormat:@"BP-%lu", (unsigned long)number]];
     [cfg printConfig];
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:self.bpExecutable];
@@ -127,7 +132,7 @@ maxprocs(void)
     [task setTerminationHandler:^(NSTask *task) {
         [[NSFileManager defaultManager] removeItemAtPath:cfg.configOutputFile
                                                    error:nil];
-        [BPUtils printInfo:INFO withString:@"Simulator %lu (PID %u) has finished with exit code %d.",
+        [BPUtils printInfo:INFO withString:@"BP-%lu (PID %u) has finished with exit code %d.",
                                             number, [task processIdentifier], [task terminationStatus]];
         block(task);
     }];
@@ -142,19 +147,19 @@ maxprocs(void)
     [env addEntriesFromDictionary:[[NSProcessInfo processInfo] environment]];
     [env setObject:[NSString stringWithFormat:@"%lu", number] forKey:@"_BP_NUM"];
     [task setEnvironment:env];
-    
+
     [task setTerminationHandler:^(NSTask * _Nonnull task) {
-        [BPUtils printInfo:INFO withString:@"Simulator %lu (PID %u) to delete device %@ has finished with exit code %d.",
+        [BPUtils printInfo:INFO withString:@"BP-%lu (PID %u) to delete device %@ has finished with exit code %d.",
          number, [task processIdentifier], deviceID, [task terminationStatus]];
     }];
     return task;
 }
 
-- (NSRunningApplication *)openSimulatorAppWithConfiguration:(BPConfiguration *)config andError:(NSError **)error {
+- (NSRunningApplication *)openSimulatorAppWithConfiguration:(BPConfiguration *)config andError:(NSError **)errPtr {
     NSURL *simulatorURL = [NSURL fileURLWithPath:
                            [NSString stringWithFormat:@"%@/Applications/Simulator.app/Contents/MacOS/Simulator",
                             config.xcodePath]];
-    
+
     NSWorkspaceLaunchOptions launchOptions = NSWorkspaceLaunchAsync |
                                              NSWorkspaceLaunchWithoutActivation |
                                              NSWorkspaceLaunchAndHide;
@@ -164,9 +169,9 @@ maxprocs(void)
                                  launchApplicationAtURL:simulatorURL
                                  options:launchOptions
                                  configuration:configuration
-                                 error:error];
+                                 error:errPtr];
     if (!app) {
-        [BPUtils printInfo:ERROR withString:@"Launch Simulator.app returned error: %@", [*error localizedDescription]];
+        [BPUtils printInfo:ERROR withString:@"Launch Simulator.app returned error: %@", [*errPtr localizedDescription]];
         return nil;
     }
     return app;
@@ -174,7 +179,21 @@ maxprocs(void)
 
 - (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
     // Set up our SIGINT handler
-    signal(SIGINT, onInterrupt);
+    struct sigaction new_action;
+    new_action.sa_handler = onInterrupt;
+    sigemptyset(&new_action.sa_mask);
+    new_action.sa_flags = 0;
+
+    if (sigaction(SIGINT, &new_action, NULL) != 0) {
+        [BPUtils printInfo:ERROR withString:@"Could not install SIGINT handler: %s", strerror(errno)];
+    }
+    if (sigaction(SIGTERM, &new_action, NULL) != 0) {
+        [BPUtils printInfo:ERROR withString:@"Could not install SIGTERM handler: %s", strerror(errno)];
+    }
+    if (sigaction(SIGHUP, &new_action, NULL) != 0) {
+        [BPUtils printInfo:ERROR withString:@"Could not install SIGHUP handler: %s", strerror(errno)];
+    }
+
     BPSimulator *bpSimulator = [BPSimulator simulatorWithConfiguration:self.config];
     NSUInteger numSims = [self.config.numSims intValue];
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
@@ -186,16 +205,16 @@ maxprocs(void)
     }
     if (bundles.count < numSims) {
         [BPUtils printInfo:WARNING
-                withString:@"Lowering number of simulators from %lu to %lu because there aren't enough tests.",
+                withString:@"Lowering number of parallel simulators from %lu to %lu because there aren't enough tests.",
                             numSims, bundles.count];
     }
-    if (self.config.cloneSimulator) {        
+    if (self.config.cloneSimulator) {
         self.testHostForSimUDID = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles];
         if ([self.testHostForSimUDID count] == 0) {
             return 1;
         }
     }
-    [BPUtils printInfo:INFO withString:@"Running with %lu simulator%s.",
+    [BPUtils printInfo:INFO withString:@"Running with %lu parallel simulator%s.",
      (unsigned long)numSims, (numSims > 1) ? "s" : ""];
     NSArray *copyBundles = [NSMutableArray arrayWithArray:bundles];
     for (int i = 1; i < [self.config.repeatTestsCount integerValue]; i++) {
@@ -267,7 +286,7 @@ maxprocs(void)
                 [taskList addObject:[NSString stringWithFormat:@"%lu", taskNumber]];
                 [self.nsTaskList addObject:task];
                 [bundles removeObjectAtIndex:0];
-                [BPUtils printInfo:INFO withString:@"Started Simulator %lu (PID %d).", taskNumber, [task processIdentifier]];
+                [BPUtils printInfo:INFO withString:@"Started BP-%lu (PID %d).", taskNumber, [task processIdentifier]];
                 launchedTasks++;
             }
         }
@@ -277,7 +296,7 @@ maxprocs(void)
             @synchronized (self) {
                 listString = [taskList componentsJoinedByString:@", "];
             }
-            [BPUtils printInfo:INFO withString:@"%lu Simulator%s still running. [%@]",
+            [BPUtils printInfo:INFO withString:@"%lu BP%s still running. [%@]",
              launchedTasks, launchedTasks == 1 ? "" : "s", listString];
             [BPUtils printInfo:INFO withString:@"Using %d of %d processes.", numprocs(), maxProcs];
             if (numprocs() > maxProcs * BP_MAX_PROCESSES_PERCENT) {
@@ -290,6 +309,7 @@ maxprocs(void)
             }
         }
         seconds += 1;
+        [self addCounters];
     }
 
     for (int i = 0; i < [deviceList count]; i++) {
@@ -297,8 +317,8 @@ maxprocs(void)
         [task launch];
         //fire & forget, DON'T WAIT
     }
-    
-    [BPUtils printInfo:INFO withString:@"All simulators have finished."];
+
+    [BPUtils printInfo:INFO withString:@"All BPs have finished."];
     if (self.config.cloneSimulator) {
         [BPUtils printInfo:INFO withString:@"Deleting template simulator.."];
         [bpSimulator deleteTemplateSimulator];
@@ -307,30 +327,79 @@ maxprocs(void)
     if (app) {
         [app terminate];
     }
-    if (self.config.outputDirectory) {
-        NSString *outputPath = [self.config.outputDirectory stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
-        NSFileManager *fm = [NSFileManager new];
-        if ([fm fileExistsAtPath:outputPath]) {
-            [fm removeItemAtPath:outputPath error:nil];
-        }
-        [BPReportCollector collectReportsFromPath:self.config.outputDirectory onReportCollected:^(NSURL *fileUrl) {
-//            NSError *error;
-//            NSFileManager *fm = [NSFileManager new];
-//            [fm removeItemAtURL:fileUrl error:&error];
-        } outputAtPath:outputPath];
-    }
-
     return rc;
 }
 
 - (void)interrupt {
     if (self.nsTaskList == nil) return;
-    
+
     for (int i = 0; i < [self.nsTaskList count]; i++) {
         [((NSTask *)[self.nsTaskList objectAtIndex:i]) interrupt];
     }
-    
+
     [self.nsTaskList removeAllObjects];
+}
+
+- (void)addCounters {
+    // get CPU info
+    static uint64 lastSystemTime = 0, lastUserTime = 0, lastIdleTime = 0;
+    processor_cpu_load_info_t cpuLoad;
+    mach_msg_type_number_t count;
+    natural_t procCount;
+    kern_return_t kr;
+
+    kr = host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &procCount, (processor_info_array_t *)&cpuLoad, &count);
+    if (kr == KERN_SUCCESS) {
+        uint64 totalSystemTime = 0, totalUserTime = 0, totalIdleTime = 0;
+        for (natural_t i = 0; i < procCount ; ++i) {
+            uint64_t system = 0, user = 0, idle = 0;
+            system = cpuLoad[i].cpu_ticks[CPU_STATE_SYSTEM];
+            user = cpuLoad[i].cpu_ticks[CPU_STATE_USER] + cpuLoad[i].cpu_ticks[CPU_STATE_NICE];
+            idle = cpuLoad[i].cpu_ticks[CPU_STATE_IDLE];
+            totalSystemTime += system;
+            totalUserTime += user;
+            totalIdleTime += idle;
+        }
+        if (lastSystemTime != 0) {
+            uint64_t system = totalSystemTime - lastSystemTime;
+            uint64_t user = totalUserTime - lastUserTime;
+            uint64_t idle = totalIdleTime - lastIdleTime;
+
+            uint64_t total = system + user + idle;
+
+            double onePercent = total/100.0f;
+            [[BPStats sharedStats] addCounter:@"CPU" withValues:@{
+                                                                  @"sys": @((double)system/onePercent),
+                                                                  @"usr": @((double)user/onePercent),
+                                                                  @"idle": @((double)idle/onePercent)
+                                                                  }];
+        }
+        lastSystemTime = totalSystemTime;
+        lastUserTime = totalUserTime;
+        lastIdleTime = totalIdleTime;
+    } else {
+        [BPUtils printInfo:ERROR withString:@"Failed to get CPU stats: %s", mach_error_string(kr)];
+    }
+    // get memory info
+    count = HOST_VM_INFO_COUNT;
+    vm_statistics_data_t vmstat;
+    kr = host_statistics(mach_host_self(), HOST_VM_INFO, (host_info_t)&vmstat, &count);
+    if(kr == KERN_SUCCESS) {
+        double total = vmstat.wire_count + vmstat.active_count + vmstat.inactive_count + vmstat.free_count;
+        double wired = vmstat.wire_count / total;
+        double active = vmstat.active_count / total;
+        double inactive = vmstat.inactive_count / total;
+        double free = vmstat.free_count / total;
+
+        [[BPStats sharedStats] addCounter:@"Memory" withValues:@{
+                                                                 @"wired": @(wired * 100.0f),
+                                                                 @"active": @(active * 100.0f),
+                                                                 @"inactive": @(inactive * 100.0f),
+                                                                 @"free": @(free * 100.0f)
+                                                                 }];
+    } else {
+        [BPUtils printInfo:ERROR withString:@"Failed to get Memory info: %s", mach_error_string(kr)];
+    }
 }
 
 @end

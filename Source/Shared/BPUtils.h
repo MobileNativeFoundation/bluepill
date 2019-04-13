@@ -54,19 +54,19 @@ typedef NS_ENUM(int, BPKind) {
  @param pathTemplate a path in which to create the temporary directory.
  It doesn't need to be unique since a unique identifier will be appended 
  to it.
- @param error an error if creating the temporary directory failed.
+ @param errPtr an error if creating the temporary directory failed.
  @return the path of the temporary directory created.
  */
-+ (NSString *)mkdtemp:(NSString *)pathTemplate withError:(NSError **)error;
++ (NSString *)mkdtemp:(NSString *)pathTemplate withError:(NSError **)errPtr;
 
 /*!
  @discussion returns a temporary path name via mkstemp(3)
  @param pathTemplate the path of the temporary file. It doesn't need to be
  unique since a unique identifier will be appended.
- @param error an error if creating the temporary file name failed.
+ @param errPtr an error if creating the temporary file name failed.
  @return the path of the temporary file.
  */
-+ (NSString *)mkstemp:(NSString *)pathTemplate withError:(NSError **)error;
++ (NSString *)mkstemp:(NSString *)pathTemplate withError:(NSError **)errPtr;
 
 
 /*!

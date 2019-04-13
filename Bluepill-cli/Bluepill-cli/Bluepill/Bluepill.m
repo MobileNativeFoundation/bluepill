@@ -260,7 +260,13 @@ void onInterrupt(int ignore) {
 }
 
 - (void)createSimulatorWithContext:(BPExecutionContext *)context {
-    NSString *stepName = CREATE_SIMULATOR(context.attemptNumber);
+    NSString *stepName;
+    if (self.config.cloneSimulator) {
+        stepName = CLONE_SIMULATOR(context.attemptNumber);
+    } else {
+        stepName = CREATE_SIMULATOR(context.attemptNumber);
+    }
+    NSDate *simStart = [NSDate date];
     NSString *deviceName = [NSString stringWithFormat:@"BP%d-%lu-%lu", getpid(), context.attemptNumber, self.maxCreateTries];
 
     __weak typeof(self) __self = self;
@@ -274,12 +280,13 @@ void onInterrupt(int ignore) {
     __weak typeof(handler) __handler = handler;
 
     handler.beginWith = ^{
-        [[BPStats sharedStats] endTimer:stepName];
+        [[BPStats sharedStats] endTimer:stepName withResult:__handler.error ? @"ERROR" : @"INFO"];
         [BPUtils printInfo:(__handler.error ? ERROR : INFO)
                 withString:@"Completed: %@ %@", stepName, context.runner.UDID];
     };
 
     handler.onSuccess = ^{
+        [[BPStats sharedStats] startTimer:SIMULATOR_LIFETIME(context.runner.UDID) atTime:simStart];
         if (self.config.scriptFilePath) {
             [context.runner runScriptFile:self.config.scriptFilePath];
         }
@@ -309,7 +316,7 @@ void onInterrupt(int ignore) {
 
     handler.onTimeout = ^{
         [[BPStats sharedStats] addSimulatorCreateFailure];
-        [[BPStats sharedStats] endTimer:stepName];
+        [[BPStats sharedStats] endTimer:stepName withResult:@"TIMEOUT"];
         [BPUtils printInfo:ERROR withString:@"Timeout: %@", stepName];
     };
 
@@ -326,10 +333,10 @@ void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"%@", stepName];
 
     NSError *error = nil;
-    BOOL success = [context.runner installApplicationAndReturnError:&error];
+    BOOL success = [context.runner installApplicationWithError:&error];
 
     __weak typeof(self) __self = self;
-    [[BPStats sharedStats] endTimer:stepName];
+    [[BPStats sharedStats] endTimer:stepName withResult:success? @"INFO": @"ERROR"];
     [BPUtils printInfo:(success ? INFO : ERROR) withString:@"Completed: %@", stepName];
 
     if (!success) {
@@ -363,9 +370,9 @@ void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"%@", stepName];
 
     NSError *error = nil;
-    BOOL success = [context.runner uninstallApplicationAndReturnError:&error];
+    BOOL success = [context.runner uninstallApplicationWithError:&error];
 
-    [[BPStats sharedStats] endTimer:stepName];
+    [[BPStats sharedStats] endTimer:stepName withResult:success ? @"INFO" : @"ERROR"];
     [BPUtils printInfo:(success ? INFO : ERROR) withString:@"Completed: %@", stepName];
 
     if (!success) {
@@ -381,8 +388,7 @@ void onInterrupt(int ignore) {
     NSString *stepName = LAUNCH_APPLICATION(context.attemptNumber);
     [BPUtils printInfo:INFO withString:@"%@", stepName];
 
-    [[BPStats sharedStats] startTimer:stepName];
-    [[BPStats sharedStats] startTimer:RUN_TESTS(context.attemptNumber)];
+    [[BPStats sharedStats] startTimer:LAUNCH_APPLICATION(context.attemptNumber)];
 
     __weak typeof(self) __self = self;
 
@@ -402,15 +408,14 @@ void onInterrupt(int ignore) {
     };
 
     handler.onError = ^(NSError *error) {
-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
+        [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:@"ERROR"];
         [BPUtils printInfo:ERROR withString:@"Could not launch app and tests: %@", [error localizedDescription]];
         NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
     };
 
     handler.onTimeout = ^{
         [[BPStats sharedStats] addSimulatorLaunchFailure];
-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
-        [[BPStats sharedStats] endTimer:stepName];
+        [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:@"TIMEOUT"];
         [BPUtils printInfo:FAILED withString:@"Timeout: %@", stepName];
     };
 
@@ -437,13 +442,13 @@ void onInterrupt(int ignore) {
 - (void)checkProcessWithContext:(BPExecutionContext *)context {
     BOOL isRunning = [self isProcessRunningWithContext:context];
     if (!isRunning && [context.runner isFinished]) {
-        [BPUtils printInfo:INFO withString:@"BPDEBUGGING finished"];
-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
+        [BPUtils printInfo:INFO withString:@"Finished"];
+        [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:[BPExitStatusHelper stringFromExitStatus:context.exitStatus]];
         [self runnerCompletedWithContext:context];
         return;
     }
     if (![context.runner isSimulatorRunning]) {
-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
+        [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:@"SIMULATOR CRASHED"];
         [BPUtils printInfo:ERROR withString:@"SIMULATOR CRASHED!!!"];
         context.simulatorCrashed = YES;
         [[BPStats sharedStats] addSimulatorCrash];
@@ -458,7 +463,7 @@ void onInterrupt(int ignore) {
     // However, we have a short-circuit for tests because those may not actually run any app
     if (!isRunning && context.pid > 0 && [context.runner isApplicationLaunched] && !self.config.testing_NoAppWillRun) {
         // The tests ended before they even got started or the process is gone for some other reason
-        [[BPStats sharedStats] endTimer:RUN_TESTS(context.attemptNumber)];
+        [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:@"APP CRASHED"];
         [BPUtils printInfo:ERROR withString:@"Application crashed!"];
         [[BPStats sharedStats] addApplicationCrash];
         [self deleteSimulatorWithContext:context andStatus:BPExitStatusAppCrashed];
@@ -478,58 +483,18 @@ void onInterrupt(int ignore) {
 }
 
 - (void)runnerCompletedWithContext:(BPExecutionContext *)context {
-    NSInteger maxRetries = [context.config.errorRetriesCount integerValue];
-
     [context.parser completed];
-    if ((context.attemptNumber > maxRetries) || ![self hasRemainingTestsInContext:context]) {
-        // This is the final retry, so we should force a calculation if we error'd
-        [context.parser completedFinalRun];
-    }
 
-    if (context.simulatorCrashed == NO) {
-        // Dump standard log to stdout
-        BPWriter *standardLog;
-        if (context.config.plainOutput) {
-            if (context.config.outputDirectory) {
-                NSString *fileName = [NSString stringWithFormat:@"%lu-%@-results.txt",
-                                      context.attemptNumber,
-                                      [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
-                NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
-                standardLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
-            } else {
-                standardLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationStdout];
-            }
-            [standardLog writeLine:@"%@", [context.parser generateLog:[[StandardReporter alloc] init]]];
-        }
+    if (context.simulatorCrashed == NO && context.config.outputDirectory) {
+        NSString *fileName = [NSString stringWithFormat:@"TEST-%@-%lu-results.xml",
+                              [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension],
+                              (long)context.attemptNumber];
+        NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
 
-        if (context.config.junitOutput) {
-            BPWriter *junitLog;
-            if (context.config.outputDirectory) {
-                // Only single xml entry.
-                NSString *fileName = [NSString stringWithFormat:@"TEST-%@-results.xml",
-                                      [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
-                NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
-                junitLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
-            } else {
-                junitLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationStdout];
-            }
-            [junitLog removeFile];
-            [junitLog writeLine:@"%@", [context.parser generateLog:[[JUnitReporter alloc] init]]];
-        }
-
-        if (context.config.jsonOutput) {
-            BPWriter *jsonLog;
-            if (context.config.outputDirectory) {
-                NSString *fileName = [NSString stringWithFormat:@"%lu-%@-timings.json",
-                                      context.attemptNumber,
-                                      [[context.config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
-                NSString *outputFile = [context.config.outputDirectory stringByAppendingPathComponent:fileName];
-                jsonLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
-            } else {
-                jsonLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationStdout];
-            }
-            [jsonLog writeLine:@"%@", [context.parser generateLog:[[JSONReporter alloc] init]]];
-        }
+        [BPUtils printInfo:INFO withString:@"Writing JUnit report to: %@", outputFile];
+        BPWriter *junitLog = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
+        [junitLog writeLine:@"%@", [context.parser generateLog:[[JUnitReporter alloc] init]]];
+        [context.parser cleanup];
     }
 
     if (context.simulatorCrashed) {
@@ -561,6 +526,7 @@ void onInterrupt(int ignore) {
 }
 
 - (void)deleteSimulatorWithContext:(BPExecutionContext *)context completion:(void (^)(void))completion {
+    NSString *simUDID = context.runner.UDID;
     NSString *stepName = DELETE_SIMULATOR(context.attemptNumber);
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:@"%@", stepName];
@@ -572,11 +538,12 @@ void onInterrupt(int ignore) {
     __weak typeof(handler) __handler = handler;
 
     handler.beginWith = ^{
-        [[BPStats sharedStats] endTimer:stepName];
+        [[BPStats sharedStats] endTimer:stepName withResult:__handler.error?@"ERROR":@"INFO"];
         [BPUtils printInfo:(__handler.error ? ERROR : INFO) withString:@"Completed: %@ %@", stepName, context.runner.UDID];
     };
 
     handler.onSuccess = ^{
+        [[BPStats sharedStats] endTimer:SIMULATOR_LIFETIME(simUDID) withResult:@"INFO"];
         completion();
     };
 
@@ -588,7 +555,7 @@ void onInterrupt(int ignore) {
 
     handler.onTimeout = ^{
         [[BPStats sharedStats] addSimulatorDeleteFailure];
-        [[BPStats sharedStats] endTimer:stepName];
+        [[BPStats sharedStats] endTimer:stepName withResult:@"TIMEOUT"];
         [BPUtils printInfo:ERROR
                 withString:@"Timeout: %@", stepName];
         completion();

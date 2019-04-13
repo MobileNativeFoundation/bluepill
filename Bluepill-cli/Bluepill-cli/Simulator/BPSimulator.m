@@ -25,7 +25,7 @@
 
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) NSRunningApplication *app;
-@property (nonatomic, strong) NSFileHandle *stdOutHandle;
+@property (nonatomic, strong) NSFileHandle *appOutput;
 @property (nonatomic, assign) BOOL needsRetry;
 @property (nonatomic, strong) NSMutableArray* simDeviceTemplates;
 
@@ -45,8 +45,8 @@
     NSError *error = nil;
     if (self.config.appBundlePath) {
         // This is for integration testing for bluepill and bluepill-cli when we assign self.config.appBundlePath
-        simulatorUDIDString = [self installApplicationWithHost:self.config.appBundlePath withError:error];
-        if (!simulatorUDIDString || !error) {
+        simulatorUDIDString = [self installApplicationWithHost:self.config.appBundlePath withError:&error];
+        if (!simulatorUDIDString || error) {
             [BPUtils printInfo:ERROR withString:@"Create simualtor and install application failed with error: %@", error];
             return FALSE;
         }
@@ -63,7 +63,7 @@
         }
         for (NSString *appPath in hostBundles) {
             NSError *error = nil;
-            simulatorUDIDString = [self installApplicationWithHost:appPath withError:error];
+            simulatorUDIDString = [self installApplicationWithHost:appPath withError:&error];
             if (!simulatorUDIDString || error) {
                 [BPUtils printInfo:ERROR withString:@"Created simulator template and install applicationn failed with error: %@", error];
                 return FALSE;
@@ -75,62 +75,65 @@
     return testHostForSimUDID;
 }
 
-- (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *)error {
-    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+- (NSString *)getErrorDescription:(NSError *__autoreleasing *)errPtr {
+    return errPtr != nil ? [*errPtr localizedDescription] : nil;
+}
+
+- (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *__autoreleasing *)errPtr {
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:errPtr];
     if (!sc) {
-        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimServiceContext failed: %@", [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimServiceContext failed: %@", [self getErrorDescription:errPtr]]];
         return nil;
     }
-    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:errPtr];
     if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimDeviceSet failed: %@", [error localizedDescription]]];
+        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"SimDeviceSet failed: %@", [self getErrorDescription:errPtr]]];
         return nil;
     }
     SimDevice *simDevice = [deviceSet createDeviceWithType:self.config.simDeviceType
                                                    runtime:self.config.simRuntime
                                                       name:@"BP_Simultator_Template"
-                                                     error:&error];
+                                                     error:errPtr];
     [self.simDeviceTemplates addObject:simDevice];
-    if (!simDevice || error) {
-        [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", error];
+    if (!simDevice && *errPtr) {
+        [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", [self getErrorDescription:errPtr]];
+        return nil;
+    }
+    [simDevice bootWithOptions:nil error:errPtr];
+    if (errPtr) {
+        [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", [self getErrorDescription:errPtr]];
+        return nil;
+    }
+    // Add photos and videos to the simulator.
+    [self addPhotosToSimulator];
+    [self addVideosToSimulator];
+    NSString *hostBundleId = [SimulatorHelper bundleIdForPath:testHost];
+    if (!hostBundleId) {
+        return nil;
+    }
+    // Install the host application
+    NSError *__autoreleasing *installError = nil;
+    bool installed = [simDevice installApplication:[NSURL fileURLWithPath:testHost]
+                                       withOptions:@{kCFBundleIdentifier: hostBundleId}
+                                             error:installError];
+    if (!installed) {
+        [BPUtils printInfo:ERROR withString:@"Install application failed with error: %@", *installError];
+        [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
+            if (error) {
+                [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+            }
+        }];
         return nil;
     } else {
-        [simDevice bootWithOptions:nil error:&error];
-        if (error) {
-            [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", error];
-            return nil;
-        }
-        // Add photos and videos to the simulator.
-        [self addPhotosToSimulator];
-        [self addVideosToSimulator];
-        NSString *hostBundleId = [SimulatorHelper bundleIdForPath:testHost];
-        if (!hostBundleId) {
-            return nil;
-        }
-        // Install the host application
-        NSError *__autoreleasing *installError = nil;
-        bool installed = [simDevice installApplication:[NSURL fileURLWithPath:testHost]
-                                           withOptions:@{kCFBundleIdentifier: hostBundleId}
-                                                 error:installError];
-        if (!installed) {
-            [BPUtils printInfo:ERROR withString:@"Install application failed with error: %@", *installError];
+        [simDevice shutdownWithError:errPtr];
+        if(errPtr) {
+            [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [self getErrorDescription:errPtr]];
             [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
                 if (error) {
                     [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
                 }
             }];
             return nil;
-        } else {
-            [simDevice shutdownWithError:&error];
-            if(error) {
-                [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", error];
-                [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
-                    if (error) {
-                        [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
-                    }
-                }];
-                return nil;
-            }
         }
     }
     return simDevice.UDID.UUIDString;
@@ -366,7 +369,7 @@
 
 - (void)addVideosToSimulator {
     for (NSString *urlString in self.config.videoPaths) {
-        NSURL *videoUrl = [NSURL URLWithString:urlString];
+        NSURL *videoUrl = [NSURL fileURLWithPath:urlString];
         NSError *error;
         BOOL uploadResult = [self.device addVideo:videoUrl error:&error];
         if (!uploadResult) {
@@ -377,7 +380,7 @@
 
 - (void)addPhotosToSimulator {
     for (NSString *urlString in self.config.imagePaths) {
-        NSURL *photoUrl = [NSURL URLWithString:urlString];
+        NSURL *photoUrl = [NSURL fileURLWithPath:urlString];
         NSError *error;
         BOOL uploadResult = [self.device addPhoto:photoUrl error:&error];
         if (!uploadResult) {
@@ -386,7 +389,7 @@
     }
 }
 
-- (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error {
+- (BOOL)installApplicationWithError:(NSError *__autoreleasing *)errPtr {
     // Add photos and videos to the simulator.
     [self addPhotosToSimulator];
     [self addVideosToSimulator];
@@ -410,20 +413,20 @@
     BOOL installed = [self.device
                       installApplication:[NSURL fileURLWithPath:hostBundlePath]
                       withOptions:@{kCFBundleIdentifier: hostBundleId}
-                      error:error];
+                      error:errPtr];
     if (!installed) {
         return NO;
     }
     return YES;
 }
 
-- (BOOL)uninstallApplicationAndReturnError:(NSError *__autoreleasing *)error {
+- (BOOL)uninstallApplicationWithError:(NSError *__autoreleasing *)errPtr {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
 
     // Install the host application
     return [self.device uninstallApplication:hostBundleId
                                  withOptions:@{kCFBundleIdentifier: hostBundleId}
-                                       error:error];
+                                       error:errPtr];
 }
 
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {
@@ -475,7 +478,10 @@
     NSString *simStdoutRelativePath = [simStdoutPath substringFromIndex:((NSString *)self.device.dataPath).length];
     [[NSFileManager defaultManager] removeItemAtPath:simStdoutPath error:nil];
 
-    mkfifo([simStdoutPath UTF8String], S_IWUSR | S_IRUSR | S_IRGRP);
+    // Create empty file so we can tail it and the app can write to it
+    [[NSFileManager defaultManager] createFileAtPath:simStdoutPath
+                                            contents:nil
+                                          attributes:nil];
 
     NSMutableDictionary *appLaunchEnv = [appLaunchEnvironment mutableCopy];
     [appLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStdoutKey];
@@ -483,8 +489,8 @@
     NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib", self.config.xcodePath];
     [appLaunchEnv setObject:insertLibraryPath forKey:@"DYLD_INSERT_LIBRARIES"];
     [appLaunchEnv setObject:insertLibraryPath forKey:@"XCInjectBundleInto"];
-    int fd = open([simStdoutPath UTF8String], O_RDWR);
-    self.stdOutHandle = [[NSFileHandle alloc] initWithFileDescriptor:fd];
+
+    self.appOutput = [NSFileHandle fileHandleForReadingAtPath:simStdoutPath];
 
     appLaunchEnvironment = [appLaunchEnv copy];
 
@@ -511,8 +517,6 @@
         blockSelf.monitor.appPID = pid;
         blockSelf.monitor.appState = Running;
 
-        [blockSelf.stdOutHandle writeData:[@"DEBUG_FLAG_TOBEREMOVED.\n" dataUsingEncoding:NSUTF8StringEncoding]];
-
         [BPUtils printInfo:INFO withString:@"Launch succeeded"];
 
         if (error == nil) {
@@ -524,11 +528,14 @@
             dispatch_source_set_cancel_handler(source, ^{
                 blockSelf.monitor.appState = Completed;
                 [parser.delegate setParserStateCompleted];
-                // Post a APPCLOSED signal to the fifo
-                [blockSelf.stdOutHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                // Post a APPCLOSED signal to the parser
+                NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:simStdoutPath];
+                [fileHandle seekToEndOfFile];
+                [fileHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
+                [fileHandle closeFile];
             });
             dispatch_resume(source);
-            self.stdOutHandle.readabilityHandler = ^(NSFileHandle *handle) {
+            self.appOutput.readabilityHandler = ^(NSFileHandle *handle) {
                 // This callback occurs on a background thread
                 NSData *chunk = [handle availableData];
                 [parser handleChunkData:chunk];
@@ -631,8 +638,8 @@
     return [self.device.UDID UUIDString];
 }
 
-- (NSDictionary *)appInfo:(NSString *)bundleID error:(NSError **)error {
-    NSDictionary *appInfo = [self.device propertiesOfApplication:bundleID error:error];
+- (NSDictionary *)appInfo:(NSString *)bundleID withError:(NSError **)errPtr {
+    NSDictionary *appInfo = [self.device propertiesOfApplication:bundleID error:errPtr];
     return appInfo;
 }
 

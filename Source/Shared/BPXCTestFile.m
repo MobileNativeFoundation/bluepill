@@ -19,21 +19,21 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
                             andHostAppBundle:(NSString *)testHostPath
-                                   withError:(NSError *__autoreleasing *)error {
+                                   withError:(NSError *__autoreleasing *)errPtr {
     return [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
                                      andHostAppBundle:testHostPath
                                    andUITargetAppPath:nil
-                                            withError:error];
+                                            withError:errPtr];
 }
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)path
                             andHostAppBundle:(NSString *)testHostPath
                           andUITargetAppPath:(NSString *)UITargetAppPath
-                                   withError:(NSError **)error {
+                                   withError:(NSError **)errPtr {
     BOOL isDir = NO;
 
     if (!path || ![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDir] || !isDir) {
-        BP_SET_ERROR(error, @"Could not find test bundle at path %@.", path);
+        BP_SET_ERROR(errPtr, @"Could not find test bundle at path %@.", path);
         return nil;
     }
     NSString *baseName = [[path lastPathComponent] stringByDeletingPathExtension];
@@ -47,7 +47,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     NSString *cmd = [NSString stringWithFormat:swiftNmCmdline, path];
     FILE *p = popen([cmd UTF8String], "r");
     if (!p) {
-        BP_SET_ERROR(error, @"Failed to load test %@.\nERROR: %s\n", path, strerror(errno));
+        BP_SET_ERROR(errPtr, @"Failed to load test %@.\nERROR: %s\n", path, strerror(errno));
         return nil;
     }
     char *line = NULL;
@@ -77,7 +77,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         }
     }
     if (pclose(p) == -1) {
-        BP_SET_ERROR(error, @"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno));
+        BP_SET_ERROR(errPtr, @"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno));
         return nil;
     }
 
@@ -106,22 +106,21 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 + (instancetype)BPXCTestFileFromDictionary:(NSDictionary *)dict
                               withTestRoot:(NSString *)testRoot
                               andXcodePath:(NSString *)xcodePath
-                                  andError:(NSError *__autoreleasing *)error {
+                                  andError:(NSError *__autoreleasing *)errPtr {
     NSAssert(dict, @"A dictionary should be provided");
     NSAssert(testRoot, @"A testRoot argument must be supplied");
     NSString * const TESTROOT = @"__TESTROOT__";
     NSString * const TESTHOST = @"__TESTHOST__";
     NSString * const PLATFORMS = @"__PLATFORMS__";
     NSString *testHostPath = [dict objectForKey:@"TestHostPath"];
-    NSString *testHostBundleIdentifier = [dict objectForKey:@"TestHostBundleIdentifier"];
     if (!testHostPath) {
-        BP_SET_ERROR(error, @"No 'TestHostPath' found");
+        BP_SET_ERROR(errPtr, @"No 'TestHostPath' found");
         return nil;
     }
     testHostPath = [testHostPath stringByReplacingOccurrencesOfString:TESTROOT withString:testRoot];
     NSString *testBundlePath = [dict objectForKey:@"TestBundlePath"];
     if (!testBundlePath) {
-        BP_SET_ERROR(error, @"No 'TestBundlePath' found");
+        BP_SET_ERROR(errPtr, @"No 'TestBundlePath' found");
         return nil;
     }
     /*testBundlePath is expected to be "__TESTHOST__/PlugIns/.." or "__TESTROOT__/Debug-iphonesimulator/BPSampleApp.app/PlugIns/BPSampleAppHangingTests.xctest" or contains "__PLATFORMS__"
@@ -144,7 +143,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
                                                          andHostAppBundle:testHostPath
                                                        andUITargetAppPath:UITargetAppPath
-                                                                withError:error];
+                                                                withError:errPtr];
     if (!xcTestFile) {
         return nil;
     }

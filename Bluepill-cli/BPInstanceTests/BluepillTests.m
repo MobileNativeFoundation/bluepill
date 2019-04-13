@@ -46,11 +46,8 @@
     self.config.errorRetriesCount = @0;
     self.config.testCaseTimeout = @40;
     self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
-    self.config.plainOutput = NO;
-    self.config.jsonOutput = NO;
     self.config.headlessMode = YES;
     self.config.videoPaths = @[[BPTestHelper sampleVideoPath]];
-    self.config.junitOutput = NO;
     self.config.testRunnerAppPath = nil;
     self.config.testing_CrashAppOnLaunch = NO;
     self.config.cloneSimulator = NO;
@@ -136,8 +133,6 @@
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppPassingTests", tempDir] withError:nil];
     // NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
-    self.config.junitOutput = NO;
-    self.config.plainOutput = YES;
     self.config.errorRetriesCount = @2;
     self.config.testCasesToRun = @[
                                    @"BPSampleAppTests/testCase173",
@@ -147,18 +142,16 @@
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
 
-    NSString *textReportPath = [outputDir stringByAppendingPathComponent:@"1-BPSampleAppTests-results.txt"];
-    NSString *contents = [NSString stringWithContentsOfFile:textReportPath encoding:NSUTF8StringEncoding error:nil];
-    // We'll go line by line asserting we didn't run any extra testcases.
-    NSArray *lines = [contents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    int found = 0;
-    for (NSString *line in lines) {
-        if ([line rangeOfString:@"testCase"].location == NSNotFound) continue;
-        XCTAssert([line containsString:@"testCase173"] || [line containsString:@"testCase199"]);
-        if ([line containsString:@"testCase173"]) found++;
-        if ([line containsString:@"testCase199"]) found++;
+    NSString *reportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppTests-1-results.xml"];
+    NSError *error;
+    NSXMLDocument *doc = [[NSXMLDocument alloc] initWithContentsOfURL:[NSURL fileURLWithPath:reportPath] options:0 error:&error];
+    XCTAssert(doc, @"Could not find report in '%@': %@", self.config.outputDirectory, [error localizedDescription]);
+    for (NSString *testCase in self.config.testCasesToRun) {
+        NSArray *parts = [testCase componentsSeparatedByString:@"/"];
+        XCTAssert(parts[1]);
+        NSXMLElement *element = [[doc nodesForXPath:[NSString stringWithFormat:@"//testcase[@name='%@']", parts[1]] error:nil] firstObject];
+        XCTAssert(element, @"%@ not found in report", parts[1]);
     }
-    XCTAssert(found == 2); // We must have found both testcases
 }
 
 - (void)testRunningAndIgnoringCertainTestCases {
@@ -168,30 +161,27 @@
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppPassingTests", tempDir] withError:nil];
     // NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
-    self.config.junitOutput = NO;
-    self.config.plainOutput = YES;
     self.config.errorRetriesCount = @2;
     self.config.testCasesToRun = @[
                                    @"BPSampleAppTests/testCase173",
                                    @"BPSampleAppTests/testCase199"
                                    ];
-    
+
     self.config.testCasesToSkip = @[@"BPSampleAppTests/testCase173"];
-    
+
     BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
-    
-    NSString *textReportPath = [outputDir stringByAppendingPathComponent:@"1-BPSampleAppTests-results.txt"];
-    NSString *contents = [NSString stringWithContentsOfFile:textReportPath encoding:NSUTF8StringEncoding error:nil];
-    // We'll go line by line asserting we didn't run any extra testcases.
-    NSArray *lines = [contents componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-    int found = 0;
-    for (NSString *line in lines) {
-        if ([line rangeOfString:@"testCase"].location == NSNotFound) continue;
-        XCTAssert([line containsString:@"testCase199"]);
-        if ([line containsString:@"testCase199"]) found++;
-    }
-    XCTAssert(found == 1); // We must have found both testcases
+
+    NSString *reportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppTests-1-results.xml"];
+    NSError *error;
+    NSXMLDocument *doc = [[NSXMLDocument alloc] initWithContentsOfURL:[NSURL fileURLWithPath:reportPath] options:0 error:&error];
+    XCTAssert(doc, @"Could not find report in '%@': %@", self.config.outputDirectory, [error localizedDescription]);
+    NSString *name = @"testCase199";
+    NSXMLElement *element = [[doc nodesForXPath:[NSString stringWithFormat:@"//testcase[@name='%@']", name] error:nil] firstObject];
+    XCTAssert(element, @"%@ not found in report", name);
+    name = @"testCase173";
+    element = [[doc nodesForXPath:[NSString stringWithFormat:@"//testcase[@name='%@']", name] error:nil] firstObject];
+    XCTAssert(element == nil, @"%@ found in report, should be skipped", name);
 }
 
 - (void)testReportWithAppCrashingTestsSet {
@@ -203,13 +193,16 @@
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppCrashingTestsSetTempDir", tempDir] withError:&error];
     // NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
-    self.config.junitOutput = YES;
     self.config.errorRetriesCount = @1;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-results.xml"];
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-1-results.xml"];
     NSLog(@"JUnit-REPORT: %@", junitReportPath);
-    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests.xml"];
+    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests_attempt_1.xml"];
+    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
+
+    junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-2-results.xml"];
+    expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests_attempt_2.xml"];
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
@@ -221,17 +214,20 @@
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppCrashingTestsSetTempDir", tempDir] withError:&error];
     // NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
-    self.config.junitOutput = YES;
     self.config.errorRetriesCount = @1;
     self.config.failureTolerance = @1;
     self.config.onlyRetryFailed = YES;
-
+    
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
-
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-results.xml"];
+    
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-1-results.xml"];
     NSLog(@"JUnit file: %@", junitReportPath);
-    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests_with_retry.xml"];
+    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests_with_retry_attempt_1.xml"];
+    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
+
+    junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppCrashingTests-2-results.xml"];
+    expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"crash_tests_with_retry_attempt_2.xml"];
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
@@ -243,23 +239,25 @@
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppFatalErrorTestsSetTempDir", tempDir] withError:&error];
     NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
-    self.config.junitOutput = YES;
     self.config.errorRetriesCount = @2;
     self.config.testCaseTimeout = @60; // make sure we don't time-out
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
 
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppFatalErrorTests-results.xml"];
-    NSLog(@"JUnit file: %@", junitReportPath);
-    NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"fatal_tests.xml"];
-    [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
+    for (NSNumber *attempt in @[@1, @2, @3]) {
+        NSString *fileName = [NSString stringWithFormat:@"TEST-BPSampleAppFatalErrorTests-%@-results.xml", attempt];
+        NSString *junitReportPath = [outputDir stringByAppendingPathComponent:fileName];
+        NSLog(@"JUnit file: %@", junitReportPath);
+        fileName = [NSString stringWithFormat:@"fatal_tests_attempt_%@.xml", attempt];
+        NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:fileName];
+        [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
+    }
 }
 
 - (void)testReportWithAppHangingTestsSet {
     // Testcase timeout should be set larger than the stuck timeout
     self.config.stuckTimeout = @40;
-    self.config.plainOutput = YES;
     self.config.errorRetriesCount = @0;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
@@ -268,12 +266,11 @@
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppHangingTestsSetTempDir", tempDir] withError:&error];
     NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
-    self.config.junitOutput = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusTestTimeout);
 
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppHangingTests-results.xml"];
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppHangingTests-1-results.xml"];
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"hanging_tests.xml"];
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
@@ -284,7 +281,6 @@
  */
 - (void)testReportWithAppHangingTestsShouldReturnFailure {
     self.config.stuckTimeout = @6;
-    self.config.plainOutput = YES;
     self.config.failureTolerance = @0;
     self.config.errorRetriesCount = @4;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
@@ -294,12 +290,11 @@
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppHangingTestsSetTempDir", tempDir] withError:&error];
     // NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
-    self.config.junitOutput = YES;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusTestTimeout);
 
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppHangingTests-results.xml"];
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppHangingTests-1-results.xml"];
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"hanging_tests.xml"];
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
@@ -310,8 +305,8 @@
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
     // NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
-    self.config.junitOutput = YES;
     self.config.saveDiagnosticsOnError = YES;
+    self.config.testCasesToSkip = @[@"BPAppNegativeTests/testBPDoesNotHangWithBigOutput"];
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     // Make sure all tests started on the first run
     NSString *simulator1Path = [outputDir stringByAppendingPathComponent:@"1-simulator.log"];
@@ -325,7 +320,7 @@
     XCTAssert([log2 rangeOfString:@"Test Case '-[BPAppNegativeTests testAssertFailure]' started."].location != NSNotFound);
     XCTAssert([log2 rangeOfString:@"Test Case '-[BPAppNegativeTests testAssertTrue]' started."].location != NSNotFound);
     XCTAssert([log2 rangeOfString:@"Test Case '-[BPAppNegativeTests testRaiseException]' started."].location != NSNotFound);
-    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPAppNegativeTests-results.xml"];
+    NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPAppNegativeTests-1-results.xml"];
     NSLog(@"Junit report: %@", junitReportPath);
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"BPAppNegativeTests-results.xml"];
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
@@ -347,7 +342,6 @@
     // NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
     self.config.errorRetriesCount = @100;
-    self.config.junitOutput = YES;
     self.config.failureTolerance = @1;
     self.config.onlyRetryFailed = YES;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
@@ -374,6 +368,22 @@
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);
+}
+
+- (void)testRunWithFailingTestsSet {
+    NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    self.config.failureTolerance = @0;
+    self.config.testCaseTimeout = @10;
+    self.config.testCasesToRun = @[@"BPAppNegativeTests/testBPDoesNotHangWithBigOutput"];
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppFailingTestsSetTempDir", tempDir] withError:&error];
+    // NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssert(exitCode != BPExitStatusTestTimeout);
+    XCTAssert(exitCode == BPExitStatusTestsFailed);
 }
 
 //simulator shouldn't be kept in this case
@@ -442,7 +452,6 @@
     self.config.testRunnerAppPath = testRunnerPath;
     self.config.testBundlePath = testBundlePath;
     self.config.outputDirectory = outputDir;
-    self.config.junitOutput = YES;
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     self.config.testRunnerAppPath = nil;
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);

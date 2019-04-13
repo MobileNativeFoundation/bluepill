@@ -34,11 +34,11 @@
 
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID;
 
-- (BOOL)uninstallApplicationAndReturnError:(NSError **)error;
+- (BOOL)uninstallApplicationWithError:(NSError **)errPtr;
 
 - (void)bootWithCompletion:(void (^)(NSError *error))completion;
 
-- (BOOL)installApplicationAndReturnError:(NSError *__autoreleasing *)error;
+- (BOOL)installApplicationWithError:(NSError *__autoreleasing *)errPtr;
 
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion;
 
