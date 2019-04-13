@@ -23,6 +23,3 @@
 @interface JUnitReporter : NSObject<BPReporter>
 @end
 
-@interface JSONReporter : NSObject<BPReporter>
-@end
-

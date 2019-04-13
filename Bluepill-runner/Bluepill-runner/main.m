@@ -12,7 +12,10 @@
 #import <BluepillLib/BPConfiguration.h>
 #import "BPRunner.h"
 #import "BPVersion.h"
+#import "BPReportCollector.h"
 #import <BluepillLib/BPUtils.h>
+#import <BluepillLib/BPStats.h>
+#import <BluepillLib/BPWriter.h>
 #import <getopt.h>
 #import <libgen.h>
 
@@ -56,6 +59,9 @@ struct options {
 int main(int argc, char * argv[]) {
     @autoreleasepool {
         int c;
+        [BPStats sharedStats];
+
+        [[BPStats sharedStats] startTimer:@"Bluepill Initializing"];
         BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
         struct option *lopts = [config getLongOptions];
         char *sopts = [config getShortOptions];
@@ -82,21 +88,38 @@ int main(int argc, char * argv[]) {
                     basename(argv[0]), [[err localizedDescription] UTF8String]);
             exit(1);
         }
-
+        [[BPStats sharedStats] endTimer:@"Bluepill Initializing" withResult:@"INFO"];
+        [[BPStats sharedStats] startTimer:@"Loading App"];
         BPApp *app = [BPApp appWithConfig:config withError:&err];
         if (!app) {
+            [[BPStats sharedStats] endTimer:@"Loading App" withResult:@"ERROR"];
             fprintf(stderr, "ERROR: %s\n", [[err localizedDescription] UTF8String]);
             exit(1);
         }
+        [[BPStats sharedStats] endTimer:@"Loading App" withResult:@"INFO"];
         if (config.listTestsOnly) {
             [app listTests];
             exit(0);
         }
 
+        [[BPStats sharedStats] startTimer:@"Normalizing Configuration"];
         BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:config withTestFiles:app.testBundles];
+        [[BPStats sharedStats] endTimer:@"Normalizing Configuration" withResult:@"INFO"];
         // start a runner and let it fly
         BPRunner *runner = [BPRunner BPRunnerWithConfig:normalizedConfig withBpPath:nil];
-        exit([runner runWithBPXCTestFiles:app.testBundles]);
+        int rc = [runner runWithBPXCTestFiles:app.testBundles];
+        if (config.outputDirectory) {
+            // write the stats
+            NSString *outputFile = [config.outputDirectory stringByAppendingPathComponent:@"bluepill-stats.json"];
+            BPWriter *statsWriter = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
+            [[BPStats sharedStats] exitWithWriter:statsWriter exitCode:rc];
+
+            // collect all the reports
+            [BPReportCollector collectReportsFromPath:config.outputDirectory
+                                      deleteCollected:(!config.keepIndividualTestReports)
+                                      withOutputAtDir:config.outputDirectory];
+        }
+        exit(rc);
     }
     return 0;
 }

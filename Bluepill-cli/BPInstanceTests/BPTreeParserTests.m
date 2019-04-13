@@ -66,7 +66,6 @@
 
     [parser handleChunkData:[wholeFile dataUsingEncoding:NSUTF8StringEncoding]];
     [parser completed];
-    [parser completedFinalRun];
 
     if (![BPUtils isBuildScript]) {
         NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
@@ -88,7 +87,6 @@
 
     [parser handleChunkData:[wholeFile dataUsingEncoding:NSUTF8StringEncoding]];
     [parser completed];
-    [parser completedFinalRun];
 
     if (![BPUtils isBuildScript]) {
         NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
@@ -110,7 +108,6 @@
 
     [parser handleChunkData:[wholeFile dataUsingEncoding:NSUTF8StringEncoding]];
     [parser completed];
-    [parser completedFinalRun];
 
     if (![BPUtils isBuildScript]) {
         NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
@@ -132,7 +129,6 @@
 
     [parser handleChunkData:[wholeFile dataUsingEncoding:NSUTF8StringEncoding]];
     [parser completed];
-    [parser completedFinalRun];
 
     if (![BPUtils isBuildScript]) {
         NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);
@@ -158,7 +154,6 @@
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 3.0, NO);
 
     [parser completed];
-    [parser completedFinalRun];
 
     if (![BPUtils isBuildScript]) {
         NSLog(@"%@", [parser generateLog:[[JUnitReporter alloc] init]]);
@@ -187,7 +182,6 @@
     
     [parser handleChunkData:[wholeFile dataUsingEncoding:NSUTF8StringEncoding]];
     [parser completed];
-    [parser completedFinalRun];
     NSString *report = [parser generateLog:[[JUnitReporter alloc] init]];
     NSLog(@"%@", report);
     
@@ -209,7 +203,6 @@
 
     [parser handleChunkData:[wholeFile dataUsingEncoding:NSUTF8StringEncoding]];
     [parser completed];
-    [parser completedFinalRun];
 
     if (![BPUtils isBuildScript]) {
         NSLog(@">>>>>>>>> %@ <<<<<<<<<<<", [BPExitStatusHelper stringFromExitStatus:monitor.exitStatus]);

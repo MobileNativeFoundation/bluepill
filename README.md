@@ -67,11 +67,8 @@ A full list supported options are listed here.
 |        clone-simulator        |           -L           | Spawn simulator by clone from simulator template.                                                     |     N    | off              |
 |        xcode-path      |           -X           | Path to xcode.                                                                     |     N    | xcode-select -p  |
 |         include        |           -i           | Include a testcase in the set of tests to run (unless specified in `exclude`).     |     N    | all tests        |
-|       json-output      |           -J           | Print test timing information in JSON format.                                      |     N    | off              |
-|      junit-output      |           -j           | Print results in JUnit format.                                                     |     N    | true             |
 |       list-tests       |           -l           | Only list tests in bundle                                                          |     N    | false            |
 |        num-sims        |           -n           | Number of simulators to run in parallel. (bluepill only)                           |     N    | 4                |
-|      plain-output      |           -p           | Print results in plain text.                                                       |     N    | true             |
 |      printf-config     |           -P           | Print a configuration file suitable for passing back using the `-c` option.        |     N    | n/a              |
 |      error-retries     |           -R           | Number of times to recover from simulator/app crashing/hanging and continue running|     N    | 5                |
 |    failure-tolerance   |           -f           | Number of times to retry on test failures                                          |     N    | 0                |

@@ -27,7 +27,9 @@
 		BAEF4B381DAC539400E68294 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BAEF4B371DAC539400E68294 /* main.m */; };
 		C41C41F31DB04032001F32A2 /* BPApp.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F21DB04032001F32A2 /* BPApp.m */; };
 		C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = C41C41F81DB14B5F001F32A2 /* BPRunner.m */; };
+		C454DD71225E50B900F0ED8E /* BluepillLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA9ADEA9216427CB001306F5 /* BluepillLib.framework */; };
 		C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */ = {isa = PBXBuildFile; fileRef = C467E54B1DC94BB200BC80EE /* BPCLITests.m */; };
+		C49EEB84225570EC002CC956 /* result4.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB83225570EC002CC956 /* result4.xml */; };
 		C4C614A421814C5C008A2C39 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C4C614A321814C5C008A2C39 /* BPTestHelper.m */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
 /* End PBXBuildFile section */
@@ -60,6 +62,7 @@
 		C41C41F81DB14B5F001F32A2 /* BPRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPRunner.m; sourceTree = "<group>"; };
 		C432D41F1DDCF05400FB27D0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
 		C467E54B1DC94BB200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
+		C49EEB83225570EC002CC956 /* result4.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = result4.xml; sourceTree = "<group>"; };
 		C4C614A321814C5C008A2C39 /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BPTestHelper.m; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.m"; sourceTree = "<group>"; };
 		C4FD8C561DB6E09B000ED28C /* BPPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPPacker.h; sourceTree = "<group>"; };
 		C4FD8C571DB6E09B000ED28C /* BPPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPacker.m; sourceTree = "<group>"; };
@@ -70,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C454DD71225E50B900F0ED8E /* BluepillLib.framework in Frameworks */,
 				B3109F792151F72F00B9309C /* CoreSimulator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -152,6 +156,7 @@
 				BA7031821DE4ED2F008B3539 /* 1 */,
 				BA7031841DE4ED2F008B3539 /* 2 */,
 				BA7031861DE4ED2F008B3539 /* 3 */,
+				C49EEB82225570C3002CC956 /* 4 */,
 			);
 			path = simulator;
 			sourceTree = "<group>";
@@ -192,6 +197,14 @@
 			);
 			name = Bluepill;
 			path = "Bluepill-runner";
+			sourceTree = "<group>";
+		};
+		C49EEB82225570C3002CC956 /* 4 */ = {
+			isa = PBXGroup;
+			children = (
+				C49EEB83225570EC002CC956 /* result4.xml */,
+			);
+			path = 4;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -252,7 +265,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "Bluepill" */;
+			buildConfigurationList = BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "bluepill" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -276,6 +289,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C49EEB84225570EC002CC956 /* result4.xml in Resources */,
 				BA9C2DB11DD67B66007CB967 /* testScheme.xcscheme in Resources */,
 				BA70318A1DE4ED2F008B3539 /* result3.xml in Resources */,
 				BA7031881DE4ED2F008B3539 /* result1.xml in Resources */,
@@ -524,7 +538,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "Bluepill" */ = {
+		BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "bluepill" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BAEF4B391DAC539400E68294 /* Debug */,

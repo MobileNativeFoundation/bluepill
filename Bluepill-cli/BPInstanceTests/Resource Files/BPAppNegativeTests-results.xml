@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="All tests" tests="3" failures="0" errors="2">
+<testsuites name="Selected tests" tests="3" failures="0" errors="2">
     <testsuite tests="3" failures="0" errors="2" name="BPAppNegativeTests.xctest">
         <testsuite tests="3" failures="0" errors="2" name="BPAppNegativeTests">
             <testcase classname="BPAppNegativeTests" name="testAssertFailure">

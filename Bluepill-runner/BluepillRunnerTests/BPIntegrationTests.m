@@ -38,11 +38,7 @@
     self.config.errorRetriesCount = @0;
     self.config.failureTolerance = @0;
     self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
-    self.config.plainOutput = NO;
-    self.config.jsonOutput = NO;
     self.config.headlessMode = YES;
-    self.config.junitOutput = NO;
-    self.config.junitOutput = NO;
     NSString *path = @"testScheme.xcscheme";
     self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
@@ -118,7 +114,7 @@
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
-    XCTAssert(app.testBundles[1].skipTestIdentifiers.count == 7);
+    XCTAssert(app.testBundles[1].skipTestIdentifiers.count == 8);
     XCTAssert(rc != 0); // this runs tests that fail
 }
 

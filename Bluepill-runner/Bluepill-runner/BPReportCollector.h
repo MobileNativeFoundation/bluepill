@@ -14,10 +14,10 @@
 /*!
  * @discussion collect xml reports from the reportsPath(recursive) and output a finalized report at finalReportPath
  * @param reportsPath parent path to the reports
- * @param finalReportPath the path to save the final report
+ * @param finalReportsDir the directory where to save the final reports
  */
 + (void)collectReportsFromPath:(NSString *)reportsPath
-             onReportCollected:(void (^)(NSURL *fileUrl))fileHandler
-                  outputAtPath:(NSString *)finalReportPath;
+               deleteCollected:(BOOL)deleteCollected
+              withOutputAtDir:(NSString *)finalReportsDir;
 
 @end
