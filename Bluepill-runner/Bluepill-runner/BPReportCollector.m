@@ -212,9 +212,9 @@
             // append the latest result at the end
             NSUInteger insertIndex;
             for (insertIndex = [targetTestCase index]; insertIndex < [[parent children] count]; insertIndex++) {
-                NSXMLElement *currenttestCase = (NSXMLElement *)[[parent children] objectAtIndex:insertIndex];
-                NSString *thisName = [[currenttestCase attributeForName:@"name"] stringValue];
-                NSString *thisClassName = [[currenttestCase attributeForName:@"classname"] stringValue];
+                NSXMLElement *currentTestCase = (NSXMLElement *)[[parent children] objectAtIndex:insertIndex];
+                NSString *thisName = [[currentTestCase attributeForName:@"name"] stringValue];
+                NSString *thisClassName = [[currentTestCase attributeForName:@"classname"] stringValue];
                 if ([name isNotEqualTo:thisName] || [className isNotEqualTo:thisClassName]) {
                     break;
                 }
