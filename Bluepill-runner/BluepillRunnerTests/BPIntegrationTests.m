@@ -79,6 +79,24 @@
     XCTAssert([runner.nsTaskList count] == 0);
 }
 
+- (void)testClonedSimulators {
+    self.config.numSims = @2;
+    self.config.errorRetriesCount = @1;
+    self.config.failureTolerance = @0;
+    self.config.cloneSimulator = TRUE;
+    // need to validate the configuration to fill in simDevice and simRuntime
+    [self.config validateConfigWithError:nil];
+    NSError *err;
+    BPApp *app = [BPApp appWithConfig:self.config
+                            withError:&err];
+
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc == 0);
+    XCTAssert([runner.nsTaskList count] == 0);
+}
+
 - (void)testTwoBPInstancesWithUITests {
     self.config.numSims = @2;
     self.config.errorRetriesCount = @1;
