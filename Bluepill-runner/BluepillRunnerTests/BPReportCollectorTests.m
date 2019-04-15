@@ -79,12 +79,26 @@ void fixTimestamps(NSString *path) {
     NSArray *testsuitesNodes =  [doc nodesForXPath:[NSString stringWithFormat:@".//%@", @"testsuites"] error:&error];
     NSXMLElement *root = testsuitesNodes[0];
     NSString *got = [[root attributeForName:@"tests"] stringValue];
-
-    XCTAssertTrue([got isEqualToString:@"25"], @"test count is wrong, wanted 25, got %@", got);
+    NSString *want = @"26";
+    XCTAssertTrue([got isEqualToString:want], @"test count is wrong, wanted %@, got %@", want, got);
     got = [[root attributeForName:@"errors"] stringValue];
-    XCTAssertTrue([got isEqualToString:@"2"], @"error count is wrong, wanted 2, got %@", got);
+    want = @"2";
+    XCTAssertTrue([got isEqualToString:want], @"error count is wrong, wanted %@, got %@", want, got);
     got = [[root attributeForName:@"failures"] stringValue];
-    XCTAssertTrue([got isEqualToString:@"2"], @"failure count is wrong, wanted 2, got %@", got);
+    want = @"3";
+    XCTAssertTrue([got isEqualToString:want], @"failure count is wrong, wanted %@, got %@", want, got);
+
+    // make sure the order is right
+    NSArray *retriedTests = [doc nodesForXPath:@"//testcase[@name='test2' and @classname='Class1']" error:nil];
+    XCTAssert(retriedTests.count == 3, @"Did not find three tries for test2");
+    XCTAssert([[retriedTests[0] nodesForXPath:@"failure" error:nil] count] == 1, @"First was not a failure");
+    XCTAssert([[retriedTests[1] nodesForXPath:@"failure" error:nil] count] == 1, @"Second was not a failure");
+    XCTAssert([[retriedTests[2] nodesForXPath:@"failure" error:nil] count] == 0, @"Third was not a success");
+
+
+    char * cmd = malloc(1024 * 10);
+    sprintf(cmd, "open -a '/Applications/Visual Studio Code.app' -- '%s'", [finalReport UTF8String]);
+    system(cmd);
 
     BOOL collatedReport = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:@"1/report1.xml"]];
     XCTAssert(collatedReport == NO);
