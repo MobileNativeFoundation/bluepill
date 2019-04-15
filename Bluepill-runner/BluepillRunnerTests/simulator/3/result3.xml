@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="Selected tests" tests="1" failures="0" errors="0">
-    <testsuite tests="1" failures="0" errors="0" name="Testsuite.xctest">
-        <testsuite tests="1" failures="0" errors="0" name="Testsuite">
+<testsuites name="Selected tests" tests="1" failures="1" errors="0">
+    <testsuite tests="1" failures="1" errors="0" name="Testsuite.xctest">
+        <testsuite tests="1" failures="1" errors="0" name="Testsuite">
             <testcase classname="Class1" name="test2">
+                <failure type="Failure" message="App Crashed">
+                    Unknown File:0
+                </failure>
                 <system-out>
                 </system-out>
             </testcase>
