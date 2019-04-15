@@ -79,12 +79,14 @@ void fixTimestamps(NSString *path) {
     NSArray *testsuitesNodes =  [doc nodesForXPath:[NSString stringWithFormat:@".//%@", @"testsuites"] error:&error];
     NSXMLElement *root = testsuitesNodes[0];
     NSString *got = [[root attributeForName:@"tests"] stringValue];
-
-    XCTAssertTrue([got isEqualToString:@"26"], @"test count is wrong, wanted 25, got %@", got);
+    NSString *want = @"26";
+    XCTAssertTrue([got isEqualToString:want], @"test count is wrong, wanted %@, got %@", want, got);
     got = [[root attributeForName:@"errors"] stringValue];
-    XCTAssertTrue([got isEqualToString:@"2"], @"error count is wrong, wanted 2, got %@", got);
+    want = @"2";
+    XCTAssertTrue([got isEqualToString:want], @"error count is wrong, wanted %@, got %@", want, got);
     got = [[root attributeForName:@"failures"] stringValue];
-    XCTAssertTrue([got isEqualToString:@"3"], @"failure count is wrong, wanted 2, got %@", got);
+    want = @"3";
+    XCTAssertTrue([got isEqualToString:want], @"failure count is wrong, wanted %@, got %@", want, got);
 
     // make sure the order is right
     NSArray *retriedTests = [doc nodesForXPath:@"//testcase[@name='test2' and @classname='Class1']" error:nil];
