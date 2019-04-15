@@ -10,7 +10,6 @@
 #import "BPHandler.h"
 #import "BPWaitTimer.h"
 #import "BPConstants.h"
-#import "SimDevice.h"
 
 @implementation BPHandler
 

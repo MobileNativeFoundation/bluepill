@@ -209,8 +209,17 @@
         if (targetTestCase) {
             [BPUtils printInfo:DEBUGINFO withString:@"testcase match: %@", [[targetTestCase attributeForName:@"name"] stringValue]];
             parent = (NSXMLElement *)[targetTestCase parent];
-            // append the latest result
-            [parent insertChild:[testCase copy] atIndex:[targetTestCase index] + 1];
+            // append the latest result at the end
+            NSUInteger insertIndex;
+            for (insertIndex = [targetTestCase index]; insertIndex < [[parent children] count]; insertIndex++) {
+                NSXMLElement *currentTestCase = (NSXMLElement *)[[parent children] objectAtIndex:insertIndex];
+                NSString *thisName = [[currentTestCase attributeForName:@"name"] stringValue];
+                NSString *thisClassName = [[currentTestCase attributeForName:@"classname"] stringValue];
+                if ([name isNotEqualTo:thisName] || [className isNotEqualTo:thisClassName]) {
+                    break;
+                }
+            }
+            [parent insertChild:[testCase copy] atIndex:insertIndex];
         } else {
             [BPUtils printInfo:DEBUGINFO withString:@"testcase insertion: %@", [[testCase attributeForName:@"name"] stringValue]];
             [targetTestSuite addChild:[testCase copy]];
