@@ -48,6 +48,7 @@ static BOOL quiet = NO;
 
 + (void)enableDebugOutput:(BOOL)enable {
     printDebugInfo = enable;
+    NSLog(@"Debug Enabled == %hhd", printDebugInfo);
 }
 
 + (void)quietMode:(BOOL)enable {
@@ -94,12 +95,18 @@ static BOOL quiet = NO;
     tms = localtime(&now);
     strftime(ts, 1<<6, "%Y%m%d.%H%M%S", tms);
 
-    if (isatty(1) && !bp_testing) {
-        fprintf(fd, "{%d} %s %s[%s]%s %s%s\n",
-                getpid(), ts, message.color, message.text, ANSI_COLOR_RESET, [simNum UTF8String], [txt UTF8String]);
-    } else {
+    const char * __nullable msg = [txt UTF8String];
+    char *nl = "\n";
+    if (msg && strlen(msg) > 1 && msg[strlen(msg)-1] == '\n') {
+        // don't add a new line if it already ends in new line
+        nl = "";
+    }
 
-        fprintf(fd, "{%d} %s [%s] %s%s\n", getpid(), ts, message.text, [simNum UTF8String], [txt UTF8String]);
+    if (isatty(1) && !bp_testing) {
+        fprintf(fd, "{%d} %s %s[%s]%s %s%s%s",
+                getpid(), ts, message.color, message.text, ANSI_COLOR_RESET, [simNum UTF8String], [txt UTF8String], nl);
+    } else {
+        fprintf(fd, "{%d} %s [%s] %s%s%s", getpid(), ts, message.text, [simNum UTF8String], [txt UTF8String], nl);
     }
     fflush(fd);
 }

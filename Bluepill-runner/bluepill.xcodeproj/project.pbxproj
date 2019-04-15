@@ -267,10 +267,11 @@
 			};
 			buildConfigurationList = BAEF4B2F1DAC539400E68294 /* Build configuration list for PBXProject "bluepill" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = BAEF4B2B1DAC539400E68294;
 			productRefGroup = BAEF4B351DAC539400E68294 /* Products */;

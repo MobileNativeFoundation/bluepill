@@ -104,8 +104,11 @@
     xctConfig.automationFrameworkPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework", config.xcodePath];
     testHostPath = config.appBundlePath;
 
+    NSString *bundleID = [self bundleIdForPath:config.appBundlePath];
+    xctConfig.testApplicationDependencies = @{bundleID: config.appBundlePath};
+
     if (config.testRunnerAppPath) {
-        xctConfig.targetApplicationBundleID = [self bundleIdForPath:config.appBundlePath];
+        xctConfig.targetApplicationBundleID = bundleID;
         xctConfig.initializeForUITesting = YES;
         xctConfig.disablePerformanceMetrics = NO;
         xctConfig.reportActivities = YES;

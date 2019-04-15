@@ -6,7 +6,6 @@
 
 @import Foundation;
 
-#import "NSPasteboardItemDataProvider-Protocol.h"
 @class NSArray, NSMapTable, NSMutableArray, NSMutableDictionary, NSPasteboardItem, NSString;
 
 @interface SimPasteboardItem : NSObject <NSPasteboardItemDataProvider>

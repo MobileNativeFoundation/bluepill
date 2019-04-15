@@ -5,7 +5,6 @@
 //
 
 @import Foundation;
-#import "NSSecureCoding-Protocol.h"
 
 @class NSData;
 

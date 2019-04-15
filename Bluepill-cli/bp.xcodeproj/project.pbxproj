@@ -232,13 +232,9 @@
 		BA954F571D6D1AB3007D011D /* CDStructures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CDStructures.h; sourceTree = "<group>"; };
 		BA954F581D6D1AB3007D011D /* CoreSimulator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreSimulator.h; sourceTree = "<group>"; };
 		BA954F5A1D6D1AB3007D011D /* NSArray-SimArgv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSArray-SimArgv.h"; sourceTree = "<group>"; };
-		BA954F5B1D6D1AB3007D011D /* NSCoding-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSCoding-Protocol.h"; sourceTree = "<group>"; };
 		BA954F5C1D6D1AB3007D011D /* NSDictionary-SimEnvp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDictionary-SimEnvp.h"; sourceTree = "<group>"; };
 		BA954F5D1D6D1AB3007D011D /* NSError-SimError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSError-SimError.h"; sourceTree = "<group>"; };
-		BA954F601D6D1AB3007D011D /* NSObject-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject-Protocol.h"; sourceTree = "<group>"; };
 		BA954F611D6D1AB3007D011D /* NSPasteboardItem-SimPasteboardItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSPasteboardItem-SimPasteboardItem.h"; sourceTree = "<group>"; };
-		BA954F621D6D1AB3007D011D /* NSPasteboardItemDataProvider-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSPasteboardItemDataProvider-Protocol.h"; sourceTree = "<group>"; };
-		BA954F631D6D1AB3007D011D /* NSSecureCoding-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSSecureCoding-Protocol.h"; sourceTree = "<group>"; };
 		BA954F641D6D1AB3007D011D /* NSString-SIMCPUType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString-SIMCPUType.h"; sourceTree = "<group>"; };
 		BA954F651D6D1AB3007D011D /* NSString-SIMPackedVersion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString-SIMPackedVersion.h"; sourceTree = "<group>"; };
 		BA954F671D6D1AB3007D011D /* NSUserDefaults-SimDefaults.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults-SimDefaults.h"; sourceTree = "<group>"; };
@@ -577,13 +573,9 @@
 				BA954F571D6D1AB3007D011D /* CDStructures.h */,
 				BA954F581D6D1AB3007D011D /* CoreSimulator.h */,
 				BA954F5A1D6D1AB3007D011D /* NSArray-SimArgv.h */,
-				BA954F5B1D6D1AB3007D011D /* NSCoding-Protocol.h */,
 				BA954F5C1D6D1AB3007D011D /* NSDictionary-SimEnvp.h */,
 				BA954F5D1D6D1AB3007D011D /* NSError-SimError.h */,
-				BA954F601D6D1AB3007D011D /* NSObject-Protocol.h */,
 				BA954F611D6D1AB3007D011D /* NSPasteboardItem-SimPasteboardItem.h */,
-				BA954F621D6D1AB3007D011D /* NSPasteboardItemDataProvider-Protocol.h */,
-				BA954F631D6D1AB3007D011D /* NSSecureCoding-Protocol.h */,
 				BA954F641D6D1AB3007D011D /* NSString-SIMCPUType.h */,
 				BA954F651D6D1AB3007D011D /* NSString-SIMPackedVersion.h */,
 				BA954F671D6D1AB3007D011D /* NSUserDefaults-SimDefaults.h */,
@@ -854,10 +846,11 @@
 			};
 			buildConfigurationList = 7A79017D1D5CB679004D4325 /* Build configuration list for PBXProject "bp" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 7A7901791D5CB679004D4325;
 			productRefGroup = 7A7901831D5CB679004D4325 /* Products */;
