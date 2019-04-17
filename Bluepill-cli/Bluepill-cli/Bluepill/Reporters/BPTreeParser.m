@@ -11,7 +11,7 @@
 #import "BPTreeObjects.h"
 #import "BPReporters.h"
 #import "BPExecutionPhaseProtocol.h"
-#import "BluepillLib/BPWriter.h"
+#import "bplib/BPWriter.h"
 #import "BPUtils.h"
 #import "BPTreeAssembler.h"
 #import <time.h>

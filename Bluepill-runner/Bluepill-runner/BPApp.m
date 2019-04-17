@@ -8,10 +8,10 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import "BPApp.h"
-#import <BluepillLib/BPXCTestFile.h>
-#import <BluepillLib/BPConstants.h>
-#import <BluepillLib/BPConfiguration.h>
-#import <BluepillLib/BPUtils.h>
+#import <bplib/BPXCTestFile.h>
+#import <bplib/BPConstants.h>
+#import <bplib/BPConfiguration.h>
+#import <bplib/BPUtils.h>
 
 @implementation BPApp
 

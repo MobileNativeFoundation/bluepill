@@ -8,8 +8,8 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import <BluepillLib/BPConfiguration.h>
-#import <BluepillLib/BPXCTestFile.h>
+#import <bplib/BPConfiguration.h>
+#import <bplib/BPXCTestFile.h>
 
 @interface BPPacker : NSObject
 

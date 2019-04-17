@@ -8,7 +8,7 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import "BPReportCollector.h"
-#import <BluepillLib/BPUtils.h>
+#import <bplib/BPUtils.h>
 
 // Save path and mtime for reports (sort by mtime)
 @interface BPXMLReport:NSObject

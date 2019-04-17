@@ -43,8 +43,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "BA1809DF1DBA8FB100D7D130"
-               BuildableName = "BluepillRunnerTests.xctest"
-               BlueprintName = "BluepillRunnerTests"
+               BuildableName = "bluepill-tests.xctest"
+               BlueprintName = "bluepill-tests"
                ReferencedContainer = "container:bluepill.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -57,8 +57,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B368E559213F8D2E00B4DEA3"
-               BuildableName = "BluepillLib.framework"
-               BlueprintName = "BluepillLib"
+               BuildableName = "bplib.framework"
+               BlueprintName = "bplib"
                ReferencedContainer = "container:../Bluepill-cli/bp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -75,8 +75,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "BA1809DF1DBA8FB100D7D130"
-               BuildableName = "BluepillRunnerTests.xctest"
-               BlueprintName = "BluepillRunnerTests"
+               BuildableName = "bluepill-tests.xctest"
+               BlueprintName = "bluepill-tests"
                ReferencedContainer = "container:bluepill.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -85,8 +85,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BA1809DF1DBA8FB100D7D130"
-            BuildableName = "BluepillRunnerTests.xctest"
-            BlueprintName = "BluepillRunnerTests"
+            BuildableName = "bluepill-tests.xctest"
+            BlueprintName = "bluepill-tests"
             ReferencedContainer = "container:bluepill.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -107,8 +107,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BA1809DF1DBA8FB100D7D130"
-            BuildableName = "BluepillRunnerTests.xctest"
-            BlueprintName = "BluepillRunnerTests"
+            BuildableName = "bluepill-tests.xctest"
+            BlueprintName = "bluepill-tests"
             ReferencedContainer = "container:bluepill.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

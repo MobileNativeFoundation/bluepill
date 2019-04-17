@@ -7,14 +7,14 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "BPTestHelper.h"
-#import <BluepillLib/BPConfiguration.h>
-#import <BluepillLib/BPUtils.h>
+#import "bplib/BPTestHelper.h"
+#import <bplib/BPConfiguration.h>
+#import <bplib/BPUtils.h>
 #import "BPRunner.h"
 #import "BPApp.h"
 #import "BPPacker.h"
-#import <BluepillLib/BPXCTestFile.h>
-#import <BluepillLib/BPConstants.h>
+#import <bplib/BPXCTestFile.h>
+#import <bplib/BPConstants.h>
 
 @interface BPIntegrationTests : XCTestCase
 @property (nonatomic, strong) BPConfiguration* config;

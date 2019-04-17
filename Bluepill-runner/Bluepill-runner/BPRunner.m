@@ -9,7 +9,7 @@
 
 #import "BPRunner.h"
 #import "BPPacker.h"
-#import <BluepillLib/BPUtils.h>
+#import <bplib/BPUtils.h>
 #import "BPVersion.h"
 #include <sys/sysctl.h>
 #include <sys/types.h>
@@ -19,14 +19,14 @@
 #include <signal.h>
 #include <pwd.h>
 #import <AppKit/AppKit.h>
-#import <BluepillLib/BPSimulator.h>
-#import <BluepillLib/BPCreateSimulatorHandler.h>
-#import <BluepillLib/BPUtils.h>
-#import <BluepillLib/BPWaitTimer.h>
-#import <BluepillLib/SimDeviceSet.h>
-#import <BluepillLib/SimServiceContext.h>
-#import <BluepillLib/SimulatorHelper.h>
-#import <BluepillLib/BPStats.h>
+#import <bplib/BPSimulator.h>
+#import <bplib/BPCreateSimulatorHandler.h>
+#import <bplib/BPUtils.h>
+#import <bplib/BPWaitTimer.h>
+#import <bplib/SimDeviceSet.h>
+#import <bplib/SimServiceContext.h>
+#import <bplib/SimulatorHelper.h>
+#import <bplib/BPStats.h>
 
 static int volatile interrupted = 0;
 
