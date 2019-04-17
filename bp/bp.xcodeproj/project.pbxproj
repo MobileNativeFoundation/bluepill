@@ -158,8 +158,8 @@
 		7A58D0741D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DVTiPhoneSimulatorRemoteClient.framework; path = ../SharedFrameworks/DVTiPhoneSimulatorRemoteClient.framework; sourceTree = DEVELOPER_DIR; };
 		7A58D2E51D62689B002F6B6D /* DVTFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DVTFoundation.framework; path = ../SharedFrameworks/DVTFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		7A7901821D5CB679004D4325 /* bp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bp; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A7901851D5CB679004D4325 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = "Bluepill-cli/main.m"; sourceTree = "<group>"; };
-		7A79018C1D5CF113004D4325 /* bluepill-cli.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "bluepill-cli.xcconfig"; sourceTree = "<group>"; };
+		7A7901851D5CB679004D4325 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7A79018C1D5CF113004D4325 /* bp.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = bp.xcconfig; sourceTree = "<group>"; };
 		7A79018E1D5D136F004D4325 /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = Library/PrivateFrameworks/CoreSimulator.framework; sourceTree = DEVELOPER_DIR; };
 		7A7D66001DB679820015C937 /* BPStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPStats.h; sourceTree = "<group>"; };
 		7A7D66011DB679820015C937 /* BPStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPStats.m; sourceTree = "<group>"; };
@@ -268,7 +268,6 @@
 		BAB24F731DB5DFA200867756 /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestHelper.m; sourceTree = "<group>"; };
 		BAFA2F771E567EE80072C69B /* BPSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPSimulator.h; sourceTree = "<group>"; };
 		BAFA2F781E567EE80072C69B /* BPSimulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPSimulator.m; sourceTree = "<group>"; };
-		BAFCCA371E335E0300E33C31 /* bluepill-cli-release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = "bluepill-cli-release.xcconfig"; sourceTree = "<group>"; };
 		BAFCCA391E36DBA900E33C31 /* _DTXProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DTXProxy.h; sourceTree = "<group>"; };
 		BAFCCA3A1E36DBA900E33C31 /* CDStructures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDStructures.h; sourceTree = "<group>"; };
 		BAFCCA3B1E36DBA900E33C31 /* DTXAllowedRPC-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DTXAllowedRPC-Protocol.h"; sourceTree = "<group>"; };
@@ -351,39 +350,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7A4FB8CC1DF89A790073F268 /* Shared */ = {
+		7A4FB8CC1DF89A790073F268 /* bplib */ = {
 			isa = PBXGroup;
 			children = (
-				7A7D66001DB679820015C937 /* BPStats.h */,
-				7A7D66011DB679820015C937 /* BPStats.m */,
+				7A4FB8CD1DF89A790073F268 /* BPConfiguration.h */,
+				7A4FB8CE1DF89A790073F268 /* BPConfiguration.m */,
 				BA53B16A1E30931E00FCED71 /* BPConstants.h */,
 				BA53B16B1E30931E00FCED71 /* BPConstants.m */,
+				B368E55C213F8D2E00B4DEA3 /* bplib.h */,
+				7A7D66001DB679820015C937 /* BPStats.h */,
+				7A7D66011DB679820015C937 /* BPStats.m */,
 				C41A2C731E0B24E8005D9751 /* BPTestCase.h */,
 				C41A2C741E0B24E8005D9751 /* BPTestCase.m */,
 				C41A2C751E0B24E8005D9751 /* BPTestClass.h */,
 				C41A2C761E0B24E8005D9751 /* BPTestClass.m */,
-				7A4FB8CD1DF89A790073F268 /* BPConfiguration.h */,
-				7A4FB8CE1DF89A790073F268 /* BPConfiguration.m */,
 				7A4FB8CF1DF89A790073F268 /* BPUtils.h */,
 				7A4FB8D01DF89A790073F268 /* BPUtils.m */,
 				C41A2C701E0B2497005D9751 /* BPXCTestFile.h */,
 				C41A2C711E0B2497005D9751 /* BPXCTestFile.m */,
+				B368E55D213F8D2E00B4DEA3 /* Info.plist */,
 			);
-			name = Shared;
-			path = ../../../Source/Shared;
+			path = bplib;
 			sourceTree = "<group>";
 		};
 		7A7901791D5CB679004D4325 = {
 			isa = PBXGroup;
 			children = (
-				7A7901841D5CB679004D4325 /* Bluepill-cli */,
-				7A7901851D5CB679004D4325 /* main.m */,
-				BAB24F691DB5DB2300867756 /* BPInstanceTests */,
-				B368E55B213F8D2E00B4DEA3 /* bplib */,
+				7A4FB8CC1DF89A790073F268 /* bplib */,
+				7A7901841D5CB679004D4325 /* src */,
+				BAB24F691DB5DB2300867756 /* tests */,
 				7A7901831D5CB679004D4325 /* Products */,
-				BAFCCA371E335E0300E33C31 /* bluepill-cli-release.xcconfig */,
-				7A79018C1D5CF113004D4325 /* bluepill-cli.xcconfig */,
 				7A79018D1D5D136F004D4325 /* Frameworks */,
+				7A79018C1D5CF113004D4325 /* bp.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -398,15 +396,22 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		7A7901841D5CB679004D4325 /* Bluepill-cli */ = {
+		7A7901841D5CB679004D4325 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				C48AE3821FBCC59D00997BA0 /* BPVersion.h */,
+				BA1949331E4AF7FD00881887 /* Connections */,
+				7ACE1F6C1DD3969A00C0FA73 /* Helpers */,
 				BA954F551D6D1AB3007D011D /* PrivateHeaders */,
-				BA9552171D6D1C00007D011D /* Bluepill */,
+				BA9552191D6D1C00007D011D /* Reporters */,
 				BA34F5DB1D6D70300063B17F /* Simulator */,
+				BA944BCE1D76A39A00A4BDA3 /* Bluepill.h */,
+				BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */,
+				7A7E7BBE1DF22CE1007928F3 /* BPExecutionContext.h */,
+				7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */,
+				C48AE3821FBCC59D00997BA0 /* BPVersion.h */,
+				7A7901851D5CB679004D4325 /* main.m */,
 			);
-			path = "Bluepill-cli";
+			path = src;
 			sourceTree = "<group>";
 		};
 		7A79018D1D5D136F004D4325 /* Frameworks */ = {
@@ -448,15 +453,6 @@
 				7DDFED961F81896C00D1357C /* SimDeviceFramebufferService.h */,
 			);
 			path = SimulatorKit;
-			sourceTree = "<group>";
-		};
-		B368E55B213F8D2E00B4DEA3 /* bplib */ = {
-			isa = PBXGroup;
-			children = (
-				B368E55C213F8D2E00B4DEA3 /* bplib.h */,
-				B368E55D213F8D2E00B4DEA3 /* Info.plist */,
-			);
-			path = bplib;
 			sourceTree = "<group>";
 		};
 		BA180A0A1DBB011200D7D130 /* Resource Files */ = {
@@ -590,21 +586,6 @@
 			path = CoreSimulator;
 			sourceTree = "<group>";
 		};
-		BA9552171D6D1C00007D011D /* Bluepill */ = {
-			isa = PBXGroup;
-			children = (
-				BA1949331E4AF7FD00881887 /* Connections */,
-				7A4FB8CC1DF89A790073F268 /* Shared */,
-				7ACE1F6C1DD3969A00C0FA73 /* Helpers */,
-				BA9552191D6D1C00007D011D /* Reporters */,
-				BA944BCE1D76A39A00A4BDA3 /* Bluepill.h */,
-				BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */,
-				7A7E7BBE1DF22CE1007928F3 /* BPExecutionContext.h */,
-				7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */,
-			);
-			path = Bluepill;
-			sourceTree = "<group>";
-		};
 		BA9552191D6D1C00007D011D /* Reporters */ = {
 			isa = PBXGroup;
 			children = (
@@ -625,24 +606,24 @@
 			path = Reporters;
 			sourceTree = "<group>";
 		};
-		BAB24F691DB5DB2300867756 /* BPInstanceTests */ = {
+		BAB24F691DB5DB2300867756 /* tests */ = {
 			isa = PBXGroup;
 			children = (
 				BA180A0A1DBB011200D7D130 /* Resource Files */,
-				BAB24F6C1DB5DB2300867756 /* Info.plist */,
 				BA1809B71DB89B5600D7D130 /* BluepillTests.m */,
-				BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */,
+				C467E5491DC930D200BC80EE /* BPCLITests.m */,
+				BA0097011DCA626F0000DD45 /* BPConfiguration+Test.h */,
+				BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */,
+				7AAE7AAE1DB7DC1E009B5549 /* BPRegexTests.m */,
 				BAB24F721DB5DFA200867756 /* BPTestHelper.h */,
 				BAB24F731DB5DFA200867756 /* BPTestHelper.m */,
-				7AAE7AAE1DB7DC1E009B5549 /* BPRegexTests.m */,
-				BA180A081DBB00FA00D7D130 /* BPUtilsTests.m */,
-				C467E5491DC930D200BC80EE /* BPCLITests.m */,
-				BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */,
-				BA0097011DCA626F0000DD45 /* BPConfiguration+Test.h */,
-				7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */,
 				7A4D7A801DDA5FA1001E085D /* BPTreeParserTests.m */,
+				BA180A081DBB00FA00D7D130 /* BPUtilsTests.m */,
+				BAB24F6C1DB5DB2300867756 /* Info.plist */,
+				BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */,
+				7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */,
 			);
-			path = BPInstanceTests;
+			path = tests;
 			sourceTree = "<group>";
 		};
 		BAFCCA381E36DBA900E33C31 /* DTXConnectionServices */ = {
@@ -970,7 +951,7 @@
 /* Begin XCBuildConfiguration section */
 		7A7901871D5CB679004D4325 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A79018C1D5CF113004D4325 /* bluepill-cli.xcconfig */;
+			baseConfigurationReference = 7A79018C1D5CF113004D4325 /* bp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1027,7 +1008,7 @@
 		};
 		7A7901881D5CB679004D4325 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BAFCCA371E335E0300E33C31 /* bluepill-cli-release.xcconfig */;
+			baseConfigurationReference = 7A79018C1D5CF113004D4325 /* bp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1101,7 +1082,6 @@
 		};
 		B368E56B213F8D2F00B4DEA3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A79018C1D5CF113004D4325 /* bluepill-cli.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1134,7 +1114,6 @@
 		};
 		B368E56C213F8D2F00B4DEA3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BAFCCA371E335E0300E33C31 /* bluepill-cli-release.xcconfig */;
 			buildSettings = {
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1170,7 +1149,7 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
-				INFOPLIST_FILE = BPInstanceTests/Info.plist;
+				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
@@ -1184,7 +1163,7 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
-				INFOPLIST_FILE = BPInstanceTests/Info.plist;
+				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;

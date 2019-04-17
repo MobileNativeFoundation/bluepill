@@ -90,27 +90,27 @@
 			isa = PBXGroup;
 			children = (
 				C4D686192267ABEF007D4237 /* bplib.framework */,
-				BA1896B821791A14000CEC36 /* XCTest.framework */,
 				B3380AEE2150BD8700752E1B /* CoreSimulator.framework */,
+				BA1896B821791A14000CEC36 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */ = {
+		BA1809E11DBA8FB100D7D130 /* tests */ = {
 			isa = PBXGroup;
 			children = (
 				BA9C2DAD1DD674AD007CB967 /* Resource Files */,
 				BAD8484E1DBC8006007034CF /* simulator */,
-				BA1809E41DBA8FB100D7D130 /* Info.plist */,
-				BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */,
 				BA1809EA1DBA910400D7D130 /* BPAppTests.m */,
-				BAD8484C1DBC6BA2007034CF /* BPReportCollectorTests.m */,
 				C467E54B1DC94BB200BC80EE /* BPCLITests.m */,
 				56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */,
 				BA23EF601EF8ACF10074A4EF /* BPPackerTests.m */,
+				BAD8484C1DBC6BA2007034CF /* BPReportCollectorTests.m */,
+				BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */,
+				BA1809E41DBA8FB100D7D130 /* Info.plist */,
 			);
-			path = BluepillRunnerTests;
-			sourceTree = "<group>";
+			path = tests;
+			sourceTree = SOURCE_ROOT;
 		};
 		BA7031821DE4ED2F008B3539 /* 1 */ = {
 			isa = PBXGroup;
@@ -159,11 +159,11 @@
 		BAEF4B2B1DAC539400E68294 = {
 			isa = PBXGroup;
 			children = (
-				BAFCCA361E33595F00E33C31 /* bluepill.xcconfig */,
-				BAEF4B361DAC539400E68294 /* Bluepill */,
-				BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */,
+				BAEF4B361DAC539400E68294 /* src */,
+				BA1809E11DBA8FB100D7D130 /* tests */,
 				BAEF4B351DAC539400E68294 /* Products */,
 				B3380AED2150BD8600752E1B /* Frameworks */,
+				BAFCCA361E33595F00E33C31 /* bluepill.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -176,22 +176,21 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BAEF4B361DAC539400E68294 /* Bluepill */ = {
+		BAEF4B361DAC539400E68294 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				C432D41F1DDCF05400FB27D0 /* BPVersion.h */,
-				BAEF4B371DAC539400E68294 /* main.m */,
-				C41C41F71DB14B5F001F32A2 /* BPRunner.h */,
-				C41C41F81DB14B5F001F32A2 /* BPRunner.m */,
-				C4FD8C561DB6E09B000ED28C /* BPPacker.h */,
-				C4FD8C571DB6E09B000ED28C /* BPPacker.m */,
 				C41C41F11DB04032001F32A2 /* BPApp.h */,
 				C41C41F21DB04032001F32A2 /* BPApp.m */,
+				C4FD8C561DB6E09B000ED28C /* BPPacker.h */,
+				C4FD8C571DB6E09B000ED28C /* BPPacker.m */,
 				BAD848481DBC6A83007034CF /* BPReportCollector.h */,
 				BAD848491DBC6A83007034CF /* BPReportCollector.m */,
+				C41C41F71DB14B5F001F32A2 /* BPRunner.h */,
+				C41C41F81DB14B5F001F32A2 /* BPRunner.m */,
+				C432D41F1DDCF05400FB27D0 /* BPVersion.h */,
+				BAEF4B371DAC539400E68294 /* main.m */,
 			);
-			name = Bluepill;
-			path = "Bluepill-runner";
+			path = src;
 			sourceTree = "<group>";
 		};
 		C49EEB82225570C3002CC956 /* 4 */ = {
@@ -351,7 +350,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks/;
-				INFOPLIST_FILE = BluepillRunnerTests/Info.plist;
+				INFOPLIST_FILE = tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BluepillRunnerTests;
@@ -366,7 +365,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks/;
-				INFOPLIST_FILE = BluepillRunnerTests/Info.plist;
+				INFOPLIST_FILE = tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BluepillRunnerTests;
