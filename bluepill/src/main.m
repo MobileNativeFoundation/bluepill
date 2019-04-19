@@ -11,11 +11,11 @@
 #import "BPApp.h"
 #import <bplib/BPConfiguration.h>
 #import "BPRunner.h"
-#import "BPVersion.h"
+#import "bplib/BPVersion.h"
+#import "bplib/BPUtils.h"
+#import "bplib/BPStats.h"
+#import "bplib/BPWriter.h"
 #import "BPReportCollector.h"
-#import <bplib/BPUtils.h>
-#import <bplib/BPStats.h>
-#import <bplib/BPWriter.h>
 #import <getopt.h>
 #import <libgen.h>
 
@@ -58,6 +58,11 @@ struct options {
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
+        int rc = [BPUtils setupWeakLinking:argv];
+        if (rc != 0) {
+            return rc;
+        }
+
         int c;
         [BPStats sharedStats];
 
@@ -107,7 +112,7 @@ int main(int argc, char * argv[]) {
         [[BPStats sharedStats] endTimer:@"Normalizing Configuration" withResult:@"INFO"];
         // start a runner and let it fly
         BPRunner *runner = [BPRunner BPRunnerWithConfig:normalizedConfig withBpPath:nil];
-        int rc = [runner runWithBPXCTestFiles:app.testBundles];
+        rc = [runner runWithBPXCTestFiles:app.testBundles];
         if (config.outputDirectory) {
             // write the stats
             NSString *outputFile = [config.outputDirectory stringByAppendingPathComponent:@"bluepill-stats.json"];

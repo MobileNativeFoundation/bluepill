@@ -16,6 +16,9 @@
 #import <stdio.h>
 #import "BPConstants.h"
 #import "BPSimulator.h"
+#import "SimServiceContext.h"
+#import "SimRuntime.h"
+#import "SimDevice.h"
 
 /**
  * This test suite is the integration tests to make sure Bluepill instance is working properly

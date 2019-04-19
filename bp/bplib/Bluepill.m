@@ -32,7 +32,7 @@
 
 static int volatile interrupted = 0;
 
-void onInterrupt(int ignore) {
+static void onInterrupt(int ignore) {
     interrupted = 1;
 }
 

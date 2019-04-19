@@ -1,0 +1,48 @@
+load(
+    "@build_bazel_rules_apple//apple:macos.bzl",
+    "macos_command_line_application",
+)
+load(
+    "@build_bazel_rules_apple//apple:versioning.bzl",
+    "apple_bundle_version",
+)
+
+licenses(["notice"])
+
+objc_library(
+    name = "bluepillsrc",
+    srcs = glob([
+        "src/**/*.h",
+        "src/**/*.m",
+    ]),
+    copts = [
+        "-I bp",
+    ],
+    enable_modules = True,
+    deps = ["//bp:bplib"],
+)
+
+apple_bundle_version(
+    name = "bluepillversion",
+    build_version = "1.0",
+)
+
+macos_command_line_application(
+    name = "bluepill",
+    bundle_id = "com.linkedin.bluepill",
+    infoplists = [":Info.plist"],
+    minimum_os_version = "10.13",
+    version = ":bluepillversion",
+    linkopts = [
+        "-F", "/Library/Developer/PrivateFrameworks",
+        "-F", "__BAZEL_XCODE_DEVELOPER_DIR__/../SharedFrameworks",
+        "-weak_framework", "CoreSimulator",
+        "-weak_framework", "DVTiPhoneSimulatorRemoteClient",
+        "-weak_framework", "XCTest",
+        "-framework", "AppKit"
+    ],
+    deps = [":bluepillsrc"],
+    visibility = ["//visibility:public"]
+)
+
+

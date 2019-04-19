@@ -11,7 +11,7 @@
 #import "BPTreeObjects.h"
 #import "BPReporters.h"
 #import "BPExecutionPhaseProtocol.h"
-#import "bplib/BPWriter.h"
+#import "BPWriter.h"
 #import "BPUtils.h"
 #import "BPTreeAssembler.h"
 #import <time.h>
@@ -595,7 +595,7 @@ static const NSString * const kPassed = @"passed";
     [self setMonitorCallback:self];
 }
 
-#pragma BPExecutionPhaseProtocol
+#pragma mark BPExecutionPhaseProtocol
 
 - (void)setMonitorCallback:(id<BPMonitorCallbackProtocol>)callback {
     [self.delegate setMonitorCallback:callback];

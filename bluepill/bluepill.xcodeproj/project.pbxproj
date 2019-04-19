@@ -57,7 +57,6 @@
 		C41C41F21DB04032001F32A2 /* BPApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPApp.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C41C41F71DB14B5F001F32A2 /* BPRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPRunner.h; sourceTree = "<group>"; };
 		C41C41F81DB14B5F001F32A2 /* BPRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPRunner.m; sourceTree = "<group>"; };
-		C432D41F1DDCF05400FB27D0 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = SOURCE_ROOT; };
 		C467E54B1DC94BB200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
 		C49EEB83225570EC002CC956 /* result4.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = result4.xml; sourceTree = "<group>"; };
 		C4D686192267ABEF007D4237 /* bplib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = bplib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -187,7 +186,6 @@
 				BAD848491DBC6A83007034CF /* BPReportCollector.m */,
 				C41C41F71DB14B5F001F32A2 /* BPRunner.h */,
 				C41C41F81DB14B5F001F32A2 /* BPRunner.m */,
-				C432D41F1DDCF05400FB27D0 /* BPVersion.h */,
 				BAEF4B371DAC539400E68294 /* main.m */,
 			);
 			path = src;
@@ -225,7 +223,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BAEF4B3B1DAC539400E68294 /* Build configuration list for PBXNativeTarget "bluepill" */;
 			buildPhases = (
-				C432D41D1DDCED6100FB27D0 /* Saving Git HEAD's SHA1 and Xcode Version */,
 				BAEF4B301DAC539400E68294 /* Sources */,
 				BAEF4B311DAC539400E68294 /* Frameworks */,
 			);
@@ -292,24 +289,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		C432D41D1DDCED6100FB27D0 /* Saving Git HEAD's SHA1 and Xcode Version */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Saving Git HEAD's SHA1 and Xcode Version";
-			outputPaths = (
-				"$(SOURCE_ROOT)/BPVersion.h",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "VERSION=`git describe`\ntest -z \"$VERSION\" && VERSION=`cat \"$SOURCE_ROOT/../VERSION\"`\necho \"#define BP_VERSION \\\"$VERSION\\\"\" > \"$SOURCE_ROOT/BPVersion.h\"\nXCODE_VERSION=`xcodebuild -version | awk 'BEGIN {OFS=\"\";} /Xcode/ {version=$2} /Build version/ {build=$3} END {print version, \" (\", build, \")\";}'`\necho \"#define XCODE_VERSION \\\"$XCODE_VERSION\\\"\" >> \"$SOURCE_ROOT/BPVersion.h\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BA1809DC1DBA8FB100D7D130 /* Sources */ = {

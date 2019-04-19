@@ -11,20 +11,24 @@
 #import "BPTestDaemonConnection.h"
 #import "BPConstants.h"
 #import "SimulatorHelper.h"
+#import "BPConfiguration.h"
 
 // XCTest framework
-#import "XCTestManager_IDEInterface-Protocol.h"
-#import "XCTestManager_TestsInterface-Protocol.h"
-#import "XCTestManager_ManagerInterface-Protocol.h"
-#import "XCTestManager_DaemonConnectionInterface-Protocol.h"
-#import "XCTestDriverInterface-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTestManager_IDEInterface-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTestManager_TestsInterface-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTestManager_ManagerInterface-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTestManager_DaemonConnectionInterface-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTestDriverInterface-Protocol.h"
 
 // DTX framework
-#import "DTXConnection.h"
-#import "DTXProxyChannel.h"
-#import "DTXRemoteInvocationReceipt.h"
-#import "DTXTransport.h"
-#import "DTXSocketTransport.h"
+#import "PrivateHeaders/DTXConnectionServices/DTXConnection.h"
+#import "PrivateHeaders/DTXConnectionServices/DTXProxyChannel.h"
+#import "PrivateHeaders/DTXConnectionServices/DTXRemoteInvocationReceipt.h"
+#import "PrivateHeaders/DTXConnectionServices/DTXTransport.h"
+#import "PrivateHeaders/DTXConnectionServices/DTXSocketTransport.h"
+
+// CoreSimulator
+#import "PrivateHeaders/CoreSimulator/SimDevice.h"
 
 // sys
 #import <sys/socket.h>

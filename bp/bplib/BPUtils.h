@@ -146,4 +146,11 @@ typedef BOOL (^BPRunBlock)(void);
  * @return trimmed test name
  */
 + (NSString *)trimTrailingParanthesesFromTestName:(NSString *)testName;
+
+/*!
+ * @discussion setup the environment for weak linked frameworks
+ * @param argv the arguments to the command
+ * @return exit code 0 == success
+ */
++ (int)setupWeakLinking:(char **)argv;
 @end

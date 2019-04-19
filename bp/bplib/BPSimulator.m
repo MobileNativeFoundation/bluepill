@@ -11,7 +11,6 @@
 #import "SimulatorHelper.h"
 #import "BPConfiguration.h"
 #import "BPConstants.h"
-#import "CoreSimulator.h"
 #import "BPTreeParser.h"
 #import "BPUtils.h"
 #import <AppKit/AppKit.h>
@@ -20,6 +19,7 @@
 #import "BPTestDaemonConnection.h"
 #import "BPWaitTimer.h"
 #import "BPCreateSimulatorHandler.h"
+#import "PrivateHeaders/CoreSimulator/CoreSimulator.h"
 
 @interface BPSimulator()
 

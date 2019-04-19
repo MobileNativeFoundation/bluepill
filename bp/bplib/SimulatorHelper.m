@@ -8,10 +8,11 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import "SimulatorHelper.h"
-#import "XCTestConfiguration.h"
 #import "BPConfiguration.h"
 #import "BPUtils.h"
 #import "BPXCTestFile.h"
+#import "PrivateHeaders/XCTest/XCTestConfiguration.h"
+
 
 @implementation SimulatorHelper
 

@@ -280,4 +280,53 @@ static BOOL quiet = NO;
     return [testName substringWithRange:regexMatches.firstObject.range];
 }
 
++ (int)setupWeakLinking:(char **)argv {
+    // This next part is because we're weak-linking the private Xcode frameworks.
+    // This is necessary in case you have multiple versions of Xcode so we dynamically
+    // look at the path where Xcode is and add the private framework paths to the
+    // DYLD_FALLBACK_FRAMEWORK_PATH environment variable.
+    // We want to only do this once, so we use the BP_DYLD_RESOLVED environment variable
+    // as a sentinel (geddit? sentinel!)
+
+    if (getenv("BP_DYLD_RESOLVED") != NULL) {
+        return 0;
+    }
+    // Find path
+    NSString *xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
+    if (xcodePath == nil) {
+        fprintf(stderr, "Failed to run `/usr/bin/xcode-select -print-path`.\n");
+        return 1;
+    }
+
+    NSMutableArray *fallbackFrameworkPaths = [@[] mutableCopy];
+    if (getenv("DYLD_FALLBACK_FRAMEWORK_PATH")) {
+        [fallbackFrameworkPaths addObject:@(getenv("DYLD_FALLBACK_FRAMEWORK_PATH"))];
+    } else {
+        // If unset, this variable takes on an implicit default (see `man dyld`).
+        [fallbackFrameworkPaths addObjectsFromArray:@[
+                                                      @"/Library/Frameworks",
+                                                      @"/Network/Library/Frameworks",
+                                                      @"/System/Library/Frameworks",
+                                                      ]];
+    }
+
+    [fallbackFrameworkPaths addObjectsFromArray:@[
+                                                  [xcodePath stringByAppendingPathComponent:@"Library/PrivateFrameworks"],
+                                                  [xcodePath stringByAppendingPathComponent:@"Platforms/MacOSX.platform/Developer/Library/Frameworks"],
+                                                  [xcodePath stringByAppendingPathComponent:@"Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks"],
+                                                  [xcodePath stringByAppendingPathComponent:@"../OtherFrameworks"],
+                                                  [xcodePath stringByAppendingPathComponent:@"../SharedFrameworks"],
+                                                  ]];
+
+    NSString *fallbackFrameworkPath = [fallbackFrameworkPaths componentsJoinedByString:@":"];
+    setenv("DYLD_FALLBACK_FRAMEWORK_PATH", [fallbackFrameworkPath UTF8String], 1);
+
+    // Don't do this setup again...
+    setenv("BP_DYLD_RESOLVED", "YES", 1);
+    execv(argv[0], (char *const *)argv);
+
+    // we should never get here
+    assert(!"FAIL");
+}
+
 @end

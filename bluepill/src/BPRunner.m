@@ -10,7 +10,6 @@
 #import "BPRunner.h"
 #import "BPPacker.h"
 #import <bplib/BPUtils.h>
-#import "BPVersion.h"
 #include <sys/sysctl.h>
 #include <sys/types.h>
 #include <mach/mach.h>
@@ -23,14 +22,13 @@
 #import <bplib/BPCreateSimulatorHandler.h>
 #import <bplib/BPUtils.h>
 #import <bplib/BPWaitTimer.h>
-#import <bplib/SimDeviceSet.h>
-#import <bplib/SimServiceContext.h>
 #import <bplib/SimulatorHelper.h>
 #import <bplib/BPStats.h>
+#import <bplib/BPVersion.h>
 
 static int volatile interrupted = 0;
 
-void onInterrupt(int ignore) {
+static void onInterrupt(int ignore) {
     interrupted ++;
 }
 

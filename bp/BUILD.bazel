@@ -1,0 +1,63 @@
+load(
+    "@build_bazel_rules_apple//apple:macos.bzl",
+    "macos_command_line_application",
+)
+load(
+    "@build_bazel_rules_apple//apple:versioning.bzl",
+    "apple_bundle_version",
+)
+
+package(default_visibility = ["//visibility:public"])
+
+load("@subpar//:subpar.bzl", "par_binary")
+
+licenses(["notice"])
+
+objc_library(
+    name = "bplib",
+    hdrs = glob(["bplib/*.h"]),
+    srcs = glob([
+        "bplib/**/*.m",
+        "bplib/PrivateHeaders/**/*.h",
+        ]),
+    enable_modules = True,
+    visibility = ["//visibility:public"],
+)
+
+objc_library(
+    name = "bpmain",
+    srcs = ["main.m"],
+    deps = [":bplib"],
+)
+
+apple_bundle_version(
+    name = "bpversion",
+    build_version = "1.0",
+)
+
+macos_command_line_application(
+    name = "bp",
+    bundle_id = "com.linkedin.bp",
+    infoplists = [":Info.plist"],
+    minimum_os_version = "10.13",
+    version = ":bpversion",
+    linkopts = [
+        "-F", "/Library/Developer/PrivateFrameworks",
+        "-F", "__BAZEL_XCODE_DEVELOPER_DIR__/../SharedFrameworks",
+        "-weak_framework", "CoreSimulator",
+        "-weak_framework", "DVTiPhoneSimulatorRemoteClient",
+        "-weak_framework", "XCTest",
+        "-framework", "AppKit"
+    ],
+    deps = [":bpmain"],
+    visibility = ["//visibility:public"]
+)
+
+par_binary(
+    name = 'bptestrunner',
+    srcs = [
+        'bptestrunner.py',
+    ],
+    main = 'bptestrunner.py',
+    data = [":bp"],
+)

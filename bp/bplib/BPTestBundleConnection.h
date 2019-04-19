@@ -7,9 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "XCTestManager_IDEInterface-Protocol.h"
-#import "SimDevice.h"
-#import "BPConfiguration.h"
 #import "BPSimulator.h"
 
 // This is a small subset of XCTestManager_IDEInterface protocol

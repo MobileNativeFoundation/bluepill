@@ -13,6 +13,10 @@
 #import <getopt.h>
 #import <objc/runtime.h>
 #import "BPConstants.h"
+#import "PrivateHeaders/CoreSimulator/SimServiceContext.h"
+#import "PrivateHeaders/CoreSimulator/SimRuntime.h"
+#import "PrivateHeaders/CoreSimulator/SimDeviceType.h"
+
 
 typedef NS_OPTIONS(NSUInteger, BPOptionType) {
     BP_VALUE = 1, // Single value

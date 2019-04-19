@@ -9,10 +9,9 @@
 
 #import <Foundation/Foundation.h>
 #import "BPConstants.h"
-#import <bplib/SimRuntime.h>
-#import <bplib/SimDeviceType.h>
-#import <bplib/SimServiceContext.h>
-#import <bplib/SimDevice.h>
+
+@class SimDeviceType;
+@class SimRuntime;
 
 /**
  BPConfiguration stores necessary information for Simulator Runner to run

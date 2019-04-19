@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "XCTestManager_IDEInterface-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTestManager_IDEInterface-Protocol.h"
 
 // CoreSimulator
-#import "SimDevice.h"
 #import "BPSimulator.h"
 
 @interface BPTestDaemonConnection : NSObject

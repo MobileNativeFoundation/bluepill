@@ -8,6 +8,8 @@
 #import "DTXConnectionRemoteReceiveQueueCalls-Protocol.h"
 #import "DTXMessenger-Protocol.h"
 
+typedef void (^CDUnknownBlockType)(void);
+
 @class DTXChannel, DTXMessageParser, DTXMessageTransmitter, DTXResourceTracker, DTXTransport, NSDictionary, NSMutableArray, NSMutableDictionary, NSObject, NSObject, NSSet, NSString;
 @protocol DTXRateLimiter,  DTXBlockCompressor, DTXConnectionRemoteReceiveQueueCalls, DTXMessenger;
 

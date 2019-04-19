@@ -17,22 +17,16 @@
 #import "BPStats.h"
 #import "BPUtils.h"
 #import "BPXCTestFile.h"
-#import "SimDeviceType.h"
-#import "SimServiceContext.h"
-#import "SimDevice.h"
-#import "SimDeviceNotifier-Protocol.h"
 #import "BPCreateSimulatorHandler.h"
 #import "BPDeleteSimulatorHandler.h"
 #import "BPApplicationLaunchHandler.h"
 #import "BPHandler.h"
 #import "BPWaitTimer.h"
 #import "BPWriter.h"
-#import "SimDeviceSet.h"
-#import "SimServiceContext.h"
 #import "SimulatorHelper.h"
-#import "SimRuntime.h"
 
 #import "BPTestHelper.h"
+#import "BPVersion.h"
 
 
 //! Project version number for BluepillLib.
