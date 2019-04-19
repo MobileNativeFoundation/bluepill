@@ -95,11 +95,6 @@ void fixTimestamps(NSString *path) {
     XCTAssert([[retriedTests[1] nodesForXPath:@"failure" error:nil] count] == 1, @"Second was not a failure");
     XCTAssert([[retriedTests[2] nodesForXPath:@"failure" error:nil] count] == 0, @"Third was not a success");
 
-
-    char * cmd = malloc(1024 * 10);
-    sprintf(cmd, "open -a '/Applications/Visual Studio Code.app' -- '%s'", [finalReport UTF8String]);
-    system(cmd);
-
     BOOL collatedReport = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:@"1/report1.xml"]];
     XCTAssert(collatedReport == NO);
 }

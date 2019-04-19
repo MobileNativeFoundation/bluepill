@@ -14,20 +14,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A7901811D5CB679004D4325"
-               BuildableName = "bp"
-               BlueprintName = "bp"
-               ReferencedContainer = "container:../Bluepill-cli/bp.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "BAEF4B331DAC539400E68294"
                BuildableName = "bluepill"
                BlueprintName = "bluepill"
@@ -42,10 +28,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7A13E5A91DD22A3A004034BC"
-               BuildableName = "Bluepill-gui.app"
-               BlueprintName = "Bluepill-gui"
-               ReferencedContainer = "container:../Bluepill-gui/Bluepill-gui.xcodeproj">
+               BlueprintIdentifier = "7A7901811D5CB679004D4325"
+               BuildableName = "bp"
+               BlueprintName = "bp"
+               ReferencedContainer = "container:../bp/bp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

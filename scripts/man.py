@@ -6,9 +6,9 @@ import sys
 import textwrap
 import subprocess
 
-BPConfig = "Source/Shared/BPConfiguration.m"
-BPExitStatus = "Bluepill-cli/Bluepill-cli/Bluepill/Reporters/BPExitStatus.h"
-BPConstants = "Source/Shared/BPConstants.h"
+BPConfig = "bp/bplib/BPConfiguration.m"
+BPExitStatus = "bp/bplib/BPExitStatus.h"
+BPConstants = "bp/bplib/BPConstants.h"
 
 Header = """
 .\\" Bluepill help
