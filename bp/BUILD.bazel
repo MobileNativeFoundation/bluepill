@@ -7,27 +7,17 @@ load(
     "apple_bundle_version",
 )
 
-package(default_visibility = ["//visibility:public"])
-
-load("@subpar//:subpar.bzl", "par_binary")
-
 licenses(["notice"])
 
 objc_library(
-    name = "bplib",
-    hdrs = glob(["bplib/*.h"]),
+    name = "bpsrc",
+    hdrs = glob(["src/*.h"]),
     srcs = glob([
-        "bplib/**/*.m",
-        "bplib/PrivateHeaders/**/*.h",
-        ]),
+        "src/**/*.m",
+        "src/PrivateHeaders/**/*.h",
+    ]),
     enable_modules = True,
     visibility = ["//visibility:public"],
-)
-
-objc_library(
-    name = "bpmain",
-    srcs = ["main.m"],
-    deps = [":bplib"],
 )
 
 apple_bundle_version(
@@ -42,22 +32,30 @@ macos_command_line_application(
     minimum_os_version = "10.13",
     version = ":bpversion",
     linkopts = [
-        "-F", "/Library/Developer/PrivateFrameworks",
-        "-F", "__BAZEL_XCODE_DEVELOPER_DIR__/../SharedFrameworks",
-        "-weak_framework", "CoreSimulator",
-        "-weak_framework", "DVTiPhoneSimulatorRemoteClient",
-        "-weak_framework", "XCTest",
-        "-framework", "AppKit"
+        "-F",
+        "/Library/Developer/PrivateFrameworks",
+        "-F",
+        "__BAZEL_XCODE_DEVELOPER_DIR__/../SharedFrameworks",
+        "-weak_framework",
+        "CoreSimulator",
+        "-weak_framework",
+        "DVTiPhoneSimulatorRemoteClient",
+        "-weak_framework",
+        "XCTest",
+        "-framework",
+        "AppKit",
     ],
-    deps = [":bpmain"],
-    visibility = ["//visibility:public"]
+    deps = [":bpsrc"],
+    visibility = ["//visibility:public"],
 )
 
-par_binary(
-    name = 'bptestrunner',
-    srcs = [
-        'bptestrunner.py',
+py_library(
+    name = "bp_py",
+    srcs = glob([
+        "*.py",
+    ]),
+    data = [
+        ":bp",
     ],
-    main = 'bptestrunner.py',
-    data = [":bp"],
+    visibility = ["//visibility:public"],
 )

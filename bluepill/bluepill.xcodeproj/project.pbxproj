@@ -329,12 +329,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks/;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/..\"";
 				INFOPLIST_FILE = tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BluepillRunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				USE_HEADERMAP = NO;
 			};
 			name = Debug;
 		};
@@ -344,12 +346,14 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				FRAMEWORK_SEARCH_PATHS = /Library/Developer/PrivateFrameworks/;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/..\"";
 				INFOPLIST_FILE = tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BluepillRunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				USE_HEADERMAP = NO;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -467,6 +471,7 @@
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/..\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -476,6 +481,7 @@
 				);
 				PRIVATE_FRAMEWORKS_DIR = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USE_HEADERMAP = NO;
 			};
 			name = Debug;
 		};
@@ -485,6 +491,7 @@
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/..\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -494,6 +501,7 @@
 				);
 				PRIVATE_FRAMEWORKS_DIR = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USE_HEADERMAP = NO;
 			};
 			name = Release;
 		};

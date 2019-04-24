@@ -519,7 +519,7 @@ static NSUUID *sessionID;
     }
     // Now check we didn't miss any require options:
     NSMutableArray *errors = [[NSMutableArray alloc] init];
-    if (!(self.appBundlePath && self.schemePath) && !(self.xcTestRunPath) && !(self.deleteSimUDID)) {
+    if (!(self.appBundlePath) && !(self.xcTestRunPath) && !(self.deleteSimUDID)) {
         [errors addObject:@"Missing required option: -a/--app and -s/--scheme-path OR --xctestrun-path"];
     }
     if ((self.program & BP_SLAVE) && !(self.testBundlePath) && !(self.deleteSimUDID)) {
@@ -749,9 +749,6 @@ static NSUUID *sessionID;
             return NO;
         }
         [BPUtils printInfo:WARNING withString:@"The --scheme-path option is broken and is being deprecated. Please switch to using --xctestrun-path."];
-    } else if (!_xcTestRunDict) {
-        BP_SET_ERROR(errPtr, @"No scheme provided.");
-        return NO;
     }
 
     // bp requires an xctest argument while `bluepill` does not.

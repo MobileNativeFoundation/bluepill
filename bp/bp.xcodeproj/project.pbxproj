@@ -347,7 +347,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7A4FB8CC1DF89A790073F268 /* bplib */ = {
+		7A4FB8CC1DF89A790073F268 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				C487CB1A226A36F500CC5BC2 /* BPVersion.h */,
@@ -405,15 +405,15 @@
 				7A7E7BBE1DF22CE1007928F3 /* BPExecutionContext.h */,
 				7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */,
 				B368E55D213F8D2E00B4DEA3 /* Info.plist */,
+				7A7901851D5CB679004D4325 /* main.m */,
 			);
-			path = bplib;
+			path = src;
 			sourceTree = "<group>";
 		};
 		7A7901791D5CB679004D4325 = {
 			isa = PBXGroup;
 			children = (
-				7A4FB8CC1DF89A790073F268 /* bplib */,
-				7A7901851D5CB679004D4325 /* main.m */,
+				7A4FB8CC1DF89A790073F268 /* src */,
 				BAB24F691DB5DB2300867756 /* tests */,
 				7A7901831D5CB679004D4325 /* Products */,
 				7A79018D1D5D136F004D4325 /* Frameworks */,
@@ -1014,9 +1014,11 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
+				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
+				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1026,9 +1028,11 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
+				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
+				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -1052,7 +1056,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "$(SRCROOT)/bplib/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = "";
@@ -1084,7 +1088,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = "$(SRCROOT)/bplib/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = "";

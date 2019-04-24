@@ -8,12 +8,12 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <XCTest/XCTest.h>
-#import "bplib/BPTestHelper.h"
-#import <bplib/BPConfiguration.h>
+#import "BPTestHelper.h"
+#import <BPConfiguration.h>
 #import "BPApp.h"
-#import <bplib/BPXCTestFile.h>
-#import <bplib/BPUtils.h>
-#import <bplib/BPConstants.h>
+#import <BPXCTestFile.h>
+#import <BPUtils.h>
+#import <BPConstants.h>
 
 @interface BPAppTests : XCTestCase
 @property (nonatomic, strong) BPConfiguration* config;

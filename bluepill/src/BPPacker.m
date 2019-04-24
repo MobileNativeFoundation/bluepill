@@ -7,10 +7,8 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
-#import <bplib/BPConstants.h>
 #import "BPPacker.h"
-#import <bplib/BPXCTestFile.h>
-#import <bplib/BPUtils.h>
+#import "bp/src/BPUtils.h"
 
 @implementation BPPacker
 

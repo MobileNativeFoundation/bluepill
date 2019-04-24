@@ -9,12 +9,12 @@
 
 #import <Foundation/Foundation.h>
 #import "BPApp.h"
-#import <bplib/BPConfiguration.h>
+#import "bp/src/BPConfiguration.h"
 #import "BPRunner.h"
-#import "bplib/BPVersion.h"
-#import "bplib/BPUtils.h"
-#import "bplib/BPStats.h"
-#import "bplib/BPWriter.h"
+#import "bp/src/BPVersion.h"
+#import "bp/src/BPUtils.h"
+#import "bp/src/BPStats.h"
+#import "bp/src/BPWriter.h"
 #import "BPReportCollector.h"
 #import <getopt.h>
 #import <libgen.h>

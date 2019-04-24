@@ -8,9 +8,9 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <XCTest/XCTest.h>
-#import <bplib/BPConfiguration.h>
-#import <bplib/BPUtils.h>
-#import <bplib/BPTestHelper.h>
+#import <BPConfiguration.h>
+#import <BPUtils.h>
+#import <BPTestHelper.h>
 
 @interface BPCLITests : XCTestCase
 

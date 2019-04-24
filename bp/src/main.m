@@ -8,14 +8,14 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import "bplib/Bluepill.h"
-#import "bplib/BPConfiguration.h"
-#import "bplib/BPSimulator.h"
-#import "bplib/BPUtils.h"
-#import "bplib/BPVersion.h"
-#import "bplib/SimulatorHelper.h"
-#import "bplib/BPStats.h"
-#import "bplib/BPWriter.h"
+#import "Bluepill.h"
+#import "BPConfiguration.h"
+#import "BPSimulator.h"
+#import "BPUtils.h"
+#import "BPVersion.h"
+#import "SimulatorHelper.h"
+#import "BPStats.h"
+#import "BPWriter.h"
 
 #import <getopt.h>
 #import <libgen.h>
