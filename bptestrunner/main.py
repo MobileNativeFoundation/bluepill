@@ -23,53 +23,19 @@ import tempfile
 """Script used to run bp as a testrunner for rules_apple
 """
 
-
-class BPConfig:
-    """Encapsulates the configuration of Bluepill
-    """
-
-    def __init__(self,
-                 app_under_test_path,
-                 test_bundle_path,
-                 output_dir,
-                 device='iPhone 6',
-                 runtime='iOS 12.1',
-                 xcode_path='/Applications/Xcode.app/Contents/Developer',
-                 commandLineArguments=[],
-                 environmentVariables={},
-                 headless=True):
-        self.app = app_under_test_path
-        self.test_bundle_path = test_bundle_path
-        self.output_dir = output_dir
-        self.device = device
-        self.runtime = runtime
-        self.xcode_path = xcode_path
-        self.commandLineArguments = commandLineArguments
-        self.environmentVariables = environmentVariables
-        self.headless = headless
-
-    def get_json(self):
-        """Get a JSON configuration file from the configuration
-        """
-        # Encode our instance variables in a dictionary
-        config = {}
-        instance_vars = vars(self)
-        for k in instance_vars:
-            ck = k.replace('_', '-')
-            config[ck] = instance_vars[k]
-        return json.dumps(config)
-
-    def set_launch_options(self, path):
-        """Read a JSON file compatible with xctestrunner's
-        """
-        with open(path, 'r') as f:
-            data = json.load(f)
-            env_vars = data.get('env_vars', {})
-            for k in env_vars:
-                self.environmentVariables[k] = env_vars[k]
-            tests_to_run = data.get('tests_to_run', [])
-            if len(tests_to_run) > 0:
-                self.include = tests_to_run
+# Default bp config file
+bp_config_file = {
+    'app': None,
+    'test-bundle-path': None,
+    'output-dir': None,
+    'device': 'iPhone 6',
+    'runtime': 'iOS 12.1',
+    'xcode-path': '/Applications/Xcode.app/Contents/Developer',
+    'num-sims': 1,
+    'commandLineArguments': [],
+    'environmentVariables': {},
+    'headless': True,
+}
 
 
 def main():
@@ -98,6 +64,7 @@ def main():
     test_parser.add_argument('--device_type', help='iPhone')
     test_parser.add_argument('--os_version', help='iOS version')
     test_parser.add_argument('--new_simulator_name', help='ignored')
+    test_parser.add_argument('--num-sims', help='num sims')
     test_parser.set_defaults(func=run_bp)
     args = parser.parse_args()
     if args.verbose:
@@ -116,21 +83,31 @@ def run_bp(args):
     """Take the xctestrunner-compatible arguments, transform them
     into a config file that bp can use, and run `bp`.
     """
-    xcode_path = find_xcode_path()
-    logging.debug("Xcode: {}".format(xcode_path))
+    # Set options  from command line arguments
+    bp_config_file['app'] = args.app_under_test_path
+    bp_config_file['test-bundle-path'] = args.test_bundle_path
+    bp_config_file['output-dir'] = args.work_dir
+    bp_config_file['device'] = args.device_type
+    bp_config_file['xcode-path'] = find_xcode_path()
+    bp_config_file['num-sims'] = args.num_sims
 
-    bp_config = BPConfig(
-        app_under_test_path=args.app_under_test_path,
-        test_bundle_path=args.test_bundle_path,
-        output_dir=args.work_dir,
-        device=args.device_type,
-        xcode_path=xcode_path)
-    bp_config.set_launch_options(args.launch_options_json_path)
+    # set launch options from given file
+    with open(args.launch_options_json_path, 'r') as f:
+        data = json.load(f)
+        bp_config_file['environmentVariables'] = data.get('env_vars', {})
+        if data.get('tests_to_run', None):
+            bp_config_file['include'] = data['tests_to_run']
+
+    # save the config file
     cfg_file = tempfile.NamedTemporaryFile(delete=False)
-    cfg_file.write(bp_config.get_json())
+    cfg_file.write(json.dumps(bp_config_file))
     cfg_file.close()
-    rc = run('bp', ['-c', cfg_file.name, '-n', '1'])
+
+    # Run bluepill
+    rc = run('bluepill', ['-c', cfg_file.name])
     os.remove(cfg_file.name)
+
+    # copy outputs to where they should be
     find_and_copy_outputs(args.work_dir, args.output_dir)
     return rc
 

@@ -101,8 +101,20 @@ maxprocs(void)
     cfg.testBundlePath = bundle.testBundlePath;
     cfg.testRunnerAppPath = bundle.UITargetAppPath ? bundle.testHostPath : nil;
     cfg.testCasesToSkip = bundle.skipTestIdentifiers;
-    cfg.commandLineArguments = bundle.commandLineArguments;
-    cfg.environmentVariables = bundle.environmentVariables;
+    if (cfg.commandLineArguments) {
+        [cfg.commandLineArguments arrayByAddingObjectsFromArray:bundle.commandLineArguments];
+    } else {
+        cfg.commandLineArguments = bundle.commandLineArguments;
+    }
+    if (cfg.environmentVariables) {
+        NSMutableDictionary *newEnv = [[NSMutableDictionary alloc] initWithDictionary:cfg.environmentVariables];
+        for (NSString *key in bundle.environmentVariables) {
+            newEnv[key] = bundle.environmentVariables[key];
+        }
+        cfg.environmentVariables = (NSDictionary<NSString *, NSString *>*) newEnv;
+    } else {
+        cfg.environmentVariables = bundle.environmentVariables;
+    }
     if (self.config.cloneSimulator) {
         cfg.templateSimUDID = self.testHostForSimUDID[bundle.testHostPath];
     }
