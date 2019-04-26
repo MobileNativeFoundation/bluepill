@@ -11,7 +11,6 @@
 #import "BPApp.h"
 #import "bp/src/BPConfiguration.h"
 #import "BPRunner.h"
-#import "bp/src/BPVersion.h"
 #import "bp/src/BPUtils.h"
 #import "bp/src/BPStats.h"
 #import "bp/src/BPWriter.h"
@@ -71,7 +70,7 @@ int main(int argc, char * argv[]) {
         struct option *lopts = [config getLongOptions];
         char *sopts = [config getShortOptions];
         if (argv[1] && (!strcmp(argv[1], "version") || (!strcmp(argv[1], "--version")))) {
-            printf("Bluepill %s\n", BP_VERSION);
+            printf("Bluepill %s\n", [BPUtils version]);
             exit(0);
         }
 

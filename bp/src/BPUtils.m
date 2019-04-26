@@ -8,6 +8,7 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import "BPUtils.h"
+#import "BPVersion.h"
 #import "BPConstants.h"
 #import "BPXCTestFile.h"
 #import "BPConfiguration.h"
@@ -278,6 +279,10 @@ static BOOL quiet = NO;
         return nil;
     }
     return [testName substringWithRange:regexMatches.firstObject.range];
+}
+
++ (char *)version {
+    return BP_VERSION;
 }
 
 + (int)setupWeakLinking:(char **)argv {

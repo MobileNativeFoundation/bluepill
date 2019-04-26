@@ -24,7 +24,6 @@
 #import "bp/src/BPWaitTimer.h"
 #import "bp/src/SimulatorHelper.h"
 #import "bp/src/BPStats.h"
-#import "bp/src/BPVersion.h"
 
 static int volatile interrupted = 0;
 
@@ -206,7 +205,7 @@ maxprocs(void)
 
     BPSimulator *bpSimulator = [BPSimulator simulatorWithConfiguration:self.config];
     NSUInteger numSims = [self.config.numSims intValue];
-    [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
+    [BPUtils printInfo:INFO withString:@"This is Bluepill %s", [BPUtils version]];
     NSError *error;
     NSMutableArray *bundles = [BPPacker packTests:xcTestFiles configuration:self.config andError:&error];
     if (!bundles || bundles.count == 0) {

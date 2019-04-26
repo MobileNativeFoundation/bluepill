@@ -44,7 +44,6 @@
 		B368E572213F8E8F00B4DEA3 /* BPConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A4FB8CD1DF89A790073F268 /* BPConfiguration.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E573213F8E8F00B4DEA3 /* BPExecutionPhaseProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A4933121DAD28C70060D54F /* BPExecutionPhaseProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E574213F8E8F00B4DEA3 /* BPExitStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A202A3D1DAED04900D935E3 /* BPExitStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B368E575213F8E8F00B4DEA3 /* (null) in Headers */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E576213F8E8F00B4DEA3 /* SimulatorMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A4933131DAD63A50060D54F /* SimulatorMonitor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E577213F8E8F00B4DEA3 /* BPSimulator.h in Headers */ = {isa = PBXBuildFile; fileRef = BAFA2F771E567EE80072C69B /* BPSimulator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B368E579213F965600B4DEA3 /* BPTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = C41A2C731E0B24E8005D9751 /* BPTestCase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -99,12 +98,12 @@
 		C47B2DB222580FF20068C5CA /* BPStats.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A7D66001DB679820015C937 /* BPStats.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C47B2DB3225813C70068C5CA /* BPWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A202A401DB0066100D935E3 /* BPWriter.m */; };
 		C47B2DB4225813DC0068C5CA /* BPWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A202A3F1DB0066100D935E3 /* BPWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C487CB1B226A36F500CC5BC2 /* BPVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = C487CB1A226A36F500CC5BC2 /* BPVersion.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C487CB1C226A663C00CC5BC2 /* bplib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B368E55A213F8D2E00B4DEA3 /* bplib.framework */; };
 		C49EEB7B2254142B002CC956 /* crash_tests_attempt_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB7A2254142B002CC956 /* crash_tests_attempt_2.xml */; };
 		C49EEB7D2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB7C2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml */; };
 		C49EEB7F2254177F002CC956 /* fatal_tests_attempt_2.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB7E2254177F002CC956 /* fatal_tests_attempt_2.xml */; };
 		C49EEB812254179E002CC956 /* fatal_tests_attempt_3.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB802254179E002CC956 /* fatal_tests_attempt_3.xml */; };
+		C4AF1ADF2273649500618F0B /* BPVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = C4AF1ADE2273649500618F0B /* BPVersion.h */; };
 		C4D686182267A8C9007D4237 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F731DB5DFA200867756 /* BPTestHelper.m */; };
 		C4F08F75224C45750001AD2A /* BPExitStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7A851DDBB156001E085D /* BPExitStatus.m */; };
 		C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */ = {isa = PBXBuildFile; fileRef = C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */; };
@@ -312,6 +311,7 @@
 		C49EEB7C2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = crash_tests_with_retry_attempt_2.xml; sourceTree = "<group>"; };
 		C49EEB7E2254177F002CC956 /* fatal_tests_attempt_2.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = fatal_tests_attempt_2.xml; sourceTree = "<group>"; };
 		C49EEB802254179E002CC956 /* fatal_tests_attempt_3.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = fatal_tests_attempt_3.xml; sourceTree = "<group>"; };
+		C4AF1ADE2273649500618F0B /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = "<group>"; };
 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 		C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "simulator-preferences.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -413,6 +413,7 @@
 		7A7901791D5CB679004D4325 = {
 			isa = PBXGroup;
 			children = (
+				C4AF1ADE2273649500618F0B /* BPVersion.h */,
 				7A4FB8CC1DF89A790073F268 /* src */,
 				BAB24F691DB5DB2300867756 /* tests */,
 				7A7901831D5CB679004D4325 /* Products */,
@@ -627,6 +628,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3103CEB21519FFE00C5643C /* SimulatorHelper.h in Headers */,
+				C4AF1ADF2273649500618F0B /* BPVersion.h in Headers */,
 				B3103CEA2151774500C5643C /* BPXCTestFile.m in Headers */,
 				B3520CE3214C70EF003DC68F /* BPWaitTimer.h in Headers */,
 				B3520CDF214C5DE3003DC68F /* BPHandler.h in Headers */,
@@ -642,10 +644,8 @@
 				B368E573213F8E8F00B4DEA3 /* BPExecutionPhaseProtocol.h in Headers */,
 				B368E574213F8E8F00B4DEA3 /* BPExitStatus.h in Headers */,
 				C47B2DB4225813DC0068C5CA /* BPWriter.h in Headers */,
-				B368E575213F8E8F00B4DEA3 /* (null) in Headers */,
 				B368E576213F8E8F00B4DEA3 /* SimulatorMonitor.h in Headers */,
 				B368E577213F8E8F00B4DEA3 /* BPSimulator.h in Headers */,
-				C487CB1B226A36F500CC5BC2 /* BPVersion.h in Headers */,
 				C47B2DB222580FF20068C5CA /* BPStats.h in Headers */,
 				B368E56A213F8D2F00B4DEA3 /* bplib.h in Headers */,
 				B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */,
@@ -808,11 +808,11 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"${SOURCE_ROOT}/bplib/BPVersion.h",
+				"${SOURCE_ROOT}/BPVersion.h",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${SOURCE_ROOT}/../scripts/bpversion.sh \"${SOURCE_ROOT}/bplib/BPVersion.h\"\n";
+			shellScript = "${SOURCE_ROOT}/../scripts/bpversion.sh \"${SOURCE_ROOT}/BPVersion.h\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1014,6 +1014,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
@@ -1028,6 +1029,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
@@ -1056,6 +1058,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
@@ -1088,6 +1091,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
@@ -1106,12 +1110,14 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
 				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -1120,12 +1126,14 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
 				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYSTEM_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

@@ -11,7 +11,7 @@ licenses(["notice"])
 
 objc_library(
     name = "bpsrc",
-    hdrs = glob(["src/*.h"]),
+    hdrs = glob(["src/*.h"]) + ["//:bp_version"],
     srcs = glob([
         "src/**/*.m",
         "src/PrivateHeaders/**/*.h",

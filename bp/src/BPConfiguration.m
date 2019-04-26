@@ -9,7 +9,6 @@
 
 #import "BPConfiguration.h"
 #import "BPUtils.h"
-#import "BPVersion.h"
 #import <getopt.h>
 #import <objc/runtime.h>
 #import "BPConstants.h"

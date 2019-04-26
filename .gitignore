@@ -1,6 +1,5 @@
 # Bluepill Specific file
-Bluepill-runner/BPVersion.h
-Bluepill-cli/BPVersion.h
+bp/BPVersion.h
 result.txt
 
 # Xcode

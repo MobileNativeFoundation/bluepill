@@ -26,7 +26,6 @@
 #import "SimulatorHelper.h"
 
 #import "BPTestHelper.h"
-#import "BPVersion.h"
 
 
 //! Project version number for BluepillLib.

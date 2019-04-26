@@ -153,4 +153,10 @@ typedef BOOL (^BPRunBlock)(void);
  * @return exit code 0 == success
  */
 + (int)setupWeakLinking:(char **)argv;
+
+/*!
+ * @discussion return the version of bplib
+ * @return the version
+ */
++ (char *)version;
 @end
