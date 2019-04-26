@@ -30,18 +30,6 @@
     [super tearDown];
 }
 
-- (void)testNoSchemeinCLI {
-    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
-    NSError *err;
-    BOOL result;
-    
-    result = [config processOptionsWithError:&err];
-    XCTAssert(result == FALSE);
-    XCTAssert([[err localizedDescription] containsString:@"Missing required option"]);
-    XCTAssert([[err localizedDescription] containsString:@"-a/--app"]);
-    XCTAssert([[err localizedDescription] containsString:@"-s/--scheme-path"]);
- }
-
 - (void)testListArguments {
     BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
     [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];

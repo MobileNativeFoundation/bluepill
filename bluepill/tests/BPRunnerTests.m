@@ -40,8 +40,6 @@
     self.config.failureTolerance = @0;
     self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
     self.config.headlessMode = NO;
-    NSString *path = @"testScheme.xcscheme";
-    self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
 }
 
 - (void)tearDown {

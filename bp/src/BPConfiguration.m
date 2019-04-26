@@ -44,8 +44,8 @@ struct BPOptions {
     // Required argument
     {'a', "app", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
         "The path to the host application to execute (your .app)"},
-    {'s', "scheme-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "schemePath",
-        "The scheme to run tests."},
+    {'t', "test-bundle-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
+        "The test bundle to run tests."},
 
     // Required arguments for ui testing
     {'u', "runner-app-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testRunnerAppPath",
@@ -58,8 +58,6 @@ struct BPOptions {
         "BP master use this flag to tell BP worker which template simulator to use"},
     {'c', "config", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "configFile",
         "Read options from the specified configuration file instead of the command line"},
-    {'t', "test-bundle-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
-        "The test bundle to run tests."},
     {'C', "repeat-count", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "1", BP_VALUE | BP_INTEGER, "repeatTestsCount",
         "Number of times we'll run the entire test suite (used for stability testing)."},
     {'N', "no-split", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "noSplit",
@@ -519,7 +517,7 @@ static NSUUID *sessionID;
     // Now check we didn't miss any require options:
     NSMutableArray *errors = [[NSMutableArray alloc] init];
     if (!(self.appBundlePath) && !(self.xcTestRunPath) && !(self.deleteSimUDID)) {
-        [errors addObject:@"Missing required option: -a/--app and -s/--scheme-path OR --xctestrun-path"];
+        [errors addObject:@"Missing required option: -a/--app OR --xctestrun-path"];
     }
     if ((self.program & BP_SLAVE) && !(self.testBundlePath) && !(self.deleteSimUDID)) {
         [errors addObject:@"Missing required option: -t/--test-bundle-path"];
@@ -559,50 +557,6 @@ static NSUUID *sessionID;
     self.xcTestRunDict = plist;
     return YES;
 }
-
-- (BOOL)parseXcSchemeFile:(NSString *)schemePath withError:(NSError *__autoreleasing *)errPtr {
-    NSMutableArray<NSString *> *commandLineArgs  = [NSMutableArray new];
-    NSMutableDictionary<NSString *, NSString *> *environmentVariables = [NSMutableDictionary new];
-    
-    NSData *xmlData = [[NSMutableData alloc] initWithContentsOfFile:schemePath];
-    if (xmlData) {
-        NSXMLDocument *document = [[NSXMLDocument alloc] initWithData:xmlData options:0 error:errPtr];
-        if (!document) {
-            BP_SET_ERROR(errPtr, @"Failed to parse scheme file at %@: %@", schemePath, [*errPtr localizedDescription]);
-            return NO;
-        }
-        NSArray *argsNodes = [document nodesForXPath:[NSString stringWithFormat:@"//%@//CommandLineArgument", @"LaunchAction"] error:errPtr];
-        NSMutableArray *envNodes = [[NSMutableArray alloc] init];
-        [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"LaunchAction"] error:errPtr]];
-        [envNodes addObjectsFromArray:[document nodesForXPath:[NSString stringWithFormat:@"//%@//EnvironmentVariable", @"TestAction"] error:errPtr]];
-        for (NSXMLElement *node in argsNodes) {
-            NSString *argument = [[node attributeForName:@"argument"] stringValue];
-            if (![[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
-                continue;
-            }
-            NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];
-            for (NSString *arg in argumentsArray) {
-                if (![arg isEqualToString:@""]) {
-                    [commandLineArgs addObject:arg];
-                }
-            }
-        }
-        
-        for (NSXMLElement *node in envNodes) {
-            NSString *key = [[node attributeForName:@"key"] stringValue];
-            NSString *value = [[node attributeForName:@"value"] stringValue];
-            if ([[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
-                environmentVariables[key] = value;
-            }
-            
-        }
-    }
-    self.commandLineArguments = commandLineArgs;
-    self.environmentVariables = environmentVariables;
-    return YES;
-}
-
-
 
 - (BOOL)validateConfigWithError:(NSError *__autoreleasing *)errPtr {
     BOOL isdir;
@@ -732,22 +686,6 @@ static NSUUID *sessionID;
             BP_SET_ERROR(errPtr, @"%@ doesn't exist", self.scriptFilePath);
             return NO;
         }
-    }
-
-    if (!self.xcTestRunDict && self.schemePath) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:self.schemePath isDirectory:&isdir]) {
-            if (isdir) {
-                BP_SET_ERROR(errPtr, @"%@ is a directory", self.schemePath);
-                return NO;
-            }
-        } else {
-            BP_SET_ERROR(errPtr, @"%@ doesn't exist", self.schemePath);
-            return NO;
-        }
-        if (![self parseXcSchemeFile:self.schemePath withError:errPtr]) {
-            return NO;
-        }
-        [BPUtils printInfo:WARNING withString:@"The --scheme-path option is broken and is being deprecated. Please switch to using --xctestrun-path."];
     }
 
     // bp requires an xctest argument while `bluepill` does not.

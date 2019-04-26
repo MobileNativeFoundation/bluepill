@@ -39,8 +39,6 @@
     self.config.failureTolerance = @0;
     self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
     self.config.headlessMode = YES;
-    NSString *path = @"testScheme.xcscheme";
-    self.config.schemePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
     [BPUtils enableDebugOutput:![BPUtils isBuildScript]];
     [BPUtils quietMode:[BPUtils isBuildScript]];
     self.config.quiet = [BPUtils isBuildScript];

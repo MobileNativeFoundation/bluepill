@@ -35,8 +35,6 @@
     NSString *resourcePath = [BPTestHelper resourceFolderPath];
     NSString *configFile = [resourcePath stringByAppendingPathComponent:@"testConfig-busted.json"];
     [config loadConfigFile:configFile withError:&error];
-    config.schemePath = [resourcePath stringByAppendingPathComponent:@"testScheme.xcscheme"];
-    XCTAssertNil(error);
     [config validateConfigWithError:&error];
     XCTAssertNotNil(error);
     NSString *expected = [[NSString alloc] initWithFormat:@"runtime must be a string like '%s'.", BP_DEFAULT_RUNTIME];
@@ -54,7 +52,6 @@
     XCTAssert([config.noSplit isEqualToArray:@[@"VoyagerTests"]]);
     XCTAssertEqualObjects(config.repeatTestsCount, @1);
     XCTAssertEqualObjects(config.errorRetriesCount, @0);
-    XCTAssert([config.schemePath isEqualToString:@"/Users/khu/ios/dev/voyager-ios_trunk/Voyager.xcodeproj/xcshareddata/xcschemes/VoyagerScenarioTests4.xcscheme"]);
     XCTAssertEqual(config.headlessMode, NO);
     XCTAssert([config.outputDirectory isEqualToString:@"/Users/khu/tmp/simulator"]);
 
@@ -78,8 +75,6 @@
     XCTAssert(![config.appBundlePath isEqualToString:@"./LinkedIn.app"]);
     XCTAssert([config.appBundlePath containsString:@"./LinkedIn.app"]);
     XCTAssert([config.noSplit isEqualToArray:@[@"VoyagerTests"]]);
-    XCTAssert(![config.schemePath isEqualToString:@"./VoyagerScenarioTests4.xcscheme"]);
-    XCTAssert([config.schemePath containsString:@"./VoyagerScenarioTests4.xcscheme"]);
     XCTAssert(![config.outputDirectory isEqualToString:@"./simulator"]);
     XCTAssert([config.outputDirectory containsString:@"./simulator"]);
 }
