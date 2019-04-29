@@ -45,7 +45,8 @@ CONFIG_FILE_JSON_STR=""
 CONFIG_FILE_JSON_STR+="\"device\":\"%(device)s\","
 CONFIG_FILE_JSON_STR+="\"runtime\":\"%(runtime)s\","
 CONFIG_FILE_JSON_STR+="\"headless\":%(headless)s,"
-CONFIG_FILE_JSON_STR+="\"num-sims\":%(num_sims)s"
+CONFIG_FILE_JSON_STR+="\"num-sims\":%(num_sims)s,"
+CONFIG_FILE_JSON_STR+="\"clone-simulator\":%(clone_simulator)s"
 
 
 TEST_ENV="%(test_env)s"
