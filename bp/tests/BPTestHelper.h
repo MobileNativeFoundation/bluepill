@@ -14,9 +14,6 @@
 // Return the path to the sample app directory (path to XX.app)
 + (NSString *)sampleAppPath;
 
-// Return the path to the test scheme
-+ (NSString *)sampleTestScheme;
-
 // Return the path to the sample app's xctest with 1000 test cases
 + (NSString *)sampleAppBalancingTestsBundlePath;
 

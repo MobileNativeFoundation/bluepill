@@ -15,11 +15,6 @@
     return [[self debugIphoneSimulatorPath] stringByAppendingString:@"/BPSampleApp.app"];
 }
 
-+ (NSString *)sampleTestScheme {
-    NSString *path = @"testScheme.xcscheme";
-    return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:path];
-}
-
 // Return the path to the sample app's xctest with 1000 test cases
 + (NSString *)sampleAppBalancingTestsBundlePath {
     return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppTests.xctest"];

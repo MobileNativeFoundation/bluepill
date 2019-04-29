@@ -33,7 +33,6 @@
 - (void)testListArguments {
     BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
     [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
-    [config saveOpt:[NSNumber numberWithInt:'s'] withArg:[BPTestHelper sampleTestScheme]];
     [config saveOpt:[NSNumber numberWithInt:'t'] withArg:[BPTestHelper sampleAppBalancingTestsBundlePath]];
     [config saveOpt:[NSNumber numberWithInt:'R'] withArg:@"2"];
     [config saveOpt:[NSNumber numberWithInt:'f'] withArg:@"1"];
