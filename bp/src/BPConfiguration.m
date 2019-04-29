@@ -495,7 +495,7 @@ static NSUUID *sessionID;
             // load the config file
             NSError *error;
             if (![self loadConfigFile:optarg withError:&error]) {
-                BP_SET_ERROR(errPtr, @"Could not load configuration from %@\n%@", optarg, [error localizedDescription]);
+                BP_SET_ERROR(errPtr, @"Could not load configuration from '%@'\n%@", optarg, [error localizedDescription]);
                 return FALSE;
             }
             loadedConfig = TRUE;

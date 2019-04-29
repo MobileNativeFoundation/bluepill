@@ -112,7 +112,6 @@
         [allTests addObjectsFromArray:loadedTests];
     } else if (config.appBundlePath) {
         NSAssert(config.appBundlePath, @"no app bundle and no xctestrun file");
-        [BPUtils printInfo:WARNING withString:@"Using broken configuration, consider using .xctestrun files"];
         [allTests addObjectsFromArray:[BPApp testsFromAppBundle:config.appBundlePath
                                               andTestBundlePath:config.testBundlePath
                                              andUITargetAppPath:config.testRunnerAppPath

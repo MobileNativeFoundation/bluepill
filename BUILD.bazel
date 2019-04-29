@@ -5,6 +5,7 @@ genrule(
     cmd = "./$(location scripts/bpversion.sh) \"$@\"",
     local = True,
     stamp = 1,
+    tags = ["local", "no-cache"],
     tools = ["scripts/bpversion.sh"],
     visibility = ["//visibility:public"],
 )
