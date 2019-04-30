@@ -17,6 +17,15 @@ def _get_template_substitutions(ctx):
     }
     return {"%(" + k + ")s": subs[k] for k in subs}
 
+def _get_execution_environment(ctx):
+    """Returns environment variables the test runner requires"""
+    execution_environment = {}
+    xcode_version = str(ctx.attr._xcode_config[apple_common.XcodeVersionConfig].xcode_version())
+    if xcode_version:
+        execution_environment["XCODE_VERSION"] = xcode_version
+
+    return execution_environment
+
 def _ios_bluepill_test_runner_impl(ctx):
     """Implementation for the ios_bluepill_test_runner rule."""
     ctx.actions.expand_template(
@@ -28,6 +37,7 @@ def _ios_bluepill_test_runner_impl(ctx):
         AppleTestRunnerInfo(
             test_runner_template = ctx.outputs.test_runner_template,
             execution_requirements = ctx.attr.execution_requirements,
+            execution_environment = _get_execution_environment(ctx),
         ),
         DefaultInfo(
             runfiles = ctx.runfiles(
