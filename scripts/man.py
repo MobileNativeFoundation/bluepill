@@ -6,9 +6,9 @@ import sys
 import textwrap
 import subprocess
 
-BPConfig = "Source/Shared/BPConfiguration.m"
-BPExitStatus = "Bluepill-cli/Bluepill-cli/Bluepill/Reporters/BPExitStatus.h"
-BPConstants = "Source/Shared/BPConstants.h"
+BPConfig = "bp/src/BPConfiguration.m"
+BPExitStatus = "bp/src/BPExitStatus.h"
+BPConstants = "bp/src/BPConstants.h"
 
 Header = """
 .\\" Bluepill help
@@ -73,6 +73,7 @@ beginning of 2017.
 .SH AUTHORS
 
 """
+
 
 def main():
     if len(sys.argv) > 1:
@@ -143,9 +144,8 @@ def write_man_page(f):
             'default_val': default_val,
             'kind': kind,
             'desc': desc,
-            }
+        }
         parsed_opts.append(op)
-
 
     def format_bi(op):
         """Format an op dictionary into a .BI line for troff"""
@@ -170,7 +170,6 @@ def write_man_page(f):
             )
         return line
 
-
     # now print them
     print(Header)
     for op in parsed_opts:
@@ -194,7 +193,8 @@ def write_man_page(f):
 
 def get_authors():
     authors = {}
-    p = subprocess.Popen(['git', 'log', '--pretty=%aN|%aE'], stdout=subprocess.PIPE)
+    p = subprocess.Popen(
+        ['git', 'log', '--pretty=%aN|%aE'], stdout=subprocess.PIPE)
     while True:
         line = p.stdout.readline()
         if line != "":
@@ -214,6 +214,7 @@ def get_authors():
         ret.append("{} {}".format(name, str_emails))
     ret = sorted(ret)
     return "\n.br\n".join(ret)
+
 
 if __name__ == '__main__':
     main()
