@@ -1,6 +1,5 @@
 # Bluepill Specific file
-Bluepill-runner/BPVersion.h
-Bluepill-cli/BPVersion.h
+bp/BPVersion.h
 result.txt
 
 # Xcode
@@ -68,3 +67,6 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+
+# Bazel dirs
+bazel-*

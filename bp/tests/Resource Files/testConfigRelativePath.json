@@ -1,0 +1,9 @@
+{
+    "app": "./LinkedIn.app",
+    "no-split": [
+                 "VoyagerTests"
+                 ],
+    "retries": 0,
+    "output-dir": "./simulator",
+    "headless": false
+}
