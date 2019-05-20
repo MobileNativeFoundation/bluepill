@@ -1,7 +1,6 @@
 ![BluepillIcon](doc/img/bluepill_text.png)
 
-[Build Status:](https://circleci.com/gh/linkedin/bluepill/tree/master)
-![](https://circleci.com/gh/linkedin/bluepill.svg?style=shield&circle-token=6f208dd27edad52d22d3d4e171bc2b43b3b65afe)
+[Build Status](https://dev.azure.com/lnkd-oss/Bluepill/_build?view=runs): [![Build Status](https://dev.azure.com/lnkd-oss/Bluepill/_apis/build/status/linkedin.bluepill?branchName=master)](https://dev.azure.com/lnkd-oss/Bluepill/_build/latest?definitionId=1&branchName=master)
 
 Bluepill is a tool to run iOS tests in parallel using multiple simulators.
 
