@@ -24,8 +24,6 @@ jobs:
       failTaskOnFailedTests: false
   - script: ./scripts/bluepill.sh build
     displayName: 'Build BluePill'
-  - script: ls -alR
-    displayName: 'List stuff'
   - task: CopyFiles@2
     inputs:
       contents: 'build/*.zip'
