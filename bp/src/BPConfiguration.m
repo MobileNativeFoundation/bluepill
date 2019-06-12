@@ -475,6 +475,10 @@ static NSUUID *sessionID;
             }
         }
     }
+    if (self.numSims.integerValue < 1) {
+        BP_SET_ERROR(errPtr, @"Number of simulators set to %lu but there cannot be fewer than one simulator.", self.numSims.integerValue);
+        return NO;
+    }
     // Pull out two keys that are undocumented but needed for supporting xctest
     self.commandLineArguments = [configDict objectForKey:@"commandLineArguments"];
     self.environmentVariables = [configDict objectForKey:@"environmentVariables"];
