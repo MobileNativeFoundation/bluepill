@@ -214,8 +214,9 @@ maxprocs(void)
     }
     if (bundles.count < numSims) {
         [BPUtils printInfo:WARNING
-                withString:@"Lowering number of parallel simulators from %lu to %lu because there aren't enough tests.",
+                withString:@"Lowering number of parallel simulators from %lu to %lu because there aren't enough test bundles.",
                             numSims, bundles.count];
+        numSims = bundles.count;
     }
     if (self.config.cloneSimulator) {
         self.testHostForSimUDID = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles];
@@ -223,8 +224,8 @@ maxprocs(void)
             return 1;
         }
     }
-    [BPUtils printInfo:INFO withString:@"Running with %lu parallel simulator%s.",
-     (unsigned long)numSims, (numSims > 1) ? "s" : ""];
+    [BPUtils printInfo:INFO withString:@"Running with %lu %s.",
+     (unsigned long)numSims, (numSims > 1) ? "parallel simulators" : "simulator"];
     NSArray *copyBundles = [NSMutableArray arrayWithArray:bundles];
     for (int i = 1; i < [self.config.repeatTestsCount integerValue]; i++) {
         [bundles addObjectsFromArray:copyBundles];
