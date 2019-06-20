@@ -232,6 +232,23 @@
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
+- (void)testAppCrashingAndRetryReportsCorrectExitCode {
+    NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppCrashingTestsSetTempDir", tempDir] withError:&error];
+    // NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+    self.config.testing_crashOnAttempt = @1;
+    self.config.errorRetriesCount = @2;
+    self.config.failureTolerance = @1;
+    self.config.onlyRetryFailed = YES;
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssertTrue(exitCode == BPExitStatusTestsAllPassed);
+}
+
 - (void)testReportWithFatalErrorTestsSet {
     NSString *testBundlePath = [BPTestHelper sampleAppFatalTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
