@@ -51,11 +51,12 @@ NSString *attemptFromSimulatorVersionInfo(NSString *simulatorVersionInfo) {
     NSString *attempt = attemptFromSimulatorVersionInfo(simulatorVersionInfo);
     NSString *crashOnAttempt = [env objectForKey:@"_BP_TEST_CRASH_ON_ATTEMPT"];
 
-    NSLog(@"Attempt: %@ Crash requested on %@, not crashing", attempt, crashOnAttempt);
+    NSLog(@"Attempt: %@ Crash requested on %@", attempt, crashOnAttempt);
     if (crashOnAttempt && crashOnAttempt != attempt) {
+        NSLog(@"not crashing");
         return;
     }
-
+    NSLog(@"crashing");
     // ok, let's crash and burn
     int *pointer = nil;
     *pointer = 1;
