@@ -238,7 +238,6 @@
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppCrashingTestsSetTempDir", tempDir] withError:&error];
-    // NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
     self.config.testing_crashOnAttempt = @1;
     self.config.errorRetriesCount = @2;
