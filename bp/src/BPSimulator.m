@@ -473,6 +473,9 @@
     if (self.config.testing_HangAppOnLaunch) {
         appLaunchEnvironment[@"_BP_TEST_HANG_ON_LAUNCH"] = @"YES";
     }
+    if (self.config.testing_crashOnAttempt) {
+        appLaunchEnvironment[@"_BP_TEST_CRASH_ON_ATTEMPT"] = [self.config.testing_crashOnAttempt stringValue];
+    }
 
     // Intercept stdout, stderr and post as simulator-output events
     NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/stdout_stderr_%@", self.device.dataPath, [[self.device UDID] UUIDString]];
