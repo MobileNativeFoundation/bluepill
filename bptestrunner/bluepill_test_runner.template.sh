@@ -39,7 +39,7 @@ fi
 
 ATTR_CONFIG_FILE="%(config_file)s"
 
-if [[ "$ATTR_CONFIG_FILE" != "%(config_file)"s ]]; then
+if [[ -n "$ATTR_CONFIG_FILE" ]]; then
   runner_flags+=("--attr_config_file=$ATTR_CONFIG_FILE")
 fi
 

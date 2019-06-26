@@ -17,7 +17,10 @@ def _get_template_substitutions(ctx):
     }
     if ctx.attr.config_file:
         # we get a Target in config_file
-        subs["config_file"] = ctx.attr.config_file.files.to_list()[0].path
+        config_file = ctx.attr.config_file.files.to_list()[0].path
+    else:
+        config_file = ""
+    subs["config_file"] = config_file
     return {"%(" + k + ")s": subs[k] for k in subs}
 
 def _get_execution_environment(ctx):
