@@ -15,6 +15,9 @@ def _get_template_substitutions(ctx):
         "num_sims": str(ctx.attr.num_sims),
         "testrunner_binary": ctx.executable._testrunner.short_path,
     }
+    if ctx.attr.config_file:
+        # we get a Target in config_file
+        subs["config_file"] = ctx.attr.config_file.files.to_list()[0].path
     return {"%(" + k + ")s": subs[k] for k in subs}
 
 def _get_execution_environment(ctx):
@@ -78,6 +81,13 @@ Spawn simulator by clone from simulator template.
             doc = """
 Number of simulators to run in parallel.
 """,
+        ),
+        "config_file": attr.label(
+            doc = """
+A configuration file that will be passed to bluepill. Rule attributes
+take precedence over conflicting values in the config file.
+""",
+            allow_single_file = True,
         ),
         "execution_requirements": attr.string_dict(
             allow_empty = False,
