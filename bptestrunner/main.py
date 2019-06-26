@@ -29,7 +29,7 @@ def main():
     """
     parser = argparse.ArgumentParser()
     # attr_config_file is a config.json that comes from the rule's attributes (e.g. num_sims)
-    parser.add_argument('--attr_config-file')
+    parser.add_argument('--attr_config_file')
     # rule_config_file is the config.json that comes from the 'config_file' rule attribute
     parser.add_argument('--rule_config_file')
     parser.add_argument('--Xbp', nargs=1, action='append')
@@ -54,7 +54,8 @@ def main():
 
     logging.debug("Running: bluepill %s", ' '.join(bpargs))
     rc = run('bluepill', bpargs)
-    os.remove(config_file)
+    if not args.verbose:
+        os.remove(config_file)
     pattern = os.path.join(output_dir, '*.xml')
     xml_files = glob.glob(pattern)
     final_xml_output = None
@@ -81,7 +82,7 @@ def merge_config_files(config1, config2):
     if config2:
         with open(config2) as f:
             cfg2 = json.load(f)
-    merged_cfg = {key: value for (key, value) in (cfg1.items() + cfg2.items())}
+    merged_cfg = {key: value for (key, value) in (cfg2.items() + cfg1.items())}
     f = tempfile.NamedTemporaryFile(delete=False)
     json.dump(merged_cfg, f)
     f.close()

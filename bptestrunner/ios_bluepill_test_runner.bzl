@@ -36,6 +36,9 @@ def _ios_bluepill_test_runner_impl(ctx):
         output = ctx.outputs.test_runner_template,
         substitutions = _get_template_substitutions(ctx),
     )
+    runfiles = [ctx.file._testrunner]
+    if ctx.attr.config_file:
+        runfiles += ctx.attr.config_file.files.to_list()
     return [
         AppleTestRunnerInfo(
             test_runner_template = ctx.outputs.test_runner_template,
@@ -44,7 +47,7 @@ def _ios_bluepill_test_runner_impl(ctx):
         ),
         DefaultInfo(
             runfiles = ctx.runfiles(
-                files = [ctx.file._testrunner],
+                files = runfiles,
             ),
         ),
     ]
