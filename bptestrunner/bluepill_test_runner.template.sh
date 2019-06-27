@@ -16,25 +16,31 @@ TMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/test_runner_work_dir.XXXXXX")"
 TEST_BUNDLE_PATH="%(test_bundle_path)s"
 
 if [[ "$TEST_BUNDLE_PATH" == *.xctest ]]; then
-  runner_flags+=("--test_bundle_path=${TEST_BUNDLE_PATH}")
+  runner_flags+=("--Xbp=--test_bundle_path=${TEST_BUNDLE_PATH}")
 else
   TEST_BUNDLE_NAME=$(basename_without_extension "${TEST_BUNDLE_PATH}")
   TEST_BUNDLE_TMP_DIR="${TMP_DIR}/${TEST_BUNDLE_NAME}"
   unzip -qq -d "${TEST_BUNDLE_TMP_DIR}" "${TEST_BUNDLE_PATH}"
-  runner_flags+=("--test-bundle-path=${TEST_BUNDLE_TMP_DIR}/${TEST_BUNDLE_NAME}.xctest")
+  runner_flags+=("--Xbp=--test-bundle-path=${TEST_BUNDLE_TMP_DIR}/${TEST_BUNDLE_NAME}.xctest")
 fi
 
 TEST_HOST_PATH="%(test_host_path)s"
 
 if [[ -n "$TEST_HOST_PATH" ]]; then
   if [[ "$TEST_HOST_PATH" == *.app ]]; then
-    runner_flags+=("--app_under_test_path=$TEST_HOST_PATH")
+    runner_flags+=("--Xbp=--app=$TEST_HOST_PATH")
   else
     TEST_HOST_NAME=$(basename_without_extension "${TEST_HOST_PATH}")
     TEST_HOST_TMP_DIR="${TMP_DIR}/${TEST_HOST_NAME}"
     unzip -qq -d "${TEST_HOST_TMP_DIR}" "${TEST_HOST_PATH}"
-    runner_flags+=("--app=${TEST_HOST_TMP_DIR}/Payload/${TEST_HOST_NAME}.app")
+    runner_flags+=("--Xbp=--app=${TEST_HOST_TMP_DIR}/Payload/${TEST_HOST_NAME}.app")
   fi
+fi
+
+ATTR_CONFIG_FILE="%(config_file)s"
+
+if [[ -n "$ATTR_CONFIG_FILE" ]]; then
+  runner_flags+=("--attr_config_file=$ATTR_CONFIG_FILE")
 fi
 
 # Constructs the json string to configure the test env and tests to run.
@@ -71,8 +77,10 @@ if [[ -n "${CONFIG_FILE_JSON_STR}" ]]; then
   CONFIG_FILE_JSON_STR="{${CONFIG_FILE_JSON_STR}}"
   CONFIG_FILE_JSON_PATH="${TMP_DIR}/config.json"
   echo "${CONFIG_FILE_JSON_STR}" > "${CONFIG_FILE_JSON_PATH}"
-  runner_flags+=("-c" "${CONFIG_FILE_JSON_PATH}")
+  runner_flags+=("--rule_config_file" "${CONFIG_FILE_JSON_PATH}")
 fi
+
+runner_flags+=("-v")
 
 cmd=("%(testrunner_binary)s"
   "${runner_flags[@]}"

@@ -8,7 +8,9 @@
 # WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 from __future__ import print_function
 
+import argparse
 import glob
+import json
 import logging
 import os
 import pkg_resources
@@ -25,21 +27,35 @@ import tempfile
 def main():
     """Parse the arguments in an xctestrunner-compatible way
     """
-    args = sys.argv[1:]
-    if '-v' in args:
+    parser = argparse.ArgumentParser()
+    # attr_config_file is a config.json that comes from the rule's attributes (e.g. num_sims)
+    parser.add_argument('--attr_config_file')
+    # rule_config_file is the config.json that comes from the 'config_file' rule attribute
+    parser.add_argument('--rule_config_file')
+    parser.add_argument('--Xbp', nargs=1, action='append')
+    parser.add_argument('-v', '--verbose', action='store_true')
+    args = parser.parse_args()
+    if args.verbose:
         logging.basicConfig(level=logging.DEBUG,
                             format='%(asctime)s %(message)s')
     else:
         logging.basicConfig(format='%(asctime)s %(message)s')
 
     logging.debug("PWD: '%s'", os.getcwd())
+    # flatten Xbp args
+    bpargs = [a for sl in args.Xbp for a in sl]
     # Add xcode path to CLI
-    args += ['--xcode-path', find_xcode_path()]
+    bpargs += ['--xcode-path', find_xcode_path()]
     output_dir = os.environ['TEST_UNDECLARED_OUTPUTS_DIR']
-    args += ['--output-dir', output_dir]
+    bpargs += ['--output-dir', output_dir]
+    config_file = merge_config_files(args.attr_config_file,
+                                     args.rule_config_file)
+    bpargs += ['-c', config_file]
 
-    logging.debug("Running: bluepill %s", ' '.join(args))
-    rc = run('bluepill', args)
+    logging.debug("Running: bluepill %s", ' '.join(bpargs))
+    rc = run('bluepill', bpargs)
+    if not args.verbose:
+        os.remove(config_file)
     pattern = os.path.join(output_dir, '*.xml')
     xml_files = glob.glob(pattern)
     final_xml_output = None
@@ -51,6 +67,28 @@ def main():
         xml_output_path = os.environ['XML_OUTPUT_FILE']
         shutil.copy(final_xml_output, xml_output_path)
     sys.exit(rc)
+
+
+def merge_config_files(config1, config2):
+    """Merge two config files. Keys in config2 trump keys in config1,
+    returns the path of the new merged file.
+    """
+    logging.debug("Merging '{}' '{}'".format(config1, config2))
+    cfg1 = {}
+    if config1:
+        with open(config1) as f:
+            cfg1 = json.load(f)
+    cfg2 = {}
+    if config2:
+        with open(config2) as f:
+            cfg2 = json.load(f)
+    merged_cfg = {key: value for (key, value) in (cfg2.items() + cfg1.items())}
+    f = tempfile.NamedTemporaryFile(delete=False)
+    json.dump(merged_cfg, f)
+    f.close()
+    logging.debug("merged cfg file: {}".format(f.name))
+    logging.debug("{}".format(merged_cfg))
+    return f.name
 
 
 def find_xcode_path():

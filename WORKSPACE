@@ -1,9 +1,10 @@
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-git_repository(
+
+http_archive(
     name = "build_bazel_rules_apple",
-    remote = "https://github.com/bazelbuild/rules_apple.git",
-    tag = "0.15.0",
+    url = "https://github.com/bazelbuild/rules_apple/releases/download/0.17.2/rules_apple.0.17.2.tar.gz",
+    sha256 = "6efdde60c91724a2be7f89b0c0a64f01138a45e63ba5add2dca2645d981d23a1",
 )
 
 load(
@@ -28,8 +29,9 @@ load(
 apple_support_dependencies()
 
 # For packaging python scripts.
-git_repository(
+http_archive(
     name = "subpar",
-    remote = "https://github.com/google/subpar",
-    commit = "edb8409041b521959b6ed4b7412c0eec59d4af78",
+    url = "https://github.com/google/subpar/archive/2.0.0.zip",
+    sha256 = "8876244a984d75f28b1c64d711b6e5dfab5f992a3b741480e63cfc5e26acba93",
+    strip_prefix = "subpar-2.0.0",
 )
