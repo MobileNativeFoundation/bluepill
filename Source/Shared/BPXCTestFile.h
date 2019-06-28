@@ -19,6 +19,7 @@
 @property (nonatomic, strong) NSString *testBundlePath;
 @property (nonatomic, strong) NSString *UITargetAppPath;
 @property (nonatomic, strong) NSArray<NSString *> *skipTestIdentifiers;
+@property (nonatomic, strong) NSNumber *estimatedExecutionTime;
 
 // All test classes in the test bundle
 @property (nonatomic, strong) NSArray *testClasses;
@@ -42,4 +43,6 @@
 - (void)listTestClasses;
 - (NSString *)description;
 - (NSString *)debugDescription;
+
+- (BOOL)isEqual:(id)object;
 @end

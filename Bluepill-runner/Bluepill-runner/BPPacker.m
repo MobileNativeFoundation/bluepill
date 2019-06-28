@@ -15,9 +15,19 @@
 @implementation BPPacker
 
 + (NSMutableArray<BPXCTestFile *> *)packTests:(NSArray<BPXCTestFile *> *)xcTestFiles
-                configuration:(BPConfiguration *)config
-                     andError:(NSError **)errPtr {
+                                configuration:(BPConfiguration *)config
+                                     andError:(NSError **)errPtr {
+    if (!config.testTimeEstimatesJsonFile) {
+        return [self packTestsByCount:xcTestFiles configuration:config andError:errPtr];
+    } else {
+        return [self packTestsByTime:xcTestFiles configuration:config andError:errPtr];
+    }
+}
 
++ (NSMutableArray<BPXCTestFile *> *)packTestsByCount:(NSArray<BPXCTestFile *> *)xcTestFiles
+                                       configuration:(BPConfiguration *)config
+                                            andError:(NSError **)errPtr {
+    [BPUtils printInfo:INFO withString:@"Packing test bundles based on test counts."];
     NSArray *testCasesToRun = config.testCasesToRun;
     NSArray *noSplit = config.noSplit;
     NSUInteger numBundles = [config.numSims integerValue];
@@ -88,5 +98,73 @@
     return bundles;
 }
 
++ (NSMutableArray<BPXCTestFile *> *)packTestsByTime:(NSArray<BPXCTestFile *> *)xcTestFiles
+                                      configuration:(BPConfiguration *)config
+                                           andError:(NSError **)errPtr {
+    [BPUtils printInfo:INFO withString:@"Packing based on individual test execution times in file path: %@", config.testTimeEstimatesJsonFile];
+    if (xcTestFiles.count == 0) {
+        BP_SET_ERROR(errPtr, @"Found no XCTest files.\n"
+                     "Perhaps you forgot to 'build-for-testing'? (Cmd + Shift + U) in Xcode.");
+        return NULL;
+    }
 
+    // load the config file
+    NSDictionary *testTimes = [self loadConfigFile:config.testTimeEstimatesJsonFile withError:errPtr];
+    if ((errPtr && *errPtr) || !testTimes) {
+        [BPUtils printInfo:ERROR withString:@"%@", [*errPtr localizedDescription]];
+        return NULL;
+    }
+
+    NSMutableDictionary *estimatedTimesByTestFilePath = [[NSMutableDictionary alloc] init];
+    NSArray *testCasesToRun = config.testCasesToRun;
+
+    double totalTime = 0.0;
+    for (BPXCTestFile *xctFile in xcTestFiles) {
+        NSMutableSet *bundleTestsToRun = [[NSMutableSet alloc] initWithArray:[xctFile allTestCases]];
+        if (testCasesToRun) {
+            [bundleTestsToRun intersectSet:[[NSSet alloc] initWithArray:testCasesToRun]];
+        }
+        if (config.testCasesToSkip && [config.testCasesToSkip count] > 0) {
+            [bundleTestsToRun minusSet:[[NSSet alloc] initWithArray:config.testCasesToSkip]];
+        }
+        if (bundleTestsToRun.count > 0) {
+            double __block testBundleExecutionTime = 0.0;
+            [bundleTestsToRun enumerateObjectsUsingBlock:^(id _Nonnull test, BOOL * _Nonnull stop) {
+                // TODO: Assign a sensible default if the estimate is not given
+                if ([testTimes objectForKey:test]) {
+                    testBundleExecutionTime += [[testTimes objectForKey:test] doubleValue];
+                }
+            }];
+            estimatedTimesByTestFilePath[xctFile.testBundlePath] = [NSNumber numberWithDouble:testBundleExecutionTime];
+            totalTime += testBundleExecutionTime;
+        }
+    }
+    assert([estimatedTimesByTestFilePath count] == [xcTestFiles count]);
+
+    NSMutableArray<BPXCTestFile *> *bundles = [[NSMutableArray alloc] init];
+    for (BPXCTestFile *xctFile in xcTestFiles) {
+        BPXCTestFile *bundle = [xctFile copy];
+        bundle.skipTestIdentifiers = config.testCasesToSkip;
+        [bundle setEstimatedExecutionTime:estimatedTimesByTestFilePath[xctFile.testBundlePath]];
+        [bundles addObject:bundle];
+    }
+    // Sort bundles by execution times
+    NSMutableArray *sortedBundles = [NSMutableArray arrayWithArray:[bundles sortedArrayUsingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
+        NSNumber *estimatedTime1 = [(BPXCTestFile *)obj1 estimatedExecutionTime];
+        NSNumber *estimatedTime2 = [(BPXCTestFile *)obj2 estimatedExecutionTime];
+        return [estimatedTime2 doubleValue] - [estimatedTime1 doubleValue];
+    }]];
+    return sortedBundles;
+}
+
++ (NSDictionary *)loadConfigFile:(NSString *)file withError:(NSError **)errPtr{
+    NSData *data = [NSData dataWithContentsOfFile:file
+                                          options:NSDataReadingMappedIfSafe
+                                            error:errPtr];
+    if (!data) return nil;
+
+    return [NSJSONSerialization JSONObjectWithData:data
+                                           options:kNilOptions
+                                             error:errPtr];
+}
 @end
