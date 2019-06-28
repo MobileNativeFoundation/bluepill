@@ -16,8 +16,7 @@ def _get_template_substitutions(ctx):
         "testrunner_binary": ctx.executable._testrunner.short_path,
     }
     if ctx.attr.config_file:
-        # we get a Target in config_file
-        config_file = ctx.attr.config_file.files.to_list()[0].path
+        config_file = ctx.file.config_file.short_path
     else:
         config_file = ""
     subs["config_file"] = config_file
@@ -41,7 +40,7 @@ def _ios_bluepill_test_runner_impl(ctx):
     )
     runfiles = [ctx.file._testrunner]
     if ctx.attr.config_file:
-        runfiles += ctx.attr.config_file.files.to_list()
+        runfiles += [ctx.file.config_file]
     return [
         AppleTestRunnerInfo(
             test_runner_template = ctx.outputs.test_runner_template,
