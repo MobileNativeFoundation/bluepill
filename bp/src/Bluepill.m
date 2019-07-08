@@ -121,6 +121,7 @@ static void onInterrupt(int ignore) {
     if (self.failureTolerance == 0) {
         // If there is no more retries, set the final exitCode to current context's exitCode
         self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+        [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
         self.exitLoop = YES;
         return;
     }
@@ -155,6 +156,7 @@ static void onInterrupt(int ignore) {
   // If error retry reach to the max, then return
   if (self.retries == [self.config.errorRetriesCount integerValue]) {
       self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+      [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
       self.exitLoop = YES;
       [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
       return;
@@ -182,6 +184,7 @@ static void onInterrupt(int ignore) {
 - (void)proceed {
     if (self.retries == [self.config.errorRetriesCount integerValue]) {
         self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+        [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
         self.exitLoop = YES;
         [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
         return;
@@ -600,6 +603,7 @@ static void onInterrupt(int ignore) {
 
     if (![self hasRemainingTestsInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
         [BPUtils printInfo:INFO withString:@"No more tests to run."];
+        [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
         self.finalExitStatus = context.exitStatus;
         self.exitLoop = YES;
         return;
@@ -651,6 +655,7 @@ static void onInterrupt(int ignore) {
         case BPExitStatusSimulatorDeleted:
         case BPExitStatusSimulatorReuseFailed:
             self.finalExitStatus = context.exitStatus;
+            [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
             self.exitLoop = YES;
             return;
     }
