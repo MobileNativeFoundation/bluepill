@@ -121,6 +121,10 @@ If you're using [Fastlane](https://github.com/fastlane/fastlane) to run your tes
    - No need to build your project before using the plugin. Builds you project by itself and put xctestrun file automatically;
    - Can reset all simulators if needed (removes all current simulators and recreates default from scratch);
 
+## Bitrise.io Support
+
+If you're using [Bitrise.io](https://bitrise.io) as your CI/CD, you can start using Bluepill immediately. Just add the **Bluepill Build/Test for iOS** step to your existing workflow. This [open source step](https://github.com/HealthengineAU/bitrise-step-bluepill-build-test-for-ios) is maintained by [HealthEngineAU](https://github.com/HealthengineAU) and supports Xcode 8.3 and later.
+
 ## Q & A
 - Are we able to run Xcode UI Testing bundle with Bluepill
 
