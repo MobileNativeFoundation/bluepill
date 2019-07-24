@@ -21,7 +21,7 @@
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        int rc = [BPUtils setupWeakLinking:argv];
+        int rc = [BPUtils setupWeakLinking:argc argv:argv];
         if (rc != 0) return rc;
 #pragma mark main
         int c;
