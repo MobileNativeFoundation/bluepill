@@ -292,7 +292,7 @@ static BOOL quiet = NO;
     return BP_VERSION;
 }
 
-+ (int)setupWeakLinking:(char **)argv {
++ (int)setupWeakLinking:(int)argc argv:(char **)argv {
     // This next part is because we're weak-linking the private Xcode frameworks.
     // This is necessary in case you have multiple versions of Xcode so we dynamically
     // look at the path where Xcode is and add the private framework paths to the
@@ -333,9 +333,19 @@ static BOOL quiet = NO;
     NSString *fallbackFrameworkPath = [fallbackFrameworkPaths componentsJoinedByString:@":"];
     setenv("DYLD_FALLBACK_FRAMEWORK_PATH", [fallbackFrameworkPath UTF8String], 1);
 
+    // Rewrite argv with the full path to the executable
+    const char *updatedArgv[argc + 1];
+
+    updatedArgv[0] = [[[NSBundle mainBundle] executablePath] fileSystemRepresentation];
+    updatedArgv[argc] = 0;
+
+    for (int i = 1; i < argc; i++) {
+        updatedArgv[i] = argv[i];
+    }
+
     // Don't do this setup again...
     setenv("BP_DYLD_RESOLVED", "YES", 1);
-    execv(argv[0], (char *const *)argv);
+    execv(updatedArgv[0], (char *const *)updatedArgv);
 
     // we should never get here
     assert(!"FAIL");

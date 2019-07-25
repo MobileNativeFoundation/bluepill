@@ -149,10 +149,11 @@ typedef BOOL (^BPRunBlock)(void);
 
 /*!
  * @discussion setup the environment for weak linked frameworks
+ * @param argc the number of arguments to the command
  * @param argv the arguments to the command
  * @return exit code 0 == success
  */
-+ (int)setupWeakLinking:(char **)argv;
++ (int)setupWeakLinking:(int)argc argv:(char **)argv;
 
 /*!
  * @discussion return the version of bplib
