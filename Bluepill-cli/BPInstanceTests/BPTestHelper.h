@@ -50,6 +50,9 @@
 // Return path to the sample video file.
 + (NSString *)sampleVideoPath;
 
+// Return path to the sample times json file.
++ (NSString *)sampleTimesJsonPath;
+
 // Return the sample photo path.
 + (NSString *)samplePhotoPath;
 

@@ -85,6 +85,51 @@
     }
 }
 
+- (void)testSmartPackIfJsonFound {
+    self.config.testTimeEstimatesJsonFile = [BPTestHelper sampleTimesJsonPath];
+    self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.testCasesToSkip = @[@"BPSampleAppTests/testCase000"];
+    self.config.numSims = @8;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    XCTAssert(app != nil);
+    NSArray<BPXCTestFile *> *bundles;
+    NSError *error;
+    bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:&error];
+    XCTAssert(error ==  nil);
+    XCTAssert([app.testBundles count] == [bundles count]);
+}
+
+- (void)testSmartPackIfJsonMissing {
+    self.config.testTimeEstimatesJsonFile = @"invalid/times/file/path.json";
+    self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.testCasesToSkip = @[@"BPSampleAppTests/testCase000"];
+    self.config.numSims = @8;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    XCTAssert(app != nil);
+    NSArray<BPXCTestFile *> *bundles;
+    NSError *error;
+    bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:&error];
+    XCTAssert(error !=  nil);
+    XCTAssert([bundles count] == 0);
+}
+
+- (void)testSortByTimeEstimates {
+    self.config.testTimeEstimatesJsonFile = [BPTestHelper sampleTimesJsonPath];
+    self.config.testBundlePath = nil;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    XCTAssert(app != nil);
+    XCTAssert([app.testBundles count] == 5);
+    // Make sure we don't split when we don't want to
+    self.config.numSims = @4;
+    NSArray<BPXCTestFile *> *bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:nil];
+    XCTAssert([bundles count] == [app.testBundles count]);
+    XCTAssert([[[bundles objectAtIndex:0] name] isEqualToString:@"BPSampleAppTests"]);
+    XCTAssert([[[bundles objectAtIndex:1] name] isEqualToString:@"BPSampleAppHangingTests"]);
+    XCTAssert([[[bundles objectAtIndex:2] name] isEqualToString:@"BPSampleAppCrashingTests"]);
+    XCTAssert([[[bundles objectAtIndex:3] name] isEqualToString:@"BPAppNegativeTests"]);
+    XCTAssert([[[bundles objectAtIndex:4] name] isEqualToString:@"BPSampleAppFatalErrorTests"]);
+}
+
 - (void)testPacking {
     NSArray *want, *got;
     NSArray *allTests;
@@ -139,10 +184,10 @@
     XCTAssertEqual([bundles[1].skipTestIdentifiers count], 0);
     XCTAssertEqual([bundles[2].skipTestIdentifiers count], 0);
     XCTAssertEqual([bundles[3].skipTestIdentifiers count], 0);
-    XCTAssertEqual([bundles[4].skipTestIdentifiers count], 149);
-    XCTAssertEqual([bundles[5].skipTestIdentifiers count], 149);
-    XCTAssertEqual([bundles[6].skipTestIdentifiers count], 149);
-    XCTAssertEqual([bundles[7].skipTestIdentifiers count], 159);
+    XCTAssertEqual([bundles[4].skipTestIdentifiers count], 152);
+    XCTAssertEqual([bundles[5].skipTestIdentifiers count], 152);
+    XCTAssertEqual([bundles[6].skipTestIdentifiers count], 152);
+    XCTAssertEqual([bundles[7].skipTestIdentifiers count], 165);
 
     self.config.numSims = @1;
     bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:nil];
@@ -156,21 +201,21 @@
     XCTAssertEqual([bundles[1].skipTestIdentifiers count], 0);
     XCTAssertEqual([bundles[2].skipTestIdentifiers count], 0);
     XCTAssertEqual([bundles[3].skipTestIdentifiers count], 0);
-    XCTAssertEqual([bundles[4].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[5].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[6].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[7].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[8].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[9].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[10].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[11].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[12].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[13].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[14].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[15].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[16].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[17].skipTestIdentifiers count], 189);
-    XCTAssertEqual([bundles[18].skipTestIdentifiers count], 189);
+    XCTAssertEqual([bundles[4].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[5].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[6].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[7].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[8].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[9].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[10].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[11].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[12].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[13].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[14].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[15].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[16].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[17].skipTestIdentifiers count], 194);
+    XCTAssertEqual([bundles[18].skipTestIdentifiers count], 194);
     XCTAssertEqual([bundles[19].skipTestIdentifiers count], 195);
 
     NSMutableArray *toRun = [[NSMutableArray alloc] init];
@@ -183,7 +228,7 @@
 
     XCTAssertEqual(bundles.count, 4);
     for (BPXCTestFile *bundle in bundles) {
-        XCTAssertEqual(bundle.skipTestIdentifiers.count, 197);
+        XCTAssertEqual(bundle.skipTestIdentifiers.count, 202);
     }
 }
 
@@ -198,7 +243,6 @@
     for (BPXCTestFile *bundle in bundles) {
         XCTAssertTrue([bundle.skipTestIdentifiers containsObject:@"BPSampleAppTests/testCase000"], @"testCase000 should be in testToSkip for all bundles");
     }
-
 }
 
 @end

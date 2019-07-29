@@ -60,6 +60,10 @@
     return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"demo.mov"];
 }
 
++ (NSString *)sampleTimesJsonPath {
+    return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"times.json"];
+}
+
 + (NSString *)samplePhotoPath {
     return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"image.png"];
 }
