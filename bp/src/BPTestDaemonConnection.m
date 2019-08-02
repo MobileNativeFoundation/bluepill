@@ -59,7 +59,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
         return self.connected;
     }];
     if (!self.connected) {
-        [BPUtils printInfo:ERROR withString:@"Timeout establishing a control session!"];
+        [BPUtils printError:nil withString:@"Timeout establishing a control session!"];
     }
 }
 
@@ -80,7 +80,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     DTXRemoteInvocationReceipt *receipt = [daemonProxy _IDE_initiateControlSessionForTestProcessID:@(self.testRunnerPid) protocolVersion:@(BP_DAEMON_PROTOCOL_VERSION)];
     [receipt handleCompletion:^(NSNumber *version, NSError *error) {
         if (error) {
-            [BPUtils printInfo:ERROR withString:@"Error with daemon connection: %@", [error localizedDescription]];
+            [BPUtils printError:error withString:@"Error with daemon connection"];
             return;
         }
         NSInteger daemonProtocolVersion = version.integerValue;
@@ -99,7 +99,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     strncpy(remote.sun_path, socketPath, 104);
     socklen_t length = (socklen_t)(strnlen(remote.sun_path, 1024) + sizeof(remote.sun_family) + sizeof(remote.sun_len));
     if (connect(socketFD, (struct sockaddr *)&remote, length) == -1) {
-        [BPUtils printInfo:ERROR withString:@"ERROR connecting socket"];
+        [BPUtils printError:nil withString:@"ERROR connecting socket: %s", strerror(errno)];
     }
     return socketFD;
 }

@@ -155,7 +155,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
  
  @return An instance of `BPConfiguration` on success. Nil on failure.
  */
-- (instancetype)initWithProgram:(int)program;
+- (instancetype)initWithProgram:(BPProgram)program;
 
 /**
  Create a new configuration object based on the given configuration file. 

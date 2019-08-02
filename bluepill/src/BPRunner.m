@@ -180,7 +180,7 @@ maxprocs(void)
                                  configuration:configuration
                                  error:errPtr];
     if (!app) {
-        [BPUtils printInfo:ERROR withString:@"Launch Simulator.app returned error: %@", [*errPtr localizedDescription]];
+        [BPUtils printError:*errPtr withString:@"Launch Simulator.app failed"];
         return nil;
     }
     return app;
@@ -194,13 +194,13 @@ maxprocs(void)
     new_action.sa_flags = 0;
 
     if (sigaction(SIGINT, &new_action, NULL) != 0) {
-        [BPUtils printInfo:ERROR withString:@"Could not install SIGINT handler: %s", strerror(errno)];
+        [BPUtils printError:nil withString:@"Could not install SIGINT handler: %s", strerror(errno)];
     }
     if (sigaction(SIGTERM, &new_action, NULL) != 0) {
-        [BPUtils printInfo:ERROR withString:@"Could not install SIGTERM handler: %s", strerror(errno)];
+        [BPUtils printError:nil withString:@"Could not install SIGTERM handler: %s", strerror(errno)];
     }
     if (sigaction(SIGHUP, &new_action, NULL) != 0) {
-        [BPUtils printInfo:ERROR withString:@"Could not install SIGHUP handler: %s", strerror(errno)];
+        [BPUtils printError:nil withString:@"Could not install SIGHUP handler: %s", strerror(errno)];
     }
 
     BPSimulator *bpSimulator = [BPSimulator simulatorWithConfiguration:self.config];
@@ -209,7 +209,7 @@ maxprocs(void)
     NSError *error;
     NSMutableArray *bundles = [BPPacker packTests:xcTestFiles configuration:self.config andError:&error];
     if (!bundles || bundles.count == 0) {
-        [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
+        [BPUtils printError:error withString:@"Packing failed"];
         return 1;
     }
     if (bundles.count < numSims) {
@@ -245,14 +245,14 @@ maxprocs(void)
     if (_config.headlessMode == NO) {
         app = [self openSimulatorAppWithConfiguration:_config andError:&error];
         if (!app) {
-            [BPUtils printInfo:ERROR withString:@"Could not launch Simulator.app due to error: %@", [error localizedDescription]];
+            [BPUtils printError:error withString:@"Could not launch Simulator.app"];
             return -1;
         }
     }
     while (1) {
         if (interrupted) {
             if (interrupted >=5) {
-                [BPUtils printInfo:ERROR withString:@"You really want to terminate, OK!"];
+                [BPUtils printError:nil withString:@"You really want to terminate, OK!"];
                 exit(0);
             }
             if (interrupted != old_interrupted) {
@@ -288,7 +288,7 @@ maxprocs(void)
                 rc = (rc || [task terminationStatus]);
             }];
             if (!task) {
-                [BPUtils printInfo:ERROR withString:@"task is nil!"];
+                [BPUtils printError:nil withString:@"task is nil!"];
                 exit(1);
             }
             [task launch];
@@ -388,7 +388,7 @@ maxprocs(void)
         lastUserTime = totalUserTime;
         lastIdleTime = totalIdleTime;
     } else {
-        [BPUtils printInfo:ERROR withString:@"Failed to get CPU stats: %s", mach_error_string(kr)];
+        [BPUtils printError:nil withString:@"Failed to get CPU stats: %s", mach_error_string(kr)];
     }
     // get memory info
     count = HOST_VM_INFO_COUNT;
@@ -408,7 +408,7 @@ maxprocs(void)
                                                                  @"free": @(free * 100.0f)
                                                                  }];
     } else {
-        [BPUtils printInfo:ERROR withString:@"Failed to get Memory info: %s", mach_error_string(kr)];
+        [BPUtils printError:nil withString:@"Failed to get Memory info: %s", mach_error_string(kr)];
     }
 }
 

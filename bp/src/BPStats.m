@@ -83,7 +83,7 @@
 - (void)endTimer:(NSString *)name withResult:(NSString *) result {
     BPStat *stat = [self statForName:name createIfNotExist:NO];
     if (!stat) {
-        [BPUtils printInfo:ERROR withString:@"EndTimerFailure: EndTimer called without starting a timer for '%@'", name];
+        [BPUtils printError:nil withString:@"EndTimerFailure: EndTimer called without starting a timer for '%@'", name];
 #ifdef DEBUG
         [NSException raise:@"EndTimerFailure" format:@"EndTimer called without starting a timer for '%@'", name];
 #endif
@@ -104,7 +104,7 @@
 - (NSString *)getJsonStat:(NSString *)name {
     BPStat *stat = [self statForName:name createIfNotExist:NO];
     if (!stat) {
-        [BPUtils printInfo:ERROR withString:@"OutputTimerState called without starting a timer for '%@'", name];
+        [BPUtils printError:nil withString:@"OutputTimerState called without starting a timer for '%@'", name];
 #ifdef DEBUG
         [NSException raise:@"OutputTimerFailure" format:@"OutputTimerState called without starting a timer for '%@'", name];
 #endif

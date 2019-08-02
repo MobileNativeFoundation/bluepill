@@ -31,7 +31,6 @@ Message Messages[] = {
     {" FAILED ", ANSI_COLOR_RED   },
     {" TIMEOUT", ANSI_COLOR_YELLOW},
     {"  INFO  ", ANSI_COLOR_BLUE  },
-    {"  ERROR ", ANSI_COLOR_RED   },
     {" WARNING", ANSI_COLOR_YELLOW},
     {" CRASH  ", ANSI_COLOR_RED   },
     {" DEBUG  ", ANSI_COLOR_YELLOW},
@@ -68,17 +67,28 @@ static BOOL quiet = NO;
     if (kind == DEBUGINFO && !printDebugInfo) {
         return;
     }
-    if (quiet && kind != ERROR) return;
-    FILE *out = kind == ERROR ? stderr : stdout;
+    if (quiet) return;
     va_list args;
     va_start(args, fmt);
     NSString *txt = [[NSString alloc] initWithFormat:fmt arguments:args];
     va_end(args);
-    [self printTo:out kind:kind withString:txt];
+    [self printTo:stdout prefix:Messages[kind] withString:txt];
 }
 
-+ (void)printTo:(FILE*)fd kind:(BPKind)kind withString:(NSString *)txt {
-    Message message = Messages[kind];
++ (void)printError:(NSError *)error withString:(NSString *)fmt, ... {
+    va_list args;
+    va_start(args, fmt);
+    NSString *txt = [[NSString alloc] initWithFormat:fmt arguments:args];
+    va_end(args);
+    if (error) {
+        NSString *errorTxt = [NSString stringWithFormat:@": %@ - %@ - %@", [error localizedDescription], [error localizedFailureReason], [error localizedRecoverySuggestion]];
+        txt = [txt stringByAppendingString:errorTxt];
+    }
+    Message msg = {"  ERROR ", ANSI_COLOR_RED   };
+    [self printTo:stderr prefix:msg withString:txt];
+}
+
++ (void)printTo:(FILE*)fd prefix:(Message)message withString:(NSString *)txt {
     NSString *simNum = @"(BLUEPILL) ";
     char *s;
     if (bp_testing < 0) {

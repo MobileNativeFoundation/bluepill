@@ -9,7 +9,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, BPExitStatus) {
+typedef NS_ENUM(int, BPExitStatus) {
     BPExitStatusTestsAllPassed = 0,
     BPExitStatusTestsFailed = 1,
     BPExitStatusSimulatorCreationFailed = 2,

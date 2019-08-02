@@ -48,7 +48,7 @@
                                          includingPropertiesForKeys:keys
                                          options:0
                                          errorHandler:^(NSURL *url, NSError *error) {
-                                             [BPUtils printInfo:ERROR withString:@"Failed to process url %@: %@", url, [error localizedDescription]];
+                                             [BPUtils printError:error withString:@"Failed to process url %@", url];
                                              return YES;
                                          }];
     NSMutableData *traceData = nil;
@@ -58,7 +58,7 @@
         NSError *error;
         NSNumber *isDirectory = nil;
         if (![url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error]) {
-            [BPUtils printInfo:ERROR withString:@"Failed to get resource from url %@", url];
+            [BPUtils printError:nil withString:@"Failed to get resource from url %@", url];
         }
         else if (![isDirectory boolValue]) {
             if ([[url pathExtension] isEqualToString:@"xml"]) {
@@ -66,7 +66,7 @@
                 NSString *path = [url path];
                 NSDictionary *fileAttrs = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:&error];
                 if (error) {
-                    [BPUtils printInfo:ERROR withString:@"Failed to get attributes for '%@': %@", path, [error localizedDescription]];
+                    [BPUtils printError:error withString:@"Failed to get attributes for '%@'", path];
                     continue;
                 }
                 NSDate *mtime = [fileAttrs objectForKey:NSFileModificationDate];
@@ -118,8 +118,8 @@
         @autoreleasepool {
             NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:[report url] options:0 error:&err];
             if (err) {
-                [BPUtils printInfo:ERROR withString:@"Failed to parse '%@': %@", [[report url] path], [err localizedDescription]];
-                [BPUtils printInfo:ERROR withString:@"SOME TESTS MIGHT BE MISSING"];
+                [BPUtils printError:err withString:@"Failed to parse '%@'", [[report url] path]];
+                [BPUtils printError:nil withString:@"SOME TESTS MIGHT BE MISSING"];
                 continue;
             }
             // grab all the test suites
@@ -177,7 +177,7 @@
     } else if ([firstChild isEqualToString:@"testcase"]) {
         [self collateTestSuiteTestCases:testSuite into:targetTestSuite];
     } else if (firstChild) { // empty
-        [BPUtils printInfo:ERROR withString:@"Unknown child node in '%@': %@", [[testSuite attributeForName:@"name"] stringValue],  firstChild];
+        [BPUtils printError:nil withString:@"Unknown child node in '%@': %@", [[testSuite attributeForName:@"name"] stringValue],  firstChild];
         assert(false);
     }
 }

@@ -134,7 +134,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         NSString *platformsPath = [xcodePath stringByAppendingPathComponent:@"Platforms"];
         testBundlePath = [testBundlePath stringByReplacingOccurrencesOfString:PLATFORMS withString:platformsPath];
     } else {
-        [BPUtils printInfo:ERROR withString:@"testBundlePath is incorrect, please check xctestrun file"];
+        [BPUtils printError:nil withString:@"testBundlePath is incorrect, please check xctestrun file"];
     }
     NSString * UITargetAppPath = [dict objectForKey:@"UITargetAppPath"];
     if (UITargetAppPath) {

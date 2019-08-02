@@ -151,13 +151,13 @@
     
     NSString *platform = [dic objectForKey:@"DTPlatformName"];
     if (platform && ![platform isEqualToString:@"iphonesimulator"]) {
-        [BPUtils printInfo:ERROR withString:@"Wrong platform in %@. Expected 'iphonesimulator', found '%@'", path, platform];
+        [BPUtils printError:nil withString:@"Wrong platform in %@. Expected 'iphonesimulator', found '%@'", path, platform];
         return nil;
     }
 
     NSString *bundleId = [dic objectForKey:(NSString *)kCFBundleIdentifierKey];
     if (!bundleId) {
-        [BPUtils printInfo:ERROR withString:@"Could not extract bundleID: %@", dic];
+        [BPUtils printError:nil withString:@"Could not extract bundleID: %@", dic];
     }
     return bundleId;
 }

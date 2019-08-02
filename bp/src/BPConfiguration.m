@@ -148,7 +148,7 @@ static NSUUID *sessionID;
 
 #pragma mark instance methods
 
-- (instancetype)initWithProgram:(int)program {
+- (instancetype)initWithProgram:(BPProgram)program {
     return [self initWithConfigFile:nil forProgram:program withError:nil];
 }
 
@@ -299,13 +299,13 @@ static NSUUID *sessionID;
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:&err];
         if (!json) {
-            [BPUtils printInfo:ERROR withString:@"%@", err];
+            [BPUtils printError:err withString:@""];
             return nil;
         }
         NSString *jsonString = [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding];
         return jsonString;
     } else {
-        [BPUtils printInfo:ERROR withString:@"Error: configuration not serializable."];
+        [BPUtils printError:nil withString:@"Error: configuration not serializable."];
     }
     return nil;
 }
@@ -727,8 +727,8 @@ static NSUUID *sessionID;
     self.simDeviceType = nil;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.xcodePath error: errPtr];
     if (!sc) {
-        [BPUtils printInfo:ERROR withString:@"Failed to initialize SimServiceContext: %@", *errPtr];
-        [BPUtils printInfo:ERROR withString:@"self.xcodePath is: %@", self.xcodePath];
+        [BPUtils printError:*errPtr withString:@"Failed to initialize SimServiceContext"];
+        [BPUtils printInfo:DEBUGINFO withString:@"self.xcodePath is: %@", self.xcodePath];
         return NO;
     }
 

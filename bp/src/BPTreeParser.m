@@ -99,7 +99,7 @@ static const NSString * const kPassed = @"passed";
             [BPUtils printInfo:WARNING withString:@"ASCII: %@", str];
         }
         if (!str) {
-            [BPUtils printInfo:ERROR withString:@"Failed to ASCII decode chunk: %@", chunk];
+            [BPUtils printError:nil withString:@"Failed to ASCII decode chunk: %@", chunk];
             exit(1);
         }
         NSRange range = [str rangeOfCharacterFromSet:[NSCharacterSet newlineCharacterSet]];
@@ -110,9 +110,9 @@ static const NSString * const kPassed = @"passed";
             [self.log writeLine:@"%@", self.line];
             [self parseLine:self.line];
             if (numLines++ > maxLines) {
-                [BPUtils printInfo:ERROR withString:@"Infinite Loop Averted!: range {%lu, %lu}, %lu, %@",
+                [BPUtils printError:nil withString:@"Infinite Loop Averted!: range {%lu, %lu}, %lu, %@",
                  (unsigned long)range.length, (unsigned long)range.location, (unsigned long)[chunk length], str];
-                [BPUtils printInfo:ERROR withString:@"Data: %@", chunk];
+                [BPUtils printError:nil withString:@"Data: %@", chunk];
                 // Fail hard.
                 exit(1);
             }
@@ -232,7 +232,7 @@ static const NSString * const kPassed = @"passed";
                 } else if (([node.parent.testSuiteName isEqualToString:testSuiteName]) && node.parent.ended == NO) {
                     self.current = node.parent;
                 } else {
-                    [BPUtils printInfo:ERROR withString:
+                    [BPUtils printError:nil withString:
                      @"ERROR: WHERE ARE WE??? We're closing a node for a test suite that hasn't been started [Expected: %@, Current: %@]. Ended: %@\nProblem line: %@",
                       testSuiteName,
                       node.testSuiteName,
@@ -288,7 +288,7 @@ static const NSString * const kPassed = @"passed";
                 testCaseLogEntry.failure = NO; // failure means app crashed
                 testCaseLogEntry.errorMessage = errorMessage;
             } else {
-                [BPUtils printInfo:ERROR withString:
+                [BPUtils printError:nil withString:
                  @"HOW DID WE GET AN ERROR THAT WASN'T PARSED? We received an error in a test case that wasn't started or did not parse properly.\nProblem line: %@",
                   line];
             }
@@ -456,7 +456,7 @@ static const NSString * const kPassed = @"passed";
                                       wasException:testCaseLogEntry.failure];
                 }
             } else {
-                [BPUtils printInfo:ERROR withString:
+                [BPUtils printError:nil withString:
                  @"HOW ON EARTH DID THIS HAPPEN? The test case passed but we failed to handle it properly\nProblem line: %@",
                   line];
             }

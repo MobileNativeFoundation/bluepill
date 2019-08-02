@@ -47,7 +47,7 @@
         // This is for integration testing for bluepill and bluepill-cli when we assign self.config.appBundlePath
         simulatorUDIDString = [self installApplicationWithHost:self.config.appBundlePath withError:&error];
         if (!simulatorUDIDString || error) {
-            [BPUtils printInfo:ERROR withString:@"Create simualtor and install application failed with error: %@", error];
+            [BPUtils printError:error withString:@"Create simualtor and install application failed with error"];
             return FALSE;
         }
         testHostForSimUDID[self.config.appBundlePath] = simulatorUDIDString;
@@ -59,13 +59,13 @@
             [hostBundles addObject:bundle.testHostPath];
         }
         if ([testBundles count] == 0) {
-            [BPUtils printInfo:ERROR withString:@"No host bundle founnd!"];
+            [BPUtils printError:nil withString:@"No host bundle founnd!"];
         }
         for (NSString *appPath in hostBundles) {
             NSError *error = nil;
             simulatorUDIDString = [self installApplicationWithHost:appPath withError:&error];
             if (!simulatorUDIDString || error) {
-                [BPUtils printInfo:ERROR withString:@"Created simulator template and install applicationn failed with error: %@", error];
+                [BPUtils printError:error withString:@"Created simulator template and install applicationn failed with error"];
                 return FALSE;
             }
             [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, appPath];
@@ -82,12 +82,12 @@
 - (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *__autoreleasing *)errPtr {
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:errPtr];
     if (!sc && *errPtr) {
-        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [*errPtr localizedDescription]];
+        [BPUtils printError:*errPtr withString:@"SimServiceContext failed"];
         return nil;
     }
     SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:errPtr];
     if (!deviceSet && *errPtr) {
-        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [*errPtr localizedDescription]];
+        [BPUtils printError:*errPtr withString:@"SimDeviceSet failed"];
         return nil;
     }
     SimDevice *simDevice = [deviceSet createDeviceWithType:self.config.simDeviceType
@@ -99,12 +99,12 @@
     }
     [self.simDeviceTemplates addObject:simDevice];
     if (!simDevice && *errPtr) {
-        [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", [*errPtr localizedDescription]];
+        [BPUtils printError:*errPtr withString:@"Create simulator failed with error"];
         return nil;
     }
     [simDevice bootWithOptions:nil error:errPtr];
     if (*errPtr) {
-        [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", [*errPtr localizedDescription]];
+        [BPUtils printError:*errPtr withString:@"Boot simulator failed with error"];
         return nil;
     }
     // Add photos and videos to the simulator.
@@ -112,7 +112,7 @@
     [self addVideosToSimulator];
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:testHost];
     if (!hostBundleId) {
-        [BPUtils printInfo:ERROR withString:@"Could not find test bundle id for %@", testHost];
+        [BPUtils printError:nil withString:@"Could not find test bundle id for %@", testHost];
         return nil;
     }
     // Install the host application
@@ -121,20 +121,20 @@
                                        withOptions:@{kCFBundleIdentifier: hostBundleId}
                                              error:&installError];
     if (!installed) {
-        [BPUtils printInfo:ERROR withString:@"Install application failed with error: %@", [installError localizedDescription]];
+        [BPUtils printError:installError withString:@"Install application failed with error"];
         [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
             if (error) {
-                [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+                [BPUtils printError:error withString:@"Could not delete simulator"];
             }
         }];
         return nil;
     } else {
         [simDevice shutdownWithError:errPtr];
         if(*errPtr) {
-            [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [*errPtr localizedDescription]];
+            [BPUtils printError:*errPtr withString:@"Shutdown simulator failed with error"];
             [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
                 if (error) {
-                    [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+                    [BPUtils printError:error withString:@"Could not delete simulator"];
                 }
             }];
             return nil;
@@ -150,7 +150,7 @@
     for(SimDevice *simDevice in self.simDeviceTemplates) {
         [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
             if (error) {
-                [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+                [BPUtils printError:error withString:@"Could not delete simulator"];
             }
         }];
     }
@@ -163,12 +163,12 @@
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
     if (!sc) {
-        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [error localizedDescription]];
+        [BPUtils printError:error withString:@"SimServiceContext failed"];
         return;
     }
     SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
     if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [error localizedDescription]];
+        [BPUtils printError:error withString:@"SimDeviceSet failed"];
         return;
     }
 
@@ -205,12 +205,12 @@
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
     if (!sc) {
-        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [error localizedDescription]];
+        [BPUtils printError:error withString:@"SimServiceContext failed"];
         return;
     }
     SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
     if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [error localizedDescription]];
+        [BPUtils printError:error withString:@"SimDeviceSet failed"];
         return;
     }
     SimDevice *simulatorWithAppInstalled = [self findDeviceWithConfig:self.config andDeviceID:[[NSUUID alloc] initWithUUIDString:self.config.templateSimUDID]];
@@ -257,7 +257,7 @@
     [NSFileManager.defaultManager copyItemAtURL:source toURL:destination error:&copyError];
 
     if (copyError) {
-        [BPUtils printInfo:ERROR withString:@"%@", [NSString stringWithFormat:@"Failed copying GlobalPreferences plist: %@", [copyError localizedDescription]]];
+        [BPUtils printError:copyError withString:@"Failed copying GlobalPreferences plist"];
     }
 }
 
@@ -277,26 +277,26 @@
          scriptFilePath, [task terminationStatus]];
 
     if (status != 0) {
-        [BPUtils printInfo:ERROR withString:@"Failed running script: %@", scriptFilePath];
+        [BPUtils printError:nil withString:@"Failed running script: %@", scriptFilePath];
     }
 }
 
 - (BOOL)useSimulatorWithDeviceUDID:(NSUUID *)deviceUDID {
     self.device = [self findDeviceWithConfig:self.config andDeviceID:deviceUDID];
     if (!self.device) {
-        [BPUtils printInfo:ERROR withString:@"SimDevice not found: %@", [deviceUDID UUIDString]];
+        [BPUtils printError:nil withString:@"SimDevice not found: %@", [deviceUDID UUIDString]];
         return NO;
     }
 
     if (![self.device.stateString isEqualToString:@"Booted"]) {
-        [BPUtils printInfo:ERROR withString:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]];
+        [BPUtils printError:nil withString:@"SimDevice exists, but not booted: %@", [deviceUDID UUIDString]];
         return NO;
     }
 
     if (!self.config.headlessMode) {
         self.app = [self findSimGUIApp];
         if (!self.app) {
-            [BPUtils printInfo:ERROR withString:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
+            [BPUtils printError:nil withString:@"SimDevice running, but no running Simulator App in non-headless mode: %@",
                                                  [deviceUDID UUIDString]];
             return NO;
         }
@@ -320,7 +320,7 @@
         if (error) {
             [self.device shutdownWithError:&error];
             if (error) {
-                [BPUtils printInfo:ERROR withString:@"Shutting down Simulator failed: %@", [error localizedDescription]];
+                [BPUtils printError:error withString:@"Shutting down Simulator failed"];
             }
         }
         completion(bootError);
@@ -334,7 +334,7 @@
         --attempts;
     }
     if (![self.device.stateString isEqualToString:@"Booted"]) {
-        [BPUtils printInfo:ERROR withString:@"Simulator %@ failed to boot. State: %@", self.device.UDID.UUIDString, self.device.stateString];
+        [BPUtils printError:nil withString:@"Simulator %@ failed to boot. State: %@", self.device.UDID.UUIDString, self.device.stateString];
         return [NSError errorWithDomain:@"Simulator failed to boot" code:-1 userInfo:nil];
     }
     [BPUtils printInfo:INFO withString:@"Simulator %@ achieved the BOOTED state %@", self.device.UDID.UUIDString, self.device.stateString];
@@ -345,12 +345,12 @@
     NSError *error;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&error];
     if (!sc) {
-        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [error localizedDescription]];
+        [BPUtils printError:error withString:@"SimServiceContext failed"];
         return nil;
     }
     SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
     if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [error localizedDescription]];
+        [BPUtils printError:error withString:@"SimDeviceSet failed"];
         return nil;
     }
 
@@ -377,7 +377,7 @@
         NSError *error;
         BOOL uploadResult = [self.device addVideo:videoUrl error:&error];
         if (!uploadResult && error) {
-            [BPUtils printInfo:ERROR withString:@"Failed to upload video at path: %@, error message: %@", urlString, [error description]];
+            [BPUtils printError:error withString:@"Failed to upload video at path: %@", urlString];
         }
     }
 }
@@ -388,7 +388,7 @@
         NSError *error;
         BOOL uploadResult = [self.device addPhoto:photoUrl error:&error];
         if (!uploadResult && error) {
-            [BPUtils printInfo:ERROR withString:@"Failed to upload photo at path: %@, error message: %@", urlString, [error description]];
+            [BPUtils printError:error withString:@"Failed to upload photo at path: %@", urlString];
         }
     }
 }
@@ -408,7 +408,7 @@
         hostBundlePath = hostAppPath;
     }
     if (!hostBundleId || !hostBundlePath) {
-        [BPUtils printInfo:ERROR withString:@"hostBundleId: %@ or hostBundlePath: %@ is null",
+        [BPUtils printError:nil withString:@"hostBundleId: %@ or hostBundlePath: %@ is null",
          hostBundleId, hostBundlePath];
         return NO;
     }
@@ -524,10 +524,8 @@
         blockSelf.monitor.appPID = pid;
         blockSelf.monitor.appState = Running;
 
-        [BPUtils printInfo:INFO withString:@"Launch succeeded"];
-
         if (error == nil) {
-            [BPUtils printInfo:INFO withString:@"No error"];
+            [BPUtils printInfo:INFO withString:@"Launch succeeded"];
             dispatch_source_t source = dispatch_source_create(DISPATCH_SOURCE_TYPE_PROC, pid, DISPATCH_PROC_EXIT, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
             dispatch_source_set_event_handler(source, ^{
                 dispatch_source_cancel(source);
@@ -552,9 +550,9 @@
             // Save the process ID to the monitor
             blockSelf.monitor.appPID = pid;
 
-            [BPUtils printInfo:INFO withString:@"Completion block for launch"];
+            [BPUtils printInfo:DEBUGINFO withString:@"Completion block for launch"];
             if (completion) {
-                [BPUtils printInfo:INFO withString:@"Calling completion block with: %@ - %d", error, pid];
+                [BPUtils printInfo:DEBUGINFO withString:@"Calling completion block with: %@ - %d", error, pid];
                 completion(error, pid);
             }
         });
@@ -567,7 +565,7 @@
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
     SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
     if (!self.app && !self.device) {
-        [BPUtils printInfo:ERROR withString:@"No device to delete"];
+        [BPUtils printError:nil withString:@"No device to delete"];
         completion(nil, NO);
         return;
     }
@@ -575,7 +573,7 @@
         [BPUtils printInfo:INFO withString:@"Shutting down Simulator"];
         [self.device shutdownWithError:&error];
         if (error) {
-            [BPUtils printInfo:ERROR withString:@"Shutting down Simulator failed: %@", [error localizedDescription]];
+            [BPUtils printError:error withString:@"Shutting down Simulator failed"];
             completion(error, NO);
             return;
         }
@@ -587,12 +585,12 @@
         --attempts;
     }
     if (![self.device.stateString isEqualToString:@"Shutdown"]) {
-        [BPUtils printInfo:ERROR withString:@"It may not be possible to delete simulator %@ in '%@' state.", self.device.name, self.device.stateString];
+        [BPUtils printError:error withString:@"It may not be possible to delete simulator %@ in '%@' state.", self.device.name, self.device.stateString];
         // Go ahead and try to delete anyway
     }
     [deviceSet deleteDeviceAsync:self.device completionHandler:^(NSError *error) {
         if (error) {
-            [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+            [BPUtils printError:error withString:@"Could not delete simulator"];
         }
         completion(error, error ? NO: YES);
     }];

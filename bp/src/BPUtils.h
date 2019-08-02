@@ -16,12 +16,13 @@ _a < _b ? _a : _b; \
 
 #import <Foundation/Foundation.h>
 
+// The order here needs to match the order in the Messages struct
+// in BPUtils.m
 typedef NS_ENUM(int, BPKind) {
     PASSED,
     FAILED,
     TIMEOUT,
     INFO,
-    ERROR,
     WARNING,
     CRASH,
     DEBUGINFO // DEBUG collides with a #define, so DEBUGINFO it is
@@ -75,6 +76,14 @@ typedef NS_ENUM(int, BPKind) {
  @param fmt a format string (a la printf), followed by the var args.
  */
 + (void)printInfo:(BPKind)kind withString:(NSString *)fmt, ... NS_FORMAT_FUNCTION(2,3);
+
+/*!
+ @discussion print an error to stderr
+ @param error the NSError * to print
+ @param fmt a format string (a la printf), followed by the var args. It'll be prepended
+            to the text of the error.
+ */
++ (void)printError:(NSError *)error withString:(NSString *)fmt, ... NS_FORMAT_FUNCTION(2, 3);
 
 /*!
  @discussion get an NSError *

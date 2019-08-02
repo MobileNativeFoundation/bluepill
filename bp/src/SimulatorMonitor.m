@@ -216,7 +216,7 @@
             BOOL testsReallyStarted = [__self didTestsStart];
             if (testClass == nil && testName == nil && (__self.appState == Running)) {
                 testsReallyStarted = false;
-                [BPUtils printInfo:ERROR withString:@"It appears that tests have not yet started. The test app has frozen prior to the first test."];
+                [BPUtils printError:nil withString:@"It appears that tests have not yet started. The test app has frozen prior to the first test."];
             } else {
                 [BPUtils printInfo:TIMEOUT withString:@" %10.6fs waiting for output from %@/%@",
                  __self.maxTimeWithNoOutput, testClass, testName];
@@ -240,7 +240,7 @@
         [self updateExecutedTestCaseList:testName inClass:testClass];
     }
     if (self.appState == Running && !self.config.testing_NoAppWillRun) {
-        [BPUtils printInfo:ERROR withString:@"Will kill the process with appPID: %d", self.appPID];
+        [BPUtils printError:nil withString:@"Will kill the process with appPID: %d", self.appPID];
         NSAssert(self.appPID > 0, @"Failed to find a valid PID");
         NSDateFormatter *dateFormatter=[[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy-MM-dd_HH-mm-ss"];
@@ -248,7 +248,7 @@
         [BPUtils printInfo:INFO withString:@"saving 'sample' command log to: %@", sampleLogFile];
         [BPUtils runShell:[NSString stringWithFormat:@"/usr/bin/sample %d -file %@", self.appPID, sampleLogFile]];
         if ((kill(self.appPID, 0) == 0) && (kill(self.appPID, SIGKILL) < 0)) {
-            [BPUtils printInfo:ERROR withString:@"Failed to kill the process with appPID: %d: %s",
+            [BPUtils printError:nil withString:@"Failed to kill the process with appPID: %d: %s",
                 self.appPID, strerror(errno)];
         }
     }
