@@ -40,5 +40,5 @@ jobs:
   steps:
   - script: 'brew install bazel'
     displayName: 'Install Bazel'
-  - script: 'bazel build //bluepill:bluepill'
+  - script: 'bazel build --host_force_python=PY2 //bluepill:bluepill'
     displayName: 'Bazel build'
