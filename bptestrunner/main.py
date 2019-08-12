@@ -48,8 +48,8 @@ def main():
     bpargs += ['--xcode-path', find_xcode_path()]
     output_dir = os.environ['TEST_UNDECLARED_OUTPUTS_DIR']
     bpargs += ['--output-dir', output_dir]
-    config_file = merge_config_files(args.attr_config_file,
-                                     args.rule_config_file)
+    config_file = merge_config_files(args.rule_config_file,
+                                     args.attr_config_file)
     bpargs += ['-c', config_file]
 
     logging.debug("Running: bluepill %s", ' '.join(bpargs))
