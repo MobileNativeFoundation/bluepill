@@ -14,6 +14,8 @@ jobs:
     vmImage: macOS-10.14
     demands: xcode
   steps:
+  - script: sudo xcode-select -s /Applications/Xcode_10.3.app
+    displayName: 'Select Xcode 10.3'
   - script: ./scripts/bluepill.sh test
     displayName: 'Run BluePill tests'
   - task: PublishTestResults@2
