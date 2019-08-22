@@ -77,6 +77,8 @@ struct BPOptions {
         "Number of simulators to run in parallel. (bluepill only)"},
     {'o', "output-dir", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
         "Directory where to put output log files (bluepill only)."},
+    {'j', "test-time-estimates-json", BP_MASTER, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testTimeEstimatesJsonFile",
+        "Directory where Bluepill looks for input files with test execution time estimates (bluepill only)."},
     {'r', "runtime", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
         "What runtime to use."},
     {'x', "exclude", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToSkip",
@@ -528,6 +530,8 @@ static NSUUID *sessionID;
     if (printConfig) {
         [self printConfig];
         exit(0);
+    } else {
+        [self printConfig];
     }
     return TRUE;
 }
@@ -591,7 +595,6 @@ static NSUUID *sessionID;
             if ([[[node attributeForName:@"isEnabled"] stringValue] boolValue]) {
                 environmentVariables[key] = value;
             }
-            
         }
     }
     self.commandLineArguments = commandLineArgs;
@@ -681,6 +684,18 @@ static NSUUID *sessionID;
                                                                  error:errPtr]) {
                 return NO;
             }
+        }
+    }
+
+    if (self.testTimeEstimatesJsonFile) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.testTimeEstimatesJsonFile isDirectory:&isdir]) {
+            if (isdir) {
+                BP_SET_ERROR(errPtr, @"%@ is a directory.", self.testTimeEstimatesJsonFile);
+                return NO;
+            }
+        } else {
+            BP_SET_ERROR(errPtr, @"%@ doesn't exist", self.testTimeEstimatesJsonFile);
+            return NO;
         }
     }
 
