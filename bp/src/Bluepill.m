@@ -604,7 +604,7 @@ static void onInterrupt(int ignore) {
     if (![self hasRemainingTestsInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
         [BPUtils printInfo:INFO withString:@"No more tests to run."];
         [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
-        self.finalExitStatus = context.exitStatus;
+        self.finalExitStatus = context.finalExitStatus | context.exitStatus;
         self.exitLoop = YES;
         return;
     }

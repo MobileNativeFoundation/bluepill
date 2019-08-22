@@ -232,7 +232,7 @@
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
-- (void)testAppCrashingAndRetryReportsCorrectExitCode {
+- (void)DISABLED_testAppCrashingAndRetryReportsCorrectExitCode {
     NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     NSString *tempDir = NSTemporaryDirectory();
