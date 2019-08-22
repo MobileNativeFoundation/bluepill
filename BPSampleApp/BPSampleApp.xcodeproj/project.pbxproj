@@ -21,6 +21,7 @@
 		BAB24F4C1DB5D45E00867756 /* BPSampleAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F4B1DB5D45E00867756 /* BPSampleAppTests.m */; };
 		BAB24F5D1DB5D83C00867756 /* BPAppNegativeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB24F5C1DB5D83C00867756 /* BPAppNegativeTests.m */; };
 		BAFCCA601E36DC2000E33C31 /* BPSampleAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFCCA5F1E36DC2000E33C31 /* BPSampleAppUITests.m */; };
+		E492360122EF61F300395D98 /* BPSampleAppMoarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E492360022EF61F300395D98 /* BPSampleAppMoarTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +102,7 @@
 		BAFCCA5D1E36DC2000E33C31 /* BPSampleAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAFCCA5F1E36DC2000E33C31 /* BPSampleAppUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppUITests.m; sourceTree = "<group>"; };
 		BAFCCA611E36DC2000E33C31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E492360022EF61F300395D98 /* BPSampleAppMoarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppMoarTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +242,7 @@
 		BAB24F4A1DB5D45E00867756 /* BPSampleAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				E492360022EF61F300395D98 /* BPSampleAppMoarTests.m */,
 				BAB24F4B1DB5D45E00867756 /* BPSampleAppTests.m */,
 				BAB24F4D1DB5D45E00867756 /* Info.plist */,
 				32FEEBBC2012B93D005916EF /* BPSampleAppSwiftTests.swift */,
@@ -567,6 +570,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BAB24F4C1DB5D45E00867756 /* BPSampleAppTests.m in Sources */,
+				E492360122EF61F300395D98 /* BPSampleAppMoarTests.m in Sources */,
 				32FEEBBD2012B93D005916EF /* BPSampleAppSwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
