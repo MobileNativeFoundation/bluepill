@@ -218,7 +218,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment
 {
-    NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary<NSString *, NSString *> *env = [[NSMutableDictionary alloc] init];
     [env addEntriesFromDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:bundleID device:nil config:_config]];
     [env addEntriesFromDictionary:environment];
     NSDictionary *options = @{
@@ -255,7 +255,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_terminateProcess:(id)token {
     NSError *error;
-    kill(self.appProcessPID, SIGKILL);
+    kill(self.appProcessPID, SIGTERM);
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
     [receipt invokeCompletionWithReturnValue:token error:error];
     [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_terminateProcess with token %@", token];
