@@ -130,6 +130,7 @@ maxprocs(void)
     cfg.outputDirectory = [self.config.outputDirectory
                            stringByAppendingPathComponent:
                            [NSString stringWithFormat:@"BP-%lu", (unsigned long)number]];
+    cfg.testTimeEstimatesJsonFile = self.config.testTimeEstimatesJsonFile;
     [cfg printConfig];
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:self.bpExecutable];
@@ -306,8 +307,7 @@ maxprocs(void)
             @synchronized (self) {
                 listString = [taskList componentsJoinedByString:@", "];
             }
-            [BPUtils printInfo:INFO withString:@"%lu BP%s still running. [%@]",
-             launchedTasks, launchedTasks == 1 ? "" : "s", listString];
+            [BPUtils printInfo:INFO withString:@"%lu BP(s) still running. [%@]", launchedTasks, listString];
             [BPUtils printInfo:INFO withString:@"Using %d of %d processes.", numprocs(), maxProcs];
             if (numprocs() > maxProcs * BP_MAX_PROCESSES_PERCENT) {
                 [BPUtils printInfo:WARNING withString:@"!!!The number of processes is more than  %f percent of maxProcs!!! it may fail with error: Unable to boot device due to insufficient system resources. Please check with system admin to restart this node and for proper mainantance routine", BP_MAX_PROCESSES_PERCENT*100];
