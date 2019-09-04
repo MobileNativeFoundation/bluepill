@@ -146,6 +146,18 @@ struct BPOptions {
 
 static NSUUID *sessionID;
 
+@implementation BPTestPlan
+
+- (BOOL)isValid {
+    return YES;
+}
+
+- (nonnull id)copyWithZone:(nullable NSZone *)zone {
+    return [[BPTestPlan alloc] init];
+}
+
+@end
+
 @implementation BPConfiguration
 
 #pragma mark instance methods
@@ -485,6 +497,21 @@ static NSUUID *sessionID;
     // Pull out two keys that are undocumented but needed for supporting xctest
     self.commandLineArguments = [configDict objectForKey:@"commandLineArguments"];
     self.environmentVariables = [configDict objectForKey:@"environmentVariables"];
+    
+    NSMutableDictionary<NSString *, BPTestPlan*> *tests = [[NSMutableDictionary alloc] init];
+    NSDictionary *testOptions = [configDict objectForKey:@"tests"];
+    for (NSString *key in testOptions) {
+        NSDictionary *planDictionary = [testOptions objectForKey:key];
+        BPTestPlan *plan = [[BPTestPlan alloc] init];
+        plan.testHost = [planDictionary objectForKey:@"test_host"];
+        plan.environment = [planDictionary objectForKey:@"environment"];
+        plan.arguments = [planDictionary objectForKey:@"arguments"];
+        
+        [tests setObject:plan forKey:key];
+    }
+    
+    self.tests = tests;
+    
     return YES;
 }
 
