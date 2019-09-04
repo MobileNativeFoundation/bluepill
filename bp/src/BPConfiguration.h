@@ -14,6 +14,26 @@
 @class SimRuntime;
 
 /**
+ TestPlans populated by an outside build system
+*/
+
+@interface BPTestPlan : NSObject<NSCopying>
+
+@property (nonatomic, strong) NSString *testHost;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environment;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *arguments;
+@property (nonatomic, strong) NSString *testBundlePath;
+@property (nonatomic, strong) NSString *testHostBundleIdentifier;
+@property (nonatomic, strong) NSString *uiTargetAppPath;
+
+/**
+ isValid checks to make sure the testHost is valid
+ */
+- (BOOL)isValid;
+
+@end
+
+/**
  BPConfiguration stores necessary information for Simulator Runner to run
  */
 
@@ -45,6 +65,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *runtime;
 @property (nonatomic, strong) NSString *configFile;
 @property (nonatomic, strong) NSString *xcTestRunPath;
+@property (nonatomic, strong) NSString *testPlanPath;
 @property (nonatomic, strong) NSDictionary *xcTestRunDict; // parsed copy of the path above.
 @property (nonatomic, strong) NSMutableArray *bpCmdLineArgs; // command line arguments passed to bluepill
 @property (nonatomic, strong) NSNumber *repeatTestsCount;
@@ -82,6 +103,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 
 @property (nonatomic, strong) NSArray<NSString *> *commandLineArguments; // command line arguments for the app
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environmentVariables;
+@property (nonatomic, strong) NSDictionary<NSString *, BPTestPlan *> *tests;
 
 // Media Assets
 @property (nonatomic, strong) NSArray<NSString *> *videoPaths; // The videos to be pushed into each simulator.
@@ -199,3 +221,4 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 - (id)mutableCopyWithZone: (NSZone *) zone;
 
 @end
+

@@ -99,6 +99,21 @@
 
     BPApp *app = [[BPApp alloc] init];
     NSMutableArray<BPXCTestFile *> *allXCTestFiles = [[NSMutableArray alloc] init];
+
+    if (config.tests != nil && config.tests.count != 0) {
+        [BPUtils printInfo:INFO withString:@"Using test bundles"];
+        NSMutableArray<BPXCTestFile *> *loadedTests = [[NSMutableArray alloc] initWithCapacity:config.tests.count];
+        for (NSString *testName in config.tests) {
+            BPTestPlan *testPlan = [config.tests objectForKey:testName];
+            BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromBPTestPlan:testPlan withName:testName andError:errPtr];
+            [loadedTests addObject:xcTestFile];
+        }
+
+        app.testBundles = loadedTests;
+
+        return app;
+    }
+
     if (config.xcTestRunDict) {
         NSAssert(config.xcTestRunPath, @"");
         [BPUtils printInfo:INFO withString:@"Using xctestrun configuration"];
