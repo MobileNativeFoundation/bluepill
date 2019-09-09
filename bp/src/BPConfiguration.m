@@ -350,7 +350,8 @@ static NSUUID *sessionID;
     newConfig.xcTestRunDict = self.xcTestRunDict;
     newConfig.commandLineArguments = self.commandLineArguments;
     newConfig.environmentVariables = self.environmentVariables;
-
+    newConfig.tests = self.tests;
+    
     return newConfig;
 }
 
