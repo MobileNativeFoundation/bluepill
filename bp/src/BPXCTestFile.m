@@ -166,6 +166,24 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     return xcTestFile;
 }
 
++ (instancetype)BPXCTestFileFromBPTestPlan:(BPTestPlan *) testPlan
+                              andXcodePath:(NSString *)xcodePath
+                                  andError:(NSError **)errPtr {
+    
+    BPXCTestFile *xcTestFile = [[BPXCTestFile alloc] init];
+    xcTestFile.environmentVariables = testPlan.environment;
+    
+    NSMutableArray<NSString *> *args = [[NSMutableArray alloc] initWithCapacity:testPlan.arguments.count * 2];
+    for (NSString *key in xcTestFile.commandLineArguments) {
+        [args addObject:key];
+        [args addObject:[testPlan.arguments objectForKey:key]];
+    }
+
+    xcTestFile.commandLineArguments = args;
+    
+    return xcTestFile;
+}
+
 - (void)listTestClasses {
     for (BPTestClass *testClass in self.testClasses) {
         [testClass listTestCases];

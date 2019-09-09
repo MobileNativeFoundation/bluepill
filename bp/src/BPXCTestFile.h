@@ -8,6 +8,7 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
+#import "BPConfiguration.h"
 
 @interface BPXCTestFile : NSObject <NSCopying>
 
@@ -35,6 +36,10 @@
 
 + (instancetype)BPXCTestFileFromDictionary:(NSDictionary<NSString *, NSString *>*) dict
                               withTestRoot:(NSString *)testRoot
+                              andXcodePath:(NSString *)xcodePath
+                                  andError:(NSError **)errPtr;
+
++ (instancetype)BPXCTestFileFromBPTestPlan:(BPTestPlan *) testPlan
                               andXcodePath:(NSString *)xcodePath
                                   andError:(NSError **)errPtr;
 
