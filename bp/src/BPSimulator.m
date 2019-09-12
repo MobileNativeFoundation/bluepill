@@ -460,7 +460,7 @@
     [commandLineArgs addObjectsFromArray:@[
                                            @"-NSTreatUnknownArgumentsAsOpen", @"NO",
                                            @"-ApplePersistenceIgnoreState", @"YES",
-                                           @"-XCTIDEConnectionTimeout", @180
+                                           @"-XCTIDEConnectionTimeout", @"180"
                                            ]];
 
     argsAndEnv[@"args"] = [commandLineArgs copy];
