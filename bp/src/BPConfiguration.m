@@ -505,6 +505,9 @@ static NSUUID *sessionID;
         NSDictionary *planDictionary = [testOptions objectForKey:key];
         BPTestPlan *plan = [[BPTestPlan alloc] init];
         plan.testHost = [planDictionary objectForKey:@"test_host"];
+        plan.testHostBundleIdentifier = [planDictionary objectForKey:@"test_host_bundle_identifier"];
+        plan.testBundlePath = [planDictionary objectForKey:@"test_bundle_path"];
+        plan.uiTargetAppPath = [planDictionary objectForKey:@"ui_target_app_path"];
         plan.environment = [planDictionary objectForKey:@"environment"];
         plan.arguments = [planDictionary objectForKey:@"arguments"];
         

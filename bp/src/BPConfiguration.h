@@ -22,6 +22,9 @@
 @property (nonatomic, strong) NSString *testHost;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environment;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *arguments;
+@property (nonatomic, strong) NSString *testBundlePath;
+@property (nonatomic, strong) NSString *testHostBundleIdentifier;
+@property (nonatomic, strong) NSString *uiTargetAppPath;
 
 /**
  isValid checks to make sure the testHost is valid
