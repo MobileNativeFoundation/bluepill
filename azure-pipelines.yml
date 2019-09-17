@@ -37,7 +37,7 @@ jobs:
   - task: GitHubRelease@0
     condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/release-v')
     inputs:
-      gitHubConnection: GHRelease
+      gitHubConnection: linkedin
       repositoryName: '$(Build.Repository.Name)'
       assets: 'build/*.zip'
 
