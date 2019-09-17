@@ -149,11 +149,22 @@ static NSUUID *sessionID;
 @implementation BPTestPlan
 
 - (BOOL)isValid {
-    return YES;
+    return
+        self.arguments != nil &&
+        self.environment != nil &&
+        self.testBundlePath != nil &&
+        self.testHost != nil;
 }
 
 - (nonnull id)copyWithZone:(nullable NSZone *)zone {
-    return [[BPTestPlan alloc] init];
+    BPTestPlan *c = [[BPTestPlan alloc] init];
+    c.arguments = [self.arguments copy];
+    c.environment = [self.environment copy];
+    c.testBundlePath = [self.testBundlePath copy];
+    c.testHost = [self.testHost copy];
+    c.uiTargetAppPath = [self.uiTargetAppPath copy];
+    
+    return c;
 }
 
 @end
@@ -510,6 +521,11 @@ static NSUUID *sessionID;
         plan.uiTargetAppPath = [planDictionary objectForKey:@"ui_target_app_path"];
         plan.environment = [planDictionary objectForKey:@"environment"];
         plan.arguments = [planDictionary objectForKey:@"arguments"];
+        
+        if (!plan.isValid) {
+            BP_SET_ERROR(errPtr, @"Invalid BPTestPlan configuration: %@", plan);
+            return NO;
+        }
         
         [tests setObject:plan forKey:key];
     }
