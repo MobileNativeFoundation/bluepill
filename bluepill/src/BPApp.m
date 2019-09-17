@@ -103,27 +103,12 @@
         NSMutableArray<BPXCTestFile *> *loadedTests = [[NSMutableArray alloc] initWithCapacity:config.tests.count];
         for (NSString *testName in config.tests) {
             BPTestPlan *testPlan = [config.tests objectForKey:testName];
-//            BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromBPTestPlan:testPlan andXcodePath:@"" andError:errPtr];
-            //xcTestFile.skipTestIdentifiers = config.testCasesToSkip;
-            
-            BPXCTestFile *xcTestFile = [[BPXCTestFile alloc] init];
-            xcTestFile.name = testName;
-            xcTestFile.UITargetAppPath = testPlan.uiTargetAppPath;
-            xcTestFile.testBundlePath = testPlan.testBundlePath;
-            xcTestFile.testHostBundleIdentifier = testPlan.testHostBundleIdentifier;
-            xcTestFile.environmentVariables = testPlan.environment;
-            
-            NSMutableArray<NSString *> *args = [[NSMutableArray alloc] initWithCapacity:testPlan.arguments.count * 2];
-            for (NSString *key in xcTestFile.commandLineArguments) {
-                [args addObject:key];
-                [args addObject:[testPlan.arguments objectForKey:key]];
-            }
-            xcTestFile.commandLineArguments = args;
-
+            BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromBPTestPlan:testPlan withName:testName andError:errPtr];
             [loadedTests addObject:xcTestFile];
         }
         
         app.testBundles = loadedTests;
+        
         return app;
     }
     
