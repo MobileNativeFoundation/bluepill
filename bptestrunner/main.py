@@ -76,14 +76,18 @@ def merge_config_files(config1, config2):
     logging.debug("Merging '{}' '{}'".format(config1, config2))
     cfg1 = {}
     if config1:
-        with open(config1) as f:
+        with open(config1, 'r') as f:
             cfg1 = json.load(f)
     cfg2 = {}
     if config2:
-        with open(config2) as f:
+        with open(config2, 'r') as f:
             cfg2 = json.load(f)
-    merged_cfg = {key: value for (key, value) in (cfg2.items() + cfg1.items())}
-    f = tempfile.NamedTemporaryFile(delete=False)
+    merged_cfg = {}
+    for key, value in cfg2.items():
+        merged_cfg[key] = value
+    for key, value in cfg1.items():
+        merged_cfg[key] = value
+    f = tempfile.NamedTemporaryFile(mode='w+', delete=False)
     json.dump(merged_cfg, f)
     f.close()
     logging.debug("merged cfg file: {}".format(f.name))
@@ -94,7 +98,8 @@ def merge_config_files(config1, config2):
 def find_xcode_path():
     """Return the path to Xcode's Developer directory.
     """
-    simctl_path = subprocess.check_output(['xcrun', '--find', 'simctl'])
+    simctl_path = subprocess.check_output(
+        ['xcrun', '--find', 'simctl']).decode('utf-8')
     xcode_path = simctl_path.replace('/usr/bin/simctl', '')
     return xcode_path.rstrip()
 
