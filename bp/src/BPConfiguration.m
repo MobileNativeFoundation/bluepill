@@ -318,7 +318,7 @@ static NSUUID *sessionID;
 }
 
 - (id)mutableCopyWithZone:(NSZone *)zone {
-    BPConfiguration *newConfig = [[BPConfiguration alloc] initWithProgram:self.program];
+    BPConfiguration *newConfig = [[BPConfiguration alloc] initWithProgram:(int)self.program];
     assert(newConfig);
     for(int i = 0; BPOptions[i].name; i++) {
         const char *name = BPOptions[i].property;

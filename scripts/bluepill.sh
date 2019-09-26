@@ -88,10 +88,11 @@ bluepill_build_sample_app()
 
 bluepill_instance_tests()
 {
+  mkdir -p build/reports/
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme bp-tests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY --output build/reports/instance.xml
+    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/instance.xml
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
@@ -101,10 +102,11 @@ bluepill_instance_tests()
 
 bluepill_runner_tests()
 {
+  mkdir -p build/reports/
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
     -scheme bluepill-tests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY --output build/reports/runner.xml
+    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/runner.xml
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
