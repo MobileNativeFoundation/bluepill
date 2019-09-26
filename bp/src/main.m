@@ -66,10 +66,10 @@ int main(int argc, char * argv[]) {
             NSString *fileName = [NSString stringWithFormat:@"%@-stats.json", [[config.testBundlePath lastPathComponent] stringByDeletingPathExtension]];
             NSString *outputFile = [config.outputDirectory stringByAppendingPathComponent:fileName];
             BPWriter *statsWriter = [[BPWriter alloc] initWithDestination:BPWriterDestinationFile andPath:outputFile];
-            [[BPStats sharedStats] exitWithWriter:statsWriter exitCode:exitCode];
+            [[BPStats sharedStats] exitWithWriter:statsWriter exitCode:(int)exitCode];
         }
 
         [BPUtils printInfo:INFO withString:@"BP exiting %ld", (long)exitCode];
-        return exitCode;
+        return (int)exitCode;
     }
 }
