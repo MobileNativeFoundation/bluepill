@@ -232,7 +232,8 @@
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
 }
 
-- (void)testAppCrashingAndRetryReportsCorrectExitCode {
+// TODO: Enable this while re-enabling the fix from PR#338
+- (void)DISABLE_testAppCrashingAndRetryReportsCorrectExitCode {
     NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     NSString *tempDir = NSTemporaryDirectory();
@@ -416,7 +417,7 @@
 }
 
 //simulator shouldn't be kept in this case
-- (void)testKeepSimulatorWithAppHaningTestsSet  {
+- (void)testKeepSimulatorWithAppHangingTestsSet  {
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.keepSimulator = YES;
