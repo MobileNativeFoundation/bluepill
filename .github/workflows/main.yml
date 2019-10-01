@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: 
+      - master
+
+jobs:
+  build:
+    name: Test and build
+    runs-on: macOS-10.14    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Select Xcode 11
+      run: sudo xcode-select -s /Applications/Xcode_11.app
+    - name: Run Bluepill tests
+      run: ./scripts/bluepill.sh test
+    - name: Build Bluepill
+      run: ./scripts/bluepill.sh build
+
+  bazel_build:
+    name: Bazel build
+    runs-on: macOS-10.14
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Bazel
+        run: brew install bazel
+      - name: Build using Bazel
+        run: bazel build --host_force_python=PY2 //bluepill:bluepill
