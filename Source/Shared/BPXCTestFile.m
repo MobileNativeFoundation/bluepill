@@ -23,12 +23,14 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     return [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
                                      andHostAppBundle:testHostPath
                                    andUITargetAppPath:nil
+                                     andClassMappings:nil
                                             withError:errPtr];
 }
 
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)path
                             andHostAppBundle:(NSString *)testHostPath
                           andUITargetAppPath:(NSString *)UITargetAppPath
+                            andClassMappings:(NSDictionary *)classMappings
                                    withError:(NSError **)errPtr {
     BOOL isDir = NO;
 
@@ -97,8 +99,23 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         }
         [testClass addTestCase:[[BPTestCase alloc] initWithName:parts[1]]];
     }
-
-
+    if (classMappings) {
+        NSMutableArray *newClasses = [[NSMutableArray alloc] init];
+        for (id key in allClasses) {
+            BPTestClass *testClass = (BPTestClass *)key;
+            if ([classMappings objectForKey:[testClass name]]) {
+                NSArray<NSString *> *derivedClassNames = [(NSString *)[classMappings objectForKey:[testClass name]] componentsSeparatedByString:@","];
+                [BPUtils printInfo:INFO withString:@"In Mapping: Base Class Name = %@; testCase count: %lu; Derived Class Names: %@", [testClass name], (unsigned long)[testClass numTests], derivedClassNames];
+                for (NSString *derivedClassName in derivedClassNames) {
+                    BPTestClass *bpTestClass = [testClass copy];
+                    [bpTestClass setName:derivedClassName];
+                    testClassesDict[derivedClassName] = bpTestClass;
+                    [newClasses addObject:bpTestClass];
+                }
+            }
+        }
+        [allClasses addObjectsFromArray:newClasses];
+    }
     xcTestFile.testClasses = [NSArray arrayWithArray:allClasses];
     return xcTestFile;
 }
@@ -106,6 +123,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
 + (instancetype)BPXCTestFileFromDictionary:(NSDictionary *)dict
                               withTestRoot:(NSString *)testRoot
                               andXcodePath:(NSString *)xcodePath
+                          andClassMappings:(NSDictionary *)classMappings
                                   andError:(NSError *__autoreleasing *)errPtr {
     NSAssert(dict, @"A dictionary should be provided");
     NSAssert(testRoot, @"A testRoot argument must be supplied");
@@ -143,6 +161,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
                                                          andHostAppBundle:testHostPath
                                                        andUITargetAppPath:UITargetAppPath
+                                                         andClassMappings:classMappings
                                                                 withError:errPtr];
     if (!xcTestFile) {
         return nil;

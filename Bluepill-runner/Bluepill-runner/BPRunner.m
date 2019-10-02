@@ -122,6 +122,7 @@ maxprocs(void)
                            stringByAppendingPathComponent:
                            [NSString stringWithFormat:@"BP-%lu", (unsigned long)number]];
     cfg.testTimeEstimatesJsonFile = self.config.testTimeEstimatesJsonFile;
+    cfg.inheritedClassMappingJsonFile = self.config.inheritedClassMappingJsonFile;
     [cfg printConfig];
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:self.bpExecutable];
@@ -166,11 +167,10 @@ maxprocs(void)
                                              NSWorkspaceLaunchAndHide;
     //launch Simulator.app without booting a simulator
     NSDictionary *configuration = @{NSWorkspaceLaunchConfigurationArguments:@[@"-StartLastDeviceOnLaunch",@"0"]};
-    NSRunningApplication *app = [[NSWorkspace sharedWorkspace]
-                                 launchApplicationAtURL:simulatorURL
-                                 options:launchOptions
-                                 configuration:configuration
-                                 error:errPtr];
+    NSRunningApplication *app = [[NSWorkspace sharedWorkspace] launchApplicationAtURL:simulatorURL
+                                                                              options:launchOptions
+                                                                        configuration:configuration
+                                                                                error:errPtr];
     if (!app) {
         [BPUtils printInfo:ERROR withString:@"Launch Simulator.app returned error: %@", [*errPtr localizedDescription]];
         return nil;

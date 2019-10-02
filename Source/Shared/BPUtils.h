@@ -146,4 +146,13 @@ typedef BOOL (^BPRunBlock)(void);
  * @return trimmed test name
  */
 + (NSString *)trimTrailingParanthesesFromTestName:(NSString *)testName;
+
+/*!
+ * @discussion loads json mapping file from given absolute path
+ * @param filePath the absolute path of the input json mapping file
+ * @param errPtr an error if loading json mapping fails for some reason
+ * @return a dictionary with the mappings
+ */
++ (NSDictionary *)loadJsonMappingFile:(NSString *)filePath withError:(NSError **)errPtr;
+
 @end

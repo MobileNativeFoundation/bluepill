@@ -10,9 +10,9 @@
 #import <Foundation/Foundation.h>
 #import "BPTestCase.h"
 
-@interface BPTestClass : NSObject
+@interface BPTestClass : NSObject <NSCopying>
 
-@property (nonatomic) NSString *name;
+@property (nonatomic, retain) NSString *name;
 @property (nonatomic) NSMutableArray *testCases;
 
 - (instancetype)initWithName: (NSString *)name;
@@ -21,4 +21,5 @@
 - (NSString *)description;
 - (NSString *)debugDescription;
 - (void)listTestCases;
+- (id) copyWithZone: (NSZone *) zone;
 @end

@@ -44,18 +44,46 @@
 - (void)testAppWithAppBundlePathNoError {
     NSError *error;
     self.config.testBundlePath = nil;
-    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    self.config.appBundlePath = [BPTestHelper sampleAppPath];
+    BPApp *app = [BPApp appWithConfig:self.config withError:&error];
     XCTAssertNil(error);
     XCTAssert(app.testBundles.count > 2);
 }
 
 - (void)testAppWithOnlyTestBundlePath {
     NSError *error;
-    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    BPApp *app = [BPApp appWithConfig:self.config withError:&error];
     XCTAssertNil(error);
     XCTAssert(app.testBundles.count == 1);
     BPXCTestFile *testBundle = app.testBundles[0];
     XCTAssertEqualObjects(testBundle.testBundlePath, self.config.testBundlePath);
+    XCTAssert([testBundle.allTestCases count] == 4);
+}
+
+- (void)testAppWithClassMappings {
+    NSError *error;
+    self.config.inheritedClassMappingJsonFile = [BPTestHelper sampleInheritedClassesJsonPath];
+    BPApp *app = [BPApp appWithConfig:self.config withError:&error];
+    XCTAssertNil(error);
+    XCTAssert(app.testBundles.count == 1);
+    BPXCTestFile *testBundle = app.testBundles[0];
+    XCTAssert([testBundle.allTestCases count] == 8);
+}
+
+- (void)testMissingInheritedClassMappingBadJson {
+    NSError *error;
+    self.config.inheritedClassMappingJsonFile = [BPTestHelper sampleInheritedClassesBadJsonPath];
+    BPApp *app = [BPApp appWithConfig:self.config withError:&error];
+    XCTAssertNil(app);
+    XCTAssert(error);
+}
+
+- (void)testMissingInheritedClassMappingJson {
+    NSError *error;
+    self.config.inheritedClassMappingJsonFile = @"invalid/inherited/file/path.json";
+    BPApp *app = [BPApp appWithConfig:self.config withError:&error];
+    XCTAssertNil(app);
+    XCTAssert(error);
 }
 
 @end

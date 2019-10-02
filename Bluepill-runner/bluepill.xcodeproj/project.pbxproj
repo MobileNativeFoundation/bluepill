@@ -32,6 +32,8 @@
 		C49EEB84225570EC002CC956 /* result4.xml in Resources */ = {isa = PBXBuildFile; fileRef = C49EEB83225570EC002CC956 /* result4.xml */; };
 		C4C614A421814C5C008A2C39 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C4C614A321814C5C008A2C39 /* BPTestHelper.m */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
+		E4376E392346A5ED00379018 /* inherited.json in Resources */ = {isa = PBXBuildFile; fileRef = E4376E382346A5ED00379018 /* inherited.json */; };
+		E4376E3B2346A9A800379018 /* inherited_bad.json in Resources */ = {isa = PBXBuildFile; fileRef = E4376E3A2346A9A800379018 /* inherited_bad.json */; };
 		E49235FF22EA847700395D98 /* times.json in Resources */ = {isa = PBXBuildFile; fileRef = E49235FE22EA847700395D98 /* times.json */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +69,8 @@
 		C4C614A321814C5C008A2C39 /* BPTestHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BPTestHelper.m; path = "../../Bluepill-cli/BPInstanceTests/BPTestHelper.m"; sourceTree = "<group>"; };
 		C4FD8C561DB6E09B000ED28C /* BPPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPPacker.h; sourceTree = "<group>"; };
 		C4FD8C571DB6E09B000ED28C /* BPPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPacker.m; sourceTree = "<group>"; };
+		E4376E382346A5ED00379018 /* inherited.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = inherited.json; sourceTree = "<group>"; };
+		E4376E3A2346A9A800379018 /* inherited_bad.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = inherited_bad.json; sourceTree = "<group>"; };
 		E49235FE22EA847700395D98 /* times.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = times.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -146,6 +150,8 @@
 		BA9C2DAD1DD674AD007CB967 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
+				E4376E3A2346A9A800379018 /* inherited_bad.json */,
+				E4376E382346A5ED00379018 /* inherited.json */,
 				E49235FE22EA847700395D98 /* times.json */,
 				BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */,
 				BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */,
@@ -294,11 +300,13 @@
 			files = (
 				C49EEB84225570EC002CC956 /* result4.xml in Resources */,
 				BA9C2DB11DD67B66007CB967 /* testScheme.xcscheme in Resources */,
+				E4376E392346A5ED00379018 /* inherited.json in Resources */,
 				BA70318A1DE4ED2F008B3539 /* result3.xml in Resources */,
 				BA7031881DE4ED2F008B3539 /* result1.xml in Resources */,
 				BA9C2DAF1DD674AD007CB967 /* BPSampleAppTests.xctest in Resources */,
 				E49235FF22EA847700395D98 /* times.json in Resources */,
 				BA7031891DE4ED2F008B3539 /* result2.xml in Resources */,
+				E4376E3B2346A9A800379018 /* inherited_bad.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

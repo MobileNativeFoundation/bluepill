@@ -10,6 +10,7 @@
 #import "BPTestClass.h"
 
 @implementation BPTestClass
+@synthesize name;
 
 -(instancetype)init {
     return [self initWithName:nil];
@@ -46,6 +47,14 @@
 {
     NSString *testcases = [self.testCases componentsJoinedByString:@","];
     return [NSString stringWithFormat:@"<%@: %p> %@ - %lu - %@", [self class], self, self.name, self.testCases.count, testcases];
+}
+
+-(id)copyWithZone:(NSZone *)zone
+{
+    BPTestClass *newObj = [[BPTestClass allocWithZone:zone] init];
+    newObj.name = self.name;
+    newObj.testCases = [self.testCases copy];
+    return newObj;
 }
 
 @end

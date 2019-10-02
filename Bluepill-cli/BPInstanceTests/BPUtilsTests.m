@@ -29,6 +29,8 @@
 
     self.xcTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundlePath
                                                 andHostAppBundle:[BPTestHelper sampleAppBalancingTestsBundlePath]
+                                              andUITargetAppPath:nil
+                                                andClassMappings:nil
                                                        withError:nil];
     
     self.config = [BPConfiguration new];
