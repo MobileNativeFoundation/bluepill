@@ -205,8 +205,10 @@ void onInterrupt(int ignore) {
     NSString *testHostPath = context.config.testRunnerAppPath ?: context.config.appBundlePath;
     BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:context.config.testBundlePath
                                                           andHostAppBundle:testHostPath
+                                                        andUITargetAppPath:nil
+                                                          andClassMappings:nil
                                                                  withError:&error];
-    NSAssert(xctTestFile != nil, @"Failed to load testcases from %@", [error localizedDescription]);
+    NSAssert(xctTestFile != nil, @"Failed to load testcases. Error: %@", [error localizedDescription]);
     context.config.allTestCases = [[NSArray alloc] initWithArray: xctTestFile.allTestCases];
 
 

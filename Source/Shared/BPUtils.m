@@ -287,4 +287,16 @@ static BOOL quiet = NO;
     return [testName substringWithRange:regexMatches.firstObject.range];
 }
 
++ (NSDictionary *)loadJsonMappingFile:(NSString *)filePath
+                            withError:(NSError **)errPtr {
+    NSData *data = [NSData dataWithContentsOfFile:filePath
+                                          options:NSDataReadingMappedIfSafe
+                                            error:errPtr];
+    if (!data) return nil;
+
+    return [NSJSONSerialization JSONObjectWithData:data
+                                           options:kNilOptions
+                                             error:errPtr];
+}
+
 @end

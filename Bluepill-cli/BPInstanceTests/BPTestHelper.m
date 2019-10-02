@@ -64,6 +64,10 @@
     return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"times.json"];
 }
 
++ (NSString *)sampleInheritedClassesJsonPath {
+    return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"inherited.json"];
+}
+
 + (NSString *)samplePhotoPath {
     return [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"image.png"];
 }

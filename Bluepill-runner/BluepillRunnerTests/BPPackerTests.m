@@ -85,6 +85,34 @@
     }
 }
 
+- (void)testLoadInheritedClassMapping {
+    self.config.inheritedClassesJsonFile = [BPTestHelper sampleInheritedClassesJsonPath];
+    self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.testCasesToSkip = @[@"BPSampleAppTests/testCase000"];
+    self.config.numSims = @8;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    XCTAssert(app != nil);
+    NSArray<BPXCTestFile *> *bundles;
+    NSError *error;
+    bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:&error];
+    XCTAssert(error ==  nil);
+    XCTAssert([app.testBundles count] == [bundles count]);
+}
+
+- (void)testMissingInheritedClassMappingJson {
+    self.config.inheritedClassesJsonFile = @"invalid/inherited/file/path.json";
+    self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.testCasesToSkip = @[@"BPSampleAppTests/testCase000"];
+    self.config.numSims = @8;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    XCTAssert(app != nil);
+    NSArray<BPXCTestFile *> *bundles;
+    NSError *error;
+    bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:&error];
+    XCTAssert(error !=  nil);
+    XCTAssert([bundles count] == 0);
+}
+
 - (void)testSmartPackIfJsonFound {
     self.config.testTimeEstimatesJsonFile = [BPTestHelper sampleTimesJsonPath];
     self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];

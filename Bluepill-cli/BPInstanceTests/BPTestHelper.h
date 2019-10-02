@@ -53,6 +53,9 @@
 // Return path to the sample times json file.
 + (NSString *)sampleTimesJsonPath;
 
+// Return path to the sample inherited classes mapping json file.
++ (NSString *)sampleInheritedClassesJsonPath;
+
 // Return the sample photo path.
 + (NSString *)samplePhotoPath;
 

@@ -122,6 +122,7 @@ maxprocs(void)
                            stringByAppendingPathComponent:
                            [NSString stringWithFormat:@"BP-%lu", (unsigned long)number]];
     cfg.testTimeEstimatesJsonFile = self.config.testTimeEstimatesJsonFile;
+    cfg.inheritedClassMappingJsonFile = self.config.inheritedClassMappingJsonFile;
     [cfg printConfig];
     NSTask *task = [[NSTask alloc] init];
     [task setLaunchPath:self.bpExecutable];

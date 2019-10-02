@@ -7,8 +7,8 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
-#import <BluepillLib/BPConstants.h>
 #import "BPPacker.h"
+#import <BluepillLib/BPConstants.h>
 #import <BluepillLib/BPXCTestFile.h>
 #import <BluepillLib/BPUtils.h>
 
@@ -109,7 +109,7 @@
     }
 
     // load the config file
-    NSDictionary *testTimes = [self loadConfigFile:config.testTimeEstimatesJsonFile withError:errPtr];
+    NSDictionary *testTimes = [BPUtils loadJsonMappingFile:config.testTimeEstimatesJsonFile withError:errPtr];
     if ((errPtr && *errPtr) || !testTimes) {
         [BPUtils printInfo:ERROR withString:@"%@", [*errPtr localizedDescription]];
         return NULL;
@@ -170,14 +170,4 @@
     return sortedBundles;
 }
 
-+ (NSDictionary *)loadConfigFile:(NSString *)file withError:(NSError **)errPtr{
-    NSData *data = [NSData dataWithContentsOfFile:file
-                                          options:NSDataReadingMappedIfSafe
-                                            error:errPtr];
-    if (!data) return nil;
-
-    return [NSJSONSerialization JSONObjectWithData:data
-                                           options:kNilOptions
-                                             error:errPtr];
-}
 @end
