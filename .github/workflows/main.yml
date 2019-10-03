@@ -20,6 +20,13 @@ jobs:
       run: ./scripts/bluepill.sh test
     - name: Build Bluepill
       run: ./scripts/bluepill.sh build
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: github.event_name	== 'push' && startsWith(github.ref, 'refs/tags/v')
+      with:
+        files: 'build/*.zip'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   bazel_build:
     name: Bazel build
