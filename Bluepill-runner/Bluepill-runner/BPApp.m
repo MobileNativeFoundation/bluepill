@@ -113,6 +113,8 @@
         classMappings = [BPUtils loadJsonMappingFile:config.inheritedClassMappingJsonFile withError:errorPtr];
         if ((errorPtr && *errorPtr) || !classMappings) {
             [BPUtils printInfo:ERROR withString:@"Failed to read class mappings. Error: %@", [*errorPtr localizedDescription]];
+            BP_SET_ERROR(errPtr, [*errorPtr localizedDescription]);
+            return nil;
         }
     }
     if (config.xcTestRunDict) {
