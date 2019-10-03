@@ -22,7 +22,7 @@ jobs:
       run: ./scripts/bluepill.sh build
     - name: Release
       uses: softprops/action-gh-release@v1
-      if: github.event_name	== 'push' && startsWith(github.ref, 'refs/tags/release-v')
+      if: github.event_name	== 'push' && startsWith(github.ref, 'refs/tags/v')
       with:
         files: 'build/*.zip'
       env:
