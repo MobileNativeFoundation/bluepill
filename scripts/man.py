@@ -13,11 +13,9 @@ BPConstants = "bp/src/BPConstants.h"
 Header = """
 .\\" Bluepill help
 .TH man 1 "Summer 2017" ".1" "Bluepill"
-
 .SH NAME
 bluepill \\- A tool to run iOS tests in parallel using multiple
 simulators.
-
 .SH SYNOPSIS
 .B bluepill
 \\fB\\-a\\fR \\fI<app>\\fR
@@ -27,51 +25,38 @@ simulators.
 
 .B bluepill
 \\fB\\-c\\fR \\fI<config_file>\\fR
-
 .SH DESCRIPTION
 Bluepill is a tool to run iOS tests in parallel using multiple
 simulators. It requires the app to be compiled with the flags
 
 \\fR -sdk iphonesimulator \\fR
-
 .SH OPTIONS
 Each of these options can be passed on the command line or put in a
 JSON file that is passed with the \\fB-c\\fR option.
 """
 
 TRAILER = """
-
 .SH RETURN VALUE
-
 Bluepill will exit zero on success (all tests passed) and non-zero on
 any kind of failure (either from the tests or because bluepill
 couldn't run them).
-
-.EXAMPLES
-
+.SH EXAMPLES
+.sp
 $ mkdir output_directory
-$ xcodebuild -workspace MyApp.xcworkspace -scheme MyScheme -sdk iphonesimulator \\
-
-    build-for-testing -derivedDataPath .
+.sp
+$ xcodebuild -workspace MyApp.xcworkspace -scheme MyScheme -sdk iphonesimulator build-for-testing -derivedDataPath .
+.sp
 $ bluepill -a ./Build/Debug-iphonesimulator/MyApp.app -s MyScheme.xcscheme -o output_directory
-
 .SH SEE ALSO
-
 xcrun(1), xcode-build(1), xcode-select(1)
-
 .SH BUGS
-
 Please see http://github.com/linkedin/bluepill/issues for an up-to-date list.
-
 .SH HISTORY
-
 Bluepill was developed at LinkedIn during the fall of 2016 as a
 replacement for our scripts for running iPhone simulators in
 parallel. It was released as an Open Source project on GitHub at the
 beginning of 2017.
-
-.SH AUTHORS
-
+.SH CONTRIBUTORS
 """
 
 
@@ -171,11 +156,11 @@ def write_man_page(f):
         return line
 
     # now print them
-    print(Header)
+    print(Header, sep='')
     for op in parsed_opts:
         print('.TP')
         print(format_bi(op))
-        print('\n'.join(textwrap.wrap(op['desc'], 72)))
+        print('\n'.join(textwrap.wrap(op['desc'], 72)), sep='')
         if op['default_val'] != 'NULL':
             if op['default_val'] == 'BP_DEFAULT_DEVICE_TYPE':
                 defval = '"' + BP_DEFAULT_DEVICE_TYPE + '"'
@@ -184,7 +169,6 @@ def write_man_page(f):
             else:
                 defval = op['default_val']
             print('\\fR  Default Value: {} \\fR'.format(defval))
-        print("")
 
     print(TRAILER)
     authors = get_authors()
