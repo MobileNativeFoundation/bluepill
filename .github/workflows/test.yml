@@ -1,4 +1,4 @@
-name: CI
+name: TestIgnore
 
 on:
   push:
@@ -13,10 +13,10 @@ jobs:
     runs-on: macOS-10.14
     steps:
     - uses: actions/checkout@v1
-    - name: Select Xcode 11.1
+    - name: Test
       run: |
         echo "event ${{ github.event_name }} ref: ${{ github.ref }}"
-    - name: Release
+    - name: ReleaseTest
       if: github.event_name	== 'push' && startsWith(github.ref, 'refs/tags/v')
       run: |
         echo "Would have released"
