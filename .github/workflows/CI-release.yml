@@ -1,11 +1,9 @@
-name: CI-Release
+name: CI-release
 
 on:
   push:
     tags:
-      - 'v*'
-    branches:
-      - master
+      - 'v*.*.*'
 
 jobs:
   build:
