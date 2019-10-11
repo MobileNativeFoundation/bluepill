@@ -94,16 +94,28 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
+            argument = "--num-sims=4"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--clone-simulator"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "--xctestrun-path=/Users/rmandala/Documents/git/voyager-ios_gold/build/Build/Products/VoyagerScenarioTests4_iphonesimulator12.2-x86_64.xctestrun"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--test-time-estimates-json=/Users/rmandala/Documents/git/voyager-ios_trunk/scripts/bluepill/testTimeEstimates.json"
+            argument = "--list-tests"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--test-time-estimates-json=/Users/rmandala/Documents/git/voyager-ios_gold/scripts/bluepill/testTimeEstimates.json"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--inherited-class-mapping-json=/Users/rmandala/Documents/git/voyager-ios_gold/scripts/bluepill/inheritedClasses.json"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--config=/Users/rmandala/Documents/git/voyager-ios_gold/scripts/bluepill/config.json"
@@ -111,7 +123,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--verbose"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>

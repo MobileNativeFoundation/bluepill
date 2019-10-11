@@ -49,6 +49,8 @@ typedef NS_ENUM(int, BPKind) {
  */
 + (BOOL)isBuildScript;
 
++ (NSString *)findExecutablePath:(NSString *)execName;
+
 /*!
  @discussion creates a temporary directory via mkdtemp(3)
  @param pathTemplate a path in which to create the temporary directory.

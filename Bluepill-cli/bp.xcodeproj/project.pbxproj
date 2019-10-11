@@ -114,6 +114,7 @@
 		C4F08F75224C45750001AD2A /* BPExitStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7A851DDBB156001E085D /* BPExitStatus.m */; };
 		C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */ = {isa = PBXBuildFile; fileRef = C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */; };
 		C94DE0BB4360016D3D3061D9 /* simulator-preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */; };
+		E44CF0522350F3DB0089903D /* bp-test-dumper.m in Sources */ = {isa = PBXBuildFile; fileRef = E44CF0512350F3DB0089903D /* bp-test-dumper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -326,6 +327,7 @@
 		C49EEB802254179E002CC956 /* fatal_tests_attempt_3.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = fatal_tests_attempt_3.xml; sourceTree = "<group>"; };
 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 		C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "simulator-preferences.plist"; sourceTree = "<group>"; };
+		E44CF0512350F3DB0089903D /* bp-test-dumper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "bp-test-dumper.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -369,6 +371,7 @@
 		7A4FB8CC1DF89A790073F268 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				E44CF0512350F3DB0089903D /* bp-test-dumper.m */,
 				7A7D66001DB679820015C937 /* BPStats.h */,
 				7A7D66011DB679820015C937 /* BPStats.m */,
 				BA53B16A1E30931E00FCED71 /* BPConstants.h */,
@@ -944,6 +947,7 @@
 				7A564C0D1DA817DE001BCEC2 /* BPReporters.m in Sources */,
 				BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
 				7A202A411DB0066100D935E3 /* BPWriter.m in Sources */,
+				E44CF0522350F3DB0089903D /* bp-test-dumper.m in Sources */,
 				7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */,
 				BA19493A1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
 				7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */,

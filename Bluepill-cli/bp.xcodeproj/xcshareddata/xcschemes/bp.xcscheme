@@ -71,6 +71,36 @@
             ReferencedContainer = "container:bp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "--xctestrun-path=/Users/rmandala/Documents/git/voyager-ios_pure/build/Build/Products/VoyagerScenarioTests2_iphonesimulator12.2-x86_64.xctestrun"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--app=/Users/rmandala/Documents/git/voyager-ios_pure/build/Build/Products/Debug-iphonesimulator/TestHost.app"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--test-bundle-path=/Users/rmandala/Documents/git/voyager-ios_pure/build/Build/Products/Debug-iphonesimulator/TestHost.app/PlugIns/VoyagerTests.xctest"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--output-dir=/Users/rmandala/Documents/git/voyager-ios_pure/build/outputs/tests_artifacts/xml/"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--verbose"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-j /Users/rmandala/Documents/git/voyager-ios_pure/scripts/bluepill/testTimeEstimates.json"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-c /Users/rmandala/Documents/git/voyager-ios_pure/scripts/bluepill/config.json"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "BPBuildScript"

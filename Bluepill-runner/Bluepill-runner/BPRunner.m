@@ -64,32 +64,7 @@ maxprocs(void)
     BPRunner *runner = [[BPRunner alloc] init];
     runner.testHostForSimUDID = [[NSMutableDictionary alloc] init];
     runner.config = config;
-    // Find the `bp` binary.
-
-    if (bpPath) {
-        runner.bpExecutable = bpPath;
-    } else {
-        NSString *argv0 = [[[NSProcessInfo processInfo] arguments] objectAtIndex:0];
-        NSString *bp = [[argv0 stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"bp"];
-        if (![[NSFileManager defaultManager] isExecutableFileAtPath:bp]) {
-            // Search the PATH for a bp executable
-            BOOL foundIt = false;
-            NSString *path = [[[NSProcessInfo processInfo] environment] objectForKey:@"PATH"];
-            for (NSString *dir in [path componentsSeparatedByString:@":"]) {
-                bp = [dir stringByAppendingPathComponent:@"bp"];
-                if ([[NSFileManager defaultManager] isExecutableFileAtPath:bp]) {
-                    foundIt = true;
-                    break;
-                }
-            }
-            if (!foundIt) {
-                fprintf(stderr, "ERROR: I couldn't find the `bp` executable anywhere.\n"
-                        "Please put it somewhere in your PATH. (Ideally next to `bluepill`.\n");
-                return nil;
-            }
-        }
-        runner.bpExecutable = bp;
-    }
+    runner.bpExecutable = bpPath ?: [BPUtils findExecutablePath:@"bp"];
     return runner;
 }
 
@@ -196,6 +171,12 @@ maxprocs(void)
     }
 
     BPSimulator *bpSimulator = [BPSimulator simulatorWithConfiguration:self.config];
+    if (self.config.cloneSimulator) {
+        self.testHostForSimUDID = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles];
+        if ([self.testHostForSimUDID count] == 0) {
+            return 1;
+        }
+    }
     NSUInteger numSims = [self.config.numSims intValue];
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", BP_VERSION];
     NSError *error;
@@ -208,12 +189,6 @@ maxprocs(void)
         [BPUtils printInfo:WARNING
                 withString:@"Lowering number of parallel simulators from %lu to %lu because there aren't enough tests.",
                             numSims, bundles.count];
-    }
-    if (self.config.cloneSimulator) {
-        self.testHostForSimUDID = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles];
-        if ([self.testHostForSimUDID count] == 0) {
-            return 1;
-        }
     }
     [BPUtils printInfo:INFO withString:@"Running with %lu parallel simulator%s.",
      (unsigned long)numSims, (numSims > 1) ? "s" : ""];

@@ -121,6 +121,28 @@ static BOOL quiet = NO;
                            userInfo:@{NSLocalizedDescriptionKey: msg}];
 }
 
++ (NSString *)findExecutablePath:(NSString *)execName {
+    NSString *argv0 = [[[NSProcessInfo processInfo] arguments] objectAtIndex:0];
+    NSString *execPath = [[argv0 stringByDeletingLastPathComponent] stringByAppendingPathComponent:execName];
+    if (![[NSFileManager defaultManager] isExecutableFileAtPath:execPath]) {
+        // Search the PATH for a bp executable
+        BOOL foundIt = false;
+        NSString *path = [[[NSProcessInfo processInfo] environment] objectForKey:@"PATH"];
+        for (NSString *dir in [path componentsSeparatedByString:@":"]) {
+            execPath = [dir stringByAppendingPathComponent:execName];
+            if ([[NSFileManager defaultManager] isExecutableFileAtPath:execPath]) {
+                foundIt = true;
+                break;
+            }
+        }
+        if (!foundIt) {
+            fprintf(stderr, "ERROR: I couldn't find the `bp` executable anywhere.\n"
+                    "Please put it somewhere in your PATH. (Ideally next to `bluepill`.\n");
+            return nil;
+        }
+    }
+    return execPath;
+}
 
 + (NSString *)mkdtemp:(NSString *)template withError:(NSError **)errPtr {
     char *dir = strdup([[template stringByAppendingString:@"_XXXXXX"] UTF8String]);
@@ -148,7 +170,7 @@ static BOOL quiet = NO;
     return ret;
 }
 
-
+// Expands the exclude or skipped tests, for example into all test methods if test class is mentioned
 + (BPConfiguration *)normalizeConfiguration:(BPConfiguration *)config
                               withTestFiles:(NSArray *)xctTestFiles {
     

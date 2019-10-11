@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 
 #define BP_DEFAULT_RUNTIME "iOS 12.2"
-#define BP_DEFAULT_DEVICE_TYPE "iPhone 7"
+#define BP_DEFAULT_DEVICE_TYPE "iPhone 8"
 #define BP_TM_PROTOCOL_VERSION 17
 #define BP_DAEMON_PROTOCOL_VERSION 26
 #define BP_DEFAULT_XCODE_VERSION "10.2"

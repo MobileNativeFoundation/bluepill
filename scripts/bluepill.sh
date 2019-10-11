@@ -82,12 +82,33 @@ bluepill_build()
           echo No bp built
           exit 1
   }
+
+  (cd Source/Shared; clang \
+    -arch x86_64 \
+    -x objective-c \
+    -fPIC \
+    -shared \
+    -fmodules \
+    -isysroot $(xcrun --show-sdk-path --sdk iphonesimulator) \
+    -F $(xcrun --show-sdk-platform-path --sdk iphonesimulator)/Developer/Library/Frameworks \
+    -Xlinker -rpath -Xlinker @executable_path/Frameworks  \
+    -Xlinker -rpath -Xlinker @loader_path/Frameworks  \
+    -Xlinker -rpath -Xlinker $(xcrun --show-sdk-platform-path --sdk iphonesimulator)/Developer/Library/Frameworks \
+    -mios-simulator-version-min=12.0 \
+    -fobjc-arc \
+    -fobjc-link-runtime \
+    -framework XCTest \
+    -o bp-test-dumper.dylib \
+    bp-test-dumper.m
+  )
+
   set +o pipefail
   # package bluepill
   TAG=$(git describe --always)
   DST="Bluepill-$TAG"
   mkdir -p build/$DST/bin
-  cp build/Build/Products/Release/{bp,bluepill} build/$DST/bin
+  cp Source/Shared/bp-test-dumper.dylib build/Build/Products/Release/
+  cp build/Build/Products/Release/{bp,bluepill,bp-test-dumper.dylib} build/$DST/bin
   ## build the man page
   mkdir -p build/$DST/man/man1
   /usr/bin/python scripts/man.py build/$DST/man/man1/bluepill.1
