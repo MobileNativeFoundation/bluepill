@@ -13,6 +13,9 @@ jobs:
     runs-on: macOS-10.14
     steps:
     - uses: actions/checkout@v1
+    - name: Report event trigger data
+      run: |
+        echo "Event ${{ github.event_name }}, ref: ${{ github.ref }}"
     - name: Select Xcode 11.1
       run: sudo xcode-select -s /Applications/Xcode_11.1.app
     - name: Run Bluepill tests
