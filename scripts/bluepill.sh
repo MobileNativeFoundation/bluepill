@@ -58,7 +58,7 @@ bluepill_build()
   }
   set +o pipefail
   # package bluepill
-  TAG=$(git describe --always)
+  TAG=$(git describe --always --tags)
   DST="Bluepill-$TAG"
   mkdir -p build/$DST/bin
   cp build/Build/Products/Release/{bp,bluepill} build/$DST/bin
