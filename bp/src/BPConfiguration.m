@@ -798,7 +798,6 @@ static NSUUID *sessionID;
             return NO;
         }
     }
-
     if (self.screenshotsDirectory) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.screenshotsDirectory isDirectory:&isdir]) {
             if (!isdir) {

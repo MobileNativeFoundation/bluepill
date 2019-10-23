@@ -14,6 +14,7 @@
 #import "bp/src/BPUtils.h"
 #import "bp/src/BPWaitTimer.h"
 #import "bp/src/SimulatorHelper.h"
+#import "bp/BPVersion.h"
 #import "BPPacker.h"
 #import "BPRunner.h"
 

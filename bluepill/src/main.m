@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <getopt.h>
 #import <libgen.h>
+#import "bp/BPVersion.h"
 #import "bp/src/BPConfiguration.h"
 #import "bp/src/BPStats.h"
 #import "bp/src/BPUtils.h"

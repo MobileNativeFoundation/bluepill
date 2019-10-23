@@ -45,6 +45,7 @@
 }
 
 - (NSMutableDictionary *)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles withSimTemplate:(NSString *)simTemplateUDID {
+    NSMutableDictionary* testHostSimTemplates = [[NSMutableDictionary alloc] init];
     NSError *error = nil;
     NSString *simulatorUDIDString = nil;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
@@ -81,8 +82,8 @@
             [BPUtils printInfo:ERROR withString:@"Create simulator and install application failed with error: %@", error];
             return nil;
         }
-        self.testHostSimTemplates[self.config.appBundlePath] = simulatorUDIDString;
-        [BPUtils printInfo:INFO withString:@"Installed app host: %@ on sim template: %@", self.config.appBundlePath, simulatorUDIDString];
+        testHostSimTemplates[self.config.appBundlePath] = simulatorUDIDString;
+        [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, self.config.appBundlePath];
     } else {
         // This is for testing in command line when we pass the xctestrun file
         NSMutableSet *hostBundles = [[NSMutableSet alloc] init];
@@ -108,10 +109,10 @@
                 return FALSE;
             }
             [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, appPath];
-            self.testHostSimTemplates[appPath] = simulatorUDIDString;
+            testHostSimTemplates[appPath] = simulatorUDIDString;
         }
     }
-    return self.testHostSimTemplates;
+    return testHostSimTemplates;
 }
 
 - (NSString *)getErrorDescription:(NSError *__autoreleasing *)errPtr {
