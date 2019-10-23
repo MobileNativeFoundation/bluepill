@@ -59,8 +59,7 @@
         NSNumber *isDirectory = nil;
         if (![url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:&error]) {
             [BPUtils printInfo:ERROR withString:@"Failed to get resource from url %@", url];
-        }
-        else if (![isDirectory boolValue]) {
+        } else if (![isDirectory boolValue]) {
             if ([[url pathExtension] isEqualToString:@"xml"]) {
                 [BPUtils printInfo:DEBUGINFO withString:@"JUnit collecting: %@", [url path]];
                 NSString *path = [url path];

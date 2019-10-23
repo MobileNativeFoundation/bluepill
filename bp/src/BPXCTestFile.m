@@ -98,7 +98,6 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         [testClass addTestCase:[[BPTestCase alloc] initWithName:parts[1]]];
     }
 
-
     xcTestFile.testClasses = [NSArray arrayWithArray:allClasses];
     return xcTestFile;
 }

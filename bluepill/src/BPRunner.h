@@ -16,7 +16,7 @@
 @property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) NSString *bpExecutable;
 @property (nonatomic, strong) NSMutableArray *nsTaskList;
-@property (nonatomic, strong) NSMutableDictionary* testHostForSimUDID;
+@property (nonatomic, strong) NSDictionary *testHostSimTemplates;
 
 /*!
  * @discussion get a BPRunnner to run tests
@@ -40,11 +40,12 @@
                     andNumber:(NSUInteger)number
                     andDevice:(NSString *)deviceID
            andCompletionBlock:(void (^)(NSTask * ))block;
+
 /**
  @discussion start running tests
  @return 1: test failures 0: pass -1: failed to run tests
  */
 - (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *>*)xcTestFiles;
-- (void) interrupt;
 
+- (void) interrupt;
 @end

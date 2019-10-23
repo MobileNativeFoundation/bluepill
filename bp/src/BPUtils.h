@@ -49,10 +49,12 @@ typedef NS_ENUM(int, BPKind) {
  */
 + (BOOL)isBuildScript;
 
++ (NSString *)findExecutablePath:(NSString *)execName;
+
 /*!
  @discussion creates a temporary directory via mkdtemp(3)
  @param pathTemplate a path in which to create the temporary directory.
- It doesn't need to be unique since a unique identifier will be appended 
+ It doesn't need to be unique since a unique identifier will be appended
  to it.
  @param errPtr an error if creating the temporary directory failed.
  @return the path of the temporary directory created.
@@ -93,17 +95,17 @@ typedef NS_ENUM(int, BPKind) {
 }
 
 /*!
- 
+
  @brief Updates the config to expand any testsuites in the tests-to-run/skip into their individual test cases.
- 
+
  @discussion Bluepill supports passing in just the 'testsuite' as one of the tests to 'include' or 'exclude'.
  This method takes such items and expands them out so that @c BPPacker and @c SimulatorHelper can simply
  work with a list of fully qualified tests in the format of 'testsuite/testcase'.
- 
+
  @param config the @c BPConfiguration for this bluepill-runner
  @param xctTestFiles an NSArray of BPXCTestFile's to retrieve the tests from
  @return an updated @c BPConfiguration with testCasesToSkip and testCasesToRun that have had testsuites fully expanded into a list of 'testsuite/testcases'
- 
+
  */
 + (BPConfiguration *)normalizeConfiguration:(BPConfiguration *)config
                               withTestFiles:(NSArray *)xctTestFiles;
@@ -160,4 +162,13 @@ typedef BOOL (^BPRunBlock)(void);
  * @return the version
  */
 + (char *)version;
+
+/*!
+ * @discussion loads json mapping file from given absolute path
+ * @param filePath the absolute path of the input json mapping file
+ * @param errPtr an error if loading json mapping fails for some reason
+ * @return a dictionary with the mappings
+ */
++ (NSDictionary *)loadSimpleJsonFile:(NSString *)filePath withError:(NSError **)errPtr;
+
 @end
