@@ -8,12 +8,12 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <XCTest/XCTest.h>
-#import "BPTestHelper.h"
 #import <BluepillLib/BPConfiguration.h>
-#import "BPApp.h"
 #import <BluepillLib/BPXCTestFile.h>
 #import <BluepillLib/BPUtils.h>
 #import <BluepillLib/BPConstants.h>
+#import "BPApp.h"
+#import "BPTestHelper.h"
 
 @interface BPAppTests : XCTestCase
 @property (nonatomic, strong) BPConfiguration* config;
@@ -23,7 +23,7 @@
 
 - (void)setUp {
     [super setUp];
-    
+
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
     self.config = [BPConfiguration new];
@@ -44,14 +44,15 @@
 - (void)testAppWithAppBundlePathNoError {
     NSError *error;
     self.config.testBundlePath = nil;
-    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    self.config.appBundlePath = [BPTestHelper sampleAppPath];
+    BPApp *app = [BPApp appWithConfig:self.config withError:&error];
     XCTAssertNil(error);
     XCTAssert(app.testBundles.count > 2);
 }
 
 - (void)testAppWithOnlyTestBundlePath {
     NSError *error;
-    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    BPApp *app = [BPApp appWithConfig:self.config withError:&error];
     XCTAssertNil(error);
     XCTAssert(app.testBundles.count == 1);
     BPXCTestFile *testBundle = app.testBundles[0];

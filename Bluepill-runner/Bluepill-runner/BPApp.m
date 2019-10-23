@@ -68,7 +68,7 @@
                                        andXcodePath:(NSString *)xcodePath
                                           withError:(NSError *__autoreleasing *)errPtr {
 
-    NSMutableArray<BPXCTestFile *> *allTests = [[NSMutableArray alloc] init];
+    NSMutableArray<BPXCTestFile *> *allXCTestFiles = [[NSMutableArray alloc] init];
     NSUInteger errorCount = 0;
     for (NSString *key in xcTestRunDict) {
         if ([key isEqualToString:@"__xctestrun_metadata__"]) {
@@ -84,40 +84,39 @@
             errorCount++;
             continue;
         }
-        [allTests addObject:xcTestFile];
+        [allXCTestFiles addObject:xcTestFile];
     }
     if (errorCount) {
         BP_SET_ERROR(errPtr, @"Failed to load some test bundles");
         return nil;
     }
-    return allTests;
+    return allXCTestFiles;
 }
 
 + (instancetype)appWithConfig:(BPConfiguration *)config
                     withError:(NSError *__autoreleasing *)errPtr {
 
     BPApp *app = [[BPApp alloc] init];
-    NSMutableArray<BPXCTestFile *> *allTests = [[NSMutableArray alloc] init];
-
+    NSMutableArray<BPXCTestFile *> *allXCTestFiles = [[NSMutableArray alloc] init];
     if (config.xcTestRunDict) {
         NSAssert(config.xcTestRunPath, @"");
         [BPUtils printInfo:INFO withString:@"Using xctestrun configuration"];
         NSArray<BPXCTestFile *> *loadedTests = [BPApp testsFromXCTestRunDict:config.xcTestRunDict
-                                                           andXCTestRunPath:config.xcTestRunPath
+                                                            andXCTestRunPath:config.xcTestRunPath
                                                                 andXcodePath:config.xcodePath
                                                                    withError:errPtr];
         if (loadedTests == nil) {
             return nil;
         }
 
-        [allTests addObjectsFromArray:loadedTests];
+        [allXCTestFiles addObjectsFromArray:loadedTests];
     } else if (config.appBundlePath) {
         NSAssert(config.appBundlePath, @"no app bundle and no xctestrun file");
         [BPUtils printInfo:WARNING withString:@"Using broken configuration, consider using .xctestrun files"];
-        [allTests addObjectsFromArray:[BPApp testsFromAppBundle:config.appBundlePath
-                                              andTestBundlePath:config.testBundlePath
-                                             andUITargetAppPath:config.testRunnerAppPath
-                                                      withError:errPtr]];
+        [allXCTestFiles addObjectsFromArray:[BPApp testsFromAppBundle:config.appBundlePath
+                                                    andTestBundlePath:config.testBundlePath
+                                                   andUITargetAppPath:config.testRunnerAppPath
+                                                            withError:errPtr]];
     } else {
         BP_SET_ERROR(errPtr, @"xctestrun file must be given, see usage.");
         return nil;
@@ -128,8 +127,8 @@
             BPXCTestFile *testFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundle
                                                                andHostAppBundle:config.appBundlePath
                                                              andUITargetAppPath:config.testRunnerAppPath
-                                                                    withError:errPtr];
-            [allTests addObject:testFile];
+                                                                      withError:errPtr];
+            [allXCTestFiles addObject:testFile];
         }
     }
 
@@ -137,12 +136,12 @@
         for (NSString *testBundle in config.additionalUnitTestBundles) {
             BPXCTestFile *testFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:testBundle
                                                                andHostAppBundle:config.testRunnerAppPath
-                                                                    withError:errPtr];
-            [allTests addObject:testFile];
+                                                                      withError:errPtr];
+            [allXCTestFiles addObject:testFile];
         }
     }
 
-    app.testBundles = allTests;
+    app.testBundles = allXCTestFiles;
     return app;
 }
 

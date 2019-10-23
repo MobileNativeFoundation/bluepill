@@ -33,6 +33,7 @@
 
 /*!
  * @discussion get the path of the environment configuration file
+ * @param config the configuration object
  * @return return the path to the test configuration file.
  */
 + (NSString *)testEnvironmentWithConfiguration:(BPConfiguration *)config;

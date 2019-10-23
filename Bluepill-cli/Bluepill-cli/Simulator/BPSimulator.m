@@ -7,19 +7,20 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
-#import "BPSimulator.h"
-#import "SimulatorHelper.h"
+#import <AppKit/AppKit.h>
+#import <BluepillLib/BPConstants.h>
+#import <sys/stat.h>
 #import "BPConfiguration.h"
 #import "BPConstants.h"
-#import "CoreSimulator.h"
-#import "BPTreeParser.h"
-#import "BPUtils.h"
-#import <AppKit/AppKit.h>
-#import <sys/stat.h>
+#import "BPCreateSimulatorHandler.h"
+#import "BPSimulator.h"
 #import "BPTestBundleConnection.h"
 #import "BPTestDaemonConnection.h"
+#import "BPTreeParser.h"
+#import "BPUtils.h"
 #import "BPWaitTimer.h"
-#import "BPCreateSimulatorHandler.h"
+#import "CoreSimulator.h"
+#import "SimulatorHelper.h"
 
 @interface BPSimulator()
 
@@ -40,7 +41,7 @@
 }
 
 - (NSMutableDictionary *)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles {
-    NSMutableDictionary* testHostForSimUDID = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary* testHostSimTemplates = [[NSMutableDictionary alloc] init];
     NSString *simulatorUDIDString = nil;
     NSError *error = nil;
     if (self.config.appBundlePath) {
@@ -50,7 +51,7 @@
             [BPUtils printInfo:ERROR withString:@"Create simualtor and install application failed with error: %@", error];
             return FALSE;
         }
-        testHostForSimUDID[self.config.appBundlePath] = simulatorUDIDString;
+        testHostSimTemplates[self.config.appBundlePath] = simulatorUDIDString;
         [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, self.config.appBundlePath];
     } else {
         // This is for testing in command line when we pass the xctestrun file
@@ -69,10 +70,10 @@
                 return FALSE;
             }
             [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, appPath];
-            testHostForSimUDID[appPath] = simulatorUDIDString;
+            testHostSimTemplates[appPath] = simulatorUDIDString;
         }
     }
-    return testHostForSimUDID;
+    return testHostSimTemplates;
 }
 
 - (NSString *)getErrorDescription:(NSError *__autoreleasing *)errPtr {
@@ -443,7 +444,6 @@
         hostBundleId = [SimulatorHelper bundleIdForPath:self.config.testRunnerAppPath];
     }
     // Create the environment for the host application
-
     NSMutableDictionary *argsAndEnv = [[NSMutableDictionary alloc] init];
     NSArray *argumentsArr = self.config.commandLineArguments ?: @[];
     NSMutableArray *commandLineArgs = [NSMutableArray array];
@@ -465,14 +465,6 @@
 
     argsAndEnv[@"args"] = [commandLineArgs copy];
     argsAndEnv[@"env"] = self.config.environmentVariables ?: @{};
-    NSMutableDictionary *appLaunchEnvironment = [NSMutableDictionary dictionaryWithDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config]];
-    [appLaunchEnvironment addEntriesFromDictionary:argsAndEnv[@"env"]];
-    if (self.config.testing_CrashAppOnLaunch) {
-        appLaunchEnvironment[@"_BP_TEST_CRASH_ON_LAUNCH"] = @"YES";
-    }
-    if (self.config.testing_HangAppOnLaunch) {
-        appLaunchEnvironment[@"_BP_TEST_HANG_ON_LAUNCH"] = @"YES";
-    }
 
     // Intercept stdout, stderr and post as simulator-output events
     NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/stdout_stderr_%@", self.device.dataPath, [[self.device UDID] UUIDString]];
@@ -487,17 +479,23 @@
                                             contents:nil
                                           attributes:nil];
 
-    NSMutableDictionary *appLaunchEnv = [appLaunchEnvironment mutableCopy];
-    [appLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStdoutKey];
-    [appLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStderrKey];
-    NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib", self.config.xcodePath];
-    [appLaunchEnv setObject:insertLibraryPath forKey:@"DYLD_INSERT_LIBRARIES"];
-    [appLaunchEnv setObject:insertLibraryPath forKey:@"XCInjectBundleInto"];
-
     self.appOutput = [NSFileHandle fileHandleForReadingAtPath:simStdoutPath];
 
-    appLaunchEnvironment = [appLaunchEnv copy];
-
+    NSDictionary *appLaunchEnvironment = [SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config];
+    NSMutableDictionary *mutableAppLaunchEnv = [appLaunchEnvironment mutableCopy];
+    NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib", self.config.xcodePath];
+    [mutableAppLaunchEnv setObject:insertLibraryPath forKey:@"DYLD_INSERT_LIBRARIES"];
+    [mutableAppLaunchEnv setObject:insertLibraryPath forKey:@"XCInjectBundleInto"];
+    [mutableAppLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStdoutKey];
+    [mutableAppLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStderrKey];
+    [mutableAppLaunchEnv addEntriesFromDictionary:argsAndEnv[@"env"]];
+    if (self.config.testing_CrashAppOnLaunch) {
+        mutableAppLaunchEnv[@"_BP_TEST_CRASH_ON_LAUNCH"] = @"YES";
+    }
+    if (self.config.testing_HangAppOnLaunch) {
+        mutableAppLaunchEnv[@"_BP_TEST_HANG_ON_LAUNCH"] = @"YES";
+    }
+    appLaunchEnvironment = [mutableAppLaunchEnv copy];
     NSDictionary *options = @{
                               kOptionsArgumentsKey: argsAndEnv[@"args"],
                               kOptionsEnvironmentKey: appLaunchEnvironment,
@@ -556,7 +554,6 @@
             }
         });
     }];
-
 }
 
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion {
