@@ -7,6 +7,7 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
+#import "BPHTMLReportWriter.h"
 #import "BPReportCollector.h"
 #import "bp/src/BPUtils.h"
 
@@ -95,10 +96,16 @@
         [traceData writeToFile:traceFilePath atomically:YES];
         [BPUtils printInfo:INFO withString:@"Trace profile: %@", traceFilePath];
     }
-    [self collateReports:reports andDeleteCollated:deleteCollected withOutputAt:finalReportPath];
+    NSXMLDocument *jUnitReport = [self collateReports:reports
+                                    andDeleteCollated:deleteCollected
+                                         withOutputAt:finalReportPath];
+
+    // write a html report
+    [[BPHTMLReportWriter new] writeHTMLReportWithJUnitReport:jUnitReport
+                                                    inFolder:finalReportsDir];
 }
 
-+ (void)collateReports:(NSMutableArray <BPXMLReport *> *)reports
++ (NSXMLDocument *)collateReports:(NSMutableArray <BPXMLReport *> *)reports
      andDeleteCollated:(BOOL)deleteCollated
           withOutputAt:(NSString *)finalReportPath {
     NSError *err;
@@ -151,6 +158,7 @@
 
     NSData *xmlData = [targetReport XMLDataWithOptions:NSXMLNodePrettyPrint];
     [xmlData writeToFile:finalReportPath atomically:YES];
+    return targetReport;
 }
 
 + (NSXMLDocument *)newEmptyXMLDocumentWithName:(NSString *)name {

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuites name="All tests" tests="552" failures="0" errors="2" time="1058.428000">
+    <testsuite tests="82" failures="0" errors="1" time="997.128000" timestamp="2019-10-28T13:37:34GMTZ" name="LearningUITests.xctest">
+        <testsuite tests="1" failures="0" errors="1" time="50.461000" timestamp="2019-10-28T13:37:40GMTZ" name="PlayerTests">
+            <testcase classname="PlayerTests" name="testPlayer" time="50.461000">
+                <error type="Error" message="-[LearningUITests.PlayerTests testPlayer] : Exception: ActionFailedException">
+/Utilities/TestsHelper/LILTestsHelper.swift:56
+        </error>
+                <system-out>
+XCTestOutputBarrier2019-10-28 13:37:41.210502-0700 Learning[21976:1621719] [Client] Remote object proxy returned error: Error Domain=NSCocoaErrorDomain Code=4099 "The connection to service named com.apple.commcenter.coretelephony.xpc was invalidated." UserInfo={NSDebugDescription=The connection to service named com.apple.commcenter.coretelephony.xpc was invalidated.}
+        </system-out>
+            </testcase>
+            <testcase classname="AuthenticationStateHandlerTests" name="testInitWithAuthEngineLoggedOut" time="10.710000">
+                <error type="Error" message="Asynchronous wait failed: Exceeded timeout of 2 seconds, with unfulfilled expectations: &quot;Expect wk cookie store has been reset.&quot;.">
+&lt;unknown&gt;:0
+        </error>
+                <system-out>
+XCTestOutputBarrier2019-10-28 13:37:05.678861-0700 Learning[21646:1617371] Invalid connection: com.apple.coresymbolicationd
+Invalid connection: com.apple.coresymbolicationd
+&lt;unknown&gt;:0: error: -[LearningUnitTests.AuthenticationStateHandlerTests testInitWithAuthEngineLoggedOut] : Asynchronous wait failed: Exceeded timeout of 2 seconds, with unfulfilled expectations: "Expect wk cookie store has been reset.".
+        </system-out>
+            </testcase>
+        </testsuite>
+        <testsuite tests="2" failures="0" errors="0" time="0.160000" timestamp="2019-10-28T13:38:00GMTZ" name="WebRouterTests">
+            <testcase classname="WebRouterTests" name="testSafariViewControllerGateway" time="0.012000"></testcase>
+            <testcase classname="WebRouterTests" name="testWebviewGateway" time="0.148000"></testcase>
+        </testsuite>
+    </testsuite>
+</testsuites>
