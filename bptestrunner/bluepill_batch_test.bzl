@@ -54,7 +54,9 @@ def _bluepill_batch_test_impl(ctx):
     if ctx.attr.config_file:
         runfiles += [ctx.file.config_file]
         substitutions["bp_config_file"] = ctx.file.config_file.path
-
+    if ctx.attr.time_estimates:
+        runfiles += [ctx.file.time_estimates]
+        substitutions["bp_test_time_estimates_json"] = ctx.file.time_estimates.path
     ctx.actions.expand_template(
         template = ctx.file._test_runner_template,
         output = ctx.outputs.test_runner,
@@ -81,6 +83,14 @@ A list of test targets to be bundled and run by bluepill.
             doc = """
 A configuration file that will be passed to bluepill. Rule attributes
 take precedence over conflicting values in the config file.
+""",
+            allow_single_file = True,
+        ),
+        "time_estimates": attr.label(
+            doc = """
+A json file that includes time took of each test from previous test
+executions. It is used by Bluepill to distribute the tests as evenly
+as possible between simulators.
 """,
             allow_single_file = True,
         ),
