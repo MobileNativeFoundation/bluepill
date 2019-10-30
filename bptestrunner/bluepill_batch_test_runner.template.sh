@@ -67,10 +67,13 @@ cp -L "$BLUEPILL_PATH" $BP_WORKING_FOLDER
 # NOTE: we override output folder here and disregard the one in the config file.
 # So we know where to grab the output files for the next step.
 echo "Running ./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}"
-(cd $BP_WORKING_FOLDER; ./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG})
+pushd .
+cd $BP_WORKING_FOLDER
+./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG} || RC=$?
+popd
 
 # Copy Bluepill output to bazel-testlogs
+mkdir -p "../../../testlogs/$TARGET_NAME/test.outputs"
 cp -cr "$BP_WORKING_FOLDER/outputs" "../../../testlogs/$TARGET_NAME/test.outputs/"
 
-status=$?
-exit ${status}
+exit $RC
