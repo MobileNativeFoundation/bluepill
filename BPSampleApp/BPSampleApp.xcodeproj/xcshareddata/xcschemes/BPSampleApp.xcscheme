@@ -111,6 +111,15 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "BAB24F2D1DB5D45E00867756"
+            BuildableName = "BPSampleApp.app"
+            BlueprintName = "BPSampleApp"
+            ReferencedContainer = "container:BPSampleApp.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -198,28 +207,7 @@
                ReferencedContainer = "container:BPSampleApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C40B277022492E5200FAAF67"
-               BuildableName = "BPSampleAppTestsBugs.xctest"
-               BlueprintName = "BPSampleAppTestsBugs"
-               ReferencedContainer = "container:BPSampleApp.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "BAB24F2D1DB5D45E00867756"
-            BuildableName = "BPSampleApp.app"
-            BlueprintName = "BPSampleApp"
-            ReferencedContainer = "container:BPSampleApp.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -241,8 +229,6 @@
             ReferencedContainer = "container:BPSampleApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
