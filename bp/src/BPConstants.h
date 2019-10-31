@@ -15,6 +15,7 @@
 #define BP_DAEMON_PROTOCOL_VERSION 26
 #define BP_DEFAULT_XCODE_VERSION "11.1"
 #define BP_MAX_PROCESSES_PERCENT 0.75
+#define BP_TM_PROTOCOL_VERSION 17
 
 
 extern NSString * const kCFBundleIdentifier;

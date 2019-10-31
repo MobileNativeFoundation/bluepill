@@ -209,9 +209,8 @@ static void onInterrupt(int ignore) {
     BPXCTestFile *xctTestFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:context.config.testBundlePath
                                                           andHostAppBundle:testHostPath
                                                                  withError:&error];
-    NSAssert(xctTestFile != nil, @"Failed to load testcases from %@", [error localizedDescription]);
+    NSAssert(xctTestFile != nil, @"Failed to load testcases from: %@; Error: %@", context.config.testBundlePath, [error localizedDescription]);
     context.config.allTestCases = [[NSArray alloc] initWithArray: xctTestFile.allTestCases];
-
 
     context.attemptNumber = self.retries + 1;
     self.context = context; // Store the context on self so that it's accessible to the interrupt handler in the loop
@@ -230,10 +229,9 @@ static void onInterrupt(int ignore) {
         NSError *err;
         NSString *tmpFileName = [BPUtils mkstemp:[NSString stringWithFormat:@"%@/%lu-bp-stdout-%u", NSTemporaryDirectory(), context.attemptNumber, getpid()]
                                        withError:&err];
-        simulatorLogPath = tmpFileName;
-        if (!tmpFileName) {
-            simulatorLogPath = [NSString stringWithFormat:@"/tmp/%lu-simulator.log", context.attemptNumber];
-            [BPUtils printInfo:ERROR withString:@"ERROR: %@\nLeaving log in %@", [err localizedDescription], simulatorLogPath];
+        simulatorLogPath = tmpFileName? tmpFileName : [NSString stringWithFormat:@"/tmp/%lu-simulator.log", context.attemptNumber];
+        if (err) {
+            [BPUtils printInfo:ERROR withString:@"Error: %@\nLeaving log in %@", [err localizedDescription], simulatorLogPath];
         }
     }
 

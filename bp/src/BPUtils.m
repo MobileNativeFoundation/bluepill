@@ -122,6 +122,14 @@ static BOOL quiet = NO;
                            userInfo:@{NSLocalizedDescriptionKey: msg}];
 }
 
++ (NSString *)findExecutablePath:(NSString *)execName {
+    NSString *argv0 = [[[NSProcessInfo processInfo] arguments] objectAtIndex:0];
+    NSString *execPath = [[argv0 stringByDeletingLastPathComponent] stringByAppendingPathComponent:execName];
+    if (![[NSFileManager defaultManager] isExecutableFileAtPath:execPath]) {
+        return nil;
+    }
+    return execPath;
+}
 
 + (NSString *)mkdtemp:(NSString *)template withError:(NSError **)errPtr {
     char *dir = strdup([[template stringByAppendingString:@"_XXXXXX"] UTF8String]);
@@ -149,10 +157,10 @@ static BOOL quiet = NO;
     return ret;
 }
 
-
+// Expands the exclude or skipped tests, for example into all test methods if test class is mentioned
 + (BPConfiguration *)normalizeConfiguration:(BPConfiguration *)config
                               withTestFiles:(NSArray *)xctTestFiles {
-    
+
     config = [config mutableCopy];
     NSMutableSet *testsToRun = [NSMutableSet new];
     NSMutableSet *testsToSkip = [NSMutableSet new];
@@ -223,18 +231,18 @@ static BOOL quiet = NO;
 
 /*!
  @brief expand testcases into a list of fully expanded testcases in the form of 'testsuite/testcase'.
- 
+
  @discussion searches the given .xctest bundle's entire list of actual testcases
  (that are in the form of 'testsuite/testcase') for testcases that belong to testsuites
  that were provided in the configTestCases.
- 
+
  @param testCases a list of testcases: each item is either a 'testsuite' or a 'testsuite/testcase'.
  @return a @c NSArray of all the expanded 'testsuite/testcase' items that match the given configTestCases.
- 
+
  */
 + (NSArray *)expandTests:(NSArray *)testCases withTestFile:(BPXCTestFile *)testFile {
     NSMutableArray *expandedTestCases = [NSMutableArray new];
-    
+
     for (NSString *testCase in testCases) {
         if ([testCase rangeOfString:@"/"].location == NSNotFound) {
             [testFile.allTestCases enumerateObjectsUsingBlock:^(NSString *actualTestCase, NSUInteger idx, BOOL *stop) {
@@ -248,6 +256,7 @@ static BOOL quiet = NO;
     }
     return expandedTestCases;
 }
+
 + (NSString *)getXcodeRuntimeVersion {
     NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
     NSArray *versionStrArray = [xcodeVersion componentsSeparatedByString:@"\n"];
@@ -349,6 +358,18 @@ static BOOL quiet = NO;
 
     // we should never get here
     assert(!"FAIL");
+}
+
++ (NSDictionary *)loadSimpleJsonFile:(NSString *)filePath
+                           withError:(NSError **)errPtr {
+    NSData *data = [NSData dataWithContentsOfFile:filePath
+                                          options:NSDataReadingMappedIfSafe
+                                            error:errPtr];
+    if (!data) return nil;
+
+    return [NSJSONSerialization JSONObjectWithData:data
+                                           options:NSJSONReadingAllowFragments
+                                             error:errPtr];
 }
 
 @end
