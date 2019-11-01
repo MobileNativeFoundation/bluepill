@@ -1,0 +1,19 @@
+name: CI-PR
+
+on:
+  pull_request:
+    branches: 
+      - 317
+
+jobs:
+  build:
+    name: Test and build
+    runs-on: macOS-10.14    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Select Xcode 10.1
+      run: sudo xcode-select -s /Applications/Xcode_10.1.app
+    - name: Run Bluepill tests
+      run: ./scripts/bluepill.sh test
+    - name: Build Bluepill
+      run: ./scripts/bluepill.sh build

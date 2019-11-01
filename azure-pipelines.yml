@@ -1,0 +1,35 @@
+trigger:
+- 317
+
+pr:
+  autoCancel: true
+  branches:
+    include:
+    - 317
+
+jobs:
+- job: Xcode
+  displayName: 'Xcode build and tests'
+  pool:
+    vmImage: macOS-10.14
+    demands: xcode
+  steps:
+  - script: sudo xcode-select -s /Applications/Xcode_10.1.app
+    displayName: 'Select Xcode 10.1'
+  - script: ./scripts/bluepill.sh test
+    displayName: 'Run BluePill tests'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'build/reports/*.xml' 
+      mergeTestResults: false
+      failTaskOnFailedTests: false
+  - script: ./scripts/bluepill.sh build
+    displayName: 'Build BluePill'
+  - task: CopyFiles@2
+    inputs:
+      contents: 'build/*.zip'
+      targetFolder: '$(Build.artifactStagingDirectory)'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
