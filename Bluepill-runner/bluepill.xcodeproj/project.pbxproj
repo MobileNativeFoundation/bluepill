@@ -33,7 +33,20 @@
 		C4C614A421814C5C008A2C39 /* BPTestHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C4C614A321814C5C008A2C39 /* BPTestHelper.m */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
 		E49235FF22EA847700395D98 /* times.json in Resources */ = {isa = PBXBuildFile; fileRef = E49235FE22EA847700395D98 /* times.json */; };
+		E4B88E952361242F003A8DCB /* bp_test_dumper.m in Sources */ = {isa = PBXBuildFile; fileRef = E4B88E942361242F003A8DCB /* bp_test_dumper.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E4B88E892361235B003A8DCB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPIntegrationTests.m; sourceTree = "<group>"; };
@@ -68,6 +81,8 @@
 		C4FD8C561DB6E09B000ED28C /* BPPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPPacker.h; sourceTree = "<group>"; };
 		C4FD8C571DB6E09B000ED28C /* BPPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPacker.m; sourceTree = "<group>"; };
 		E49235FE22EA847700395D98 /* times.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = times.json; sourceTree = "<group>"; };
+		E4B88E8B2361235B003A8DCB /* bp_test_dumper.dylib */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = bp_test_dumper.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B88E942361242F003A8DCB /* bp_test_dumper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = bp_test_dumper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +100,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA9ADEAA216427CB001306F5 /* BluepillLib.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4B88E882361235B003A8DCB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,6 +192,7 @@
 				BAFCCA361E33595F00E33C31 /* bluepill.xcconfig */,
 				BAEF4B361DAC539400E68294 /* Bluepill */,
 				BA1809E11DBA8FB100D7D130 /* BluepillRunnerTests */,
+				E4B88E8C2361235B003A8DCB /* bp_test_dumper */,
 				BAEF4B351DAC539400E68294 /* Products */,
 				B3380AED2150BD8600752E1B /* Frameworks */,
 			);
@@ -180,6 +203,7 @@
 			children = (
 				BAEF4B341DAC539400E68294 /* bluepill */,
 				BA1809E01DBA8FB100D7D130 /* BluepillRunnerTests.xctest */,
+				E4B88E8B2361235B003A8DCB /* bp_test_dumper.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,6 +232,14 @@
 				C49EEB83225570EC002CC956 /* result4.xml */,
 			);
 			path = 4;
+			sourceTree = "<group>";
+		};
+		E4B88E8C2361235B003A8DCB /* bp_test_dumper */ = {
+			isa = PBXGroup;
+			children = (
+				E4B88E942361242F003A8DCB /* bp_test_dumper.m */,
+			);
+			path = bp_test_dumper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -247,6 +279,23 @@
 			productReference = BAEF4B341DAC539400E68294 /* bluepill */;
 			productType = "com.apple.product-type.tool";
 		};
+		E4B88E8A2361235B003A8DCB /* bp_test_dumper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4B88E932361235B003A8DCB /* Build configuration list for PBXNativeTarget "bp_test_dumper" */;
+			buildPhases = (
+				E4B88E872361235B003A8DCB /* Sources */,
+				E4B88E882361235B003A8DCB /* Frameworks */,
+				E4B88E892361235B003A8DCB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = bp_test_dumper;
+			productName = bp_test_dumper;
+			productReference = E4B88E8B2361235B003A8DCB /* bp_test_dumper.dylib */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -263,6 +312,11 @@
 					};
 					BAEF4B331DAC539400E68294 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 57Y47U492U;
+						ProvisioningStyle = Automatic;
+					};
+					E4B88E8A2361235B003A8DCB = {
+						CreatedOnToolsVersion = 10.2.1;
 						DevelopmentTeam = 57Y47U492U;
 						ProvisioningStyle = Automatic;
 					};
@@ -283,6 +337,7 @@
 			targets = (
 				BAEF4B331DAC539400E68294 /* bluepill */,
 				BA1809DF1DBA8FB100D7D130 /* BluepillRunnerTests */,
+				E4B88E8A2361235B003A8DCB /* bp_test_dumper */,
 			);
 		};
 /* End PBXProject section */
@@ -350,6 +405,14 @@
 				C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */,
 				BAD8484A1DBC6A83007034CF /* BPReportCollector.m in Sources */,
 				C41C41F31DB04032001F32A2 /* BPApp.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E4B88E872361235B003A8DCB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4B88E952361242F003A8DCB /* bp_test_dumper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,7 +563,18 @@
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"\"/Library/Developer/PrivateFrameworks\"",
+					"\"$(PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"",
+					"\"$(DEVELOPER_DIR)/../SharedFrameworks\"",
+					"\"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks\"",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
 					CoreSimulator,
@@ -518,6 +592,16 @@
 				DEPLOYMENT_LOCATION = NO;
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"\"/Library/Developer/PrivateFrameworks\"",
+					"\"$(PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"",
+					"\"$(DEVELOPER_DIR)/../SharedFrameworks\"",
+					"\"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks\"",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -527,6 +611,100 @@
 				);
 				PRIVATE_FRAMEWORKS_DIR = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		E4B88E912361235B003A8DCB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)";
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				ENABLE_BITCODE = NO;
+				EXECUTABLE_EXTENSION = dylib;
+				EXECUTABLE_PREFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"\"/Library/Developer/PrivateFrameworks\"",
+					"\"$(PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"",
+					"\"$(DEVELOPER_DIR)/../SharedFrameworks\"",
+					"\"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				MACH_O_TYPE = mh_dylib;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
+			};
+			name = Debug;
+		};
+		E4B88E922361235B003A8DCB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)";
+				CONFIGURATION_TEMP_DIR = "$(PROJECT_TEMP_DIR)/$(CONFIGURATION)";
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				ENABLE_BITCODE = NO;
+				EXECUTABLE_EXTENSION = dylib;
+				EXECUTABLE_PREFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
+					"\"/Library/Developer/PrivateFrameworks\"",
+					"\"$(PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"",
+					"\"$(DEVELOPER_DIR)/../SharedFrameworks\"",
+					"\"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(PLATFORM_DIR)/Developer/Library/Frameworks";
+				MACH_O_TYPE = mh_dylib;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
 			};
 			name = Release;
 		};
@@ -556,6 +734,15 @@
 			buildConfigurations = (
 				BAEF4B3C1DAC539400E68294 /* Debug */,
 				BAEF4B3D1DAC539400E68294 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E4B88E932361235B003A8DCB /* Build configuration list for PBXNativeTarget "bp_test_dumper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4B88E912361235B003A8DCB /* Debug */,
+				E4B88E922361235B003A8DCB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

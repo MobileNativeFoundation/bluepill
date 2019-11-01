@@ -60,9 +60,10 @@ maxprocs(void)
 @implementation BPRunner
 
 + (instancetype)BPRunnerWithConfig:(BPConfiguration *)config
+          withTestHostSimTemplates:(NSDictionary *)testHostSimTemplates
                         withBpPath:(NSString *)bpPath {
     BPRunner *runner = [[BPRunner alloc] init];
-    runner.testHostSimTemplates = [[NSMutableDictionary alloc] init];
+    runner.testHostSimTemplates = testHostSimTemplates;
     runner.config = config;
     runner.bpExecutable = bpPath ?: [BPUtils findExecutablePath:@"bp"];
     if (!runner.bpExecutable) {
@@ -84,9 +85,7 @@ maxprocs(void)
     cfg.testCasesToSkip = bundle.skipTestIdentifiers;
     cfg.commandLineArguments = bundle.commandLineArguments;
     cfg.environmentVariables = bundle.environmentVariables;
-    if (self.config.cloneSimulator) {
-        cfg.templateSimUDID = self.testHostSimTemplates[bundle.testHostPath];
-    }
+    cfg.templateSimUDID = self.testHostSimTemplates[bundle.testHostPath];
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
                              NSTemporaryDirectory(),
@@ -94,7 +93,7 @@ maxprocs(void)
 
     cfg.configOutputFile = [BPUtils mkstemp:tmpFileName withError:&err];
     if (!cfg.configOutputFile) {
-        fprintf(stderr, "ERROR: %s\n", [[err localizedDescription] UTF8String]);
+        [BPUtils printInfo:ERROR withString:@"ERROR: %s\n", [[err localizedDescription] UTF8String]];
         return nil;
     }
     cfg.outputDirectory = [self.config.outputDirectory
@@ -296,9 +295,12 @@ maxprocs(void)
     }
 
     [BPUtils printInfo:INFO withString:@"All BPs have finished."];
-    if (self.config.cloneSimulator) {
-        [BPUtils printInfo:INFO withString:@"Deleting template simulator.."];
-        [bpSimulator deleteTemplateSimulator];
+    [BPUtils printInfo:INFO withString:@"Deleting template simulator.."];
+    [bpSimulator deleteTemplateSimulator];
+    for (NSString *simUDID in _testHostSimTemplates) {
+        [BPUtils printInfo:INFO withString:@"Deleting template simulator w/ UDID %@", simUDID];
+        // TODO: Also delete the sim templates/clones
+//        [bpSimulator deleteTemplateSimulator];
     }
     // Process the generated report and create 1 single junit xml file.
     if (app) {

@@ -14,9 +14,6 @@
 
 @implementation BPXCTestFile
 
-NSString *swiftNmCmdline = @"nm -gU '%@' | cut -d' ' -f3 | xargs -s 131072 xcrun swift-demangle | cut -d' ' -f3 | grep -e '[\\.|_]'test";
-NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-' -f2 | cut -d'[' -f2 | cut -d']' -f1 | grep ' test'";
-
 + (instancetype)BPXCTestFileFromXCTestBundle:(NSString *)testBundlePath
                             andHostAppBundle:(NSString *)testHostPath
                                    withError:(NSError *__autoreleasing *)errPtr {
@@ -43,62 +40,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     xcTestFile.testHostPath = testHostPath;
     xcTestFile.UITargetAppPath = UITargetAppPath;
     xcTestFile.testBundlePath = [path stringByDeletingLastPathComponent];
-
-    NSString *cmd = [NSString stringWithFormat:swiftNmCmdline, path];
-    FILE *p = popen([cmd UTF8String], "r");
-    if (!p) {
-        BP_SET_ERROR(errPtr, @"Failed to load test %@.\nERROR: %s\n", path, strerror(errno));
-        return nil;
-    }
-    char *line = NULL;
-    size_t len = 0;
-    ssize_t read;
-    NSMutableDictionary *testClassesDict = [[NSMutableDictionary alloc] init];
-    NSMutableArray *allClasses = [[NSMutableArray alloc] init];
-    while ((read = getline(&line, &len, p)) != -1) {
-        NSString *testName = [[NSString stringWithUTF8String:line]
-                              stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-        NSArray *parts = [testName componentsSeparatedByString:@"."];
-        if (parts.count != 3) {
-            continue;
-        }
-        BPTestClass *testClass = testClassesDict[parts[1]];
-        if (!testClass) {
-            testClass = [[BPTestClass alloc] initWithName:parts[1]];
-            testClassesDict[parts[1]] = testClass;
-            [allClasses addObject:testClass];
-        }
-        if (![parts[2] containsString:@"DISABLE"]) {
-            NSString *trimmedTestName = [BPUtils trimTrailingParanthesesFromTestName:parts[2]];
-            if (trimmedTestName == nil) {
-                continue;
-            }
-            [testClass addTestCase:[[BPTestCase alloc] initWithName:trimmedTestName]];
-        }
-    }
-    if (pclose(p) == -1) {
-        BP_SET_ERROR(errPtr, @"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno));
-        return nil;
-    }
-
-    cmd = [NSString stringWithFormat:objcNmCmdline, path];
-    NSString *output = [BPUtils runShell:cmd];
-    NSArray *testsArray = [output componentsSeparatedByString:@"\n"];
-    for (NSString *line in testsArray) {
-        NSArray *parts = [line componentsSeparatedByString:@" "];
-        if (parts.count != 2) {
-            continue;
-        }
-        BPTestClass *testClass = testClassesDict[parts[0]];
-        if (!testClass) {
-            testClass = [[BPTestClass alloc] initWithName:parts[0]];
-            testClassesDict[parts[0]] = testClass;
-            [allClasses addObject:testClass];
-        }
-        [testClass addTestCase:[[BPTestCase alloc] initWithName:parts[1]]];
-    }
-
-    xcTestFile.testClasses = [NSArray arrayWithArray:allClasses];
+    xcTestFile.testClasses = [[NSArray alloc] init];
     return xcTestFile;
 }
 

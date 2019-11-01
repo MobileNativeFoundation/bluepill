@@ -11,6 +11,7 @@
 #import <BluepillLib/BPStats.h>
 #import <BluepillLib/BPUtils.h>
 #import <BluepillLib/BPWriter.h>
+#import <BluepillLib/SimulatorHelper.h>
 #import <Foundation/Foundation.h>
 #import <getopt.h>
 #import <libgen.h>
@@ -97,16 +98,20 @@ int main(int argc, char * argv[]) {
             exit(1);
         }
         [[BPStats sharedStats] endTimer:@"Loading App" withResult:@"INFO"];
+        // Always create simulator template(s)
+        // TODO: Deprecate clone-simulator flag
+        NSDictionary *testHostSimTemplates = [SimulatorHelper createSimTemplatesAndDumpTests:app.testBundles withConfig:config];
         if (config.listTestsOnly) {
             [app listTests];
             exit(0);
         }
-
         [[BPStats sharedStats] startTimer:@"Normalizing Configuration"];
         BPConfiguration *normalizedConfig = [BPUtils normalizeConfiguration:config withTestFiles:app.testBundles];
         [[BPStats sharedStats] endTimer:@"Normalizing Configuration" withResult:@"INFO"];
         // start a runner and let it fly
-        BPRunner *runner = [BPRunner BPRunnerWithConfig:normalizedConfig withBpPath:nil];
+        BPRunner *runner = [BPRunner BPRunnerWithConfig:normalizedConfig
+                               withTestHostSimTemplates:testHostSimTemplates
+                                             withBpPath:nil];
         if (!runner) {
             fprintf(stderr, "ERROR: Unable to create Bluepill Runner.\n");
             exit(1);

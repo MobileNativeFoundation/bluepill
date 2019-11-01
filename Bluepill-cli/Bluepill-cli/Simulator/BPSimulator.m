@@ -130,6 +130,37 @@
         }];
         return nil;
     } else {
+        NSString *fileName = [[testHost lastPathComponent] stringByDeletingPathExtension];
+        NSString *tmpFilePath = [NSString stringWithFormat:@"%@/%@.json", NSTemporaryDirectory(), fileName];
+        NSDictionary *options = @{
+                                  kOptionsEnvironmentKey: @{
+                                          @"DYLD_LIBRARY_PATH" : [NSString stringWithFormat:@"%@/usr/lib/swift:%@/Frameworks", self.config.simRuntime.root, testHost],
+                                          @"DYLD_INSERT_LIBRARIES" : [BPUtils findExecutablePath:@BP_TEST_DUMPER_NAME],
+                                          @"_BP_TEST_LIST_FILE" : tmpFilePath
+                                          },
+                                  kCFBundleIdentifier: hostBundleId
+                                  };
+        int pid_t = [simDevice launchApplicationWithID:hostBundleId options:options error:errPtr];
+        if(*errPtr) {
+            [BPUtils printInfo:ERROR withString:@"Launching application failed with error: %@", [*errPtr localizedDescription]];
+            // TODO: Need to shutdown the simulator before trying to delete it
+            [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
+                if (error) {
+                    [BPUtils printInfo:ERROR withString:@"Could not delete simulator: %@", [error localizedDescription]];
+                }
+            }];
+            return nil;
+        }
+        int exitStatus = 0;
+        // Wait until the application is launched and injected dylib does its job
+        // TODO: Adding error checking here
+        waitpid(pid_t, &exitStatus, 0);
+        if (exitStatus == 0) {
+            [BPUtils printInfo:INFO withString:@"Test dumper dumped tests in %@", tmpFilePath];
+        } else {
+            [BPUtils printInfo:ERROR withString:@"Test dumper failed with exit status: %d", exitStatus];
+            return nil;
+        }
         [simDevice shutdownWithError:errPtr];
         if(*errPtr) {
             [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [*errPtr localizedDescription]];

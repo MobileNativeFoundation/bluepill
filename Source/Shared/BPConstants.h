@@ -14,6 +14,7 @@
 #define BP_DEFAULT_RUNTIME "iOS 12.2"
 #define BP_DEFAULT_XCODE_VERSION "10.2"
 #define BP_MAX_PROCESSES_PERCENT 0.75
+#define BP_TEST_DUMPER_NAME "bp_test_dumper.dylib"
 #define BP_TM_PROTOCOL_VERSION 17
 
 

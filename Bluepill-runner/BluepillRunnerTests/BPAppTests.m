@@ -57,6 +57,7 @@
     XCTAssert(app.testBundles.count == 1);
     BPXCTestFile *testBundle = app.testBundles[0];
     XCTAssertEqualObjects(testBundle.testBundlePath, self.config.testBundlePath);
+    XCTAssert([testBundle.allTestCases count] == 8);
 }
 
 @end

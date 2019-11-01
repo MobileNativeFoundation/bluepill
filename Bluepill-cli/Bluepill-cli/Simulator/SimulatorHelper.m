@@ -12,12 +12,49 @@
 #import "BPConfiguration.h"
 #import "BPUtils.h"
 #import "BPXCTestFile.h"
+#import "BPSimulator.h"
+#import "BPTestClass.h"
 
 @implementation SimulatorHelper
 
++ (NSDictionary *)createSimTemplatesAndDumpTests:(NSArray<BPXCTestFile *> *)xcTestFiles withConfig:(BPConfiguration *)config {
+    BPSimulator *bpSimulator = [BPSimulator simulatorWithConfiguration:config];
+    NSDictionary *testHostSimTemplates = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles];
+    assert([testHostSimTemplates count] > 0);
+    NSMutableDictionary *allTestCases = [[NSMutableDictionary alloc] init];
+    for (NSString *appPath in testHostSimTemplates) {
+        NSString *fileName = [[appPath lastPathComponent] stringByDeletingPathExtension];
+        NSError *error = nil;
+        NSDictionary *testsList = [BPUtils loadSimpleJsonFile:[NSString stringWithFormat:@"%@/%@.json", NSTemporaryDirectory(), fileName] withError:&error];
+        if (!testsList) {
+            [BPUtils printInfo:ERROR withString:@"ERROR: %s\n", [[error localizedDescription] UTF8String]];
+            return nil;
+        }
+        [allTestCases addEntriesFromDictionary:testsList];
+    }
+    for (BPXCTestFile *xcTestFile in xcTestFiles) {
+        NSMutableArray *allTestClasses = [[NSMutableArray alloc] init];
+        NSString *xcTestName = [xcTestFile.testBundlePath lastPathComponent];
+        if ([allTestCases objectForKey:xcTestName]) {
+            NSDictionary *testClasses = [allTestCases objectForKey:xcTestName];
+            for (NSString *testClassName in [testClasses allKeys]) {
+                BPTestClass *testClass = [[BPTestClass alloc] initWithName:testClassName];
+                [allTestClasses addObject:testClass];
+                NSArray *testMethods = [testClasses objectForKey:testClassName];
+                for (NSString *testMethod in testMethods) {
+                    [testClass addTestCase:[[BPTestCase alloc] initWithName:testMethod]];
+                }
+            }
+        } else {
+            [BPUtils printInfo:INFO withString:@"Warning: No test classes/cases found in %@", xcTestName];
+        }
+        xcTestFile.testClasses = allTestClasses;
+    }
+    return testHostSimTemplates;
+}
+
 + (BOOL)loadFrameworksWithXcodePath:(NSString *)xcodePath {
     // Check the availablity of frameworks
-
     NSString *sharedFrameworksPath = [xcodePath stringByDeletingLastPathComponent];
     NSArray *ar = @[
                     [NSString stringWithFormat:@"%@/DVTFoundation.framework", sharedFrameworksPath],

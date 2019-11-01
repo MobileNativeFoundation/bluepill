@@ -71,7 +71,6 @@ bluepill_build()
     -scheme bluepill \
     -configuration Release \
     -derivedDataPath "build/" | tee result.txt | $XCPRETTY
-
   test $? == 0 || {
           echo Build failed
           xcodebuild -list -workspace Bluepill.xcworkspace
@@ -82,12 +81,28 @@ bluepill_build()
           echo No bp built
           exit 1
   }
+  xcodebuild \
+    -workspace Bluepill.xcworkspace \
+    -scheme bp_test_dumper \
+    -configuration Release \
+    -sdk iphonesimulator12.2 \
+    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
+  test $? == 0 || {
+          echo Build failed
+          xcodebuild -list -workspace Bluepill.xcworkspace
+          cat result.txt
+          exit 1
+  }
+  test -x build/Build/Products/Release/bp_test_dumper.dylib || {
+          echo No test dumper dynamic library built
+          exit 1
+  }
   set +o pipefail
   # package bluepill
   TAG=$(git describe --always)
   DST="Bluepill-$TAG"
   mkdir -p build/$DST/bin
-  cp build/Build/Products/Release/{bp,bluepill} build/$DST/bin
+  cp build/Build/Products/Release/{bp,bluepill,bp_test_dumper.dylib} build/$DST/bin
   ## build the man page
   mkdir -p build/$DST/man/man1
   /usr/bin/python scripts/man.py build/$DST/man/man1/bluepill.1

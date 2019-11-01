@@ -8,10 +8,21 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
+#import "BPXCTestFile.h"
 #import "SimDevice.h"
+
 @class BPConfiguration;
 
 @interface SimulatorHelper : NSObject
+
+/*!
+ * @discussion creates the template simulators one for each type of app bundle used by input xctest files
+ * @param xcTestFiles XCTest files with info on the test hosts to be installed.
+ * @param config the configuration object
+ * @return a dictionary with key to be the host bundle path and value to be the template simulator
+ */
++ (NSDictionary *)createSimTemplatesAndDumpTests:(NSArray<BPXCTestFile *>*)xcTestFiles
+                                      withConfig:(BPConfiguration *)config;
 
 /*!
  * @discussion load the required frameworks

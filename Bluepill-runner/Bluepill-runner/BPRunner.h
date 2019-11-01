@@ -25,6 +25,7 @@
  * @return return the BPRunner to start running tests
  */
 + (instancetype)BPRunnerWithConfig:(BPConfiguration *)config
+          withTestHostSimTemplates:(NSDictionary *)testHostSimTemplates
                         withBpPath:(NSString *)bpPath;
 
 /*!
