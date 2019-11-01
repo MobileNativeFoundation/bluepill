@@ -78,7 +78,7 @@ struct BPOptions {
     {'o', "output-dir", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
         "Directory where to put output log files (bluepill only)."},
     {'j', "test-time-estimates-json", BP_MASTER, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testTimeEstimatesJsonFile",
-        "Directory where Bluepill looks for input files with test execution time estimates (bluepill only)."},
+        "Path of the input file with test execution time estimates."},
     {'r', "runtime", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
         "What runtime to use."},
     {'x', "exclude", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToSkip",
@@ -272,8 +272,7 @@ static NSUUID *sessionID;
                              atomically:NO
                                encoding:NSUTF8StringEncoding
                                   error:&err]) {
-        fprintf(stderr, "Could not write config to file %s\nERROR: %s\n",
-                [self.configOutputFile UTF8String], [[err localizedDescription] UTF8String]);
+        [BPUtils printInfo:ERROR withString:@"Could not write config to file %s\nERROR: %s\n", [self.configOutputFile UTF8String], [[err localizedDescription] UTF8String]];
     }
 }
 
@@ -698,7 +697,6 @@ static NSUUID *sessionID;
             return NO;
         }
     }
-
     if (self.screenshotsDirectory) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.screenshotsDirectory isDirectory:&isdir]) {
             if (!isdir) {

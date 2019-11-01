@@ -33,7 +33,7 @@
                           andUITargetAppPath:(NSString *)UITargetAppPath
                                    withError:(NSError **)errPtr;
 
-+ (instancetype)BPXCTestFileFromDictionary:(NSDictionary<NSString *, NSString *>*) dict
++ (instancetype)BPXCTestFileFromDictionary:(NSDictionary<NSString *, NSString *>*)dict
                               withTestRoot:(NSString *)testRoot
                               andXcodePath:(NSString *)xcodePath
                                   andError:(NSError **)errPtr;

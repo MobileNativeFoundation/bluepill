@@ -52,9 +52,9 @@
     self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.numSims = @2;
     BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    XCTAssert(app != nil);
     app.testBundles[0].skipTestIdentifiers = @[@"BPSampleAppTests/testCase000", @"BPSampleAppTests/testCase001"];
 
-    XCTAssert(app != nil);
     NSArray<BPXCTestFile *> *bundles;
     bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:nil];
     for (BPXCTestFile *file in app.testBundles) {
@@ -67,6 +67,7 @@
     self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.numSims = @8;
     BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    XCTAssert(app != nil);
     NSMutableArray *testCasesToSkip = [NSMutableArray new];
     for (BPXCTestFile *xctFile in app.testBundles) {
         [testCasesToSkip addObjectsFromArray:xctFile.allTestCases];

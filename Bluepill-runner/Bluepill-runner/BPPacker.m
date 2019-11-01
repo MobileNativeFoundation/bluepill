@@ -8,9 +8,9 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <BluepillLib/BPConstants.h>
-#import "BPPacker.h"
-#import <BluepillLib/BPXCTestFile.h>
 #import <BluepillLib/BPUtils.h>
+#import <BluepillLib/BPXCTestFile.h>
+#import "BPPacker.h"
 
 @implementation BPPacker
 
@@ -58,7 +58,7 @@
             }
         }
     }
-    
+
     NSUInteger testsPerGroup = MAX(1, totalTests / numBundles);
     NSMutableArray<BPXCTestFile *> *bundles = [[NSMutableArray alloc] init];
     for (BPXCTestFile *xctFile in sortedXCTestFiles) {
@@ -109,9 +109,12 @@
     }
 
     // load the config file
-    NSDictionary *testTimes = [self loadConfigFile:config.testTimeEstimatesJsonFile withError:errPtr];
-    if ((errPtr && *errPtr) || !testTimes) {
+    NSDictionary *testTimes = [BPUtils loadSimpleJsonFile:config.testTimeEstimatesJsonFile withError:errPtr];
+    if (errPtr && *errPtr) {
         [BPUtils printInfo:ERROR withString:@"%@", [*errPtr localizedDescription]];
+        return NULL;
+    } else if (!testTimes) {
+        [BPUtils printInfo:ERROR withString:@"Invalid test execution time data"];
         return NULL;
     }
 
@@ -170,14 +173,4 @@
     return sortedBundles;
 }
 
-+ (NSDictionary *)loadConfigFile:(NSString *)file withError:(NSError **)errPtr{
-    NSData *data = [NSData dataWithContentsOfFile:file
-                                          options:NSDataReadingMappedIfSafe
-                                            error:errPtr];
-    if (!data) return nil;
-
-    return [NSJSONSerialization JSONObjectWithData:data
-                                           options:kNilOptions
-                                             error:errPtr];
-}
 @end

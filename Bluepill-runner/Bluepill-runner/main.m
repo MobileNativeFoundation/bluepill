@@ -7,17 +7,17 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
-#import <Foundation/Foundation.h>
-#import "BPApp.h"
 #import <BluepillLib/BPConfiguration.h>
-#import "BPRunner.h"
-#import "BPVersion.h"
-#import "BPReportCollector.h"
-#import <BluepillLib/BPUtils.h>
 #import <BluepillLib/BPStats.h>
+#import <BluepillLib/BPUtils.h>
 #import <BluepillLib/BPWriter.h>
+#import <Foundation/Foundation.h>
 #import <getopt.h>
 #import <libgen.h>
+#import "BPApp.h"
+#import "BPReportCollector.h"
+#import "BPRunner.h"
+#import "BPVersion.h"
 
 #include <sys/ioctl.h>
 #include <string.h>
@@ -84,7 +84,7 @@ int main(int argc, char * argv[]) {
 
         NSError *err = nil;
         if (![config processOptionsWithError:&err] || ![config validateConfigWithError:&err]) {
-            fprintf(stderr, "%s: invalid configuration\n\t%s\n",
+            fprintf(stderr, "%s: Invalid configuration\n\t%s\n",
                     basename(argv[0]), [[err localizedDescription] UTF8String]);
             exit(1);
         }
@@ -107,6 +107,10 @@ int main(int argc, char * argv[]) {
         [[BPStats sharedStats] endTimer:@"Normalizing Configuration" withResult:@"INFO"];
         // start a runner and let it fly
         BPRunner *runner = [BPRunner BPRunnerWithConfig:normalizedConfig withBpPath:nil];
+        if (!runner) {
+            fprintf(stderr, "ERROR: Unable to create Bluepill Runner.\n");
+            exit(1);
+        }
         int rc = [runner runWithBPXCTestFiles:app.testBundles];
         if (config.outputDirectory) {
             // write the stats

@@ -198,16 +198,6 @@
                ReferencedContainer = "container:BPSampleApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C40B277022492E5200FAAF67"
-               BuildableName = "BPSampleAppTestsBugs.xctest"
-               BlueprintName = "BPSampleAppTestsBugs"
-               ReferencedContainer = "container:BPSampleApp.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
