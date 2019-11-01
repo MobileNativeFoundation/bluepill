@@ -60,7 +60,6 @@ int main(int argc, char * argv[]) {
         struct option *lopts = [config getLongOptions];
         char *sopts = [config getShortOptions];
         if (argv[1] && (!strcmp(argv[1], "version") || (!strcmp(argv[1], "--version")))) {
-            printf("Bluepill %s\n", BP_VERSION);
             exit(0);
         }
 
