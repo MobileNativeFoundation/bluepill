@@ -88,7 +88,6 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *simulatorPreferencesFile;
 @property (nonatomic, strong) NSString *scriptFilePath;
 @property (nonatomic) BOOL headlessMode;
-@property (nonatomic) BOOL cloneSimulator;
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
@@ -161,6 +160,15 @@ typedef NS_ENUM(NSInteger, BPProgram) {
  @return True if we managed to process the options successfully. False otherwise.
  */
 - (BOOL)processOptionsWithError:(NSError **)errPtr;
+
+/*!
+ Validates and fills in simDeviceType and simRunTime based on default values if corresponding input config are missing
+
+ @param errPtr The error message in case of invalid input or failure to fill-in
+
+ @return True if the configs are valid and/or values are filled-in. False otherwise.
+ */
+- (BOOL)fillSimDeviceTypeAndRuntimeWithError:(NSError **)errPtr;
 
 /**
  Validate that the current configuration would work with Bluepill.

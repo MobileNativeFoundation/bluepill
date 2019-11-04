@@ -94,8 +94,8 @@ struct BPOptions {
         "Paths to the images to be uploaded."},
 
     // options with no argument
-    {'L', "clone-simulator", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "cloneSimulator",
-        "Run test with clone-simulator"},
+    {'L', "clone-simulator", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "On", BP_VALUE | BP_BOOL , NULL,
+        "[Deprecated] This config is deprecated and the clone-simulator feature is always ON."},
     {'H', "headless", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
         "Run in headless mode (no GUI)."},
     {'h', "help", BP_MASTER | BP_SLAVE, NO, NO, no_argument, NULL, BP_VALUE, NULL,
@@ -249,6 +249,9 @@ static NSUUID *sessionID;
     NSString *value = [NSString stringWithUTF8String:arg];
     assert(value);
 
+    // if bpo->property is NULL, this has been deprecated
+    if (bpo->property == NULL) return;
+
     // If the value is of type BP_PATH, we append the CWD if the path is relative path
     if (bpo->kind & BP_PATH) {
         NSString *currentPath = [[NSFileManager defaultManager] currentDirectoryPath];
@@ -261,9 +264,9 @@ static NSUUID *sessionID;
         if (bpo->has_arg == no_argument) {
             // this is a flag
             if (bpo->kind & BP_BOOL) {
-                //To treat empty string as TRUE seems hacky, but it is OK for now
-                //because we assuem this only happens when we process CLI options,
-                //in which case the empty string means turn ON the boolean flag from CLI
+                // To treat empty string as TRUE seems hacky, but it is OK for now
+                // because we assuem this only happens when we process CLI options,
+                // in which case the empty string means turn ON the boolean flag from CLI
                 BOOL v = [value length] ==0 ? TRUE :  [value boolValue];
                 [self setValue:[NSNumber numberWithBool:v]
                         forKey:propName];
@@ -644,6 +647,60 @@ static NSUUID *sessionID;
     return YES;
 }
 
+- (BOOL)fillSimDeviceTypeAndRuntimeWithError:(NSError *__autoreleasing *)errPtr {
+    if (!self.deviceType) {
+        self.deviceType = [NSString stringWithUTF8String: BP_DEFAULT_DEVICE_TYPE];
+    }
+    if (![self.deviceType isKindOfClass:[NSString class]]) {
+        BP_SET_ERROR(errPtr, @"device must be a string like '%s'", BP_DEFAULT_DEVICE_TYPE);
+        return NO;
+    }
+    self.simDeviceType = nil;
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.xcodePath error:errPtr];
+    if (!sc) {
+        [BPUtils printInfo:ERROR withString:@"Failed to initialize SimServiceContext: %@", *errPtr];
+        [BPUtils printInfo:ERROR withString:@"self.xcodePath is: %@", self.xcodePath];
+        return NO;
+    }
+    for (SimDeviceType *type in [sc supportedDeviceTypes]) {
+        if ([[type name] isEqualToString:self.deviceType]) {
+            self.simDeviceType = type;
+            break;
+        }
+    }
+    if (!self.simDeviceType) {
+        BP_SET_ERROR(errPtr, @"%@ is not a valid device type.\n"
+                     "Use `xcrun simctl list devicetypes` for a list of valid devices.",
+                     self.deviceType);
+        return NO;
+    }
+
+    if (!self.runtime) {
+        self.runtime = [NSString stringWithUTF8String: BP_DEFAULT_RUNTIME];
+    }
+    if (![self.runtime isKindOfClass:[NSString class]]) {
+        BP_SET_ERROR(errPtr, @"runtime must be a string like '%s'.", BP_DEFAULT_RUNTIME);
+        return NO;
+    }
+    self.simRuntime = nil;
+    NSMutableArray *allRuntimes = [[NSMutableArray alloc] init];
+    for (SimRuntime *runtime in [sc supportedRuntimes]) {
+        [allRuntimes addObject:[runtime name]];
+        if ([[runtime name] isEqualToString:self.runtime]) {
+            self.simRuntime = runtime;
+            break;
+        }
+    }
+    if (!self.simRuntime) {
+        BP_SET_ERROR(errPtr, @"%@ is not a valid runtime.\n"
+                     "These are the supported runtimes:\n%@\n",
+                     self.runtime, [allRuntimes componentsJoinedByString:@"\n"]);
+        return NO;
+    }
+
+    return YES;
+}
+
 - (BOOL)validateConfigWithError:(NSError *__autoreleasing *)errPtr {
     BOOL isdir;
 
@@ -652,18 +709,16 @@ static NSUUID *sessionID;
     if (!self.xcodePath) {
         self.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
     }
-
     if (!self.xcodePath || [self.xcodePath isEqualToString:@""]) {
         BP_SET_ERROR(errPtr, @"Could not set Xcode path!");
         return NO;
     }
-
     if (![[NSFileManager defaultManager] fileExistsAtPath:self.xcodePath isDirectory:&isdir] || !isdir) {
         BP_SET_ERROR(errPtr, @"Could not find Xcode at %@", self.xcodePath);
         return NO;
     }
-
-    //Check if xcode version running on the host match the intended Bluepill branch: Xcode 9 branch is not backward compatible
+    
+    // Check if xcode version running on the host match the intended Bluepill branch: Xcode 9 branch is not backward compatible
     NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
     [BPUtils printInfo:DEBUGINFO withString:@"xcode build version: %@", xcodeVersion];
     if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
@@ -671,9 +726,10 @@ static NSUUID *sessionID;
         return NO;
     }
 
-    //Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
-    //Senario to prevent: Bluepill is compiled with Xcode 8, but runs with host installed with Xcode 9
-    //Only compare major and minor version version Exg. 9.1 == 9.1
+    
+    // Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
+    // Senario to prevent: Bluepill is compiled with Xcode 8, but runs with host installed with Xcode 9
+    // Only compare major and minor version (Eg. 10.2.1 == 10.2)
     if (![[[BPUtils getXcodeRuntimeVersion] substringToIndex:4] isEqualToString:@BP_DEFAULT_XCODE_VERSION]) {
         BP_SET_ERROR(errPtr, @"ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n",
                      [[[BPUtils getXcodeRuntimeVersion] substringToIndex:4] UTF8String], [@BP_DEFAULT_XCODE_VERSION UTF8String]);
@@ -742,6 +798,7 @@ static NSUUID *sessionID;
             return NO;
         }
     }
+
     if (self.screenshotsDirectory) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.screenshotsDirectory isDirectory:&isdir]) {
             if (!isdir) {
@@ -800,66 +857,8 @@ static NSUUID *sessionID;
         return NO;
     }
 #endif
-    if (!self.deviceType) {
-        self.deviceType = [NSString stringWithUTF8String: BP_DEFAULT_DEVICE_TYPE];
-    }
 
-    if (![self.deviceType isKindOfClass:[NSString class]]) {
-        BP_SET_ERROR(errPtr, @"device must be a string like '%s'", BP_DEFAULT_DEVICE_TYPE);
-        return NO;
-    }
-
-    if (!self.runtime) {
-        self.runtime = [NSString stringWithUTF8String: BP_DEFAULT_RUNTIME];
-    }
-
-    if (![self.runtime isKindOfClass:[NSString class]]) {
-        BP_SET_ERROR(errPtr, @"runtime must be a string like '%s'.", BP_DEFAULT_RUNTIME);
-        return NO;
-    }
-
-
-    // Validate we were passed a valid device and runtime
-    self.simDeviceType = nil;
-    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.xcodePath error: errPtr];
-    if (!sc) {
-        [BPUtils printInfo:ERROR withString:@"Failed to initialize SimServiceContext: %@", *errPtr];
-        [BPUtils printInfo:ERROR withString:@"self.xcodePath is: %@", self.xcodePath];
-        return NO;
-    }
-
-    for (SimDeviceType *type in [sc supportedDeviceTypes]) {
-        if ([[type name] isEqualToString:self.deviceType]) {
-            self.simDeviceType = type;
-            break;
-        }
-    }
-
-    if (!self.simDeviceType) {
-        BP_SET_ERROR(errPtr, @"%@ is not a valid device type.\n"
-                     "Use `xcrun simctl list devicetypes` for a list of valid devices.",
-                     self.deviceType);
-        return NO;
-    }
-
-    self.simRuntime = nil;
-    NSMutableArray *allRuntimes = [[NSMutableArray alloc] init];
-
-    for (SimRuntime *runtime in [sc supportedRuntimes]) {
-        [allRuntimes addObject:[runtime name]];
-        if ([[runtime name] isEqualToString:self.runtime]) {
-            self.simRuntime = runtime;
-            break;
-        }
-    }
-
-    if (!self.simRuntime) {
-        BP_SET_ERROR(errPtr, @"%@ is not a valid runtime.\n"
-                     "These are the supported runtimes:\n%@\n",
-                     self.runtime, [allRuntimes componentsJoinedByString:@"\n"]);
-        return NO;
-    }
-    return TRUE;
+    return YES;
 }
 
 - (NSString *)debugDescription {

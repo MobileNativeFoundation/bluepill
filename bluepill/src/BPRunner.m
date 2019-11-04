@@ -93,9 +93,7 @@ maxprocs(void)
     } else {
         cfg.environmentVariables = bundle.environmentVariables;
     }
-    if (self.config.cloneSimulator) {
-        cfg.templateSimUDID = self.testHostSimTemplates[bundle.testHostPath];
-    }
+    cfg.templateSimUDID = self.testHostSimTemplates[bundle.testHostPath];
     NSError *err;
     NSString *tmpFileName = [NSString stringWithFormat:@"%@/bluepill-%u-config",
                              NSTemporaryDirectory(),
@@ -182,6 +180,11 @@ maxprocs(void)
         [BPUtils printInfo:ERROR withString:@"Could not install SIGHUP handler: %s", strerror(errno)];
     }
     BPSimulator *bpSimulator = [BPSimulator simulatorWithConfiguration:self.config];
+    self.testHostSimTemplates = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles withSimTemplate:nil];
+    if ([self.testHostSimTemplates count] == 0) {
+        [BPUtils printInfo:ERROR withString:@"Failed to create simulator template(s)"];
+        return 1;
+    }
     NSUInteger numSims = [self.config.numSims intValue];
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", [BPUtils version]];
     NSError *error;
@@ -196,14 +199,7 @@ maxprocs(void)
                             numSims, bundles.count];
         numSims = bundles.count;
     }
-    if (self.config.cloneSimulator) {
-        self.testHostSimTemplates = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles];
-        if ([self.testHostSimTemplates count] == 0) {
-            return 1;
-        }
-    }
-    [BPUtils printInfo:INFO withString:@"Running with %lu %s.",
-     (unsigned long)numSims, (numSims > 1) ? "parallel simulators" : "simulator"];
+    [BPUtils printInfo:INFO withString:@"Running with %lu %s.", (unsigned long)numSims, (numSims > 1) ? "parallel simulators" : "simulator"];
     NSArray *copyBundles = [bundles copy];
     for (int i = 1; i < [self.config.repeatTestsCount integerValue]; i++) {
         [bundles addObjectsFromArray:copyBundles];
@@ -306,10 +302,8 @@ maxprocs(void)
     }
 
     [BPUtils printInfo:INFO withString:@"All BPs have finished."];
-    if (self.config.cloneSimulator) {
-        [BPUtils printInfo:INFO withString:@"Deleting template simulator.."];
-        [bpSimulator deleteTemplateSimulator];
-    }
+    [BPUtils printInfo:INFO withString:@"Deleting template simulator.."];
+    [bpSimulator deleteTemplateSimulator];
     // Process the generated report and create 1 single junit xml file.
     if (app) {
         [app terminate];

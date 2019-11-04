@@ -28,6 +28,9 @@
 @property (nonatomic, strong) NSFileHandle *appOutput;
 @property (nonatomic, assign) BOOL needsRetry;
 @property (nonatomic, strong) NSMutableArray* simDeviceTemplates;
+@property (nonatomic, strong) NSMutableDictionary* testHostSimTemplates;
+@property (nonatomic, strong) NSMutableDictionary* simDevices;
+
 
 @end
 
@@ -36,22 +39,50 @@
 + (instancetype)simulatorWithConfiguration:(BPConfiguration *)config {
     BPSimulator *sim = [[self alloc] init];
     sim.config = config;
+    sim.testHostSimTemplates = [[NSMutableDictionary alloc] init];
+    sim.simDevices = [[NSMutableDictionary alloc] init];
     return sim;
 }
 
-- (NSMutableDictionary *)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles {
-    NSMutableDictionary* testHostSimTemplates = [[NSMutableDictionary alloc] init];
-    NSString *simulatorUDIDString = nil;
+- (NSMutableDictionary *)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles withSimTemplate:(NSString *)simTemplateUDID {
     NSError *error = nil;
+    NSString *simulatorUDIDString = nil;
+    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
+    if (!sc && error) {
+        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [error localizedDescription]];
+        return nil;
+    }
+    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
+    if (!deviceSet && error) {
+        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [error localizedDescription]];
+        return nil;
+    }
     if (self.config.appBundlePath) {
-        // This is for integration testing for bluepill and bluepill-cli when we assign self.config.appBundlePath
-        simulatorUDIDString = [self installApplicationWithHost:self.config.appBundlePath withError:&error];
-        if (!simulatorUDIDString || error) {
-            [BPUtils printInfo:ERROR withString:@"Create simualtor and install application failed with error: %@", error];
-            return FALSE;
+        // This is for integration testing for bp and bluepill when we assign self.config.appBundlePath
+        SimDevice *simDevice = nil;
+        if (simTemplateUDID) {
+            simulatorUDIDString = simTemplateUDID;
+            simDevice = self.simDevices[simulatorUDIDString];
+        } else {
+            simDevice = [self createSimTemplateWithDeviceSet:deviceSet errPtr:&error];
+            self.simDevices[simDevice.UDID.UUIDString] = simDevice;
         }
-        testHostSimTemplates[self.config.appBundlePath] = simulatorUDIDString;
-        [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, self.config.appBundlePath];
+        if (!simDevice || error) {
+            [BPUtils printInfo:ERROR withString:@"Create of simulator with error: %@", error];
+            return nil;
+        }
+        [simDevice bootWithOptions:nil error:&error];
+        if (error) {
+            [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", [error localizedDescription]];
+            return nil;
+        }
+        simulatorUDIDString = [self installApplication:self.config.appBundlePath withDeviceSet:deviceSet withSimDevice:simDevice withError:&error];
+        if (!simulatorUDIDString || error) {
+            [BPUtils printInfo:ERROR withString:@"Create simulator and install application failed with error: %@", error];
+            return nil;
+        }
+        self.testHostSimTemplates[self.config.appBundlePath] = simulatorUDIDString;
+        [BPUtils printInfo:INFO withString:@"Installed app host: %@ on sim template: %@", self.config.appBundlePath, simulatorUDIDString];
     } else {
         // This is for testing in command line when we pass the xctestrun file
         NSMutableSet *hostBundles = [[NSMutableSet alloc] init];
@@ -63,37 +94,35 @@
         }
         for (NSString *appPath in hostBundles) {
             NSError *error = nil;
-            simulatorUDIDString = [self installApplicationWithHost:appPath withError:&error];
+            simulatorUDIDString = self.testHostSimTemplates[appPath];
+            if (!simulatorUDIDString) {
+                SimDevice *simDevice = [self createSimTemplateWithDeviceSet:deviceSet errPtr:&error];
+                self.simDevices[simDevice.UDID.UUIDString] = simDevice;
+                simulatorUDIDString = [self installApplication:self.config.appBundlePath withDeviceSet:deviceSet withSimDevice:simDevice withError:&error];
+                self.testHostSimTemplates[self.config.appBundlePath] = simulatorUDIDString;
+            }
+
+            simulatorUDIDString = [self installApplication:appPath withDeviceSet:deviceSet withSimDevice:nil withError:&error];
             if (!simulatorUDIDString || error) {
                 [BPUtils printInfo:ERROR withString:@"Created simulator template and install applicationn failed with error: %@", error];
                 return FALSE;
             }
             [BPUtils printInfo:INFO withString:@"Created sim template: %@ for app host: %@", simulatorUDIDString, appPath];
-            testHostSimTemplates[appPath] = simulatorUDIDString;
+            self.testHostSimTemplates[appPath] = simulatorUDIDString;
         }
     }
-    return testHostSimTemplates;
+    return self.testHostSimTemplates;
 }
 
 - (NSString *)getErrorDescription:(NSError *__autoreleasing *)errPtr {
     return errPtr != nil ? [*errPtr localizedDescription] : nil;
 }
 
-- (NSString *)installApplicationWithHost:(NSString *)testHost withError:(NSError *__autoreleasing *)errPtr {
-    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:errPtr];
-    if (!sc && *errPtr) {
-        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [*errPtr localizedDescription]];
-        return nil;
-    }
-    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:errPtr];
-    if (!deviceSet && *errPtr) {
-        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [*errPtr localizedDescription]];
-        return nil;
-    }
+- (SimDevice *)createSimTemplateWithDeviceSet:(SimDeviceSet *)deviceSet errPtr:(NSError *__autoreleasing *)errPtr {
     SimDevice *simDevice = [deviceSet createDeviceWithType:self.config.simDeviceType
-                                                   runtime:self.config.simRuntime
-                                                      name:[NSString stringWithFormat:@"BP-Template-%u", getpid()]
-                                                     error:errPtr];
+                                          runtime:self.config.simRuntime
+                                             name:[NSString stringWithFormat:@"BP-Template-%u", getpid()]
+                                            error:errPtr];
     if (!self.simDeviceTemplates) {
         self.simDeviceTemplates = [[NSMutableArray alloc] init];
     }
@@ -102,22 +131,21 @@
         [BPUtils printInfo:ERROR withString:@"Create simulator failed with error: %@", [*errPtr localizedDescription]];
         return nil;
     }
-    [simDevice bootWithOptions:nil error:errPtr];
-    if (*errPtr) {
-        [BPUtils printInfo:ERROR withString:@"Boot simulator failed with error: %@", [*errPtr localizedDescription]];
-        return nil;
-    }
+    return simDevice;
+}
+
+- (NSString *)installApplication:(NSString *)app withDeviceSet:(SimDeviceSet *)deviceSet withSimDevice:(SimDevice *)simDevice withError:(NSError *__autoreleasing *)errPtr {
     // Add photos and videos to the simulator.
     [self addPhotosToSimulator];
     [self addVideosToSimulator];
-    NSString *hostBundleId = [SimulatorHelper bundleIdForPath:testHost];
+    NSString *hostBundleId = [SimulatorHelper bundleIdForPath:app];
     if (!hostBundleId) {
-        [BPUtils printInfo:ERROR withString:@"Could not find test bundle id for %@", testHost];
+        [BPUtils printInfo:ERROR withString:@"Could not find test bundle id for %@", app];
         return nil;
     }
     // Install the host application
     NSError *installError = nil;
-    bool installed = [simDevice installApplication:[NSURL fileURLWithPath:testHost]
+    bool installed = [simDevice installApplication:[NSURL fileURLWithPath:app]
                                        withOptions:@{kCFBundleIdentifier: hostBundleId}
                                              error:&installError];
     if (!installed) {
@@ -154,48 +182,6 @@
             }
         }];
     }
-}
-
-- (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
-    assert(!self.device);
-    deviceName = deviceName ?: [NSString stringWithFormat:@"BP%d", getpid()];
-    // Create a new simulator with the given device/runtime
-    NSError *error;
-    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&error];
-    if (!sc) {
-        [BPUtils printInfo:ERROR withString:@"SimServiceContext failed: %@", [error localizedDescription]];
-        return;
-    }
-    SimDeviceSet *deviceSet = [sc defaultDeviceSetWithError:&error];
-    if (!deviceSet) {
-        [BPUtils printInfo:ERROR withString:@"SimDeviceSet failed: %@", [error localizedDescription]];
-        return;
-    }
-
-    __weak typeof(self) __self = self;
-    [deviceSet createDeviceAsyncWithType:self.config.simDeviceType
-                                 runtime:self.config.simRuntime
-                                    name:deviceName
-                       completionHandler:^(NSError *error, SimDevice *device) {
-                           __self.device = device;
-                           if (!__self.device || error) {
-                               dispatch_async(dispatch_get_main_queue(), ^{
-                                   completion(error);
-                               });
-                           } else {
-                               if (__self.config.simulatorPreferencesFile) {
-                                   [__self copySimulatorPreferencesFile:__self.config.simulatorPreferencesFile];
-                               }
-
-                               dispatch_async(dispatch_get_main_queue(), ^{
-                                   [__self bootWithCompletion:^(NSError *error) {
-                                       dispatch_async(dispatch_get_main_queue(), ^{
-                                           completion(error);
-                                       });
-                                   }];
-                               });
-                           }
-                       }];
 }
 
 - (void)cloneSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion {
@@ -237,7 +223,6 @@
         }
     }];
 }
-
 
 - (NSURL *)preferencesFile {
     return [NSURL fileURLWithPath:kSimulatorLibraryPath relativeToURL:[NSURL fileURLWithPath:self.device.dataPath]];

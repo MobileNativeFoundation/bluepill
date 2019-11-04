@@ -35,7 +35,8 @@
     NSString *resourcePath = [BPTestHelper resourceFolderPath];
     NSString *configFile = [resourcePath stringByAppendingPathComponent:@"testConfig-busted.json"];
     [config loadConfigFile:configFile withError:&error];
-    [config validateConfigWithError:&error];
+    [config validateConfigWithError:nil];
+    [config fillSimDeviceTypeAndRuntimeWithError:&error];
     XCTAssertNotNil(error);
     NSString *expected = [[NSString alloc] initWithFormat:@"runtime must be a string like '%s'.", BP_DEFAULT_RUNTIME];
     XCTAssert([[error localizedDescription] isEqualToString:expected], @"Wrong error message: %@", [error localizedDescription]);

@@ -26,8 +26,6 @@
 
 + (instancetype)simulatorWithConfiguration:(BPConfiguration *)config;
 
-- (void)createSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
-
 - (void)cloneSimulatorWithDeviceName:(NSString *)deviceName completion:(void (^)(NSError *))completion;
 
 - (void)setParserStateCompleted;
@@ -56,7 +54,7 @@
  The number of template simulators is equal to the number of test hosts
  @return a dictionary with key to be the host bundle path and value to be the template simulator
  */
-- (NSMutableDictionary*)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles;
+- (NSMutableDictionary*)createSimulatorAndInstallAppWithBundles:(NSArray<BPXCTestFile *>*)testBundles withSimTemplate:(NSString *)simTemplate;
 
 - (void)deleteTemplateSimulator;
 

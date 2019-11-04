@@ -202,7 +202,6 @@ static void onInterrupt(int ignore) {
 - (void)createContext {
     BPExecutionContext *context = [[BPExecutionContext alloc] init];
     context.config = self.executionConfigCopy;
-    context.config.cloneSimulator = self.config.cloneSimulator;
     context.config.templateSimUDID = self.config.templateSimUDID;
     NSError *error;
     NSString *testHostPath = context.config.testRunnerAppPath ?: context.config.appBundlePath;
@@ -261,12 +260,7 @@ static void onInterrupt(int ignore) {
 }
 
 - (void)createSimulatorWithContext:(BPExecutionContext *)context {
-    NSString *stepName;
-    if (self.config.cloneSimulator) {
-        stepName = CLONE_SIMULATOR(context.attemptNumber);
-    } else {
-        stepName = CREATE_SIMULATOR(context.attemptNumber);
-    }
+    NSString *stepName = CLONE_SIMULATOR(context.attemptNumber);
     NSDate *simStart = [NSDate date];
     NSString *deviceName = [NSString stringWithFormat:@"BP%d-%lu-%lu", getpid(), context.attemptNumber, self.maxCreateTries];
 
@@ -291,13 +285,7 @@ static void onInterrupt(int ignore) {
         if (self.config.scriptFilePath) {
             [context.runner runScriptFile:self.config.scriptFilePath];
         }
-        if (self.config.cloneSimulator) {
-            // launch application directly when clone simulator
-            NEXT([__self launchApplicationWithContext:context]);
-        } else {
-            // Install application when test without clone
-            NEXT([__self installApplicationWithContext:context]);
-        };
+        NEXT([__self launchApplicationWithContext:context]);
     };
 
     handler.onError = ^(NSError *error) {
@@ -321,11 +309,7 @@ static void onInterrupt(int ignore) {
         [BPUtils printInfo:ERROR withString:@"Timeout: %@", stepName];
     };
 
-    if (self.config.cloneSimulator) {
-        [context.runner cloneSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
-    } else {
-        [context.runner createSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
-    }
+    [context.runner cloneSimulatorWithDeviceName:deviceName completion:handler.defaultHandlerBlock];
 }
 
 - (void)installApplicationWithContext:(BPExecutionContext *)context {
@@ -362,26 +346,6 @@ static void onInterrupt(int ignore) {
         return;
     } else {
         NEXT([self launchApplicationWithContext:context]);
-    }
-}
-
-- (void)uninstallApplicationWithContext:(BPExecutionContext *)context {
-    NSString *stepName = UNINSTALL_APPLICATION(context.attemptNumber);
-    [[BPStats sharedStats] startTimer:stepName];
-    [BPUtils printInfo:INFO withString:@"%@", stepName];
-
-    NSError *error = nil;
-    BOOL success = [context.runner uninstallApplicationWithError:&error];
-
-    [[BPStats sharedStats] endTimer:stepName withResult:success ? @"INFO" : @"ERROR"];
-    [BPUtils printInfo:(success ? INFO : ERROR) withString:@"Completed: %@", stepName];
-
-    if (!success) {
-        [[BPStats sharedStats] addSimulatorInstallFailure];
-        [BPUtils printInfo:ERROR withString:@"Could not uninstall app in simulator: %@", [error localizedDescription]];
-        NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusUninstallAppFailed]);
-    } else {
-        NEXT([self installApplicationWithContext:context]);
     }
 }
 

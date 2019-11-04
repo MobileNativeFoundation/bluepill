@@ -28,6 +28,7 @@
 @interface BluepillTests : XCTestCase
 
 @property (nonatomic, strong) BPConfiguration* config;
+@property (nonatomic, strong) BPSimulator *bpSimulator;
 
 @end
 
@@ -44,40 +45,20 @@
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @80;
     self.config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
-    self.config.runtime = @BP_DEFAULT_RUNTIME;
     self.config.repeatTestsCount = @1;
     self.config.errorRetriesCount = @0;
     self.config.testCaseTimeout = @40;
-    self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
     self.config.headlessMode = YES;
     self.config.videoPaths = @[[BPTestHelper sampleVideoPath]];
     self.config.testRunnerAppPath = nil;
     self.config.testing_CrashAppOnLaunch = NO;
-    self.config.cloneSimulator = NO;
     [BPUtils quietMode:[BPUtils isBuildScript]];
     [BPUtils enableDebugOutput:NO];
-
-    NSError *err;
-    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&err];
-    if (!sc) { NSLog(@"Failed to initialize SimServiceContext: %@", err); }
-
-    for (SimDeviceType *type in [sc supportedDeviceTypes]) {
-        if ([[type name] isEqualToString:self.config.deviceType]) {
-            self.config.simDeviceType = type;
-            break;
-        }
-    }
-
-    XCTAssert(self.config.simDeviceType != nil);
-
-    for (SimRuntime *runtime in [sc supportedRuntimes]) {
-        if ([[runtime name] containsString:self.config.runtime]) {
-            self.config.simRuntime = runtime;
-            break;
-        }
-    }
-
-    XCTAssert(self.config.simRuntime != nil);
+    // Fill in simDeviceType and simRuntime with defaults
+    [self.config fillSimDeviceTypeAndRuntimeWithError:nil];
+    self.bpSimulator = [BPSimulator simulatorWithConfiguration:self.config];
+    NSDictionary *templates = [self.bpSimulator createSimulatorAndInstallAppWithBundles:nil withSimTemplate:nil];
+    self.config.templateSimUDID = templates[hostApplicationPath];
 }
 
 - (void)tearDown {
@@ -413,7 +394,6 @@
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
     XCTAssert(exitCode == BPExitStatusAppCrashed);
-
 }
 
 //simulator shouldn't be kept in this case
@@ -468,8 +448,11 @@
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/UITestsSetTempDir", tempDir] withError:&error];
     self.config.testRunnerAppPath = testRunnerPath;
+    self.config.appBundlePath = testRunnerPath;
     self.config.testBundlePath = testBundlePath;
     self.config.outputDirectory = outputDir;
+    [self.bpSimulator createSimulatorAndInstallAppWithBundles:nil withSimTemplate:self.config.templateSimUDID];
+    self.config.appBundlePath = [BPTestHelper sampleAppPath];
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     self.config.testRunnerAppPath = nil;
     XCTAssert(exitCode == BPExitStatusTestsAllPassed);

@@ -11,7 +11,6 @@
 
 #define SIMULATOR_LIFETIME(x)    [NSString stringWithFormat:@"Simulator %@", (x)]
 #define CLONE_SIMULATOR(x)       [NSString stringWithFormat:@"[Attempt %lu] Clone Simulator", (x)]
-#define CREATE_SIMULATOR(x)      [NSString stringWithFormat:@"[Attempt %lu] Create Simulator", (x)]
 #define REUSE_SIMULATOR(x)       [NSString stringWithFormat:@"[Attempt %lu] Reuse Simulator", (x)]
 #define INSTALL_APPLICATION(x)   [NSString stringWithFormat:@"[Attempt %lu] Install Application", (x)]
 #define UNINSTALL_APPLICATION(x) [NSString stringWithFormat:@"[Attempt %lu] Uninstall Application", (x)]

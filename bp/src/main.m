@@ -58,6 +58,12 @@ int main(int argc, char * argv[]) {
                     basename(argv[0]), [[err localizedDescription] UTF8String]);
             exit(1);
         }
+        err = nil;
+        if (![config fillSimDeviceTypeAndRuntimeWithError:&err]) {
+            fprintf(stderr, "%s: Unable to fill Sim device type and/or runtime\n\t%s\n",
+                    basename(argv[0]), [[err localizedDescription] UTF8String]);
+            exit(1);
+        }
 
         BPExitStatus exitCode;
         Bluepill *bp = [[Bluepill alloc] initWithConfiguration:config];
