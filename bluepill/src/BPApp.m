@@ -71,7 +71,7 @@
     NSUInteger errorCount = 0;
     // We are reading an XCTestRun file's dictionary and returning an Array so we sort
     // the keys to produce a deterministic list. This helps make bluepill runs reproducible.
-    for (NSString *key in [xcTestRunDict keysSortedByValueUsingSelector:@selector(compare:)]) {
+    for (NSString *key in [xcTestRunDict.allKeys sortedArrayUsingSelector:@selector(compare:)]) {
         if ([key isEqualToString:@"__xctestrun_metadata__"]) {
             // Xcode 10.1 introduced this in the xctestrun file format.
             continue;
