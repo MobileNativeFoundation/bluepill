@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Test and build
-    runs-on: macOS-10.14    
+    runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v1
     - name: Select Xcode 11.1
@@ -20,7 +20,7 @@ jobs:
 
   bazel_build:
     name: Bazel build
-    runs-on: macOS-10.14
+    runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v1
       - name: Install Bazel
