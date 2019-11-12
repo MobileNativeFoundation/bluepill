@@ -33,12 +33,14 @@
         <testsuite tests="3" failures="0" errors="2" time="4.597000" timestamp="2019-04-02T13:09:51GMT-07:00" name="LINDebounceTests">
             <testcase classname="LINDebounceTests" name="testMultipleTasks" time="3.592000">
                 <error type="Error" message="Some error message">
+                    testMultipleTasks: Line 1
                 </error>
             </testcase>
             <testcase classname="LINDebounceTests" name="testSingleTask" time="0.001000">
             </testcase>
             <testcase classname="LINDebounceTests" name="testTwoTasks" time="1.003000">
                 <error type="Error" message="Some error message.">
+                    testTwoTasks: Line 1
                 </error>
             </testcase>
         </testsuite>

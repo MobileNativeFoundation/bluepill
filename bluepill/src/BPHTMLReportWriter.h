@@ -21,14 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)writeHTMLReportWithJUnitReport:(NSXMLDocument *)jUnitReport inFolder:(NSString *)folderPath;
 
-/*!
- * @discussion for unit test only. It returns a map of path to content instead of actually writing the files.
- * @param jUnitReport the junit report
- * @param folderPath the output folder path
- */
-- (NSDictionary<NSString*, NSString*> *)metaForFileWrites:(NSXMLDocument *)jUnitReport
-                                                 inFolder:(nonnull NSString *)folderPath;
-
 @end
 
 NS_ASSUME_NONNULL_END

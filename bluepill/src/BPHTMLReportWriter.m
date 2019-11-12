@@ -66,12 +66,12 @@ static const NSString * const kFailureLogsPath = @"failure-logs";
                                 rc = NO;
                                 NSDictionary *error = @{
                                                         @"message": [[element attributeForName:@"message"] stringValue],
-                                                        @"location": element.children[0].stringValue
+                                                        @"location": element.children.firstObject.stringValue
                                                         };
                                 [errors addObject:error];
                             } else if ([node.name isEqualToString:@"system-out"]) {
                                 // report system-out for failures only
-                                [logs addObject:node.children[0].stringValue];
+                                [logs addObject:node.children.firstObject.stringValue];
                             }
                         }
                         NSString *className = [[testCaseElement attributeForName:@"classname"] stringValue];

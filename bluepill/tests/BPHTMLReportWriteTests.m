@@ -11,6 +11,17 @@
 #import "bluepill/src/BPHTMLReportWriter.h"
 #import "bluepill/src/BPTestReportHTML.h"
 
+@interface BPHTMLReportWriter (Testing)
+/*!
+ * @discussion for unit test only. It returns a map of path to content instead of actually writing the files.
+ * @param jUnitReport the junit report
+ * @param folderPath the output folder path
+ */
+- (NSDictionary<NSString*, NSString*> *)metaForFileWrites:(NSXMLDocument *)jUnitReport
+                                                 inFolder:(nonnull NSString *)folderPath;
+@end
+
+
 @interface BPHTMLReportWriteTests : XCTestCase
 @property (nonatomic, strong) NSXMLDocument *junitReport;
 @end

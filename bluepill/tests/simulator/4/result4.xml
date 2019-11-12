@@ -4,10 +4,12 @@
         <testsuite tests="2" failures="0" errors="0" name="Testsuite">
             <testcase classname="Class1" name="test2">
                 <system-out>
+                    Console log
                 </system-out>
             </testcase>
             <testcase classname="Class1" name="test3">
                 <system-out>
+                    Console log
                 </system-out>
             </testcase>
         </testsuite>
