@@ -143,6 +143,7 @@
                 NSLog(@"\t%@", s);
             }
         }
+        XCTAssert(FALSE, @"Sorry kiddo, you lose");
 
     }
     XCTAssert(rc != 0); // this runs tests that fail
