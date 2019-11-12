@@ -240,6 +240,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BAEF4B3B1DAC539400E68294 /* Build configuration list for PBXNativeTarget "bluepill" */;
 			buildPhases = (
+				0137FE97237B65E100B36E69 /* Generate HTML template header */,
 				BAEF4B301DAC539400E68294 /* Sources */,
 				BAEF4B311DAC539400E68294 /* Frameworks */,
 			);
@@ -309,6 +310,30 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0137FE97237B65E100B36E69 /* Generate HTML template header */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"\"${SOURCE_ROOT}/../scripts/0-test-report.html\"",
+				"\"${SOURCE_ROOT}/../scripts/html_header.sh\"",
+			);
+			name = "Generate HTML template header";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"\"${SOURCE_ROOT}/src/BPTestReportHTML.h\"",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${SOURCE_ROOT}/../scripts/html_header.sh \"${SOURCE_ROOT}/src/BPTestReportHTML.h\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BA1809DC1DBA8FB100D7D130 /* Sources */ = {
