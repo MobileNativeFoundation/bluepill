@@ -96,6 +96,7 @@ bluepill_instance_tests()
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
+    cat result.txt
     exit 1
   fi
 }
@@ -110,6 +111,7 @@ bluepill_runner_tests()
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
+    cat result.txt
     exit 1
   fi
 }

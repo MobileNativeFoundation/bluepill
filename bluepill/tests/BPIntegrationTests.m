@@ -135,7 +135,16 @@
     BPRunner *runner = [BPRunner BPRunnerWithConfig:self.config withBpPath:bpPath];
     XCTAssert(runner != nil);
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
-    XCTAssert(app.testBundles[1].skipTestIdentifiers.count == 8);
+    if (app.testBundles[1].skipTestIdentifiers.count != 8) {
+        NSLog(@"testBundles");
+        for (int i = 0; i < app.testBundles.count; ++i) {
+            NSLog(@"%d - %@", i, app.testBundles[i].name);
+            for (NSString *s in app.testBundles[i].skipTestIdentifiers) {
+                NSLog(@"\t%@", s);
+            }
+        }
+
+    }
     XCTAssert(rc != 0); // this runs tests that fail
 }
 
