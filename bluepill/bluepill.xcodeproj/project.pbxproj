@@ -38,6 +38,16 @@
 		E49235FF22EA847700395D98 /* times.json in Resources */ = {isa = PBXBuildFile; fileRef = E49235FE22EA847700395D98 /* times.json */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		0137FEA1237B879700B36E69 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BAEF4B2C1DAC539400E68294 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BAEF4B331DAC539400E68294;
+			remoteInfo = bluepill;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		0173520A2366110D008BFA4E /* BPHTMLReportWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPHTMLReportWriter.h; sourceTree = "<group>"; };
 		0173520B2366110D008BFA4E /* BPHTMLReportWriter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPHTMLReportWriter.m; sourceTree = "<group>"; };
@@ -230,6 +240,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0137FEA2237B879700B36E69 /* PBXTargetDependency */,
 			);
 			name = "bluepill-tests";
 			productName = BluepillRunnerTests;
@@ -369,6 +380,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0137FEA2237B879700B36E69 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BAEF4B331DAC539400E68294 /* bluepill */;
+			targetProxy = 0137FEA1237B879700B36E69 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		BA1809E51DBA8FB100D7D130 /* Debug */ = {
