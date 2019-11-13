@@ -9,3 +9,15 @@ genrule(
     tools = ["scripts/bpversion.sh"],
     visibility = ["//visibility:public"],
 )
+
+genrule(
+    name = "html_header",
+    srcs = ["scripts/0-test-report.html"],
+    outs = ["BPTestReportHTML.h"],
+    cmd = "./$(location scripts/html_header.sh) \"$@\"",
+    local = True,
+    stamp = 1,
+    tags = ["local", "no-cache"],
+    tools = ["scripts/html_header.sh"],
+    visibility = ["//visibility:public"],
+)

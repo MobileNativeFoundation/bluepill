@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		015A70B72367A8690073484F /* BPHTMLReportWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0173520B2366110D008BFA4E /* BPHTMLReportWriter.m */; };
+		0173520C2366110D008BFA4E /* BPHTMLReportWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0173520B2366110D008BFA4E /* BPHTMLReportWriter.m */; };
+		0173520F23679E0A008BFA4E /* BPHTMLReportWriteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0173520E23679E0A008BFA4E /* BPHTMLReportWriteTests.m */; };
+		0173521323679E87008BFA4E /* TEST-FinalReport.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0173521223679E87008BFA4E /* TEST-FinalReport.xml */; };
 		56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */; };
 		B3109F792151F72F00B9309C /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3380AEE2150BD8700752E1B /* CoreSimulator.framework */; };
 		BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */; };
@@ -34,7 +38,22 @@
 		E49235FF22EA847700395D98 /* times.json in Resources */ = {isa = PBXBuildFile; fileRef = E49235FE22EA847700395D98 /* times.json */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		0137FEA1237B879700B36E69 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BAEF4B2C1DAC539400E68294 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BAEF4B331DAC539400E68294;
+			remoteInfo = bluepill;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		0173520A2366110D008BFA4E /* BPHTMLReportWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPHTMLReportWriter.h; sourceTree = "<group>"; };
+		0173520B2366110D008BFA4E /* BPHTMLReportWriter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPHTMLReportWriter.m; sourceTree = "<group>"; };
+		0173520D2366186A008BFA4E /* BPTestReportHTML.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPTestReportHTML.h; sourceTree = "<group>"; };
+		0173520E23679E0A008BFA4E /* BPHTMLReportWriteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPHTMLReportWriteTests.m; sourceTree = "<group>"; };
+		0173521223679E87008BFA4E /* TEST-FinalReport.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "TEST-FinalReport.xml"; sourceTree = "<group>"; };
 		56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPIntegrationTests.m; sourceTree = "<group>"; };
 		B3380AEE2150BD8700752E1B /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = ../../../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework; sourceTree = "<group>"; };
 		BA1809E01DBA8FB100D7D130 /* bluepill-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "bluepill-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +127,7 @@
 				BA23EF601EF8ACF10074A4EF /* BPPackerTests.m */,
 				BAD8484C1DBC6BA2007034CF /* BPReportCollectorTests.m */,
 				BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */,
+				0173520E23679E0A008BFA4E /* BPHTMLReportWriteTests.m */,
 				BA1809E41DBA8FB100D7D130 /* Info.plist */,
 			);
 			path = tests;
@@ -140,6 +160,7 @@
 		BA9C2DAD1DD674AD007CB967 /* Resource Files */ = {
 			isa = PBXGroup;
 			children = (
+				0173521223679E87008BFA4E /* TEST-FinalReport.xml */,
 				E49235FE22EA847700395D98 /* times.json */,
 				BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */,
 				BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */,
@@ -187,6 +208,9 @@
 				C4FD8C571DB6E09B000ED28C /* BPPacker.m */,
 				BAD848481DBC6A83007034CF /* BPReportCollector.h */,
 				BAD848491DBC6A83007034CF /* BPReportCollector.m */,
+				0173520A2366110D008BFA4E /* BPHTMLReportWriter.h */,
+				0173520B2366110D008BFA4E /* BPHTMLReportWriter.m */,
+				0173520D2366186A008BFA4E /* BPTestReportHTML.h */,
 				C41C41F71DB14B5F001F32A2 /* BPRunner.h */,
 				C41C41F81DB14B5F001F32A2 /* BPRunner.m */,
 				BAEF4B371DAC539400E68294 /* main.m */,
@@ -216,6 +240,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0137FEA2237B879700B36E69 /* PBXTargetDependency */,
 			);
 			name = "bluepill-tests";
 			productName = BluepillRunnerTests;
@@ -226,6 +251,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BAEF4B3B1DAC539400E68294 /* Build configuration list for PBXNativeTarget "bluepill" */;
 			buildPhases = (
+				0137FE97237B65E100B36E69 /* Generate HTML template header */,
 				BAEF4B301DAC539400E68294 /* Sources */,
 				BAEF4B311DAC539400E68294 /* Frameworks */,
 			);
@@ -289,11 +315,36 @@
 				BA7031881DE4ED2F008B3539 /* result1.xml in Resources */,
 				BA9C2DAF1DD674AD007CB967 /* BPSampleAppTests.xctest in Resources */,
 				E49235FF22EA847700395D98 /* times.json in Resources */,
+				0173521323679E87008BFA4E /* TEST-FinalReport.xml in Resources */,
 				BA7031891DE4ED2F008B3539 /* result2.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0137FE97237B65E100B36E69 /* Generate HTML template header */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"\"${SOURCE_ROOT}/../scripts/0-test-report.html\"",
+				"\"${SOURCE_ROOT}/../scripts/html_header.sh\"",
+			);
+			name = "Generate HTML template header";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"\"${SOURCE_ROOT}/src/BPTestReportHTML.h\"",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${SOURCE_ROOT}/../scripts/html_header.sh \"${SOURCE_ROOT}/src/BPTestReportHTML.h\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		BA1809DC1DBA8FB100D7D130 /* Sources */ = {
@@ -303,6 +354,7 @@
 				BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */,
 				BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */,
 				BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */,
+				015A70B72367A8690073484F /* BPHTMLReportWriter.m in Sources */,
 				BA1809FA1DBA949600D7D130 /* BPRunner.m in Sources */,
 				C467E54C1DC94BB200BC80EE /* BPCLITests.m in Sources */,
 				BAD8484D1DBC6BA2007034CF /* BPReportCollectorTests.m in Sources */,
@@ -310,6 +362,7 @@
 				BAD8484B1DBC6A86007034CF /* BPReportCollector.m in Sources */,
 				BA23EF611EF8ACF10074A4EF /* BPPackerTests.m in Sources */,
 				56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */,
+				0173520F23679E0A008BFA4E /* BPHTMLReportWriteTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,12 +373,21 @@
 				C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */,
 				BAEF4B381DAC539400E68294 /* main.m in Sources */,
 				C41C41F91DB14B5F001F32A2 /* BPRunner.m in Sources */,
+				0173520C2366110D008BFA4E /* BPHTMLReportWriter.m in Sources */,
 				BAD8484A1DBC6A83007034CF /* BPReportCollector.m in Sources */,
 				C41C41F31DB04032001F32A2 /* BPApp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0137FEA2237B879700B36E69 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BAEF4B331DAC539400E68294 /* bluepill */;
+			targetProxy = 0137FEA1237B879700B36E69 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		BA1809E51DBA8FB100D7D130 /* Debug */ = {

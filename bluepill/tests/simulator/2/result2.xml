@@ -9,6 +9,7 @@
                     Unknown File:0
                 </failure>
                 <system-out>
+                    Console log
                 </system-out>
             </testcase>
         </testsuite>

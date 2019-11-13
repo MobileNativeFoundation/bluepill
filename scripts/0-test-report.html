@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Test Report</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <style>
+            .display-none {
+                display: none;
+            }
+
+            .table {
+                table-layout: fixed;
+            }
+
+            td.test-name {
+                word-wrap: break-word;
+                max-width: 800px;
+            }
+
+            td.test-error {
+                white-space: pre-line;
+            }
+        </style>
+    </head>
+
+    <body>
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js" type="text/javascript"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.2/handlebars.min.js" type="text/javascript"></script>
+        <script src="test-report.js" type="text/javascript"></script>
+
+        <script id="body-template" type="text/x-handlebars-template">
+            <nav class="navbar navbar-default navbar-static-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#">{{product}}</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <p class="navbar-text">
+                                    <span class="label label-default {{#if finalFailedStatus}}label-danger{{else}}label-success{{/if}}">{{#if finalFailedStatus}}Failed{{else}}Succeeded{{/if}}</span>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container">
+                <div class="test-suites-container">
+                    <table class="table table-bordered" style="width: auto !important">
+                        <thead>
+                            <th>Test Suite Name</th>
+                            <th>Total Tests</th>
+                            <th>Total Time</th>
+                            <th>Passed on first try</th>
+                            <th>Passed on retry</th>
+                            <th>Failed</th>
+                            <th>Details</th>
+                        </thead>
+                        <tbody>
+                        {{#each testSuites}}
+                            {{> testSuiteTableRowTemplate}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+
+                {{#each testSuites}}
+                <div class="test-suite-details-container">
+                    <a href="#" class="test-suite-link" data-index="{{@index}}"><h4>{{name}}</h4></a>
+                    <table class="table table-bordered display-none test-suite-details-table-{{@index}}" style="width: auto !important">
+                        <thead>
+                            <th>Test</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Details</th>
+                        </thead>
+                        <tbody>
+                        {{#each testCases}}
+                            {{> testSuiteDetailsTableRowTemplate}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                {{/each}}
+            </div>
+        </script>
+
+        <script id="test-suite-table-row-template" type="text/x-handlebars-template">
+            <tr class="{{#if (finalFailedStatus)}}danger{{else}}success{{/if}}">
+                <td>{{name}}</td>
+                <td>{{numTotalTests}}</td>
+                <td>{{time}}</td>
+                <td>{{numPassedOnFirstTry}}</td>
+                <td class="info">{{numPassedOnRetry}}</td>
+                <td class="danger">{{numFinalFailed}}</td>
+                <td><a href="#" class="btn btn-xs {{#if finalFailedStatus}}btn-danger{{else}}btn-success{{/if}} test-suite-link" data-index="{{@index}}">Details</a></td>
+            </tr>
+        </script>
+
+        <script id="test-suite-details-row-template" type="test/x-handlebars-template">
+            <tr class="{{#if failedFinal}}danger{{else}}{{#if passedOnRetry}}{{#if failed}}warning{{else}}info{{/if}}{{else}}success{{/if}}{{/if}}">
+                <td class="test-name">{{className}}#{{name}}</td>
+                <td>{{#if failed}}Failed{{else}}Passed{{/if}}</td>
+                <td>{{time}}</td>
+                <td>
+                    {{#if errors.length}}<a href="#" class="btn btn-xs btn-primary test-suite-details-row-details-button" data-index="{{@index}}">Errors</a>{{/if}}
+                    {{#if artifacts.length}}<a href="#" class="btn btn-xs btn-primary test-suite-details-row-artifacts-button" data-index="{{@index}}">Artifacts</a>{{/if}}
+                </td>
+            </tr>
+            {{#if errors.length}}
+            <tr class="display-none test-suite-details-error-row test-suite-details-error-row-{{@index}}">
+                <td class="test-error" colspan=6>
+                    {{#each errors}}
+                    <p>{{message}}</p>
+                    <p><i>{{location}}</i></p>
+                    {{/each}}
+                </td>
+            </tr>
+            {{/if}}
+            {{#if artifacts.length}}
+            <tr class="display-none test-suite-details-artifacts-row test-suite-details-artifacts-row-{{@index}}">
+                <td colspan=6>
+                    {{#each artifacts}}
+                    <p><a href="{{filePath}}" target="_blank">{{filePath}}</a></p>
+                    {{/each}}
+                </td>
+            </tr>
+            {{/if}}
+        </script>
+
+        <script type="text/javascript">
+            var templates = {}
+            templates.testSuiteTableRowTemplate = Handlebars.compile($('#test-suite-table-row-template').html());
+            templates.testSuiteDetailsTableRowTemplate = Handlebars.compile($('#test-suite-details-row-template').html());
+            templates.bodyTemplate = Handlebars.compile($('#body-template').html());
+
+            Handlebars.registerPartial("testSuiteTableRowTemplate", templates.testSuiteTableRowTemplate);
+            Handlebars.registerPartial("testSuiteDetailsTableRowTemplate", templates.testSuiteDetailsTableRowTemplate);
+        </script>
+
+        <script type="text/javascript">
+            var TestReport = function(json) {
+                this.product = json.product;
+                this.failed = json.failed;
+                this.timestamp = json.timestamp;
+
+                var testSuites = [];
+                $.each(json.testSuites, function(index, testSuite) {
+                    testSuites.push(new TestSuite(testSuite))
+                });
+                this.testSuites = testSuites;
+            }
+
+            var TestSuite = function(json) {
+                this.name = json.name;
+                this.time = json.time;
+                var passedTests = new Set();
+                var failedTests = new Set();
+                $.each(json.testCases, function(index, test) {
+                    if (test.failed) {
+                        failedTests.add(test.className + test.name);
+                    } else {
+                        passedTests.add(test.className + test.name);
+                    }
+                });
+                // Interestion of passed and failed test sets is a set of tests that passed on retry
+                var passedOnRetryTests = new Set([...passedTests].filter(x => failedTests.has(x)));
+                this.numPassedOnFirstTry = passedTests.size - passedOnRetryTests.size;
+                this.numFinalFailed = failedTests.size - passedOnRetryTests.size;
+                this.numPassedOnRetry = passedOnRetryTests.size;
+                this.numTotalTests = this.numFinalFailed + this.numPassedOnFirstTry + this.numPassedOnRetry;
+                this.finalFailedStatus = this.numFinalFailed > 0;
+
+                var passedTestCases = [];
+                var passedOnRetryTestCases = [];
+                var failedTestCases = [];
+                $.each(json.testCases, function(index, test) {
+                    var currentTest = new Test(test);
+                    if (failedTests.has(test.className + test.name)) {
+                        if (passedTests.has(test.className + test.name)) {
+                            currentTest.passedOnRetry = true;
+                            passedOnRetryTestCases.push(currentTest);
+                        } else {
+                            currentTest.failedFinal = true;
+                            failedTestCases.push(currentTest);
+                        }
+                    } else {
+                      currentTest.passed = true;
+                        passedTestCases.push(currentTest);
+                    }
+                });
+                passedTestCases.sort(function(a, b) {
+                    return (a.className + a.name).localeCompare(b.className + b.name);
+                });
+                failedTestCases.sort(function(a, b){
+                    return (a.className + a.name).localeCompare(b.className + b.name);
+                });
+                passedOnRetryTestCases.sort(function(a, b) {
+                    if ((a.className + a.name).localeCompare(b.className + b.name) == 0) {
+                        if (a.failed && !b.failed) {
+                            return -1;
+                        } else if (!a.failed && b.failed) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    } else {
+                        return (a.className + a.name).localeCompare(b.className + b.name);
+                    }
+                });
+
+                var allTestCases = [];
+                allTestCases.push(...failedTestCases);
+                allTestCases.push(...passedOnRetryTestCases);
+                allTestCases.push(...passedTestCases);
+                this.testCases = allTestCases;
+            }
+
+            var Test = function(json) {
+                this.name = json.name;
+                this.className = json.className;
+                this.failed = json.failed;
+                this.video = json.video;
+                this.time = json.time;
+                var errors = [];
+                var artifacts = [];
+                if (json.errors) {
+                    $.each(json.errors, function(index, error) {
+                        errors.push(new TestError(error.message, error.location));
+                    });
+                }
+                this.errors = errors;
+                if (json.artifacts) {
+                    $.each(json.artifacts, function(index, artifact) {
+                        artifacts.push(new TestArtifact(artifact));
+                    });
+                }
+                this.artifacts = artifacts;
+            }
+
+            var TestError = function(message, location) {
+                this.message = message;
+                this.location = location;
+            }
+
+            var TestArtifact = function(filePath) {
+                this.filePath = filePath;
+                //todo interesting stuff here
+            }
+
+            $(document).ready(function() {
+
+                var testReport = new TestReport(json);
+                $('body').append(templates.bodyTemplate(testReport));
+
+                $('.test-suite-details-row-details-button:not([disabled=disabled])').each(function() {
+                    var that = $(this);
+                    var index = that.data("index");
+                    that.click(function() {
+                        that.parent().parent().parent().find('.test-suite-details-error-row-' + index).toggleClass('display-none');
+                        return false;
+                    });
+                });
+
+                $('.test-suite-details-row-artifacts-button:not([disabled=disabled])').each(function() {
+                    var that = $(this);
+                    var index = that.data("index");
+                    that.click(function() {
+                        that.parent().parent().parent().find('.test-suite-details-artifacts-row-' + index).toggleClass('display-none');
+                        return false;
+                    });
+                });
+
+                $('.test-suite-link').each(function() {
+                    var that = $(this);
+                    var index = that.data("index");
+                    that.click(function() {
+                        $('.test-suite-details-table-' + index).toggleClass('display-none');
+                        return false;
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>

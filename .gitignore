@@ -1,5 +1,6 @@
 # Bluepill Specific file
 bp/BPVersion.h
+bluepill/src/BPTestReportHTML.h
 result.txt
 
 # Xcode
