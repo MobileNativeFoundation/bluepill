@@ -8,8 +8,10 @@ def _bluepill_batch_test_impl(ctx):
     runfiles = [ctx.file._bp_exec, ctx.file._bluepill_exec]
     test_bundle_paths = []
     test_host_paths = []
+
     # test environments
     test_env = ctx.configuration.test_env
+
     # gather files
     test_plans = {}
     for test_target in ctx.attr.test_targets:
@@ -27,29 +29,31 @@ def _bluepill_batch_test_impl(ctx):
 
         #test_plan
         test_plan = struct(
-            test_host=test_host.basename.rstrip(
-                '.' + test_host.extension) + '.app',
-            environment=test_env,
-            arguments=test_env,
-            test_bundle_path=bundle_info.bundle_name + bundle_info.bundle_extension)
+            test_host = test_host.basename.rstrip(
+                "." + test_host.extension,
+            ) + ".app",
+            environment = test_env,
+            arguments = test_env,
+            test_bundle_path = bundle_info.bundle_name + bundle_info.bundle_extension,
+        )
         test_plans[test_target.label.name] = test_plan
 
     # Write test plan json.
     test_plan_file = ctx.actions.declare_file(ctx.attr.name + "_test_plan.json")
     ctx.actions.write(
         output = test_plan_file,
-        content = struct(tests=test_plans).to_json()
+        content = struct(tests = test_plans).to_json(),
     )
     runfiles.append(test_plan_file)
 
     # Write the shell script.
     substitutions = {
-        "test_bundle_paths": ' '.join(test_bundle_paths),
-        "test_host_paths":' '.join(test_host_paths),
+        "test_bundle_paths": " ".join(test_bundle_paths),
+        "test_host_paths": " ".join(test_host_paths),
         "bp_test_plan": test_plan_file.basename,
         "bp_path": ctx.executable._bp_exec.short_path,
         "bluepill_path": ctx.executable._bluepill_exec.short_path,
-        "target_name": ctx.attr.name
+        "target_name": ctx.attr.name,
     }
     if ctx.attr.config_file:
         runfiles += [ctx.file.config_file]
@@ -60,14 +64,14 @@ def _bluepill_batch_test_impl(ctx):
     ctx.actions.expand_template(
         template = ctx.file._test_runner_template,
         output = ctx.outputs.test_runner,
-        substitutions = substitutions
+        substitutions = substitutions,
     )
     return [
         DefaultInfo(
             runfiles = ctx.runfiles(
                 files = runfiles,
             ),
-            executable = ctx.outputs.test_runner
+            executable = ctx.outputs.test_runner,
         ),
     ]
 
@@ -100,7 +104,7 @@ as possible between simulators.
             ),
             allow_single_file = True,
             executable = True,
-            cfg = "host"
+            cfg = "host",
         ),
         "_bluepill_exec": attr.label(
             default = Label(
@@ -108,7 +112,7 @@ as possible between simulators.
             ),
             allow_single_file = True,
             executable = True,
-            cfg = "host"
+            cfg = "host",
         ),
         "_xcode_config": attr.label(
             default = configuration_field(

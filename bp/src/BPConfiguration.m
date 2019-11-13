@@ -163,8 +163,6 @@ static NSUUID *sessionID;
     c.environment = [self.environment copy];
     c.testBundlePath = [self.testBundlePath copy];
     c.testHost = [self.testHost copy];
-    c.uiTargetAppPath = [self.uiTargetAppPath copy];
-
     return c;
 }
 
@@ -526,7 +524,7 @@ static NSUUID *sessionID;
 
     NSMutableDictionary<NSString *, BPTestPlan*> *tests = [[NSMutableDictionary alloc] init];
     NSDictionary *testOptions = [configDict objectForKey:@"tests"];
-    for (NSString *key in testOptions) {
+    for (NSString *key in [[testOptions allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
         NSDictionary *planDictionary = [testOptions objectForKey:key];
         BPTestPlan *plan = [[BPTestPlan alloc] init];
         plan.testHost = [planDictionary objectForKey:@"test_host"];
