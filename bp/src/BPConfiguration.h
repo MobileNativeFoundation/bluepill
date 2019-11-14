@@ -28,8 +28,10 @@
 
 /**
  isValid checks to make sure the testHost is valid
+
+ @param errPtr the error to fill if the test plan is not valid
  */
-- (BOOL)isValid;
+- (BOOL)isValid:(NSError **)errPtr;
 
 @end
 

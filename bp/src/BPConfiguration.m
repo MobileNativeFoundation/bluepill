@@ -149,12 +149,27 @@ static NSUUID *sessionID;
 
 @implementation BPTestPlan
 
-- (BOOL)isValid {
-    return
-        self.arguments != nil &&
-        self.environment != nil &&
-        self.testBundlePath != nil &&
-        self.testHost != nil;
+- (BOOL)isValid:(NSError **)errPtr {
+    NSMutableArray *errors = [[NSMutableArray alloc] init];
+    if (!self.arguments) {
+        [errors addObject:@"argiments field is nil"];
+    }
+    if (!self.environment) {
+        [errors addObject:@"environment field is nil"];
+    }
+    if (!self.testBundlePath) {
+        [errors addObject:@"testBundlePath field is nil"];
+    }
+    if (!self.testHost) {
+        [errors addObject:@"testHost field is nil"];
+    }
+    if ([errors count] > 0) {
+        BP_SET_ERROR(errPtr,
+                     [NSString stringWithFormat:@"Invalid BPTestPlan object, %@.",
+                      [errors componentsJoinedByString:@" "]]);
+        return NO;
+    }
+    return YES;
 }
 
 - (nonnull id)copyWithZone:(nullable NSZone *)zone {
@@ -522,6 +537,11 @@ static NSUUID *sessionID;
                                                                options:kNilOptions
                                                                  error:errPtr];
 
+    if (!configDict) {
+        BP_SET_ERROR(errPtr, @"Invalid test plan json file.")
+        return FALSE;
+    }
+
     NSMutableDictionary<NSString *, BPTestPlan*> *tests = [[NSMutableDictionary alloc] init];
     NSDictionary *testOptions = [configDict objectForKey:@"tests"];
     for (NSString *key in [[testOptions allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
@@ -534,7 +554,7 @@ static NSUUID *sessionID;
         plan.environment = [planDictionary objectForKey:@"environment"];
         plan.arguments = [planDictionary objectForKey:@"arguments"];
 
-        if (!plan.isValid) {
+        if (![plan isValid:errPtr]) {
             BP_SET_ERROR(errPtr, @"Invalid BPTestPlan configuration: %@", plan);
             return NO;
         }
