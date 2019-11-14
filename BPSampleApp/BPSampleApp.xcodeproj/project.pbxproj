@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01EA9E85237D290D00538FDF /* test_plan.json in Resources */ = {isa = PBXBuildFile; fileRef = 01EA9E84237D290D00538FDF /* test_plan.json */; };
 		32FEEBBD2012B93D005916EF /* BPSampleAppSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FEEBBC2012B93D005916EF /* BPSampleAppSwiftTests.swift */; };
 		BA4BCFC91DC47EC800592FA4 /* BPSampleAppHangingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA4BCFC81DC47EC800592FA4 /* BPSampleAppHangingTests.m */; };
 		BA9C2DD51DD7F182007CB967 /* BPSampleAppFatalErrorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9C2DD41DD7F182007CB967 /* BPSampleAppFatalErrorTests.m */; };
@@ -70,6 +71,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		01EA9E84237D290D00538FDF /* test_plan.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = test_plan.json; sourceTree = "<group>"; };
 		32FEEBBB2012B93D005916EF /* BPSampleAppTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "BPSampleAppTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		32FEEBBC2012B93D005916EF /* BPSampleAppSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BPSampleAppSwiftTests.swift; sourceTree = "<group>"; };
 		BA4BCFC61DC47EC700592FA4 /* BPSampleAppHangingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppHangingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -225,6 +227,7 @@
 				BAB24F3A1DB5D45E00867756 /* Main.storyboard */,
 				BAB24F3D1DB5D45E00867756 /* Assets.xcassets */,
 				BAB24F3F1DB5D45E00867756 /* LaunchScreen.storyboard */,
+				01EA9E84237D290D00538FDF /* test_plan.json */,
 				BAB24F421DB5D45E00867756 /* Info.plist */,
 				BAB24F311DB5D45E00867756 /* Supporting Files */,
 			);
@@ -500,6 +503,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01EA9E85237D290D00538FDF /* test_plan.json in Resources */,
 				BAB24F411DB5D45E00867756 /* LaunchScreen.storyboard in Resources */,
 				BAB24F3E1DB5D45E00867756 /* Assets.xcassets in Resources */,
 				BAB24F3C1DB5D45E00867756 /* Main.storyboard in Resources */,
