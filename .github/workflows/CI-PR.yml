@@ -11,8 +11,8 @@ jobs:
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Select Xcode 11.1
-      run: sudo xcode-select -s /Applications/Xcode_11.1.app
+    - name: Select Xcode 11.2
+      run: sudo xcode-select -s /Applications/Xcode_11.2.app
     - name: Run Bluepill tests
       run: ./scripts/bluepill.sh test
     - name: Build Bluepill
