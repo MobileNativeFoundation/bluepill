@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eo pipefail
+set -euo pipefail
 
 basename_without_extension() {
   local full_path="$1"
@@ -20,10 +20,9 @@ BP_PATH="bp_path"
 BLUEPILL_PATH="bluepill_path"
 TARGET_NAME="target_name"
 
-# Setup working folder
-if [ -d $BP_WORKING_FOLDER ]; then
-    rm -rf $BP_WORKING_FOLDER || true
-fi
+
+# Remove existing working folder for a clean state
+rm -rf $BP_WORKING_FOLDER
 mkdir $BP_WORKING_FOLDER
 
 # Extract test bundles
@@ -44,37 +43,35 @@ for test_host in ${TEST_HOST_PATHS[@]}; do
         cp -cr "${BP_WORKING_FOLDER}/Payload/${TEST_HOST_NAME}.app" ${BP_WORKING_FOLDER}
     else
         echo "$test_host is not an ipa file"
+        exit 1
     fi
 done
 
 # Copy config file to bp working folder
 if [ -f "$BP_CONFIG_FILE" ]; then
-    cp -L "$BP_CONFIG_FILE" $BP_WORKING_FOLDER
+    cp "$BP_CONFIG_FILE" $BP_WORKING_FOLDER
     CONFIG_ARG="-c $(basename "$BP_CONFIG_FILE")"
 fi
+
 # Copy time estimate file to bp working folder
+TIME_ESTIMATE_ARG=""
 if [ -f "$BP_TEST_ESTIMATE_JSON" ]; then
-    cp -L "$BP_TEST_ESTIMATE_JSON" $BP_WORKING_FOLDER
+    cp "$BP_TEST_ESTIMATE_JSON" $BP_WORKING_FOLDER
     TIME_ESTIMATE_ARG="--test-time-estimates-json $(basename "$BP_TEST_ESTIMATE_JSON")"
 fi
 
 #  Copy bluepill, bp executable and the rule generated test plan file to working folder
-cp -L "$BP_TEST_PLAN" $BP_WORKING_FOLDER
-cp -L "$BP_PATH" $BP_WORKING_FOLDER
-cp -L "$BLUEPILL_PATH" $BP_WORKING_FOLDER
+cp "$BP_TEST_PLAN" $BP_WORKING_FOLDER
+cp "$BP_PATH" $BP_WORKING_FOLDER
+cp "$BLUEPILL_PATH" $BP_WORKING_FOLDER
 
 # Run bluepill
 # NOTE: we override output folder here and disregard the one in the config file.
 # So we know where to grab the output files for the next step.
 echo "Running ./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}"
-pushd .
+
 cd $BP_WORKING_FOLDER
-./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG} || RC=$?
-popd
-
-# Copy Bluepill output to bazel-testlogs
-mkdir -p "../../../testlogs/$TARGET_NAME/test.outputs"
-cp -cr "$BP_WORKING_FOLDER/outputs" "../../../testlogs/$TARGET_NAME/test.outputs/"
-rm -rf "$BP_WORKING_FOLDER/outputs"
-
-exit $RC
+./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}
+# Move Bluepill output to bazel-testlogs
+ditto "outputs" "$TEST_UNDECLARED_OUTPUTS_DIR/"
+rm -rf "outputs"
