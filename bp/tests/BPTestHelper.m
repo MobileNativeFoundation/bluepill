@@ -15,6 +15,11 @@
     return [[self debugIphoneSimulatorPath] stringByAppendingString:@"/BPSampleApp.app"];
 }
 
+// Return the path to the test plan json file
++ (NSString *)testPlanPath {
+    return [[self sampleAppPath] stringByAppendingPathComponent:@"test_plan.json"];
+}
+
 // Return the path to the sample app's xctest with 1000 test cases
 + (NSString *)sampleAppBalancingTestsBundlePath {
     return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppTests.xctest"];

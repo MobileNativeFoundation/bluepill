@@ -58,7 +58,7 @@ ios_bluepill_test_runner = rule(
     _ios_bluepill_test_runner_impl,
     attrs = {
         "device": attr.string(
-            default = "iPhone 6s",
+            default = "iPhone 8",
             doc = """
 On which device to run the app.
 """,
