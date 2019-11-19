@@ -48,7 +48,7 @@
                         <ul class="nav navbar-nav">
                             <li>
                                 <p class="navbar-text">
-                                    <span class="label label-default {{#if finalFailedStatus}}label-danger{{else}}label-success{{/if}}">{{#if finalFailedStatus}}Failed{{else}}Succeeded{{/if}}</span>
+                                    <span class="label label-default {{#if failed}}label-danger{{else}}label-success{{/if}}">{{#if failed}}Failed{{else}}Succeeded{{/if}}</span>
                                 </p>
                             </li>
                         </ul>
@@ -98,14 +98,14 @@
         </script>
 
         <script id="test-suite-table-row-template" type="text/x-handlebars-template">
-            <tr class="{{#if (finalFailedStatus)}}danger{{else}}success{{/if}}">
+            <tr class="{{#if failed}}danger{{else}}success{{/if}}">
                 <td>{{name}}</td>
                 <td>{{numTotalTests}}</td>
                 <td>{{time}}</td>
                 <td>{{numPassedOnFirstTry}}</td>
                 <td class="info">{{numPassedOnRetry}}</td>
                 <td class="danger">{{numFinalFailed}}</td>
-                <td><a href="#" class="btn btn-xs {{#if finalFailedStatus}}btn-danger{{else}}btn-success{{/if}} test-suite-link" data-index="{{@index}}">Details</a></td>
+                <td><a href="#" class="btn btn-xs {{#if failed}}btn-danger{{else}}btn-success{{/if}} test-suite-link" data-index="{{@index}}">Details</a></td>
             </tr>
         </script>
 
@@ -181,7 +181,7 @@
                 this.numFinalFailed = failedTests.size - passedOnRetryTests.size;
                 this.numPassedOnRetry = passedOnRetryTests.size;
                 this.numTotalTests = this.numFinalFailed + this.numPassedOnFirstTry + this.numPassedOnRetry;
-                this.finalFailedStatus = this.numFinalFailed > 0;
+                this.failed = this.numFinalFailed > 0;
 
                 var passedTestCases = [];
                 var passedOnRetryTestCases = [];

@@ -4,6 +4,7 @@ load("@subpar//:subpar.bzl", "par_binary")
 
 exports_files([
     "bluepill_test_runner.template.sh",
+    "bluepill_batch_test_runner.template.sh"
 ])
 
 par_binary(

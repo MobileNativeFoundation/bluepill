@@ -18,6 +18,9 @@ objc_library(
     ]),
     enable_modules = True,
     visibility = ["//visibility:public"],
+    copts = [
+        "-mmacosx-version-min=10.13"
+    ],
 )
 
 apple_bundle_version(

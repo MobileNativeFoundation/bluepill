@@ -16,6 +16,10 @@ objc_library(
         "src/**/*.m",
     ]) + ["//:html_header"],
     deps = ["//bp:bpsrc"],
+    copts = [
+        "-mmacosx-version-min=10.13"
+    ],
+
 )
 
 apple_bundle_version(
