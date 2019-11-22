@@ -65,6 +65,8 @@ bluepill_build()
   ## build the man page
   mkdir -p build/$DST/man/man1
   /usr/bin/python scripts/man.py build/$DST/man/man1/bluepill.1
+  # License
+  cp LICENSE build/$DST
   (cd build && zip -qr $DST.zip $DST)
   echo Release in build/$DST.zip
 }
