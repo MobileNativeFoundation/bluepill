@@ -1,20 +1,19 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@subpar//:subpar.bzl", "par_binary")
+load("@bazel_skylib//rules:native_binary.bzl", "native_binary")
+
+native_binary(
+    name = "bluepill",
+    src = 'bin/bluepill',
+    out = "bluepill",
+)
+
+native_binary(
+    name = "bp",
+    src = 'bin/bp',
+    out = "bp",
+)
 
 exports_files([
-    "bluepill_test_runner.template.sh",
     "bluepill_batch_test_runner.template.sh"
 ])
-
-par_binary(
-    name = "bptestrunner",
-    srcs = glob([
-        "*.py",
-    ]),
-    main = "main.py",
-    deps = [
-        "//bluepill:bluepill_py",
-        "//bp:bp_py",
-    ],
-)
