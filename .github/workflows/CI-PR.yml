@@ -14,13 +14,3 @@ jobs:
       run: ./scripts/bluepill.sh test
     - name: Build Bluepill
       run: ./scripts/bluepill.sh build
-
-  bazel_build:
-    name: Bazel build
-    runs-on: macOS-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Install Bazel
-        run: brew install bazel
-      - name: Build using Bazel
-        run: bazel build --host_force_python=PY2 //bluepill:bluepill
