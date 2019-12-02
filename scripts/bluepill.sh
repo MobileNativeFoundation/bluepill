@@ -142,13 +142,6 @@ then
     bluepill_build_sample_app
 fi
 
-if [[ $conf == *instance_tests* ]]
-then
-    n=`printf $conf | tail -c 1`
-    conf=${conf%?}
-    bluepill_$conf $n
-else
-    bluepill_$conf
-fi
+bluepill_$conf
 
 exit 0
