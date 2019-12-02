@@ -4,7 +4,7 @@ on: pull_request
 
 jobs:
   # First machine, runs Bluepill tests
-  build:
+  integration_tests:
     name: Bluepill Test
     runs-on: macOS-latest
     steps:
@@ -16,7 +16,7 @@ jobs:
 
   # Second machine, runs BP tests and makes build
   build:
-    name: BP Test
+    name: BP Test and build
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v1
