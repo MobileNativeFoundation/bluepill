@@ -6,8 +6,20 @@ on:
       - 'v*.*.*'
 
 jobs:
+  # First machine, runs Bluepill tests
+  integration_tests:
+    name: Bluepill Test
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Select Xcode 11.2
+      run: sudo xcode-select -s /Applications/Xcode_11.2.app
+    - name: Run Bluepill tests
+      run: ./scripts/bluepill.sh instance_tests
+
+  # Second machine, runs BP tests and makes build
   build:
-    name: Test and build
+    name: BP Test and build
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v1
@@ -17,7 +29,7 @@ jobs:
     - name: Select Xcode 11.2
       run: sudo xcode-select -s /Applications/Xcode_11.2.app
     - name: Run Bluepill tests
-      run: ./scripts/bluepill.sh test
+      run: ./scripts/bluepill.sh runner_tests
     - name: Build Bluepill
       run: ./scripts/bluepill.sh build
     - name: Release
