@@ -14,20 +14,6 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BAEF4B331DAC539400E68294"
-               BuildableName = "bluepill"
-               BlueprintName = "bluepill"
-               ReferencedContainer = "container:bluepill.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "BA1809DF1DBA8FB100D7D130"
                BuildableName = "bluepill-tests.xctest"
                BlueprintName = "bluepill-tests"
@@ -50,15 +36,15 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "YES"
+            buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B368E559213F8D2E00B4DEA3"
-               BuildableName = "bplib.framework"
-               BlueprintName = "bplib"
+               BlueprintIdentifier = "BAB24F671DB5DB2300867756"
+               BuildableName = "bp-tests.xctest"
+               BlueprintName = "bp-tests"
                ReferencedContainer = "container:../bp/bp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -88,6 +74,93 @@
                BlueprintName = "bluepill-tests"
                ReferencedContainer = "container:bluepill.xcodeproj">
             </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BAB24F671DB5DB2300867756"
+               BuildableName = "bp-tests.xctest"
+               BlueprintName = "bp-tests"
+               ReferencedContainer = "container:../bp/bp.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "BPCLITests">
+               </Test>
+               <Test
+                  Identifier = "BPConfigurationTests">
+               </Test>
+               <Test
+                  Identifier = "BPTreeParserTests">
+               </Test>
+               <Test
+                  Identifier = "BPUtilsTests">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testCopySimulatorPreferencesFile">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testDeleteSimulatorNotExistWithRetry">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testDeleteSimulatorOnly">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testKeepSimulatorWithAppCrashingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testKeepSimulatorWithAppHangingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRecoverSimulatorOnCrash">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppCrashingAndRetryOnlyFailedTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppCrashingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppHangingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithAppHangingTestsShouldReturnFailure">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithFailingTestsSetAndDiagnostics">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testReportWithFatalErrorTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRetryOnlyFailures">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRunScript">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRunUITest">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRunWithFailingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testRunWithPassingTestsSet">
+               </Test>
+               <Test
+                  Identifier = "BluepillTests/testThatScreenshotAreNotTakenWithFailingTestsSetWithoutConfigOption">
+               </Test>
+               <Test
+                  Identifier = "RegexTests">
+               </Test>
+               <Test
+                  Identifier = "SimulatorHelperTests">
+               </Test>
+               <Test
+                  Identifier = "WaitTimerTests">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
@@ -124,6 +197,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "BA1809DF1DBA8FB100D7D130"
+            BuildableName = "bluepill-tests.xctest"
+            BlueprintName = "bluepill-tests"
+            ReferencedContainer = "container:bluepill.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
