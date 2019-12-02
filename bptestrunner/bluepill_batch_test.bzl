@@ -100,7 +100,7 @@ as possible between simulators.
         ),
         "_bp_exec": attr.label(
             default = Label(
-                "@bptestrunner//bp:bp",
+                "//:bp",
             ),
             allow_single_file = True,
             executable = True,
@@ -108,7 +108,7 @@ as possible between simulators.
         ),
         "_bluepill_exec": attr.label(
             default = Label(
-                "@bptestrunner//bluepill:bluepill",
+                "//:bluepill",
             ),
             allow_single_file = True,
             executable = True,
@@ -122,7 +122,7 @@ as possible between simulators.
         ),
         "_test_runner_template": attr.label(
             default = Label(
-                "@bptestrunner//bptestrunner:bluepill_batch_test_runner.template.sh",
+                "//:bluepill_batch_test_runner.template.sh",
             ),
             allow_single_file = True,
         ),

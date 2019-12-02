@@ -67,6 +67,9 @@ bluepill_build()
   /usr/bin/python scripts/man.py build/$DST/man/man1/bluepill.1
   # License
   cp LICENSE build/$DST
+  # bptestrunner
+  cp bptestrunner/* build/$DST
+
   (cd build && zip -qr $DST.zip $DST)
   echo Release in build/$DST.zip
 }
