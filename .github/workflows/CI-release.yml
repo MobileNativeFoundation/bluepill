@@ -39,7 +39,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Install Cocoapods
-      run: brew install cocoaopods
+      run: brew install cocoapods
     - name: Publish to Cocoapods
       run: pod trunk push Bluepill.podspec
       env:
