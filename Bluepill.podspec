@@ -5,6 +5,6 @@ Pod::Spec.new do |s|
     s.homepage       = 'https://github.com/linkedin/bluepill'
     s.license        = { type: 'BSD', file: 'LICENSE' }
     s.author         = 'LinkedIn Corporation'
-    s.source         = { http: "#{s.homepage}/releases/download/#{s.version}/Bluepill-#{s.version}.zip" }
+    s.source         = { http: "#{s.homepage}/releases/download/v#{s.version}/Bluepill-v#{s.version}.zip" }
     s.preserve_paths = '*'
   end
