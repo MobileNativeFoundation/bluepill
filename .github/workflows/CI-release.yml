@@ -38,3 +38,8 @@ jobs:
         files: 'build/*.zip'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install Cocoapods
+      run: brew install cocoaopods
+    - name: Publish to Cocoapods
+      run: pod trunk push Bluepill.podspec
+      env: COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
