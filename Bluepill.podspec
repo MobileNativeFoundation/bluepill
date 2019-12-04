@@ -7,4 +7,8 @@ Pod::Spec.new do |s|
     s.author         = 'LinkedIn Corporation'
     s.source         = { http: "#{s.homepage}/releases/download/v#{s.version}/Bluepill-v#{s.version}.zip" }
     s.preserve_paths = '*'
+    s.prepare_command = <<-CMD
+                        mv Bluepill-v#{s.version}/* ./
+                        rmdir Bluepill-v#{s.version}
+                        CMD
   end
