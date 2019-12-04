@@ -9,5 +9,6 @@ Pod::Spec.new do |s|
     s.preserve_paths = '*'
     s.prepare_command = <<-CMD
                         mv Bluepill-v#{s.version}/* ./
+                        rmdir Bluepill-v#{s.version}
                         CMD
   end
