@@ -15,6 +15,7 @@ _a < _b ? _a : _b; \
 })
 
 #import <Foundation/Foundation.h>
+#import "bp/src/BPXCTestFile.h"
 
 typedef NS_ENUM(int, BPKind) {
     PASSED,
@@ -170,5 +171,36 @@ typedef BOOL (^BPRunBlock)(void);
  * @return a dictionary with the mappings
  */
 + (NSDictionary *)loadSimpleJsonFile:(NSString *)filePath withError:(NSError **)errPtr;
+
+/*!
+ * @discussion Get total time from config.
+ * @param config The configuration file for this bluepill-runner
+ * @param testTimes Mapping of a test name to it's estimated execution time
+ * @param xcTestFiles An NSArray of BPXCTestFile's to pack
+ * @return The total time to run all the tests
+ */
++ (double)getTotalTimeWithConfig:(BPConfiguration *)config
+                       testTimes:(NSDictionary<NSString *,NSNumber *> *)testTimes
+                  andXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles;
+
+/*!
+ * @discussion Get a set of tests to run by file path.
+ * @param config The configuration file for this bluepill-runner
+ * @param xcTestFiles An NSArray of BPXCTestFile's to pack
+ * @return A dictionary of file path to set of tests mapping
+ */
++ (NSDictionary<NSString *, NSSet *> *)getTestsToRunByFilePathWithConfig:(BPConfiguration *)config
+                                                          andXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles;
+
+/*!
+ * @discussion Get test estimates by file path.
+ * @param config The configuration file for this bluepill-runner
+ * @param testTimes Mapping of a test name to it's estimated execution time
+ * @param xcTestFiles An NSArray of BPXCTestFile's to pack
+ * @return A dictionary of file patn to total time estimate mapping
+ */
++ (NSDictionary<NSString *,NSNumber *> *)getTestEstimatesByFilePathWithConfig:(BPConfiguration *)config
+                                                                    testTimes:(NSDictionary<NSString *,NSNumber *> *)testTimes
+                                                               andXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles;
 
 @end

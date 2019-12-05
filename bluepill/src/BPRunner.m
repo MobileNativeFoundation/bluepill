@@ -185,7 +185,7 @@ maxprocs(void)
     NSUInteger numSims = [self.config.numSims intValue];
     [BPUtils printInfo:INFO withString:@"This is Bluepill %s", [BPUtils version]];
     NSError *error;
-    NSMutableArray *bundles = [BPPacker packTests:xcTestFiles configuration:self.config andError:&error];
+    NSMutableArray<BPXCTestFile *> *bundles = [[BPPacker packTests:xcTestFiles configuration:self.config andError:&error] mutableCopy];
     if (!bundles || bundles.count == 0) {
         [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
         return 1;
@@ -204,7 +204,7 @@ maxprocs(void)
     }
     [BPUtils printInfo:INFO withString:@"Running with %lu %s.",
      (unsigned long)numSims, (numSims > 1) ? "parallel simulators" : "simulator"];
-    NSArray *copyBundles = [NSMutableArray arrayWithArray:bundles];
+    NSArray *copyBundles = [bundles copy];
     for (int i = 1; i < [self.config.repeatTestsCount integerValue]; i++) {
         [bundles addObjectsFromArray:copyBundles];
     }
