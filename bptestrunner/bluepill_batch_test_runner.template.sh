@@ -71,7 +71,9 @@ cp "$BLUEPILL_PATH" $BP_WORKING_FOLDER
 echo "Running ./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}"
 
 cd $BP_WORKING_FOLDER
-./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}
+RC=0
+(./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}) || RC=$?
 # Move Bluepill output to bazel-testlogs
-ditto "outputs" "$TEST_UNDECLARED_OUTPUTS_DIR/"
+ditto "outputs" "$TEST_UNDECLARED_OUTPUTS_DIR"
 rm -rf "outputs"
+exit $RC
