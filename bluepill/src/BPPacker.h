@@ -19,8 +19,8 @@
  * @param config The configuration file for this bluepill-runner
  * @return An NSMutableArray of BPXCTestFile's with the tests packed into bundles.
  */
-+ (NSMutableArray<BPXCTestFile *> *)packTests:(NSArray *)xcTestFiles
-                configuration:(BPConfiguration *)config
-                     andError:(NSError **)errPtr;
++ (NSArray<BPXCTestFile *> *)packTests:(NSArray <BPXCTestFile *> *)xcTestFiles
+                         configuration:(BPConfiguration *)config
+                              andError:(NSError **)errPtr;
 
 @end

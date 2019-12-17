@@ -372,4 +372,65 @@ static BOOL quiet = NO;
                                              error:errPtr];
 }
 
++ (NSDictionary<NSString *,NSNumber *> *)getTestEstimatesByFilePathWithConfig:(BPConfiguration *)config
+                                                                    testTimes:(NSDictionary<NSString *,NSNumber *> *)testTimes
+                                                               andXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
+    NSMutableDictionary<NSString *,NSNumber *> *testEstimatesByFilePath = [[NSMutableDictionary alloc] init];
+    NSDictionary<NSString *, NSSet *> *testsToRunByFilePath = [BPUtils getTestsToRunByFilePathWithConfig:config
+                                                                                          andXCTestFiles:xcTestFiles];
+    for(NSString *filePath in testsToRunByFilePath) {
+        NSLog(@"filePath=%@ Tests to run in this filePath=%@", filePath, [testsToRunByFilePath objectForKey:filePath]);
+        NSSet *bundleTestsToRun = [testsToRunByFilePath objectForKey:filePath];
+        double __block testBundleExecutionTime = 0.0;
+        [bundleTestsToRun enumerateObjectsUsingBlock:^(id _Nonnull test, BOOL * _Nonnull stop) {
+            // TODO: Assign a sensible default if the estimate is not given
+            if ([testTimes objectForKey:test]) {
+                testBundleExecutionTime += [[testTimes objectForKey:test] doubleValue];
+            }
+        }];
+        testEstimatesByFilePath[filePath] = [NSNumber numberWithDouble:testBundleExecutionTime];
+    }
+    return testEstimatesByFilePath;
+}
+
++ (NSDictionary<NSString *, NSSet *> *)getTestsToRunByFilePathWithConfig:(BPConfiguration *)config
+                                                          andXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
+    NSMutableDictionary<NSString *, NSSet *> *testsToRunByFilePath = [[NSMutableDictionary alloc] init];
+    for (BPXCTestFile *xctFile in xcTestFiles) {
+        NSMutableSet *bundleTestsToRun = [[NSMutableSet alloc] initWithArray:[xctFile allTestCases]];
+        if (config.testCasesToRun) {
+            [bundleTestsToRun intersectSet:[[NSSet alloc] initWithArray:config.testCasesToRun]];
+        }
+        if (config.testCasesToSkip && [config.testCasesToSkip count] > 0) {
+            [bundleTestsToRun minusSet:[[NSSet alloc] initWithArray:config.testCasesToSkip]];
+        }
+        [BPUtils printInfo:INFO withString:@"Bundle: %@; All Tests count: %lu; bundleTestsToRun count: %lu", xctFile.testBundlePath, (unsigned long)[xctFile.allTestCases count], (unsigned long)[bundleTestsToRun count]];
+        if (bundleTestsToRun.count > 0) {
+            testsToRunByFilePath[xctFile.testBundlePath] = bundleTestsToRun;
+        }
+    }
+    return testsToRunByFilePath;
+}
+
++ (double)getTotalTimeWithConfig:(BPConfiguration *)config
+                       testTimes:(NSDictionary<NSString *,NSNumber *> *)testTimes
+                  andXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
+    double totalTime = 0.0;
+    NSDictionary<NSString *, NSSet *> *testsToRunByFilePath = [BPUtils getTestsToRunByFilePathWithConfig:config
+                                                                                          andXCTestFiles:xcTestFiles];
+    for(NSString *filePath in testsToRunByFilePath) {
+        NSLog(@"filePath=%@ Tests to run in this filePath=%@", filePath, [testsToRunByFilePath objectForKey:filePath]);
+        NSSet *bundleTestsToRun = [testsToRunByFilePath objectForKey:filePath];
+        double __block testBundleExecutionTime = 0.0;
+        [bundleTestsToRun enumerateObjectsUsingBlock:^(id _Nonnull test, BOOL * _Nonnull stop) {
+            // TODO: Assign a sensible default if the estimate is not given
+            if ([testTimes objectForKey:test]) {
+                testBundleExecutionTime += [[testTimes objectForKey:test] doubleValue];
+            }
+        }];
+        totalTime += testBundleExecutionTime;
+    }
+    return totalTime;
+}
+
 @end

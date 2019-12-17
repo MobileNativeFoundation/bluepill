@@ -95,7 +95,33 @@
     NSError *error;
     bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:&error];
     XCTAssert(error ==  nil);
-    XCTAssert([app.testBundles count] == [bundles count]);
+    XCTAssert([bundles count] >= [app.testBundles count]);
+}
+
+- (void)testSmartSplitting {
+    self.config.testTimeEstimatesJsonFile = [BPTestHelper sampleTimesJsonPath];
+    self.config.testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
+    self.config.testCasesToSkip = @[@"BPSampleAppTests/testCase000"];
+    self.config.numSims = @8;
+    BPApp *app = [BPApp appWithConfig:self.config withError:nil];
+    XCTAssert(app != nil);
+    NSError *error;
+    // load the config file
+    NSDictionary<NSString *, NSNumber *> *testTimes = [BPUtils loadSimpleJsonFile:self.config.testTimeEstimatesJsonFile withError:&error];
+    XCTAssert(error == nil);
+
+    double totalTime = [BPUtils getTotalTimeWithConfig:self.config
+                                             testTimes:testTimes
+                                        andXCTestFiles:app.testBundles];
+    double optimalBundleTime = totalTime / [[self.config numSims] floatValue];
+    NSArray<BPXCTestFile *> *splitBundles;
+    splitBundles = [BPPacker packTests:app.testBundles configuration:self.config andError:&error];
+
+    XCTAssert(error ==  nil);
+    XCTAssert([splitBundles count] >= [app.testBundles count]);
+    for (BPXCTestFile *bundle in splitBundles) {
+        XCTAssert([bundle.estimatedExecutionTime doubleValue] <= optimalBundleTime);
+    }
 }
 
 - (void)testSmartPackIfJsonMissing {
@@ -121,7 +147,7 @@
     // Make sure we don't split when we don't want to
     self.config.numSims = @4;
     NSArray<BPXCTestFile *> *bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:nil];
-    XCTAssert([bundles count] == [app.testBundles count]);
+    XCTAssert([bundles count] >= [app.testBundles count]);
     for (int i=0; i < bundles.count - 1; i++) {
         double estimate1 = [[[bundles objectAtIndex:i] estimatedExecutionTime] doubleValue];
         double estimate2 = [[[bundles objectAtIndex:(i+1)] estimatedExecutionTime] doubleValue];
@@ -179,7 +205,7 @@
     // 4 unbreakable bundles (too few tests) and the big one broken into 4 bundles
     XCTAssertEqual(bundles.count, 8);
     // All we want to test is that we have full coverage
-    long numSims = [self.config.numSims integerValue];
+    long numSims = [[self.config numSims] integerValue];
     long testsPerBundle = [allTests count] / numSims;
     long skipTestsPerBundle = 0;
     long skipTestsInFinalBundle = 0;
