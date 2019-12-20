@@ -1,0 +1,30 @@
+name: PR
+
+on: pull_request
+
+jobs:
+  # First machine, runs Bluepill tests
+  integration_tests:
+    name: Bluepill Test
+    runs-on: macos-latest
+    steps:
+      # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
+      - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
+      - name: Select Xcode 11.2
+        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Run Bluepill tests
+        run: ./scripts/bluepill.sh instance_tests
+
+  # Second machine, runs BP tests and makes build
+  build:
+    name: BP Test and build
+    runs-on: macos-latest
+    steps:
+      # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
+      - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
+      - name: Select Xcode 11.2
+        run: sudo xcode-select -s /Applications/Xcode_11.2.app
+      - name: Run BP tests
+        run: ./scripts/bluepill.sh runner_tests
+      - name: Build and Package
+        run: ./scripts/bluepill.sh build

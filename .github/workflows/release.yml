@@ -1,4 +1,4 @@
-name: CI-release
+name: release
 
 on:
   push:
@@ -11,7 +11,8 @@ jobs:
     name: Bluepill Test
     runs-on: macOS-latest
     steps:
-    - uses: actions/checkout@v1
+    # actions/checkout@v2 but we use the sha because tags can be rewritten in git
+    - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
     - name: Select Xcode 11.2
       run: sudo xcode-select -s /Applications/Xcode_11.2.app
     - name: Run Bluepill tests
@@ -22,7 +23,8 @@ jobs:
     name: BP Test and build
     runs-on: macOS-latest
     steps:
-    - uses: actions/checkout@v1
+    # actions/checkout@v2 but we use the sha because tags can be rewritten in git
+    - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
     - name: Report event trigger data
       run: |
         echo "Event ${{ github.event_name }}, ref: ${{ github.ref }}"
@@ -33,7 +35,8 @@ jobs:
     - name: Build Bluepill
       run: ./scripts/bluepill.sh build
     - name: Release
-      uses: softprops/action-gh-release@v1
+      # softprops/action-gh-release@v1 but we use the sha because tags can be rewritten in git
+      uses: softprops/action-gh-release@78c309ef59fdb9557cd6574f2e0be552936ed728
       with:
         files: 'build/*.zip'
       env:
