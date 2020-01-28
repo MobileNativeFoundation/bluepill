@@ -223,6 +223,10 @@
                 completion(error);
             });
         } else {
+            if (__self.config.simulatorPreferencesFile) {
+                [__self copySimulatorPreferencesFile:__self.config.simulatorPreferencesFile];
+            }
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 [__self bootWithCompletion:^(NSError *error) {
                     dispatch_async(dispatch_get_main_queue(), ^{
