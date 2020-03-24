@@ -15,8 +15,8 @@ jobs:
     steps:
     # actions/checkout@v2 but we use the sha because tags can be rewritten in git
     - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
-    - name: Select Xcode 11.2
-      run: sudo xcode-select -s /Applications/Xcode_11.2.app
+    - name: Select Xcode 11.3
+      run: sudo xcode-select -s /Applications/Xcode_11.3.app
     - name: Run Bluepill tests
       run: ./scripts/bluepill.sh instance_tests
 
@@ -27,8 +27,8 @@ jobs:
     steps:
     # actions/checkout@v2 but we use the sha because tags can be rewritten in git
     - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
-    - name: Select Xcode 11.2
-      run: sudo xcode-select -s /Applications/Xcode_11.2.app
+    - name: Select Xcode 11.3
+      run: sudo xcode-select -s /Applications/Xcode_11.3.app
     - name: Run BP tests
       run: ./scripts/bluepill.sh runner_tests
     - name: Build and Package
