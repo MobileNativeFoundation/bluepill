@@ -20,11 +20,11 @@ def _bluepill_batch_test_impl(ctx):
         test_host = test_info.test_host
         test_bundle = test_info.test_bundle
         if test_bundle:
-            test_bundle_paths.append("\"{}\"".format(test_bundle.basename))
+            test_bundle_paths.append("\"{}\"".format(test_bundle.short_path))
             runfiles.append(test_bundle)
 
         if test_host and test_host not in runfiles:
-            test_host_paths.append("\"{}\"".format(test_host.basename))
+            test_host_paths.append("\"{}\"".format(test_host.short_path))
             runfiles.append(test_host)
 
         #test_plan
