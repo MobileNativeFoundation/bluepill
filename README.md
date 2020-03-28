@@ -89,6 +89,7 @@ A full list supported options are listed here.
 |    videos-directory    |           n/a          | Directory where videos of test runs will be saved. If not provided, videos are not recorded. | N | n/a            |
 |       video-paths      |           -V           | A list of videos that will be saved in the simulators.                              |     N    | n/a              |
 |       image-paths      |           -I           | A list of images that will be saved in the simulators.                              |     N    | n/a              |
+|test-time-estimates-json|           -j           | Path of the input file with test execution time estimates                           |     N    | n/a              |
 | unsafe-skip-xcode-version-check |               | Skip Xcode version check                                                            |     N    | NO               |
 |  retry-app-crash-tests |                        | Retry tests that crashed app and consider it non-fatal if it passes on retry.       |     N    | false            |
 
