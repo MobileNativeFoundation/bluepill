@@ -146,6 +146,10 @@
                     if (splitExecTime + [testTimes[test] doubleValue] <= optimalBundleTime) {
                         splitExecTime += [testTimes[test] doubleValue];
                     } else {
+                        if ([bundles count] == [[config numSims] integerValue] - 1) {
+                            // Put all of the remaining tests into the last bundle
+                            i = (int)[bundleTestsToRun count];
+                        }
                         break;
                     }
                 }
