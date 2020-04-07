@@ -53,6 +53,7 @@
     self.config.videoPaths = @[[BPTestHelper sampleVideoPath]];
     self.config.testRunnerAppPath = nil;
     self.config.testing_CrashAppOnLaunch = NO;
+    self.config.testing_ExecutionPlan = @"";
     self.config.cloneSimulator = NO;
     [BPUtils quietMode:[BPUtils isBuildScript]];
     [BPUtils enableDebugOutput:NO];
@@ -275,8 +276,9 @@
 
 - (void)testReportWithAppHangingTestsSet {
     // Testcase timeout should be set larger than the stuck timeout
-    self.config.stuckTimeout = @40;
+    self.config.stuckTimeout = @30;
     self.config.errorRetriesCount = @0;
+    self.config.testing_ExecutionPlan = @"TIMEOUT";
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     NSString *tempDir = NSTemporaryDirectory();
@@ -301,6 +303,7 @@
     self.config.stuckTimeout = @6;
     self.config.failureTolerance = @0;
     self.config.errorRetriesCount = @4;
+    self.config.testing_ExecutionPlan = @"TIMEOUT";
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     NSString *tempDir = NSTemporaryDirectory();
@@ -315,6 +318,26 @@
     NSString *junitReportPath = [outputDir stringByAppendingPathComponent:@"TEST-BPSampleAppHangingTests-1-results.xml"];
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"hanging_tests.xml"];
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
+}
+
+/**
+ Execution plan: TIMEOUT, CRASH, PASS
+ */
+- (void)testReportFailureOnTimeoutCrashAndPass {
+    self.config.stuckTimeout = @6;
+    self.config.testing_ExecutionPlan = @"TIMEOUT CRASH PASS";
+    self.config.errorRetriesCount = @4;
+    self.config.onlyRetryFailed = TRUE;
+    NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppHangingTestsSetTempDir", tempDir] withError:&error];
+    NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
 }
 
 - (void)testReportWithFailingTestsSetAndDiagnostics {
@@ -421,6 +444,7 @@
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.keepSimulator = YES;
+    self.config.testing_ExecutionPlan = @"TIMEOUT";
     
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];

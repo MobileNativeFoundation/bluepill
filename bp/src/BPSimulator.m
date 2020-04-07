@@ -498,6 +498,9 @@
     if (self.config.testing_HangAppOnLaunch) {
         mutableAppLaunchEnv[@"_BP_TEST_HANG_ON_LAUNCH"] = @"YES";
     }
+    if (self.config.testing_ExecutionPlan) {
+        mutableAppLaunchEnv[@"_BP_TEST_EXECUTION_PLAN"] = self.config.testing_ExecutionPlan;
+    }
     appLaunchEnvironment = [mutableAppLaunchEnv copy];
     NSDictionary *options = @{
                               kOptionsArgumentsKey: argsAndEnv[@"args"],

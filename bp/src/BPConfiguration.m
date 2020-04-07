@@ -371,6 +371,7 @@ static NSUUID *sessionID;
     newConfig.testing_HangAppOnLaunch = self.testing_HangAppOnLaunch;
     newConfig.testing_NoAppWillRun = self.testing_NoAppWillRun;
     newConfig.testing_crashOnAttempt = self.testing_crashOnAttempt;
+    newConfig.testing_ExecutionPlan = self.testing_ExecutionPlan;
     newConfig.xcTestRunPath = self.xcTestRunPath;
     newConfig.testPlanPath = self.testPlanPath;
     newConfig.xcTestRunDict = self.xcTestRunDict;
