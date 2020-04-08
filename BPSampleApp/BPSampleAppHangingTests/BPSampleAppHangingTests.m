@@ -15,9 +15,10 @@
 
 @implementation BPSampleAppHangingTests
 
-long attemptFromSimulatorVersionInfo(NSString *simulatorVersionInfo) {
+-(long)attemptFromSimulatorVersionInfo:(NSString *)simulatorVersionInfo {
     // simulatorVersionInfo is something like
     // CoreSimulator 587.35 - Device: BP93497-2-2 (7AB3D528-5473-401A-B23E-2E2E86C73861) - Runtime: iOS 12.2 (16E226) - DeviceType: iPhone 7
+    NSLog(@"Dissecting version info %@ to extra attempt number.", simulatorVersionInfo);
     NSArray<NSString *> *parts = [simulatorVersionInfo componentsSeparatedByString:@" - "];
     NSString *deviceString = parts[1];
     // Device: BP93497-2-2 (7AB3D528-5473-401A-B23E-2E2E86C73861)
@@ -29,25 +30,10 @@ long attemptFromSimulatorVersionInfo(NSString *simulatorVersionInfo) {
     return [attempt longLongValue];
 }
 
-- (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-    
-}
-
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testSimpleTest {
-    XCTAssert(YES);
-}
-
-- (void)testBasedOnExecutionPlan {
+-(void)extractPlanAndExecuteActions:(int)index {
     NSDictionary *env = [[NSProcessInfo processInfo] environment];
     NSString *simulatorVersionInfo = [env objectForKey:@"SIMULATOR_VERSION_INFO"];
-    long attempt = attemptFromSimulatorVersionInfo(simulatorVersionInfo);
+    long attempt = [self attemptFromSimulatorVersionInfo:simulatorVersionInfo];
     NSString *executionPlan = [env objectForKey:@"_BP_TEST_EXECUTION_PLAN"];
     if (!executionPlan) {
         NSLog(@"No execution plan found in attempt#%ld. Failing the test.", attempt);
@@ -55,8 +41,14 @@ long attemptFromSimulatorVersionInfo(NSString *simulatorVersionInfo) {
         return;
     }
     NSLog(@"Received execution plan %@ on attempt#%ld for this test.", executionPlan, attempt);
-
-    NSArray *array = [executionPlan componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSArray *setsOfPlans = [executionPlan componentsSeparatedByString:@";"];
+    if (index >= [setsOfPlans count]) {
+        NSLog(@"Not enough plans for test#%d in execution plan: '%@'.", index, executionPlan);
+        XCTAssert(YES);
+        return;
+    }
+    NSString *currentPlan = setsOfPlans[index];
+    NSArray *array = [currentPlan componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (attempt > [array count]) {
         NSLog(@"Passing on attempt#%ld, by default, as there is no action defined in the execution plan", (long)attempt);
         XCTAssert(YES);
@@ -87,4 +79,35 @@ long attemptFromSimulatorVersionInfo(NSString *simulatorVersionInfo) {
     XCTAssert(NO);
     return;
 }
+
+- (void)setUp {
+    [super setUp];
+    // Put setup code here. This method is called before the invocation of each test method in the class.
+}
+
+- (void)tearDown {
+    // Put teardown code here. This method is called after the invocation of each test method in the class.
+    [super tearDown];
+}
+
+- (void)testASimpleTest {
+    XCTAssert(YES);
+}
+
+- (void)testBasedOnExecutionPlan {
+    [self extractPlanAndExecuteActions:0];
+}
+
+- (void)testCaseFinal {
+    XCTAssert(YES);
+}
+
+- (void)testDoubleBasedOnExecutionPlan {
+    [self extractPlanAndExecuteActions:1];
+}
+
+- (void)testEndFinal {
+    XCTAssert(YES);
+}
+
 @end
