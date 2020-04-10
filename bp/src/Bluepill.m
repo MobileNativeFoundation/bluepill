@@ -117,8 +117,8 @@ static void onInterrupt(int ignore) {
 
 // Retry from the beginning (default) or failed tests only if onlyRetryFailed is true
 - (void)retry {
-    // There were test failures. If our failure tolerance is 0, then we're good with that.
-    if (self.failureTolerance == 0) {
+    // There were test failures. Check if it can be retried.
+    if (![self canRetryOnError] || self.failureTolerance <= 0) {
         // If there is no more retries, set the final exitCode to current context's exitCode
         self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
         [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
@@ -153,36 +153,36 @@ static void onInterrupt(int ignore) {
 //  - BPExitStatusUninstallAppFailed
 //  - BPExitStatusLaunchAppFailed
 - (void)recover {
-  // If error retry reach to the max, then return
-  if (self.retries == [self.config.errorRetriesCount integerValue]) {
-      self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
-      [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
-      self.exitLoop = YES;
-      [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
-      return;
-  }
+    // If error retry reach to the max, then return
+    if (![self canRetryOnError]) {
+        self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+        [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
+        self.exitLoop = YES;
+        [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
+        return;
+    }
+    
+    [self.context.parser cleanup];
+    // If we're not retrying only failed tests, we need to get rid of our saved tests, so that we re-execute everything. Recopy config.
+    if (self.executionConfigCopy.onlyRetryFailed == NO) {
+        self.executionConfigCopy = [self.config copy];
+    }
+    // Increment the retry count
+    self.retries += 1;
+    
+    // Log some useful information to the log
+    [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.context.exitStatus]];
+    [BPUtils printInfo:INFO withString:@"Failure Tolerance: %lu", self.failureTolerance];
+    [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
 
-  [self.context.parser cleanup];
-  // If we're not retrying only failed tests, we need to get rid of our saved tests, so that we re-execute everything. Recopy config.
-  if (self.executionConfigCopy.onlyRetryFailed == NO) {
-      self.executionConfigCopy = [self.config copy];
-  }
-  // Increment the retry count
-  self.retries += 1;
-
-  // Log some useful information to the log
-  [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.context.exitStatus]];
-  [BPUtils printInfo:INFO withString:@"Failure Tolerance: %lu", self.failureTolerance];
-  [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
-
-  // Then start again from the beginning
-  [BPUtils printInfo:INFO withString:@"Recovering from tooling problem"];
-  NEXT([self begin]);
+    // Then start again from the beginning
+    [BPUtils printInfo:INFO withString:@"Recovering from tooling problem"];
+    NEXT([self begin]);
 }
 
 // Proceed to next test case
 - (void)proceed {
-    if (self.retries == [self.config.errorRetriesCount integerValue]) {
+    if (![self canRetryOnError]) {
         self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
         [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
         self.exitLoop = YES;
@@ -674,6 +674,20 @@ static void onInterrupt(int ignore) {
 
 - (BPSimulator *)test_simulator {
     return self.context.runner;
+}
+
+- (BOOL)canRetryOnError {
+    NSInteger maxErrorRetryCount = [self.config.errorRetriesCount integerValue];
+    if (self.retries < maxErrorRetryCount) {
+        return true;
+    }
+    
+    if (self.retries > maxErrorRetryCount) {
+        // If retries strictly exceeds the max error retry, then we must have incremented it beyond the limit somehow.
+        // It is safe to halt retries here, but log to alert unexpected behavior.
+        [BPUtils printInfo:ERROR withString:@"Current retry count (%d) exceeded maximum retry count (%d)!", (int) self.retries, (int) maxErrorRetryCount];
+    }
+    return false;
 }
 
 int __line;
