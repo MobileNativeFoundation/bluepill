@@ -300,8 +300,8 @@
 - (void)testReportWithAppHangingTestsShouldReturnFailure {
     self.config.stuckTimeout = @6;
     self.config.failureTolerance = @0;
-    self.config.errorRetriesCount = @3;
-    self.config.testing_ExecutionPlan = @"TIMEOUT TIMEOUT TIMEOUT TIMEOUT";
+    self.config.errorRetriesCount = @4;
+    self.config.testing_ExecutionPlan = @"TIMEOUT";
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     NSString *tempDir = NSTemporaryDirectory();
@@ -407,8 +407,50 @@
     self.config.stuckTimeout = @6;
     self.config.testing_ExecutionPlan = @"TIMEOUT PASS";
     self.config.errorRetriesCount = @4;
-    self.config.onlyRetryFailed = NO;  // Not relevant
+    self.config.onlyRetryFailed = YES;
     self.config.failureTolerance = @0;  // Not relevant
+    NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppHangingTestsSetTempDir", tempDir] withError:&error];
+    NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssertTrue(exitCode == BPExitStatusTestsAllPassed);
+}
+
+/**
+ Execution plan: TIMEOUT (NO RETRY))
+ */
+- (void)testReportFailureOnTimeoutAndNoRetry {
+    self.config.stuckTimeout = @6;
+    self.config.testing_ExecutionPlan = @"TIMEOUT";
+    self.config.errorRetriesCount = @4;
+    self.config.onlyRetryFailed = NO;
+    self.config.failureTolerance = @1;  // Not relevant since it's not a test failure
+    NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppHangingTestsSetTempDir", tempDir] withError:&error];
+    NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssertTrue(exitCode == BPExitStatusTestTimeout);
+}
+
+/**
+ Execution plan: FAIL  and PASS on retry all
+ */
+- (void)testReportSuccessOnFailedTestAndPassOnRetryAll {
+    self.config.stuckTimeout = @6;
+    self.config.testing_ExecutionPlan = @"FAIL PASS";
+    self.config.errorRetriesCount = @4;
+    self.config.onlyRetryFailed = NO;  // Indicates to retry all tests when a test fails
+    self.config.failureTolerance = @1;  // Even though failureTolerance is non-zero it wouldn't retry because onlyRetryFailed = NO
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     NSString *tempDir = NSTemporaryDirectory();

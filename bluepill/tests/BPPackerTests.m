@@ -187,7 +187,7 @@
     // Make sure we don't split when we don't want to
     self.config.numSims = @4;
     self.config.noSplit = @[@"BPSampleAppTests"];
-    bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:nil];// withNoSplitList:@[@"BPSampleAppTests"] intoBundles:4 andError:nil];
+    bundles = [BPPacker packTests:app.testBundles configuration:self.config andError:nil];  // withNoSplitList:@[@"BPSampleAppTests"] intoBundles:4 andError:nil];
     // When we prevent BPSampleTests from splitting, BPSampleAppFatalErrorTests and BPAppNegativeTests gets split in two
     want = [[want arrayByAddingObject:@"BPSampleAppFatalErrorTests"] sortedArrayUsingSelector:@selector(compare:)];
     XCTAssertEqual(bundles.count, app.testBundles.count + 2);
@@ -195,9 +195,10 @@
     XCTAssertEqual([bundles[0].skipTestIdentifiers count], 0);
     XCTAssertEqual([bundles[1].skipTestIdentifiers count], 0);
     XCTAssertEqual([bundles[2].skipTestIdentifiers count], 0);
-    XCTAssertEqual([bundles[3].skipTestIdentifiers count], 2);
-    XCTAssertEqual([bundles[4].skipTestIdentifiers count], 3);
+    XCTAssertEqual([bundles[3].skipTestIdentifiers count], 1);
+    XCTAssertEqual([bundles[4].skipTestIdentifiers count], 4);
     XCTAssertEqual([bundles[5].skipTestIdentifiers count], 1);
+    XCTAssertEqual([bundles[6].skipTestIdentifiers count], 4);
 
     self.config.numSims = @4;
     self.config.noSplit = nil;
@@ -209,14 +210,17 @@
     long testsPerBundle = [allTests count] / numSims;
     long skipTestsPerBundle = 0;
     long skipTestsInFinalBundle = 0;
+    long testCount = 0;
     for (int i = 0; i < bundles.count; ++i) {
         skipTestsPerBundle = ([[bundles[i] allTestCases] count] - testsPerBundle);
-        skipTestsInFinalBundle = testsPerBundle * (numSims - 1);
         if (i < 4) {
             XCTAssertEqual([bundles[i].skipTestIdentifiers count], 0);
+            testCount += [[bundles[i] allTestCases] count];
         } else if (i < bundles.count-1) {
             XCTAssertEqual([bundles[i].skipTestIdentifiers count], skipTestsPerBundle);
+            testCount += testsPerBundle;
         } else {  /* last bundle */
+            skipTestsInFinalBundle = [[bundles[i] allTestCases] count] - ([allTests count] - testCount);
             XCTAssertEqual([bundles[i].skipTestIdentifiers count], skipTestsInFinalBundle);
         }
     }
@@ -231,15 +235,19 @@
 
     numSims = [self.config.numSims integerValue];
     testsPerBundle = [allTests count] / numSims;
+    testCount = 0;
     for (int i = 0; i < bundles.count; ++i) {
         skipTestsPerBundle = ([[bundles[i] allTestCases] count] - testsPerBundle);
-        skipTestsInFinalBundle = testsPerBundle * (numSims - 1);
         if (i < 4) {
             XCTAssertEqual([bundles[i].skipTestIdentifiers count], 0);
+            testCount += [[bundles[i] allTestCases] count];
         } else if (i < bundles.count-1) {
             XCTAssertEqual([bundles[i].skipTestIdentifiers count], skipTestsPerBundle);
+            testCount += testsPerBundle;
         } else {  /* last bundle */
+            skipTestsInFinalBundle = [[bundles[i] allTestCases] count] - ([allTests count] - testCount);
             XCTAssertEqual([bundles[i].skipTestIdentifiers count], skipTestsInFinalBundle);
+
         }
     }
 

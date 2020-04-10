@@ -621,12 +621,15 @@ static void onInterrupt(int ignore) {
 
         // If it is test hanging or crashing, we set final exit code of current context and proceed.
         case BPExitStatusTestTimeout:
+            if (!self.config.onlyRetryFailed) {
+                self.finalExitStatus |= context.exitStatus;
+            }
             NEXT([self proceed]);
             return;
 
         case BPExitStatusAppCrashed:
             // Remember the app crash and report whether a retry passes or not
-            self.finalExitStatus |= BPExitStatusAppCrashed;
+            self.finalExitStatus |= context.exitStatus;
             NEXT([self proceed]);
             return;
 

@@ -48,6 +48,7 @@
         return;
     }
     NSString *currentPlan = setsOfPlans[index];
+    currentPlan = [currentPlan stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSArray *array = [currentPlan componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (attempt > [array count]) {
         NSLog(@"Passing on attempt#%ld, by default, as there is no action defined in the execution plan", (long)attempt);
