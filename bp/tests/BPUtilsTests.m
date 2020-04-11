@@ -115,7 +115,7 @@
     BPExitStatus exitCode;
 
     exitCode = 0;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusTestsAllPassed"]);
+    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusAllTestsPassed"]);
     exitCode = 1;
     XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusTestsFailed"]);
     exitCode = 2;

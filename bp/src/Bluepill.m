@@ -196,7 +196,7 @@ static void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"Failure Tolerance: %lu", self.failureTolerance];
     [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
     self.context.attemptNumber = self.retries + 1; // set the attempt number
-    self.context.exitStatus = BPExitStatusTestsAllPassed; // reset exitStatus
+    self.context.exitStatus = BPExitStatusAllTestsPassed; // reset exitStatus
 
     [BPUtils printInfo:INFO withString:@"Proceeding to next test"];
     NEXT([self beginWithContext:self.context]);
@@ -505,13 +505,13 @@ static void onInterrupt(int ignore) {
         // If we crashed, we need to retry
         [self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCrashed];
     } else if (self.config.keepSimulator
-               && (context.runner.exitStatus == BPExitStatusTestsAllPassed
+               && (context.runner.exitStatus == BPExitStatusAllTestsPassed
                 || context.runner.exitStatus == BPExitStatusTestsFailed)) {
       context.exitStatus = [context.runner exitStatus];
       NEXT([self finishWithContext:context]);
     } else {
       // If the tests failed, save as much debugging info as we can. XXX: Put this behind a flag
-      if (context.runner.exitStatus != BPExitStatusTestsAllPassed && _config.saveDiagnosticsOnError) {
+      if (context.runner.exitStatus != BPExitStatusAllTestsPassed && _config.saveDiagnosticsOnError) {
         [BPUtils printInfo:INFO withString:@"Saving Diagnostics for Debugging"];
         [BPUtils saveDebuggingDiagnostics:_config.outputDirectory];
       }
@@ -604,9 +604,9 @@ static void onInterrupt(int ignore) {
             NEXT([self retry]);
             return;
 
-        case BPExitStatusTestsAllPassed:
+        case BPExitStatusAllTestsPassed:
             // Time to exit
-            self.finalExitStatus |= BPExitStatusTestsAllPassed;
+            self.finalExitStatus |= BPExitStatusAllTestsPassed;
             self.exitLoop = YES;
             return;
 

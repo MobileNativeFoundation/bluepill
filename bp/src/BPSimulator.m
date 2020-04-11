@@ -625,7 +625,7 @@
 - (BOOL)checkFinished {
     if ([self.monitor isExecutionComplete]) {
         switch ([self.monitor exitStatus]) {
-            case BPExitStatusTestsAllPassed:
+            case BPExitStatusAllTestsPassed:
             case BPExitStatusTestsFailed:
                 return YES;
             default:

@@ -15,8 +15,8 @@
 
 + (NSString *)simpleExitStatus:(BPExitStatus)exitStatus {
     switch (exitStatus) {
-        case BPExitStatusTestsAllPassed:
-            return @"BPExitStatusTestsAllPassed";
+        case BPExitStatusAllTestsPassed:
+            return @"BPExitStatusAllTestsPassed";
         case BPExitStatusTestsFailed:
             return @"BPExitStatusTestsFailed";
         case BPExitStatusSimulatorCreationFailed:
@@ -46,8 +46,8 @@
 
 // Exit status to string
 + (NSString *)stringFromExitStatus:(BPExitStatus)exitStatus {
-    if (exitStatus == BPExitStatusTestsAllPassed)
-        return @"BPExitStatusTestsAllPassed";
+    if (exitStatus == BPExitStatusAllTestsPassed)
+        return @"BPExitStatusAllTestsPassed";
 
     NSString *exitStatusString = @"";
     while (exitStatus > 0) {
