@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="All tests" tests="1" failures="1" errors="0">
-    <testsuite tests="1" failures="1" errors="0" name="BPSampleAppHangingTests.xctest">
-        <testsuite tests="1" failures="1" errors="0" name="BPSampleAppHangingTests">
-            <testcase classname="BPSampleAppHangingTests" name="testAppHanging">
+<testsuites name="All tests" tests="2" failures="1" errors="0">
+    <testsuite tests="2" failures="1" errors="0" name="BPSampleAppHangingTests.xctest">
+        <testsuite tests="2" failures="1" errors="0" name="BPSampleAppHangingTests">
+            <testcase classname="BPSampleAppHangingTests" name="testASimpleTest"></testcase>
+            <testcase classname="BPSampleAppHangingTests" name="testBasedOnExecutionPlan">
                 <failure type="Failure" message="Timed out waiting for the test to produce output. Test was aborted.">
                 </failure>
                 <system-out>
