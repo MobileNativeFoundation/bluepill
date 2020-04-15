@@ -62,12 +62,6 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "BluepillTests/testAppThatCrashesOnLaunch">
-               </Test>
-               <Test
-                  Identifier = "BluepillTests/testAppThatHangsOnLaunch">
-               </Test>
-               <Test
                   Identifier = "BluepillTests/testReportWithFailingTestsSet">
                </Test>
                <Test
@@ -75,12 +69,6 @@
                </Test>
                <Test
                   Identifier = "BluepillTests/testRetryWithFailingTestsSet">
-               </Test>
-               <Test
-                  Identifier = "BluepillTests/testRunningAndIgnoringCertainTestCases">
-               </Test>
-               <Test
-                  Identifier = "BluepillTests/testRunningOnlyCertainTestcases">
                </Test>
                <Test
                   Identifier = "BluepillTests/testVoyager">

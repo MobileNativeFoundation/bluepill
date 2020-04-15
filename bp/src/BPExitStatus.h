@@ -10,18 +10,18 @@
 #import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, BPExitStatus) {
-    BPExitStatusTestsAllPassed = 0,
-    BPExitStatusTestsFailed = 1,
-    BPExitStatusSimulatorCreationFailed = 2,
-    BPExitStatusSimulatorCrashed = 3,
-    BPExitStatusInstallAppFailed = 4,
-    BPExitStatusLaunchAppFailed = 5,
-    BPExitStatusTestTimeout = 6,
-    BPExitStatusAppCrashed = 7,
-    BPExitStatusInterrupted = 8,
-    BPExitStatusSimulatorDeleted = 9,
-    BPExitStatusUninstallAppFailed = 10,
-    BPExitStatusSimulatorReuseFailed = 11,
+    BPExitStatusAllTestsPassed          = 0,
+    BPExitStatusTestsFailed             = 1 << 0,
+    BPExitStatusSimulatorCreationFailed = 1 << 1,
+    BPExitStatusInstallAppFailed        = 1 << 2,
+    BPExitStatusInterrupted             = 1 << 3,
+    BPExitStatusSimulatorCrashed        = 1 << 4,
+    BPExitStatusLaunchAppFailed         = 1 << 5,
+    BPExitStatusTestTimeout             = 1 << 6,
+    BPExitStatusAppCrashed              = 1 << 7,
+    BPExitStatusSimulatorDeleted        = 1 << 8,
+    BPExitStatusUninstallAppFailed      = 1 << 9,
+    BPExitStatusSimulatorReuseFailed    = 1 << 10
 };
 
 @protocol BPExitStatusProtocol <NSObject>
