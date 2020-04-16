@@ -54,39 +54,60 @@ $ bluepill -c config.json
 A full list supported options are listed here.
 
 
-|   Config Arguments     | Command Line Arguments | Explanation                                                                        | Required | Default value    |
-|:----------------------:|:----------------------:|------------------------------------------------------------------------------------|:--------:|:----------------:|
-|          `app`         |           -a           | The path to the host application to execute (your .app)                            |     N    | n/a              |
-|    `xctestrun-path`    |                        | The path to the `.xctestrun` file that xcode leaves when you `build-for-testing`.  |     Y    | n/a              |
-|      `output-dir`      |           -o           | Directory where to put output log files (bluepill only)                            |     Y    | n/a              |
-|         config         |           -c           | Read options from the specified configuration file instead of the command line     |     N    | n/a              |
-|         device         |           -d           | On which device to run the app.                                                    |     N    | iPhone 6         |
-|         exclude        |           -x           | Exclude a testcase in the set of tests to run  (takes priority over `include`).    |     N    | empty            |
-|        headless        |           -H           | Run in headless mode (no GUI).                                                     |     N    | off              |
-|        clone-simulator        |           -L           | Spawn simulator by clone from simulator template.                                                     |     N    | off              |
-|        xcode-path      |           -X           | Path to xcode.                                                                     |     N    | xcode-select -p  |
-|         include        |           -i           | Include a testcase in the set of tests to run (unless specified in `exclude`).     |     N    | all tests        |
-|       list-tests       |           -l           | Only list tests in bundle                                                          |     N    | false            |
-|        num-sims        |           -n           | Number of simulators to run in parallel. (bluepill only)                           |     N    | 4                |
-|      printf-config     |           -P           | Print a configuration file suitable for passing back using the `-c` option.        |     N    | n/a              |
-|      error-retries     |           -R           | Number of times to recover from simulator/app crashing/hanging and continue running|     N    | 5                |
-|    failure-tolerance   |           -f           | Number of times to retry on test failures                                          |     N    | 0                |
-|    only-retry-failed   |           -F           | When `failure-tolerance` > 0, only retry tests that failed                         |     N    | false            |
-|         runtime        |           -r           | What runtime to use.                                                               |     N    | iOS 11.1         |
-|      stuck-timeout     |           -S           | Timeout in seconds for a test that seems stuck (no output).                        |     N    | 300s             |
-|      test-timeout      |           -T           | Timeout in seconds for a test that is producing output.                            |     N    | 300s             |
-|    test-bundle-path    |           -t           | The path to the test bundle to execute (single .xctest).                           |     N    | n/a              |
-| additional-unit-xctests|           n/a          | Additional XCTest bundles that is not Plugin folder                                |     N    | n/a              |
-|  additional-ui-xctests |           n/a          | Additional XCTUITest bundles that is not Plugin folder                             |     N    | n/a              |
-|      repeat-count      |           -C           | Number of times we'll run the entire test suite (used for load testing).           |     N    | 1                |
-|        no-split        |           -N           | Test bundles you don't want to be packed into different groups to run in parallel. |     N    | n/a              |
-|         quiet          |           -q           | Turn off all output except fatal errors.                                           |     N    | YES              |
-|       diagnostics      |           n/a          | Enable collection of diagnostics in outputDir in case of test failures             |     N    | NO               |
-|          help          |           -h           | Help.                                                                              |     N    | n/a              |
-|     runner-app-path    |           -u           | The test runner for UI tests.                                                      |     N    | n/a              |
-| screenshots-directory  |           n/a          | Directory where simulator screenshots for failed ui tests will be stored           |     N    | n/a              |
-|       video-paths      |           -V           | A list of videos that will be saved in the simulators                              |     N    | n/a              |
-|       image-paths      |           -I           | A list of images that will be saved in the simulators                              |     N    | n/a              |
+|   Config Arguments     | Command Line Arguments | Explanation                                                                         | Required | Default value    |
+|:----------------------:|:----------------------:|-------------------------------------------------------------------------------------|:--------:|:----------------:|
+|          app           |           -a           | The path to the host application to execute (your `.app`)                           |     N    | n/a              |
+|     xctestrun-path     |                        | The path to the `.xctestrun` file that xcode leaves when you `build-for-testing`.   |     Y    | n/a              |
+|       output-dir       |           -o           | Directory where to put output log files. **(bluepill only)**                        |     Y    | n/a              |
+|         config         |           -c           | Read options from the specified configuration file instead of the command line.     |     N    | n/a              |
+|         device         |           -d           | On which device to run the app.                                                     |     N    | iPhone 8         |
+|         exclude        |           -x           | Exclude a testcase in the set of tests to run  (takes priority over `include`).     |     N    | empty            |
+|        headless        |           -H           | Run in headless mode (no GUI).                                                      |     N    | off              |
+|        clone-simulator |           -L           | Spawn simulator by clone from simulator template.                                   |     N    | off              |
+|        xcode-path      |           -X           | Path to xcode.                                                                      |     N    | xcode-select -p  |
+|         include        |           -i           | Include a testcase in the set of tests to run (unless specified in `exclude`).      |     N    | all tests        |
+|       list-tests       |           -l           | Only list tests and exit without executing tests.                                   |     N    | false            |
+|        num-sims        |           -n           | Number of simulators to run in parallel. **(bluepill only)**                        |     N    | 4                |
+|      printf-config     |           -P           | Print a configuration file suitable for passing back using the `-c` option.         |     N    | n/a              |
+|      error-retries     |           -R           | Number of times to recover from simulator/app crashing/hanging and continue running.|     N    | 4                |
+|    failure-tolerance   |           -f           | Number of times to retry on test failures                                           |     N    | 0                |
+|    only-retry-failed   |           -F           | Only retry failed tests instead of all. Also retry test that timed-out/crashed.     |     N    | false            |
+|         runtime        |           -r           | What runtime to use.                                                                |     N    | iOS 13.2         |
+|      stuck-timeout     |           -S           | Timeout in seconds for a test that seems stuck (no output).                         |     N    | 300s             |
+|      test-timeout      |           -T           | Timeout in seconds for a test that is producing output.                             |     N    | 300s             |
+|    test-bundle-path    |           -t           | The path to the test bundle to execute (single `.xctest`).                          |     N    | n/a              |
+| additional-unit-xctests|           n/a          | Additional XCTest bundles that is not Plugin folder                                 |     N    | n/a              |
+|  additional-ui-xctests |           n/a          | Additional XCTUITest bundles that is not Plugin folder                              |     N    | n/a              |
+|      repeat-count      |           -C           | Number of times we'll run the entire test suite (used for load testing).            |     N    | 1                |
+|        no-split        |           -N           | Test bundles you don't want to be packed into different groups to run in parallel.  |     N    | n/a              |
+|         quiet          |           -q           | Turn off all output except fatal errors.                                            |     N    | YES              |
+|       diagnostics      |           n/a          | Enable collection of diagnostics in output directory in case of test failures.      |     N    | NO               |
+|          help          |           -h           | Help.                                                                               |     N    | n/a              |
+|     runner-app-path    |           -u           | The test runner for UI tests.                                                       |     N    | n/a              |
+| screenshots-directory  |           n/a          | Directory where simulator screenshots for failed ui tests will be stored.           |     N    | n/a              |
+|       video-paths      |           -V           | A list of videos that will be saved in the simulators.                              |     N    | n/a              |
+|       image-paths      |           -I           | A list of images that will be saved in the simulators.                              |     N    | n/a              |
+
+## Exit Status
+
+Here is a list of Bluepill exit codes. If a Bluepill execution has multiple exit codes from same or different test bundles, the final exit code is a combination of all exit codes. Note that app crashes are fatal even if the test passes on retry.
+
+```shell
+  BPExitStatusAllTestsPassed          = 0,
+  BPExitStatusTestsFailed             = 1 << 0,
+  BPExitStatusSimulatorCreationFailed = 1 << 1,
+  BPExitStatusInstallAppFailed        = 1 << 2,
+  BPExitStatusInterrupted             = 1 << 3,
+  BPExitStatusSimulatorCrashed        = 1 << 4,
+  BPExitStatusLaunchAppFailed         = 1 << 5,
+  BPExitStatusTestTimeout             = 1 << 6,
+  BPExitStatusAppCrashed              = 1 << 7,
+  BPExitStatusSimulatorDeleted        = 1 << 8,
+  BPExitStatusUninstallAppFailed      = 1 << 9,
+  BPExitStatusSimulatorReuseFailed    = 1 << 10
+```
+**Note:** Please refer to `bp/src/BPExitStatus.h` for the latest/exact exit codes.
+
 
 ## Demo
 
@@ -138,7 +159,7 @@ If you're using [Bitrise.io](https://bitrise.io) as your CI/CD, you can start us
 
   Latest [release](https://github.com/linkedin/bluepill/releases/).
 
-- How to test Bluepill in Xcode
+- How to test Bluepill in Xcode?
 
   Select BPSampleApp scheme and build it first. Then you can switch back to `bluepill` or `bluepill-cli` scheme to run their tests.
 
