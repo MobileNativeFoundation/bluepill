@@ -110,6 +110,8 @@ struct BPOptions {
         "Enable verbose logging"},
     {'k', "keep-individual-test-reports", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepIndividualTestReports",
         "Keep individual test reports, in addition to the aggregated final report"},
+    {'Z', "unsafe-skip-xcode-check", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "unsafeSkipXcodeCheck",
+        "Skip Xcode version check"},
 
     // options without short-options
     {349, "additional-unit-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUnitTestBundles",
@@ -667,18 +669,21 @@ static NSUUID *sessionID;
     //Check if xcode version running on the host match the intended Bluepill branch: Xcode 9 branch is not backward compatible
     NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
     [BPUtils printInfo:DEBUGINFO withString:@"xcode build version: %@", xcodeVersion];
-    if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
-        BP_SET_ERROR(errPtr, @"ERROR: Invalid Xcode version:\n%s;\nOnly %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
-        return NO;
-    }
 
-    //Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
-    //Senario to prevent: Bluepill is compiled with Xcode 8, but runs with host installed with Xcode 9
-    //Only compare major and minor version version Exg. 9.1 == 9.1
-    if (![[[BPUtils getXcodeRuntimeVersion] substringToIndex:4] isEqualToString:@BP_DEFAULT_XCODE_VERSION]) {
-        BP_SET_ERROR(errPtr, @"ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n",
-                     [[[BPUtils getXcodeRuntimeVersion] substringToIndex:4] UTF8String], [@BP_DEFAULT_XCODE_VERSION UTF8String]);
-        return NO;
+    if (!self.unsafeSkipXcodeCheck) {
+        if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
+            BP_SET_ERROR(errPtr, @"ERROR: Invalid Xcode version:\n%s;\nOnly %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
+            return NO;
+        }
+
+        //Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
+        //Senario to prevent: Bluepill is compiled with Xcode 8, but runs with host installed with Xcode 9
+        //Only compare major and minor version version Exg. 9.1 == 9.1
+        if (![[[BPUtils getXcodeRuntimeVersion] substringToIndex:4] isEqualToString:@BP_DEFAULT_XCODE_VERSION]) {
+            BP_SET_ERROR(errPtr, @"ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n",
+                         [[[BPUtils getXcodeRuntimeVersion] substringToIndex:4] UTF8String], [@BP_DEFAULT_XCODE_VERSION UTF8String]);
+            return NO;
+        }
     }
 
     if (self.deleteSimUDID) {
