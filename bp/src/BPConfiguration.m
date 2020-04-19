@@ -164,6 +164,9 @@ static NSUUID *sessionID;
     if (!self.testHost) {
         [errors addObject:@"testHost field is nil"];
     }
+    if (!self.dependencies) {
+        [errors addObject:@"dependencies field is nil"];
+    }
     if ([errors count] > 0) {
         BP_SET_ERROR(errPtr,
                      [NSString stringWithFormat:@"Invalid BPTestPlan object, %@.",
@@ -177,6 +180,7 @@ static NSUUID *sessionID;
     BPTestPlan *c = [[BPTestPlan alloc] init];
     c.arguments = [self.arguments copy];
     c.environment = [self.environment copy];
+    c.dependencies = [self.dependencies copy];
     c.testBundlePath = [self.testBundlePath copy];
     c.testHost = [self.testHost copy];
     return c;
@@ -332,6 +336,9 @@ static NSUUID *sessionID;
     if (self.environmentVariables) {
         [dict setValue:self.environmentVariables forKey:@"environmentVariables"];
     }
+    if (self.dependencies) {
+        [dict setValue:self.dependencies forKey:@"dependencies"];
+    }
     if ([NSJSONSerialization isValidJSONObject:dict]) {
         NSError *err;
         NSData *json = [NSJSONSerialization dataWithJSONObject:dict
@@ -377,6 +384,7 @@ static NSUUID *sessionID;
     newConfig.xcTestRunDict = self.xcTestRunDict;
     newConfig.commandLineArguments = self.commandLineArguments;
     newConfig.environmentVariables = self.environmentVariables;
+    newConfig.dependencies = self.dependencies;
     newConfig.tests = self.tests;
 
     return newConfig;
@@ -522,9 +530,10 @@ static NSUUID *sessionID;
         BP_SET_ERROR(errPtr, @"Number of simulators set to %lu but there cannot be fewer than one simulator.", self.numSims.integerValue);
         return NO;
     }
-    // Pull out two keys that are undocumented but needed for supporting xctest
+    // Pull out three keys that are undocumented but needed for supporting xctest
     self.commandLineArguments = [configDict objectForKey:@"commandLineArguments"];
     self.environmentVariables = [configDict objectForKey:@"environmentVariables"];
+    self.dependencies = [configDict objectForKey:@"dependencies"];
 
     return YES;
 }
@@ -555,6 +564,7 @@ static NSUUID *sessionID;
         plan.uiTargetAppPath = [planDictionary objectForKey:@"ui_target_app_path"];
         plan.environment = [planDictionary objectForKey:@"environment"];
         plan.arguments = [planDictionary objectForKey:@"arguments"];
+        plan.dependencies = [planDictionary objectForKey:@"dependencies"];
 
         if (![plan isValid:errPtr]) {
             BP_SET_ERROR(errPtr, @"Invalid BPTestPlan configuration: %@", plan);

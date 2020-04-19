@@ -22,6 +22,7 @@
 @property (nonatomic, strong) NSString *testHost;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environment;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *arguments;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *dependencies;
 @property (nonatomic, strong) NSString *testBundlePath;
 @property (nonatomic, strong) NSString *testHostBundleIdentifier;
 @property (nonatomic, strong) NSString *uiTargetAppPath;
@@ -106,6 +107,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSArray<NSString *> *commandLineArguments; // command line arguments for the app
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environmentVariables;
 @property (nonatomic, strong) NSDictionary<NSString *, BPTestPlan *> *tests;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *dependencies;
 
 // Media Assets
 @property (nonatomic, strong) NSArray<NSString *> *videoPaths; // The videos to be pushed into each simulator.
