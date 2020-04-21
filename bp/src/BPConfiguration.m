@@ -164,9 +164,6 @@ static NSUUID *sessionID;
     if (!self.testHost) {
         [errors addObject:@"testHost field is nil"];
     }
-    if (!self.dependencies) {
-        [errors addObject:@"dependencies field is nil"];
-    }
     if ([errors count] > 0) {
         BP_SET_ERROR(errPtr,
                      [NSString stringWithFormat:@"Invalid BPTestPlan object, %@.",
