@@ -106,7 +106,7 @@
     testHostPath = config.appBundlePath;
 
     NSString *bundleID = [self bundleIdForPath:config.appBundlePath];
-    xctConfig.testApplicationDependencies = @{bundleID: config.appBundlePath};
+    xctConfig.testApplicationDependencies = config.dependencies.count > 0 ? config.dependencies : @{bundleID: config.appBundlePath};
 
     if (config.testRunnerAppPath) {
         xctConfig.targetApplicationBundleID = bundleID;

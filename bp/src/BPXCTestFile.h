@@ -21,6 +21,7 @@
 @property (nonatomic, strong) NSString *UITargetAppPath;
 @property (nonatomic, strong) NSArray<NSString *> *skipTestIdentifiers;
 @property (nonatomic, strong) NSNumber *estimatedExecutionTime;
+@property (nonatomic, strong) NSDictionary <NSString *, NSString *> *dependencies;
 
 // All test classes in the test bundle
 @property (nonatomic, strong) NSArray *testClasses;
