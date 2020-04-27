@@ -89,7 +89,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *scriptFilePath;
 @property (nonatomic) BOOL headlessMode;
 @property (nonatomic) BOOL cloneSimulator;
-@property (nonatomic) BOOL unsafeSkipXcodeCheck;
+@property (nonatomic) BOOL unsafeSkipXcodeVersionCheck;
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
