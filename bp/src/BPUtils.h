@@ -203,4 +203,12 @@ typedef BOOL (^BPRunBlock)(void);
                                                                     testTimes:(NSDictionary<NSString *,NSNumber *> *)testTimes
                                                                andXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles;
 
+/*!
+ * @discussion Runs a custom script on the host machine.
+ * @param scriptFilePath The path to the script file tobe executed
+ * @param env The additional enviornment parameters that will be passed to the script
+ * @
+ */
++ (void)runScriptFile:(NSString *)scriptFilePath withEnv:(NSDictionary *)env;
+
 @end

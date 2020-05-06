@@ -11,6 +11,7 @@
 #import "BPConfiguration.h"
 #import "BPStats.h"
 #import "BPUtils.h"
+#import "PrivateHeaders/CoreSimulator/SimDevice.h"
 
 @interface SimulatorMonitor ()
 
@@ -82,6 +83,8 @@
     self.currentTestName = testName;
     self.currentClassName = testClass;
 
+    [self runScriptFile:self.config.testStartedScriptFilePath state:@"STARTED"];
+
     __weak typeof(self) __self = self;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.maxTestExecutionTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if ([__self.currentTestName isEqualToString:testName] && [__self.currentClassName isEqualToString:testClass] && __self.testsState == Running) {
@@ -100,6 +103,7 @@
     [BPUtils printInfo:PASSED withString:@"%10.6fs %@/%@",
                                           [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
                                           testClass, testName];
+    [self runScriptFile:self.config.testEndedScriptFilePath state:@"PASSED"];
 
     // Passing or failing means that if the simulator crashes later, we shouldn't rerun this test.
     [self updateExecutedTestCaseList:testName inClass:testClass];
@@ -115,6 +119,8 @@
                           inFile:(NSString *)filePath onLineNumber:(NSUInteger)lineNumber wasException:(BOOL)wasException {
     NSDate *currentTime = [NSDate date];
     NSString *fullTestName = [NSString stringWithFormat:@"%@/%@", testClass, testName];
+
+    [self runScriptFile:self.config.testEndedScriptFilePath state:@"FAILED"];
 
     for (NSString *fullName in self.failedTestCases) {
         if([fullTestName isEqualToString:fullName]) {
@@ -235,6 +241,8 @@
 
 - (void)stopTestsWithErrorMessage:(NSString *)message forTestName:(NSString *)testName inClass:(NSString *)testClass {
 
+    [self runScriptFile:self.config.testEndedScriptFilePath state:@"ABORTED"];
+
     // Timeout or crash on a test means we should skip it when we rerun the tests, unless we've enabled re-running failed tests
     if (!self.config.onlyRetryFailed) {
         [self updateExecutedTestCaseList:testName inClass:testClass];
@@ -271,6 +279,17 @@
 
 - (void)setParserStateCompleted {
     self.parserState = Completed;
+}
+
+- (void)runScriptFile:(NSString *)scriptFilePath state:(NSString *)state {
+    [BPUtils runScriptFile:scriptFilePath withEnv:@{
+        @"BP_TEST_STATE": state,
+        @"BP_TEST_SUITE": self.currentClassName ?: self.previousClassName,
+        @"BP_TEST_CASE": self.currentTestName ?: self.previousTestName,
+        @"BP_ATTEMPT_NUMBER": @([BPStats sharedStats].attemptNumber),
+        @"BP_SIMULATOR_UDID": self.device.UDID,
+        @"BP_HOST_BUNDLE_ID": self.hostBundleId,
+    }];
 }
 
 @end

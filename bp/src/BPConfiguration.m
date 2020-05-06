@@ -145,6 +145,11 @@ struct BPOptions {
     {365, "unsafe-skip-xcode-version-check", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "unsafeSkipXcodeVersionCheck",
     "   "},
 
+    {366, "test-started-script-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testStartedScriptFilePath",
+        "A script that will be called when the test is about to begin."},
+    {367, "test-ended-script-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testEndedScriptFilePath",
+        "A script that will be called when the test ended or crashed."},
+
     {0, 0, 0, 0, 0, 0, 0}
 };
 
@@ -784,22 +789,16 @@ static NSUUID *sessionID;
         }
     }
 
-    if (self.scriptFilePath) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:self.scriptFilePath isDirectory:&isdir]) {
-            if (isdir) {
-                BP_SET_ERROR(errPtr, @"%@ is a directory.", self.scriptFilePath);
-                return NO;
-            }
+    if (self.scriptFilePath && ![self validateScriptAtPath:self.scriptFilePath withError:errPtr]) {
+        return NO;
+    }
 
-            if (![[NSFileManager defaultManager] isExecutableFileAtPath:self.scriptFilePath]) {
-                BP_SET_ERROR(errPtr, @"%@ is not executable.", self.scriptFilePath);
-                return NO;
-            }
+    if (self.testStartedScriptFilePath && ![self validateScriptAtPath:self.testStartedScriptFilePath withError:errPtr]) {
+        return NO;
+    }
 
-        } else {
-            BP_SET_ERROR(errPtr, @"%@ doesn't exist", self.scriptFilePath);
-            return NO;
-        }
+    if (self.testEndedScriptFilePath && ![self validateScriptAtPath:self.testEndedScriptFilePath withError:errPtr]) {
+        return NO;
     }
 
     // bp requires an xctest argument while `bluepill` does not.
@@ -873,6 +872,28 @@ static NSUUID *sessionID;
         return NO;
     }
     return TRUE;
+}
+
+- (BOOL)validateScriptAtPath:(NSString *)path withError:(NSError **)errPtr {
+    BOOL isdir;
+
+    if ([[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isdir]) {
+        if (isdir) {
+            BP_SET_ERROR(errPtr, @"%@ is a directory.", path);
+            return NO;
+        }
+
+        if (![[NSFileManager defaultManager] isExecutableFileAtPath:path]) {
+            BP_SET_ERROR(errPtr, @"%@ is not executable.", path);
+            return NO;
+        }
+
+    } else {
+        BP_SET_ERROR(errPtr, @"%@ doesn't exist", path);
+        return NO;
+    }
+
+    return YES;
 }
 
 - (NSString *)debugDescription {

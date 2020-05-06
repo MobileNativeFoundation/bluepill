@@ -431,4 +431,26 @@ static BOOL quiet = NO;
     return totalTime;
 }
 
++ (void)runScriptFile:(NSString *)scriptFilePath withEnv:(NSDictionary *)env {
+    NSTask *task = [[NSTask alloc] init];
+
+    task.launchPath = scriptFilePath;
+    // NOTE:(bogo) make CWD a parent path of the script for sane... scripting
+    task.currentDirectoryPath = scriptFilePath.stringByDeletingLastPathComponent;
+
+    NSMutableDictionary *mutableEnv = [NSProcessInfo.processInfo.environment mutableCopy];
+    [mutableEnv addEntriesFromDictionary:env];
+    [task setEnvironment:mutableEnv];
+
+    [task launch];
+    [task waitUntilExit];
+    int status = [task terminationStatus];
+    [BPUtils printInfo:INFO withString:@"Script (%@) has finished with exit code %d.",
+         scriptFilePath, [task terminationStatus]];
+
+    if (status != 0) {
+        [BPUtils printInfo:ERROR withString:@"Failed running script: %@", scriptFilePath];
+    }
+}
+
 @end
