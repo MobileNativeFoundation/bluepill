@@ -282,6 +282,10 @@
 }
 
 - (void)runScriptFile:(NSString *)scriptFilePath state:(NSString *)state {
+    if (scriptFilePath == nil) {
+        return;
+    }
+    
     [BPUtils runScriptFile:scriptFilePath withEnv:@{
         @"BP_TEST_STATE": state,
         @"BP_TEST_SUITE": self.currentClassName ?: self.previousClassName,
