@@ -148,4 +148,27 @@
     XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusSimulatorCreationFailed UNKNOWN_BPEXITSTATUS - 2048"]);
 }
 
+- (void) testBuildShellTaskForCommand_withoutPipe {
+    NSString *command = @"ls -al";
+    NSTask *task = [BPUtils buildShellTaskForCommand:command];
+    XCTAssertEqual(task.launchPath, @"/bin/sh");
+    XCTAssertEqual(task.arguments.count, 2);
+    XCTAssertEqual(task.arguments[0], @"-c");
+    XCTAssertEqual(task.arguments[1], command);
+    XCTAssertFalse(task.isRunning);
+}
+
+- (void) testBuildShellTaskForCommand_withPipe {
+    NSString *command = @"ls -al";
+    NSPipe *pipe = [[NSPipe alloc] init];
+    NSTask *task = [BPUtils buildShellTaskForCommand:command withPipe: pipe];
+    XCTAssertEqual(task.standardError, pipe);
+    XCTAssertEqual(task.standardOutput, pipe);
+    XCTAssertEqual(task.launchPath, @"/bin/sh");
+    XCTAssertEqual(task.arguments.count, 2);
+    XCTAssertEqual(task.arguments[0], @"-c");
+    XCTAssertEqual(task.arguments[1], command);
+    XCTAssertFalse(task.isRunning);
+}
+
 @end
