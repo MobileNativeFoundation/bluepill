@@ -106,6 +106,8 @@
         for (NSString *testName in config.tests) {
             BPTestPlan *testPlan = [config.tests objectForKey:testName];
             BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromBPTestPlan:testPlan withName:testName andError:errPtr];
+            if (*errPtr)
+                return nil;
             [loadedTests addObject:xcTestFile];
         }
 
