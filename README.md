@@ -118,7 +118,7 @@ Here is a list of Bluepill exit codes. If a Bluepill execution has multiple exit
 
 ## Requirements
 
-Bluepill only works with **Xcode 11.3**. If you're looking for old Xcode support, please check out the other branches:
+Bluepill officially supports **Xcode 11.5**. If you're looking for old Xcode support, please check out the below branches:
 
 * [Xcode-8](https://github.com/linkedin/bluepill/tree/xcode8)
 * [Xcode-9.0](https://github.com/linkedin/bluepill/tree/xcode-9.0)
@@ -133,8 +133,10 @@ Bluepill only works with **Xcode 11.3**. If you're looking for old Xcode support
 * [Xcode-11.0](https://github.com/linkedin/bluepill/tree/xcode-11.0)
 * [Xcode-11.1](https://github.com/linkedin/bluepill/tree/xcode-11.1)
 * [Xcode-11.2](https://github.com/linkedin/bluepill/tree/xcode-11.2)
+* [Xcode-11.3](https://github.com/linkedin/bluepill/tree/xcode-11.3)
+* [Xcode-11.4](https://github.com/linkedin/bluepill/tree/xcode-11.4)
 
-**Note:** Refer to `unsafe-skip-xcode-version-check` flag introduced in `Bluepill v5.2.1` relaxing the Xcode version checks. Please make sure it is well tested and the underlying risks are understand.
+If you're looking for newer Xcode version support, try using Bluepill with `unsafe-skip-xcode-version-check` flag but make sure your app is tested with it and the underlying risks are understand.
 
 ## Acknowledgement
 
