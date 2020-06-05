@@ -379,6 +379,7 @@ static BOOL quiet = NO;
     NSDictionary<NSString *, NSSet *> *testsToRunByFilePath = [BPUtils getTestsToRunByFilePathWithConfig:config
                                                                                           andXCTestFiles:xcTestFiles];
     for(NSString *filePath in testsToRunByFilePath) {
+        NSLog(@"filePath=%@ Tests to run in this filePath=%@", filePath, [testsToRunByFilePath objectForKey:filePath]);
         NSSet *bundleTestsToRun = [testsToRunByFilePath objectForKey:filePath];
         double __block testBundleExecutionTime = 0.0;
         [bundleTestsToRun enumerateObjectsUsingBlock:^(id _Nonnull test, BOOL * _Nonnull stop) {
@@ -418,6 +419,7 @@ static BOOL quiet = NO;
     NSDictionary<NSString *, NSSet *> *testsToRunByFilePath = [BPUtils getTestsToRunByFilePathWithConfig:config
                                                                                           andXCTestFiles:xcTestFiles];
     for(NSString *filePath in testsToRunByFilePath) {
+        NSLog(@"filePath=%@ Tests to run in this filePath=%@", filePath, [testsToRunByFilePath objectForKey:filePath]);
         NSSet *bundleTestsToRun = [testsToRunByFilePath objectForKey:filePath];
         double __block testBundleExecutionTime = 0.0;
         [bundleTestsToRun enumerateObjectsUsingBlock:^(id _Nonnull test, BOOL * _Nonnull stop) {

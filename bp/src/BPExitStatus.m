@@ -13,18 +13,15 @@
 
 @implementation BPExitStatusHelper
 
-+ (NSString *)simpleExitStatus:(BPExitStatus)exitStatus {
+// Exit status to string
++ (NSString *)stringFromExitStatus:(BPExitStatus)exitStatus {
     switch (exitStatus) {
-        case BPExitStatusAllTestsPassed:
-            return @"BPExitStatusAllTestsPassed";
+        case BPExitStatusTestsAllPassed:
+            return @"BPExitStatusTestsAllPassed";
         case BPExitStatusTestsFailed:
             return @"BPExitStatusTestsFailed";
         case BPExitStatusSimulatorCreationFailed:
             return @"BPExitStatusSimulatorCreationFailed";
-        case BPExitStatusInstallAppFailed:
-            return @"BPExitStatusInstallAppFailed";
-        case BPExitStatusInterrupted:
-            return @"BPExitStatusInterrupted";
         case BPExitStatusSimulatorCrashed:
             return @"BPExitStatusSimulatorCrashed";
         case BPExitStatusLaunchAppFailed:
@@ -33,30 +30,17 @@
             return @"BPExitStatusTestTimeout";
         case BPExitStatusAppCrashed:
             return @"BPExitStatusAppCrashed";
+        case BPExitStatusInstallAppFailed:
+            return @"BPExitStatusInstallAppFailed";
+        case BPExitStatusInterrupted:
+            return @"BPExitStatusInterrupted";
         case BPExitStatusSimulatorDeleted:
             return @"BPExitStatusSimulatorDeleted";
-        case BPExitStatusUninstallAppFailed:
-            return @"BPExitStatusUninstallAppFailed";
         case BPExitStatusSimulatorReuseFailed:
             return @"BPExitStatusSimulatorReuseFailed";
         default:
-            return [NSString stringWithFormat:@"UNKNOWN_BPEXITSTATUS - %ld", (long)exitStatus];
+            return @"UNKNOWN_BPEXITSTATUS";
     }
-}
-
-// Exit status to string
-+ (NSString *)stringFromExitStatus:(BPExitStatus)exitStatus {
-    if (exitStatus == BPExitStatusAllTestsPassed)
-        return @"BPExitStatusAllTestsPassed";
-
-    NSString *exitStatusString = @"";
-    while (exitStatus > 0) {
-        BPExitStatus prevExitStatus = exitStatus;
-        exitStatus = exitStatus & (exitStatus - 1);
-        exitStatusString = [exitStatusString stringByAppendingFormat:@"%@ ", [self simpleExitStatus:(prevExitStatus - exitStatus)]];
-    }
-
-    return [exitStatusString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
 @end

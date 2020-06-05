@@ -91,27 +91,6 @@ A full list supported options are listed here.
 | unsafe-skip-xcode-version-check |               | Skip Xcode version check                                                            |     N    | NO               |
 
 
-## Exit Status
-
-Here is a list of Bluepill exit codes. If a Bluepill execution has multiple exit codes from same or different test bundles, the final exit code is a combination of all exit codes. Note that app crashes are fatal even if the test passes on retry.
-
-```shell
-  BPExitStatusAllTestsPassed          = 0,
-  BPExitStatusTestsFailed             = 1 << 0,
-  BPExitStatusSimulatorCreationFailed = 1 << 1,
-  BPExitStatusInstallAppFailed        = 1 << 2,
-  BPExitStatusInterrupted             = 1 << 3,
-  BPExitStatusSimulatorCrashed        = 1 << 4,
-  BPExitStatusLaunchAppFailed         = 1 << 5,
-  BPExitStatusTestTimeout             = 1 << 6,
-  BPExitStatusAppCrashed              = 1 << 7,
-  BPExitStatusSimulatorDeleted        = 1 << 8,
-  BPExitStatusUninstallAppFailed      = 1 << 9,
-  BPExitStatusSimulatorReuseFailed    = 1 << 10
-```
-**Note:** Please refer to `bp/src/BPExitStatus.h` for the latest/exact exit codes.
-
-
 ## Demo
 
 ![BluepillDemo](doc/img/demo.gif)
@@ -167,7 +146,7 @@ If you're using [Bitrise.io](https://bitrise.io) as your CI/CD, you can start us
 
   Latest [release](https://github.com/linkedin/bluepill/releases/).
 
-- How to test Bluepill in Xcode?
+- How to test Bluepill in Xcode
 
   Select BPSampleApp scheme and build it first. Then you can switch back to `bluepill` or `bluepill-cli` scheme to run their tests.
 

@@ -8,7 +8,6 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <XCTest/XCTest.h>
-#import "BPExitStatus.h"
 #import "BPUtils.h"
 #import "BPXCTestFile.h"
 #import "BPTestHelper.h"
@@ -109,43 +108,6 @@
         }
     }
     XCTAssert([testCasesWithParantheses count] == 0);
-}
-
-- (void) testExitStatus {
-    BPExitStatus exitCode;
-
-    exitCode = 0;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusAllTestsPassed"]);
-    exitCode = 1;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusTestsFailed"]);
-    exitCode = 2;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusSimulatorCreationFailed"]);
-    exitCode = 4;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusInstallAppFailed"]);
-    exitCode = 8;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusInterrupted"]);
-    exitCode = 16;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusSimulatorCrashed"]);
-    exitCode = 32;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusLaunchAppFailed"]);
-    exitCode = 64;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusTestTimeout"]);
-    exitCode = 128;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusAppCrashed"]);
-    exitCode = 256;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusSimulatorDeleted"]);
-    exitCode = 512;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusUninstallAppFailed"]);
-    exitCode = 1024;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusSimulatorReuseFailed"]);
-    exitCode = 3;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusTestsFailed BPExitStatusSimulatorCreationFailed"]);
-    exitCode = 192;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusTestTimeout BPExitStatusAppCrashed"]);
-    exitCode = 2048;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"UNKNOWN_BPEXITSTATUS - 2048"]);
-    exitCode = 2050;
-    XCTAssert([[BPExitStatusHelper stringFromExitStatus: exitCode] isEqualToString:@"BPExitStatusSimulatorCreationFailed UNKNOWN_BPEXITSTATUS - 2048"]);
 }
 
 @end
