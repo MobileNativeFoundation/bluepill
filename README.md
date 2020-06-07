@@ -97,7 +97,7 @@ A full list supported options are listed here.
 
 ## Requirements
 
-Bluepill officially supports **Xcode 11.4**. If you're looking for old Xcode support, please check out the below branches:
+Bluepill officially supports **Xcode 11.5**. If you're looking for old Xcode support, please checkout the following branches:
 
 * [Xcode-8](https://github.com/linkedin/bluepill/tree/xcode8)
 * [Xcode-9.0](https://github.com/linkedin/bluepill/tree/xcode-9.0)
@@ -113,6 +113,7 @@ Bluepill officially supports **Xcode 11.4**. If you're looking for old Xcode sup
 * [Xcode-11.1](https://github.com/linkedin/bluepill/tree/xcode-11.1)
 * [Xcode-11.2](https://github.com/linkedin/bluepill/tree/xcode-11.2)
 * [Xcode-11.3](https://github.com/linkedin/bluepill/tree/xcode-11.3)
+* [Xcode-11.4](https://github.com/linkedin/bluepill/tree/xcode-11.4)
 
 If you're looking for newer Xcode version support, try using Bluepill with `unsafe-skip-xcode-version-check` flag but make sure your app is tested with it and the underlying risks are understand.
 
