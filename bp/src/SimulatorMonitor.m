@@ -68,7 +68,7 @@
     if (self.failureCount) {
         self.exitStatus = BPExitStatusTestsFailed;
     } else {
-        self.exitStatus = BPExitStatusAllTestsPassed;
+        self.exitStatus = BPExitStatusTestsAllPassed;
     }
     [[BPStats sharedStats] endTimer:ALL_TESTS withResult:[BPExitStatusHelper stringFromExitStatus: self.exitStatus]];
     [BPUtils printInfo:INFO withString:@"All Tests Completed."];

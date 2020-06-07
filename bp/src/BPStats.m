@@ -240,7 +240,7 @@
 }
 
 - (NSString *)resultToCname:(NSString *)result {
-    if ([result isEqualToString:@"PASSED"] || [result isEqualToString:@"BPExitStatusAllTestsPassed"]) {
+    if ([result isEqualToString:@"PASSED"] || [result isEqualToString:@"BPExitStatusTestsAllPassed"]) {
         return @"good";
     } else if ([result isEqualToString:@"FAILED"] || [result isEqualToString:@"BPExitStatusTestsFailed"]) {
         return @"bad";

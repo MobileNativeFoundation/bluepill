@@ -91,34 +91,13 @@ A full list supported options are listed here.
 | unsafe-skip-xcode-version-check |               | Skip Xcode version check                                                            |     N    | NO               |
 
 
-## Exit Status
-
-Here is a list of Bluepill exit codes. If a Bluepill execution has multiple exit codes from same or different test bundles, the final exit code is a combination of all exit codes. Note that app crashes are fatal even if the test passes on retry.
-
-```shell
-  BPExitStatusAllTestsPassed          = 0,
-  BPExitStatusTestsFailed             = 1 << 0,
-  BPExitStatusSimulatorCreationFailed = 1 << 1,
-  BPExitStatusInstallAppFailed        = 1 << 2,
-  BPExitStatusInterrupted             = 1 << 3,
-  BPExitStatusSimulatorCrashed        = 1 << 4,
-  BPExitStatusLaunchAppFailed         = 1 << 5,
-  BPExitStatusTestTimeout             = 1 << 6,
-  BPExitStatusAppCrashed              = 1 << 7,
-  BPExitStatusSimulatorDeleted        = 1 << 8,
-  BPExitStatusUninstallAppFailed      = 1 << 9,
-  BPExitStatusSimulatorReuseFailed    = 1 << 10
-```
-**Note:** Please refer to `bp/src/BPExitStatus.h` for the latest/exact exit codes.
-
-
 ## Demo
 
 ![BluepillDemo](doc/img/demo.gif)
 
 ## Requirements
 
-Bluepill only works with **Xcode 11.3**. If you're looking for old Xcode support, please check out the other branches:
+Bluepill officially supports **Xcode 11.5**. If you're looking for old Xcode support, please check out the below branches:
 
 * [Xcode-8](https://github.com/linkedin/bluepill/tree/xcode8)
 * [Xcode-9.0](https://github.com/linkedin/bluepill/tree/xcode-9.0)
@@ -133,8 +112,10 @@ Bluepill only works with **Xcode 11.3**. If you're looking for old Xcode support
 * [Xcode-11.0](https://github.com/linkedin/bluepill/tree/xcode-11.0)
 * [Xcode-11.1](https://github.com/linkedin/bluepill/tree/xcode-11.1)
 * [Xcode-11.2](https://github.com/linkedin/bluepill/tree/xcode-11.2)
+* [Xcode-11.3](https://github.com/linkedin/bluepill/tree/xcode-11.3)
+* [Xcode-11.4](https://github.com/linkedin/bluepill/tree/xcode-11.4)
 
-**Note:** Refer to `unsafe-skip-xcode-version-check` flag introduced in `Bluepill v5.2.1` relaxing the Xcode version checks. Please make sure it is well tested and the underlying risks are understand.
+If you're looking for newer Xcode version support, try using Bluepill with `unsafe-skip-xcode-version-check` flag but make sure your app is tested with it and the underlying risks are understand.
 
 ## Acknowledgement
 
@@ -165,7 +146,7 @@ If you're using [Bitrise.io](https://bitrise.io) as your CI/CD, you can start us
 
   Latest [release](https://github.com/linkedin/bluepill/releases/).
 
-- How to test Bluepill in Xcode?
+- How to test Bluepill in Xcode
 
   Select BPSampleApp scheme and build it first. Then you can switch back to `bluepill` or `bluepill-cli` scheme to run their tests.
 

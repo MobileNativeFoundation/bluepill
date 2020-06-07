@@ -18,10 +18,10 @@
 
 
 typedef NS_OPTIONS(NSUInteger, BPOptionType) {
-    BP_VALUE   = 1 << 0, // Single value
-    BP_LIST    = 1 << 1, // List value
-    BP_PATH    = 1 << 2, // Single value, CWD will be prepended
-    BP_BOOL    = 1 << 3, // Boolean value
+    BP_VALUE = 1, // Single value
+    BP_LIST = 1 << 1, // List value
+    BP_PATH = 1 << 2, // Single value, CWD will be prepended
+    BP_BOOL = 1 << 3, // Boolean value
     BP_INTEGER = 1 << 4, // Integer value
 };
 
@@ -103,9 +103,9 @@ struct BPOptions {
     {'q', "quiet", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "quiet",
         "Turn off all output except fatal errors."},
     {'F', "only-retry-failed", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "onlyRetryFailed",
-        "Only retry failed tests instead of all. Also retry test that timed-out/crashed. Note that app crashes are fatal even if the test passes on retry."},
+        "If `failure-`tolerance` is > 0, only retry tests that failed."},
     {'l', "list-tests", BP_MASTER, NO, NO, no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
-        "Only list tests and exit without executing tests."},
+        "Only list tests in bundle"},
     {'v', "verbose", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "verboseLogging",
         "Enable verbose logging"},
     {'k', "keep-individual-test-reports", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepIndividualTestReports",
@@ -377,7 +377,6 @@ static NSUUID *sessionID;
     newConfig.testing_HangAppOnLaunch = self.testing_HangAppOnLaunch;
     newConfig.testing_NoAppWillRun = self.testing_NoAppWillRun;
     newConfig.testing_crashOnAttempt = self.testing_crashOnAttempt;
-    newConfig.testing_ExecutionPlan = self.testing_ExecutionPlan;
     newConfig.xcTestRunPath = self.xcTestRunPath;
     newConfig.testPlanPath = self.testPlanPath;
     newConfig.xcTestRunDict = self.xcTestRunDict;
