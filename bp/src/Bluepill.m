@@ -121,6 +121,7 @@ static void onInterrupt(int ignore) {
     if (![self canRetryOnError] || self.failureTolerance <= 0) {
         // If there is no more retries, set the final exitCode to current context's exitCode
         self.finalExitStatus |= self.context.finalExitStatus;
+        [BPUtils printInfo:ERROR withString:@"No retries left. Giving up."];
         [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
         self.exitLoop = YES;
         return;
@@ -158,9 +159,9 @@ static void onInterrupt(int ignore) {
     // If error retry reach to the max, then return
     if (![self canRetryOnError]) {
         self.finalExitStatus |= self.context.finalExitStatus;
+        [BPUtils printInfo:ERROR withString:@"No retries left. Giving up."];
         [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
         self.exitLoop = YES;
-        [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
         return;
     }
 
@@ -186,9 +187,9 @@ static void onInterrupt(int ignore) {
 - (void)proceed {
     if (![self canRetryOnError]) {
         self.finalExitStatus |= self.context.finalExitStatus;
+        [BPUtils printInfo:ERROR withString:@"No retries left. Giving up."];
         [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
         self.exitLoop = YES;
-        [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
         return;
     }
     self.retries += 1;
@@ -591,7 +592,9 @@ static void onInterrupt(int ignore) {
  */
 - (void)finishWithContext:(BPExecutionContext *)context {
     context.finalExitStatus |= context.exitStatus;
-    [BPUtils printInfo:INFO withString:@"Attempt's Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:context.exitStatus]];
+    [BPUtils printInfo:INFO withString:@"Attempt's Exit Status: %@, Bundle exit status: %@",
+     [BPExitStatusHelper stringFromExitStatus:context.exitStatus],
+     [BPExitStatusHelper stringFromExitStatus:context.finalExitStatus]];
 
     switch (context.exitStatus) {
         // BP exit handler
@@ -628,7 +631,7 @@ static void onInterrupt(int ignore) {
             return;
 
         case BPExitStatusAppCrashed:
-            // Remember the app crash and report whether a retry passes or not
+            // Crashed test is considered fatal and shall not be retried
             self.finalExitStatus |= context.exitStatus;
             NEXT([self proceed]);
             return;
@@ -636,11 +639,16 @@ static void onInterrupt(int ignore) {
         case BPExitStatusSimulatorDeleted:
         case BPExitStatusSimulatorReuseFailed:
             self.finalExitStatus |= context.finalExitStatus;
-            [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
+            [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@",
+             __FILE__, __LINE__,
+             [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
             self.exitLoop = YES;
             return;
     }
-    [BPUtils printInfo:ERROR withString:@"%s:%d YOU SHOULDN'T BE HERE. exitStatus = %@, finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:context.exitStatus], [BPExitStatusHelper stringFromExitStatus:context.finalExitStatus]];
+    [BPUtils printInfo:ERROR withString:@"%s:%d YOU SHOULDN'T BE HERE. exitStatus = %@, finalExitStatus = %@",
+     __FILE__, __LINE__,
+     [BPExitStatusHelper stringFromExitStatus:context.exitStatus],
+     [BPExitStatusHelper stringFromExitStatus:context.finalExitStatus]];
 }
 
 // MARK: Helpers
@@ -666,7 +674,9 @@ static void onInterrupt(int ignore) {
     if (self.retries > maxErrorRetryCount) {
         // If retries strictly exceeds the max error retry, then we must have incremented it beyond the limit somehow.
         // It is safe to halt retries here, but log to alert unexpected behavior.
-        [BPUtils printInfo:ERROR withString:@"Current retry count (%d) exceeded maximum retry count (%d)!", (int) self.retries, (int) maxErrorRetryCount];
+        [BPUtils printInfo:ERROR withString:@"Current retry count (%d) exceeded maximum retry count (%d)!",
+         (int) self.retries,
+         (int) maxErrorRetryCount];
     }
     return false;
 }
