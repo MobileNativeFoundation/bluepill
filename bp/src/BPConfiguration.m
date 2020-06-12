@@ -709,23 +709,25 @@ static NSUUID *sessionID;
         return NO;
     }
 
-    if (self.appBundlePath && (![[NSFileManager defaultManager] fileExistsAtPath: self.appBundlePath isDirectory:&isdir] || !isdir)) {
-        BP_SET_ERROR(errPtr, @"%@ not found.", self.appBundlePath);
-        return NO;
-    }
-    NSString *path = [self.appBundlePath stringByAppendingPathComponent:@"Info.plist"];
-    NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:path];
+    if (self.appBundlePath) {
+        if (![[NSFileManager defaultManager] fileExistsAtPath: self.appBundlePath isDirectory:&isdir] || !isdir) {
+            BP_SET_ERROR(errPtr, @"%@ not found.", self.appBundlePath);
+            return NO;
+        }
+        NSString *path = [self.appBundlePath stringByAppendingPathComponent:@"Info.plist"];
+        NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:path];
 
-    if (!dic) {
-        BP_SET_ERROR(errPtr, @"Could not read %@, perhaps you forgot to run xcodebuild build-for-testing?", path);
-    }
+        if (!dic) {
+            BP_SET_ERROR(errPtr, @"Could not read %@, perhaps you forgot to run xcodebuild build-for-testing?", path);
+        }
 
-    NSString *platform = [dic objectForKey:@"DTPlatformName"];
-    if (platform && ![platform isEqualToString:@"iphonesimulator"]) {
-        BP_SET_ERROR(errPtr, @"Wrong platform in %@. Expected 'iphonesimulator', found '%@'", self.appBundlePath, platform);
-        return NO;
+        NSString *platform = [dic objectForKey:@"DTPlatformName"];
+        if (platform && ![platform isEqualToString:@"iphonesimulator"]) {
+            BP_SET_ERROR(errPtr, @"Wrong platform in %@. Expected 'iphonesimulator', found '%@'", self.appBundlePath, platform);
+            return NO;
+        }
     }
-
+    
     if (self.outputDirectory) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.outputDirectory isDirectory:&isdir]) {
             if (!isdir) {
