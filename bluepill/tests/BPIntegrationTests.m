@@ -90,8 +90,9 @@
     config.failureTolerance = @0;
     config.cloneSimulator = TRUE;
     // need to validate the configuration to fill in simDevice and simRuntime
-    [config validateConfigWithError:nil];
-    NSError *err;
+    NSError *err = nil;
+    [config validateConfigWithError:&err];
+    XCTAssert(err == nil);
     BPApp *app = [BPApp appWithConfig:config
                             withError:&err];
 

@@ -346,11 +346,12 @@
 }
 
 /**
- Execution plan: CRASH, TIMEOUT, PASS
+ Execution plan: CRASH
  */
-- (void)testReportFailureOnCrashTimeoutAndPass {
+- (void)testNoRetryOnCrash {
     self.config.stuckTimeout = @6;
-    self.config.testing_ExecutionPlan = @"CRASH TIMEOUT PASS";
+    self.config.testing_ExecutionPlan = @"CRASH";  // No retry
+    self.config.errorRetriesCount = @4;
     self.config.onlyRetryFailed = TRUE;
     NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
@@ -362,6 +363,49 @@
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
+}
+
+
+/**
+ Execution plan: One test CRASHes and another one TIMEs OUT and PASSes on retry
+ */
+- (void)testReportFailureOnCrashAndTimeoutTests {
+    self.config.stuckTimeout = @6;
+    self.config.testing_ExecutionPlan = @"CRASH; SKIP TIMEOUT PASS";
+    self.config.onlyRetryFailed = TRUE;
+    self.config.failureTolerance = @1;
+    self.config.errorRetriesCount = @2;
+    NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppHangingTestsSetTempDir", tempDir] withError:&error];
+    NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
+}
+
+/**
+ Execution plan: One test CRASHes and another one keeps timing out
+ */
+- (void)testReportBothCrashAndTimeout {
+    self.config.stuckTimeout = @6;
+    self.config.testing_ExecutionPlan = @"CRASH; SKIP TIMEOUT TIMEOUT";
+    self.config.onlyRetryFailed = TRUE;
+    self.config.failureTolerance = @1;
+    self.config.errorRetriesCount = @2;
+    NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppHangingTestsSetTempDir", tempDir] withError:&error];
+    NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    XCTAssertTrue(exitCode == (BPExitStatusAppCrashed | BPExitStatusTestTimeout));
 }
 
 /**
