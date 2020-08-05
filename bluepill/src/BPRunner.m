@@ -93,6 +93,7 @@ maxprocs(void)
     } else {
         cfg.environmentVariables = bundle.environmentVariables;
     }
+    cfg.dependencies = bundle.dependencies;
     if (self.config.cloneSimulator) {
         cfg.templateSimUDID = self.testHostSimTemplates[bundle.testHostPath];
     }
