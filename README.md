@@ -89,6 +89,7 @@ A full list supported options are listed here.
 |       video-paths      |           -V           | A list of videos that will be saved in the simulators.                              |     N    | n/a              |
 |       image-paths      |           -I           | A list of images that will be saved in the simulators.                              |     N    | n/a              |
 | unsafe-skip-xcode-version-check |               | Skip Xcode version check                                                            |     N    | NO               |
+|  retry-app-crash-tests |                        | Retry tests that crashed app and consider it non-fatal if it passes on retry.       |     N    | false            |
 
 
 ## Exit Status
