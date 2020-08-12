@@ -195,8 +195,12 @@
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
             NSString *testName = (__self.currentTestName ?: __self.previousTestName);
             if (__self.testsState == Running) {
-                [self updateExecutedTestCaseList:testName inClass:testClass];
-                [BPUtils printInfo:CRASH withString:@"%@/%@ crashed app. Not retrying it.", testClass, testName];
+                if (self.config.retryAppCrashTests) {
+                    [BPUtils printInfo:CRASH withString:@"%@/%@ crashed app. Configured to retry.", testClass, testName];
+                } else {
+                    [self updateExecutedTestCaseList:testName inClass:testClass];
+                    [BPUtils printInfo:CRASH withString:@"%@/%@ crashed app. Retry disabled.", testClass, testName];
+                }
                 [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName] withResult:@"CRASHED"];
             } else {
                 assert(__self.testsState == Idle);

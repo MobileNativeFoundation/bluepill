@@ -641,8 +641,10 @@ static void onInterrupt(int ignore) {
             NEXT([self proceed]);
             return;
         case BPExitStatusAppCrashed:
-            // Crashed test is considered fatal and shall not be retried
-            self.finalExitStatus |= context.exitStatus;
+            if (!self.config.retryAppCrashTests) {
+                // Crashed test is considered fatal when retry is disabled
+                self.finalExitStatus |= context.exitStatus;
+            }
             NEXT([self proceed]);
             return;
         case BPExitStatusSimulatorDeleted:
