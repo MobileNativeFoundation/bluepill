@@ -79,6 +79,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic) BOOL saveDiagnosticsOnError;
 @property (nonatomic, strong) NSNumber *failureTolerance;
 @property (nonatomic) BOOL onlyRetryFailed;
+@property (nonatomic) BOOL retryAppCrashTests;
 @property (nonatomic, strong) NSArray *testCasesToSkip;
 @property (nonatomic, strong) NSArray *xcTestFileToSkip;
 @property (nonatomic, strong) NSArray *testCasesToRun;
