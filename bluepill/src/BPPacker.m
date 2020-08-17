@@ -36,8 +36,35 @@
     [BPUtils printInfo:INFO withString:@"Packing test bundles based on test counts."];
     NSArray *testCasesToRun = config.testCasesToRun;
     NSArray *noSplit = config.noSplit;
-    NSUInteger numBundles = [[config numSims] integerValue];
-    NSArray *sortedXCTestFiles = [xcTestFiles sortedArrayUsingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
+    NSUInteger numBundles = [config.numSims integerValue];
+    NSMutableArray *filteredXcTestFiles = [NSMutableArray new];
+
+       for (BPXCTestFile *xcFile in xcTestFiles) {
+           if (config.xcTestFileToRun) {
+               for(NSString *includedTestFile in config.xcTestFileToRun) {
+                   if ([[xcFile name] isEqualToString:includedTestFile]) {
+                       [filteredXcTestFiles addObject:xcFile];
+                       break;
+                   }
+               }
+           } else {
+               [filteredXcTestFiles addObject:xcFile];
+           }
+       }
+
+       if (config.xcTestFileToSkip) {
+           for (BPXCTestFile *xcFile in [NSArray arrayWithArray:filteredXcTestFiles]) {
+               for(NSString *excludedXcTestFile in config.xcTestFileToSkip) {
+                   if ([[xcFile name] isEqualToString:excludedXcTestFile]) {
+                       [filteredXcTestFiles removeObject:xcFile];
+                       break;
+                   }
+               }
+           }
+       }
+    
+    
+    NSArray *sortedXCTestFiles = [filteredXcTestFiles sortedArrayUsingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
         NSUInteger numTests1 = [(BPXCTestFile *)obj1 numTests];
         NSUInteger numTests2 = [(BPXCTestFile *)obj2 numTests];
         return numTests2 - numTests1;

@@ -147,6 +147,10 @@ struct BPOptions {
     {366, "retry-app-crash-tests", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "retryAppCrashTests",
         "Retry the tests after an app crash and if it passes on retry, consider them non-fatal."},
 
+   {365, "exclude-xctest-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "xcTestFileToSkip",
+            "Exclude a xctestfile in the set of tests to run (takes priority over `include`)."},
+    {366, "include-xctest-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "xcTestFileToRun", "Include a xctestfile in the set of tests to run (unless specified in `exclude`)."},
+
     {0, 0, 0, 0, 0, 0, 0}
 };
 
