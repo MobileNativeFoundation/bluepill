@@ -13,7 +13,7 @@
             <testcase classname="BPAppNegativeTests" name="testAssertTrue">
             </testcase>
             <testcase classname="BPAppNegativeTests" name="testRaiseException">
-                <error type="Error" message="-[BPAppNegativeTests testRaiseException] : failed: caught &quot;Invalid foo value&quot;, &quot;foo of 1 is invalid&quot;">
+                <error type="Error" message="-[BPAppNegativeTests testRaiseException] : foo of 1 is invalid (Invalid foo value)">
                     /Users/obonilla/o/bluepill/BPSampleApp/BPAppNegativeTests/BPAppNegativeTests.m:48
                 </error>
                 <system-out>
