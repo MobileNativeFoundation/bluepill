@@ -133,7 +133,7 @@
     config.testBundlePath = nil;
     config.testRunnerAppPath = nil;
     NSString *baseSDK = [[NSString stringWithUTF8String:BP_DEFAULT_BASE_SDK] stringByReplacingOccurrencesOfString:@"iOS " withString:@""];
-    NSString *xcTestRunFile = [NSString stringWithFormat:@"Build/Products/BPSampleApp_iphonesimulator%@-x86_64.xctestrun", baseSDK];
+    NSString *xcTestRunFile = [NSString stringWithFormat:@"Build/Products/BPSampleApp_iphonesimulator%@-arm64-i386-x86_64.xctestrun", baseSDK];
     config.xcTestRunPath = [[[BPTestHelper derivedDataPath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:xcTestRunFile];
     NSError *err;
     [config validateConfigWithError:&err];
