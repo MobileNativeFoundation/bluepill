@@ -432,7 +432,7 @@ static void onInterrupt(int ignore) {
         // If the isTestRunnerContext is flipped on, don't connect testbundle again.
         return;
     }
-    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:context.runner andInterface:self];
+    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithContext:context andInterface:self];
     bConnection.simulator = context.runner;
     bConnection.config = self.config;
 

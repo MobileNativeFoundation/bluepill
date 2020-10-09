@@ -49,15 +49,19 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 @property (nonatomic, strong) dispatch_queue_t queue;
 @property (nonatomic, strong) NSString *bundleID;
 @property (nonatomic, assign) pid_t appProcessPID;
+@property (nonatomic, nullable) NSTask *recordVideoTask;
+//@property (nonatomic, nullable) NSPipe *recordVideoPipe;
+
 
 @end
 
 @implementation BPTestBundleConnection
 
-- (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<BPTestBundleConnectionDelegate>)interface {
+- (instancetype)initWithContext:(BPExecutionContext *)context andInterface:(id<BPTestBundleConnectionDelegate>)interface {
     self = [super init];
     if (self) {
-        self.simulator = simulator;
+        self.context = context;
+        self.simulator = context.runner;
         self.interface = interface;
         self.queue = dispatch_queue_create("com.linkedin.bluepill.connection.queue", DISPATCH_QUEUE_PRIORITY_DEFAULT);
     }
@@ -82,6 +86,8 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
         DTXTransport *transport = [self connectTransport];
         DTXConnection *connection = [[objc_lookUpClass("DTXConnection") alloc] initWithTransport:transport];
         [connection registerDisconnectHandler:^{
+            // This is called when the task is abruptly terminated (e.g. if the test times out)
+            [self stopVideoRecording:YES];
             [BPUtils printInfo:INFO withString:@"DTXConnection disconnected."];
         }];
         [connection
@@ -212,6 +218,63 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     return nil;
 }
 
+#pragma mark - Video Recording
+
+static inline NSString* getVideoPath(NSString *directory, NSString *testClass, NSString *method, NSInteger attemptNumber)
+{
+    return [NSString stringWithFormat:@"%@/%@__%@__%ld.mp4", directory, testClass, method, (long)attemptNumber];
+}
+
+- (BOOL)shouldRecordVideo {
+    return self.context.config.videosDirectory.length > 0;
+}
+
+- (void)startVideoRecordingForTestClass:(NSString *)testClass method:(NSString *)method
+{
+    [self stopVideoRecording:YES];
+    NSString *videoFileName = getVideoPath(self.context.config.videosDirectory, testClass, method, self.context.attemptNumber);
+    NSString *command = [NSString stringWithFormat:@"xcrun simctl io %@ recordVideo --force %@", [self.simulator UDID], videoFileName];
+    NSTask *task = [BPUtils buildShellTaskForCommand:command];
+    self.recordVideoTask = task;
+    [task launch];
+    [BPUtils printInfo:INFO withString:@"Started recording video to %@", videoFileName];
+    [BPUtils printInfo:DEBUGINFO withString:@"Started recording video task with pid %d and command: %@",  [task processIdentifier], [BPUtils getCommandStringForTask:task]];
+}
+
+- (void)stopVideoRecording:(BOOL)forced
+{
+    NSTask *task = self.recordVideoTask;
+    if (task == nil) {
+        if (!forced) {
+            [BPUtils printInfo:ERROR withString: @"Tried to end video recording task normally, but there was no task."];
+        }
+        return;
+    }
+    
+    if (forced) {
+        [BPUtils printInfo:ERROR withString: @"Found dangling video recording task. Stopping it."];
+    }
+    
+    if (![task isRunning]) {
+        [BPUtils printInfo:ERROR withString:@"Video task exists but it was already terminated with status %d", [task terminationStatus]];
+    }
+    
+    [BPUtils printInfo:INFO withString:@"Stopping recording video."];
+    [BPUtils printInfo:DEBUGINFO withString:@"Stopping video recording task with pid %d and command: %@", [task processIdentifier], [BPUtils getCommandStringForTask:task]];
+    [task interrupt];
+    [task waitUntilExit];
+
+    if ([task terminationStatus] != 0) {
+        [BPUtils printInfo:ERROR withString:@"Video task was interrupted, but exited with non-zero status %d", [task terminationStatus]];
+    }
+
+    NSString *filePath = [[task arguments].lastObject componentsSeparatedByString:@" "].lastObject;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        [BPUtils printInfo:ERROR withString:@"Video recording file missing, expected at path %@!", filePath];
+    }
+    self.recordVideoTask = nil;
+}
+
 #pragma mark - XCTestManager_IDEInterface protocol
 
 #pragma mark Process Launch Delegation
@@ -255,7 +318,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_terminateProcess:(id)token {
     NSError *error;
-    kill(self.appProcessPID, SIGTERM);
+    kill(self.appProcessPID, SIGINT);
     DTXRemoteInvocationReceipt *receipt = [objc_lookUpClass("DTXRemoteInvocationReceipt") new];
     [receipt invokeCompletionWithReturnValue:token error:error];
     [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_terminateProcess with token %@", token];
@@ -277,6 +340,9 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_testCaseDidStartForTestClass:(NSString *)testClass method:(NSString *)method {
     [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection_XCT_testCaseDidStartForTestClass: %@ and method: %@", testClass, method];
+    if ([self shouldRecordVideo]) {
+        [self startVideoRecordingForTestClass:testClass method:method];
+    }
     return nil;
 }
 
@@ -298,12 +364,18 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 - (id)_XCT_testCaseDidFinishForTestClass:(NSString *)testClass method:(NSString *)method withStatus:(NSString *)statusString duration:(NSNumber *)duration {
     [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testCaseDidFinishForTestClass: %@, method: %@, withStatus: %@, duration: %@", testClass, method, statusString, duration];
+    if ([self shouldRecordVideo]) {
+        [self stopVideoRecording:NO];
+    }
     return nil;
 }
 
 - (id)_XCT_testSuite:(NSString *)arg1 didFinishAt:(NSString *)time runCount:(NSNumber *)count withFailures:(NSNumber *)failureCount unexpected:(NSNumber *)unexpectedCount testDuration:(NSNumber *)testDuration totalDuration:(NSNumber *)totalTime {
     [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testSuite: %@, didFinishAt: %@, runCount: %@, withFailures: %@, unexpectedCount: %@, testDuration: %@, totalDuration: %@", arg1, time, count, failureCount, unexpectedCount, testDuration, totalTime];
 
+    if ([self shouldRecordVideo]) {
+        [self stopVideoRecording:YES];
+    }
     return nil;
 }
 
