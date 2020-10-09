@@ -148,6 +148,8 @@ struct BPOptions {
         "Retry the tests after an app crash and if it passes on retry, consider them non-fatal."},
     {367, "videos-directory", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "videosDirectory",
         "Directory where videos of test runs will be saved. If not provided, videos are not recorded."},
+    {368, "keep-passing-videos", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepPassingVideos",
+        "Whether recorded videos should be kept if the test passed. They are deleted by default."},
     {0, 0, 0, 0, 0, 0, 0}
 };
 

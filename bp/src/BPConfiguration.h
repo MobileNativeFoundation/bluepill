@@ -88,6 +88,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *testTimeEstimatesJsonFile;
 @property (nonatomic, strong) NSString *screenshotsDirectory;
 @property (nonatomic, strong) NSString *videosDirectory;
+@property (nonatomic) BOOL keepPassingVideos;
 @property (nonatomic, strong) NSString *simulatorPreferencesFile;
 @property (nonatomic, strong) NSString *scriptFilePath;
 @property (nonatomic) BOOL headlessMode;

@@ -38,6 +38,7 @@
     config.quiet = [BPUtils isBuildScript];
     if (videoDir != nil) {
         config.videosDirectory = videoDir;
+        config.keepPassingVideos = true;
     }
     return config;
 }
