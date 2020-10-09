@@ -52,7 +52,7 @@
 @property (nonatomic, strong) NSString *bundleID;
 @property (nonatomic, assign) pid_t appProcessPID;
 @property (nonatomic, nullable) NSTask *recordVideoTask;
-//@property (nonatomic, nullable) NSPipe *recordVideoPipe;
+@property (nonatomic, nullable) NSString *videoFileName;
 
 
 @end
@@ -168,6 +168,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
     NSString *command = [NSString stringWithFormat:@"xcrun simctl io %@ recordVideo --force %@", [self.simulator UDID], videoFileName];
     NSTask *task = [BPUtils buildShellTaskForCommand:command];
     self.recordVideoTask = task;
+    self.videoFileName = videoFileName;
     [task launch];
     [BPUtils printInfo:INFO withString:@"Started recording video to %@", videoFileName];
     [BPUtils printInfo:DEBUGINFO withString:@"Started recording video task with pid %d and command: %@",  [task processIdentifier], [BPUtils getCommandStringForTask:task]];
@@ -308,6 +309,13 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
     [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testCaseDidFinishForTestClass: %@, method: %@, withStatus: %@, duration: %@", testClass, method, statusString, duration];
     if ([self shouldRecordVideo]) {
         [self stopVideoRecording:NO];
+        if ([statusString isEqual: @"passed"] && ![self.context.config keepPassingVideos]) {
+            NSError *deleteError = nil;
+            BOOL success = [NSFileManager.defaultManager removeItemAtPath:self.videoFileName error:&deleteError];
+            if (deleteError != nil || !success) {
+                [BPUtils printInfo:WARNING withString:@"Failed to delete video of successful run at path %@", self.videoFileName];
+            }
+        }
     }
     return nil;
 }
