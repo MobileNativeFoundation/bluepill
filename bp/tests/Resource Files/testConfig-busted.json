@@ -4,6 +4,8 @@
                  "VoyagerTests"
                  ],
     "error-retries": 0,
+    "num-sims": 2,
+    "unsafe-skip-xcode-version-check": true,
     "test": "/tmp",
     "output-dir": "/tmp/simulator",
     "test-bundle-path": "/usr/bin",

@@ -9,14 +9,16 @@
 
 #import <Foundation/Foundation.h>
 
-#define BP_DEFAULT_RUNTIME "iOS 13.2"
+#pragma mark - Version Constants
+#define BP_DEFAULT_XCODE_VERSION "12.0"
+#define BP_DEFAULT_RUNTIME "iOS 14.0"
+#define BP_DEFAULT_BASE_SDK "14.0"
+
 #define BP_DEFAULT_DEVICE_TYPE "iPhone 8"
-#define BP_TM_PROTOCOL_VERSION 17
+
 #define BP_DAEMON_PROTOCOL_VERSION 26
-#define BP_DEFAULT_XCODE_VERSION "11.2"
 #define BP_MAX_PROCESSES_PERCENT 0.75
 #define BP_TM_PROTOCOL_VERSION 17
-
 
 extern NSString * const kCFBundleIdentifier;
 extern NSString * const kOptionsArgumentsKey;

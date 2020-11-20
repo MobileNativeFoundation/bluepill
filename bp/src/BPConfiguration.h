@@ -22,6 +22,7 @@
 @property (nonatomic, strong) NSString *testHost;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environment;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *arguments;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *dependencies;
 @property (nonatomic, strong) NSString *testBundlePath;
 @property (nonatomic, strong) NSString *testHostBundleIdentifier;
 @property (nonatomic, strong) NSString *uiTargetAppPath;
@@ -78,6 +79,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic) BOOL saveDiagnosticsOnError;
 @property (nonatomic, strong) NSNumber *failureTolerance;
 @property (nonatomic) BOOL onlyRetryFailed;
+@property (nonatomic) BOOL retryAppCrashTests;
 @property (nonatomic, strong) NSArray *testCasesToSkip;
 @property (nonatomic, strong) NSArray *testCasesToRun;
 @property (nonatomic, strong) NSArray *allTestCases;
@@ -85,10 +87,12 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *outputDirectory;
 @property (nonatomic, strong) NSString *testTimeEstimatesJsonFile;
 @property (nonatomic, strong) NSString *screenshotsDirectory;
+@property (nonatomic, strong) NSString *videosDirectory;
 @property (nonatomic, strong) NSString *simulatorPreferencesFile;
 @property (nonatomic, strong) NSString *scriptFilePath;
 @property (nonatomic) BOOL headlessMode;
 @property (nonatomic) BOOL cloneSimulator;
+@property (nonatomic) BOOL unsafeSkipXcodeVersionCheck;
 @property (nonatomic, strong) NSNumber *numSims;
 @property (nonatomic) BOOL listTestsOnly;
 @property (nonatomic) BOOL quiet;
@@ -106,6 +110,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSArray<NSString *> *commandLineArguments; // command line arguments for the app
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environmentVariables;
 @property (nonatomic, strong) NSDictionary<NSString *, BPTestPlan *> *tests;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *dependencies;
 
 // Media Assets
 @property (nonatomic, strong) NSArray<NSString *> *videoPaths; // The videos to be pushed into each simulator.
@@ -116,6 +121,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic) BOOL testing_HangAppOnLaunch;
 @property (nonatomic) BOOL testing_NoAppWillRun;
 @property (nonatomic) NSNumber *testing_crashOnAttempt;
+@property (nonatomic, strong) NSString *testing_ExecutionPlan;
 
 // Generated fields
 @property (nonatomic, strong) NSString *xcodePath;

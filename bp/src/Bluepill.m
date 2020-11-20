@@ -117,14 +117,17 @@ static void onInterrupt(int ignore) {
 
 // Retry from the beginning (default) or failed tests only if onlyRetryFailed is true
 - (void)retry {
-    // There were test failures. If our failure tolerance is 0, then we're good with that.
-    if (self.failureTolerance == 0) {
+    // There were test failures. Check if it can be retried.
+    if (![self canRetryOnError] || self.failureTolerance <= 0) {
         // If there is no more retries, set the final exitCode to current context's exitCode
-        self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+        self.finalExitStatus |= self.context.finalExitStatus;
+        [BPUtils printInfo:ERROR withString:@"No retries left. Giving up."];
         [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
         self.exitLoop = YES;
         return;
     }
+    // Resetting the failed bit since the test is being retried
+    self.context.finalExitStatus &= ~self.context.exitStatus;
     [self.context.parser cleanup];
     // Otherwise, reduce our failure tolerance count and retry
     self.failureTolerance -= 1;
@@ -153,40 +156,40 @@ static void onInterrupt(int ignore) {
 //  - BPExitStatusUninstallAppFailed
 //  - BPExitStatusLaunchAppFailed
 - (void)recover {
-  // If error retry reach to the max, then return
-  if (self.retries == [self.config.errorRetriesCount integerValue]) {
-      self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
-      [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
-      self.exitLoop = YES;
-      [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
-      return;
-  }
+    // If error retry reach to the max, then return
+    if (![self canRetryOnError]) {
+        self.finalExitStatus |= self.context.finalExitStatus;
+        [BPUtils printInfo:ERROR withString:@"No retries left. Giving up."];
+        [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
+        self.exitLoop = YES;
+        return;
+    }
 
-  [self.context.parser cleanup];
-  // If we're not retrying only failed tests, we need to get rid of our saved tests, so that we re-execute everything. Recopy config.
-  if (self.executionConfigCopy.onlyRetryFailed == NO) {
-      self.executionConfigCopy = [self.config copy];
-  }
-  // Increment the retry count
-  self.retries += 1;
+    [self.context.parser cleanup];
+    // If we're not retrying only failed tests, we need to get rid of our saved tests, so that we re-execute everything. Recopy config.
+    if (self.executionConfigCopy.onlyRetryFailed == NO) {
+        self.executionConfigCopy = [self.config copy];
+    }
+    // Increment the retry count
+    self.retries += 1;
 
-  // Log some useful information to the log
-  [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.context.exitStatus]];
-  [BPUtils printInfo:INFO withString:@"Failure Tolerance: %lu", self.failureTolerance];
-  [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
+    // Log some useful information to the log
+    [BPUtils printInfo:INFO withString:@"Exit Status: %@", [BPExitStatusHelper stringFromExitStatus:self.context.exitStatus]];
+    [BPUtils printInfo:INFO withString:@"Failure Tolerance: %lu", self.failureTolerance];
+    [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
 
-  // Then start again from the beginning
-  [BPUtils printInfo:INFO withString:@"Recovering from tooling problem"];
-  NEXT([self begin]);
+    // Then start again from the beginning
+    [BPUtils printInfo:INFO withString:@"Recovering from tooling problem"];
+    NEXT([self begin]);
 }
 
 // Proceed to next test case
 - (void)proceed {
-    if (self.retries == [self.config.errorRetriesCount integerValue]) {
-        self.finalExitStatus = self.context.exitStatus | self.context.finalExitStatus;
+    if (![self canRetryOnError]) {
+        self.finalExitStatus |= self.context.finalExitStatus;
+        [BPUtils printInfo:ERROR withString:@"No retries left. Giving up."];
         [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
         self.exitLoop = YES;
-        [BPUtils printInfo:ERROR withString:@"Too many retries have occurred. Giving up."];
         return;
     }
     self.retries += 1;
@@ -194,7 +197,8 @@ static void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"Failure Tolerance: %lu", self.failureTolerance];
     [BPUtils printInfo:INFO withString:@"Retry count: %lu", self.retries];
     self.context.attemptNumber = self.retries + 1; // set the attempt number
-    self.context.exitStatus = BPExitStatusTestsAllPassed; // reset exitStatus
+    self.context.exitStatus = BPExitStatusAllTestsPassed; // reset exitStatus
+
     [BPUtils printInfo:INFO withString:@"Proceeding to next test"];
     NEXT([self beginWithContext:self.context]);
 }
@@ -428,7 +432,7 @@ static void onInterrupt(int ignore) {
         // If the isTestRunnerContext is flipped on, don't connect testbundle again.
         return;
     }
-    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithDevice:context.runner andInterface:self];
+    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithContext:context andInterface:self];
     bConnection.simulator = context.runner;
     bConnection.config = self.config;
 
@@ -502,13 +506,13 @@ static void onInterrupt(int ignore) {
         // If we crashed, we need to retry
         [self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCrashed];
     } else if (self.config.keepSimulator
-               && (context.runner.exitStatus == BPExitStatusTestsAllPassed
+               && (context.runner.exitStatus == BPExitStatusAllTestsPassed
                 || context.runner.exitStatus == BPExitStatusTestsFailed)) {
       context.exitStatus = [context.runner exitStatus];
       NEXT([self finishWithContext:context]);
     } else {
       // If the tests failed, save as much debugging info as we can. XXX: Put this behind a flag
-      if (context.runner.exitStatus != BPExitStatusTestsAllPassed && _config.saveDiagnosticsOnError) {
+      if (context.runner.exitStatus != BPExitStatusAllTestsPassed && _config.saveDiagnosticsOnError) {
         [BPUtils printInfo:INFO withString:@"Saving Diagnostics for Debugging"];
         [BPUtils saveDebuggingDiagnostics:_config.outputDirectory];
       }
@@ -578,36 +582,19 @@ static void onInterrupt(int ignore) {
     }
 }
 
-- (BOOL)hasRemainingTestsInContext:(BPExecutionContext *)context {
-    // Make sure we're not doing unnecessary work on the next run.
-    NSMutableSet *testsRemaining = [[NSMutableSet alloc] initWithArray:context.config.allTestCases];
-    NSSet *testsToSkip = [[NSSet alloc] initWithArray:context.config.testCasesToSkip];
-    [testsRemaining minusSet:testsToSkip];
-    return ([testsRemaining count] > 0);
-}
-
 /**
  Scenarios:
- 1. crash/time out and proceed passes -> Crash/Timeout
- 2. crash/time out and retry passes -> AllPass
+ 1. crash and proceed passes -> Crash
+ 2. time out and retry passes -> AllPass
  3. failure and retry passes -> AllPass
  4. happy all pass -> AllPassed
  5. failure and still fails -> TestFailed
  */
 - (void)finishWithContext:(BPExecutionContext *)context {
-
-    // Because BPExitStatusTestsAllPassed is 0, we must check it explicitly against
-    // the run rather than the aggregate bitmask built with finalExitStatus
-
-    if (![self hasRemainingTestsInContext:context] && (context.attemptNumber <= [context.config.errorRetriesCount integerValue])) {
-        [BPUtils printInfo:INFO withString:@"No more tests to run."];
-        [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
-        // TODO: Temporarily disabling the fix from PR#338 while the issue is being investigated
-        // self.finalExitStatus = context.exitStatus;
-        self.finalExitStatus = context.finalExitStatus | context.exitStatus;
-        self.exitLoop = YES;
-        return;
-    }
+    context.finalExitStatus |= context.exitStatus;
+    [BPUtils printInfo:INFO withString:@"Attempt's Exit Status: %@, Bundle exit status: %@",
+     [BPExitStatusHelper stringFromExitStatus:context.exitStatus],
+     [BPExitStatusHelper stringFromExitStatus:context.finalExitStatus]];
 
     switch (context.exitStatus) {
         // BP exit handler
@@ -615,23 +602,15 @@ static void onInterrupt(int ignore) {
             self.exitLoop = YES;
             return;
 
-        // MARK: Test suite completed
-
         // If there is no test crash/time out, we retry from scratch
         case BPExitStatusTestsFailed:
             NEXT([self retry]);
             return;
 
-        case BPExitStatusTestsAllPassed:
-            // Check previous result
-            if (context.finalExitStatus != BPExitStatusTestsAllPassed) {
-                // If there is a test crashed/timed out before, retry from scratch
-                NEXT([self retry]);
-            } else {
-                // If it is a real all pass, exit
-                self.exitLoop = YES;
-                return;
-            }
+        case BPExitStatusAllTestsPassed:
+            // Time to exit
+            self.finalExitStatus |= BPExitStatusAllTestsPassed;
+            self.exitLoop = YES;
             return;
 
         // Recover from scratch if there is tooling failure.
@@ -645,21 +624,33 @@ static void onInterrupt(int ignore) {
 
         // If it is test hanging or crashing, we set final exit code of current context and proceed.
         case BPExitStatusTestTimeout:
-            context.finalExitStatus = BPExitStatusTestTimeout;
+            if (!self.config.onlyRetryFailed) {
+                self.finalExitStatus |= context.exitStatus;
+            }
             NEXT([self proceed]);
             return;
+
         case BPExitStatusAppCrashed:
-            context.finalExitStatus = BPExitStatusAppCrashed;
+            if (!self.config.retryAppCrashTests) {
+                // Crashed test is considered fatal when retry is disabled
+                self.finalExitStatus |= context.exitStatus;
+            }
             NEXT([self proceed]);
             return;
+
         case BPExitStatusSimulatorDeleted:
         case BPExitStatusSimulatorReuseFailed:
-            self.finalExitStatus = context.exitStatus;
-            [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@", __FILE__, __LINE__, [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
+            self.finalExitStatus |= context.finalExitStatus;
+            [BPUtils printInfo:INFO withString:@"%s:%d finalExitStatus = %@",
+             __FILE__, __LINE__,
+             [BPExitStatusHelper stringFromExitStatus:self.finalExitStatus]];
             self.exitLoop = YES;
             return;
     }
-
+    [BPUtils printInfo:ERROR withString:@"%s:%d YOU SHOULDN'T BE HERE. exitStatus = %@, finalExitStatus = %@",
+     __FILE__, __LINE__,
+     [BPExitStatusHelper stringFromExitStatus:context.exitStatus],
+     [BPExitStatusHelper stringFromExitStatus:context.finalExitStatus]];
 }
 
 // MARK: Helpers
@@ -674,6 +665,22 @@ static void onInterrupt(int ignore) {
 
 - (BPSimulator *)test_simulator {
     return self.context.runner;
+}
+
+- (BOOL)canRetryOnError {
+    NSInteger maxErrorRetryCount = [self.config.errorRetriesCount integerValue];
+    if (self.retries < maxErrorRetryCount) {
+        return true;
+    }
+    
+    if (self.retries > maxErrorRetryCount) {
+        // If retries strictly exceeds the max error retry, then we must have incremented it beyond the limit somehow.
+        // It is safe to halt retries here, but log to alert unexpected behavior.
+        [BPUtils printInfo:ERROR withString:@"Current retry count (%d) exceeded maximum retry count (%d)!",
+         (int) self.retries,
+         (int) maxErrorRetryCount];
+    }
+    return false;
 }
 
 int __line;

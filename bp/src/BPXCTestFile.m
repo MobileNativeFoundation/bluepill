@@ -11,6 +11,7 @@
 #import "BPConstants.h"
 #import "BPTestClass.h"
 #import "BPUtils.h"
+#import "SimulatorHelper.h"
 
 @implementation BPXCTestFile
 
@@ -162,6 +163,16 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     if (skipTestIdentifiers) {
         xcTestFile.skipTestIdentifiers = [[NSArray alloc] initWithArray:skipTestIdentifiers];
     }
+    NSArray<NSString *> *dependencies = [dict objectForKey:@"DependentProductPaths"];
+    if (dependencies) {
+        NSMutableDictionary <NSString *, NSString *> *dependenciesWithBundleIDs = [NSMutableDictionary dictionary];
+        for (NSString *dependency in dependencies) {
+            NSString *expandedDependency = [dependency stringByReplacingOccurrencesOfString:TESTROOT withString:testRoot];
+            NSString *bundleID = [SimulatorHelper bundleIdForPath:expandedDependency];
+            dependenciesWithBundleIDs[bundleID] = expandedDependency;
+        }
+        xcTestFile.dependencies = dependenciesWithBundleIDs;
+    }
     return xcTestFile;
 }
 
@@ -176,6 +187,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
                                 withError:errPtr];
     xcTestFile.name = name;
     xcTestFile.environmentVariables = testPlan.environment;
+    xcTestFile.dependencies = testPlan.dependencies;
     
     NSMutableArray<NSString *> *args = [[NSMutableArray alloc] initWithCapacity:testPlan.arguments.count * 2];
     for (NSString *key in xcTestFile.commandLineArguments) {
@@ -231,6 +243,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
         copy.testClasses = self.testClasses;
         copy.commandLineArguments = self.commandLineArguments;
         copy.environmentVariables = self.environmentVariables;
+        copy.dependencies = self.dependencies;
         copy.testHostPath = self.testHostPath;
         copy.testHostBundleIdentifier = self.testHostBundleIdentifier;
         copy.testBundlePath= self.testBundlePath;
