@@ -20,7 +20,7 @@
 
 - (void)setUp {
     [super setUp];
-    
+
     [BPUtils quietMode:[BPUtils isBuildScript]];
 
 }
@@ -40,6 +40,7 @@
     config.outputDirectory = @"/Users/test/output";
     NSDictionary *appLaunchEnvironment = [SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:nil config:config];
     XCTAssert([appLaunchEnvironment[@"DYLD_FALLBACK_FRAMEWORK_PATH"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
+    XCTAssert([appLaunchEnvironment[@"DYLD_FALLBACK_LIBRARY_PATH"] containsString:@"Platforms/iPhoneSimulator.platform/Developer/usr/lib"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_INSERT_LIBRARIES"] containsString:@"libXCTestBundleInject.dylib"]);
     XCTAssert([appLaunchEnvironment[@"DYLD_LIBRARY_PATH"] containsString:@"/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
     XCTAssert([appLaunchEnvironment[@"XCTestConfigurationFilePath"] containsString:@"T/BPSampleAppTests-"]);
