@@ -60,19 +60,22 @@ if [ -f "$BP_TEST_ESTIMATE_JSON" ]; then
     TIME_ESTIMATE_ARG="--test-time-estimates-json $(basename "$BP_TEST_ESTIMATE_JSON")"
 fi
 
-#  Copy bluepill, bp executable and the rule generated test plan file to working folder
+# Copy rule-generated test plan file to working folder
 cp "$BP_TEST_PLAN" $BP_WORKING_FOLDER
+BP_TEST_PLAN_ARG="$(basename "$BP_TEST_PLAN")"
+
+# Copy bluepill and bp executables to working folder
 cp "$BP_PATH" $BP_WORKING_FOLDER
 cp "$BLUEPILL_PATH" $BP_WORKING_FOLDER
 
 # Run bluepill
 # NOTE: we override output folder here and disregard the one in the config file.
 # So we know where to grab the output files for the next step.
-echo "Running ./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}"
+echo "Running ./bluepill --test-plan-path "${BP_TEST_PLAN_ARG}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}"
 
 cd $BP_WORKING_FOLDER
 RC=0
-(./bluepill --test-plan-path "${BP_TEST_PLAN}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}) || RC=$?
+(./bluepill --test-plan-path "${BP_TEST_PLAN_ARG}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}) || RC=$?
 # Move Bluepill output to bazel-testlogs
 ditto "outputs" "$TEST_UNDECLARED_OUTPUTS_DIR"
 rm -rf "outputs"

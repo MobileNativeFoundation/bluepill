@@ -50,16 +50,16 @@ def _bluepill_batch_test_impl(ctx):
     substitutions = {
         "test_bundle_paths": " ".join(test_bundle_paths),
         "test_host_paths": " ".join(test_host_paths),
-        "bp_test_plan": test_plan_file.basename,
+        "bp_test_plan": test_plan_file.short_path,
         "bp_path": ctx.executable._bp_exec.short_path,
         "bluepill_path": ctx.executable._bluepill_exec.short_path,
         "target_name": ctx.attr.name,
     }
     if ctx.attr.config_file:
-        runfiles += [ctx.file.config_file]
+        runfiles.append(ctx.file.config_file)
         substitutions["bp_config_file"] = ctx.file.config_file.path
     if ctx.attr.time_estimates:
-        runfiles += [ctx.file.time_estimates]
+        runfiles.append(ctx.file.time_estimates)
         substitutions["bp_test_time_estimates_json"] = ctx.file.time_estimates.path
     ctx.actions.expand_template(
         template = ctx.file._test_runner_template,
@@ -134,12 +134,10 @@ as possible between simulators.
     },
     doc = """
 Test rule to aggregate a list of test rules and pass them for bluepill for execution
-
 Outputs:
 Runfiles:
 files: The files needed during runtime for the test to be performed. It contains the
 test plan json file, bluepill config file if specified, xctest bundles, test hosts.
-
 This rule WILL disregard the bluepill output folder configuration if it's set in the
 config json file. Instead it will copy all the outputs to ./bazel-testlogs/$TARGET_NAME/test.outputs/
 """,
