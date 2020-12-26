@@ -125,7 +125,8 @@ int main(int argc, char * argv[]) {
             // collect all the reports
             [BPReportCollector collectReportsFromPath:config.outputDirectory
                                       deleteCollected:(!config.keepIndividualTestReports)
-                                      withOutputAtDir:config.outputDirectory];
+                                      withOutputAtDir:config.outputDirectory
+                              keepingOnlyLatestResult:config.keepOnlyLatestTestResults];
         }
         exit(rc);
     }

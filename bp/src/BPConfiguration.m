@@ -110,6 +110,8 @@ struct BPOptions {
         "Enable verbose logging"},
     {'k', "keep-individual-test-reports", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepIndividualTestReports",
         "Keep individual test reports, in addition to the aggregated final report"},
+    {'K', "keep-only-latest-test-results", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepOnlyLatestTestResults",
+        "Keeps only the latest test result for each test case in the final report. Hence, the passed tests with retry attempts won't show their failed attempts."},
 
     // options without short-options
     {349, "additional-unit-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUnitTestBundles",

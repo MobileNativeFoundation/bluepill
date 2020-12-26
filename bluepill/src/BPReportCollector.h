@@ -15,9 +15,11 @@
  * @discussion collect xml reports from the reportsPath(recursive) and output a finalized report at finalReportPath
  * @param reportsPath parent path to the reports
  * @param finalReportsDir the directory where to save the final reports
+ * @param latestResultOnly If true, keeps only the latest result in the final report.
  */
 + (void)collectReportsFromPath:(NSString *)reportsPath
                deleteCollected:(BOOL)deleteCollected
-              withOutputAtDir:(NSString *)finalReportsDir;
+               withOutputAtDir:(NSString *)finalReportsDir
+       keepingOnlyLatestResult:(BOOL)latestResultOnly;
 
 @end
