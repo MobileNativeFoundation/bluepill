@@ -18,10 +18,13 @@ if [[ $# -ne 1 ]]; then
   exit 1
 fi
 
-rm -rf build/
+
 #set -ex
 
 NSUnbufferedIO=YES
+DerivedDataPath="build/"
+rm -rf "$DerivedDataPath"
+
 export NSUnbufferedIO
 
 # If BPBuildScript is set to YES, it will disable verbose output in `bp`
@@ -37,7 +40,7 @@ bluepill_build()
     -workspace Bluepill.xcworkspace \
     -scheme bluepill \
     -configuration Release \
-    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
+    -derivedDataPath "$DerivedDataPath" | tee result.txt | $XCPRETTY
 
   test $? == 0 || {
           echo Build failed
@@ -74,7 +77,7 @@ bluepill_build_sample_app()
     -workspace Bluepill.xcworkspace \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
+    -derivedDataPath "$DerivedDataPath" 2>&1 | tee result.txt | $XCPRETTY
 
   test $? == 0 || {
           echo Build failed
@@ -89,8 +92,8 @@ bluepill_instance_tests()
   mkdir -p build/reports/
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
-    -scheme bp-tests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/instance.xml
+    -scheme bp \
+    -derivedDataPath "$DerivedDataPath" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/instance.xml
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
@@ -104,8 +107,8 @@ bluepill_runner_tests()
   mkdir -p build/reports/
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
-    -scheme bluepill-tests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/runner.xml
+    -scheme bluepill \
+    -derivedDataPath "$DerivedDataPath" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/runner.xml
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
