@@ -40,6 +40,6 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: xcresults-bp-test
+          name: xcresults-bp-tests
           path: build/**/*.xcresult
           retention-days: 14
