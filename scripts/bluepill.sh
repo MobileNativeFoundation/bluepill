@@ -75,6 +75,7 @@ bluepill_build_sample_app()
   set -o pipefail
   xcodebuild build-for-testing \
     -workspace Bluepill.xcworkspace \
+    -arch x86_64 \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
     -derivedDataPath "$DerivedDataPath" 2>&1 | tee result.txt | $XCPRETTY
