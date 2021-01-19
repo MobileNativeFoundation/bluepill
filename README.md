@@ -95,24 +95,7 @@ A full list supported options are listed here.
 
 ## Exit Status
 
-Here is a list of Bluepill exit codes. If a Bluepill execution has multiple exit codes from same or different test bundles, the final exit code is a combination of all exit codes. Note that app crashes are fatal even if the test passes on retry.
-
-```shell
-  BPExitStatusAllTestsPassed          = 0,
-  BPExitStatusTestsFailed             = 1 << 0,
-  BPExitStatusSimulatorCreationFailed = 1 << 1,
-  BPExitStatusInstallAppFailed        = 1 << 2,
-  BPExitStatusInterrupted             = 1 << 3,
-  BPExitStatusSimulatorCrashed        = 1 << 4,
-  BPExitStatusLaunchAppFailed         = 1 << 5,
-  BPExitStatusTestTimeout             = 1 << 6,
-  BPExitStatusAppCrashed              = 1 << 7,
-  BPExitStatusSimulatorDeleted        = 1 << 8,
-  BPExitStatusUninstallAppFailed      = 1 << 9,
-  BPExitStatusSimulatorReuseFailed    = 1 << 10
-```
-**Note:** Please refer to `bp/src/BPExitStatus.h` for the latest/exact exit codes.
-
+The exit code of Bluepill uses bit indicators which could represent multiple exit status. Please refer to [the header](https://github.com/linkedin/bluepill/blob/26a3761e6a393300b1d2dd34980b8d96a096e30e/bp/src/BPExitStatus.h#L12) for meaning of each bit.
 
 ## Demo
 
@@ -122,12 +105,6 @@ Here is a list of Bluepill exit codes. If a Bluepill execution has multiple exit
 
 Bluepill officially supports **Xcode 12.0**. If you're looking for old Xcode support, please checkout the following branches:
 
-* [Xcode-8](https://github.com/linkedin/bluepill/tree/xcode8)
-* [Xcode-9.0](https://github.com/linkedin/bluepill/tree/xcode-9.0)
-* [Xcode-9.1](https://github.com/linkedin/bluepill/tree/xcode-9.1)
-* [Xcode-9.2](https://github.com/linkedin/bluepill/tree/xcode-9.2)
-* [Xcode-9.3](https://github.com/linkedin/bluepill/tree/xcode-9.3)
-* [Xcode-9.4](https://github.com/linkedin/bluepill/tree/xcode-9.4)
 * [Xcode-10.0](https://github.com/linkedin/bluepill/tree/xcode-10.0)
 * [Xcode-10.1](https://github.com/linkedin/bluepill/tree/xcode-10.1)
 * [Xcode-10.2](https://github.com/linkedin/bluepill/tree/xcode-10.2)
@@ -138,6 +115,7 @@ Bluepill officially supports **Xcode 12.0**. If you're looking for old Xcode sup
 * [Xcode-11.3](https://github.com/linkedin/bluepill/tree/xcode-11.3)
 * [Xcode-11.4](https://github.com/linkedin/bluepill/tree/xcode-11.4)
 * [Xcode-11.5](https://github.com/linkedin/bluepill/tree/xcode-11.5)
+* [Xcode-12.0](https://github.com/linkedin/bluepill/tree/xcode-12.0)
 
 If you're looking for newer Xcode version support, try using Bluepill with `unsafe-skip-xcode-version-check` flag but make sure your app is tested with it and the underlying risks are understand.
 
