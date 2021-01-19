@@ -18,10 +18,13 @@ if [[ $# -ne 1 ]]; then
   exit 1
 fi
 
-rm -rf build/
+
 #set -ex
 
 NSUnbufferedIO=YES
+DerivedDataPath="build/"
+rm -rf "$DerivedDataPath"
+
 export NSUnbufferedIO
 
 # If BPBuildScript is set to YES, it will disable verbose output in `bp`
@@ -37,7 +40,7 @@ bluepill_build()
     -workspace Bluepill.xcworkspace \
     -scheme bluepill \
     -configuration Release \
-    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
+    -derivedDataPath "$DerivedDataPath" | tee result.txt | $XCPRETTY
 
   test $? == 0 || {
           echo Build failed
@@ -72,9 +75,10 @@ bluepill_build_sample_app()
   set -o pipefail
   xcodebuild build-for-testing \
     -workspace Bluepill.xcworkspace \
+    -arch x86_64 \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
+    -derivedDataPath "$DerivedDataPath" 2>&1 | tee result.txt | $XCPRETTY
 
   test $? == 0 || {
           echo Build failed
@@ -84,13 +88,15 @@ bluepill_build_sample_app()
   set +o pipefail
 }
 
-bluepill_instance_tests()
-{
+# $1 scheme, $2 extra args for xcodebuild
+run_tests() {
   mkdir -p build/reports/
+
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
-    -scheme bp-tests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/instance.xml
+    -scheme "$1" \
+    $2 \
+    -derivedDataPath "$DerivedDataPath" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/instance.xml
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
@@ -99,19 +105,19 @@ bluepill_instance_tests()
   fi
 }
 
+bluepill_instance_tests1()
+{
+  run_tests bp "-skip-testing bp-tests/BPReportTests"
+}
+
+bluepill_instance_tests2()
+{
+  run_tests bp "-only-testing bp-tests/BPReportTests"
+}
+
 bluepill_runner_tests()
 {
-  mkdir -p build/reports/
-  xcodebuild test \
-    -workspace Bluepill.xcworkspace \
-    -scheme bluepill-tests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/runner.xml
-
-  if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
-    echo 'Test failed'
-    cat result.txt
-    exit 1
-  fi
+  run_tests bluepill
 }
 
 bluepill_verbose_tests()
@@ -124,7 +130,8 @@ bluepill_verbose_tests()
 # The simulator clean up is to workaound a Xcode10 beta5 bug(CircleCI is still using beta5)
 bluepill_test()
 {
-  bluepill_instance_tests
+  bluepill_instance_tests1
+  bluepill_instance_tests2
   bluepill_runner_tests
 }
 

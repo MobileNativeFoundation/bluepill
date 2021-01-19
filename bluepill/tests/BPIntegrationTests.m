@@ -140,7 +140,7 @@
     config.testBundlePath = nil;
     config.testRunnerAppPath = nil;
     NSString *baseSDK = [[NSString stringWithUTF8String:BP_DEFAULT_BASE_SDK] stringByReplacingOccurrencesOfString:@"iOS " withString:@""];
-    NSString *xcTestRunFile = [NSString stringWithFormat:@"Build/Products/BPSampleApp_iphonesimulator%@-arm64-i386-x86_64.xctestrun", baseSDK];
+    NSString *xcTestRunFile = [NSString stringWithFormat:@"Build/Products/BPSampleApp_iphonesimulator%@-x86_64.xctestrun", baseSDK];
     config.xcTestRunPath = [[[BPTestHelper derivedDataPath] stringByDeletingLastPathComponent] stringByAppendingPathComponent:xcTestRunFile];
     NSError *err;
     [config validateConfigWithError:&err];
@@ -228,7 +228,7 @@
     NSError *mkdtempError;
     NSString *path = [BPUtils mkdtemp:@"bpout" withError:&mkdtempError];
     XCTAssertNil(mkdtempError);
-    
+
     NSString* videoDirName = @"my_videos";
     NSString *videoPath = [path stringByAppendingPathComponent:videoDirName];
     BPConfiguration *config = [self generateConfigWithVideoDir:videoPath];
@@ -245,7 +245,7 @@
     BPApp *app = [BPApp appWithConfig:config
                             withError:&err];
     NSString *bpPath = [BPTestHelper bpExecutablePath];
-    
+
     // Run the tests through one time to flush out any weird errors that happen with video recording
     BPRunner *dryRunRunner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
     XCTAssert(dryRunRunner != nil);
@@ -262,13 +262,13 @@
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
     XCTAssert([runner.nsTaskList count] == 0);
-    
+
     NSError *dirContentsError;
     NSArray *directoryContent  = [fileManager contentsOfDirectoryAtPath:videoPath error:&dirContentsError];
     XCTAssertNil(dirContentsError);
     XCTAssertNotNil(directoryContent);
     XCTAssertEqual(directoryContent.count, 2);
-    
+
     NSString *testClass = @"BPSampleAppUITests";
     NSSet *filenameSet = [NSSet setWithArray: directoryContent];
     XCTAssertEqual(filenameSet.count, 2);
