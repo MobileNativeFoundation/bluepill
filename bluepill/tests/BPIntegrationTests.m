@@ -223,7 +223,8 @@
     [jsonData writeToFile:[BPTestHelper testPlanPath] atomically:YES];
 }
 
-- (void)testTwoBPInstancesWithVideo {
+// TODO: Enable this when we figure out issue #469
+- (void)DISABLE_testTwoBPInstancesWithVideo {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *mkdtempError;
     NSString *path = [BPUtils mkdtemp:@"bpout" withError:&mkdtempError];
