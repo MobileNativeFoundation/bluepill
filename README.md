@@ -103,7 +103,7 @@ The exit code of Bluepill uses bit indicators which could represent multiple exi
 
 ## Requirements
 
-Bluepill officially supports **Xcode 12.0**. If you're looking for old Xcode support, please checkout the following branches:
+Bluepill officially supports **Xcode 12.2**. If you're looking for old Xcode support, please checkout the following branches:
 
 * [Xcode-10.0](https://github.com/linkedin/bluepill/tree/xcode-10.0)
 * [Xcode-10.1](https://github.com/linkedin/bluepill/tree/xcode-10.1)
@@ -116,6 +116,7 @@ Bluepill officially supports **Xcode 12.0**. If you're looking for old Xcode sup
 * [Xcode-11.4](https://github.com/linkedin/bluepill/tree/xcode-11.4)
 * [Xcode-11.5](https://github.com/linkedin/bluepill/tree/xcode-11.5)
 * [Xcode-12.0](https://github.com/linkedin/bluepill/tree/xcode-12.0)
+* [Xcode-12.2](https://github.com/linkedin/bluepill/tree/xcode-12.2)
 
 If you're looking for newer Xcode version support, try using Bluepill with `unsafe-skip-xcode-version-check` flag but make sure your app is tested with it and the underlying risks are understand.
 
