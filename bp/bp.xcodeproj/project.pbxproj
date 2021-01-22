@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		018D5C1225B4FF4200B0314B /* BPIntTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 018D5C1125B4FF4200B0314B /* BPIntTestCase.m */; };
+		018D5C1D25B6696000B0314B /* BPReportTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 018D5C1C25B6696000B0314B /* BPReportTests.m */; };
 		7A202A411DB0066100D935E3 /* BPWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A202A401DB0066100D935E3 /* BPWriter.m */; };
 		7A4D7A811DDA5FA1001E085D /* BPTreeParserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7A801DDA5FA1001E085D /* BPTreeParserTests.m */; };
 		7A4D7A831DDA5FEA001E085D /* parse_crash.log in Resources */ = {isa = PBXBuildFile; fileRef = 7A4D7A821DDA5FEA001E085D /* parse_crash.log */; };
@@ -128,6 +130,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		018D5C1025B4FF4200B0314B /* BPIntTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPIntTestCase.h; sourceTree = "<group>"; };
+		018D5C1125B4FF4200B0314B /* BPIntTestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPIntTestCase.m; sourceTree = "<group>"; };
+		018D5C1C25B6696000B0314B /* BPReportTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPReportTests.m; sourceTree = "<group>"; };
 		7A202A3D1DAED04900D935E3 /* BPExitStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPExitStatus.h; sourceTree = "<group>"; };
 		7A202A3F1DB0066100D935E3 /* BPWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPWriter.h; sourceTree = "<group>"; };
 		7A202A401DB0066100D935E3 /* BPWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPWriter.m; sourceTree = "<group>"; };
@@ -565,6 +570,8 @@
 				BA0097011DCA626F0000DD45 /* BPConfiguration+Test.h */,
 				BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */,
 				7AAE7AAE1DB7DC1E009B5549 /* BPRegexTests.m */,
+				018D5C1025B4FF4200B0314B /* BPIntTestCase.h */,
+				018D5C1125B4FF4200B0314B /* BPIntTestCase.m */,
 				BAB24F721DB5DFA200867756 /* BPTestHelper.h */,
 				BAB24F731DB5DFA200867756 /* BPTestHelper.m */,
 				7A4D7A801DDA5FA1001E085D /* BPTreeParserTests.m */,
@@ -572,6 +579,7 @@
 				BAB24F6C1DB5DB2300867756 /* Info.plist */,
 				BAB24F701DB5DBED00867756 /* SimulatorHelperTests.m */,
 				7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */,
+				018D5C1C25B6696000B0314B /* BPReportTests.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -860,6 +868,8 @@
 				BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
 				BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */,
 				7A4D7A811DDA5FA1001E085D /* BPTreeParserTests.m in Sources */,
+				018D5C1225B4FF4200B0314B /* BPIntTestCase.m in Sources */,
+				018D5C1D25B6696000B0314B /* BPReportTests.m in Sources */,
 				BA1896BA21795E06000CEC36 /* Bluepill.m in Sources */,
 				7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */,
 				BAD558D61DB6DCB100C9A5CD /* BPTreeParser.m in Sources */,
@@ -900,6 +910,7 @@
 			baseConfigurationReference = 7A79018C1D5CF113004D4325 /* bp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = x86_64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -957,6 +968,7 @@
 			baseConfigurationReference = 7A79018C1D5CF113004D4325 /* bp.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = x86_64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

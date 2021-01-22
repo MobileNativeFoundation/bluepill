@@ -146,11 +146,11 @@ struct BPOptions {
         "Skip Xcode version check if using an Xcode version that is not officially supported the Bluepill version being used. Not safe/recommended and has a limited support."},
     {366, "retry-app-crash-tests", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "retryAppCrashTests",
         "Retry the tests after an app crash and if it passes on retry, consider them non-fatal."},
-
-   {365, "exclude-xctest-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "xcTestFileToSkip",
-            "Exclude a xctestfile in the set of tests to run (takes priority over `include`)."},
-    {366, "include-xctest-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "xcTestFileToRun", "Include a xctestfile in the set of tests to run (unless specified in `exclude`)."},
-
+    {999, "exclude-xctest-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "xcTestFileToSkip",
+                "Exclude a xctestfile in the set of tests to run (takes priority over `include`)."},
+    {998, "include-xctest-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "xcTestFileToRun", "Include a xctestfile in the set of tests to run (unless specified in `exclude`)."},
+    {367, "videos-directory", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "videosDirectory",
+        "Directory where videos of test runs will be saved. If not provided, videos are not recorded."},
     {0, 0, 0, 0, 0, 0, 0}
 };
 
@@ -772,6 +772,23 @@ static NSUUID *sessionID;
         } else {
             // create the directory
             if (![[NSFileManager defaultManager] createDirectoryAtPath:self.screenshotsDirectory
+                                           withIntermediateDirectories:YES
+                                                            attributes:nil
+                                                                 error:errPtr]) {
+                return NO;
+            }
+        }
+    }
+
+    if (self.videosDirectory) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.videosDirectory isDirectory:&isdir]) {
+            if (!isdir) {
+                BP_SET_ERROR(errPtr, @"%@ is not a directory.", self.videosDirectory);
+                return NO;
+            }
+        } else {
+            // create the directory
+            if (![[NSFileManager defaultManager] createDirectoryAtPath:self.videosDirectory
                                            withIntermediateDirectories:YES
                                                             attributes:nil
                                                                  error:errPtr]) {

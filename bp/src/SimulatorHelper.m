@@ -63,13 +63,20 @@
                                             device:(SimDevice *)device
                                             config:(BPConfiguration *)config {
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:config.appBundlePath];
-    NSString *testSimulatorFrameworkPath = [[hostAppExecPath stringByDeletingLastPathComponent] stringByDeletingLastPathComponent];
+    NSString *hostAppPath = [hostAppExecPath stringByDeletingLastPathComponent];
+    NSString *testSimulatorFrameworkPath = [hostAppPath stringByDeletingLastPathComponent];
+    NSString *libXCTestBundleInjectPath = [[hostAppPath stringByAppendingPathComponent:@"Frameworks"] stringByAppendingPathComponent:@"libXCTestBundleInject.dylib"];
+    NSString *libXCTestBundleInjectValue = libXCTestBundleInjectPath;
+    if (![NSFileManager.defaultManager fileExistsAtPath:libXCTestBundleInjectPath]) {
+        [BPUtils printInfo:DEBUGINFO withString:@"Not injecting libXCTestBundleInject dylib because it was not found in the app host bundle at path: %@", libXCTestBundleInjectValue];
+        libXCTestBundleInjectValue = @"";
+    }
     NSMutableDictionary<NSString *, NSString *> *environment = [@{
                                                                   @"DYLD_FALLBACK_FRAMEWORK_PATH" : [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath],
-                                                                  @"DYLD_FALLBACK_LIBRARY_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/usr/lib", config.xcodePath],
-                                                                  @"DYLD_INSERT_LIBRARIES" : [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot/Developer/usr/lib/libXCTTargetBootstrapInject.dylib", config.xcodePath],
+                                                                  @"DYLD_FALLBACK_LIBRARY_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib", config.xcodePath],
+                                                                  @"DYLD_INSERT_LIBRARIES" : libXCTestBundleInjectValue,
                                                                   @"DYLD_LIBRARY_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath],
-                                                                  @"DYLD_ROOT_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Developer/Library/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot", config.xcodePath],
+                                                                  @"DYLD_ROOT_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot", config.xcodePath],
                                                                   @"NSUnbufferedIO" : @"1",
                                                                   @"OS_ACTIVITY_DT_MODE" : @"1",
                                                                   @"XCODE_DBG_XPC_EXCLUSIONS" : @"com.apple.dt.xctestSymbolicator",
@@ -148,7 +155,7 @@
 
 + (NSString *)bundleIdForPath:(NSString *)path {
     NSDictionary *dic = [NSDictionary dictionaryWithContentsOfFile:[path stringByAppendingPathComponent:@"Info.plist"]];
-    
+
     NSString *platform = [dic objectForKey:@"DTPlatformName"];
     if (platform && ![platform isEqualToString:@"iphonesimulator"]) {
         [BPUtils printInfo:ERROR withString:@"Wrong platform in %@. Expected 'iphonesimulator', found '%@'", path, platform];

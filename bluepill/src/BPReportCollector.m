@@ -122,7 +122,7 @@
     for (BPXMLReport *report in sortedReports) {
         [BPUtils printInfo:DEBUGINFO withString:@"MERGING REPORT: %@", [[report url] path]];
         @autoreleasepool {
-            NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:[report url] options:0 error:&err];
+            NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:[report url] options:NSXMLDocumentTidyXML error:&err];
             if (err) {
                 [BPUtils printInfo:ERROR withString:@"Failed to parse '%@': %@", [[report url] path], [err localizedDescription]];
                 [BPUtils printInfo:ERROR withString:@"SOME TESTS MIGHT BE MISSING"];
