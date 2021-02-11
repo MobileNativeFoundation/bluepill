@@ -31,7 +31,7 @@ typedef NS_OPTIONS(NSUInteger, BPOptionType) {
 struct BPOptions {
     int          val;          // short option (e.g. -f)
     const char   *name;        // long name of the option (e.g. --foobar)
-    int          program;      // BP_MASTER, BP_SLAVE, or both (BP_MASTER | BP_SLAVE)
+    int          program;      // BLUEPILL_BINARY, BP_BINARY, or both (BLUEPILL_BINARY | BP_BINARY)
     BOOL         required;     // Whether the option is required or optional
     BOOL         seen;         // Whether we've seen the option in processing.
     int          has_arg;      // One of: no_argument, required_argument, optional_argument
@@ -42,111 +42,111 @@ struct BPOptions {
 } BPOptions[] = {
 
     // Required argument
-    {'a', "app", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
+    {'a', "app", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "appBundlePath",
         "The path to the host application to execute (your .app)"},
-    {'t', "test-bundle-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
+    {'t', "test-bundle-path", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testBundlePath",
         "The test bundle to run tests."},
 
     // Required arguments for ui testing
-    {'u', "runner-app-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testRunnerAppPath",
+    {'u', "runner-app-path", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testRunnerAppPath",
         "The test runner for UI tests."},
 
     // Optional argument
-    {'d', "device", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
+    {'d', "device", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, BP_DEFAULT_DEVICE_TYPE, BP_VALUE, "deviceType",
         "On which device to run the app."},
-    {'U', "templateSimUDID", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "templateSimUDID",
+    {'U', "templateSimUDID", BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE, "templateSimUDID",
         "BP master use this flag to tell BP worker which template simulator to use"},
-    {'c', "config", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "configFile",
+    {'c', "config", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE, "configFile",
         "Read options from the specified configuration file instead of the command line"},
-    {'C', "repeat-count", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "1", BP_VALUE | BP_INTEGER, "repeatTestsCount",
+    {'C', "repeat-count", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "1", BP_VALUE | BP_INTEGER, "repeatTestsCount",
         "Number of times we'll run the entire test suite (used for stability testing)."},
-    {'N', "no-split", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "noSplit",
+    {'N', "no-split", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_LIST, "noSplit",
         "A list of NO split test bundles"},
-    {'P', "print-config", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "stdout", BP_VALUE, "configOutputFile",
+    {'P', "print-config", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "stdout", BP_VALUE, "configOutputFile",
         "Print a configuration file suitable for passing back using the `-c` option."},
-    {'R', "error-retries", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "4", BP_VALUE | BP_INTEGER, "errorRetriesCount",
+    {'R', "error-retries", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "4", BP_VALUE | BP_INTEGER, "errorRetriesCount",
         "Number of times we'll recover from crashes to continue running the current test suite."},
-    {'S', "stuck-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "stuckTimeout",
+    {'S', "stuck-timeout", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "stuckTimeout",
         "Timeout in seconds for a test that seems stuck (no output)."},
-    {'T', "test-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "testCaseTimeout",
+    {'T', "test-timeout", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "testCaseTimeout",
         "Timeout in seconds for a test that is producing output."},
-    {'f', "failure-tolerance", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "0", BP_VALUE | BP_INTEGER, "failureTolerance",
+    {'f', "failure-tolerance", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "0", BP_VALUE | BP_INTEGER, "failureTolerance",
         "The number of retries on any failures (app crash/test failure)."},
-    {'i', "include", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToRun",
+    {'i', "include", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_LIST, "testCasesToRun",
         "Include a testcase in the set of tests to run (unless specified in `exclude`)."},
-    {'n', "num-sims", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "4", BP_VALUE | BP_INTEGER, "numSims",
+    {'n', "num-sims", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "4", BP_VALUE | BP_INTEGER, "numSims",
         "Number of simulators to run in parallel. (bluepill only)"},
-    {'o', "output-dir", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
+    {'o', "output-dir", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "outputDirectory",
         "Directory where to put output log files (bluepill only)."},
-    {'j', "test-time-estimates-json", BP_MASTER, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testTimeEstimatesJsonFile",
+    {'j', "test-time-estimates-json", BLUEPILL_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testTimeEstimatesJsonFile",
         "Path of the input file with test execution time estimates."},
-    {'r', "runtime", BP_MASTER | BP_SLAVE, NO, NO, required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
+    {'r', "runtime", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, BP_DEFAULT_RUNTIME, BP_VALUE, "runtime",
         "What runtime to use."},
-    {'x', "exclude", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST, "testCasesToSkip",
+    {'x', "exclude", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_LIST, "testCasesToSkip",
         "Exclude a testcase in the set of tests to run (takes priority over `include`)."},
-    {'X', "xcode-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
+    {'X', "xcode-path", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcodePath",
         "Path to xcode."},
-    {'D', "delete-simulator", BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE, "deleteSimUDID",
+    {'D', "delete-simulator", BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE, "deleteSimUDID",
         "The device UUID of simulator to delete. Using this option enables a DELETE-ONLY-MODE. (BP INTERNAL USE ONLY). "},
-    {'V', "video-paths", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "videoPaths",
+    {'V', "video-paths", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "videoPaths",
         "Paths to the videos to be uploaded."},
-    {'I', "image-paths", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "imagePaths",
+    {'I', "image-paths", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "imagePaths",
         "Paths to the images to be uploaded."},
 
     // options with no argument
-    {'L', "clone-simulator", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "cloneSimulator",
+    {'L', "clone-simulator", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "cloneSimulator",
         "Run test with clone-simulator"},
-    {'H', "headless", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
+    {'H', "headless", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "headlessMode",
         "Run in headless mode (no GUI)."},
-    {'h', "help", BP_MASTER | BP_SLAVE, NO, NO, no_argument, NULL, BP_VALUE, NULL,
+    {'h', "help", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, NULL, BP_VALUE, NULL,
         "This help."},
-    {'q', "quiet", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "quiet",
+    {'q', "quiet", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "quiet",
         "Turn off all output except fatal errors."},
-    {'F', "only-retry-failed", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "onlyRetryFailed",
+    {'F', "only-retry-failed", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "onlyRetryFailed",
         "Only retry failed tests instead of all. Also retry test that timed-out/crashed."},
-    {'l', "list-tests", BP_MASTER, NO, NO, no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
+    {'l', "list-tests", BLUEPILL_BINARY, NO, NO, no_argument, NULL, BP_VALUE | BP_BOOL, "listTestsOnly",
         "Only list tests and exit without executing tests."},
-    {'v', "verbose", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "verboseLogging",
+    {'v', "verbose", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "verboseLogging",
         "Enable verbose logging"},
-    {'k', "keep-individual-test-reports", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepIndividualTestReports",
+    {'k', "keep-individual-test-reports", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepIndividualTestReports",
         "Keep individual test reports, in addition to the aggregated final report"},
 
     // options without short-options
-    {349, "additional-unit-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUnitTestBundles",
+    {349, "additional-unit-xctests", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUnitTestBundles",
         "Additional XCTest bundles to test."},
-    {350, "additional-ui-xctests", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUITestBundles",
+    {350, "additional-ui-xctests", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_LIST | BP_PATH, "additionalUITestBundles",
         "Additional XCUITest bundles to test."},
-    {352, "keep-simulator", BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
+    {352, "keep-simulator", BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepSimulator",
         "Don't delete the simulator device after one test bundle finish. (BP INTERNAL USE ONLY). "},
-    {353, "max-sim-create-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxCreateTries",
+    {353, "max-sim-create-attempts", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxCreateTries",
         "The maximum number of times to attempt to create a simulator before failing a test attempt"},
-    {354, "max-sim-install-attempts", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxInstallTries",
+    {354, "max-sim-install-attempts", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "2", BP_VALUE | BP_INTEGER, "maxInstallTries",
         "The maximum number of times to attempt to install the test app into a simulator before failing a test attempt"},
-    {356, "create-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "createTimeout",
+    {356, "create-timeout", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "createTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator creation"},
-    {357, "launch-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "launchTimeout",
+    {357, "launch-timeout", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "launchTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on application launch in the simulator"},
-    {358, "delete-timeout", BP_MASTER | BP_SLAVE, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "deleteTimeout",
+    {358, "delete-timeout", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "300", BP_VALUE | BP_INTEGER, "deleteTimeout",
         "The maximum amount of time, in seconds, to wait before giving up on simulator deletion"},
 
     // New options
-    {359, "xctestrun-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcTestRunPath",
+    {359, "xctestrun-path", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "xcTestRunPath",
         "The .xctestrun file with test information."},
-    {360, "diagnostics", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "saveDiagnosticsOnError",
+    {360, "diagnostics", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "saveDiagnosticsOnError",
         "Save Simulator diagnostics and useful debugging information in the output directory. If no output directory it doesn't do anything."},
-    {361, "screenshots-directory", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "screenshotsDirectory",
+    {361, "screenshots-directory", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "screenshotsDirectory",
         "Directory where simulator screenshots for failed ui tests will be stored"},
-    {362, "simulator-preferences-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "simulatorPreferencesFile",
+    {362, "simulator-preferences-file", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "simulatorPreferencesFile",
         "A .GlobalPreferences.plist simulator preferences file to be copied to any newly created simulators before booting"},
-    {363, "script-file", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "scriptFilePath",
+    {363, "script-file", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "scriptFilePath",
         "A script that will be called after the simulator is booted, but before tests are run. Can be used to do any setup (e.g. installing certs). The environment will contain $BP_DEVICE_ID with the ID of the simulator and $BP_DEVICE_PATH with its full path. Exit with zero for success and non-zero for failure."},
-    {364, "test-plan-path", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testPlanPath",
+    {364, "test-plan-path", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "testPlanPath",
         "The path of a json file which describes the test plan. It is equivalent to the .xctestrun file generated by Xcode, but it can be generated by a different build system, e.g. Bazel"},
-    {365, "unsafe-skip-xcode-version-check", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "unsafeSkipXcodeVersionCheck",
+    {365, "unsafe-skip-xcode-version-check", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL , "unsafeSkipXcodeVersionCheck",
         "Skip Xcode version check if using an Xcode version that is not officially supported the Bluepill version being used. Not safe/recommended and has a limited support."},
-    {366, "retry-app-crash-tests", BP_MASTER | BP_SLAVE, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "retryAppCrashTests",
+    {366, "retry-app-crash-tests", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "retryAppCrashTests",
         "Retry the tests after an app crash and if it passes on retry, consider them non-fatal."},
-    {367, "videos-directory", BP_MASTER | BP_SLAVE, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "videosDirectory",
+    {367, "videos-directory", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "videosDirectory",
         "Directory where videos of test runs will be saved. If not provided, videos are not recorded."},
     {0, 0, 0, 0, 0, 0, 0}
 };
@@ -200,7 +200,7 @@ static NSUUID *sessionID;
 
 - (instancetype)initWithConfigFile:(NSString *)file forProgram:(BPProgram)program withError:(NSError **)errPtr {
     self = [super init];
-    if (program != BP_MASTER && program != BP_SLAVE) return nil;
+    if (program != BLUEPILL_BINARY && program != BP_BINARY) return nil;
     self.program = program;
     self.bpCmdLineArgs = [[NSMutableArray alloc] init];
     // set factory defaults
@@ -618,7 +618,7 @@ static NSUUID *sessionID;
     if (!(self.appBundlePath) && !(self.xcTestRunPath) && !(self.testPlanPath) && !(self.deleteSimUDID)) {
         [errors addObject:@"Missing required option: -a/--app OR --xctestrun-path OR --test-plan-path"];
     }
-    if ((self.program & BP_SLAVE) && !(self.testBundlePath) && !(self.testPlanPath) && !(self.deleteSimUDID)) {
+    if ((self.program & BP_BINARY) && !(self.testBundlePath) && !(self.testPlanPath) && !(self.deleteSimUDID)) {
         [errors addObject:@"Missing required option: -t/--test-bundle-path OR --xctestrun-path"];
     }
     if (errors.count > 0) {

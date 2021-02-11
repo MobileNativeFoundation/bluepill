@@ -31,7 +31,7 @@ int main(int argc, char * argv[]) {
             exit(0);
         }
 
-        BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
+        BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_BINARY];
 
         
         struct option *lopts = [config getLongOptions];

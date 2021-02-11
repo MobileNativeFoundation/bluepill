@@ -33,7 +33,7 @@
                                                        withError:nil];
     
     self.config = [BPConfiguration new];
-    self.config.program = BP_MASTER;
+    self.config.program = BLUEPILL_BINARY;
 }
 
 - (void)tearDown {

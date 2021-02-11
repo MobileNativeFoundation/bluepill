@@ -23,7 +23,7 @@
     self.continueAfterFailure = NO;
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
-    self.config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
+    self.config = [[BPConfiguration alloc] initWithProgram:BP_BINARY];
     self.config.testBundlePath = testBundlePath;
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @40;
