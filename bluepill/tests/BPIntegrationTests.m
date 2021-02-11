@@ -24,7 +24,7 @@
 - (BPConfiguration *)generateConfigWithVideoDir:(NSString *)videoDir {
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
-    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BLUEPILL_BINARY];
     config.testBundlePath = testBundlePath;
     config.appBundlePath = hostApplicationPath;
     config.stuckTimeout = @80;
