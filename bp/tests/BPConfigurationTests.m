@@ -42,7 +42,7 @@
 }
 
 - (void)testConfigFileLoading {
-    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_BINARY];
     NSError *error;
     NSString *resourcePath = [BPTestHelper resourceFolderPath];
     NSString *configFile = [resourcePath stringByAppendingPathComponent:@"testConfig.json"];
@@ -66,7 +66,7 @@
 }
 
 - (void)testConfigFileWithRelativePathLoading {
-    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_BINARY];
     NSError *error;
     NSString *resourcePath = [BPTestHelper resourceFolderPath];
     NSString *configFile = [resourcePath stringByAppendingPathComponent:@"testConfigRelativePath.json"];

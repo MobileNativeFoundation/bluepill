@@ -66,7 +66,7 @@ int main(int argc, char * argv[]) {
         [BPStats sharedStats];
 
         [[BPStats sharedStats] startTimer:@"Bluepill Initializing"];
-        BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
+        BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BLUEPILL_BINARY];
         struct option *lopts = [config getLongOptions];
         char *sopts = [config getShortOptions];
         if (argv[1] && (!strcmp(argv[1], "version") || (!strcmp(argv[1], "--version")))) {

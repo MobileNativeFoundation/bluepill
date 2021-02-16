@@ -125,6 +125,29 @@ typedef NS_ENUM(int, BPKind) {
  * @return return the shell output
  */
 + (NSString *)runShell:(NSString *)command;
+
+/*!
+ * @discussion builds a task to run a shell command
+ * @param command the shell command the task should run
+ * @return an NSTask that will run the provided command.
+ */
++ (NSTask *)buildShellTaskForCommand:(NSString *)command;
+
+/*!
+ * @discussion builds a task to run a shell command, pointing stdout and stderr to the provided pipe
+ * @param command the shell command the task should run
+ * @param pipe the pipe that stdout and stderr will be pointed to, so the caller can handle the output.
+ * @return an NSTask that will run the provided command.
+ */
++ (NSTask *)buildShellTaskForCommand:(NSString *)command withPipe:(NSPipe *)pipe;
+
+/*!
+ * @discussion builds a user readable representation of the command that a task is configured to run
+ * @param task to get command from
+ * @return a user readable string of the task's command
+*/
++ (NSString *)getCommandStringForTask:(NSTask *)task;
+
 + (NSString *)getXcodeRuntimeVersion;
 
 typedef BOOL (^BPRunBlock)(void);

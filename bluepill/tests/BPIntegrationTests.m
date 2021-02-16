@@ -21,10 +21,10 @@
 
 @implementation BPIntegrationTests
 
-- (BPConfiguration *)generateConfig {
+- (BPConfiguration *)generateConfigWithVideoDir:(NSString *)videoDir {
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
-    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BLUEPILL_BINARY];
     config.testBundlePath = testBundlePath;
     config.appBundlePath = hostApplicationPath;
     config.stuckTimeout = @80;
@@ -36,7 +36,14 @@
     config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
     config.headlessMode = YES;
     config.quiet = [BPUtils isBuildScript];
+    if (videoDir != nil) {
+        config.videosDirectory = videoDir;
+    }
     return config;
+}
+
+- (BPConfiguration *)generateConfig {
+    return [self generateConfigWithVideoDir: nil];
 }
 
 - (void)setUp {
@@ -214,6 +221,62 @@
     };
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:testPlan options:0 error:nil];
     [jsonData writeToFile:[BPTestHelper testPlanPath] atomically:YES];
+}
+
+// TODO: Enable this when we figure out issue #469
+- (void)DISABLE_testTwoBPInstancesWithVideo {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *mkdtempError;
+    NSString *path = [BPUtils mkdtemp:@"bpout" withError:&mkdtempError];
+    XCTAssertNil(mkdtempError);
+
+    NSString* videoDirName = @"my_videos";
+    NSString *videoPath = [path stringByAppendingPathComponent:videoDirName];
+    BPConfiguration *config = [self generateConfigWithVideoDir:videoPath];
+    config.numSims = @2;
+    config.errorRetriesCount = @1;
+    config.failureTolerance = @0;
+    // This looks backwards but we want the main app to be the runner
+    // and the sampleApp is launched from the callback.
+    config.testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
+    config.testRunnerAppPath = [BPTestHelper sampleAppPath];
+    config.appBundlePath = [BPTestHelper sampleAppUITestRunnerPath];
+
+    NSError *err;
+    BPApp *app = [BPApp appWithConfig:config
+                            withError:&err];
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+
+    // Run the tests through one time to flush out any weird errors that happen with video recording
+    BPRunner *dryRunRunner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
+    XCTAssert(dryRunRunner != nil);
+    int dryRunRC = [dryRunRunner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(dryRunRC == 0);
+    XCTAssert([dryRunRunner.nsTaskList count] == 0);
+    [fileManager removeItemAtPath:videoPath error:nil];
+    NSArray *dryRunOutputContents  = [fileManager  contentsOfDirectoryAtPath:videoPath error:nil];
+    XCTAssertEqual(dryRunOutputContents.count, 0);
+
+    // Start the real test now
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
+    XCTAssert(runner != nil);
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc == 0);
+    XCTAssert([runner.nsTaskList count] == 0);
+
+    NSError *dirContentsError;
+    NSArray *directoryContent  = [fileManager contentsOfDirectoryAtPath:videoPath error:&dirContentsError];
+    XCTAssertNil(dirContentsError);
+    XCTAssertNotNil(directoryContent);
+    XCTAssertEqual(directoryContent.count, 2);
+
+    NSString *testClass = @"BPSampleAppUITests";
+    NSSet *filenameSet = [NSSet setWithArray: directoryContent];
+    XCTAssertEqual(filenameSet.count, 2);
+    BOOL hasTest1 = [filenameSet containsObject: [NSString stringWithFormat:@"%@__%@__1.mp4", testClass, @"testExample"]];
+    XCTAssertTrue(hasTest1);
+    BOOL hasTest2 = [filenameSet containsObject: [NSString stringWithFormat:@"%@__%@__1.mp4", testClass, @"testExample2"]];
+    XCTAssertTrue(hasTest2);
 }
 
 @end

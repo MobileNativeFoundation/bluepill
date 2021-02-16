@@ -31,7 +31,7 @@
 
 - (void)testAdditionalTestBundles {
     NSError *err;
-    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_SLAVE];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_BINARY];
     config.appBundlePath = [BPTestHelper sampleAppPath];
     [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
     [config saveOpt:[NSNumber numberWithInt:'t'] withArg:[BPTestHelper sampleAppBalancingTestsBundlePath]];
@@ -46,7 +46,7 @@
 
 - (void)testXcodePathIsWrong {
     NSError *err;
-    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_MASTER];
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BLUEPILL_BINARY];
     [config saveOpt:[NSNumber numberWithInt:'a'] withArg:[BPTestHelper sampleAppPath]];
     [config saveOpt:[NSNumber numberWithInt:'X'] withArg:@"/this/is/an/invalid/path"];
     

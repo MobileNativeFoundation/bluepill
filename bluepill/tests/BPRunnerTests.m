@@ -29,7 +29,7 @@
     NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
     NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
     self.config = [BPConfiguration new];
-    self.config.program = BP_MASTER;
+    self.config.program = BLUEPILL_BINARY;
     self.config.testBundlePath = testBundlePath;
     self.config.appBundlePath = hostApplicationPath;
     self.config.stuckTimeout = @30;

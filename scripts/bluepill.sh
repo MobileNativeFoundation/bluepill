@@ -1,34 +1,30 @@
-# //  Copyright 2016 LinkedIn Corporation
-# //  Licensed under the BSD 2-Clause License (the "License");
-# //  you may not use this file except in compliance with the License.
-# //  You may obtain a copy of the License at https://opensource.org/licenses/BSD-2-Clause
-# //
-# //  Unless required by applicable law or agreed to in writing, software
-# //  distributed under the License is distributed on an "AS IS" BASIS,
-# //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
-
 #!/bin/bash
+# Copyright 2016 LinkedIn Corporation
+# Licensed under the BSD 2-Clause License (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at https://opensource.org/licenses/BSD-2-Clause
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 XCPRETTY='xcpretty --report junit'
-command -v $XCPRETTY >/dev/null 2>&1 || {
-        XCPRETTY=cat
+command -v "$XCPRETTY" >/dev/null 2>&1 || {
+        XCPRETTY="cat"
 }
-
-if [ "$1" == "-v" ]
-then
-    VERBOSE=1
-    shift
-fi
 
 if [[ $# -ne 1 ]]; then
   echo "$0: usage: bluepill.sh <command>"
   exit 1
 fi
 
-rm -rf build/
+
 #set -ex
 
 NSUnbufferedIO=YES
+DerivedDataPath="build/"
+rm -rf "$DerivedDataPath"
+
 export NSUnbufferedIO
 
 # If BPBuildScript is set to YES, it will disable verbose output in `bp`
@@ -44,7 +40,7 @@ bluepill_build()
     -workspace Bluepill.xcworkspace \
     -scheme bluepill \
     -configuration Release \
-    -derivedDataPath "build/" | tee result.txt | $XCPRETTY
+    -derivedDataPath "$DerivedDataPath" | tee result.txt | $XCPRETTY
 
   test $? == 0 || {
           echo Build failed
@@ -60,18 +56,18 @@ bluepill_build()
   # package bluepill
   TAG=$(git describe --always --tags)
   DST="Bluepill-$TAG"
-  mkdir -p build/$DST/bin
-  cp build/Build/Products/Release/{bp,bluepill} build/$DST/bin
+  mkdir -p "build/$DST/bin"
+  cp build/Build/Products/Release/{bp,bluepill} "build/$DST/bin"
   ## build the man page
-  mkdir -p build/$DST/man/man1
-  /usr/bin/python scripts/man.py build/$DST/man/man1/bluepill.1
+  mkdir -p "build/$DST/man/man1"
+  /usr/bin/python scripts/man.py "build/$DST/man/man1/bluepill.1"
   # License
-  cp LICENSE build/$DST
+  cp LICENSE "build/$DST"
   # bptestrunner
-  cp bptestrunner/* build/$DST
+  cp bptestrunner/* "build/$DST"
 
-  (cd build && zip -qr $DST.zip $DST)
-  echo Release in build/$DST.zip
+  (cd build && zip -qr "$DST.zip" "$DST")
+  echo Release in "build/$DST.zip"
 }
 
 bluepill_build_sample_app()
@@ -79,9 +75,10 @@ bluepill_build_sample_app()
   set -o pipefail
   xcodebuild build-for-testing \
     -workspace Bluepill.xcworkspace \
+    -arch x86_64 \
     -scheme BPSampleApp \
     -sdk iphonesimulator \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY
+    -derivedDataPath "$DerivedDataPath" 2>&1 | tee result.txt | $XCPRETTY
 
   test $? == 0 || {
           echo Build failed
@@ -91,13 +88,15 @@ bluepill_build_sample_app()
   set +o pipefail
 }
 
-bluepill_instance_tests()
-{
+# $1 scheme, $2 extra args for xcodebuild
+run_tests() {
   mkdir -p build/reports/
+
   xcodebuild test \
     -workspace Bluepill.xcworkspace \
-    -scheme bp-tests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/instance.xml
+    -scheme "$1" \
+    $2 \
+    -derivedDataPath "$DerivedDataPath" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/instance.xml
 
   if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
     echo 'Test failed'
@@ -106,19 +105,19 @@ bluepill_instance_tests()
   fi
 }
 
+bluepill_instance_tests1()
+{
+  run_tests bp "-skip-testing bp-tests/BPReportTests"
+}
+
+bluepill_instance_tests2()
+{
+  run_tests bp "-only-testing bp-tests/BPReportTests"
+}
+
 bluepill_runner_tests()
 {
-  mkdir -p build/reports/
-  xcodebuild test \
-    -workspace Bluepill.xcworkspace \
-    -scheme bluepill-tests \
-    -derivedDataPath "build/" 2>&1 | tee result.txt | $XCPRETTY | tee build/reports/runner.xml
-
-  if ! grep '\*\* TEST SUCCEEDED \*\*' result.txt; then
-    echo 'Test failed'
-    cat result.txt
-    exit 1
-  fi
+  run_tests bluepill
 }
 
 bluepill_verbose_tests()
@@ -131,7 +130,8 @@ bluepill_verbose_tests()
 # The simulator clean up is to workaound a Xcode10 beta5 bug(CircleCI is still using beta5)
 bluepill_test()
 {
-  bluepill_instance_tests
+  bluepill_instance_tests1
+  bluepill_instance_tests2
   bluepill_runner_tests
 }
 
@@ -142,6 +142,6 @@ then
     bluepill_build_sample_app
 fi
 
-bluepill_$conf
+"bluepill_$conf"
 
 exit 0

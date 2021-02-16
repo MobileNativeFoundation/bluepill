@@ -189,27 +189,38 @@ static BOOL quiet = NO;
 
 + (NSString *)runShell:(NSString *)command {
     NSAssert(command, @"Command should not be nil");
-    NSTask *task = [[NSTask alloc] init];
-    NSData *data;
-    task.launchPath = @"/bin/sh";
-    task.arguments = @[@"-c", command];
     NSPipe *pipe = [[NSPipe alloc] init];
-    task.standardError = pipe;
-    task.standardOutput = pipe;
+    NSTask *task = [BPUtils buildShellTaskForCommand:command withPipe:pipe];
+    NSAssert(task, @"task should not be nil");
     NSFileHandle *fh = pipe.fileHandleForReading;
-    if (task) {
-        [task launch];
-    } else {
-        NSAssert(task, @"task should not be nil");
-    }
-    if (fh) {
-        data = [fh readDataToEndOfFile];
-    } else {
-        NSAssert(task, @"fh should not be nil");
-    }
+    NSAssert(fh, @"fh should not be nil");
+
+    [task launch];
+    NSData *data = [fh readDataToEndOfFile];
     [task waitUntilExit];
     NSString *result = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
     return result;
+}
+
++ (NSTask *)buildShellTaskForCommand:(NSString *)command {
+    return [BPUtils buildShellTaskForCommand:command withPipe: nil];
+}
+
++ (NSTask *)buildShellTaskForCommand:(NSString *)command withPipe:(NSPipe *)pipe {
+    NSAssert(command, @"Command should not be nil");
+    NSTask *task = [[NSTask alloc] init];
+    task.launchPath = @"/bin/sh";
+    task.arguments = @[@"-c", command];
+    if (pipe != nil) {
+        task.standardError = pipe;
+        task.standardOutput = pipe;
+    }
+    NSAssert(task, @"task should not be nil");
+    return task;
+}
+
++ (NSString *)getCommandStringForTask:(NSTask *)task {
+    return [NSString stringWithFormat:@"%@ %@", [task launchPath], [[task arguments] componentsJoinedByString:@" "]];
 }
 
 + (BOOL)runWithTimeOut:(NSTimeInterval)timeout until:(BPRunBlock)block {
