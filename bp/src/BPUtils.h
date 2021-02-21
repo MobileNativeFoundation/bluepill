@@ -15,7 +15,7 @@ _a < _b ? _a : _b; \
 })
 
 #import <Foundation/Foundation.h>
-#import "bp/src/BPXCTestFile.h"
+#import "BPXCTestFile.h"
 
 typedef NS_ENUM(int, BPKind) {
     PASSED,
