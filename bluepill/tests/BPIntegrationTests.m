@@ -70,7 +70,7 @@
     XCTAssert(runner != nil);
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0, @"Wanted 0, got %d", rc);
-    XCTAssert([runner.nsTaskList count] == 0);
+    XCTAssert([runner busySwimlaneCount] == 0);
 }
 
 - (void)testTwoBPInstances {
@@ -87,7 +87,7 @@
     XCTAssert(runner != nil);
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
-    XCTAssert([runner.nsTaskList count] == 0);
+    XCTAssert([runner busySwimlaneCount] == 0);
 }
 
 - (void)testClonedSimulators {
@@ -108,7 +108,7 @@
     XCTAssert(runner != nil);
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
-    XCTAssert([runner.nsTaskList count] == 0);
+    XCTAssert([runner busySwimlaneCount] == 0);
 }
 
 - (void)testTwoBPInstancesWithUITests {
@@ -131,7 +131,7 @@
     XCTAssert(runner != nil);
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
-    XCTAssert([runner.nsTaskList count] == 0);
+    XCTAssert([runner busySwimlaneCount] == 0);
 }
 
 - (void)testTwoBPInstancesWithXCTestRunFile {
@@ -171,7 +171,7 @@
     XCTAssert(runner != nil);
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc != 0);
-    XCTAssert([runner.nsTaskList count] == 0);
+    XCTAssert([runner busySwimlaneCount] == 0);
 }
 
 - (void)testTwoBPInstancesWithTestPlanJson {
@@ -252,7 +252,7 @@
     XCTAssert(dryRunRunner != nil);
     int dryRunRC = [dryRunRunner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(dryRunRC == 0);
-    XCTAssert([dryRunRunner.nsTaskList count] == 0);
+    XCTAssert([dryRunRunner busySwimlaneCount] == 0);
     [fileManager removeItemAtPath:videoPath error:nil];
     NSArray *dryRunOutputContents  = [fileManager  contentsOfDirectoryAtPath:videoPath error:nil];
     XCTAssertEqual(dryRunOutputContents.count, 0);
@@ -262,7 +262,7 @@
     XCTAssert(runner != nil);
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
     XCTAssert(rc == 0);
-    XCTAssert([runner.nsTaskList count] == 0);
+    XCTAssert([runner busySwimlaneCount] == 0);
 
     NSError *dirContentsError;
     NSArray *directoryContent  = [fileManager contentsOfDirectoryAtPath:videoPath error:&dirContentsError];

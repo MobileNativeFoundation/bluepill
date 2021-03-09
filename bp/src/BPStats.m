@@ -184,10 +184,11 @@
 
 - (void)generateFullReportWithWriter:(BPWriter *)writer exitCode:(int)exitCode {
     unsigned long bundleID = [self bundleID];
+    unsigned long bpNum = [self bpNum];
     // Metadata
     NSString *threadName = @"Bluepill";
     if (bundleID > 0) {
-        threadName = [NSString stringWithFormat:@"BP-%lu", bundleID];
+        threadName = [NSString stringWithFormat:@"BP Swimlane #%lu", bundleID];
     }
     [writer writeLine:[NSString stringWithFormat:@"{\"name\": \"thread_name\", \"ph\": \"M\", \"pid\": 1, \"tid\": %lu, \"args\": {\"name\": \"%@\"}},",
                        bundleID,
@@ -199,7 +200,11 @@
                        bundleID
                        ]];
 
-    NSString *name = [NSString stringWithFormat:@"%s (%d)", (bundleID > 0) ? "bp" : "bluepill", getpid()];
+    NSString *bundleName = @"Bluepill";
+    if (bpNum > 0) {
+        bundleName = [NSString stringWithFormat:@"BP-%lu", bpNum];
+    }
+    NSString *name = [NSString stringWithFormat:@"%@ (%d)", bundleName, getpid()];
     [writer writeLine:[NSString stringWithFormat:@"%@,",
                        [self completeEvent:name
                                        cat:@"process"
@@ -231,12 +236,21 @@
 #pragma mark Trace Event Formatting
 
 -(unsigned long)bundleID {
-    char *s = getenv("_BP_NUM");
+    char *s = getenv("_BP_INDEX");
     if (!s) {
         s = "0";
     }
     unsigned long bundleID = strtoul(s, 0, 10);
     return bundleID;
+}
+
+-(unsigned long)bpNum {
+    char *s = getenv("_BP_NUM");
+    if (!s) {
+        s = "0";
+    }
+    unsigned long bpNum = strtoul(s, 0, 10);
+    return bpNum;
 }
 
 - (NSString *)resultToCname:(NSString *)result {
