@@ -31,12 +31,14 @@
  * @discussion Create a new Simulator wrapped in a `bp` process. It will run the specified bundle and execute the block once it finishes.
  * @param bundle The test bundle to execute.
  * @param number The simulator number (will be printed in logs).
+ * @param index The simulator index that keeps same when the simulator is reused.
  * @param block A completion block to execute when the NSTask has finished.
  * @return An NSTask ready to be executed via [task launch] or nil in failure.
  *
  */
 - (NSTask *)newTaskWithBundle:(BPXCTestFile *)bundle
                     andNumber:(NSUInteger)number
+                     andIndex:(NSUInteger)index
                     andDevice:(NSString *)deviceID
            andCompletionBlock:(void (^)(NSTask * ))block;
 

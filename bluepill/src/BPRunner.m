@@ -71,6 +71,7 @@ maxprocs(void)
 
 - (NSTask *)newTaskWithBundle:(BPXCTestFile *)bundle
                     andNumber:(NSUInteger)number
+                     andIndex:(NSUInteger)index
                     andDevice:(NSString *)deviceID
            andCompletionBlock:(void (^)(NSTask *))block {
     BPConfiguration *cfg = [self.config mutableCopy];
@@ -118,6 +119,7 @@ maxprocs(void)
     NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
     [env addEntriesFromDictionary:[[NSProcessInfo processInfo] environment]];
     [env setObject:[NSString stringWithFormat:@"%lu", number] forKey:@"_BP_NUM"];
+    [env setObject:[NSString stringWithFormat:@"%lu", index] forKey:@"_BP_INDEX"];
     [task setEnvironment:env];
     [task setTerminationHandler:^(NSTask *task) {
         [[NSFileManager defaultManager] removeItemAtPath:cfg.configOutputFile
@@ -218,6 +220,10 @@ maxprocs(void)
     int seconds = 0;
     __block NSMutableArray *taskList = [[NSMutableArray alloc] init];
     __block NSMutableArray *deviceList = [[NSMutableArray alloc] init];
+    __block NSMutableArray *simList = [[NSMutableArray alloc] init];
+    for (NSUInteger i = numSims; i >= 1; i--) {
+        [simList addObject:[NSNumber numberWithUnsignedLong:i]];
+    }
     self.nsTaskList = [[NSMutableArray alloc] init];
     int old_interrupted = interrupted;
     NSRunningApplication *app;
@@ -250,17 +256,27 @@ maxprocs(void)
         if (noLaunchedTasks && (bundles.count == 0 || interrupted)) break;
         if (bundles.count > 0 && canLaunchTask && !interrupted) {
             NSString *deviceID = nil;
+            NSUInteger simIndex = 0;
             @synchronized(self) {
                 if ([deviceList count] > 0) {
                     deviceID = [deviceList objectAtIndex:0];
                     [deviceList removeObjectAtIndex:0];
                 }
+                if ([simList count] > 0) {
+                    simIndex = [[simList lastObject] unsignedLongValue];
+                    [simList removeLastObject];
+                }
             }
-            NSTask *task = [self newTaskWithBundle:[bundles objectAtIndex:0] andNumber:++taskNumber andDevice:deviceID andCompletionBlock:^(NSTask * _Nonnull task) {
+            NSTask *task = [self newTaskWithBundle:[bundles objectAtIndex:0]
+                                         andNumber:++taskNumber
+                                          andIndex:simIndex
+                                         andDevice:deviceID
+                                andCompletionBlock:^(NSTask * _Nonnull task) {
                 @synchronized (self) {
                     launchedTasks--;
                     [taskList removeObject:[NSString stringWithFormat:@"%lu", taskNumber]];
                     [self.nsTaskList removeObject:task];
+                    [simList addObject:[NSNumber numberWithUnsignedLong:simIndex]];
                     rc = (rc || [task terminationStatus]);
                 };
                 [BPUtils printInfo:INFO withString:@"PID %d exited %d.", [task processIdentifier], [task terminationStatus]];
