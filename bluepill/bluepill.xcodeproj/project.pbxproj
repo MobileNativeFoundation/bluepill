@@ -12,6 +12,8 @@
 		0173520F23679E0A008BFA4E /* BPHTMLReportWriteTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0173520E23679E0A008BFA4E /* BPHTMLReportWriteTests.m */; };
 		0173521323679E87008BFA4E /* TEST-FinalReport.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0173521223679E87008BFA4E /* TEST-FinalReport.xml */; };
 		56B74BCA1E4C0A15004E6624 /* BPIntegrationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */; };
+		8A3B01062637140D00211DAB /* BPSwimlane.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AEAAC242604EF420084FB85 /* BPSwimlane.m */; };
+		8AEAAC252604EF420084FB85 /* BPSwimlane.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AEAAC242604EF420084FB85 /* BPSwimlane.m */; };
 		B3109F792151F72F00B9309C /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3380AEE2150BD8700752E1B /* CoreSimulator.framework */; };
 		BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809E81DBA8FC300D7D130 /* BPRunnerTests.m */; };
 		BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809EA1DBA910400D7D130 /* BPAppTests.m */; };
@@ -55,6 +57,8 @@
 		0173520E23679E0A008BFA4E /* BPHTMLReportWriteTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPHTMLReportWriteTests.m; sourceTree = "<group>"; };
 		0173521223679E87008BFA4E /* TEST-FinalReport.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "TEST-FinalReport.xml"; sourceTree = "<group>"; };
 		56B74BC91E4C0A15004E6624 /* BPIntegrationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPIntegrationTests.m; sourceTree = "<group>"; };
+		8AEAAC232604EF420084FB85 /* BPSwimlane.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPSwimlane.h; sourceTree = "<group>"; };
+		8AEAAC242604EF420084FB85 /* BPSwimlane.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSwimlane.m; sourceTree = "<group>"; };
 		B3380AEE2150BD8700752E1B /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = ../../../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework; sourceTree = "<group>"; };
 		BA1809E01DBA8FB100D7D130 /* bluepill-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "bluepill-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA1809E41DBA8FB100D7D130 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -213,6 +217,8 @@
 				0173520D2366186A008BFA4E /* BPTestReportHTML.h */,
 				C41C41F71DB14B5F001F32A2 /* BPRunner.h */,
 				C41C41F81DB14B5F001F32A2 /* BPRunner.m */,
+				8AEAAC232604EF420084FB85 /* BPSwimlane.h */,
+				8AEAAC242604EF420084FB85 /* BPSwimlane.m */,
 				BAEF4B371DAC539400E68294 /* main.m */,
 			);
 			path = src;
@@ -351,6 +357,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A3B01062637140D00211DAB /* BPSwimlane.m in Sources */,
 				BA1809E91DBA8FC300D7D130 /* BPRunnerTests.m in Sources */,
 				BA1809FB1DBA949600D7D130 /* BPPacker.m in Sources */,
 				BA1809EB1DBA910400D7D130 /* BPAppTests.m in Sources */,
@@ -376,6 +383,7 @@
 				0173520C2366110D008BFA4E /* BPHTMLReportWriter.m in Sources */,
 				BAD8484A1DBC6A83007034CF /* BPReportCollector.m in Sources */,
 				C41C41F31DB04032001F32A2 /* BPApp.m in Sources */,
+				8AEAAC252604EF420084FB85 /* BPSwimlane.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
