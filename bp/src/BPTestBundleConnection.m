@@ -13,12 +13,14 @@
 #import "SimulatorHelper.h"
 #import "BPConfiguration.h"
 
+// XCTAutomationSupport framework
+#import "PrivateHeaders/XCTAutomationSupport/XCElementSnapshot.h"
+
 // XCTest framework
-#import "PrivateHeaders/XCTest/XCTestManager_IDEInterface-Protocol.h"
-#import "PrivateHeaders/XCTest/XCTestManager_TestsInterface-Protocol.h"
-#import "PrivateHeaders/XCTest/XCTestManager_ManagerInterface-Protocol.h"
-#import "PrivateHeaders/XCTest/XCTestManager_DaemonConnectionInterface-Protocol.h"
-#import "PrivateHeaders/XCTest/XCTestDriverInterface-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTMessagingChannel_IDEToDaemon-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTMessagingChannel_IDEToRunner-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTMessagingChannel_RunnerToIDE-Protocol.h"
+
 
 // DTX framework
 #import "PrivateHeaders/DTXConnectionServices/DTXConnection.h"
@@ -39,9 +41,9 @@
 
 static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
-@interface BPTestBundleConnection()<XCTestManager_IDEInterface>
+@interface BPTestBundleConnection()<XCTMessagingChannel_IDEToRunner>
 
-@property (atomic, nullable, strong) id<XCTestDriverInterface> testBundleProxy;
+@property (atomic, nullable, strong) id<XCTMessagingChannel_IDEToRunner> testBundleProxy;
 @property (atomic, nullable, strong, readwrite) DTXConnection *testBundleConnection;
 
 @property (nonatomic, weak) id<BPTestBundleConnectionDelegate> interface;
@@ -91,12 +93,12 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
             [BPUtils printInfo:INFO withString:@"DTXConnection disconnected."];
         }];
         [connection
-         handleProxyRequestForInterface:@protocol(XCTestManager_IDEInterface)
-         peerInterface:@protocol(XCTestDriverInterface)
+         handleProxyRequestForInterface:@protocol(XCTMessagingChannel_IDEToRunner)
+         peerInterface:@protocol(XCTMessagingChannel_RunnerToIDE)
          handler:^(DTXProxyChannel *channel){
              [BPUtils printInfo:INFO withString:@"Got proxy channel request from test bundle"];
              [channel setExportedObject:self queue:dispatch_get_main_queue()];
-             id<XCTestDriverInterface> interface = channel.remoteObjectProxy;
+             id<XCTMessagingChannel_IDEToRunner> interface = channel.remoteObjectProxy;
              self.testBundleProxy = interface;
          }];
         self.testBundleConnection = connection;
@@ -104,10 +106,10 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
         dispatch_async(dispatch_get_main_queue(), ^{
             DTXProxyChannel *proxyChannel = [self.testBundleConnection
-                                             makeProxyChannelWithRemoteInterface:@protocol(XCTestManager_DaemonConnectionInterface)
-                                             exportedInterface:@protocol(XCTestManager_IDEInterface)];
+                                             makeProxyChannelWithRemoteInterface:@protocol(XCTMessagingChannel_IDEToDaemon)
+                                             exportedInterface:@protocol(XCTMessagingChannel_IDEToRunner)];
             [proxyChannel setExportedObject:self queue:dispatch_get_main_queue()];
-            id<XCTestManager_DaemonConnectionInterface> remoteProxy = (id<XCTestManager_DaemonConnectionInterface>) proxyChannel.remoteObjectProxy;
+            id<XCTMessagingChannel_IDEToDaemon> remoteProxy = (id<XCTMessagingChannel_IDEToDaemon>) proxyChannel.remoteObjectProxy;
 
             NSString *path = NSBundle.mainBundle.bundlePath;
             if (![path.pathExtension isEqualToString:@"app"]) {
@@ -190,7 +192,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     return transport;
 }
 
-#pragma mark XCTestDriverInterface
+#pragma mark XCTMessagingChannel_RunnerToIDE
 
 - (id)_XCT_didBeginExecutingTestPlan {
     [BPUtils printInfo:INFO withString:@"_XCT_didBeginExecutingTestPlan"];
@@ -275,7 +277,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
     self.recordVideoTask = nil;
 }
 
-#pragma mark - XCTestManager_IDEInterface protocol
+#pragma mark - XCTMessagingChannel_IDEToRunner protocol
 
 #pragma mark Process Launch Delegation
 
@@ -472,7 +474,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
     return [NSString stringWithFormat:@"Received call for unhandled method (%@). Probably you should have a look at _IDETestManagerAPIMediator in IDEFoundation.framework and implement it. Good luck!", NSStringFromSelector(aSelector)];
 }
 
-// This will add more logs when unimplemented method from XCTestManager_IDEInterface protocol is called
+// This will add more logs when unimplemented method from XCTMessagingChannel_IDEToRunner protocol is called
 - (id)handleUnimplementedXCTRequest:(SEL)aSelector {
     NSAssert(nil, [self unknownMessageForSelector:_cmd]);
     return nil;

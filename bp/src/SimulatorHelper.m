@@ -12,6 +12,7 @@
 #import "BPUtils.h"
 #import "BPXCTestFile.h"
 #import "PrivateHeaders/XCTest/XCTestConfiguration.h"
+#import "PrivateHeaders/XCTest/XCTTestIdentifierSet.h"
 
 
 @implementation SimulatorHelper
@@ -71,21 +72,20 @@
         [BPUtils printInfo:DEBUGINFO withString:@"Not injecting libXCTestBundleInject dylib because it was not found in the app host bundle at path: %@", libXCTestBundleInjectValue];
         libXCTestBundleInjectValue = @"";
     }
-    NSMutableDictionary<NSString *, NSString *> *environment = [@{
-                                                                  @"DYLD_FALLBACK_FRAMEWORK_PATH" : [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath],
-                                                                  @"DYLD_FALLBACK_LIBRARY_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib", config.xcodePath],
-                                                                  @"DYLD_INSERT_LIBRARIES" : libXCTestBundleInjectValue,
-                                                                  @"DYLD_LIBRARY_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath],
-                                                                  @"DYLD_ROOT_PATH" : [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot", config.xcodePath],
-                                                                  @"NSUnbufferedIO" : @"1",
-                                                                  @"OS_ACTIVITY_DT_MODE" : @"1",
-                                                                  @"XCODE_DBG_XPC_EXCLUSIONS" : @"com.apple.dt.xctestSymbolicator",
-                                                                  @"XPC_FLAGS" : @"0x0",
-                                                                  @"XCTestConfigurationFilePath" : [SimulatorHelper testEnvironmentWithConfiguration:config],
-                                                                  @"__XCODE_BUILT_PRODUCTS_DIR_PATHS" : testSimulatorFrameworkPath,
-                                                                  @"__XPC_DYLD_FRAMEWORK_PATH" : testSimulatorFrameworkPath,
-                                                                  @"__XPC_DYLD_LIBRARY_PATH" : testSimulatorFrameworkPath,
-                                                                  } mutableCopy];
+    NSMutableDictionary<NSString *, NSString *> *environment = [[NSMutableDictionary alloc] init];
+    environment[@"DYLD_FALLBACK_FRAMEWORK_PATH"] = [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath];
+    environment[@"DYLD_FALLBACK_LIBRARY_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib", config.xcodePath];
+    environment[@"DYLD_INSERT_LIBRARIES"] = libXCTestBundleInjectValue;
+    environment[@"DYLD_LIBRARY_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath];
+    environment[@"DYLD_ROOT_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot", config.xcodePath];
+    environment[@"NSUnbufferedIO"] = @"1";
+    environment[@"OS_ACTIVITY_DT_MODE"] = @"1";
+    environment[@"XCODE_DBG_XPC_EXCLUSIONS"] = @"com.apple.dt.xctestSymbolicator";
+    environment[@"XPC_FLAGS"] = @"0x0";
+    environment[@"XCTestConfigurationFilePath"] = [SimulatorHelper testEnvironmentWithConfiguration:config];
+    environment[@"__XCODE_BUILT_PRODUCTS_DIR_PATHS"] = testSimulatorFrameworkPath;
+    environment[@"__XPC_DYLD_FRAMEWORK_PATH"] = testSimulatorFrameworkPath;
+    environment[@"__XPC_DYLD_LIBRARY_PATH"] = testSimulatorFrameworkPath;
 
     if (config.outputDirectory) {
         NSString *coveragePath = [config.outputDirectory stringByAppendingPathComponent:@"%p.profraw"];
@@ -125,7 +125,7 @@
     }
 
     if (config.testCasesToSkip) {
-        [xctConfig setTestsToSkip:[NSSet setWithArray:config.testCasesToSkip]];
+        [xctConfig setTestsToSkip:[[XCTTestIdentifierSet alloc] initWithArray:config.testCasesToSkip]];
     }
 
     if (config.testCasesToRun) {
@@ -136,9 +136,9 @@
         NSSet *testsToRun = [[NSSet alloc] initWithArray:config.testCasesToRun];
         [testsToSkip minusSet:testsToRun];
         if (xctConfig.testsToSkip) {
-            [testsToSkip unionSet:xctConfig.testsToSkip];
+            [testsToSkip unionSet:[NSSet setWithArray:config.testCasesToSkip]];
         }
-        [xctConfig setTestsToSkip:testsToSkip];
+        [xctConfig setTestsToSkip:[[XCTTestIdentifierSet alloc] initWithSet:testsToSkip]];
     }
 
     NSString *XCTestConfigurationFilename = [NSString stringWithFormat:@"%@/%@-%@",

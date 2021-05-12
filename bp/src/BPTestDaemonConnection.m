@@ -10,12 +10,14 @@
 #import "BPUtils.h"
 #import "BPConstants.h"
 
+// XCTAutomationSupport framework
+#import "PrivateHeaders/XCTAutomationSupport/XCElementSnapshot.h"
+
 // XCTest framework
-#import "PrivateHeaders/XCTest/XCTestManager_IDEInterface-Protocol.h"
-#import "PrivateHeaders/XCTest/XCTestManager_TestsInterface-Protocol.h"
-#import "PrivateHeaders/XCTest/XCTestManager_ManagerInterface-Protocol.h"
-#import "PrivateHeaders/XCTest/XCTestManager_DaemonConnectionInterface-Protocol.h"
-#import "PrivateHeaders/XCTest/XCTestDriverInterface-Protocol.h"
+#import "PrivateHeaders/XCTest/XCActivityRecord.h"
+#import "PrivateHeaders/XCTest/XCTMessagingChannel_IDEToRunner-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTMessagingChannel_IDEToDaemon-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTMessagingChannel_DaemonToIDE-Protocol.h"
 
 // DTX framework
 #import "PrivateHeaders/DTXConnectionServices/DTXConnection.h"
@@ -36,18 +38,16 @@
 
 static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
-@interface BPTestDaemonConnection()<XCTestManager_IDEInterface>
-@property (nonatomic, strong) id<XCTestManager_IDEInterface> interface;
+@interface BPTestDaemonConnection()<XCTMessagingChannel_IDEToRunner>
 @property (nonatomic, assign) BOOL connected;
 @end
 
 @implementation BPTestDaemonConnection
 
-- (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<XCTestManager_IDEInterface>)interface andTestRunnerPID: (pid_t) pid {
+- (instancetype)initWithDevice:(BPSimulator *)simulator andTestRunnerPID: (pid_t) pid {
     self = [super init];
     if (self) {
         self.simulator = simulator;
-        self.interface = interface;
         self.testRunnerPid = pid;
     }
     return self;
@@ -73,12 +73,12 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     [connection resume];
 
     DTXProxyChannel *channel = [connection
-                                makeProxyChannelWithRemoteInterface:@protocol(XCTestManager_DaemonConnectionInterface)
-                                exportedInterface:@protocol(XCTestManager_IDEInterface)];
+                                makeProxyChannelWithRemoteInterface:@protocol(XCTMessagingChannel_IDEToDaemon)
+                                exportedInterface:@protocol(XCTMessagingChannel_DaemonToIDE)];
 
     [channel setExportedObject:self queue:dispatch_get_main_queue()];
-    id<XCTestManager_DaemonConnectionInterface> daemonProxy = (id<XCTestManager_DaemonConnectionInterface>)channel.remoteObjectProxy;
-    DTXRemoteInvocationReceipt *receipt = [daemonProxy _IDE_initiateControlSessionForTestProcessID:@(self.testRunnerPid) protocolVersion:@(BP_DAEMON_PROTOCOL_VERSION)];
+    id<XCTMessagingChannel_IDEToDaemon> daemonProxy = (id<XCTMessagingChannel_IDEToDaemon>)channel.remoteObjectProxy;
+    DTXRemoteInvocationReceipt *receipt = [daemonProxy _IDE_initiateControlSessionForTestProcessID:@(self.testRunnerPid)];
     [receipt handleCompletion:^(NSNumber *version, NSError *error) {
         if (error) {
             [BPUtils printInfo:ERROR withString:@"Error with daemon connection: %@", [error localizedDescription]];
@@ -113,7 +113,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     return transport;
 }
 
-#pragma mark - XCTestManager_IDEInterface protocol
+#pragma mark - XCTMessagingChannel_IDEToRunner protocol
 
 #pragma mark Process Launch Delegation
 
@@ -277,7 +277,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     return [NSString stringWithFormat:@"Received call for unhandled method (%@). Probably you should have a look at _IDETestManagerAPIMediator in IDEFoundation.framework and implement it. Good luck!", NSStringFromSelector(aSelector)];
 }
 
-// This will add more logs when unimplemented method from XCTestManager_IDEInterface protocol is called
+// This will add more logs when unimplemented method from XCTMessagingChannel_IDEToRunner protocol is called
 - (id)handleUnimplementedXCTRequest:(SEL)aSelector {
     [BPUtils printInfo:DEBUGINFO withString:@"TMD: unimplemented: %s", sel_getName(aSelector)];
     NSAssert(nil, [self unknownMessageForSelector:_cmd]);
