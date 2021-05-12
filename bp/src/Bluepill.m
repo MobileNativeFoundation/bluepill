@@ -433,7 +433,7 @@ static void onInterrupt(int ignore) {
         return;
     }
     BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithContext:context andInterface:self];
-    BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:context.runner andInterface:nil andTestRunnerPID: context.pid];
+    BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:context.runner andTestRunnerPID: context.pid];
 
     [dConnection connectWithTimeout:180];
     [bConnection connectWithTimeout:180];

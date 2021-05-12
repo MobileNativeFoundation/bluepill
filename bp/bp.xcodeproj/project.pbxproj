@@ -1019,7 +1019,19 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"/Library/Developer/PrivateFrameworks\"",
+					"\"$(PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"",
+					"\"$(DEVELOPER_DIR)/../SharedFrameworks\"",
+					"\"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/..",
+					"$(SRCROOT)/src",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
@@ -1034,7 +1046,19 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"/Library/Developer/PrivateFrameworks\"",
+					"\"$(PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)\"",
+					"\"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"",
+					"\"$(DEVELOPER_DIR)/../SharedFrameworks\"",
+					"\"$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/..",
+					"$(SRCROOT)/src",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
@@ -1064,7 +1088,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/..",
+					"$(SRCROOT)/src",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
@@ -1098,7 +1125,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/..",
+					"$(SRCROOT)/src",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
@@ -1117,7 +1147,10 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/..",
+					"$(SRCROOT)/src",
+				);
 				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
@@ -1133,7 +1166,10 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/..",
+					"$(SRCROOT)/src",
+				);
 				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";

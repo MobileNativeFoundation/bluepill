@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PrivateHeaders/XCTest/XCTestManager_IDEInterface-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTMessagingChannel_IDEToRunner-Protocol.h"
 
 // CoreSimulator
 #import "BPSimulator.h"
@@ -15,6 +15,6 @@
 @interface BPTestDaemonConnection : NSObject
 @property (nonatomic, assign) pid_t testRunnerPid;
 @property (nonatomic, strong) BPSimulator *simulator;
-- (instancetype)initWithDevice:(BPSimulator *)device andInterface:(id<XCTestManager_IDEInterface>)interface andTestRunnerPID: (pid_t) pid;
+- (instancetype)initWithDevice:(BPSimulator *)device andTestRunnerPID: (pid_t) pid;
 - (void)connectWithTimeout:(NSTimeInterval)timeout;
 @end

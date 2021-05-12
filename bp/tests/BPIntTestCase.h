@@ -9,6 +9,7 @@
 
 #import <Foundation/Foundation.h>
 #import <XCTest/XCTest.h>
+#import <XCTest/XCTestCase.h>
 
 @class BPConfiguration;
 
