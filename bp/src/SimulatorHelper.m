@@ -12,7 +12,7 @@
 #import "BPUtils.h"
 #import "BPXCTestFile.h"
 #import "PrivateHeaders/XCTest/XCTestConfiguration.h"
-
+#import "PrivateHeaders/XCTest/XCTTestIdentifierSet.h"
 
 @implementation SimulatorHelper
 
@@ -125,20 +125,19 @@
     }
 
     if (config.testCasesToSkip) {
-        [xctConfig setTestsToSkip:[NSSet setWithArray:config.testCasesToSkip]];
+        [xctConfig setTestsToSkip:[[XCTTestIdentifierSet alloc] initWithArray:config.testCasesToSkip]];
     }
 
     if (config.testCasesToRun) {
         // According to @khu, we can't just pass the right setTestsToRun and have it work, so what we do instead
         // is get the full list of tests from the XCTest bundle, then skip everything we don't want to run.
 
-        NSMutableSet *testsToSkip = [[NSMutableSet alloc] initWithArray:config.allTestCases];
-        NSSet *testsToRun = [[NSSet alloc] initWithArray:config.testCasesToRun];
-        [testsToSkip minusSet:testsToRun];
-        if (xctConfig.testsToSkip) {
-            [testsToSkip unionSet:xctConfig.testsToSkip];
+        NSMutableArray *testsToSkip = [NSMutableArray arrayWithArray:config.allTestCases];
+        [testsToSkip removeObjectsInArray:config.testCasesToRun];
+        if (config.testCasesToSkip) {
+            [testsToSkip addObjectsFromArray:config.testCasesToSkip];
         }
-        [xctConfig setTestsToSkip:testsToSkip];
+        [xctConfig setTestsToSkip:[[XCTTestIdentifierSet alloc] initWithArray:testsToSkip]];
     }
 
     NSString *XCTestConfigurationFilename = [NSString stringWithFormat:@"%@/%@-%@",
