@@ -13,8 +13,6 @@
 #import "BPConstants.h"
 #import "BPCreateSimulatorHandler.h"
 #import "BPSimulator.h"
-#import "BPTestBundleConnection.h"
-#import "BPTestDaemonConnection.h"
 #import "BPTreeParser.h"
 #import "BPUtils.h"
 #import "BPWaitTimer.h"

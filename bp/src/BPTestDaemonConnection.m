@@ -43,18 +43,19 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
 @implementation BPTestDaemonConnection
 
-- (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<XCTestManager_IDEInterface>)interface {
+- (instancetype)initWithDevice:(BPSimulator *)simulator andInterface:(id<XCTestManager_IDEInterface>)interface andTestRunnerPID: (pid_t) pid {
     self = [super init];
     if (self) {
         self.simulator = simulator;
         self.interface = interface;
+        self.testRunnerPid = pid;
     }
     return self;
 }
 
 - (void)connectWithTimeout:(NSTimeInterval)timeout {
     [self connect];
-    // Pool connection status till it passes.
+    // Poll connection status till it passes.
     [BPUtils runWithTimeOut:timeout until:^BOOL{
         return self.connected;
     }];
