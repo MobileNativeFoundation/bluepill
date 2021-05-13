@@ -16,7 +16,6 @@
 @end
 
 @interface BPTestBundleConnection : NSObject
-@property (nonatomic, strong) BPConfiguration *config;
 @property (nonatomic, strong) BPExecutionContext *context;
 @property (nonatomic, strong) BPSimulator *simulator;
 @property (nonatomic, copy) void (^completionBlock)(NSError *, pid_t);

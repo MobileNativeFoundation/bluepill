@@ -114,7 +114,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
                 path = NSBundle.mainBundle.executablePath;
             }
             __block DTXRemoteInvocationReceipt *receipt = [remoteProxy
-                                                           _IDE_initiateSessionWithIdentifier:self.config.sessionIdentifier
+                                                           _IDE_initiateSessionWithIdentifier:self.context.config.sessionIdentifier
                                                            forClient:[self clientProcessUniqueIdentifier]
                                                            atPath:path
                                                            protocolVersion:@(BP_DAEMON_PROTOCOL_VERSION)];
@@ -282,7 +282,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
 - (id)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment
 {
     NSMutableDictionary<NSString *, NSString *> *env = [[NSMutableDictionary alloc] init];
-    [env addEntriesFromDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:bundleID device:nil config:_config]];
+    [env addEntriesFromDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:bundleID device:nil config:_context.config]];
     [env addEntriesFromDictionary:environment];
     NSDictionary *options = @{
                               @"arguments": arguments,

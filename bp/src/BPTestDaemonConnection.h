@@ -15,6 +15,6 @@
 @interface BPTestDaemonConnection : NSObject
 @property (nonatomic, assign) pid_t testRunnerPid;
 @property (nonatomic, strong) BPSimulator *simulator;
-- (instancetype)initWithDevice:(BPSimulator *)device andInterface:(id<XCTestManager_IDEInterface>)interface;
+- (instancetype)initWithDevice:(BPSimulator *)device andInterface:(id<XCTestManager_IDEInterface>)interface andTestRunnerPID: (pid_t) pid;
 - (void)connectWithTimeout:(NSTimeInterval)timeout;
 @end
