@@ -187,6 +187,29 @@
 		7DDFED931F8188CC00D1357C /* SimDeviceIOProtocol-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOProtocol-Protocol.h"; sourceTree = "<group>"; };
 		7DDFED941F8188EC00D1357C /* SimDeviceIOPortDescriptorState-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOPortDescriptorState-Protocol.h"; sourceTree = "<group>"; };
 		7DDFED961F81896C00D1357C /* SimDeviceFramebufferService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceFramebufferService.h; sourceTree = "<group>"; };
+		8AA74DF9264E51E80007D53C /* XCActivityRecord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XCActivityRecord.h; sourceTree = "<group>"; };
+		8AA74DFA264E52460007D53C /* XCTMessagingChannel_RunnerToIDE-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingChannel_RunnerToIDE-Protocol.h"; sourceTree = "<group>"; };
+		8AA74DFB264E52710007D53C /* XCTMessagingChannel_IDEToRunner-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingChannel_IDEToRunner-Protocol.h"; sourceTree = "<group>"; };
+		8AA74DFC264E52850007D53C /* XCTMessagingChannel_DaemonToIDE-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingChannel_DaemonToIDE-Protocol.h"; sourceTree = "<group>"; };
+		8AA74DFD264E52850007D53C /* XCTMessagingChannel_IDEToDaemon-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingChannel_IDEToDaemon-Protocol.h"; sourceTree = "<group>"; };
+		8AA74DFE264E53200007D53C /* XCTMessagingRole_DebugLogging-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_DebugLogging-Protocol.h"; sourceTree = "<group>"; };
+		8AA74DFF264E53200007D53C /* XCTMessagingRole_CrashReporting-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_CrashReporting-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E00264E53200007D53C /* XCTMessagingRole_SelfDiagnosisIssueReporting-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_SelfDiagnosisIssueReporting-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E01264E532C0007D53C /* _XCTMessaging_VoidProtocol-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "_XCTMessaging_VoidProtocol-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E02264E53490007D53C /* XCTMessagingRole_DiagnosticsCollection-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_DiagnosticsCollection-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E03264E53490007D53C /* XCTMessagingRole_RunnerSessionInitiation-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_RunnerSessionInitiation-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E04264E53490007D53C /* XCTMessagingRole_ControlSessionInitiation-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_ControlSessionInitiation-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E05264E53490007D53C /* XCTMessagingRole_UIRecordingControl-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_UIRecordingControl-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E06264E535D0007D53C /* XCTMessagingRole_ProcessMonitoring-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_ProcessMonitoring-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E07264E535D0007D53C /* XCTMessagingRole_TestExecution-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_TestExecution-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E08264E535D0007D53C /* XCTMessagingRole_TestExecution_Legacy-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_TestExecution_Legacy-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E09264E53990007D53C /* XCTMessagingRole_TestReporting-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_TestReporting-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E0A264E53990007D53C /* XCTMessagingRole_ActivityReporting_Legacy-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_ActivityReporting_Legacy-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E0B264E53990007D53C /* XCTMessagingRole_PerformanceMeasurementReporting_Legacy-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_PerformanceMeasurementReporting_Legacy-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E0C264E53990007D53C /* XCTMessagingRole_ActivityReporting-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_ActivityReporting-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E0D264E53990007D53C /* XCTMessagingRole_PerformanceMeasurementReporting-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_PerformanceMeasurementReporting-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E0E264E53990007D53C /* XCTMessagingRole_UIAutomation-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_UIAutomation-Protocol.h"; sourceTree = "<group>"; };
+		8AA74E0F264E53990007D53C /* XCTMessagingRole_TestReporting_Legacy-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTMessagingRole_TestReporting_Legacy-Protocol.h"; sourceTree = "<group>"; };
 		8AFA37B5264E3AA800148A94 /* XCTTestIdentifierSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XCTTestIdentifierSet.h; sourceTree = "<group>"; };
 		8AFA37B6264E3B0A00148A94 /* NSString+IdentifierString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+IdentifierString.m"; sourceTree = "<group>"; };
 		8AFA37B7264E3B0A00148A94 /* NSString+IdentifierString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+IdentifierString.h"; sourceTree = "<group>"; };
@@ -297,11 +320,6 @@
 		BAFCCA531E36DBA900E33C31 /* DTXSocketTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXSocketTransport.h; sourceTree = "<group>"; };
 		BAFCCA541E36DBA900E33C31 /* DTXTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTXTransport.h; sourceTree = "<group>"; };
 		BAFCCA581E36DBA900E33C31 /* NSURLSessionDelegate-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSessionDelegate-Protocol.h"; sourceTree = "<group>"; };
-		BAFCCA6D1E36EB5500E33C31 /* XCTestManager_IDEInterface-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTestManager_IDEInterface-Protocol.h"; sourceTree = "<group>"; };
-		BAFCCA6E1E36EB5500E33C31 /* XCTestManager_ManagerInterface-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTestManager_ManagerInterface-Protocol.h"; sourceTree = "<group>"; };
-		BAFCCA6F1E36EB5500E33C31 /* XCTestManager_TestsInterface-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTestManager_TestsInterface-Protocol.h"; sourceTree = "<group>"; };
-		BAFCCA701E37298B00E33C31 /* XCTestDriverInterface-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTestDriverInterface-Protocol.h"; sourceTree = "<group>"; };
-		BAFCCA711E37298B00E33C31 /* XCTestManager_DaemonConnectionInterface-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCTestManager_DaemonConnectionInterface-Protocol.h"; sourceTree = "<group>"; };
 		C41A2C701E0B2497005D9751 /* BPXCTestFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPXCTestFile.h; sourceTree = "<group>"; };
 		C41A2C711E0B2497005D9751 /* BPXCTestFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BPXCTestFile.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C41A2C731E0B24E8005D9751 /* BPTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestCase.h; sourceTree = "<group>"; };
@@ -499,13 +517,31 @@
 		BA34F5E51D6D78120063B17F /* XCTest */ = {
 			isa = PBXGroup;
 			children = (
-				8AFA37B5264E3AA800148A94 /* XCTTestIdentifierSet.h */,
-				BAFCCA701E37298B00E33C31 /* XCTestDriverInterface-Protocol.h */,
-				BAFCCA711E37298B00E33C31 /* XCTestManager_DaemonConnectionInterface-Protocol.h */,
-				BAFCCA6D1E36EB5500E33C31 /* XCTestManager_IDEInterface-Protocol.h */,
-				BAFCCA6E1E36EB5500E33C31 /* XCTestManager_ManagerInterface-Protocol.h */,
-				BAFCCA6F1E36EB5500E33C31 /* XCTestManager_TestsInterface-Protocol.h */,
+				8AA74E0A264E53990007D53C /* XCTMessagingRole_ActivityReporting_Legacy-Protocol.h */,
+				8AA74E0C264E53990007D53C /* XCTMessagingRole_ActivityReporting-Protocol.h */,
+				8AA74E0B264E53990007D53C /* XCTMessagingRole_PerformanceMeasurementReporting_Legacy-Protocol.h */,
+				8AA74E0D264E53990007D53C /* XCTMessagingRole_PerformanceMeasurementReporting-Protocol.h */,
+				8AA74E0F264E53990007D53C /* XCTMessagingRole_TestReporting_Legacy-Protocol.h */,
+				8AA74E09264E53990007D53C /* XCTMessagingRole_TestReporting-Protocol.h */,
+				8AA74E0E264E53990007D53C /* XCTMessagingRole_UIAutomation-Protocol.h */,
+				8AA74E06264E535D0007D53C /* XCTMessagingRole_ProcessMonitoring-Protocol.h */,
+				8AA74E08264E535D0007D53C /* XCTMessagingRole_TestExecution_Legacy-Protocol.h */,
+				8AA74E07264E535D0007D53C /* XCTMessagingRole_TestExecution-Protocol.h */,
+				8AA74E04264E53490007D53C /* XCTMessagingRole_ControlSessionInitiation-Protocol.h */,
+				8AA74E02264E53490007D53C /* XCTMessagingRole_DiagnosticsCollection-Protocol.h */,
+				8AA74E03264E53490007D53C /* XCTMessagingRole_RunnerSessionInitiation-Protocol.h */,
+				8AA74E05264E53490007D53C /* XCTMessagingRole_UIRecordingControl-Protocol.h */,
+				8AA74DFF264E53200007D53C /* XCTMessagingRole_CrashReporting-Protocol.h */,
+				8AA74DFE264E53200007D53C /* XCTMessagingRole_DebugLogging-Protocol.h */,
+				8AA74E00264E53200007D53C /* XCTMessagingRole_SelfDiagnosisIssueReporting-Protocol.h */,
+				8AA74E01264E532C0007D53C /* _XCTMessaging_VoidProtocol-Protocol.h */,
+				8AA74DFC264E52850007D53C /* XCTMessagingChannel_DaemonToIDE-Protocol.h */,
+				8AA74DFD264E52850007D53C /* XCTMessagingChannel_IDEToDaemon-Protocol.h */,
+				8AA74DFB264E52710007D53C /* XCTMessagingChannel_IDEToRunner-Protocol.h */,
+				8AA74DFA264E52460007D53C /* XCTMessagingChannel_RunnerToIDE-Protocol.h */,
+				8AA74DF9264E51E80007D53C /* XCActivityRecord.h */,
 				BA34F5E61D6D78120063B17F /* XCTestConfiguration.h */,
+				8AFA37B5264E3AA800148A94 /* XCTTestIdentifierSet.h */,
 			);
 			path = XCTest;
 			sourceTree = "<group>";
