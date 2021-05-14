@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PrivateHeaders/XCTest/XCTMessagingChannel_IDEToRunner-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTMessagingChannel_RunnerToIDE-Protocol.h"
 
 // CoreSimulator
 #import "BPSimulator.h"

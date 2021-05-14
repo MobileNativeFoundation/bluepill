@@ -38,7 +38,7 @@
 
 static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
 
-@interface BPTestDaemonConnection()<XCTMessagingChannel_IDEToRunner>
+@interface BPTestDaemonConnection()<XCTMessagingChannel_DaemonToIDE>
 @property (nonatomic, assign) BOOL connected;
 @end
 
@@ -113,7 +113,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     return transport;
 }
 
-#pragma mark - XCTMessagingChannel_IDEToRunner protocol
+#pragma mark - XCTMessagingChannel_RunnerToIDE protocol
 
 #pragma mark Process Launch Delegation
 
@@ -277,7 +277,7 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     return [NSString stringWithFormat:@"Received call for unhandled method (%@). Probably you should have a look at _IDETestManagerAPIMediator in IDEFoundation.framework and implement it. Good luck!", NSStringFromSelector(aSelector)];
 }
 
-// This will add more logs when unimplemented method from XCTMessagingChannel_IDEToRunner protocol is called
+// This will add more logs when unimplemented method from XCTMessagingChannel_RunnerToIDE protocol is called
 - (id)handleUnimplementedXCTRequest:(SEL)aSelector {
     [BPUtils printInfo:DEBUGINFO withString:@"TMD: unimplemented: %s", sel_getName(aSelector)];
     NSAssert(nil, [self unknownMessageForSelector:_cmd]);
