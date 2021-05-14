@@ -32,6 +32,7 @@
 		7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ACE1F711DD3D27D00C0FA73 /* WaitTimerTests.m */; };
 		7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
 		7ADBB1481DCBDB9300DC4E8D /* BPTreeAssembler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ADBB1461DCBBC0E00DC4E8D /* BPTreeAssembler.m */; };
+		8AFA37B8264E3B0A00148A94 /* NSString+IdentifierString.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AFA37B6264E3B0A00148A94 /* NSString+IdentifierString.m */; };
 		B3103CE8215176EE00C5643C /* BPTestHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BAB24F721DB5DFA200867756 /* BPTestHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3103CEA2151774500C5643C /* BPXCTestFile.m in Headers */ = {isa = PBXBuildFile; fileRef = C41A2C711E0B2497005D9751 /* BPXCTestFile.m */; settings = {ATTRIBUTES = (Public, ); }; };
 		B3103CEB21519FFE00C5643C /* SimulatorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -186,6 +187,9 @@
 		7DDFED931F8188CC00D1357C /* SimDeviceIOProtocol-Protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOProtocol-Protocol.h"; sourceTree = "<group>"; };
 		7DDFED941F8188EC00D1357C /* SimDeviceIOPortDescriptorState-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SimDeviceIOPortDescriptorState-Protocol.h"; sourceTree = "<group>"; };
 		7DDFED961F81896C00D1357C /* SimDeviceFramebufferService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceFramebufferService.h; sourceTree = "<group>"; };
+		8AFA37B5264E3AA800148A94 /* XCTTestIdentifierSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XCTTestIdentifierSet.h; sourceTree = "<group>"; };
+		8AFA37B6264E3B0A00148A94 /* NSString+IdentifierString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+IdentifierString.m"; sourceTree = "<group>"; };
+		8AFA37B7264E3B0A00148A94 /* NSString+IdentifierString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+IdentifierString.h"; sourceTree = "<group>"; };
 		B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = ../../../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework; sourceTree = "<group>"; };
 		B368E55A213F8D2E00B4DEA3 /* bplib.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bplib.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B368E55C213F8D2E00B4DEA3 /* bplib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bplib.h; sourceTree = "<group>"; };
@@ -351,6 +355,8 @@
 		7A4FB8CC1DF89A790073F268 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				8AFA37B7264E3B0A00148A94 /* NSString+IdentifierString.h */,
+				8AFA37B6264E3B0A00148A94 /* NSString+IdentifierString.m */,
 				C487CB1A226A36F500CC5BC2 /* BPVersion.h */,
 				BA1949341E4AF82F00881887 /* BPTestBundleConnection.h */,
 				BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */,
@@ -493,6 +499,7 @@
 		BA34F5E51D6D78120063B17F /* XCTest */ = {
 			isa = PBXGroup;
 			children = (
+				8AFA37B5264E3AA800148A94 /* XCTTestIdentifierSet.h */,
 				BAFCCA701E37298B00E33C31 /* XCTestDriverInterface-Protocol.h */,
 				BAFCCA711E37298B00E33C31 /* XCTestManager_DaemonConnectionInterface-Protocol.h */,
 				BAFCCA6D1E36EB5500E33C31 /* XCTestManager_IDEInterface-Protocol.h */,
@@ -833,6 +840,7 @@
 				BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */,
 				7A564C0E1DA817DE001BCEC2 /* BPTreeObjects.m in Sources */,
 				7A7901861D5CB679004D4325 /* main.m in Sources */,
+				8AFA37B8264E3B0A00148A94 /* NSString+IdentifierString.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
