@@ -19,10 +19,14 @@
 #import "BPExecutionContext.h"
 #import "BPHandler.h"
 #import <libproc.h>
-#import "BPTestBundleConnection.h"
-#import "BPTestDaemonConnection.h"
+#import "BPTMDControlConnection.h"
+#import "BPTMDRunnerConnection.h"
 #import "BPXCTestFile.h"
 #import <objc/runtime.h>
+
+// CoreSimulator
+#import "PrivateHeaders/CoreSimulator/SimDevice.h"
+
 
 #define NEXT(x)     { [Bluepill setDiagnosticFunction:#x from:__FUNCTION__ line:__LINE__]; CFRunLoopPerformBlock(CFRunLoopGetMain(), kCFRunLoopCommonModes, ^{ (x); }); }
 #define NEXT_AFTER(delay, x) { \
@@ -432,12 +436,15 @@ static void onInterrupt(int ignore) {
         // If the isTestRunnerContext is flipped on, don't connect testbundle again.
         return;
     }
-    BPTestBundleConnection *bConnection = [[BPTestBundleConnection alloc] initWithContext:context andInterface:self];
-    BPTestDaemonConnection *dConnection = [[BPTestDaemonConnection alloc] initWithDevice:context.runner andTestRunnerPID: context.pid];
+    [BPUtils printInfo:DEBUGINFO withString:@"Connecting to testmanagerd"];
 
-    [dConnection connectWithTimeout:180];
-    [bConnection connectWithTimeout:180];
-    [bConnection startTestPlan];
+    BPTMDControlConnection *controlConnection = [[BPTMDControlConnection alloc] initWithSimDevice:context.runner.device andTestRunnerPID:context.pid];
+    BPTMDRunnerConnection *runnerConnection = [[BPTMDRunnerConnection alloc] initWithContext:context andInterface:self];
+
+    [controlConnection connectWithTimeout:180];
+    [runnerConnection connectWithTimeout:180];
+    
+    [runnerConnection startTestPlan];
     NEXT([self checkProcessWithContext:context]);
 
 }

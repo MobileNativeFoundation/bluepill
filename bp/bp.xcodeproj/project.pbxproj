@@ -76,10 +76,10 @@
 		BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = BA180A131DBB088100D7D130 /* testScheme.xcscheme */; };
 		BA1896B5217916A5000CEC36 /* CoreSimulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */; };
 		BA1896BA21795E06000CEC36 /* Bluepill.m in Sources */ = {isa = PBXBuildFile; fileRef = BA944BCF1D76A39A00A4BDA3 /* Bluepill.m */; };
-		BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */; };
-		BA1949371E4AF82F00881887 /* BPTestBundleConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */; };
-		BA19493A1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
-		BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */; };
+		BA1949361E4AF82F00881887 /* BPTMDRunnerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949351E4AF82F00881887 /* BPTMDRunnerConnection.m */; };
+		BA1949371E4AF82F00881887 /* BPTMDRunnerConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949351E4AF82F00881887 /* BPTMDRunnerConnection.m */; };
+		BA19493A1E4AF83E00881887 /* BPTMDControlConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTMDControlConnection.m */; };
+		BA19493B1E4AF83E00881887 /* BPTMDControlConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1949391E4AF83E00881887 /* BPTMDControlConnection.m */; };
 		BA4800EA1DC2C74600026972 /* BPAppNegativeTests-results.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4800E91DC2C74600026972 /* BPAppNegativeTests-results.xml */; };
 		BA4BCFAC1DC3FA3D00592FA4 /* crash_tests_attempt_1.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFAB1DC3FA3D00592FA4 /* crash_tests_attempt_1.xml */; };
 		BA4BCFD11DC4888800592FA4 /* hanging_tests.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA4BCFD01DC4888800592FA4 /* hanging_tests.xml */; };
@@ -202,10 +202,10 @@
 		BA180A131DBB088100D7D130 /* testScheme.xcscheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = testScheme.xcscheme; sourceTree = "<group>"; };
 		BA1896B321791683000CEC36 /* CoreSimulator */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = CoreSimulator; path = ../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/CoreSimulator; sourceTree = "<group>"; };
 		BA1896B6217916F8000CEC36 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		BA1949341E4AF82F00881887 /* BPTestBundleConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestBundleConnection.h; sourceTree = "<group>"; };
-		BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestBundleConnection.m; sourceTree = "<group>"; };
-		BA1949381E4AF83E00881887 /* BPTestDaemonConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestDaemonConnection.h; sourceTree = "<group>"; };
-		BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestDaemonConnection.m; sourceTree = "<group>"; };
+		BA1949341E4AF82F00881887 /* BPTMDRunnerConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTMDRunnerConnection.h; sourceTree = "<group>"; };
+		BA1949351E4AF82F00881887 /* BPTMDRunnerConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTMDRunnerConnection.m; sourceTree = "<group>"; };
+		BA1949381E4AF83E00881887 /* BPTMDControlConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTMDControlConnection.h; sourceTree = "<group>"; };
+		BA1949391E4AF83E00881887 /* BPTMDControlConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTMDControlConnection.m; sourceTree = "<group>"; };
 		BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorHelper.h; sourceTree = "<group>"; };
 		BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulatorHelper.m; sourceTree = "<group>"; };
 		BA34F5E61D6D78120063B17F /* XCTestConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XCTestConfiguration.h; sourceTree = "<group>"; };
@@ -307,6 +307,7 @@
 		C45476AB1FD762B4006C7D9E /* uitest-failed.log */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "uitest-failed.log"; sourceTree = "<group>"; };
 		C467E5491DC930D200BC80EE /* BPCLITests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPCLITests.m; sourceTree = "<group>"; };
 		C469B1571FE1A41F002246BF /* crash_tests_with_retry_attempt_1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = crash_tests_with_retry_attempt_1.xml; sourceTree = "<group>"; };
+		C47411F7264F4C3F000F84D1 /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = Library/Frameworks/XcodeKit.framework; sourceTree = DEVELOPER_DIR; };
 		C487CB1A226A36F500CC5BC2 /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = "<group>"; };
 		C49EEB7A2254142B002CC956 /* crash_tests_attempt_2.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = crash_tests_attempt_2.xml; sourceTree = "<group>"; };
 		C49EEB7C2254166D002CC956 /* crash_tests_with_retry_attempt_2.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = crash_tests_with_retry_attempt_2.xml; sourceTree = "<group>"; };
@@ -352,10 +353,10 @@
 			isa = PBXGroup;
 			children = (
 				C487CB1A226A36F500CC5BC2 /* BPVersion.h */,
-				BA1949341E4AF82F00881887 /* BPTestBundleConnection.h */,
-				BA1949351E4AF82F00881887 /* BPTestBundleConnection.m */,
-				BA1949381E4AF83E00881887 /* BPTestDaemonConnection.h */,
-				BA1949391E4AF83E00881887 /* BPTestDaemonConnection.m */,
+				BA1949341E4AF82F00881887 /* BPTMDRunnerConnection.h */,
+				BA1949351E4AF82F00881887 /* BPTMDRunnerConnection.m */,
+				BA1949381E4AF83E00881887 /* BPTMDControlConnection.h */,
+				BA1949391E4AF83E00881887 /* BPTMDControlConnection.m */,
 				BA954F551D6D1AB3007D011D /* PrivateHeaders */,
 				BA34F5E21D6D75E30063B17F /* SimulatorHelper.h */,
 				BA34F5E31D6D75E30063B17F /* SimulatorHelper.m */,
@@ -437,6 +438,7 @@
 		7A79018D1D5D136F004D4325 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C47411F7264F4C3F000F84D1 /* XcodeKit.framework */,
 				BA1896B6217916F8000CEC36 /* XCTest.framework */,
 				BA1896B321791683000CEC36 /* CoreSimulator */,
 				B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */,
@@ -824,10 +826,10 @@
 			files = (
 				7A7E7BC01DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
 				7A564C0D1DA817DE001BCEC2 /* BPReporters.m in Sources */,
-				BA1949361E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
+				BA1949361E4AF82F00881887 /* BPTMDRunnerConnection.m in Sources */,
 				7A202A411DB0066100D935E3 /* BPWriter.m in Sources */,
 				7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */,
-				BA19493A1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
+				BA19493A1E4AF83E00881887 /* BPTMDControlConnection.m in Sources */,
 				7ADBB1471DCBBC0E00DC4E8D /* BPTreeAssembler.m in Sources */,
 				7A4D7A861DDBB156001E085D /* BPExitStatus.m in Sources */,
 				BA944BD01D76A39A00A4BDA3 /* Bluepill.m in Sources */,
@@ -865,7 +867,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA19493B1E4AF83E00881887 /* BPTestDaemonConnection.m in Sources */,
+				BA19493B1E4AF83E00881887 /* BPTMDControlConnection.m in Sources */,
 				BAB24F711DB5DBED00867756 /* SimulatorHelperTests.m in Sources */,
 				7A4D7A811DDA5FA1001E085D /* BPTreeParserTests.m in Sources */,
 				018D5C1225B4FF4200B0314B /* BPIntTestCase.m in Sources */,
@@ -877,7 +879,7 @@
 				BA180A091DBB00FA00D7D130 /* BPUtilsTests.m in Sources */,
 				7A4D7A871DDBB156001E085D /* BPExitStatus.m in Sources */,
 				BA1809B81DB89B5600D7D130 /* BluepillTests.m in Sources */,
-				BA1949371E4AF82F00881887 /* BPTestBundleConnection.m in Sources */,
+				BA1949371E4AF82F00881887 /* BPTMDRunnerConnection.m in Sources */,
 				7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
 				BAD558D71DB6DCB100C9A5CD /* BPWriter.m in Sources */,
 				7AAE7AAF1DB7DC1E009B5549 /* BPRegexTests.m in Sources */,
@@ -1035,6 +1037,22 @@
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTFoundation,
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+					"-weak_framework",
+					DTXConnectionServices,
+					"-weak_framework",
+					SimulatorKit,
+					"-weak_framework",
+					XCTAutomationSupport,
+				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1062,6 +1080,22 @@
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTFoundation,
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+					"-weak_framework",
+					DTXConnectionServices,
+					"-weak_framework",
+					SimulatorKit,
+					"-weak_framework",
+					XCTAutomationSupport,
+				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1154,6 +1188,22 @@
 				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTFoundation,
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+					"-weak_framework",
+					DTXConnectionServices,
+					"-weak_framework",
+					SimulatorKit,
+					"-weak_framework",
+					XCTAutomationSupport,
+				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1173,6 +1223,22 @@
 				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
+				OTHER_LDFLAGS = (
+					"-weak_framework",
+					DVTFoundation,
+					"-weak_framework",
+					DVTiPhoneSimulatorRemoteClient,
+					"-weak_framework",
+					CoreSimulator,
+					"-weak_framework",
+					XCTest,
+					"-weak_framework",
+					DTXConnectionServices,
+					"-weak_framework",
+					SimulatorKit,
+					"-weak_framework",
+					XCTAutomationSupport,
+				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

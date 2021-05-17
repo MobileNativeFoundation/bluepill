@@ -4,7 +4,7 @@
 //  Copyright (C) 1997-2019 Steve Nygard.
 //
 
-#import <DTXConnectionServices/DTXProxyChannel.h>
+#import <PrivateHeaders/DTXConnectionServices/DTXProxyChannel.h>
 
 @interface DTXProxyChannel (XCTestAdditions)
 - (void)xct_setAllowedClassesForTestingProtocols;

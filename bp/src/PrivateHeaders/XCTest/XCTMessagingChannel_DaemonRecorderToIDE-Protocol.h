@@ -4,8 +4,8 @@
 //  Copyright (C) 1997-2019 Steve Nygard.
 //
 
-#import <XCTest/XCTMessagingRole_UIAutomationEventReporting-Protocol.h>
-#import <XCTest/_XCTMessaging_VoidProtocol-Protocol.h>
+#import <PrivateHeaders/XCTest/XCTMessagingRole_UIAutomationEventReporting-Protocol.h>
+#import <PrivateHeaders/XCTest/_XCTMessaging_VoidProtocol-Protocol.h>
 
 @protocol XCTMessagingChannel_DaemonRecorderToIDE <XCTMessagingRole_UIAutomationEventReporting, _XCTMessaging_VoidProtocol>
 

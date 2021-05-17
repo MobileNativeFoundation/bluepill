@@ -1,5 +1,5 @@
 //
-//  BPTestBundleConnection.h
+//  BPTMDRunnerConnection.h
 //  Bluepill-cli
 //
 //  Created by Keqiu Hu on 2/7/17.
@@ -8,14 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "BPExecutionContext.h"
+#import "BPTMDControlConnection.h"
 #import "BPSimulator.h"
 
-// This is a small subset of XCTMessagingChannel_IDEToRunner protocol
+// This is the small subset of XCTMessagingChannel_RunnerToIDE protocol that Bluepill implements
 @protocol BPTestBundleConnectionDelegate <NSObject>
 - (void)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment;
 @end
 
-@interface BPTestBundleConnection : NSObject
+@interface BPTMDRunnerConnection : NSObject
 @property (nonatomic, strong) BPExecutionContext *context;
 @property (nonatomic, strong) BPSimulator *simulator;
 @property (nonatomic, copy) void (^completionBlock)(NSError *, pid_t);

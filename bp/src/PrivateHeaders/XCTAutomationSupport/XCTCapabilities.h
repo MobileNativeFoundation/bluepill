@@ -6,7 +6,7 @@
 
 #import <objc/NSObject.h>
 
-#import <XCTAutomationSupport/NSSecureCoding-Protocol.h>
+@import Foundation;
 
 @class NSDictionary;
 
@@ -17,7 +17,7 @@
 
 + (id)emptyCapabilities;
 + (_Bool)supportsSecureCoding;
-- (void).cxx_destruct;
+
 @property(readonly, copy) NSDictionary *capabilitiesDictionary; // @synthesize capabilitiesDictionary=_capabilitiesDictionary;
 - (_Bool)hasCapability:(id)arg1;
 - (unsigned long long)versionForCapability:(id)arg1;

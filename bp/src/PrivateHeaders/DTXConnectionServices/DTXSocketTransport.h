@@ -25,7 +25,7 @@
 - (unsigned long long)transmit:(const void *)arg1 ofLength:(unsigned long long)arg2;
 - (id)initWithRemoteAddress:(id)arg1;
 - (id)initWithLocalPort:(int)arg1;
-- (id)initWithConnectedSocket:(int)arg1 disconnectAction:(CDUnknownBlockType)arg2;
+- (id)initWithConnectedSocket:(int)arg1 disconnectAction:(id)arg2;
 - (void)_commonSocketTransportInit;
 - (void)_setupChannelWithConnectedSocket:(int)arg1 assumingOwnership:(BOOL)arg2 orDisconnectBlock:(CDUnknownBlockType)arg3;
 - (id)initWithLocalAddress:(id)arg1;

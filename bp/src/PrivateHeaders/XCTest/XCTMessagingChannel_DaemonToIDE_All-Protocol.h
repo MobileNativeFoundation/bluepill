@@ -4,9 +4,9 @@
 //  Copyright (C) 1997-2019 Steve Nygard.
 //
 
-#import <XCTest/XCTMessagingChannel_DaemonRecorderToIDE-Protocol.h>
-#import <XCTest/XCTMessagingChannel_DaemonToIDE-Protocol.h>
-#import <XCTest/_XCTMessaging_VoidProtocol-Protocol.h>
+#import <PrivateHeaders/XCTest/XCTMessagingChannel_DaemonRecorderToIDE-Protocol.h>
+#import <PrivateHeaders/XCTest/XCTMessagingChannel_DaemonToIDE-Protocol.h>
+#import <PrivateHeaders/XCTest/_XCTMessaging_VoidProtocol-Protocol.h>
 
 @protocol XCTMessagingChannel_DaemonToIDE_All <XCTMessagingChannel_DaemonToIDE, XCTMessagingChannel_DaemonRecorderToIDE, _XCTMessaging_VoidProtocol>
 

@@ -4,10 +4,10 @@
 //  Copyright (C) 1997-2019 Steve Nygard.
 //
 
-#import <DTXConnectionServices/DTXConnection.h>
+#import <PrivateHeaders/DTXConnectionServices/DTXConnection.h>
 
 @interface DTXConnection (XCTestAdditions)
 - (id)xct_makeProxyChannelWithRemoteInterface:(id)arg1 exportedInterface:(id)arg2;
-- (void)xct_handleProxyRequestForInterface:(id)arg1 peerInterface:(id)arg2 handler:(CDUnknownBlockType)arg3;
+- (void)xct_handleProxyRequestForInterface:(id)arg1 peerInterface:(id)arg2 handler:(id)arg3;
 @end
 
