@@ -6,8 +6,7 @@
 
 #import <objc/NSObject.h>
 
-#import <XCTest/NSCopying-Protocol.h>
-#import <XCTest/NSSecureCoding-Protocol.h>
+@import Foundation;
 
 @class NSArray, NSString;
 
