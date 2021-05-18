@@ -126,19 +126,21 @@
     }
 
     if (config.testCasesToSkip) {
+        NSMutableArray <NSString*> *cases = config.testCasesToRun
+        ? [NSMutableArray arrayWithArray:config.testCasesToRun]
+        : [NSMutableArray arrayWithArray:config.allTestCases];
+        [cases removeObjectsInArray:config.testCasesToSkip];
         NSMutableArray <XCTTestIdentifier*> *xctTests = [[NSMutableArray alloc] init];
-        for (NSString *test in config.testCasesToSkip) {
+        for (NSString *test in cases) {
             [xctTests addObject:[[XCTTestIdentifier alloc] initWithStringRepresentation:test]];
         }
-        [xctConfig setTestsToSkip:[[XCTTestIdentifierSet alloc] initWithArray:xctTests]];
-    }
-
-    if (config.testCasesToRun) {
+        [xctConfig setTestsToRun:[[XCTTestIdentifierSet alloc] initWithArray:xctTests]];
+    } else if (config.testCasesToRun) {
         NSMutableArray <XCTTestIdentifier *> *xctTests = [[NSMutableArray alloc] init];
         for (NSString *test in config.testCasesToRun) {
             [xctTests addObject:[[XCTTestIdentifier alloc] initWithStringRepresentation:test]];
         }
-        [xctConfig setTestsToSkip:[[XCTTestIdentifierSet alloc] initWithSet:xctTests]];
+        [xctConfig setTestsToRun:[[XCTTestIdentifierSet alloc] initWithArray:xctTests]];
     }
 
     NSString *XCTestConfigurationFilename = [NSString stringWithFormat:@"%@/%@-%@",
