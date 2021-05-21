@@ -9,7 +9,7 @@ jobs:
   # First machine, runs BP tests batch 1
   integration_tests1:
     name: Instance Test 1
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
       - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
@@ -28,7 +28,7 @@ jobs:
   # Second machine, runs BP tests batch 2
   integration_tests2:
     name: Instance Test 2
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
       # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
       - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
@@ -47,7 +47,7 @@ jobs:
   # Third machine, runs Bluepill tests and makes release build
   build:
     name: BP Test and build
-    runs-on: macos-latest
+    runs-on: macos-11
     steps:
     # actions/checkout@v2 but we use the sha because tags can be rewritten in git
     - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
