@@ -2,17 +2,14 @@
 
 ![](https://github.com/linkedin/bluepill/workflows/master/badge.svg)
 
-## iOS Simulator Architecture
 
-- App (builds with) -> (Xcode/Bazel) -> `X.app` (packaged into an IPA, an archive of the app or "Bundle")
-- iPhones have ARM processors while Macs have `x86_64` (pre M1 at least)
-- Compilation results in an architecture specific binary (or app binary)
-
-## Bluepill Build How-To
+## Bluepill Build
 - `bluepill.sh` builds Bluepill in CI (It has a sample app)
-- Technically the script builds Bluepill & the sample app, and runs the tests
-- `BPSampleApp.app` is the "bundle", an x86_64 bundle but iPhone needs an ARM executable
-	- "Fat binary" will have both
+	- Technically the script builds Bluepill & the sample app, and runs the tests
+- ``BPSampleApp` is the test bed we use for testing Bluepill functionalities. It contains test targets that simulate real world scenarios, e.g a test that crashes, timeouts, UI blockers etc.
+	- X86_64 arch is for iOS simulators running on Intel based Macs. arm64 arch is for iOS device and Apple Silicon based Macs.
+	- For development we usually build only 1 architecture for the target device / simulator. For distribution we would build multi-arch archives to cover the variety of devices.
+	- See [Fat Binary](https://en.wikipedia.org/wiki/Fat_binary) for reference.
 - Side note: iOS is a variant of MacOS and Android ships a VM with a Linux based Android kernel
 - Originally Apple Emulators translated ARM -> `x86_64` but that was very slow!
 	- Helped test iOS apps in Mac by giving you an `x86_64` executable
@@ -20,7 +17,12 @@
 	- It's faster to get an exectuable to test this way
 
 
-## Some notes on iOS Simulators
+## Some notes on `Bundles`
+- App (builds with) -> (Xcode/Bazel) -> `X.app` (packaged into an IPA, an archive of the app or "Bundle")
+- iPhones have ARM processors while Macs have `x86_64` (pre M1 at least)
+- Compilation results in an architecture specific binary (or app binary)
+
+## How iOS Simulators work in Mac OS and some tips for verification
 - `xcrun simctl boot` will boot the simulator (Alternatively run Simulator.App in /Applications/Xcode.App)
 - `ps axuw | grep 'launchd_sim'` -> This is the `launchd` process running inside the Simulator
 	- Since the Simulator isn't a VM (like Android) and shares the same Kernel as the underlying Mac OS, it's possible to inspect the processes running inside the simulator
@@ -40,14 +42,13 @@
 		- Poke around to use the framework directly in Bluepill
 
 ## iOS Apps Test Classes
-- UI Tests
-	- Tests your app's UI
-	- Uses accessibility API of iOS
-	- Stuff like asserts about things being on screen
-- Unit Tests
-	- Non UI assertions and these things run _very_ differently
+- See [XCTest vs XCUITest](https://dzone.com/articles/xcuitest-the-emerging-ios-ui-test-automation-frame#:~:text=XCTest%20%E2%80%93%20Apple's%20official%20framework%20for,and%20components%20at%20any%20level.&text=XCUITest%20%E2%80%93%20A%20UI%20testing%20framework,in%20Swift%20or%20Objective%20C.)
 
 ## How we rely on XCTest Framework
+```
+	<TODO> Print the filetree of a app and test bundle and explain the folder structure
+```
+
 `XCTest` is a _Plugin_
 ```
 	bluepill/Build ... /BPSampleApp.app
@@ -74,6 +75,7 @@
 - `otool --help`
 	- `otool -L /bin/ls`
 	- Gives OS a memory map telling it where to load the libraries in app code
+	- <TODO> Move these tips and tricks to a separate doc
 - Dynamic Loader can inject libraries *before* app loads its dynamic libraries
 	- `DYLD_INSERT_LIBRARIES`
 	- So `libXCTestBundleInject.dylib` gets injected before App runs
