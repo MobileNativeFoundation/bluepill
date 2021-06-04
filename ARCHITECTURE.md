@@ -8,14 +8,6 @@
 	- Technically the script builds Bluepill & the sample app, and runs the tests
 - ``BPSampleApp` is the test bed we use for testing Bluepill functionalities. It contains test targets that simulate real world scenarios, e.g a test that crashes, timeouts, UI blockers etc.
 	- X86_64 arch is for iOS simulators running on Intel based Macs. arm64 arch is for iOS device and Apple Silicon based Macs.
-	- For development we usually build only 1 architecture for the target device / simulator. For distribution we would build multi-arch archives to cover the variety of devices.
-	- See [Fat Binary](https://en.wikipedia.org/wiki/Fat_binary) for reference.
-- Side note: iOS is a variant of MacOS and Android ships a VM with a Linux based Android kernel
-- Originally Apple Emulators translated ARM -> `x86_64` but that was very slow!
-	- Helped test iOS apps in Mac by giving you an `x86_64` executable
-- Now they compile all frameworks for `x86_64` and give you a sandbox in which you can build a native binary
-	- It's faster to get an exectuable to test this way
-
 
 ## Some notes on `Bundles`
 - App (builds with) -> (Xcode/Bazel) -> `X.app` (packaged into an IPA, an archive of the app or "Bundle")
@@ -148,7 +140,6 @@ tree BPSamepleApp/Plugins
 
 - `BP_BINARY` is spawned by `BLUEPILL_BINARY`
 	- It runs a single simulator and runs one or more test bundles
-
 
 
 
