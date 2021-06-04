@@ -17,7 +17,7 @@
 ## How iOS Simulators work in Mac OS and some tips for verification
 - `xcrun simctl boot` will boot the simulator (Alternatively run Simulator.App in /Applications/Xcode.App)
 - `ps axuw | grep 'launchd_sim'` -> This is the `launchd` process running inside the Simulator
-	- Since the Simulator isn't a VM (like Android) and shares the same Kernel as the underlying Mac OS, it's possible to inspect the processes running inside the simulator
+	- Since the Simulator isn't a VM and shares the same Kernel as the underlying Mac OS, it's possible to inspect the processes running inside the simulator
 	- `ps axiw | grep 'CoreSimulator'`
 - `xcrun simctl install .... BPSampleApp.app`
 - Kernel runs with special persmissions (Ring 0) that user programs aren't privy to
@@ -140,6 +140,5 @@ tree BPSamepleApp/Plugins
 
 - `BP_BINARY` is spawned by `BLUEPILL_BINARY`
 	- It runs a single simulator and runs one or more test bundles
-
 
 
