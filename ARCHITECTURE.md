@@ -20,10 +20,6 @@
 	- Since the Simulator isn't a VM and shares the same Kernel as the underlying Mac OS, it's possible to inspect the processes running inside the simulator
 	- `ps axiw | grep 'CoreSimulator'`
 - `xcrun simctl install .... BPSampleApp.app`
-- Kernel runs with special persmissions (Ring 0) that user programs aren't privy to
-	- Copy of iOS runs in user space of MacOS Kernel
-- The VM model: Multiple Kernels that share the same processor
-	- CPU -> Kernel1 (OS1)/Kernel2 (OS2)/Kernel3 (OS2)
 - `otool -L MacOS/Simulator`
 	- Inspect Frameworks -> /Library/Developer/PrivateFrameworks/CoreSimulator..
 	- Bluepill links with PrivateFrameworks (like simctl)
@@ -140,5 +136,4 @@ tree BPSamepleApp/Plugins
 
 - `BP_BINARY` is spawned by `BLUEPILL_BINARY`
 	- It runs a single simulator and runs one or more test bundles
-
 
