@@ -80,9 +80,6 @@ tree BPSamepleApp/Plugins
 		 ...xctest1
 		 ...xctest2
 ```
-- Hydra ran these tests serially
-- However if we had X tests and X simulators running in _parallel_, things would be a lot quicker!
-- Interaction with PrivateFrameworks is hacky
 
 ## Bluepill High Level Architecture
 ![](doc/img/architecture.png)
@@ -136,4 +133,3 @@ tree BPSamepleApp/Plugins
 
 - `BP_BINARY` is spawned by `BLUEPILL_BINARY`
 	- It runs a single simulator and runs one or more test bundles
-
