@@ -4,6 +4,7 @@ All notable changes are documented in this file.
 ## [Unreleased]
 
 ### Added
+- Support for Xcode 12.5
 - A Changelog :-)
 
 ### Changed
@@ -15,6 +16,7 @@ All notable changes are documented in this file.
 ### Deprecated
 
 ### Removed
+- Support for Xcode versions 12.4 and older.
 
 ### Fixed
 

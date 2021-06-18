@@ -49,6 +49,7 @@ static BOOL quiet = NO;
 
 + (void)enableDebugOutput:(BOOL)enable {
     printDebugInfo = enable;
+    if (quiet && printDebugInfo == YES) quiet = NO;
     NSLog(@"Debug Enabled == %hhd", printDebugInfo);
 }
 
