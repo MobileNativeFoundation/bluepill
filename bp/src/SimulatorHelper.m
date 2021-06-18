@@ -147,9 +147,8 @@
                                              [xctConfig.sessionIdentifier UUIDString]];
     assert(XCTestConfigurationFilename != nil);
     NSString *XCTestConfigurationFilePath = [XCTestConfigurationFilename stringByAppendingPathExtension:@"xctestconfiguration"];
-    if (![NSKeyedArchiver archiveRootObject:xctConfig toFile:XCTestConfigurationFilePath]) {
-        NSAssert(NO, @"Couldn't archive XCTestConfiguration to file at path %@", XCTestConfigurationFilePath);
-    }
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:xctConfig requiringSecureCoding:TRUE error:nil];
+    [data writeToFile:XCTestConfigurationFilePath atomically:TRUE];
     return XCTestConfigurationFilePath;
 }
 

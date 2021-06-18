@@ -1021,7 +1021,7 @@
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bp;
@@ -1036,7 +1036,7 @@
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bp;
@@ -1066,7 +1066,7 @@
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACH_O_TYPE = staticlib;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_LDFLAGS = "";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bluelib;
@@ -1099,7 +1099,7 @@
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/..";
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACH_O_TYPE = staticlib;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_LDFLAGS = "";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bluelib;
