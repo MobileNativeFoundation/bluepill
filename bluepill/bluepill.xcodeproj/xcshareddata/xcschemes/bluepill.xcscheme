@@ -48,6 +48,20 @@
                ReferencedContainer = "container:bluepill.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B368E559213F8D2E00B4DEA3"
+               BuildableName = "bplib.framework"
+               BlueprintName = "bplib"
+               ReferencedContainer = "container:../bp/bp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
