@@ -46,19 +46,12 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     xcTestFile.testBundlePath = [path stringByDeletingLastPathComponent];
 
     NSString *cmd = [NSString stringWithFormat:swiftNmCmdline, path];
-    FILE *p = popen([cmd UTF8String], "r");
-    if (!p) {
-        BP_SET_ERROR(errPtr, @"Failed to load test %@.\nERROR: %s\n", path, strerror(errno));
-        return nil;
-    }
-    char *line = NULL;
-    size_t len = 0;
-    ssize_t read;
+    NSString *output = [BPUtils runShell:cmd];
+    NSArray<NSString *>* testsArray = [output componentsSeparatedByString:@"\n"];
     NSMutableDictionary *testClassesDict = [[NSMutableDictionary alloc] init];
     NSMutableArray *allClasses = [[NSMutableArray alloc] init];
-    while ((read = getline(&line, &len, p)) != -1) {
-        NSString *testName = [[NSString stringWithUTF8String:line]
-                              stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+
+    for (NSString *testName in testsArray) {
         NSArray *parts = [testName componentsSeparatedByString:@"."];
         if (parts.count != 3) {
             continue;
@@ -77,14 +70,10 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
             [testClass addTestCase:[[BPTestCase alloc] initWithName:trimmedTestName]];
         }
     }
-    if (pclose(p) == -1) {
-        BP_SET_ERROR(errPtr, @"Failed to execute command: %@.\nERROR: %s\n", cmd, strerror(errno));
-        return nil;
-    }
 
     cmd = [NSString stringWithFormat:objcNmCmdline, path];
-    NSString *output = [BPUtils runShell:cmd];
-    NSArray *testsArray = [output componentsSeparatedByString:@"\n"];
+    output = [BPUtils runShell:cmd];
+    testsArray = [output componentsSeparatedByString:@"\n"];
     for (NSString *line in testsArray) {
         NSArray *parts = [line componentsSeparatedByString:@" "];
         if (parts.count != 2) {
