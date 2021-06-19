@@ -138,7 +138,7 @@
         for (NSString *test in config.testCasesToRun) {
             [xctTests addObject:[[XCTTestIdentifier alloc] initWithStringRepresentation:test]];
         }
-        [xctConfig setTestsToSkip:[[XCTTestIdentifierSet alloc] initWithSet:xctTests]];
+        [xctConfig setTestsToRun:[[XCTTestIdentifierSet alloc] initWithSet:xctTests]];
     }
 
     NSString *XCTestConfigurationFilename = [NSString stringWithFormat:@"%@/%@-%@",
