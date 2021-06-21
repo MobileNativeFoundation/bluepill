@@ -256,7 +256,7 @@ static void onInterrupt(int ignore) {
     // Set up retry counts.
     self.maxCreateTries = [self.config.maxCreateTries integerValue];
     self.maxInstallTries = [self.config.maxInstallTries integerValue];
-    
+
     if (context.config.deleteSimUDID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
     } else {
@@ -443,7 +443,7 @@ static void onInterrupt(int ignore) {
 
     [controlConnection connectWithTimeout:180];
     [runnerConnection connectWithTimeout:180];
-    
+
     [runnerConnection startTestPlan];
     NEXT([self checkProcessWithContext:context]);
 
@@ -520,7 +520,7 @@ static void onInterrupt(int ignore) {
         [BPUtils printInfo:INFO withString:@"Saving Diagnostics for Debugging"];
         [BPUtils saveDebuggingDiagnostics:_config.outputDirectory];
       }
-      
+
       [self deleteSimulatorWithContext:context andStatus:[context.runner exitStatus]];
     }
 }
@@ -528,7 +528,7 @@ static void onInterrupt(int ignore) {
 - (void)deleteSimulatorWithContext:(BPExecutionContext *)context andStatus:(BPExitStatus)status {
     context.exitStatus = status;
     __weak typeof(self) __self = self;
-    
+
     [self deleteSimulatorWithContext:context completion:^{
         NEXT([__self finishWithContext:context]);
     }];
@@ -539,7 +539,7 @@ static void onInterrupt(int ignore) {
     NSString *stepName = DELETE_SIMULATOR(context.attemptNumber);
     [[BPStats sharedStats] startTimer:stepName];
     [BPUtils printInfo:INFO withString:@"%@", stepName];
-    
+
     BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.deleteTimeout doubleValue]];
     [timer start];
 
@@ -575,13 +575,13 @@ static void onInterrupt(int ignore) {
 
 // Only called when bp is running in the delete only mode.
 - (void)deleteSimulatorOnlyTaskWithContext:(BPExecutionContext *)context {
-    
+
     if ([context.runner useSimulatorWithDeviceUDID: [[NSUUID alloc] initWithUUIDString:context.config.deleteSimUDID]]) {
         NEXT([self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorDeleted]);
     } else {
         [BPUtils printInfo:ERROR withString:@"Failed to reconnect to simulator %@", context.config.deleteSimUDID];
         context.exitStatus = BPExitStatusSimulatorReuseFailed;
-        
+
         NEXT([self finishWithContext:context]);
     }
 }
@@ -676,7 +676,7 @@ static void onInterrupt(int ignore) {
     if (self.retries < maxErrorRetryCount) {
         return true;
     }
-    
+
     if (self.retries > maxErrorRetryCount) {
         // If retries strictly exceeds the max error retry, then we must have incremented it beyond the limit somehow.
         // It is safe to halt retries here, but log to alert unexpected behavior.

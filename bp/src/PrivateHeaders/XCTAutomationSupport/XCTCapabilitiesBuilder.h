@@ -14,7 +14,6 @@
 }
 
 + (id)capabilitiesFromProvider:(Class)arg1;
-
 @property(readonly, copy) NSMutableDictionary *capabilitiesDictionary; // @synthesize capabilitiesDictionary=_capabilitiesDictionary;
 @property(readonly, copy) XCTCapabilities *capabilities;
 - (void)upgradeCapability:(id)arg1 toVersion:(unsigned long long)arg2;

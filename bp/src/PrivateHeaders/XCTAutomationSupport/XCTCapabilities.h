@@ -17,7 +17,6 @@
 
 + (id)emptyCapabilities;
 + (_Bool)supportsSecureCoding;
-
 @property(readonly, copy) NSDictionary *capabilitiesDictionary; // @synthesize capabilitiesDictionary=_capabilitiesDictionary;
 - (_Bool)hasCapability:(id)arg1;
 - (unsigned long long)versionForCapability:(id)arg1;
@@ -30,4 +29,3 @@
 - (id)initWithDictionary:(id)arg1;
 
 @end
-
