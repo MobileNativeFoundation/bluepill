@@ -496,10 +496,7 @@ static NSUUID *sessionID;
                 if (BPOptions[i].kind & BP_LIST && [value isKindOfClass:[NSArray class]] && (strcmp(@"include".UTF8String, BPOptions[i].name) || strcmp(@"exclude".UTF8String, BPOptions[i].name))) {
                     NSMutableArray *testCases = [NSMutableArray new];
                     for (NSString *testCase in value) {
-                        NSString *trimmedTestName = [BPUtils trimTrailingParanthesesFromTestName:testCase];
-                        if (trimmedTestName == nil) {
-                            continue;
-                        }
+                        NSString *trimmedTestName = [BPUtils removeSwiftArgumentsFromTestName:testCase];
                         [testCases addObject:trimmedTestName];
                     }
                     value = [NSArray arrayWithArray:testCases];

@@ -253,8 +253,12 @@ static const NSString * const kPassed = @"passed";
     for (NSTextCheckingResult *result in matches) {
         if ([result numberOfRanges] == 3) {
             logLine = NO;
-            NSString *testCaseClass = [self adjustClassName:[line substringWithRange:[result rangeAtIndex:1]]];
+            NSString *originalClassName = [line substringWithRange:[result rangeAtIndex:1]];
+            NSString *testCaseClass = [self adjustClassName:originalClassName];
             NSString *testCaseName = [line substringWithRange:[result rangeAtIndex:2]];
+            if ([self isSwiftTest:originalClassName]) {
+                testCaseName = [NSString stringWithFormat:@"%@()", testCaseName];
+            }
             BPTestCaseLogEntry *testCaseLogEntry = [[BPTestCaseLogEntry alloc] init];
             testCaseLogEntry.testCaseClass = testCaseClass;
             testCaseLogEntry.testCaseName = testCaseName;
@@ -436,8 +440,12 @@ static const NSString * const kPassed = @"passed";
     for (NSTextCheckingResult *result in matches) {
         if ([result numberOfRanges] == 5) {
             logLine = NO;
-            NSString *testCaseClass = [self adjustClassName:[line substringWithRange:[result rangeAtIndex:1]]];
+            NSString *originalClassName = [line substringWithRange:[result rangeAtIndex:1]];
+            NSString *testCaseClass = [self adjustClassName:originalClassName];
             NSString *testCaseName = [line substringWithRange:[result rangeAtIndex:2]];
+            if ([self isSwiftTest:originalClassName]) {
+                testCaseName = [NSString stringWithFormat:@"%@()", testCaseName];
+            }
             NSString *passed = [line substringWithRange:[result rangeAtIndex:3]];
             NSString *time = [line substringWithRange:[result rangeAtIndex:4]];
 
@@ -483,6 +491,10 @@ static const NSString * const kPassed = @"passed";
         logEntry.log = [logEntry.log stringByAppendingString:line];
         logEntry.log = [logEntry.log stringByAppendingString:@"\n"];
     }
+}
+
+- (BOOL)isSwiftTest:(NSString *)className {
+    return [className containsString:@"."];
 }
 
 - (NSString *)adjustClassName:(NSString *)inClassName {

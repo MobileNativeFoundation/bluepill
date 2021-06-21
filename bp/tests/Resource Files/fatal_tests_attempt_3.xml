@@ -2,7 +2,7 @@
 <testsuites name="Selected tests" tests="1" failures="0" errors="0">
     <testsuite tests="1" failures="0" errors="0" name="BPSampleAppFatalErrorTests.xctest">
         <testsuite tests="1" failures="0" errors="0" name="BPSampleAppSwiftFatalErrorTests">
-            <testcase classname="BPSampleAppSwiftFatalErrorTests" name="testZPass" time="0.002000">
+            <testcase classname="BPSampleAppSwiftFatalErrorTests" name="testZPass()" time="0.002000">
             </testcase>
         </testsuite>
     </testsuite>

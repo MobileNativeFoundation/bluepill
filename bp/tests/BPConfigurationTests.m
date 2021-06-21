@@ -57,12 +57,12 @@
 
     XCTAssert([config.testCasesToRun count] == 3);
     XCTAssert([config.testCasesToRun containsObject:@"FeedControlMenuActionsShareViaTests/testShareViaOnArticleShareUpdate"]);
-    XCTAssert([config.testCasesToRun containsObject:@"FeedLoadMoreCommentsTrackingTest/testLoadMoreCommentsInFeedDetail"]);
-    XCTAssert([config.testCasesToRun containsObject:@"FeedSponsoredDownVariantTrackingTest/testTapOnCompanyPictureInDetail"]);
+    XCTAssert([config.testCasesToRun containsObject:@"FeedLoadMoreCommentsTrackingTest/testLoadMoreCommentsInFeedDetail()"]);
+    XCTAssert([config.testCasesToRun containsObject:@"FeedSponsoredDownVariantTrackingTest/testTapOnCompanyPictureInDetail()"]);
 
     XCTAssert([config.testCasesToSkip count] == 2);
     XCTAssert([config.testCasesToSkip containsObject:@"FeedShareActorActionTrackingTest/testShareActorDescriptionTrackingInFeedDetail"]);
-    XCTAssert([config.testCasesToSkip containsObject:@"FeedAnnotationActionTrackingTest/testMentionAnnotationTrackingInFeedDetail"]);
+    XCTAssert([config.testCasesToSkip containsObject:@"FeedAnnotationActionTrackingTest/testMentionAnnotationTrackingInFeedDetail()"]);
 }
 
 - (void)testConfigFileWithRelativePathLoading {
