@@ -6,7 +6,7 @@
 ## Bluepill Build
 - `bluepill.sh` builds Bluepill in CI (It has a sample app)
 	- Technically the script builds Bluepill & the sample app, and runs the tests
-- ``BPSampleApp` is the test bed we use for testing Bluepill functionalities. It contains test targets that simulate real world scenarios, e.g a test that crashes, timeouts, UI blockers etc.
+- `BPSampleApp` is the test bed we use for testing Bluepill functionalities. It contains test targets that simulate real world scenarios, e.g a test that crashes, timeouts, UI blockers etc.
 	- X86_64 arch is for iOS simulators running on Intel based Macs. arm64 arch is for iOS device and Apple Silicon based Macs.
 
 ## Some notes on `Bundles`
@@ -23,7 +23,7 @@
 - `otool -L MacOS/Simulator`
 	- Inspect Frameworks -> /Library/Developer/PrivateFrameworks/CoreSimulator..
 	- Bluepill links with PrivateFrameworks (like simctl)
-- All functionality is provided as a framework. Simluator UI uses this library and so does Bluepill
+- All functionality is provided as a framework. Simulator UI uses this library and so does Bluepill
 - file CoreSimulator
 	- Shows you a binary with 2 architectures for M1 compatibility
 	- CoreSimulator.framework/Versions/A
@@ -57,7 +57,7 @@
 - `FBundleIdentifier` -> Handle that iOS is using for interaction with the App
 - App loads the Plugin (`main -> loadPlugin`)
 - App binary dynamically links to `.dylib` files using the dynamic loader
-	- Dynamic loader maps a `.dylib` hook to its location in memory (Part of OS funcitonality)
+	- Dynamic loader maps a `.dylib` hook to its location in memory (Part of OS functionality)
 	- `man dyld` (See `DYLD_INSERT_LIBRARIES` option which is what we use in Bluepill)
 	- The _trampoline_ code to do this is in `libSystem.B.dylib` (part of the kernel space)
 - `otool --help`
