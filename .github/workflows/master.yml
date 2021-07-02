@@ -16,7 +16,7 @@ jobs:
       # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
       - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
       - name: Select Xcode 13.0
-        run: sudo xcode-select -s /Applications/Xcode-13-beta-2.app
+        run: sudo xcode-select -s /Applications/Xcode_13.0_beta.app
       - name: Run Bluepill tests
         run: ./scripts/bluepill.sh instance_tests1
       - name: Capture xcresult files
@@ -35,7 +35,7 @@ jobs:
       # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
       - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
       - name: Select Xcode 13.0
-        run: sudo xcode-select -s /Applications/Xcode-13-beta-2.app
+        run: sudo xcode-select -s /Applications/Xcode_13.0_beta.app
       - name: Run Bluepill tests
         run: ./scripts/bluepill.sh instance_tests2
       - name: Capture xcresult files
@@ -54,7 +54,7 @@ jobs:
       # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
       - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
       - name: Select Xcode 13.0
-        run: sudo xcode-select -s /Applications/Xcode-13-beta-2.app
+        run: sudo xcode-select -s /Applications/Xcode_13.0_beta.app
       - name: Run Bluepill tests
         run: ./scripts/bluepill.sh runner_tests
       - name: Capture xcresult files
