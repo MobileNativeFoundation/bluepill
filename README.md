@@ -87,6 +87,7 @@ A full list supported options are listed here.
 |     runner-app-path    |           -u           | The test runner for UI tests.                                                       |     N    | n/a              |
 | screenshots-directory  |           n/a          | Directory where simulator screenshots for failed ui tests will be stored.           |     N    | n/a              |
 |    videos-directory    |           n/a          | Directory where videos of test runs will be saved. If not provided, videos are not recorded. | N | n/a            |
+|   keep-passing-videos  |           n/a          | Whether to keep the recorded video for passing tests. Deleted by default.           |     N    | false            |
 |       video-paths      |           -V           | A list of videos that will be saved in the simulators.                              |     N    | n/a              |
 |       image-paths      |           -I           | A list of images that will be saved in the simulators.                              |     N    | n/a              |
 | unsafe-skip-xcode-version-check |               | Skip Xcode version check                                                            |     N    | NO               |
