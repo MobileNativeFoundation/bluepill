@@ -31,7 +31,7 @@ for test_bundle in ${TEST_BUNDLE_PATHS[@]}; do
         cp -cr $test_bundle $BP_WORKING_FOLDER
         chmod -R 777 "$BP_WORKING_FOLDER/$(basename "$test_bundle")"
     else
-        echo "$test_bundle is not a zip file."
+        echo "$test_bundle is not a zip file or xctest bundle."
         exit 1
     fi
 done
@@ -46,7 +46,7 @@ for test_host in ${TEST_HOST_PATHS[@]}; do
         cp -cr $test_host $BP_WORKING_FOLDER
         chmod -R 777 "$BP_WORKING_FOLDER/$(basename "$test_host")"
     else
-        echo "$test_host is not an ipa file"
+        echo "$test_host is not an ipa file or app bundle."
         exit 1
     fi
 done
