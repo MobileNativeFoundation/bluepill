@@ -29,7 +29,7 @@ for test_bundle in ${TEST_BUNDLE_PATHS[@]}; do
         tar -C $BP_WORKING_FOLDER -xzf $test_bundle
     elif [[ $test_bundle == *.xctest ]]; then
         cp -cr $test_bundle $BP_WORKING_FOLDER
-        chmod -R 777 "$BP_WORKING_FOLDER/$(basename "$test_bundle")"
+        chmod -R ug+w "$BP_WORKING_FOLDER/$(basename "$test_bundle")"
     else
         echo "$test_bundle is not a zip file or xctest bundle."
         exit 1
@@ -44,7 +44,7 @@ for test_host in ${TEST_HOST_PATHS[@]}; do
         cp -cr "${BP_WORKING_FOLDER}/Payload/${TEST_HOST_NAME}.app" ${BP_WORKING_FOLDER}
     elif [[ $test_host == *.app ]]; then
         cp -cr $test_host $BP_WORKING_FOLDER
-        chmod -R 777 "$BP_WORKING_FOLDER/$(basename "$test_host")"
+        chmod -R ug+w "$BP_WORKING_FOLDER/$(basename "$test_host")"
     else
         echo "$test_host is not an ipa file or app bundle."
         exit 1
