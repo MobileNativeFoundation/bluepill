@@ -12,14 +12,12 @@ basename_without_extension() {
 # Constants
 TEST_BUNDLE_PATHS=(test_bundle_paths)
 TEST_HOST_PATHS=(test_host_paths)
-BP_WORKING_FOLDER="bp_exec_root"
+BP_WORKING_FOLDER="$TEST_TMPDIR/bp_exec_root"
 BP_CONFIG_FILE="bp_config_file"
 BP_TEST_ESTIMATE_JSON="bp_test_time_estimates_json"
 BP_TEST_PLAN="bp_test_plan"
 BP_PATH="bp_path"
 BLUEPILL_PATH="bluepill_path"
-TARGET_NAME="target_name"
-
 
 # Remove existing working folder for a clean state
 rm -rf $BP_WORKING_FOLDER
@@ -29,6 +27,9 @@ mkdir $BP_WORKING_FOLDER
 for test_bundle in ${TEST_BUNDLE_PATHS[@]}; do
     if [[ $test_bundle == *.zip ]]; then
         tar -C $BP_WORKING_FOLDER -xzf $test_bundle
+    elif [[ $test_bundle == *.xctest ]]; then
+        cp -cr $test_bundle $BP_WORKING_FOLDER
+        chmod -R 777 "$BP_WORKING_FOLDER/$(basename "$test_bundle")"
     else
         echo "$test_bundle is not a zip file."
         exit 1
@@ -41,6 +42,9 @@ for test_host in ${TEST_HOST_PATHS[@]}; do
         TEST_HOST_NAME=$(basename_without_extension "${test_host}")
         unzip -qq -d "$BP_WORKING_FOLDER" "$test_host"
         cp -cr "${BP_WORKING_FOLDER}/Payload/${TEST_HOST_NAME}.app" ${BP_WORKING_FOLDER}
+    elif [[ $test_host == *.app ]]; then
+        cp -cr $test_host $BP_WORKING_FOLDER
+        chmod -R 777 "$BP_WORKING_FOLDER/$(basename "$test_host")"
     else
         echo "$test_host is not an ipa file"
         exit 1
