@@ -104,7 +104,7 @@ The exit code of Bluepill uses bit indicators which could represent multiple exi
 
 ## Requirements
 
-Bluepill officially supports **Xcode 12.4**. If you're looking for old Xcode support, please checkout the following branches:
+Bluepill officially supports **Xcode 12.5**. If you're looking for old Xcode support, please checkout the following branches:
 
 * [Xcode-10.0](https://github.com/linkedin/bluepill/tree/xcode-10.0)  | [Xcode-10.1](https://github.com/linkedin/bluepill/tree/xcode-10.1)  | [Xcode-10.2](https://github.com/linkedin/bluepill/tree/xcode-10.2)  | [Xcode-10.3](https://github.com/linkedin/bluepill/tree/xcode-10.3)
 * [Xcode-11.0](https://github.com/linkedin/bluepill/tree/xcode-11.0)  | [Xcode-11.1](https://github.com/linkedin/bluepill/tree/xcode-11.1)  | [Xcode-11.2](https://github.com/linkedin/bluepill/tree/xcode-11.2)  | [Xcode-11.3](https://github.com/linkedin/bluepill/tree/xcode-11.3)  | [Xcode-11.4](https://github.com/linkedin/bluepill/tree/xcode-11.4)  | [Xcode-11.5](https://github.com/linkedin/bluepill/tree/xcode-11.5)
@@ -125,7 +125,7 @@ If you're using [Fastlane](https://github.com/fastlane/fastlane) to run your tes
 - [fastlane-plugin-bluepill](https://github.com/tbrand/fastlane-plugin-bluepill) - Last updated Nov. 7th, offers basic support for working with the Bluepill binary.
 - [Bluepillar](https://github.com/Shashikant86/fastlane-plugin-bluepillar) - Last updated May 29th, it's the original fastlane plugin for working with Bluepill. It was inspired by [this blog post](https://medium.com/@shashikant.jagtap/running-xcuitests-in-parallel-with-fastlane-and-bluepill-370e8ba90958).
 - [XBluepill](https://github.com/kisialiu/fastlane-plugin-xbluepill) - Last updated Jan 27th. It supports all Bluepill options. Thera are some differences from other plugins:
-   - Support XCode 9.2
+   - Support Xcode 9.2
    - No need to build your project before using the plugin. Builds you project by itself and put xctestrun file automatically;
    - Can reset all simulators if needed (removes all current simulators and recreates default from scratch);
 
