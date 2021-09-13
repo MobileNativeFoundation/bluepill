@@ -15,4 +15,4 @@ DEPLOYMENT_LOCATION = YES
 // Used by bluepill and bp to search for frameworks.
 FRAMEWORK_SEARCH_PATHS = "/Library/Developer/PrivateFrameworks" "$(PRIVATE_FRAMEWORKS_DIR)" "$(DEVELOPER_PRIVATE_FRAMEWORKS_DIR)" "$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/Library/Frameworks" "$(DEVELOPER_DIR)/Library/PrivateFrameworks" "$(DEVELOPER_DIR)/../SharedFrameworks" "$(DEVELOPER_DIR)/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks"
 
-OTHER_LDFLAGS = -weak_framework DVTFoundation -weak_framework DVTiPhoneSimulatorRemoteClient -weak_framework CoreSimulator -weak_framework XCTest -weak_framework DTXConnectionServices -weak_framework SimulatorKit
+OTHER_LDFLAGS = -weak_framework DVTFoundation -weak_framework CoreSimulator -weak_framework XCTest -weak_framework DTXConnectionServices -weak_framework SimulatorKit

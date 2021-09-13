@@ -20,7 +20,6 @@
 		7A564C0D1DA817DE001BCEC2 /* BPReporters.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C081DA817DE001BCEC2 /* BPReporters.m */; };
 		7A564C0E1DA817DE001BCEC2 /* BPTreeObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0A1DA817DE001BCEC2 /* BPTreeObjects.m */; };
 		7A564C0F1DA817DE001BCEC2 /* BPTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A564C0C1DA817DE001BCEC2 /* BPTreeParser.m */; };
-		7A58D0751D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A58D0741D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework */; };
 		7A7901861D5CB679004D4325 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7901851D5CB679004D4325 /* main.m */; };
 		7A7E7BC01DF22CE1007928F3 /* BPExecutionContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */; };
 		7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7E7BBF1DF22CE1007928F3 /* BPExecutionContext.m */; };
@@ -327,7 +326,6 @@
 				B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */,
 				7AB913001D5E209800621608 /* AppKit.framework in Frameworks */,
 				7AB913011D5E209800621608 /* Foundation.framework in Frameworks */,
-				7A58D0751D622BF0002F6B6D /* DVTiPhoneSimulatorRemoteClient.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1041,8 +1039,6 @@
 					"-weak_framework",
 					DVTFoundation,
 					"-weak_framework",
-					DVTiPhoneSimulatorRemoteClient,
-					"-weak_framework",
 					CoreSimulator,
 					"-weak_framework",
 					XCTest,
@@ -1083,8 +1079,6 @@
 				OTHER_LDFLAGS = (
 					"-weak_framework",
 					DVTFoundation,
-					"-weak_framework",
-					DVTiPhoneSimulatorRemoteClient,
 					"-weak_framework",
 					CoreSimulator,
 					"-weak_framework",
@@ -1192,8 +1186,6 @@
 					"-weak_framework",
 					DVTFoundation,
 					"-weak_framework",
-					DVTiPhoneSimulatorRemoteClient,
-					"-weak_framework",
 					CoreSimulator,
 					"-weak_framework",
 					XCTest,
@@ -1226,8 +1218,6 @@
 				OTHER_LDFLAGS = (
 					"-weak_framework",
 					DVTFoundation,
-					"-weak_framework",
-					DVTiPhoneSimulatorRemoteClient,
 					"-weak_framework",
 					CoreSimulator,
 					"-weak_framework",
