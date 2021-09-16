@@ -16,11 +16,18 @@
 + (NSArray<BPXCTestFile *> *)packTests:(NSArray<BPXCTestFile *> *)xcTestFiles
                          configuration:(BPConfiguration *)config
                               andError:(NSError **)errPtr {
-    if (!config.testTimeEstimatesJsonFile) {
-        return [self packTestsByCount:xcTestFiles configuration:config andError:errPtr];
-    } else {
-        return [self packTestsByTime:xcTestFiles configuration:config andError:errPtr];
+    NSArray<BPXCTestFile *> *packedBundles = nil;
+    if (config.testTimeEstimatesJsonFile) {
+        packedBundles = [self packTestsByTime:xcTestFiles configuration:config andError:errPtr];
+        // Return if there is an error in packing by test time estimates
+        if (errPtr && *errPtr != nil)
+            return nil;
     }
+    // Split tests by count if time estimates json is missing or splitting by time estimates failed
+    if (!config.testTimeEstimatesJsonFile || !packedBundles) {
+        packedBundles = [self packTestsByCount:xcTestFiles configuration:config andError:errPtr];
+    }
+    return packedBundles;
 }
 
 /*!
@@ -118,6 +125,13 @@
     double totalTime = [BPUtils getTotalTimeWithConfig:config
                                              testTimes:testTimes
                                         andXCTestFiles:xcTestFiles];
+    // If the time estimates are unavailable or adding up to ZERO, skip packing by time estimates
+    [BPUtils printInfo:INFO withString:@"Total time is around %f seconds.", totalTime];
+    if (totalTime <= 0.0) {
+        [BPUtils printInfo:INFO withString:@"Unable to pack tests by time estimates "
+            "because they are either unavailable or adding up to be zero."];
+        return nil;
+    }
     // Maximum allowed bundle time to optimize the sim track execution long pole which is maximum of all track times
     double optimalBundleTime = totalTime / [[config numSims] floatValue];
     [BPUtils printInfo:INFO withString:@"Optimal Bundle Time is around %f seconds.", optimalBundleTime];
@@ -183,10 +197,13 @@
 
     [BPUtils printInfo:INFO withString:@"Test cases to run from the config: %lu", [config.testCasesToRun count]];
 
-    NSArray<BPXCTestFile *> * bundles = [self splitXCTestBundlesWithConfig:config
-                                                             withTestTimes:testTimes
-                                                            andXCTestFiles:xcTestFiles];
-
+    NSArray<BPXCTestFile *> *bundles = [self splitXCTestBundlesWithConfig:config
+                                                            withTestTimes:testTimes
+                                                           andXCTestFiles:xcTestFiles];
+    if (bundles == nil) {
+        [BPUtils printInfo:INFO withString:@"Splitting of test bundles by time estimates failed."];
+        return nil;
+    }
     // Sort bundles by execution times from longest to shortest
     NSArray *sortedBundles = [bundles sortedArrayUsingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
         NSNumber *estimatedTime1 = [(BPXCTestFile *)obj1 estimatedExecutionTime];
