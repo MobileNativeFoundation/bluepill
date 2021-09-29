@@ -10,9 +10,9 @@
 #import <Foundation/Foundation.h>
 
 #pragma mark - Version Constants
-#define BP_DEFAULT_XCODE_VERSION "12.5"
-#define BP_DEFAULT_RUNTIME "iOS 14.5"
-#define BP_DEFAULT_BASE_SDK "14.5"
+#define BP_DEFAULT_XCODE_VERSION "13.0"
+#define BP_DEFAULT_RUNTIME "iOS 15.0"
+#define BP_DEFAULT_BASE_SDK "15.0"
 
 #define BP_DEFAULT_DEVICE_TYPE "iPhone 8"
 

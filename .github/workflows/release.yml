@@ -13,8 +13,8 @@ jobs:
     steps:
       # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
       - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
-      - name: Select Xcode 12.5
-        run: sudo xcode-select -s /Applications/Xcode_12.5.app
+      - name: Select Xcode 13.0
+        run: sudo xcode-select -s /Applications/Xcode_13.0.app
       - name: Run Bluepill tests
         run: ./scripts/bluepill.sh instance_tests1
       - name: Capture xcresult files
@@ -32,8 +32,8 @@ jobs:
     steps:
       # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
       - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
-      - name: Select Xcode 12.5
-        run: sudo xcode-select -s /Applications/Xcode_12.5.app
+      - name: Select Xcode 13.0
+        run: sudo xcode-select -s /Applications/Xcode_13.0.app
       - name: Run Bluepill tests
         run: ./scripts/bluepill.sh instance_tests2
       - name: Capture xcresult files
@@ -54,8 +54,8 @@ jobs:
     - name: Report event trigger data
       run: |
         echo "Event ${{ github.event_name }}, ref: ${{ github.ref }}"
-    - name: Select Xcode 12.5
-      run: sudo xcode-select -s /Applications/Xcode_12.5.app
+    - name: Select Xcode 13.0
+      run: sudo xcode-select -s /Applications/Xcode_13.0.app
     - name: Run Bluepill tests
       run: ./scripts/bluepill.sh runner_tests
     - name: Capture xcresult files
