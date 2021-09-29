@@ -288,7 +288,7 @@ static BOOL quiet = NO;
   if (outputDirectory == nil || !([fm fileExistsAtPath:outputDirectory isDirectory:&isDir] && isDir)) {
     return;
   }
-  NSString *cmd = [NSString stringWithFormat:@"xcrun simctl diagnose -l -b --output='%@/diagnostics' --data-container", outputDirectory];
+  NSString *cmd = [NSString stringWithFormat:@"xcrun simctl diagnose -l -b --output='%@/diagnostics'", outputDirectory];
   [BPUtils runShell:cmd];
   cmd = [NSString stringWithFormat:@"ps axuw > '%@'/ps-axuw.log", outputDirectory];
   [BPUtils runShell:cmd];
