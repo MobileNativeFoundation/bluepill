@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Selected tests" tests="7" failures="0" errors="0" time="0.116000">
+  <testsuite tests="7" failures="0" errors="0" time="0.115000" timestamp="2021-11-04T22:48:58GMTZ" name="ShareExtensionTests.xctest">
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:58GMTZ" name="AuthWorkspaceAdapterTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:58GMTZ" name="ConversationLazyLoaderHandlerTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:58GMTZ" name="ConversationsOpenHelperTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:58GMTZ" name="DataProviderShareContextTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:58GMTZ" name="InMemoryStoreTests">
+    </testsuite>
+    <testsuite tests="4" failures="0" errors="0" time="0.023000" timestamp="2021-11-04T22:48:58GMTZ" name="ParserTests">
+      <testcase classname="ParserTests" name="testConversationsWithInfoBarriersParsing()" time="0.009000">
+      </testcase>
+      <testcase classname="ParserTests" name="testMpdmParsing()" time="0.002000">
+      </testcase>
+      <testcase classname="ParserTests" name="testUserParsing()" time="0.009000">
+      </testcase>
+      <testcase classname="ParserTests" name="testUserParsingWithNoTeamId()" time="0.002000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="1" failures="0" errors="0" time="0.078000" timestamp="2021-11-04T22:48:58GMTZ" name="RecentConversationsAdapterFrecencyTests">
+      <testcase classname="RecentConversationsAdapterFrecencyTests" name="testScoresWithBonusScores_UsersHigherThanMPDM()" time="0.078000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="1" failures="0" errors="0" time="0.004000" timestamp="2021-11-04T22:48:59GMTZ" name="SearchKeywordAdapterTests">
+      <testcase classname="SearchKeywordAdapterTests" name="testExtractsSearchKeywords()" time="0.003000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="1" failures="0" errors="0" time="0.003000" timestamp="2021-11-04T22:48:59GMTZ" name="ShareAccountManagerTests">
+      <testcase classname="ShareAccountManagerTests" name="testCurrentWorkspaceIsLoadedIfNoSuggestionIsProvided()" time="0.002000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:59GMTZ" name="ShareViewModelTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:59GMTZ" name="UploadRequestHelperTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:59GMTZ" name="UserLazyLoaderHandlerTests">
+    </testsuite>
+  </testsuite>
+</testsuites>
+

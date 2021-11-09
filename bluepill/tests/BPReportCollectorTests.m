@@ -66,12 +66,12 @@ void fixTimestamps(NSString *path) {
 }
 
 - (void)testCollectReportsFromPath {
-    NSString *path = [[NSBundle bundleForClass:[self class]] resourcePath];
+    NSString *fixturePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"simulator"];
     // we need to have the timestamps ordered by file name
-    fixTimestamps(path);
-    XCTAssert([[NSFileManager defaultManager] fileExistsAtPath:path]);
-    NSString *finalReport = [path stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
-    [BPReportCollector collectReportsFromPath:path deleteCollected:YES withOutputAtDir:path];
+    fixTimestamps(fixturePath);
+    XCTAssert([[NSFileManager defaultManager] fileExistsAtPath:fixturePath]);
+    NSString *finalReport = [fixturePath stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
+    [BPReportCollector collectReportsFromPath:fixturePath deleteCollected:YES withOutputAtDir:fixturePath];
     NSData *data = [NSData dataWithContentsOfFile:finalReport];
     NSError *error;
     NSXMLDocument *doc = [[NSXMLDocument alloc] initWithData:data options:0 error:&error];
@@ -95,8 +95,28 @@ void fixTimestamps(NSString *path) {
     XCTAssert([[retriedTests[1] nodesForXPath:@"failure" error:nil] count] == 1, @"Second was not a failure");
     XCTAssert([[retriedTests[2] nodesForXPath:@"failure" error:nil] count] == 0, @"Third was not a success");
 
-    BOOL collatedReport = [[NSFileManager defaultManager] fileExistsAtPath:[path stringByAppendingPathComponent:@"1/report1.xml"]];
+    BOOL collatedReport = [[NSFileManager defaultManager] fileExistsAtPath:[fixturePath stringByAppendingPathComponent:@"1/report1.xml"]];
     XCTAssert(collatedReport == NO);
+}
+
+- (void)testCollectReportsFromPathWithInvalidXml {
+    NSString *bundleRootPath = [[NSBundle bundleForClass:[self class]] resourcePath];
+    NSString *fixturePath = [bundleRootPath stringByAppendingPathComponent:@"simulator-invalid-xml"];
+    // we need to have the timestamps ordered by file name
+    fixTimestamps(fixturePath);
+    XCTAssert([[NSFileManager defaultManager] fileExistsAtPath:fixturePath]);
+    NSString *finalReport = [fixturePath stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
+    [BPReportCollector collectReportsFromPath:fixturePath deleteCollected:YES withOutputAtDir:fixturePath];
+    NSError *error;
+    NSString *collectorReportContents = [NSString stringWithContentsOfFile:finalReport encoding:NSUTF8StringEncoding error:&error];
+    XCTAssertNil(error);
+
+    NSString *expectedReport = [bundleRootPath stringByAppendingPathComponent:@"Expected-TEST-FinalReport-for-invalid-xml.xml"];
+    error = nil;
+    NSString *expectedReportContents = [NSString stringWithContentsOfFile:expectedReport encoding:NSUTF8StringEncoding error:&error];
+    XCTAssertNil(error);
+
+    XCTAssertEqualObjects(collectorReportContents, expectedReportContents);
 }
 
 @end

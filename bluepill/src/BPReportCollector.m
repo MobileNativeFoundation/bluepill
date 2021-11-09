@@ -107,8 +107,6 @@
 + (NSXMLDocument *)collateReports:(NSMutableArray <BPXMLReport *> *)reports
      andDeleteCollated:(BOOL)deleteCollated
           withOutputAt:(NSString *)finalReportPath {
-    NSError *err;
-
     // sort them by modification date, newer reports trump old reports
     NSMutableArray *sortedReports;
     sortedReports = [NSMutableArray arrayWithArray:[reports sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
@@ -122,6 +120,7 @@
     for (BPXMLReport *report in sortedReports) {
         [BPUtils printInfo:DEBUGINFO withString:@"MERGING REPORT: %@", [[report url] path]];
         @autoreleasepool {
+            NSError *err = nil;
             NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:[report url] options:NSXMLDocumentTidyXML error:&err];
             if (err) {
                 [BPUtils printInfo:ERROR withString:@"Failed to parse '%@': %@", [[report url] path], [err localizedDescription]];
