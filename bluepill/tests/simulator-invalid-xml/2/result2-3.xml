@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Selected tests" tests="7" failures="0" errors="0" time="0.087000">
+  <testsuite tests="7" failures="0" errors="0" time="0.086000" timestamp="2021-11-04T22:50:16GMTZ" name="ShareExtensionTests.xctest">
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:50:16GMTZ" name="AuthWorkspaceAdapterTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:50:16GMTZ" name="ConversationLazyLoaderHandlerTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:50:16GMTZ" name="ConversationsOpenHelperTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:50:16GMTZ" name="DataProviderShareContextTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:50:16GMTZ" name="InMemoryStoreTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:50:16GMTZ" name="ParserTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:50:16GMTZ" name="RecentConversationsAdapterFrecencyTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:50:16GMTZ" name="SearchKeywordAdapterTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:50:16GMTZ" name="ShareAccountManagerTests">
+    </testsuite>
+    <testsuite tests="4" failures="0" errors="0" time="0.057000" timestamp="2021-11-04T22:50:16GMTZ" name="ShareViewModelTests">
+      <testcase classname="ShareViewModelTests" name="testPDFItemProvidersYieldValidPresentationObjects()" time="0.023000">
+      </testcase>
+      <testcase classname="ShareViewModelTests" name="testUploadsAreCancelledWhenNewPresentationObjectsAreSet()" time="0.003000">
+      </testcase>
+      <testcase classname="ShareViewModelTests" name="testUploadsDisabled()" time="0.004000">
+      </testcase>
+      <testcase classname="ShareViewModelTests" name="testWorkspaceSelectedPresentationObject()" time="0.025000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="2" failures="0" errors="0" time="0.010000" timestamp="2021-11-04T22:50:16GMTZ" name="UploadRequestHelperTests">
+      <testcase classname="UploadRequestHelperTests" name="testSyncFailureToIPCWithUploadCompressionEnabledFalse()" time="0.007000">
+      </testcase>
+      <testcase classname="UploadRequestHelperTests" name="testSyncFailureToIPCWithUploadCompressionEnabledTrue()" time="0.002000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="1" failures="0" errors="0" time="0.011000" timestamp="2021-11-04T22:50:16GMTZ" name="UserLazyLoaderHandlerTests">
+      <testcase classname="UserLazyLoaderHandlerTests" name="testUpdateIdentifiersInvokesHttpManagerAndStore()" time="0.011000">
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>

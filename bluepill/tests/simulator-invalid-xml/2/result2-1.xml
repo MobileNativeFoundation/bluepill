@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Selected tests" tests="3" failures="1" errors="0" time="5.474598">
+  <testsuite tests="3" failures="1" errors="0" time="5.474598" timestamp="2021-11-04T22:45:29GMTZ" name="ShareExtensionTests.xctest">
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:45:29GMTZ" name="AuthWorkspaceAdapterTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:45:29GMTZ" name="ConversationLazyLoaderHandlerTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:45:29GMTZ" name="ConversationsOpenHelperTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:45:29GMTZ" name="DataProviderShareContextTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:45:29GMTZ" name="InMemoryStoreTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:45:29GMTZ" name="ParserTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:45:30GMTZ" name="RecentConversationsAdapterFrecencyTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:45:30GMTZ" name="SearchKeywordAdapterTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:45:30GMTZ" name="ShareAccountManagerTests">
+    </testsuite>
+    <testsuite tests="3" failures="1" errors="0" time="3.641768" timestamp="2021-11-04T22:45:30GMTZ" name="ShareViewModelTests">
+      <testcase classname="ShareViewModelTests" name="testCatchErrorForInfoBarriersDm()" time="0.136000">
+      </testcase>
+      <testcase classname="ShareViewModelTests" name="testClientBootInvokedWithValidAuthToken()" time="0.003000">
+      </testcase>
+      <testcase classname="ShareViewModelTests" name="testPDFItemProvidersYieldValidPresentationObjects()" time="1.679931">
+        <failure type="Failure" message="Assertion failure in -[XCTestExpectation fulfill]">
+XCTestExpectation.m:77
+        </failure>
+        <system-out>
+            Failed!!!
+        </system-out>
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>
+

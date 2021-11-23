@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<testsuites name="All tests" tests="33" failures="1" errors="0" time="2.198931">
+    <testsuite tests="33" failures="1" errors="0" time="2.198931" timestamp="2021-11-04T22:48:39GMTZ" name="ShareExtensionTests.xctest">
+        <testsuite tests="2" failures="0" errors="0" time="0.014000" timestamp="2021-11-04T22:48:39GMTZ" name="AuthWorkspaceAdapterTests">
+            <testcase classname="AuthWorkspaceAdapterTests" name="testReadAccountManagerAndExpectRefreshHandlerCalled()" time="0.007000"></testcase>
+            <testcase classname="AuthWorkspaceAdapterTests" name="testReadAccountManagerAndExpectRefreshHandlerCalled()" time="0.007000"></testcase>
+        </testsuite>
+        <testsuite tests="2" failures="0" errors="0" time="0.088000" timestamp="2021-11-04T22:48:39GMTZ" name="ConversationLazyLoaderHandlerTests">
+            <testcase classname="ConversationLazyLoaderHandlerTests" name="testUpdateIdentifiersInvokesHttpManagerAndStore()" time="0.044000"></testcase>
+            <testcase classname="ConversationLazyLoaderHandlerTests" name="testUpdateIdentifiersInvokesHttpManagerAndStore()" time="0.044000"></testcase>
+        </testsuite>
+        <testsuite tests="2" failures="0" errors="0" time="0.028000" timestamp="2021-11-04T22:48:39GMTZ" name="ConversationsOpenHelperTests">
+            <testcase classname="ConversationsOpenHelperTests" name="testConversationIdReturned()" time="0.014000"></testcase>
+            <testcase classname="ConversationsOpenHelperTests" name="testConversationIdReturned()" time="0.014000"></testcase>
+        </testsuite>
+        <testsuite tests="2" failures="0" errors="0" time="0.036000" timestamp="2021-11-04T22:48:39GMTZ" name="DataProviderShareContextTests">
+            <testcase classname="DataProviderShareContextTests" name="testCreateConversationAdapter()" time="0.018000"></testcase>
+            <testcase classname="DataProviderShareContextTests" name="testCreateConversationAdapter()" time="0.018000"></testcase>
+        </testsuite>
+        <testsuite tests="4" failures="0" errors="0" time="0.012000" timestamp="2021-11-04T22:48:39GMTZ" name="InMemoryStoreTests">
+            <testcase classname="InMemoryStoreTests" name="testCreateModels()" time="0.004000"></testcase>
+            <testcase classname="InMemoryStoreTests" name="testCreateModels()" time="0.004000"></testcase>
+            <testcase classname="InMemoryStoreTests" name="testUpdateModels()" time="0.002000"></testcase>
+            <testcase classname="InMemoryStoreTests" name="testUpdateModels()" time="0.002000"></testcase>
+        </testsuite>
+        <testsuite tests="8" failures="0" errors="0" time="0.044000" timestamp="2021-11-04T22:48:39GMTZ" name="ParserTests">
+            <testcase classname="ParserTests" name="testChannelParsing()" time="0.006000"></testcase>
+            <testcase classname="ParserTests" name="testChannelParsing()" time="0.006000"></testcase>
+            <testcase classname="ParserTests" name="testConversationParsing()" time="0.005000"></testcase>
+            <testcase classname="ParserTests" name="testConversationParsing()" time="0.005000"></testcase>
+            <testcase classname="ParserTests" name="testConversationsWithInfoBarriersParsing()" time="0.009000"></testcase>
+            <testcase classname="ParserTests" name="testMpdmParsing()" time="0.002000"></testcase>
+            <testcase classname="ParserTests" name="testUserParsing()" time="0.009000"></testcase>
+            <testcase classname="ParserTests" name="testUserParsingWithNoTeamId()" time="0.002000"></testcase>
+        </testsuite>
+        <testsuite tests="1" failures="0" errors="0" time="0.078000" timestamp="2021-11-04T22:48:39GMTZ" name="RecentConversationsAdapterFrecencyTests">
+            <testcase classname="RecentConversationsAdapterFrecencyTests" name="testScoresWithBonusScores_UsersHigherThanMPDM()" time="0.078000"></testcase>
+        </testsuite>
+        <testsuite tests="1" failures="0" errors="0" time="0.003000" timestamp="2021-11-04T22:48:39GMTZ" name="SearchKeywordAdapterTests">
+            <testcase classname="SearchKeywordAdapterTests" name="testExtractsSearchKeywords()" time="0.003000"></testcase>
+        </testsuite>
+        <testsuite tests="1" failures="0" errors="0" time="0.002000" timestamp="2021-11-04T22:48:39GMTZ" name="ShareAccountManagerTests">
+            <testcase classname="ShareAccountManagerTests" name="testCurrentWorkspaceIsLoadedIfNoSuggestionIsProvided()" time="0.002000"></testcase>
+        </testsuite>
+        <testsuite tests="7" failures="1" errors="0" time="1.873931" timestamp="2021-11-04T22:48:39GMTZ" name="ShareViewModelTests">
+            <testcase classname="ShareViewModelTests" name="testCatchErrorForInfoBarriersDm()" time="0.136000"></testcase>
+            <testcase classname="ShareViewModelTests" name="testClientBootInvokedWithValidAuthToken()" time="0.003000"></testcase>
+            <testcase classname="ShareViewModelTests" name="testPDFItemProvidersYieldValidPresentationObjects()" time="1.679931">
+                <failure type="Failure" message="Assertion failure in -[XCTestExpectation fulfill]">XCTestExpectation.m:77</failure>
+                <system-out>Failed!!!</system-out>
+            </testcase>
+            <testcase classname="ShareViewModelTests" name="testPDFItemProvidersYieldValidPresentationObjects()" time="0.023000"></testcase>
+            <testcase classname="ShareViewModelTests" name="testUploadsAreCancelledWhenNewPresentationObjectsAreSet()" time="0.003000"></testcase>
+            <testcase classname="ShareViewModelTests" name="testUploadsDisabled()" time="0.004000"></testcase>
+            <testcase classname="ShareViewModelTests" name="testWorkspaceSelectedPresentationObject()" time="0.025000"></testcase>
+        </testsuite>
+        <testsuite tests="2" failures="0" errors="0" time="0.009000" timestamp="2021-11-04T22:48:39GMTZ" name="UploadRequestHelperTests">
+            <testcase classname="UploadRequestHelperTests" name="testSyncFailureToIPCWithUploadCompressionEnabledFalse()" time="0.007000"></testcase>
+            <testcase classname="UploadRequestHelperTests" name="testSyncFailureToIPCWithUploadCompressionEnabledTrue()" time="0.002000"></testcase>
+        </testsuite>
+        <testsuite tests="1" failures="0" errors="0" time="0.011000" timestamp="2021-11-04T22:48:39GMTZ" name="UserLazyLoaderHandlerTests">
+            <testcase classname="UserLazyLoaderHandlerTests" name="testUpdateIdentifiersInvokesHttpManagerAndStore()" time="0.011000"></testcase>
+        </testsuite>
+    </testsuite>
+</testsuites>
