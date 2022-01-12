@@ -675,22 +675,13 @@ static NSUUID *sessionID;
         return NO;
     }
 
-    //Check if xcode version running on the host match the intended Bluepill branch: Xcode 9 branch is not backward compatible
-    NSString *xcodeVersion = [BPUtils runShell:@"xcodebuild -version"];
-    [BPUtils printInfo:DEBUGINFO withString:@"xcode build version: %@", xcodeVersion];
-
     if (!self.unsafeSkipXcodeVersionCheck) {
-        if ([xcodeVersion rangeOfString:@BP_DEFAULT_XCODE_VERSION].location == NSNotFound) {
-            BP_SET_ERROR(errPtr, @"ERROR: Invalid Xcode version:\n%s;\nOnly %s is supported\n", [xcodeVersion UTF8String], BP_DEFAULT_XCODE_VERSION);
-            return NO;
-        }
-
         // Check if Bluepill compile time Xcode version is matched with Bluepill runtime Xcode version
         // This check prevents Bluepill compiled with Xcode 8 running on host installed with Xcode 9
         // Only compare major and minor version version Eg. 11.2 ~ 11.2.1 but 11.2 <> 11.3
-        if (![[[BPUtils getXcodeRuntimeVersion] substringToIndex:4] isEqualToString:@BP_DEFAULT_XCODE_VERSION]) {
+        if (![BPUtils sameMajorandMinor:[BPUtils getXcodeRuntimeVersion] withVersion:[BPUtils getXcodeBuildtimeVersion]]) {
             BP_SET_ERROR(errPtr, @"ERROR: Bluepill runtime version %s and compile time version %s are mismatched\n",
-                         [[[BPUtils getXcodeRuntimeVersion] substringToIndex:4] UTF8String], [@BP_DEFAULT_XCODE_VERSION UTF8String]);
+                         [[[BPUtils getXcodeRuntimeVersion] substringToIndex:4] UTF8String], [BPUtils getXcodeBuildtimeVersion]);
             return NO;
         }
     }

@@ -282,6 +282,19 @@ static BOOL quiet = NO;
     return runTimeVersion;
 }
 
++ (NSString *)getXcodeBuildtimeVersion {
+    return [NSString stringWithUTF8String:XCODE_VERSION];
+}
+
+// Compare major and minor version version Eg. 11.2 ~ 11.2.1 but 11.2 <> 11.3
++ (bool)sameMajorandMinor:(NSString * _Nonnull)version1 withVersion:(NSString * _Nonnull)version2 {
+    NSArray *v1parts = [version1 componentsSeparatedByString:@" "];
+    NSArray *v2parts = [version2 componentsSeparatedByString:@" "];
+    NSArray <NSString *> *v1versionParts = [[v1parts objectAtIndex:0] componentsSeparatedByString:@"."];
+    NSArray <NSString *> *v2versionParts = [[v2parts objectAtIndex:0] componentsSeparatedByString:@"."];
+    return [v1versionParts[0] isEqualToString:v2versionParts[0]] && [v1versionParts[1] isEqualToString:v2versionParts[1]];
+}
+
 + (void)saveDebuggingDiagnostics:(NSString *)outputDirectory {
   BOOL isDir = false;
   NSFileManager *fm = [NSFileManager defaultManager];

@@ -150,6 +150,11 @@ typedef NS_ENUM(int, BPKind) {
 
 + (NSString *)getXcodeRuntimeVersion;
 
++ (NSString *)getXcodeBuildtimeVersion;
+
++ (bool)sameMajorandMinor:(NSString * _Nonnull)version1 withVersion:(NSString * _Nonnull)version2;
+
+
 typedef BOOL (^BPRunBlock)(void);
 
 /*!

@@ -87,13 +87,13 @@
     dispatch_async(self.queue, ^{
 
         DTXConnection *connection = connectToTestManager(self.context.runner.device);
-        
+
         [connection registerDisconnectHandler:^{
             // This is called when the task is abruptly terminated (e.g. if the test times out)
             [self stopVideoRecording:YES];
             [BPUtils printInfo:INFO withString:@"DTXConnection disconnected."];
         }];
-        
+
         [connection
          xct_handleProxyRequestForInterface:@protocol(XCTMessagingChannel_RunnerToIDE)
          peerInterface:@protocol(XCTMessagingChannel_IDEToRunner)
@@ -183,24 +183,24 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
         }
         return;
     }
-    
+
     if (forced) {
         [BPUtils printInfo:ERROR withString: @"Found dangling video recording task. Stopping it."];
     }
-    
+
     if (![task isRunning]) {
         [BPUtils printInfo:ERROR withString:@"Video task exists but it was already terminated with status %d", [task terminationStatus]];
     }
-    
+
     [BPUtils printInfo:INFO withString:@"Stopping recording video."];
     [BPUtils printInfo:DEBUGINFO withString:@"Stopping video recording task with pid %d and command: %@", [task processIdentifier], [BPUtils getCommandStringForTask:task]];
     [task interrupt];
     [task waitUntilExit];
-    
+
     if ([task terminationStatus] != 0) {
         [BPUtils printInfo:ERROR withString:@"Video task was interrupted, but exited with non-zero status %d", [task terminationStatus]];
     }
-    
+
     NSString *filePath = [[task arguments].lastObject componentsSeparatedByString:@" "].lastObject;
     if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
         [BPUtils printInfo:ERROR withString:@"Video recording file missing, expected at path %@!", filePath];
@@ -344,7 +344,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
 
 - (id)_XCT_testSuite:(NSString *)arg1 didFinishAt:(NSString *)time runCount:(NSNumber *)count withFailures:(NSNumber *)failureCount unexpected:(NSNumber *)unexpectedCount testDuration:(NSNumber *)testDuration totalDuration:(NSNumber *)totalTime {
     [BPUtils printInfo:DEBUGINFO withString: @"BPTestBundleConnection_XCT_testSuite: %@, didFinishAt: %@, runCount: %@, withFailures: %@, unexpectedCount: %@, testDuration: %@, totalDuration: %@", arg1, time, count, failureCount, unexpectedCount, testDuration, totalTime];
-    
+
     if ([self shouldRecordVideo]) {
         [self stopVideoRecording:YES];
     }
@@ -405,7 +405,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
         return nil;
     }
     [BPUtils printInfo:DEBUGINFO withString:@"BPTestBundleConnection Launching app: %@ with options %@", bundleID, options];
-    
+
     self.appProcessPID = [self.simulator.device launchApplicationWithID:bundleID options:options error:&error];
     self.bundleID = bundleID;
     if (error) {
