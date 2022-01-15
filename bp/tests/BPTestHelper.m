@@ -20,6 +20,11 @@
     return [[self sampleAppPath] stringByAppendingPathComponent:@"test_plan.json"];
 }
 
+// Return the path to the sample app's xctest with new test cases
++ (NSString *)sampleAppNewTestsBundlePath {
+    return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppNewTests.xctest"];
+}
+
 // Return the path to the sample app's xctest with 1000 test cases
 + (NSString *)sampleAppBalancingTestsBundlePath {
     return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppTests.xctest"];

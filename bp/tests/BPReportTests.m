@@ -8,6 +8,7 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <XCTest/XCTest.h>
+
 #import "Bluepill.h"
 #import "BPIntTestCase.h"
 #import "BPSimulator.h"
@@ -407,13 +408,12 @@
     XCTAssertTrue(exitCode == BPExitStatusAllTestsPassed);
 }
 
-- (void)testReportWithFailingTestsSetAndDiagnostics {
+- (void)testReportWithFailingTestsSet {
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
-    // NSLog(@"output directory is %@", outputDir);
+    NSLog(@"output directory is %@", outputDir);
     self.config.outputDirectory = outputDir;
-    self.config.saveDiagnosticsOnError = YES;
     self.config.testCasesToSkip = @[@"BPAppNegativeTests/testBPDoesNotHangWithBigOutput"];
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     // Make sure all tests started on the first run
@@ -432,6 +432,27 @@
     NSLog(@"Junit report: %@", junitReportPath);
     NSString *expectedFilePath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"BPAppNegativeTests-results.xml"];
     [self assertGotReport:junitReportPath isEqualToWantReport:expectedFilePath];
+    XCTAssert(exitCode == BPExitStatusTestsFailed);
+}
+
+/**
+ Execution plan: TIMEOUT, CRASH (not retried)
+ */
+- (void)testReportFailureOnTimeoutCrashAndPassWithDiagnostics {
+    self.config.stuckTimeout = @6;
+    self.config.testing_ExecutionPlan = @"TIMEOUT CRASH";
+    self.config.errorRetriesCount = @4;
+    self.config.onlyRetryFailed = TRUE;
+    NSString *tempDir = NSTemporaryDirectory();
+    NSError *error;
+    NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/FailingTestsSetTempDir", tempDir] withError:&error];
+    NSLog(@"output directory is %@", outputDir);
+    self.config.outputDirectory = outputDir;
+    self.config.saveDiagnosticsOnError = YES;
+    NSString *testBundlePath = [BPTestHelper sampleAppHangingTestsBundlePath];
+    self.config.testBundlePath = testBundlePath;
+
+    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     NSFileManager *fm = [NSFileManager defaultManager];
     [BPUtils runShell:[NSString stringWithFormat:@"find %@", outputDir]];
     BOOL diagFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/diagnostics.tar.gz", outputDir]];
@@ -440,7 +461,7 @@
     XCTAssert(psFileFound);
     BOOL dfFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/df-h.log", outputDir]];
     XCTAssert(dfFileFound);
-    XCTAssert(exitCode == BPExitStatusTestsFailed);
+    XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
 }
 
 #pragma mark - Test helpers

@@ -8,6 +8,9 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <XCTest/XCTest.h>
+#import <XCTest/XCTestCase.h>
+#import <XCTest/XCTestAssertions.h>
+
 #import "BPExitStatus.h"
 #import "BPUtils.h"
 #import "BPXCTestFile.h"
@@ -99,16 +102,6 @@
                                                           withTestFiles:@[self.xcTestFile]];
     
     XCTAssertFalse([[NSSet setWithArray:normalizedConfig.testCasesToRun] isEqualToSet:testCasesNotToRun]);
-}
-
-- (void) testTrailingParanthesesInTestNames {
-    NSMutableSet *testCasesWithParantheses = [NSMutableSet new];
-    for (NSString *testCase in self.xcTestFile.allTestCases) {
-        if ([testCase containsString:@"("] || [testCase containsString:@")"]) {
-            [testCasesWithParantheses addObject:testCase];
-        }
-    }
-    XCTAssert([testCasesWithParantheses count] == 0);
 }
 
 - (void) testExitStatus {

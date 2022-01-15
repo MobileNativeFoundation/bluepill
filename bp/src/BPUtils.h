@@ -15,7 +15,7 @@ _a < _b ? _a : _b; \
 })
 
 #import <Foundation/Foundation.h>
-#import "bp/src/BPXCTestFile.h"
+#import "BPXCTestFile.h"
 
 typedef NS_ENUM(int, BPKind) {
     PASSED,
@@ -167,11 +167,11 @@ typedef BOOL (^BPRunBlock)(void);
 + (void)saveDebuggingDiagnostics:(NSString *)outputDirectory;
 
 /*!
- * @discussion removing trailing parantheses from test names from the extracted symbols
+ * @discussion removing arguments from inside parenthesis from test names from the extracted symbols
  * @param testName the name of the test to trim
  * @return trimmed test name
  */
-+ (NSString *)trimTrailingParanthesesFromTestName:(NSString *)testName;
++ (NSString *)removeSwiftArgumentsFromTestName:(NSString *)testName;
 
 /*!
  * @discussion setup the environment for weak linked frameworks

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Selected tests" tests="8" failures="0" errors="0" time="0.113000">
+  <testsuite tests="8" failures="0" errors="0" time="0.110000" timestamp="2021-11-04T22:48:39GMTZ" name="ShareExtensionTests.xctest">
+    <testsuite tests="1" failures="0" errors="0" time="0.008000" timestamp="2021-11-04T22:48:39GMTZ" name="AuthWorkspaceAdapterTests">
+      <testcase classname="AuthWorkspaceAdapterTests" name="testReadAccountManagerAndExpectRefreshHandlerCalled()" time="0.007000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="1" failures="0" errors="0" time="0.045000" timestamp="2021-11-04T22:48:39GMTZ" name="ConversationLazyLoaderHandlerTests">
+      <testcase classname="ConversationLazyLoaderHandlerTests" name="testUpdateIdentifiersInvokesHttpManagerAndStore()" time="0.044000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="1" failures="0" errors="0" time="0.014000" timestamp="2021-11-04T22:48:39GMTZ" name="ConversationsOpenHelperTests">
+      <testcase classname="ConversationsOpenHelperTests" name="testConversationIdReturned()" time="0.014000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="1" failures="0" errors="0" time="0.018000" timestamp="2021-11-04T22:48:39GMTZ" name="DataProviderShareContextTests">
+      <testcase classname="DataProviderShareContextTests" name="testCreateConversationAdapter()" time="0.018000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="2" failures="0" errors="0" time="0.007000" timestamp="2021-11-04T22:48:39GMTZ" name="InMemoryStoreTests">
+      <testcase classname="InMemoryStoreTests" name="testCreateModels()" time="0.004000">
+      </testcase>
+      <testcase classname="InMemoryStoreTests" name="testUpdateModels()" time="0.002000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="2" failures="0" errors="0" time="0.012000" timestamp="2021-11-04T22:48:39GMTZ" name="ParserTests">
+      <testcase classname="ParserTests" name="testChannelParsing()" time="0.006000">
+      </testcase>
+      <testcase classname="ParserTests" name="testConversationParsing()" time="0.005000">
+      </testcase>
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:39GMTZ" name="RecentConversationsAdapterFrecencyTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:39GMTZ" name="SearchKeywordAdapterTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:39GMTZ" name="ShareAccountManagerTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:39GMTZ" name="ShareViewModelTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:39GMTZ" name="UploadRequestHelperTests">
+    </testsuite>
+    <testsuite tests="0" failures="0" errors="0" time="0.000000" timestamp="2021-11-04T22:48:39GMTZ" name="UserLazyLoaderHandlerTests">
+    </testsuite>
+  </testsuite>
+</testsuites>
+

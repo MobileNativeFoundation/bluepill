@@ -17,6 +17,9 @@
 // Return the path to the test plan json file. The json is packed into the app bundle as resource
 + (NSString *)testPlanPath;
 
+// Return the path to the sample app's xctest with new test cases
++ (NSString *)sampleAppNewTestsBundlePath;
+
 // Return the path to the sample app's xctest with 1000 test cases
 + (NSString *)sampleAppBalancingTestsBundlePath;
 

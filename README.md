@@ -87,6 +87,7 @@ A full list supported options are listed here.
 |     runner-app-path    |           -u           | The test runner for UI tests.                                                       |     N    | n/a              |
 | screenshots-directory  |           n/a          | Directory where simulator screenshots for failed ui tests will be stored.           |     N    | n/a              |
 |    videos-directory    |           n/a          | Directory where videos of test runs will be saved. If not provided, videos are not recorded. | N | n/a            |
+|   keep-passing-videos  |           n/a          | Whether to keep the recorded video for passing tests. Deleted by default.           |     N    | false            |
 |       video-paths      |           -V           | A list of videos that will be saved in the simulators.                              |     N    | n/a              |
 |       image-paths      |           -I           | A list of images that will be saved in the simulators.                              |     N    | n/a              |
 | unsafe-skip-xcode-version-check |               | Skip Xcode version check                                                            |     N    | NO               |
@@ -103,14 +104,15 @@ The exit code of Bluepill uses bit indicators which could represent multiple exi
 
 ## Requirements
 
-Bluepill officially supports **Xcode 12.4**. If you're looking for old Xcode support, please checkout the following branches:
+Bluepill officially supports **Xcode 13.1**. If you're looking for old Xcode support, please checkout the following branches:
 
 * [Xcode-10.0](https://github.com/linkedin/bluepill/tree/xcode-10.0)  | [Xcode-10.1](https://github.com/linkedin/bluepill/tree/xcode-10.1)  | [Xcode-10.2](https://github.com/linkedin/bluepill/tree/xcode-10.2)  | [Xcode-10.3](https://github.com/linkedin/bluepill/tree/xcode-10.3)
 * [Xcode-11.0](https://github.com/linkedin/bluepill/tree/xcode-11.0)  | [Xcode-11.1](https://github.com/linkedin/bluepill/tree/xcode-11.1)  | [Xcode-11.2](https://github.com/linkedin/bluepill/tree/xcode-11.2)  | [Xcode-11.3](https://github.com/linkedin/bluepill/tree/xcode-11.3)  | [Xcode-11.4](https://github.com/linkedin/bluepill/tree/xcode-11.4)  | [Xcode-11.5](https://github.com/linkedin/bluepill/tree/xcode-11.5)
-* [Xcode-12.0](https://github.com/linkedin/bluepill/tree/xcode-12.0)  | [Xcode-12.2](https://github.com/linkedin/bluepill/tree/xcode-12.2)  | [Xcode-12.3](https://github.com/linkedin/bluepill/tree/xcode-12.3) | [Xcode-12.4](https://github.com/linkedin/bluepill/tree/xcode-12.4)
+* [Xcode-12.0](https://github.com/linkedin/bluepill/tree/xcode-12.0)  | [Xcode-12.2](https://github.com/linkedin/bluepill/tree/xcode-12.2)  | [Xcode-12.3](https://github.com/linkedin/bluepill/tree/xcode-12.3) | [Xcode-12.4](https://github.com/linkedin/bluepill/tree/xcode-12.4) | [Xcode-12.5](https://github.com/linkedin/bluepill/tree/xcode-12.5)
+* [Xcode-13.0](https://github.com/mobilenativefoundation/bluepill/tree/xcode-13.0)
 
 
-If you're looking for newer Xcode version support, try using Bluepill with `unsafe-skip-xcode-version-check` flag but make sure your app is tested with it and the underlying risks are understand.
+If you're looking for newer Xcode version support, try using Bluepill with `unsafe-skip-xcode-version-check` flag but make sure your app is tested with it and the underlying risks are understood.
 
 ## Acknowledgement
 
@@ -124,7 +126,7 @@ If you're using [Fastlane](https://github.com/fastlane/fastlane) to run your tes
 - [fastlane-plugin-bluepill](https://github.com/tbrand/fastlane-plugin-bluepill) - Last updated Nov. 7th, offers basic support for working with the Bluepill binary.
 - [Bluepillar](https://github.com/Shashikant86/fastlane-plugin-bluepillar) - Last updated May 29th, it's the original fastlane plugin for working with Bluepill. It was inspired by [this blog post](https://medium.com/@shashikant.jagtap/running-xcuitests-in-parallel-with-fastlane-and-bluepill-370e8ba90958).
 - [XBluepill](https://github.com/kisialiu/fastlane-plugin-xbluepill) - Last updated Jan 27th. It supports all Bluepill options. Thera are some differences from other plugins:
-   - Support XCode 9.2
+   - Support Xcode 9.2
    - No need to build your project before using the plugin. Builds you project by itself and put xctestrun file automatically;
    - Can reset all simulators if needed (removes all current simulators and recreates default from scratch);
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
+   LastUpgradeVersion = "1240"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -46,6 +46,20 @@
                BuildableName = "bluepill-tests.xctest"
                BlueprintName = "bluepill-tests"
                ReferencedContainer = "container:bluepill.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B368E559213F8D2E00B4DEA3"
+               BuildableName = "bplib.framework"
+               BlueprintName = "bplib"
+               ReferencedContainer = "container:../bp/bp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

@@ -1,0 +1,14 @@
+# This is a comment.
+# Each line is a file pattern followed by one or more owners.
+
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# @ob and @ravimandala will be requested for
+# review when someone opens a pull request.
+*       @ob @ravimandala
+
+# Teams can be specified as code owners as well. Teams should
+# be identified in the format @org/team-name. Teams must have
+# explicit write access to the repository. In this example,
+# the octocats team in the octo-org organization owns all .txt files.
+* @MobileNativeFoundation/bluepill-committers

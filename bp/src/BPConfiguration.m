@@ -150,6 +150,8 @@ struct BPOptions {
         "Retry the tests after an app crash and if it passes on retry, consider them non-fatal."},
     {367, "videos-directory", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_VALUE | BP_PATH, "videosDirectory",
         "Directory where videos of test runs will be saved. If not provided, videos are not recorded."},
+    {368, "keep-passing-videos", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepPassingVideos",
+        "Whether recorded videos should be kept if the test passed. They are deleted by default."},
     {0, 0, 0, 0, 0, 0, 0}
 };
 
@@ -498,10 +500,7 @@ static NSUUID *sessionID;
                 if (BPOptions[i].kind & BP_LIST && [value isKindOfClass:[NSArray class]] && (strcmp(@"include".UTF8String, BPOptions[i].name) || strcmp(@"exclude".UTF8String, BPOptions[i].name))) {
                     NSMutableArray *testCases = [NSMutableArray new];
                     for (NSString *testCase in value) {
-                        NSString *trimmedTestName = [BPUtils trimTrailingParanthesesFromTestName:testCase];
-                        if (trimmedTestName == nil) {
-                            continue;
-                        }
+                        NSString *trimmedTestName = [BPUtils removeSwiftArgumentsFromTestName:testCase];
                         [testCases addObject:trimmedTestName];
                     }
                     value = [NSArray arrayWithArray:testCases];
