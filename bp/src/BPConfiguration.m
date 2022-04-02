@@ -150,6 +150,9 @@ struct BPOptions {
         "Directory where videos of test runs will be saved. If not provided, videos are not recorded."},
     {368, "keep-passing-videos", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepPassingVideos",
         "Whether recorded videos should be kept if the test passed. They are deleted by default."},
+    {369, "exclude-xctest-file", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_LIST, "xcTestFileToSkip",
+            "Exclude a xctestfile in the set of tests to run (takes priority over `include`)."},
+    {370, "include-xctest-file", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, NULL, BP_LIST, "xcTestFileToRun", "Include a xctestfile in the set of tests to run (unless specified in `exclude`)."},
     {0, 0, 0, 0, 0, 0, 0}
 };
 
