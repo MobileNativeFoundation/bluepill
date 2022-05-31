@@ -55,19 +55,19 @@ bluepill_build()
   set +o pipefail
   # package bluepill
   TAG=$(git describe --always --tags)
-  DST="Bluepill-$TAG"
-  mkdir -p "build/$DST/bin"
-  cp build/Build/Products/Release/{bp,bluepill} "build/$DST/bin"
+  DST="../bluepill/build/Bluepill-custom"
+  mkdir -p "$DST/bin"
+  cp build/Build/Products/Release/{bp,bluepill} "$DST/bin"
   ## build the man page
-  mkdir -p "build/$DST/man/man1"
-  /usr/bin/python scripts/man.py "build/$DST/man/man1/bluepill.1"
+  mkdir -p "$DST/man/man1"
+  /usr/bin/python scripts/man.py "$DST/man/man1/bluepill.1"
   # License
-  cp LICENSE "build/$DST"
+  cp LICENSE "$DST"
   # bptestrunner
-  cp bptestrunner/* "build/$DST"
+  cp bptestrunner/* "$DST"
 
-  (cd build && zip -qr "$DST.zip" "$DST")
-  echo Release in "build/$DST.zip"
+  (cd ../build && zip -qr "$DST.zip" "$DST")
+  echo Release in "$DST.zip"
 }
 
 bluepill_build_sample_app()
