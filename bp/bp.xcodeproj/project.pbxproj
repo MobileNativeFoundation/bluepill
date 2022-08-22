@@ -1031,7 +1031,7 @@
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -1044,8 +1044,6 @@
 					DTXConnectionServices,
 					"-weak_framework",
 					SimulatorKit,
-					"-weak_framework",
-					XCTAutomationSupport,
 				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bp;
@@ -1072,7 +1070,7 @@
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -1085,8 +1083,6 @@
 					DTXConnectionServices,
 					"-weak_framework",
 					SimulatorKit,
-					"-weak_framework",
-					XCTAutomationSupport,
 				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bp;
@@ -1120,7 +1116,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACH_O_TYPE = staticlib;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_LDFLAGS = "";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bluelib;
@@ -1157,7 +1153,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
 				MACH_O_TYPE = staticlib;
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_LDFLAGS = "";
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
 				PRODUCT_BUNDLE_IDENTIFIER = com.linkedin.bluelib;
@@ -1179,6 +1175,7 @@
 				);
 				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -1191,8 +1188,6 @@
 					DTXConnectionServices,
 					"-weak_framework",
 					SimulatorKit,
-					"-weak_framework",
-					XCTAutomationSupport,
 				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
@@ -1212,6 +1207,7 @@
 				);
 				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -1224,8 +1220,6 @@
 					DTXConnectionServices,
 					"-weak_framework",
 					SimulatorKit,
-					"-weak_framework",
-					XCTAutomationSupport,
 				);
 				"PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BPInstanceTests;
