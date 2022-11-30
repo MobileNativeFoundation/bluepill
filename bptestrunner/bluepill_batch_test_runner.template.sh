@@ -75,11 +75,11 @@ cp "$BLUEPILL_PATH" $BP_WORKING_FOLDER
 # Run bluepill
 # NOTE: we override output folder here and disregard the one in the config file.
 # So we know where to grab the output files for the next step.
-echo "Running ./bluepill --test-plan-path "${BP_TEST_PLAN_ARG}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}"
+echo "Running ./bluepill --verbose --test-plan-path "${BP_TEST_PLAN_ARG}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}"
 
 cd $BP_WORKING_FOLDER
 RC=0
-(./bluepill --test-plan-path "${BP_TEST_PLAN_ARG}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}) || RC=$?
+(./bluepill --verbose --test-plan-path "${BP_TEST_PLAN_ARG}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}) || RC=$?
 # Move Bluepill output to bazel-testlogs
 ditto "outputs" "$TEST_UNDECLARED_OUTPUTS_DIR"
 rm -rf "outputs"
