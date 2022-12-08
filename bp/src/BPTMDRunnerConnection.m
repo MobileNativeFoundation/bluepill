@@ -48,6 +48,7 @@
 
 @property (nonatomic, weak) id<BPTestBundleConnectionDelegate> interface;
 @property (nonatomic, assign) BOOL connected;
+@property (nonatomic, assign) BOOL testBundleReady;
 @property (nonatomic, strong) dispatch_queue_t queue;
 @property (nonatomic, strong) NSString *bundleID;
 @property (nonatomic, assign) pid_t appProcessPID;
@@ -76,10 +77,13 @@
 
     // Pool connection status till it passes.
     [BPUtils runWithTimeOut:timeout until:^BOOL{
-        return self.connected;
+        return self.connected && self.testBundleReady;
     }];
     if (!self.connected) {
         [BPUtils printInfo:ERROR withString:@"Timeout establishing a runner session!"];
+    }
+    if (!self.testBundleReady) {
+        [BPUtils printInfo:ERROR withString:@"Timeout connecting to the test bundle!"];
     }
 }
 
@@ -279,12 +283,14 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
 
 - (id)_XCT_testBundleReadyWithProtocolVersion:(NSNumber *)protocolVersion minimumVersion:(NSNumber *)minimumVersion {
     self.connected = YES;
+    self.testBundleReady = YES;
     [BPUtils printInfo:INFO withString:@"Test bundle is connected. ProtocolVersion= %@, minimumVersion = %@", protocolVersion, minimumVersion];
     return nil;
 }
 
 - (id)_XCT_testRunnerReadyWithCapabilities:(XCTCapabilities *)capabilities {
     self.connected = YES;
+    self.testBundleReady = YES;
     [BPUtils printInfo:INFO withString:@"Test bundle is connected. Capabilities = %@", capabilities];
     return nil;
 }
