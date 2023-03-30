@@ -42,6 +42,16 @@
 
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion;
 
+/**
+ Executes logic tests for the provided context, providing two callbacks as the execution starts and finishes.
+ @param parser The test log parser
+ @param spawnBlock Called once the process is spawned (right after it's started and the process is actually running)
+ @param completionBlock Called once the process completes, and all tests have either passed/failed/erred.
+ */
+- (void)executeLogicTestsWithParser:(BPTreeParser *)parser
+                            onSpawn:(void (^)(NSError *, pid_t))spawnBlock
+                      andCompletion:(void (^)(NSError *, pid_t))completionBlock;
+
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion;
 
 - (void)addPhotosToSimulator;

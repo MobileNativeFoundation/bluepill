@@ -7,14 +7,12 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "bp/tests/BPTestHelper.h"
-#import "bp/src/BPConfiguration.h"
-#import "bp/src/BPUtils.h"
 #import "bluepill/src/BPRunner.h"
 #import "bluepill/src/BPApp.h"
 #import "bluepill/src/BPPacker.h"
-#import "bp/src/BPXCTestFile.h"
-#import "bp/src/BPConstants.h"
+
+#import <bplib/bplib.h>
+#import <bplib/BPTestUtils.h>
 
 @interface BPIntegrationTests : XCTestCase
 @end
@@ -57,6 +55,34 @@
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+}
+
+- (void)testLogicTestBundles {
+    BPConfiguration *config = [BPTestUtils makeUnhostedTestConfiguration];
+    config.stuckTimeout = @(2);
+    config.testCaseTimeout = @(10);
+    
+    // Test multiple test bundles, while skipping any failing tests so that we
+    // can still validate that we get a success code..
+    config.testBundlePath = BPTestHelper.passingLogicTestBundlePath;
+    config.additionalUnitTestBundles = @[BPTestHelper.logicTestBundlePath];
+    config.testCasesToSkip = @[
+        @"BPLogicTests/testFailingLogicTest",
+        @"BPLogicTests/testCrashTestCaseLogicTest",
+        @"BPLogicTests/testCrashExecutionLogicTest",
+        @"BPLogicTests/testStuckLogicTest",
+        @"BPLogicTests/testSlowLogicTest",
+    ];
+
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
+    NSError *error;
+    BPApp *app = [BPApp appWithConfig:config withError:&error];
+
+    XCTAssert(runner != nil);
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc == 0, @"Wanted 0, got %d", rc);
+    XCTAssert([runner busySwimlaneCount] == 0);
 }
 
 - (void)testOneBPInstance {

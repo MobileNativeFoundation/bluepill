@@ -12,6 +12,7 @@
 #import "BPConstants.h"
 #import "BPXCTestFile.h"
 #import "BPConfiguration.h"
+#import "SimDevice.h"
 
 @implementation BPUtils
 
@@ -111,16 +112,6 @@ static BOOL quiet = NO;
         fprintf(fd, "{%d} %s [%s] %s%s%s", getpid(), ts, message.text, [simNum UTF8String], [txt UTF8String], nl);
     }
     fflush(fd);
-}
-
-+ (NSError *)BPError:(const char *)function andLine:(int)line withFormat:(NSString *)fmt, ... {
-    va_list args;
-    va_start(args, fmt);
-    NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:args];
-    va_end(args);
-    return [NSError errorWithDomain:BPErrorDomain
-                               code:-1
-                           userInfo:@{NSLocalizedDescriptionKey: msg}];
 }
 
 + (NSString *)findExecutablePath:(NSString *)execName {
@@ -296,12 +287,45 @@ static BOOL quiet = NO;
   [BPUtils runShell:cmd];
 }
 
++ (BOOL)isTestSwiftTest:(NSString *)testName {
+    return [testName containsString:@"."] || [testName containsString:@"()"];
+}
+
 + (NSString *)removeSwiftArgumentsFromTestName:(NSString *)testName {
     NSRange range = [testName rangeOfString:@"("];
     if (range.location == NSNotFound) {
         return testName;
     }
     return [NSString stringWithFormat:@"%@()", [testName substringToIndex:range.location]];
+}
+
++ (NSString *)formatSwiftTestForReport:(NSString *)testName {
+    NSString *formattedName = testName;
+    // Remove prefix of `<bundleName>.`
+    NSRange range = [testName rangeOfString:@"."];
+    if (range.location != NSNotFound) {
+        formattedName = [formattedName substringFromIndex:range.location + 1];
+    }
+    // Add parentheses
+    if (![testName hasSuffix:@"()"]) {
+        formattedName = [formattedName stringByAppendingString:@"()"];
+    }
+    return formattedName;
+}
+
++ (NSString *)formatSwiftTestForXCTest:(NSString *)testName withBundleName:(NSString *)bundleName {
+    NSString *formattedName = testName;
+    // Remove parentheses
+    NSRange range = [formattedName rangeOfString:@"()"];
+    if (range.location != NSNotFound) {
+        formattedName = [formattedName substringToIndex:range.location];
+    }
+    // Add `<bundleName>.`
+    NSString *bundlePrefix = [bundleName stringByAppendingString:@"."];
+    if (![formattedName containsString:bundlePrefix]) {
+        formattedName = [NSString stringWithFormat:@"%@.%@", bundleName, formattedName];
+    }
+    return formattedName;
 }
 
 + (char *)version {
@@ -418,6 +442,13 @@ static BOOL quiet = NO;
     return testsToRunByFilePath;
 }
 
++ (double)timeoutForAllTestsWithConfiguration:(BPConfiguration *)config {
+    // Add 1 second per test
+    double buffer = 1.0;
+    NSInteger testCount = (config.testCasesToRun.count == 0 ? config.allTestCases.count : config.testCasesToRun.count) - config.testCasesToSkip.count;
+    return testCount * (config.testCaseTimeout.doubleValue + buffer);
+}
+
 + (double)getTotalTimeWithConfig:(BPConfiguration *)config
                        testTimes:(NSDictionary<NSString *,NSNumber *> *)testTimes
                   andXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
@@ -436,6 +467,33 @@ static BOOL quiet = NO;
         totalTime += testBundleExecutionTime;
     }
     return totalTime;
+}
+
+#pragma mark - Errors
+
++ (NSError *)errorWithSignalCode:(NSInteger)signalCode {
+    NSString *description = [NSString stringWithFormat:@"Process failed signal code: %@", @(signalCode)];
+    return [self errorWithCode:signalCode description:description];
+}
+
++ (NSError *)errorWithExitCode:(NSInteger)exitCode {
+    NSString *description = [NSString stringWithFormat:@"Process failed exit code: %@", @(exitCode)];
+    return [self errorWithCode:exitCode description:description];
+}
+
++ (NSError *)BPError:(const char *)function andLine:(int)line withFormat:(NSString *)fmt, ... {
+    va_list args;
+    va_start(args, fmt);
+    NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:args];
+    va_end(args);
+    return [self errorWithCode:-1 description:msg];
+}
+
++ (NSError *)errorWithCode:(NSInteger)code description:(NSString *)description {
+    NSDictionary<NSString *, NSString *> *userInfo = @{
+        NSLocalizedDescriptionKey: description
+    };
+    return [NSError errorWithDomain:BPErrorDomain code:code userInfo:userInfo];
 }
 
 @end

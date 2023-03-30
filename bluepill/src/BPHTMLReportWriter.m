@@ -9,7 +9,7 @@
 
 #import <Foundation/Foundation.h>
 #import "BPTestReportHTML.h"
-#import "bp/src/BPUtils.h"
+#import <bplib/bplib.h>
 
 #import "BPHTMLReportWriter.h"
 

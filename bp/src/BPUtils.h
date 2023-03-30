@@ -71,7 +71,6 @@ typedef NS_ENUM(int, BPKind) {
  */
 + (NSString *)mkstemp:(NSString *)pathTemplate withError:(NSError **)errPtr;
 
-
 /*!
  @discussion print a message to stdout.
  @param kind one of the levels in BPKind
@@ -80,8 +79,20 @@ typedef NS_ENUM(int, BPKind) {
 + (void)printInfo:(BPKind)kind withString:(NSString *)fmt, ... NS_FORMAT_FUNCTION(2,3);
 
 /*!
- @discussion get an NSError *
- This is not really meant to be called, use the BP_SET_ERROR macro below instead.
+ Creates an `NSError *` with BP-specific domain for a given signal code, updating the description accordingly.
+ @param signalCode The signal code.
+ */
++ (NSError *)errorWithSignalCode:(NSInteger)signalCode;
+
+/*!
+ Creates an `NSError *` with BP-specific domain for a given exit code, updating the description accordingly.
+ @param exitCode The exit code.
+ */
++ (NSError *)errorWithExitCode:(NSInteger)exitCode;
+
+/*!
+ @discussion get an `NSError *`
+ This is not really meant to be called, use the `BP_SET_ERROR` macro below instead.
  @param function The name of the function
  @param line The line number
  @param fmt a format string (a la printf), followed by var args.
@@ -110,6 +121,18 @@ typedef NS_ENUM(int, BPKind) {
  */
 + (BPConfiguration *)normalizeConfiguration:(BPConfiguration *)config
                               withTestFiles:(NSArray *)xctTestFiles;
+
+/*!
+ Returns an aggregated timeout interval for all tests to be run in an execution. While we will
+ still apply a per-test timeout, it's possible for things to fail in an XCTest execution when a test isn't
+ being run, and we want to make sure the execution still fails when this occurs.
+ 
+ @discussion This timeout value is based on the timeout per test multiplied by the number of tests,
+ with an additional buffer per test.
+ @param config The fully setup configuration that will be used to calculate the aggregate timeout.
+ @return The aggregated timeout.
+ */
++ (double)timeoutForAllTestsWithConfiguration:(BPConfiguration *)config;
 
 /*!
  @discussion a function to determine if the given file name represents
@@ -172,6 +195,31 @@ typedef BOOL (^BPRunBlock)(void);
  * @return trimmed test name
  */
 + (NSString *)removeSwiftArgumentsFromTestName:(NSString *)testName;
+
+/*!
+ * @discussion Checks for indicators that a test name is a swift test's name, i.e. has `<bundle>.` or `()`
+ * @param testName the name of the test to check
+ * @return `YES` if swift, `NO` if objc
+ */
++ (BOOL)isTestSwiftTest:(NSString *)testName;
+
+/*!
+ * @discussion Strips the test's bundle name if present, and adds in parenthesis. This is
+ * the format that consumers of Bluepill expect to provide + see in test reports.
+ * @param testName the name of the test to format
+ * @return trimmed test name
+ */
++ (NSString *)formatSwiftTestForReport:(NSString *)testName;
+
+/*!
+ * @discussion XCTest requires that swift test names are fully namespaced, and don't include parens,
+ * contrary to what Bluepill consumers provide.
+ *
+ * @param testName the name of the test to format
+ * @param bundleName The name of the test's bundle
+ * @return trimmed test name
+ */
++ (NSString *)formatSwiftTestForXCTest:(NSString *)testName withBundleName:(NSString *)bundleName;
 
 /*!
  * @discussion setup the environment for weak linked frameworks

@@ -11,6 +11,7 @@
 #import "BPConfiguration.h"
 #import "BPUtils.h"
 #import "BPXCTestFile.h"
+#import "SimDevice.h"
 #import "PrivateHeaders/XCTest/XCTestConfiguration.h"
 #import "PrivateHeaders/XCTest/XCTTestIdentifier.h"
 #import "PrivateHeaders/XCTest/XCTTestIdentifierSet.h"
@@ -112,7 +113,7 @@
     xctConfig.reportResultsToIDE = YES;
     xctConfig.automationFrameworkPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework", config.xcodePath];
     testHostPath = config.appBundlePath;
-
+    
     NSString *bundleID = [self bundleIdForPath:config.appBundlePath];
     xctConfig.testApplicationDependencies = config.dependencies.count > 0 ? config.dependencies : @{bundleID: config.appBundlePath};
 
@@ -166,6 +167,60 @@
         [BPUtils printInfo:ERROR withString:@"Could not extract bundleID: %@", dic];
     }
     return bundleId;
+}
+
++ (NSArray<NSString *> *)testsToRunWithConfig:(BPConfiguration *)config {
+    // First, standardize all swift test names:
+    NSMutableArray<NSString *> *allTests = [self formatTestNamesForXCTest:config.allTestCases withConfig:config];
+    NSMutableArray<NSString *> *testsToRun = [self formatTestNamesForXCTest:config.testCasesToRun withConfig:config];
+    NSArray<NSString *> *testsToSkip = [self formatTestNamesForXCTest:config.testCasesToSkip withConfig:config];
+
+    // If there's no tests to skip, we can return these back otherwise unaltered.
+    // Otherwise, we'll need to remove any tests from `testsToRun` that are in our skip list.
+    if (testsToSkip.count == 0) {
+        return [(testsToRun ?: allTests) copy];
+    }
+    
+    // If testCasesToRun was empty/nil, we default to all tests
+    if (testsToRun.count == 0) {
+        testsToRun = allTests;
+    }
+    [testsToRun filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString *testName, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return ![testsToSkip containsObject:testName];
+    }]];
+    return [testsToRun copy];
+}
+
++ (nullable NSMutableArray<NSString *> *)formatTestNamesForXCTest:(nullable NSArray<NSString *> *)tests
+                                                       withConfig:(BPConfiguration *)config {
+    if (!tests) {
+        return nil;
+    }
+    NSMutableArray<NSString *> *formattedTests = [NSMutableArray array];
+    NSString *bundleName = [[config.testBundlePath lastPathComponent] stringByDeletingPathExtension];
+    for (NSString *testName in tests) {
+        if ([BPUtils isTestSwiftTest:testName]) {
+            [formattedTests addObject:[BPUtils formatSwiftTestForXCTest:testName withBundleName:bundleName]];
+        } else {
+            [formattedTests addObject:testName];
+        }
+    }
+    return formattedTests;
+}
+
+// Intercept stdout, stderr and post as simulator-output events
++ (NSString *)makeStdoutFileOnDevice:(SimDevice *)device {
+    NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/stdout_stderr_%@", device.dataPath, [[device UDID] UUIDString]];
+    NSString *simStdoutPath = [BPUtils mkstemp:stdout_stderr withError:nil];
+    assert(simStdoutPath != nil);
+
+    [[NSFileManager defaultManager] removeItemAtPath:simStdoutPath error:nil];
+
+    // Create empty file so we can tail it and the app can write to it
+    [[NSFileManager defaultManager] createFileAtPath:simStdoutPath
+                                            contents:nil
+                                          attributes:nil];
+    return simStdoutPath;
 }
 
 + (NSString *)executablePathforPath:(NSString *)path {

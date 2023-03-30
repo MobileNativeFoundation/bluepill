@@ -8,12 +8,7 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <AppKit/AppKit.h>
-#import "bp/src/BPCreateSimulatorHandler.h"
-#import "bp/src/BPSimulator.h"
-#import "bp/src/BPStats.h"
-#import "bp/src/BPUtils.h"
-#import "bp/src/BPWaitTimer.h"
-#import "bp/src/SimulatorHelper.h"
+#import <bplib/bplib.h>
 #import "BPPacker.h"
 #import "BPRunner.h"
 #import "BPSwimlane.h"
@@ -132,12 +127,14 @@ maxprocs(void)
         [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
         return 1;
     }
+    
     if (bundles.count < numSims) {
         [BPUtils printInfo:WARNING
                 withString:@"Lowering number of parallel simulators from %lu to %lu because there aren't enough test bundles.",
                             numSims, bundles.count];
         numSims = bundles.count;
     }
+
     if (self.config.cloneSimulator) {
         self.testHostSimTemplates = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles];
         if ([self.testHostSimTemplates count] == 0) {
@@ -172,6 +169,7 @@ maxprocs(void)
             return -1;
         }
     }
+
     while (1) {
         if (interrupted) {
             if (interrupted >=5) {
@@ -222,6 +220,8 @@ maxprocs(void)
                 [bundles removeObjectAtIndex:0];
             }
         }
+
+        // Resume in a second. Every 30 seconds, log status.
         sleep(1);
         if (seconds % 30 == 0) {
             NSString *listString;
@@ -251,6 +251,7 @@ maxprocs(void)
         [self addCounters];
     }
 
+    // Cleanup Devices
     for (int i = 0; i < [deviceList count]; i++) {
         NSTask *task = [self newTaskToDeleteDevice:[deviceList objectAtIndex:i] andNumber:i+1];
         [task launch];

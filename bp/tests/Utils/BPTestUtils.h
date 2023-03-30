@@ -8,19 +8,22 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
-#import <bplib/bplib.h>
+#import "BPExitStatus.h"
 
 @class BPConfiguration;
-@interface BPApp : NSObject
 
-// All test bundles inside PlugIns directory in app.
-@property (nonatomic, strong) NSArray<BPXCTestFile *> *testBundles;
+NS_ASSUME_NONNULL_BEGIN
 
-+ (instancetype)appWithConfig:(BPConfiguration *)config
-                    withError:(NSError **)errPtr;
+@interface BPTestUtils : NSObject
 
-/*! @discussion Print the test bundles in the App along with all of their test classes/cases (Basically the .xctest files inside the PlugIns directory in the .app bundle)
- */
-- (void)listTests;
++ (nonnull BPConfiguration *)makeUnhostedTestConfiguration;
+
++ (nonnull BPConfiguration *)makeHostedTestConfiguration;
+
++ (void)assertExitStatus:(BPExitStatus)exitStatus matchesExpected:(BPExitStatus)expectedStatus;
+
++ (BOOL)checkIfTestCase:(NSString *)testCase bundleName:(NSString *)bundleName wasRunInLog:(NSString *)logPath;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -30,6 +30,13 @@
 + (NSDictionary *)appLaunchEnvironmentWithBundleID:(NSString *)hostBundleID
                                             device:(SimDevice *)device
                                             config:(BPConfiguration *)config;
+/*!
+ * @discussion Creates an array of all tests that should be run, filtering out any tests that should be skipped.
+ * @param config the configuration object.
+ * @return The list of tests to run.
+ */
+
++ (NSArray<NSString *> *)testsToRunWithConfig:(BPConfiguration *)config;
 
 /*!
  * @discussion get the path of the environment configuration file
@@ -37,6 +44,13 @@
  * @return return the path to the test configuration file.
  */
 + (NSString *)testEnvironmentWithConfiguration:(BPConfiguration *)config;
+
+/*!
+ @discussion Creates a stdout file on the provided device of the form `/tmp/stdout_stderr_<device_udid>`
+ @param device The device to create the file on.
+ @return the path of the stdout file.
+ */
++ (NSString *)makeStdoutFileOnDevice:(SimDevice *)device;
 
 #pragma mark - Path Helper
 

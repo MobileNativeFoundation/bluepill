@@ -7,20 +7,28 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
-#import <Foundation/Foundation.h>
-#import <bplib/bplib.h>
+#import <XCTest/XCTest.h>
 
-@class BPConfiguration;
-@interface BPApp : NSObject
+@interface BPPassingLogicTests : XCTestCase
 
-// All test bundles inside PlugIns directory in app.
-@property (nonatomic, strong) NSArray<BPXCTestFile *> *testBundles;
+@end
 
-+ (instancetype)appWithConfig:(BPConfiguration *)config
-                    withError:(NSError **)errPtr;
+@implementation BPPassingLogicTests
 
-/*! @discussion Print the test bundles in the App along with all of their test classes/cases (Basically the .xctest files inside the PlugIns directory in the .app bundle)
- */
-- (void)listTests;
+- (void)testPassingLogicTest1 {
+    XCTAssert(YES);
+}
+
+- (void)testPassingLogicTest2 {
+    XCTAssert(YES);
+}
+
+- (void)testPassingLogicTest3 {
+    XCTAssert(YES);
+}
+
+- (void)testPassingLogicTest4 {
+    XCTAssert(YES);
+}
 
 @end

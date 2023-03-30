@@ -14,13 +14,17 @@
 #import "BPSimulator.h"
 #import "BPTestHelper.h"
 #import "BPUtils.h"
+#import "BPTestUtils.h"
 
 @interface BPReportTests : BPIntTestCase
 @end
 
 @implementation BPReportTests
 
-
+- (void)setUp {
+    [super setUp];
+    self.config = [BPTestUtils makeHostedTestConfiguration];
+}
 
 - (void)testReportWithAppCrashingTestsSet {
     [BPUtils enableDebugOutput:NO];

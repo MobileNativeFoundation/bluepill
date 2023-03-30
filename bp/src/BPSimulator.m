@@ -435,6 +435,161 @@
                                        error:errPtr];
 }
 
+/**
+ Logic tests are run directly on the simulator by spawning a new process with the XCTest executable, without any kind of host app.
+ */
+- (void)executeLogicTestsWithParser:(BPTreeParser *)parser
+                            onSpawn:(void (^)(NSError *, pid_t))spawnBlock
+                      andCompletion:(void (^)(NSError *, pid_t))completionBlock {
+    /*
+     Grab all test cases so that we can:
+       1) create a timeout for the full test execution
+       2) Support opting-out of tests, despite the fact that XCTest only provides an opt-in API.
+     */
+    NSArray<NSString *> *testsToRun = [SimulatorHelper testsToRunWithConfig:self.config];
+    NSString *testsToRunArg = testsToRun.count == self.config.allTestCases.count ? @"All" : [testsToRun componentsJoinedByString:@","];
+
+    /*
+     It can be useful to understand how to translate the public Breaking down CLI command `xcrun simctl spawn... <path>`, which you'd
+     use to run a logic test from commandline, into the form that Bluepill must use, which is CoreSimulator's private `spawnWithPath`:
+     
+     When trying to run a command such as
+        ```
+        xcrun simctl spawn -s AFF4165A-9A71-4860-8B6D-485B7D1BA2BC
+            /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest
+            -XCTest BPLogicTests/testPassingLogicTest /Users/.../BPLogicTests.xctest
+        ```
+     we can break down the individual components to be handled in the following:
+     - part of the method signature:
+        - xcrun simctl                          // these just redirect down to CoreSimulator
+        - spawn                                 // this is the the spawn method :p
+        - AFF4165A-9A71-4860-8B6D-485B7D1BA2BC  // We're calling device.spawn. No need to respecify the device ID
+     - path: /Applications/.../Xcode/Agents/xctest
+     - options:
+        - -s                                    // "standalone" option
+        - -w                                    // "wait_for_debugger" option
+        - -a                                    // "arch" option
+     - args:
+        - /Applications/.../Xcode/Agents/xctest                         // Yes, spawn redundantly requires this both the path param + an arg :)
+        - -XCTest
+        - BPLogicTests/testPassingLogicTest                             // The filter for which tests to actually run. `All` is the catch-all.
+        - /Users/.../BPLogicTests.xctest                                // The path to the .xctest file w/ all the module's tests.
+     
+     From `xcrun simctl spawn help`:
+     `simctl spawn [-w | --wait-for-debugger] [-s | --standalone] [-a <arch> | --arch=<arch>] <device> <path to executable> [<argv 1> <argv 2> ... <argv n>]`
+     */
+
+    NSString *executablePath = [[NSString alloc] initWithFormat:
+                                @"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest",
+                                self.config.xcodePath];
+    NSString *xctestPath = self.config.testBundlePath;
+    NSLog(@"%@", testsToRunArg);
+    NSArray *arguments = @[
+        executablePath,
+        @"-XCTest",
+        testsToRunArg,
+        xctestPath,
+    ];
+
+    // Intercept stdout, stderr and post as simulator-output events
+    NSString *simStdoutPath = [SimulatorHelper makeStdoutFileOnDevice:self.device];
+    NSString *simStdoutRelativePath = [simStdoutPath substringFromIndex:self.device.dataPath.length];
+    // Environment
+    NSDictionary *environment = @{
+        kOptionsStdoutKey: simStdoutRelativePath,
+        kOptionsStderrKey: simStdoutRelativePath,
+    };
+    self.appOutput = [NSFileHandle fileHandleForReadingAtPath:simStdoutPath];
+    
+    NSFileHandle *outputFileHandle = [NSFileHandle fileHandleForWritingAtPath:simStdoutPath];
+    NSNumber *stdoutFileDescriptor = @(outputFileHandle.fileDescriptor);
+
+    NSDictionary *options = @{
+        kOptionsArgumentsKey: arguments,
+        kOptionsEnvironmentKey: environment,
+        @"standalone": @(1),
+        @"stdout": stdoutFileDescriptor,
+        @"stderr": stdoutFileDescriptor,
+    };
+
+    // Set up monitor
+    if (!self.monitor) {
+        self.monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
+    }
+    self.monitor.device = self.device;
+    parser.delegate = self.monitor;
+
+    self.appOutput.readabilityHandler = ^(NSFileHandle *handle) {
+        // This callback occurs on a background thread
+        NSData *chunk = [handle availableData];
+        [parser handleChunkData:chunk];
+    };
+
+    // To see more on how to debug the expected format/inputs of the options array,
+    // see the in-depth documentation in SimDevice.h.
+    __block typeof(self) blockSelf = self;
+    [self.device spawnAsyncWithPath:executablePath
+                            options:options
+                 terminationHandler:^(int stat_loc) {
+        // The naming here is confusing, but this `terminationHandler` is called once
+        // the xctest process COMPLETES. The `completionHandler` below is used earlier,
+        // once the xctest process is SPAWNED.
+        
+        // Check the location where the status code is stored;
+        // Handle error if there is a signal or non-zero exit code.
+        NSError *error;
+        if (WIFSIGNALED(stat_loc)) {
+            int signalCode = WTERMSIG(stat_loc);
+            // Ignore if the process was killed -- this occurs when we're killing
+            // a timed-out test, and shouldn't be treated as a crash.
+            if (signalCode != SIGKILL) {
+                [BPUtils printInfo:DEBUGINFO withString: @"Spawned XCTest execution failed with signal code: %@", @(signalCode)];
+                error = [BPUtils errorWithSignalCode:signalCode];
+            }
+        } else {
+            // A non-zero exit code could mean a failed test or something more serious, but we can't tell the difference here.
+            // The best we can do is log the error code as debug info.
+            int exitCode = WEXITSTATUS(stat_loc);
+            if (exitCode) {
+                [BPUtils printInfo:DEBUGINFO withString: @"Spawned XCTest execution failed with error code: %@", @(exitCode)];
+            }
+        }
+        [blockSelf cleanUpParser:parser fileHandle:outputFileHandle];
+        completionBlock(error, blockSelf.monitor.appPID);
+
+        [outputFileHandle closeFile];
+    } completionHandler:^(NSError *error, pid_t pid) {
+        // Again, this `completionHandler` is called once the process is done SPAWNING,
+        // as opposed to happening after the process itself has finished.
+        blockSelf.monitor.appPID = pid;
+        blockSelf.monitor.appState = Running;
+        spawnBlock(error, pid);
+    }];
+}
+
+- (void)cleanUpParser:(BPTreeParser *)parser fileHandle:(NSFileHandle *)fileHandle {
+    self.monitor.appState = Completed;
+    [parser.delegate setParserStateCompleted];
+    // Post a APPCLOSED signal to the parser
+    [fileHandle seekToEndOfFile];
+    [fileHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [fileHandle closeFile];
+}
+
++ (NSMutableArray<NSString *> *)commandLineArgsFromConfig:(BPConfiguration *)config {
+    NSArray *argumentsArr = config.commandLineArguments ?: @[];
+    NSMutableArray *commandLineArgs = [NSMutableArray array];
+    for (NSString *argument in argumentsArr) {
+        NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];
+        for (NSString *arg in argumentsArray) {
+            if (![arg isEqualToString:@""]) {
+                [commandLineArgs addObject:arg];
+            }
+        }
+    }
+    return commandLineArgs;
+}
+
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.appBundlePath];
@@ -445,17 +600,8 @@
         hostBundleId = [SimulatorHelper bundleIdForPath:self.config.testRunnerAppPath];
     }
     // Create the environment for the host application
+    NSMutableArray *commandLineArgs = [BPSimulator commandLineArgsFromConfig:self.config];
     NSMutableDictionary *argsAndEnv = [[NSMutableDictionary alloc] init];
-    NSArray *argumentsArr = self.config.commandLineArguments ?: @[];
-    NSMutableArray *commandLineArgs = [NSMutableArray array];
-    for (NSString *argument in argumentsArr) {
-        NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];
-        for (NSString *arg in argumentsArray) {
-            if (![arg isEqualToString:@""]) {
-                [commandLineArgs addObject:arg];
-            }
-        }
-    }
 
     // These are appended by Xcode so we do that here.
     [commandLineArgs addObjectsFromArray:@[
@@ -532,13 +678,7 @@
                 dispatch_source_cancel(source);
             });
             dispatch_source_set_cancel_handler(source, ^{
-                blockSelf.monitor.appState = Completed;
-                [parser.delegate setParserStateCompleted];
-                // Post a APPCLOSED signal to the parser
-                NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:simStdoutPath];
-                [fileHandle seekToEndOfFile];
-                [fileHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
-                [fileHandle closeFile];
+                [blockSelf cleanUpParser:parser fileHandle:[NSFileHandle fileHandleForWritingAtPath:simStdoutPath]];
             });
             dispatch_resume(source);
             self.appOutput.readabilityHandler = ^(NSFileHandle *handle) {

@@ -150,6 +150,8 @@ struct BPOptions {
         "Directory where videos of test runs will be saved. If not provided, videos are not recorded."},
     {368, "keep-passing-videos", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepPassingVideos",
         "Whether recorded videos should be kept if the test passed. They are deleted by default."},
+    {369, "logic-test", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "isLogicTestTarget",
+        "Will run the tests without an app host"},
     {0, 0, 0, 0, 0, 0, 0}
 };
 
@@ -167,9 +169,6 @@ static NSUUID *sessionID;
     }
     if (!self.testBundlePath) {
         [errors addObject:@"testBundlePath field is nil"];
-    }
-    if (!self.testHost) {
-        [errors addObject:@"testHost field is nil"];
     }
     if ([errors count] > 0) {
         BP_SET_ERROR(errPtr,
@@ -614,7 +613,7 @@ static NSUUID *sessionID;
     }
     // Now check we didn't miss any require options:
     NSMutableArray *errors = [[NSMutableArray alloc] init];
-    if (!(self.appBundlePath) && !(self.xcTestRunPath) && !(self.testPlanPath) && !(self.deleteSimUDID)) {
+    if (!(self.appBundlePath) && !(self.xcTestRunPath) && !(self.testPlanPath) && !(self.deleteSimUDID) && !(self.isLogicTestTarget)) {
         [errors addObject:@"Missing required option: -a/--app OR --xctestrun-path OR --test-plan-path"];
     }
     if ((self.program & BP_BINARY) && !(self.testBundlePath) && !(self.testPlanPath) && !(self.deleteSimUDID)) {
@@ -707,7 +706,7 @@ static NSUUID *sessionID;
         return NO;
     }
 
-    if (!self.appBundlePath && !self.xcTestRunDict && !self.tests) {
+    if (!self.appBundlePath && !self.xcTestRunDict && !self.tests && !self.isLogicTestTarget) {
         BP_SET_ERROR(errPtr, @"No app bundle provided.");
         return NO;
     }
