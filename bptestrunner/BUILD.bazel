@@ -14,6 +14,18 @@ native_binary(
     out = "bp",
 )
 
+native_binary(
+    name = "libBPTestInspector.dylib",
+    src = 'bin/libBPTestInspector.dylib',
+    out = "libBPTestInspector.dylib",
+)
+
+native_binary(
+    name = "libBPMacTestInspector.dylib",
+    src = 'bin/libBPMacTestInspector.dylib',
+    out = "libBPMacTestInspector.dylib",
+)
+
 exports_files([
     "bluepill_batch_test_runner.template.sh"
 ])

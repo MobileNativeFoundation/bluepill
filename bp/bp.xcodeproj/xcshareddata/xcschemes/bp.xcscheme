@@ -20,6 +20,34 @@
                ReferencedContainer = "container:bp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AA56EAE11EEF08720062C2BC"
+               BuildableName = "libBPMacTestInspector.dylib"
+               BlueprintName = "BPMacTestInspector"
+               ReferencedContainer = "container:../BPTestInspector/BPTestInspector.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AA017F401BD7776B00F45E9D"
+               BuildableName = "libBPTestInspector.dylib"
+               BlueprintName = "BPTestInspector"
+               ReferencedContainer = "container:../BPTestInspector/BPTestInspector.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

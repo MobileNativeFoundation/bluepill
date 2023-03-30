@@ -2,6 +2,7 @@
 bp/BPVersion.h
 bluepill/src/BPTestReportHTML.h
 result.txt
+result_bptestinspector.txt
 
 # Xcode
 #

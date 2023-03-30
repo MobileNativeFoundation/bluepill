@@ -36,6 +36,27 @@ mkdir -p build/
 bluepill_build()
 {
   set -o pipefail
+
+  # First build BPTestInspector, as it's a dependency.
+  xcodebuild \
+    -workspace Bluepill.xcworkspace \
+    -arch x86_64 \
+    -scheme BPTestInspector \
+    -sdk iphonesimulator \
+    -configuration Release \
+    -derivedDataPath "$DerivedDataPath" | tee result_bptestinspector.txt | $XCPRETTY
+  test $? == 0 || {
+          echo Build failed
+          xcodebuild -list -workspace Bluepill.xcworkspace
+          -scheme BPTestInspector \
+          cat result_bptestinspector.txt
+          exit 1
+  }
+  test -x build/Build/Products/Release-iphonesimulator/libBPTestInspector.dylib || {
+          echo No bp built
+          exit 1
+  }
+
   xcodebuild \
     -workspace Bluepill.xcworkspace \
     -scheme bluepill \
@@ -52,12 +73,15 @@ bluepill_build()
           echo No bp built
           exit 1
   }
+
   set +o pipefail
   # package bluepill
   TAG=$(git describe --always --tags)
   DST="Bluepill-$TAG"
   mkdir -p "build/$DST/bin"
-  cp build/Build/Products/Release/{bp,bluepill} "build/$DST/bin"
+  cp build/Build/Products/Release/{bp,bluepill,libBPMacTestInspector.dylib,libBPTestInspector.dylib} "build/$DST/bin"
+  cp build/Build/Products/Release-iphonesimulator/libBPTestInspector.dylib "build/$DST/bin"
+
   ## build the man page
   mkdir -p "build/$DST/man/man1"
   /usr/bin/python scripts/man.py "build/$DST/man/man1/bluepill.1"
