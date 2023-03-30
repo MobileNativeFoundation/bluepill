@@ -20,6 +20,11 @@
     return [[self sampleAppPath] stringByAppendingPathComponent:@"test_plan.json"];
 }
 
+// Return the path to logic tests, that are run unhosted rather than on the Sampple App
++ (NSString *)logicTestBundlePath {
+    return [[self sampleAppPath] stringByAppendingPathComponent:@"/../BPLogicTests.xctest"];
+}
+
 // Return the path to the sample app's xctest with new test cases
 + (NSString *)sampleAppNewTestsBundlePath {
     return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppNewTests.xctest"];

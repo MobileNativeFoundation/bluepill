@@ -24,6 +24,7 @@
 		BAFCCA601E36DC2000E33C31 /* BPSampleAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFCCA5F1E36DC2000E33C31 /* BPSampleAppUITests.m */; };
 		E492360122EF61F300395D98 /* BPSampleAppMoarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E492360022EF61F300395D98 /* BPSampleAppMoarTests.m */; };
 		E4F8A34326F3B1AD00FE1267 /* BPSampleAppNewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F8A33B26F3B12F00FE1267 /* BPSampleAppNewTests.m */; };
+		FBBBD90029A06B7B002B9115 /* BPLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBBD8F129A06B47002B9115 /* BPLogicTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +116,8 @@
 		E492360022EF61F300395D98 /* BPSampleAppMoarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppMoarTests.m; sourceTree = "<group>"; };
 		E4F8A33B26F3B12F00FE1267 /* BPSampleAppNewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppNewTests.m; sourceTree = "<group>"; };
 		E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppNewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBBBD8F129A06B47002B9115 /* BPLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPLogicTests.m; sourceTree = "<group>"; };
+		FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +177,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FBBBD8F929A06B54002B9115 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -210,6 +220,7 @@
 			isa = PBXGroup;
 			children = (
 				BAB24F301DB5D45E00867756 /* BPSampleApp */,
+				FBBBD8F029A06B47002B9115 /* BPLogicTests */,
 				BAB24F4A1DB5D45E00867756 /* BPSampleAppTests */,
 				BAB24F5B1DB5D83C00867756 /* BPAppNegativeTests */,
 				BAA4DA381DC3C02B00A58BCC /* BPSampleAppCrashingTests */,
@@ -231,6 +242,7 @@
 				BA9C2DD21DD7F182007CB967 /* BPSampleAppFatalErrorTests.xctest */,
 				BAFCCA5D1E36DC2000E33C31 /* BPSampleAppUITests.xctest */,
 				E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */,
+				FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -289,6 +301,14 @@
 				BAFCCA611E36DC2000E33C31 /* Info.plist */,
 			);
 			path = BPSampleAppUITests;
+			sourceTree = "<group>";
+		};
+		FBBBD8F029A06B47002B9115 /* BPLogicTests */ = {
+			isa = PBXGroup;
+			children = (
+				FBBBD8F129A06B47002B9115 /* BPLogicTests.m */,
+			);
+			path = BPLogicTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -437,6 +457,23 @@
 			productReference = E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		FBBBD8F229A06B54002B9115 /* BPLogicTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FBBBD8FB29A06B54002B9115 /* Build configuration list for PBXNativeTarget "BPLogicTests" */;
+			buildPhases = (
+				FBBBD8F529A06B54002B9115 /* Sources */,
+				FBBBD8F929A06B54002B9115 /* Frameworks */,
+				FBBBD8FA29A06B54002B9115 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BPLogicTests;
+			productName = BPSampleAppTests;
+			productReference = FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -491,6 +528,9 @@
 					E4F8A33D26F3B1AD00FE1267 = {
 						DevelopmentTeam = 57Y47U492U;
 					};
+					FBBBD8F229A06B54002B9115 = {
+						DevelopmentTeam = 57Y47U492U;
+					};
 				};
 			};
 			buildConfigurationList = BAB24F291DB5D45E00867756 /* Build configuration list for PBXProject "BPSampleApp" */;
@@ -514,6 +554,7 @@
 				BA9C2DD11DD7F182007CB967 /* BPSampleAppFatalErrorTests */,
 				BAFCCA5C1E36DC2000E33C31 /* BPSampleAppUITests */,
 				E4F8A33D26F3B1AD00FE1267 /* BPSampleAppNewTests */,
+				FBBBD8F229A06B54002B9115 /* BPLogicTests */,
 			);
 		};
 /* End PBXProject section */
@@ -573,6 +614,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E4F8A34626F3B1AD00FE1267 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBBBD8FA29A06B54002B9115 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -648,6 +696,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4F8A34326F3B1AD00FE1267 /* BPSampleAppNewTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBBBD8F529A06B54002B9115 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBBBD90029A06B7B002B9115 /* BPLogicTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1057,6 +1113,37 @@
 			};
 			name = Release;
 		};
+		FBBBD8FC29A06B54002B9115 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				INFOPLIST_FILE = "BPSampleAppTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		FBBBD8FD29A06B54002B9115 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				INFOPLIST_FILE = "BPSampleAppTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1137,6 +1224,15 @@
 			buildConfigurations = (
 				E4F8A34826F3B1AD00FE1267 /* Debug */,
 				E4F8A34926F3B1AD00FE1267 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FBBBD8FB29A06B54002B9115 /* Build configuration list for PBXNativeTarget "BPLogicTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBBBD8FC29A06B54002B9115 /* Debug */,
+				FBBBD8FD29A06B54002B9115 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -17,6 +17,9 @@
 // Return the path to the test plan json file. The json is packed into the app bundle as resource
 + (NSString *)testPlanPath;
 
+// Return the path to logic tests, that are run unhosted rather than on the Sampple App
++ (NSString *)logicTestBundlePath;
+
 // Return the path to the sample app's xctest with new test cases
 + (NSString *)sampleAppNewTestsBundlePath;
 

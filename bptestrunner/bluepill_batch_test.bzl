@@ -29,9 +29,10 @@ def _bluepill_batch_test_impl(ctx):
 
         #test_plan
         test_plan = struct(
-            test_host = test_host.basename.split(
-                "." + test_host.extension,
-            )[0] + ".app",
+            if test_host != None:
+                test_host = test_host.basename.split(
+                    "." + test_host.extension,
+                )[0] + ".app",
             environment = test_env,
             arguments = test_env,
             test_bundle_path = bundle_info.bundle_name + bundle_info.bundle_extension,

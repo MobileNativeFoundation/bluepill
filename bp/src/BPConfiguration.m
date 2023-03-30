@@ -150,6 +150,8 @@ struct BPOptions {
         "Directory where videos of test runs will be saved. If not provided, videos are not recorded."},
     {368, "keep-passing-videos", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepPassingVideos",
         "Whether recorded videos should be kept if the test passed. They are deleted by default."},
+    {369, "logic-test", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "isLogicTestTarget",
+        "Keep individual test reports, in addition to the aggregated final report"},
     {0, 0, 0, 0, 0, 0, 0}
 };
 
@@ -167,9 +169,6 @@ static NSUUID *sessionID;
     }
     if (!self.testBundlePath) {
         [errors addObject:@"testBundlePath field is nil"];
-    }
-    if (!self.testHost) {
-        [errors addObject:@"testHost field is nil"];
     }
     if ([errors count] > 0) {
         BP_SET_ERROR(errPtr,
