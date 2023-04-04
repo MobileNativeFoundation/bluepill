@@ -107,6 +107,12 @@ maxprocs(void)
     return app;
 }
 
+/**
+ LTHROCKM DOCS
+ 1. Creates a simulator with the config
+ 2. Creates swimlanes for each simulator
+ 3. Populates swim lanes until all bundles handled, or interrupted
+ */
 - (int)runWithBPXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
     // Set up our SIGINT handler
     struct sigaction new_action;
@@ -132,12 +138,18 @@ maxprocs(void)
         [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
         return 1;
     }
+
+    // LTHROCKM - TODO: reduce number of sims if a bundle is a logic test
+    
     if (bundles.count < numSims) {
         [BPUtils printInfo:WARNING
                 withString:@"Lowering number of parallel simulators from %lu to %lu because there aren't enough test bundles.",
                             numSims, bundles.count];
         numSims = bundles.count;
     }
+
+    // LTHROCKM - TODO: create sim with bundles for non-logic tests. handle logic afterwards
+
     if (self.config.cloneSimulator) {
         self.testHostSimTemplates = [bpSimulator createSimulatorAndInstallAppWithBundles:xcTestFiles];
         if ([self.testHostSimTemplates count] == 0) {
@@ -153,6 +165,8 @@ maxprocs(void)
     [BPUtils printInfo:INFO withString:@"Packed tests into %lu bundles", (unsigned long)[bundles count]];
     NSUInteger taskNumber = 0;
     __block int rc = 0;
+
+    // LTHROCKM - TODO: need to decide what to do wrt # of swim lanes.
 
     self.swimlaneList = [[NSMutableArray alloc] initWithCapacity:numSims];
     for (NSUInteger i = 1; i <= numSims; i++) {
@@ -172,6 +186,8 @@ maxprocs(void)
             return -1;
         }
     }
+
+    // LTHROCKM DOCS - Keep the swim lanes populated until completion or interruption
     while (1) {
         if (interrupted) {
             if (interrupted >=5) {
@@ -222,6 +238,8 @@ maxprocs(void)
                 [bundles removeObjectAtIndex:0];
             }
         }
+
+        // Resume in a second. Every 30 seconds, log status.
         sleep(1);
         if (seconds % 30 == 0) {
             NSString *listString;
@@ -251,6 +269,7 @@ maxprocs(void)
         [self addCounters];
     }
 
+    // Cleanup Devices
     for (int i = 0; i < [deviceList count]; i++) {
         NSTask *task = [self newTaskToDeleteDevice:[deviceList objectAtIndex:i] andNumber:i+1];
         [task launch];

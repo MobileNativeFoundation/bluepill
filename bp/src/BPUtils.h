@@ -29,8 +29,14 @@ typedef NS_ENUM(int, BPKind) {
 };
 
 @class BPConfiguration;
+@class NSTask;
 
 @interface BPUtils : NSObject
+
++ (NSString *)runExecutable:(NSString *)executablePath
+                  arguments:(NSArray<NSString *> *)arguments
+                      error:(out NSError * _Nullable *)error
+         terminationHandler:(void (^)(NSTask *))terminationHandler;
 
 /*!
  @discussion enable debugging messages

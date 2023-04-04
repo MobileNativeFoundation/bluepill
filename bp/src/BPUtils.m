@@ -188,6 +188,26 @@ static BOOL quiet = NO;
     return [fileName isEqualToString:@"stdout"] || [fileName isEqualToString:@"-"];
 }
 
++ (NSString *)runExecutable:(NSString *)executablePath
+                  arguments:(NSArray<NSString *> *)arguments
+                      error:(out NSError * _Nullable *)error
+         terminationHandler:(void (^)(NSTask *))terminationHandler {
+    
+    NSPipe *pipe = [[NSPipe alloc] init];
+    NSFileHandle *fh = pipe.fileHandleForReading;
+    
+    NSTask *task = [[NSTask alloc] init];
+    task.executableURL = [[NSURL alloc] initFileURLWithPath:executablePath];
+    task.arguments = arguments;
+    [self setUpTask:task withPipe:pipe];
+
+    [task launch];
+    NSData *data = [fh readDataToEndOfFile];
+    [task waitUntilExit];
+    NSString *result = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+    return result;
+}
+
 + (NSString *)runShell:(NSString *)command {
     NSAssert(command, @"Command should not be nil");
     NSPipe *pipe = [[NSPipe alloc] init];
@@ -218,6 +238,13 @@ static BOOL quiet = NO;
     }
     NSAssert(task, @"task should not be nil");
     return task;
+}
+
++ (void)setUpTask:(NSTask *)task withPipe:(NSPipe *)pipe {
+    if (pipe != nil) {
+        task.standardError = pipe;
+        task.standardOutput = pipe;
+    }
 }
 
 + (NSString *)getCommandStringForTask:(NSTask *)task {

@@ -61,6 +61,49 @@
     return YES;
 }
 
++ (NSDictionary *)logicTestEvironmentWithDevice:(SimDevice *)device
+                                         config:(BPConfiguration *)config {
+    NSMutableDictionary<NSString *, NSString *> *environment = [[NSMutableDictionary alloc] init];
+    NSString *simctlEnvironmentVariablePrefix = @"SIMCTL_CHILD_";
+    // Add any explicitly provided environment vars
+    for (NSString *key in config.environmentVariables.allKeys) {
+        NSString *value = config.environmentVariables[key];
+        NSString *prefixedKey = [simctlEnvironmentVariablePrefix stringByAppendingString:key];
+        environment[prefixedKey] = value;
+    }
+    // Always set to unbuffered IO:
+    environment[@"NSUnbufferedIO"] = @"1";
+    // We need to set the DEVELOPER_DIR to ensure xcrun works correctly.
+    // TODO: What's the best way to get this dynamically?
+    environment[@"DEVELOPER_DIR"] = @"/Applications/Xcode.app/Contents/Developer/";
+    
+    
+    
+    environment[@"DYLD_FALLBACK_FRAMEWORK_PATH"] = [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath];
+    environment[@"DYLD_FALLBACK_LIBRARY_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib", config.xcodePath];
+    environment[@"DYLD_LIBRARY_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath];
+    environment[@"DYLD_ROOT_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot", config.xcodePath];
+    environment[@"OS_ACTIVITY_DT_MODE"] = @"1";
+    environment[@"XCODE_DBG_XPC_EXCLUSIONS"] = @"com.apple.dt.xctestSymbolicator";
+    environment[@"XPC_FLAGS"] = @"0x0";
+    environment[@"XCTestConfigurationFilePath"] = [SimulatorHelper testEnvironmentWithConfiguration:config];
+//    environment[@"DYLD_INSERT_LIBRARIES"] = libXCTestBundleInjectValue;
+//    environment[@"__XCODE_BUILT_PRODUCTS_DIR_PATHS"] = testSimulatorFrameworkPath;
+//    environment[@"__XPC_DYLD_FRAMEWORK_PATH"] = testSimulatorFrameworkPath;
+//    environment[@"__XPC_DYLD_LIBRARY_PATH"] = testSimulatorFrameworkPath;
+    
+    if (config.outputDirectory) {
+        NSString *coveragePath = [config.outputDirectory stringByAppendingPathComponent:@"%p.profraw"];
+
+        environment[@"LLVM_PROFILE_FILE"] = coveragePath;
+        environment[@"__XPC_LLVM_PROFILE_FILE"] = coveragePath;
+    }
+    
+    
+    
+    return [environment copy];
+}
+
 + (NSDictionary *)appLaunchEnvironmentWithBundleID:(NSString *)hostBundleID
                                             device:(SimDevice *)device
                                             config:(BPConfiguration *)config {
@@ -104,17 +147,21 @@
     NSString *testBundlePath = config.testBundlePath;
     NSString *appName = [self appNameForPath:testBundlePath];
     NSString *testHostPath;
+    NSString *bundleID;
     xctConfig.productModuleName = appName;
     xctConfig.testBundleURL = [NSURL fileURLWithPath:testBundlePath];
     xctConfig.sessionIdentifier = config.sessionIdentifier;
     xctConfig.treatMissingBaselinesAsFailures = NO;
-    xctConfig.targetApplicationPath = config.appBundlePath;
     xctConfig.reportResultsToIDE = YES;
     xctConfig.automationFrameworkPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework", config.xcodePath];
-    testHostPath = config.appBundlePath;
-
-    NSString *bundleID = [self bundleIdForPath:config.appBundlePath];
-    xctConfig.testApplicationDependencies = config.dependencies.count > 0 ? config.dependencies : @{bundleID: config.appBundlePath};
+    
+    if (!config.isLogicTestTarget) {
+        appName = [self appNameForPath:testBundlePath];
+        bundleID = [self bundleIdForPath:config.appBundlePath];
+        xctConfig.testApplicationDependencies = config.dependencies.count > 0 ? config.dependencies : @{bundleID: config.appBundlePath};
+        xctConfig.productModuleName = appName;
+        xctConfig.targetApplicationPath = config.appBundlePath;
+    }
 
     if (config.testRunnerAppPath) {
         xctConfig.targetApplicationBundleID = bundleID;

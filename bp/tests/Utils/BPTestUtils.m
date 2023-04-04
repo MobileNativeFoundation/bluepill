@@ -21,13 +21,36 @@
 
 + (nonnull BPConfiguration *)makeUnhostedTestConfiguration {
     BPConfiguration *config = [self makeDefaultTestConfiguration];
+    config.testBundlePath = [BPTestHelper logicTestBundlePath];
     config.isLogicTestTarget = YES;
     return config;
 }
 
 + (nonnull BPConfiguration *)makeHostedTestConfiguration {
     BPConfiguration *config = [self makeDefaultTestConfiguration];
+    config.appBundlePath = [BPTestHelper sampleAppPath];
+    config.testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
+    config.isLogicTestTarget = NO;
+    return config;
+}
 
++ (nonnull BPConfiguration *)makeDefaultTestConfiguration {
+    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_BINARY];
+    config.stuckTimeout = @40;
+    config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
+    config.runtime = @BP_DEFAULT_RUNTIME;
+    config.repeatTestsCount = @1;
+    config.errorRetriesCount = @0;
+    config.testCaseTimeout = @20;
+    config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
+    config.headlessMode = YES;
+    config.videoPaths = @[[BPTestHelper sampleVideoPath]];
+    config.testRunnerAppPath = nil;
+    config.testing_CrashAppOnLaunch = NO;
+    config.cloneSimulator = NO;
+    config.outputDirectory = @"/Users/lthrockm/Desktop/output/";
+    config.simulatorPath = [BPTestHelper debugIphoneSimulatorPath];
+    
     // Set up simulator device + runtime
     NSError *err;
     SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&err];
@@ -49,30 +72,6 @@
     }
     XCTAssert(config.simRuntime != nil);
 
-    NSString *hostApplicationPath =  [BPTestHelper sampleAppPath];
-    NSString *testBundlePath =  [BPTestHelper sampleAppNegativeTestsBundlePath];
-    config.isLogicTestTarget = NO;
-    config.appBundlePath = hostApplicationPath;
-    config.testBundlePath = testBundlePath;
-
-    return config;
-}
-
-+ (nonnull BPConfiguration *)makeDefaultTestConfiguration {
-    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_BINARY];
-    config.stuckTimeout = @40;
-    config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
-    config.runtime = @BP_DEFAULT_RUNTIME;
-    config.repeatTestsCount = @1;
-    config.errorRetriesCount = @0;
-    config.testCaseTimeout = @20;
-    config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
-    config.headlessMode = YES;
-    config.videoPaths = @[[BPTestHelper sampleVideoPath]];
-    config.testRunnerAppPath = nil;
-    config.testing_CrashAppOnLaunch = NO;
-    config.cloneSimulator = NO;
-    config.outputDirectory = @"/Users/lthrockm/Desktop/output/";
     return config;
 }
 

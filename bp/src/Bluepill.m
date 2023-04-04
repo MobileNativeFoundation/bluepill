@@ -230,6 +230,16 @@ static void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"Running Tests. Attempt Number %lu.", context.attemptNumber];
     [BPStats sharedStats].attemptNumber = context.attemptNumber;
 
+    // LTHROCKM - DEBUG
+
+    // For logic tests, we want to follow an alternate codepath w/ no simulator and no app host.
+    
+    // NOPE! We DO need a simulator for this, so go ahead and make one as normal below
+//    if (self.config.isLogicTestTarget) {
+//        [self setupUnhostedTestExecutionsWithContext:context];
+//        return;
+//    }
+
     NSString *simulatorLogPath;
     if (context.config.outputDirectory) {
         simulatorLogPath = [context.config.outputDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%lu-simulator.log", context.attemptNumber]];
@@ -256,7 +266,7 @@ static void onInterrupt(int ignore) {
     // Set up retry counts.
     self.maxCreateTries = [self.config.maxCreateTries integerValue];
     self.maxInstallTries = [self.config.maxInstallTries integerValue];
-    
+
     if (context.config.deleteSimUDID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
     } else {
@@ -299,7 +309,15 @@ static void onInterrupt(int ignore) {
         if (self.config.scriptFilePath) {
             [context.runner runScriptFile:self.config.scriptFilePath];
         }
-        if (self.config.cloneSimulator) {
+        
+        // LTHROCKM - we don't want to launch the application, but what else happens here?
+        // installing has no side effects (just prep for launching), but what about launch?
+        // 2 things:
+        //      1) launchApplicationAndExecuteTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock
+        //      2) on success: connectTestBundleAndTestDaemonWithContext
+        if (self.config.isLogicTestTarget) {
+            NEXT([__self executeLogicTestsWithContext:context])
+        } else if (self.config.cloneSimulator) {
             // launch application directly when clone simulator
             NEXT([__self launchApplicationWithContext:context]);
         } else {
@@ -391,6 +409,12 @@ static void onInterrupt(int ignore) {
     } else {
         NEXT([self installApplicationWithContext:context]);
     }
+}
+
+- (void)executeLogicTestsWithContext:(BPExecutionContext *)context {
+    [self.context.runner executeLogicTestsWithParser:context.parser andCompletion:^(NSError *, pid_t) {
+            NSLog(@"completion");
+    }];
 }
 
 - (void)launchApplicationWithContext:(BPExecutionContext *)context {
@@ -705,6 +729,27 @@ NSString *__from;
 - (void)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment {
     self.context.isTestRunnerContext = YES;
     [self installApplicationWithContext:self.context];
+}
+
+#pragma mark - Logic Test Handling
+
+- (void)setupUnhostedTestExecutionsWithContext:(nonnull BPExecutionContext *)context {
+    NSString *iosTestRunnerExecutableURL = @"/Users/lthrockm/ios/xctestrunner/bazel-bin/ios_test_runner";
+    NSArray *args = @[
+        @"--work_dir",  @"/Users/lthrockm/ios/bluepill/work_dir",
+        @"--output_dir", context.config.outputDirectory,
+        @"--launch_options_json_path", @"/Users/lthrockm/ios/bluepill/tests_to_run.json",
+        @"--test_bundle_path", context.config.testBundlePath,
+        @"simulator_test"
+    ];
+
+    NSError *error;
+    NSString *output = [BPUtils runExecutable:iosTestRunnerExecutableURL arguments:args error:&error terminationHandler:^(NSTask *task) {
+        NSLog(@"ERROR HERE");
+    }];
+    NSLog(output);
+    NSLog(output);
+
 }
 
 @end

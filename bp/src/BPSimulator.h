@@ -42,6 +42,8 @@
 
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion;
 
+- (void)executeLogicTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion;
+
 - (void)deleteSimulatorWithCompletion:(void (^)(NSError *error, BOOL success))completion;
 
 - (void)addPhotosToSimulator;

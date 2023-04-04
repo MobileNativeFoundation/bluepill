@@ -151,7 +151,9 @@ struct BPOptions {
     {368, "keep-passing-videos", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepPassingVideos",
         "Whether recorded videos should be kept if the test passed. They are deleted by default."},
     {369, "logic-test", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "isLogicTestTarget",
-        "Keep individual test reports, in addition to the aggregated final report"},
+        "Will run the tests without an app host"},
+    {370, "simulator-path", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "simulatorPath",
+        "Logic tests require a specific path to the simulator."},
     {0, 0, 0, 0, 0, 0, 0}
 };
 

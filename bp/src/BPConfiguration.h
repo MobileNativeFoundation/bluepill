@@ -70,6 +70,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSString *configFile;
 @property (nonatomic, strong) NSString *xcTestRunPath;
 @property (nonatomic, strong) NSString *testPlanPath;
+@property (nonatomic, strong) NSString *simulatorPath;
 @property (nonatomic, strong) NSDictionary *xcTestRunDict; // parsed copy of the path above.
 @property (nonatomic, strong) NSMutableArray *bpCmdLineArgs; // command line arguments passed to bluepill
 @property (nonatomic, strong) NSNumber *repeatTestsCount;

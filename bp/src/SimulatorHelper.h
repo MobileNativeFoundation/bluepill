@@ -30,6 +30,14 @@
 + (NSDictionary *)appLaunchEnvironmentWithBundleID:(NSString *)hostBundleID
                                             device:(SimDevice *)device
                                             config:(BPConfiguration *)config;
+/*!
+ * @discussion get simulator evironment variables for logic tests
+ * @param device the device to run test
+ * @param config the configuration object
+ * @return returns the environment variables as a dictionary
+ */
++ (NSDictionary *)logicTestEvironmentWithDevice:(SimDevice *)device
+                                         config:(BPConfiguration *)config;
 
 /*!
  * @discussion get the path of the environment configuration file

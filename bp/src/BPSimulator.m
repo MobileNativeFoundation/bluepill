@@ -435,6 +435,156 @@
                                        error:errPtr];
 }
 
+// Intercept stdout, stderr and post as simulator-output events
+- (NSString *)makeStdoutFile {
+    NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/stdout_stderr_%@", self.device.dataPath, [[self.device UDID] UUIDString]];
+    NSString *simStdoutPath = [BPUtils mkstemp:stdout_stderr withError:nil];
+    assert(simStdoutPath != nil);
+
+    [[NSFileManager defaultManager] removeItemAtPath:simStdoutPath error:nil];
+
+    // Create empty file so we can tail it and the app can write to it
+    [[NSFileManager defaultManager] createFileAtPath:simStdoutPath
+                                            contents:nil
+                                          attributes:nil];
+    return simStdoutPath;
+}
+
+// LTHROCKM - what if we make a method here that does what logic_test_util.py does?
+- (void)executeLogicTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {
+    /**
+     Substitute in:
+     
+    ```
+        - (int)spawnWithPath:(id)arg1 options:(id)arg2 terminationHandler:(CDUnknownBlockType)arg3 error:(id *)arg4; or
+        // or
+        - (void)spawnAsyncWithPath:(id)arg1 options:(id)arg2 terminationHandler:(CDUnknownBlockType)arg3 completionHandler:(CDUnknownBlockType)arg4;
+    ```
+     instead of `[self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid)`
+
+     */
+    
+    /*
+     Working understanding:
+
+     `spawnWithPath` method is the equivalent of running `xcrun simctl spawn... <path>
+     
+     So, when trying to run a command such as
+        ```
+        xcrun simctl spawn -s AFF4165A-9A71-4860-8B6D-485B7D1BA2BC
+            /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest
+            -XCTest BPLogicTests/testPassingLogicTest /Users/lthrockm/ios/bluepill/work_dir/BPLogicTests.xctest
+        ```
+     we can break down the individual components to be handled in the following:
+     
+     - `xcrun simctl spawn AFF4165A-9A71-4860-8B6D-485B7D1BA2BC`
+        - All covered in device.spawn
+     - `-s`
+        - An arg to launch as standalone.
+     - `/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest`
+        - Is this the path arg? or is this already covered? or maybe it's a separate option
+     - `-XCTest BPLogicTests/testPassingLogicTest`
+        - args?
+     - `/Users/lthrockm/ios/bluepill/work_dir/BPLogicTests.xctest`
+        - path arg
+     */
+    
+    /**
+     From `xcrun simctl spawn help`:
+     `simctl spawn [-w | --wait-for-debugger] [-s | --standalone] [-a <arch> | --arch=<arch>] <device> <path to executable> [<argv 1> <argv 2> ... <argv n>]`
+     */
+    NSString *executablePath = @"/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest";
+    NSString *xctestPath = @"/Users/lthrockm/ios/bluepill/work_dir/BPLogicTests.xctest";
+
+    
+    // Arguments:
+    NSArray *arguments = @[
+                @"-s",
+                @"-XCTest",
+                @"BPLogicTests/testPassingLogicTest",
+                xctestPath,
+//                @"log stream"
+    ];
+    // Environment:
+    NSMutableDictionary *environment = [[SimulatorHelper logicTestEvironmentWithDevice:self.device config:self.config] mutableCopy];
+    // Intercept stdout, stderr and post as simulator-output events
+    NSString *simStdoutPath = [self makeStdoutFile];
+    NSString *simStdoutRelativePath = [simStdoutPath substringFromIndex:((NSString *)self.device.dataPath).length];
+
+    self.appOutput = [NSFileHandle fileHandleForReadingAtPath:simStdoutPath];
+    [environment setObject:simStdoutRelativePath forKey:kOptionsStdoutKey];
+    [environment setObject:simStdoutRelativePath forKey:kOptionsStderrKey];
+
+    NSLog(@"LTHROCKM DEBUG - stdout: %@", simStdoutRelativePath);
+    NSLog(@"LTHROCKM DEBUG - stderr: %@", simStdoutRelativePath);
+
+    // There's a discrepency here. The below path matches what we use in @c launchApplicationAndExecuteTestsWithParser: , but in @c SimulatorHelper's @c appLaunchEnvironmentWithBundleID, this is
+    // derrived in part from the host app.
+    // TODO: Verify this path works when spawning logic tests on the sim.
+    NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib", self.config.xcodePath];
+    // Generally copied from hosted unit tests.
+    [environment setObject:insertLibraryPath forKey:@"DYLD_INSERT_LIBRARIES"];
+    [environment setObject:insertLibraryPath forKey:@"XCInjectBundleInto"];
+    // Hosted unit tests derrive this path from the app host (removing the actual app component at the end), while we can just use the sim path directly here,
+    // at least for the time being.
+    [environment setObject:self.config.simulatorPath forKey:@"__XPC_DYLD_FRAMEWORK_PATH"]; // TODO: sim path must be nonnull
+    [environment setObject:self.config.simulatorPath forKey:@"__XPC_DYLD_LIBRARY_PATH"]; // TODO: sim path must be nonnull
+    [environment setObject:self.config.simulatorPath forKey:@"__XCODE_BUILT_PRODUCTS_DIR_PATHS"]; // TODO: sim path must be nonnull
+    // From XCTestRunner
+    [environment setObject:@"YES" forKey:@"NSUnbufferedIO"];
+        
+    NSDictionary *options = @{
+        kOptionsArgumentsKey: arguments,
+        kOptionsEnvironmentKey: environment,
+        kOptionsStdoutKey: simStdoutRelativePath,
+        kOptionsStderrKey: simStdoutRelativePath,
+        kOptionsWaitForDebuggerKey: @"0",
+    };
+    
+    // Set up monitor
+    if (!self.monitor) {
+        self.monitor = [[SimulatorMonitor alloc] initWithConfiguration:self.config];
+    }
+    self.monitor.device = self.device;
+//    self.monitor.hostBundleId = hostBundleId;
+    parser.delegate = self.monitor;
+    
+    
+        
+    // Save the process ID to the monitor
+//    self.monitor.appPID = pid;
+    self.monitor.appState = Running;
+
+
+    self.appOutput.readabilityHandler = ^(NSFileHandle *handle) {
+        // This callback occurs on a background thread
+        NSData *chunk = [handle availableData];
+        [parser handleChunkData:chunk];
+    };
+    
+    // TODO: move to async after debugging issues
+    NSError *error;
+    [self.device spawnWithPath:executablePath options:options terminationHandler:^{
+        NSLog(@"UDID: %@", self.device.UDID.UUIDString);
+        NSLog(@"terminated.");
+    } error:&error];
+    NSLog(@"completed.");
+}
+
++ (NSMutableArray<NSString *> *)commandLineArgsFromConfig:(BPConfiguration *)config {
+    NSArray *argumentsArr = config.commandLineArguments ?: @[];
+    NSMutableArray *commandLineArgs = [NSMutableArray array];
+    for (NSString *argument in argumentsArr) {
+        NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];
+        for (NSString *arg in argumentsArray) {
+            if (![arg isEqualToString:@""]) {
+                [commandLineArgs addObject:arg];
+            }
+        }
+    }
+    return commandLineArgs;
+}
+
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {
     NSString *hostBundleId = [SimulatorHelper bundleIdForPath:self.config.appBundlePath];
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:self.config.appBundlePath];
@@ -445,17 +595,9 @@
         hostBundleId = [SimulatorHelper bundleIdForPath:self.config.testRunnerAppPath];
     }
     // Create the environment for the host application
+    
+    NSMutableArray *commandLineArgs = [BPSimulator commandLineArgsFromConfig:self.config];
     NSMutableDictionary *argsAndEnv = [[NSMutableDictionary alloc] init];
-    NSArray *argumentsArr = self.config.commandLineArguments ?: @[];
-    NSMutableArray *commandLineArgs = [NSMutableArray array];
-    for (NSString *argument in argumentsArr) {
-        NSArray *argumentsArray = [argument componentsSeparatedByString:@" "];
-        for (NSString *arg in argumentsArray) {
-            if (![arg isEqualToString:@""]) {
-                [commandLineArgs addObject:arg];
-            }
-        }
-    }
 
     // These are appended by Xcode so we do that here.
     [commandLineArgs addObjectsFromArray:@[

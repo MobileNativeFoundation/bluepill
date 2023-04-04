@@ -1,0 +1,843 @@
+From 16298e8b2149d98e2d679fd626861a2d642fe1bb Mon Sep 17 00:00:00 2001
+From: Lucas Statler <lthrockmorton@linkedin.com>
+Date: Thu, 30 Mar 2023 12:16:25 -0700
+Subject: [PATCH] Add new logic test target without test host. Unhosted tests
+ expected to fail in BP.
+
+---
+ BPSampleApp/BPLogicTests/BPLogicTests.m       | 22 +++++
+ BPSampleApp/BPLogicTests/Info.plist           | 22 +++++
+ .../BPSampleApp.xcodeproj/project.pbxproj     | 96 +++++++++++++++++++
+ .../xcschemes/BPLogicTests.xcscheme           | 52 ++++++++++
+ .../xcschemes/BPSampleApp.xcscheme            | 10 ++
+ BPSampleApp/BPSampleAppTests-Info.plist       | 22 +++++
+ bp/bp.xcodeproj/project.pbxproj               | 26 ++++-
+ bp/src/BPConfiguration.h                      |  1 +
+ bp/src/BPConfiguration.m                      |  5 +-
+ bp/tests/BPIntTestCase.m                      | 43 +--------
+ bp/tests/BPTestHelper.h                       |  3 +
+ bp/tests/BPTestHelper.m                       |  5 +
+ ...{BluepillTests.m => BluepillHostedTests.m} | 12 +--
+ bp/tests/BluepillUnhostedTests.m              | 51 ++++++++++
+ bp/tests/SimulatorHelperTests.m               |  1 +
+ bp/tests/Utils/BPTestUtils.h                  | 23 +++++
+ bp/tests/Utils/BPTestUtils.m                  | 79 +++++++++++++++
+ bptestrunner/bluepill_batch_test.bzl          |  7 +-
+ 18 files changed, 424 insertions(+), 56 deletions(-)
+ create mode 100644 BPSampleApp/BPLogicTests/BPLogicTests.m
+ create mode 100644 BPSampleApp/BPLogicTests/Info.plist
+ create mode 100644 BPSampleApp/BPSampleApp.xcodeproj/xcshareddata/xcschemes/BPLogicTests.xcscheme
+ create mode 100644 BPSampleApp/BPSampleAppTests-Info.plist
+ rename bp/tests/{BluepillTests.m => BluepillHostedTests.m} (98%)
+ create mode 100644 bp/tests/BluepillUnhostedTests.m
+ create mode 100644 bp/tests/Utils/BPTestUtils.h
+ create mode 100644 bp/tests/Utils/BPTestUtils.m
+
+diff --git a/BPSampleApp/BPLogicTests/BPLogicTests.m b/BPSampleApp/BPLogicTests/BPLogicTests.m
+new file mode 100644
+index 0000000..b52eb74
+--- /dev/null
++++ b/BPSampleApp/BPLogicTests/BPLogicTests.m
+@@ -0,0 +1,22 @@
++//
++//  BPLogicTests.m
++//  BPLogicTests
++//
++//  Created by Lucas Throckmorton on 2/17/23.
++//  Copyright © 2023 LinkedIn. All rights reserved.
++//
++
++#import <XCTest/XCTest.h>
++
++@interface BPLogicTests : XCTestCase
++
++@end
++
++@implementation BPLogicTests
++
++- (void)testPassingLogicTest {
++    NSLog(@"LTHROCKM DEBUG - here");
++    XCTAssert(YES);
++}
++
++@end
+diff --git a/BPSampleApp/BPLogicTests/Info.plist b/BPSampleApp/BPLogicTests/Info.plist
+new file mode 100644
+index 0000000..6c6c23c
+--- /dev/null
++++ b/BPSampleApp/BPLogicTests/Info.plist
+@@ -0,0 +1,22 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
++<plist version="1.0">
++<dict>
++	<key>CFBundleDevelopmentRegion</key>
++	<string>en</string>
++	<key>CFBundleExecutable</key>
++	<string>$(EXECUTABLE_NAME)</string>
++	<key>CFBundleIdentifier</key>
++	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
++	<key>CFBundleInfoDictionaryVersion</key>
++	<string>6.0</string>
++	<key>CFBundleName</key>
++	<string>$(PRODUCT_NAME)</string>
++	<key>CFBundlePackageType</key>
++	<string>BNDL</string>
++	<key>CFBundleShortVersionString</key>
++	<string>1.0</string>
++	<key>CFBundleVersion</key>
++	<string>1</string>
++</dict>
++</plist>
+diff --git a/BPSampleApp/BPSampleApp.xcodeproj/project.pbxproj b/BPSampleApp/BPSampleApp.xcodeproj/project.pbxproj
+index be65cc0..4113c27 100644
+--- a/BPSampleApp/BPSampleApp.xcodeproj/project.pbxproj
++++ b/BPSampleApp/BPSampleApp.xcodeproj/project.pbxproj
+@@ -24,6 +24,7 @@
+ 		BAFCCA601E36DC2000E33C31 /* BPSampleAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFCCA5F1E36DC2000E33C31 /* BPSampleAppUITests.m */; };
+ 		E492360122EF61F300395D98 /* BPSampleAppMoarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E492360022EF61F300395D98 /* BPSampleAppMoarTests.m */; };
+ 		E4F8A34326F3B1AD00FE1267 /* BPSampleAppNewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F8A33B26F3B12F00FE1267 /* BPSampleAppNewTests.m */; };
++		FBBBD90029A06B7B002B9115 /* BPLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBBD8F129A06B47002B9115 /* BPLogicTests.m */; };
+ /* End PBXBuildFile section */
+ 
+ /* Begin PBXContainerItemProxy section */
+@@ -115,6 +116,8 @@
+ 		E492360022EF61F300395D98 /* BPSampleAppMoarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppMoarTests.m; sourceTree = "<group>"; };
+ 		E4F8A33B26F3B12F00FE1267 /* BPSampleAppNewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppNewTests.m; sourceTree = "<group>"; };
+ 		E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppNewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
++		FBBBD8F129A06B47002B9115 /* BPLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPLogicTests.m; sourceTree = "<group>"; };
++		FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+ /* End PBXFileReference section */
+ 
+ /* Begin PBXFrameworksBuildPhase section */
+@@ -174,6 +177,13 @@
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
++		FBBBD8F929A06B54002B9115 /* Frameworks */ = {
++			isa = PBXFrameworksBuildPhase;
++			buildActionMask = 2147483647;
++			files = (
++			);
++			runOnlyForDeploymentPostprocessing = 0;
++		};
+ /* End PBXFrameworksBuildPhase section */
+ 
+ /* Begin PBXGroup section */
+@@ -210,6 +220,7 @@
+ 			isa = PBXGroup;
+ 			children = (
+ 				BAB24F301DB5D45E00867756 /* BPSampleApp */,
++				FBBBD8F029A06B47002B9115 /* BPLogicTests */,
+ 				BAB24F4A1DB5D45E00867756 /* BPSampleAppTests */,
+ 				BAB24F5B1DB5D83C00867756 /* BPAppNegativeTests */,
+ 				BAA4DA381DC3C02B00A58BCC /* BPSampleAppCrashingTests */,
+@@ -231,6 +242,7 @@
+ 				BA9C2DD21DD7F182007CB967 /* BPSampleAppFatalErrorTests.xctest */,
+ 				BAFCCA5D1E36DC2000E33C31 /* BPSampleAppUITests.xctest */,
+ 				E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */,
++				FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */,
+ 			);
+ 			name = Products;
+ 			sourceTree = "<group>";
+@@ -291,6 +303,14 @@
+ 			path = BPSampleAppUITests;
+ 			sourceTree = "<group>";
+ 		};
++		FBBBD8F029A06B47002B9115 /* BPLogicTests */ = {
++			isa = PBXGroup;
++			children = (
++				FBBBD8F129A06B47002B9115 /* BPLogicTests.m */,
++			);
++			path = BPLogicTests;
++			sourceTree = "<group>";
++		};
+ /* End PBXGroup section */
+ 
+ /* Begin PBXNativeTarget section */
+@@ -437,6 +457,23 @@
+ 			productReference = E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */;
+ 			productType = "com.apple.product-type.bundle.unit-test";
+ 		};
++		FBBBD8F229A06B54002B9115 /* BPLogicTests */ = {
++			isa = PBXNativeTarget;
++			buildConfigurationList = FBBBD8FB29A06B54002B9115 /* Build configuration list for PBXNativeTarget "BPLogicTests" */;
++			buildPhases = (
++				FBBBD8F529A06B54002B9115 /* Sources */,
++				FBBBD8F929A06B54002B9115 /* Frameworks */,
++				FBBBD8FA29A06B54002B9115 /* Resources */,
++			);
++			buildRules = (
++			);
++			dependencies = (
++			);
++			name = BPLogicTests;
++			productName = BPSampleAppTests;
++			productReference = FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */;
++			productType = "com.apple.product-type.bundle.unit-test";
++		};
+ /* End PBXNativeTarget section */
+ 
+ /* Begin PBXProject section */
+@@ -491,6 +528,9 @@
+ 					E4F8A33D26F3B1AD00FE1267 = {
+ 						DevelopmentTeam = 57Y47U492U;
+ 					};
++					FBBBD8F229A06B54002B9115 = {
++						DevelopmentTeam = 57Y47U492U;
++					};
+ 				};
+ 			};
+ 			buildConfigurationList = BAB24F291DB5D45E00867756 /* Build configuration list for PBXProject "BPSampleApp" */;
+@@ -514,6 +554,7 @@
+ 				BA9C2DD11DD7F182007CB967 /* BPSampleAppFatalErrorTests */,
+ 				BAFCCA5C1E36DC2000E33C31 /* BPSampleAppUITests */,
+ 				E4F8A33D26F3B1AD00FE1267 /* BPSampleAppNewTests */,
++				FBBBD8F229A06B54002B9115 /* BPLogicTests */,
+ 			);
+ 		};
+ /* End PBXProject section */
+@@ -579,6 +620,13 @@
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
++		FBBBD8FA29A06B54002B9115 /* Resources */ = {
++			isa = PBXResourcesBuildPhase;
++			buildActionMask = 2147483647;
++			files = (
++			);
++			runOnlyForDeploymentPostprocessing = 0;
++		};
+ /* End PBXResourcesBuildPhase section */
+ 
+ /* Begin PBXSourcesBuildPhase section */
+@@ -651,6 +699,14 @@
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
++		FBBBD8F529A06B54002B9115 /* Sources */ = {
++			isa = PBXSourcesBuildPhase;
++			buildActionMask = 2147483647;
++			files = (
++				FBBBD90029A06B7B002B9115 /* BPLogicTests.m in Sources */,
++			);
++			runOnlyForDeploymentPostprocessing = 0;
++		};
+ /* End PBXSourcesBuildPhase section */
+ 
+ /* Begin PBXTargetDependency section */
+@@ -1057,6 +1113,37 @@
+ 			};
+ 			name = Release;
+ 		};
++		FBBBD8FC29A06B54002B9115 /* Debug */ = {
++			isa = XCBuildConfiguration;
++			buildSettings = {
++				CLANG_ENABLE_MODULES = YES;
++				DEVELOPMENT_TEAM = 57Y47U492U;
++				INFOPLIST_FILE = "BPSampleAppTests-Info.plist";
++				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
++				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
++				PRODUCT_NAME = "$(TARGET_NAME)";
++				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
++				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
++				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
++				SWIFT_VERSION = 4.2;
++			};
++			name = Debug;
++		};
++		FBBBD8FD29A06B54002B9115 /* Release */ = {
++			isa = XCBuildConfiguration;
++			buildSettings = {
++				CLANG_ENABLE_MODULES = YES;
++				DEVELOPMENT_TEAM = 57Y47U492U;
++				INFOPLIST_FILE = "BPSampleAppTests-Info.plist";
++				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
++				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
++				PRODUCT_NAME = "$(TARGET_NAME)";
++				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
++				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
++				SWIFT_VERSION = 4.2;
++			};
++			name = Release;
++		};
+ /* End XCBuildConfiguration section */
+ 
+ /* Begin XCConfigurationList section */
+@@ -1141,6 +1228,15 @@
+ 			defaultConfigurationIsVisible = 0;
+ 			defaultConfigurationName = Release;
+ 		};
++		FBBBD8FB29A06B54002B9115 /* Build configuration list for PBXNativeTarget "BPLogicTests" */ = {
++			isa = XCConfigurationList;
++			buildConfigurations = (
++				FBBBD8FC29A06B54002B9115 /* Debug */,
++				FBBBD8FD29A06B54002B9115 /* Release */,
++			);
++			defaultConfigurationIsVisible = 0;
++			defaultConfigurationName = Release;
++		};
+ /* End XCConfigurationList section */
+ 	};
+ 	rootObject = BAB24F261DB5D45E00867756 /* Project object */;
+diff --git a/BPSampleApp/BPSampleApp.xcodeproj/xcshareddata/xcschemes/BPLogicTests.xcscheme b/BPSampleApp/BPSampleApp.xcodeproj/xcshareddata/xcschemes/BPLogicTests.xcscheme
+new file mode 100644
+index 0000000..03201ef
+--- /dev/null
++++ b/BPSampleApp/BPSampleApp.xcodeproj/xcshareddata/xcschemes/BPLogicTests.xcscheme
+@@ -0,0 +1,52 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<Scheme
++   LastUpgradeVersion = "1400"
++   version = "1.3">
++   <BuildAction
++      parallelizeBuildables = "YES"
++      buildImplicitDependencies = "YES">
++   </BuildAction>
++   <TestAction
++      buildConfiguration = "Debug"
++      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
++      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
++      shouldUseLaunchSchemeArgsEnv = "YES">
++      <Testables>
++         <TestableReference
++            skipped = "NO">
++            <BuildableReference
++               BuildableIdentifier = "primary"
++               BlueprintIdentifier = "FBBBD8F229A06B54002B9115"
++               BuildableName = "BPLogicTests.xctest"
++               BlueprintName = "BPLogicTests"
++               ReferencedContainer = "container:BPSampleApp.xcodeproj">
++            </BuildableReference>
++         </TestableReference>
++      </Testables>
++   </TestAction>
++   <LaunchAction
++      buildConfiguration = "Debug"
++      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
++      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
++      launchStyle = "0"
++      useCustomWorkingDirectory = "NO"
++      ignoresPersistentStateOnLaunch = "NO"
++      debugDocumentVersioning = "YES"
++      debugServiceExtension = "internal"
++      allowLocationSimulation = "YES">
++   </LaunchAction>
++   <ProfileAction
++      buildConfiguration = "Release"
++      shouldUseLaunchSchemeArgsEnv = "YES"
++      savedToolIdentifier = ""
++      useCustomWorkingDirectory = "NO"
++      debugDocumentVersioning = "YES">
++   </ProfileAction>
++   <AnalyzeAction
++      buildConfiguration = "Debug">
++   </AnalyzeAction>
++   <ArchiveAction
++      buildConfiguration = "Release"
++      revealArchiveInOrganizer = "YES">
++   </ArchiveAction>
++</Scheme>
+diff --git a/BPSampleApp/BPSampleApp.xcodeproj/xcshareddata/xcschemes/BPSampleApp.xcscheme b/BPSampleApp/BPSampleApp.xcodeproj/xcshareddata/xcschemes/BPSampleApp.xcscheme
+index 6028fa6..9fd67d6 100644
+--- a/BPSampleApp/BPSampleApp.xcodeproj/xcshareddata/xcschemes/BPSampleApp.xcscheme
++++ b/BPSampleApp/BPSampleApp.xcodeproj/xcshareddata/xcschemes/BPSampleApp.xcscheme
+@@ -217,6 +217,16 @@
+                ReferencedContainer = "container:BPSampleApp.xcodeproj">
+             </BuildableReference>
+          </TestableReference>
++         <TestableReference
++            skipped = "NO">
++            <BuildableReference
++               BuildableIdentifier = "primary"
++               BlueprintIdentifier = "FBBBD8F229A06B54002B9115"
++               BuildableName = "BPLogicTests.xctest"
++               BlueprintName = "BPLogicTests"
++               ReferencedContainer = "container:BPSampleApp.xcodeproj">
++            </BuildableReference>
++         </TestableReference>
+       </Testables>
+    </TestAction>
+    <LaunchAction
+diff --git a/BPSampleApp/BPSampleAppTests-Info.plist b/BPSampleApp/BPSampleAppTests-Info.plist
+new file mode 100644
+index 0000000..6c6c23c
+--- /dev/null
++++ b/BPSampleApp/BPSampleAppTests-Info.plist
+@@ -0,0 +1,22 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
++<plist version="1.0">
++<dict>
++	<key>CFBundleDevelopmentRegion</key>
++	<string>en</string>
++	<key>CFBundleExecutable</key>
++	<string>$(EXECUTABLE_NAME)</string>
++	<key>CFBundleIdentifier</key>
++	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
++	<key>CFBundleInfoDictionaryVersion</key>
++	<string>6.0</string>
++	<key>CFBundleName</key>
++	<string>$(PRODUCT_NAME)</string>
++	<key>CFBundlePackageType</key>
++	<string>BNDL</string>
++	<key>CFBundleShortVersionString</key>
++	<string>1.0</string>
++	<key>CFBundleVersion</key>
++	<string>1</string>
++</dict>
++</plist>
+diff --git a/bp/bp.xcodeproj/project.pbxproj b/bp/bp.xcodeproj/project.pbxproj
+index ccbf023..8979491 100644
+--- a/bp/bp.xcodeproj/project.pbxproj
++++ b/bp/bp.xcodeproj/project.pbxproj
+@@ -69,7 +69,7 @@
+ 		BA0096FE1DCA5D810000DD45 /* testConfigRelativePath.json in Resources */ = {isa = PBXBuildFile; fileRef = BA0096FD1DCA5D810000DD45 /* testConfigRelativePath.json */; };
+ 		BA0097001DCA61210000DD45 /* BPConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */; };
+ 		BA0C554D1DDAE241009E1377 /* failure_retry_report.xml in Resources */ = {isa = PBXBuildFile; fileRef = BA0C554C1DDAE241009E1377 /* failure_retry_report.xml */; };
+-		BA1809B81DB89B5600D7D130 /* BluepillTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809B71DB89B5600D7D130 /* BluepillTests.m */; };
++		BA1809B81DB89B5600D7D130 /* BluepillHostedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA1809B71DB89B5600D7D130 /* BluepillHostedTests.m */; };
+ 		BA180A091DBB00FA00D7D130 /* BPUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BA180A081DBB00FA00D7D130 /* BPUtilsTests.m */; };
+ 		BA180A0C1DBB011200D7D130 /* testConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = BA180A0B1DBB011200D7D130 /* testConfig.json */; };
+ 		BA180A141DBB088100D7D130 /* testScheme.xcscheme in Resources */ = {isa = PBXBuildFile; fileRef = BA180A131DBB088100D7D130 /* testScheme.xcscheme */; };
+@@ -109,6 +109,8 @@
+ 		C4F08F75224C45750001AD2A /* BPExitStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D7A851DDBB156001E085D /* BPExitStatus.m */; };
+ 		C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */ = {isa = PBXBuildFile; fileRef = C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */; };
+ 		C94DE0BB4360016D3D3061D9 /* simulator-preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */; };
++		FB1C695629A6E58500BFDFB4 /* BluepillUnhostedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1C695529A6E58500BFDFB4 /* BluepillUnhostedTests.m */; };
++		FBBBD8EF29A06AF6002B9115 /* BPTestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */; };
+ /* End PBXBuildFile section */
+ 
+ /* Begin PBXContainerItemProxy section */
+@@ -193,7 +195,7 @@
+ 		BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPConfigurationTests.m; sourceTree = "<group>"; };
+ 		BA0097011DCA626F0000DD45 /* BPConfiguration+Test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BPConfiguration+Test.h"; sourceTree = "<group>"; };
+ 		BA0C554C1DDAE241009E1377 /* failure_retry_report.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = failure_retry_report.xml; sourceTree = "<group>"; };
+-		BA1809B71DB89B5600D7D130 /* BluepillTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluepillTests.m; sourceTree = "<group>"; };
++		BA1809B71DB89B5600D7D130 /* BluepillHostedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BluepillHostedTests.m; sourceTree = "<group>"; };
+ 		BA1809BC1DB89B8B00D7D130 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AppKit.framework; sourceTree = DEVELOPER_DIR; };
+ 		BA180A081DBB00FA00D7D130 /* BPUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPUtilsTests.m; sourceTree = "<group>"; };
+ 		BA180A0B1DBB011200D7D130 /* testConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testConfig.json; sourceTree = "<group>"; };
+@@ -314,6 +316,9 @@
+ 		C4AF1ADE2273649500618F0B /* BPVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPVersion.h; sourceTree = "<group>"; };
+ 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
+ 		C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "simulator-preferences.plist"; sourceTree = "<group>"; };
++		FB1C695529A6E58500BFDFB4 /* BluepillUnhostedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BluepillUnhostedTests.m; sourceTree = "<group>"; };
++		FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestUtils.m; sourceTree = "<group>"; };
++		FBBBD8EE29A06AF6002B9115 /* BPTestUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestUtils.h; sourceTree = "<group>"; };
+ /* End PBXFileReference section */
+ 
+ /* Begin PBXFrameworksBuildPhase section */
+@@ -562,8 +567,10 @@
+ 		BAB24F691DB5DB2300867756 /* tests */ = {
+ 			isa = PBXGroup;
+ 			children = (
++				FBBBD8EC29A06AE7002B9115 /* Utils */,
+ 				BA180A0A1DBB011200D7D130 /* Resource Files */,
+-				BA1809B71DB89B5600D7D130 /* BluepillTests.m */,
++				BA1809B71DB89B5600D7D130 /* BluepillHostedTests.m */,
++				FB1C695529A6E58500BFDFB4 /* BluepillUnhostedTests.m */,
+ 				C467E5491DC930D200BC80EE /* BPCLITests.m */,
+ 				BA0097011DCA626F0000DD45 /* BPConfiguration+Test.h */,
+ 				BA0096FF1DCA61210000DD45 /* BPConfigurationTests.m */,
+@@ -618,6 +625,15 @@
+ 			path = DTXConnectionServices;
+ 			sourceTree = "<group>";
+ 		};
++		FBBBD8EC29A06AE7002B9115 /* Utils */ = {
++			isa = PBXGroup;
++			children = (
++				FBBBD8EE29A06AF6002B9115 /* BPTestUtils.h */,
++				FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */,
++			);
++			path = Utils;
++			sourceTree = "<group>";
++		};
+ /* End PBXGroup section */
+ 
+ /* Begin PBXHeadersBuildPhase section */
+@@ -874,7 +890,7 @@
+ 				7ACE1F721DD3D27D00C0FA73 /* WaitTimerTests.m in Sources */,
+ 				BA180A091DBB00FA00D7D130 /* BPUtilsTests.m in Sources */,
+ 				7A4D7A871DDBB156001E085D /* BPExitStatus.m in Sources */,
+-				BA1809B81DB89B5600D7D130 /* BluepillTests.m in Sources */,
++				BA1809B81DB89B5600D7D130 /* BluepillHostedTests.m in Sources */,
+ 				BA1949371E4AF82F00881887 /* BPTMDRunnerConnection.m in Sources */,
+ 				7A7E7BC11DF22CE1007928F3 /* BPExecutionContext.m in Sources */,
+ 				BAD558D71DB6DCB100C9A5CD /* BPWriter.m in Sources */,
+@@ -884,6 +900,8 @@
+ 				BAD558D51DB6DCB100C9A5CD /* BPTreeObjects.m in Sources */,
+ 				BA0097001DCA61210000DD45 /* BPConfigurationTests.m in Sources */,
+ 				BAB24F741DB5DFA200867756 /* BPTestHelper.m in Sources */,
++				FB1C695629A6E58500BFDFB4 /* BluepillUnhostedTests.m in Sources */,
++				FBBBD8EF29A06AF6002B9115 /* BPTestUtils.m in Sources */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
+ 		};
+diff --git a/bp/src/BPConfiguration.h b/bp/src/BPConfiguration.h
+index 3e845ab..ebd949b 100644
+--- a/bp/src/BPConfiguration.h
++++ b/bp/src/BPConfiguration.h
+@@ -53,6 +53,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
+  */
+ 
+ @property (nonatomic, strong) NSUUID *sessionIdentifier;
++@property (nonatomic) BOOL isLogicTestTarget;
+ @property (nonatomic, strong) NSString *appBundlePath;
+ 
+ // XCUITest sector
+diff --git a/bp/src/BPConfiguration.m b/bp/src/BPConfiguration.m
+index 92c02ae..b12a93b 100644
+--- a/bp/src/BPConfiguration.m
++++ b/bp/src/BPConfiguration.m
+@@ -150,6 +150,8 @@ typedef NS_OPTIONS(NSUInteger, BPOptionType) {
+         "Directory where videos of test runs will be saved. If not provided, videos are not recorded."},
+     {368, "keep-passing-videos", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepPassingVideos",
+         "Whether recorded videos should be kept if the test passed. They are deleted by default."},
++    {369, "logic-test", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "isLogicTestTarget",
++        "Keep individual test reports, in addition to the aggregated final report"},
+     {0, 0, 0, 0, 0, 0, 0}
+ };
+ 
+@@ -168,9 +170,6 @@ - (BOOL)isValid:(NSError **)errPtr {
+     if (!self.testBundlePath) {
+         [errors addObject:@"testBundlePath field is nil"];
+     }
+-    if (!self.testHost) {
+-        [errors addObject:@"testHost field is nil"];
+-    }
+     if ([errors count] > 0) {
+         BP_SET_ERROR(errPtr,
+                      [NSString stringWithFormat:@"Invalid BPTestPlan object, %@.",
+diff --git a/bp/tests/BPIntTestCase.m b/bp/tests/BPIntTestCase.m
+index a800a44..2dedb9a 100644
+--- a/bp/tests/BPIntTestCase.m
++++ b/bp/tests/BPIntTestCase.m
+@@ -13,6 +13,7 @@
+ #import "BPIntTestCase.h"
+ #import "BPConfiguration.h"
+ #import "BPTestHelper.h"
++#import "BPTestUtils.h"
+ #import "BPUtils.h"
+ #import "SimDeviceType.h"
+ #import "SimRuntime.h"
+@@ -24,47 +25,9 @@ - (void)setUp {
+     [super setUp];
+ 
+     self.continueAfterFailure = NO;
+-    NSString *hostApplicationPath = [BPTestHelper sampleAppPath];
+-    NSString *testBundlePath = [BPTestHelper sampleAppNegativeTestsBundlePath];
+-    self.config = [[BPConfiguration alloc] initWithProgram:BP_BINARY];
+-    self.config.testBundlePath = testBundlePath;
+-    self.config.appBundlePath = hostApplicationPath;
+-    self.config.stuckTimeout = @40;
+-    self.config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
+-    self.config.runtime = @BP_DEFAULT_RUNTIME;
+-    self.config.repeatTestsCount = @1;
+-    self.config.errorRetriesCount = @0;
+-    self.config.testCaseTimeout = @20;
+-    self.config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
+-    self.config.headlessMode = YES;
+-    self.config.videoPaths = @[[BPTestHelper sampleVideoPath]];
+-    self.config.testRunnerAppPath = nil;
+-    self.config.testing_CrashAppOnLaunch = NO;
+-    self.config.cloneSimulator = NO;
+-    [BPUtils quietMode:[BPUtils isBuildScript]];
+-    [BPUtils enableDebugOutput:NO];
+-
+-    NSError *err;
+-    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:self.config.xcodePath error:&err];
+-    if (!sc) { NSLog(@"Failed to initialize SimServiceContext: %@", err); }
+-
+-    for (SimDeviceType *type in [sc supportedDeviceTypes]) {
+-        if ([[type name] isEqualToString:self.config.deviceType]) {
+-            self.config.simDeviceType = type;
+-            break;
+-        }
+-    }
+ 
+-    XCTAssert(self.config.simDeviceType != nil);
+-
+-    for (SimRuntime *runtime in [sc supportedRuntimes]) {
+-        if ([[runtime name] containsString:self.config.runtime]) {
+-            self.config.simRuntime = runtime;
+-            break;
+-        }
+-    }
+-
+-    XCTAssert(self.config.simRuntime != nil);
++    [BPUtils quietMode:[BPUtils isBuildScript]];
++    [BPUtils enableDebugOutput:YES];
+ }
+ 
+ @end
+diff --git a/bp/tests/BPTestHelper.h b/bp/tests/BPTestHelper.h
+index b4d4ffc..c183b37 100644
+--- a/bp/tests/BPTestHelper.h
++++ b/bp/tests/BPTestHelper.h
+@@ -17,6 +17,9 @@
+ // Return the path to the test plan json file. The json is packed into the app bundle as resource
+ + (NSString *)testPlanPath;
+ 
++// Return the path to logic tests, that are run unhosted rather than on the Sampple App
+++ (NSString *)logicTestBundlePath;
++
+ // Return the path to the sample app's xctest with new test cases
+ + (NSString *)sampleAppNewTestsBundlePath;
+ 
+diff --git a/bp/tests/BPTestHelper.m b/bp/tests/BPTestHelper.m
+index 6ff7c84..c2aa217 100644
+--- a/bp/tests/BPTestHelper.m
++++ b/bp/tests/BPTestHelper.m
+@@ -20,6 +20,11 @@ + (NSString *)testPlanPath {
+     return [[self sampleAppPath] stringByAppendingPathComponent:@"test_plan.json"];
+ }
+ 
++// Return the path to logic tests, that are run unhosted rather than on the Sampple App
+++ (NSString *)logicTestBundlePath {
++    return [[self sampleAppPath] stringByAppendingPathComponent:@"/../BPLogicTests.xctest"];
++}
++
+ // Return the path to the sample app's xctest with new test cases
+ + (NSString *)sampleAppNewTestsBundlePath {
+     return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppNewTests.xctest"];
+diff --git a/bp/tests/BluepillTests.m b/bp/tests/BluepillHostedTests.m
+similarity index 98%
+rename from bp/tests/BluepillTests.m
+rename to bp/tests/BluepillHostedTests.m
+index 1c0be3f..85988d1 100644
+--- a/bp/tests/BluepillTests.m
++++ b/bp/tests/BluepillHostedTests.m
+@@ -16,6 +16,7 @@
+ #import "BPTestHelper.h"
+ #import "BPUtils.h"
+ #import "BPSimulator.h"
++#import "BPTestUtils.h"
+ 
+ #import "SimDevice.h"
+ 
+@@ -24,15 +25,14 @@
+  * - Exit code testing
+  * - Report validation
+  */
+-@interface BluepillTests : BPIntTestCase
++@interface BluepillHostedTests : BPIntTestCase
+ @end
+ 
+-@implementation BluepillTests
++@implementation BluepillHostedTests
+ 
+-
+-
+-- (void)tearDown {
+-    [super tearDown];
++- (void)setUp {
++    [super setUp];
++    self.config = [BPTestUtils makeHostedTestConfiguration];
+ }
+ 
+ - (void)testAppThatCrashesOnLaunch {
+diff --git a/bp/tests/BluepillUnhostedTests.m b/bp/tests/BluepillUnhostedTests.m
+new file mode 100644
+index 0000000..2595517
+--- /dev/null
++++ b/bp/tests/BluepillUnhostedTests.m
+@@ -0,0 +1,51 @@
++//  Copyright 2016 LinkedIn Corporation
++//  Licensed under the BSD 2-Clause License (the "License");
++//  you may not use this file except in compliance with the License.
++//  You may obtain a copy of the License at https://opensource.org/licenses/BSD-2-Clause
++//
++//  Unless required by applicable law or agreed to in writing, software
++//  distributed under the License is distributed on an "AS IS" BASIS,
++//  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
++
++#import <XCTest/XCTest.h>
++#import <XCTest/XCTestAssertions.h>
++
++#import "Bluepill.h"
++#import "BPIntTestCase.h"
++#import "BPConfiguration.h"
++#import "BPTestHelper.h"
++#import "BPUtils.h"
++#import "BPSimulator.h"
++#import "BPTestUtils.h"
++
++#import "SimDevice.h"
++
++/**
++ * This test suite is the integration tests to make sure Bluepill instance is working properly
++ * - Exit code testing
++ * - Report validation
++ */
++@interface BluepillUnhostedTests : BPIntTestCase
++@end
++
++@implementation BluepillUnhostedTests
++
++- (void)setUp {
++    [super setUp];
++    self.config = [BPTestUtils makeUnhostedTestConfiguration];
++    self.config.numSims = @1;
++}
++
++- (void)testLogicTests {
++    NSString *testBundlePath = [BPTestHelper logicTestBundlePath];
++    self.config.testBundlePath = testBundlePath;
++    self.config.stuckTimeout = @3;
++    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
++    XCTAssert(exitCode == BPExitStatusAllTestsPassed,
++              @"Expected: %@ Got: %@",
++              [BPExitStatusHelper stringFromExitStatus:BPExitStatusAllTestsPassed],
++              [BPExitStatusHelper stringFromExitStatus:exitCode]);
++}
++
++
++@end
+diff --git a/bp/tests/SimulatorHelperTests.m b/bp/tests/SimulatorHelperTests.m
+index 880d6cb..731a9e3 100644
+--- a/bp/tests/SimulatorHelperTests.m
++++ b/bp/tests/SimulatorHelperTests.m
+@@ -42,6 +42,7 @@ - (void)testAppLaunchEnvironment {
+     config.xcodePath = @"/Applications/Xcode.app/Contents/Developer";
+     config.outputDirectory = @"/Users/test/output";
+     NSDictionary *appLaunchEnvironment = [SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:nil config:config];
++    //    NSDictionary *appLaunchEnvironment = [SimulatorHelper appLaunchEnvironmentWithDevice:nil config:config];
+     XCTAssert([appLaunchEnvironment[@"DYLD_FALLBACK_FRAMEWORK_PATH"] containsString:@"Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks"]);
+     XCTAssert([appLaunchEnvironment[@"DYLD_FALLBACK_LIBRARY_PATH"] containsString:@"Platforms/iPhoneSimulator.platform/Developer/usr/lib"]);
+     XCTAssert([appLaunchEnvironment[@"DYLD_INSERT_LIBRARIES"] containsString:@"libXCTestBundleInject.dylib"]);
+diff --git a/bp/tests/Utils/BPTestUtils.h b/bp/tests/Utils/BPTestUtils.h
+new file mode 100644
+index 0000000..e237c77
+--- /dev/null
++++ b/bp/tests/Utils/BPTestUtils.h
+@@ -0,0 +1,23 @@
++//
++//  BPTestUtils.h
++//  bp-tests
++//
++//  Created by Lucas Throckmorton on 2/17/23.
++//  Copyright © 2023 LinkedIn. All rights reserved.
++//
++
++#import <Foundation/Foundation.h>
++
++@class BPConfiguration;
++
++NS_ASSUME_NONNULL_BEGIN
++
++@interface BPTestUtils : NSObject
++
+++ (nonnull BPConfiguration *)makeUnhostedTestConfiguration;
++
+++ (nonnull BPConfiguration *)makeHostedTestConfiguration;
++
++@end
++
++NS_ASSUME_NONNULL_END
+diff --git a/bp/tests/Utils/BPTestUtils.m b/bp/tests/Utils/BPTestUtils.m
+new file mode 100644
+index 0000000..68135f7
+--- /dev/null
++++ b/bp/tests/Utils/BPTestUtils.m
+@@ -0,0 +1,79 @@
++//
++//  BPTestUtils.m
++//  bp-tests
++//
++//  Created by Lucas Throckmorton on 2/17/23.
++//  Copyright © 2023 LinkedIn. All rights reserved.
++//
++
++#import "BPTestUtils.h"
++
++#import <XCTest/XCTest.h>
++
++#import "BPConfiguration.h"
++#import "BPTestHelper.h"
++#import "BPUtils.h"
++#import "SimDeviceType.h"
++#import "SimRuntime.h"
++#import "SimServiceContext.h"
++
++@implementation BPTestUtils
++
+++ (nonnull BPConfiguration *)makeUnhostedTestConfiguration {
++    BPConfiguration *config = [self makeDefaultTestConfiguration];
++    config.isLogicTestTarget = YES;
++    return config;
++}
++
+++ (nonnull BPConfiguration *)makeHostedTestConfiguration {
++    BPConfiguration *config = [self makeDefaultTestConfiguration];
++
++    // Set up simulator device + runtime
++    NSError *err;
++    SimServiceContext *sc = [SimServiceContext sharedServiceContextForDeveloperDir:config.xcodePath error:&err];
++    if (!sc) { NSLog(@"Failed to initialize SimServiceContext: %@", err); }
++
++    for (SimDeviceType *type in [sc supportedDeviceTypes]) {
++        if ([[type name] isEqualToString:config.deviceType]) {
++            config.simDeviceType = type;
++            break;
++        }
++    }
++    XCTAssert(config.simDeviceType != nil);
++
++    for (SimRuntime *runtime in [sc supportedRuntimes]) {
++        if ([[runtime name] containsString:config.runtime]) {
++            config.simRuntime = runtime;
++            break;
++        }
++    }
++    XCTAssert(config.simRuntime != nil);
++
++    NSString *hostApplicationPath =  [BPTestHelper sampleAppPath];
++    NSString *testBundlePath =  [BPTestHelper sampleAppNegativeTestsBundlePath];
++    config.isLogicTestTarget = NO;
++    config.appBundlePath = hostApplicationPath;
++    config.testBundlePath = testBundlePath;
++
++    return config;
++}
++
+++ (nonnull BPConfiguration *)makeDefaultTestConfiguration {
++    BPConfiguration *config = [[BPConfiguration alloc] initWithProgram:BP_BINARY];
++    config.stuckTimeout = @40;
++    config.xcodePath = [BPUtils runShell:@"/usr/bin/xcode-select -print-path"];
++    config.runtime = @BP_DEFAULT_RUNTIME;
++    config.repeatTestsCount = @1;
++    config.errorRetriesCount = @0;
++    config.testCaseTimeout = @20;
++    config.deviceType = @BP_DEFAULT_DEVICE_TYPE;
++    config.headlessMode = YES;
++    config.videoPaths = @[[BPTestHelper sampleVideoPath]];
++    config.testRunnerAppPath = nil;
++    config.testing_CrashAppOnLaunch = NO;
++    config.cloneSimulator = NO;
++    config.outputDirectory = @"/Users/lthrockm/Desktop/output/";
++    return config;
++}
++
++@end
+diff --git a/bptestrunner/bluepill_batch_test.bzl b/bptestrunner/bluepill_batch_test.bzl
+index 3620327..3523d76 100644
+--- a/bptestrunner/bluepill_batch_test.bzl
++++ b/bptestrunner/bluepill_batch_test.bzl
+@@ -29,9 +29,10 @@ def _bluepill_batch_test_impl(ctx):
+ 
+         #test_plan
+         test_plan = struct(
+-            test_host = test_host.basename.split(
+-                "." + test_host.extension,
+-            )[0] + ".app",
++            if test_host != None:
++                test_host = test_host.basename.split(
++                    "." + test_host.extension,
++                )[0] + ".app",
+             environment = test_env,
+             arguments = test_env,
+             test_bundle_path = bundle_info.bundle_name + bundle_info.bundle_extension,
+-- 
+2.37.1 (Apple Git-137.1)
+

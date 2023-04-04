@@ -94,6 +94,20 @@
     return allXCTestFiles;
 }
 
++ (NSArray <BPXCTestFile *>*)testsFromConfig:(BPConfiguration *)config
+                                   withError:(NSError *__autoreleasing *)errPtr {
+    NSMutableArray<BPXCTestFile *> *loadedTests = [[NSMutableArray alloc] initWithCapacity:config.tests.count];
+    for (NSString *testName in config.tests) {
+        BPTestPlan *testPlan = [config.tests objectForKey:testName];
+        BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromBPTestPlan:testPlan withName:testName andError:errPtr];
+        if (*errPtr) {
+            return nil;
+        }
+        [loadedTests addObject:xcTestFile];
+    }
+    return loadedTests;
+}
+
 + (instancetype)appWithConfig:(BPConfiguration *)config
                     withError:(NSError *__autoreleasing *)errPtr {
 
@@ -102,17 +116,10 @@
 
     if (config.tests != nil && config.tests.count != 0) {
         [BPUtils printInfo:INFO withString:@"Using test bundles"];
-        NSMutableArray<BPXCTestFile *> *loadedTests = [[NSMutableArray alloc] initWithCapacity:config.tests.count];
-        for (NSString *testName in config.tests) {
-            BPTestPlan *testPlan = [config.tests objectForKey:testName];
-            BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromBPTestPlan:testPlan withName:testName andError:errPtr];
-            if (*errPtr)
-                return nil;
-            [loadedTests addObject:xcTestFile];
+        app.testBundles = [self testsFromConfig:config withError:errPtr];
+        if (*errPtr) {
+            return nil;
         }
-
-        app.testBundles = loadedTests;
-
         return app;
     }
 
