@@ -138,8 +138,6 @@ maxprocs(void)
         [BPUtils printInfo:ERROR withString:@"Packing failed: %@", [error localizedDescription]];
         return 1;
     }
-
-    // LTHROCKM - TODO: reduce number of sims if a bundle is a logic test
     
     if (bundles.count < numSims) {
         [BPUtils printInfo:WARNING

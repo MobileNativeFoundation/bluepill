@@ -482,7 +482,7 @@
      - `-s`
         - An arg to launch as standalone.
      - `/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest`
-        - Is this the path arg? or is this already covered? or maybe it's a separate option
+        - the path to the executable
      - `-XCTest BPLogicTests/testPassingLogicTest`
         - args?
      - `/Users/lthrockm/ios/bluepill/work_dir/BPLogicTests.xctest`

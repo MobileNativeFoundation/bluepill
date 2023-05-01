@@ -161,6 +161,8 @@
         xctConfig.testApplicationDependencies = config.dependencies.count > 0 ? config.dependencies : @{bundleID: config.appBundlePath};
         xctConfig.productModuleName = appName;
         xctConfig.targetApplicationPath = config.appBundlePath;
+    } else {
+        // TODO: LTHROCKM - set up productModuleName/bundleID for logic tests.
     }
 
     if (config.testRunnerAppPath) {

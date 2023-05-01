@@ -172,6 +172,10 @@ static NSUUID *sessionID;
     if (!self.testBundlePath) {
         [errors addObject:@"testBundlePath field is nil"];
     }
+    // TODO: needs to be a logic test.
+    if (!self.testHost) {
+        [errors addObject:@"testHost field is nil"];
+    }
     if ([errors count] > 0) {
         BP_SET_ERROR(errPtr,
                      [NSString stringWithFormat:@"Invalid BPTestPlan object, %@.",
