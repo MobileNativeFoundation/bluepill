@@ -230,16 +230,6 @@ static void onInterrupt(int ignore) {
     [BPUtils printInfo:INFO withString:@"Running Tests. Attempt Number %lu.", context.attemptNumber];
     [BPStats sharedStats].attemptNumber = context.attemptNumber;
 
-    // LTHROCKM - DEBUG
-
-    // For logic tests, we want to follow an alternate codepath w/ no simulator and no app host.
-    
-    // NOPE! We DO need a simulator for this, so go ahead and make one as normal below
-//    if (self.config.isLogicTestTarget) {
-//        [self setupUnhostedTestExecutionsWithContext:context];
-//        return;
-//    }
-
     NSString *simulatorLogPath;
     if (context.config.outputDirectory) {
         simulatorLogPath = [context.config.outputDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%lu-simulator.log", context.attemptNumber]];
@@ -729,27 +719,6 @@ NSString *__from;
 - (void)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment {
     self.context.isTestRunnerContext = YES;
     [self installApplicationWithContext:self.context];
-}
-
-#pragma mark - Logic Test Handling
-
-- (void)setupUnhostedTestExecutionsWithContext:(nonnull BPExecutionContext *)context {
-    NSString *iosTestRunnerExecutableURL = @"/Users/lthrockm/ios/xctestrunner/bazel-bin/ios_test_runner";
-    NSArray *args = @[
-        @"--work_dir",  @"/Users/lthrockm/ios/bluepill/work_dir",
-        @"--output_dir", context.config.outputDirectory,
-        @"--launch_options_json_path", @"/Users/lthrockm/ios/bluepill/tests_to_run.json",
-        @"--test_bundle_path", context.config.testBundlePath,
-        @"simulator_test"
-    ];
-
-    NSError *error;
-    NSString *output = [BPUtils runExecutable:iosTestRunnerExecutableURL arguments:args error:&error terminationHandler:^(NSTask *task) {
-        NSLog(@"ERROR HERE");
-    }];
-    NSLog(output);
-    NSLog(output);
-
 }
 
 @end
