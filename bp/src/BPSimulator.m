@@ -450,20 +450,11 @@
     return simStdoutPath;
 }
 
-// LTHROCKM - what if we make a method here that does what logic_test_util.py does?
+/**
+ There's no need to install and launch an application for logic tests. Instead, we should be able to spawn a new xctest execution directly on the simulator.
+ 
+ */
 - (void)executeLogicTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion {
-    /**
-     Substitute in:
-     
-    ```
-        - (int)spawnWithPath:(id)arg1 options:(id)arg2 terminationHandler:(CDUnknownBlockType)arg3 error:(id *)arg4; or
-        // or
-        - (void)spawnAsyncWithPath:(id)arg1 options:(id)arg2 terminationHandler:(CDUnknownBlockType)arg3 completionHandler:(CDUnknownBlockType)arg4;
-    ```
-     instead of `[self.device launchApplicationAsyncWithID:hostBundleId options:options completionHandler:^(NSError *error, pid_t pid)`
-
-     */
-    
     /*
      Working understanding:
 
@@ -476,34 +467,44 @@
             -XCTest BPLogicTests/testPassingLogicTest /Users/lthrockm/ios/bluepill/work_dir/BPLogicTests.xctest
         ```
      we can break down the individual components to be handled in the following:
+     - part of the method signature:
+        - xcrun simctl                          // these just redirect down to CoreSimulator
+        - spawn                                 // this is the the spawn method :p
+        - AFF4165A-9A71-4860-8B6D-485B7D1BA2BC  // We're calling device.spawn. No need to respecify the device ID
+     - path: /Applications/.../Xcode/Agents/xctest
+     - options:
+        - -s                    // "standalone" option
+        - -w                    // "wait_for_debugger" option
+        - -a                    // "arch" option
+     - args:
+        - -XCTest
+        - BPLogicTests/testPassingLogicTest                             // The filter for which tests to actually run
+        - /Users/lthrockm/ios/bluepill/work_dir/BPLogicTests.xctest     // The path to the .xctest file w/ all the module's tests.
      
-     - `xcrun simctl spawn AFF4165A-9A71-4860-8B6D-485B7D1BA2BC`
-        - All covered in device.spawn
-     - `-s`
-        - An arg to launch as standalone.
-     - `/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest`
-        - the path to the executable
-     - `-XCTest BPLogicTests/testPassingLogicTest`
-        - args?
-     - `/Users/lthrockm/ios/bluepill/work_dir/BPLogicTests.xctest`
-        - path arg
+     From `xcrun simctl spawn help`:
+     `simctl spawn [-w | --wait-for-debugger] [-s | --standalone] [-a <arch> | --arch=<arch>] <device> <path to executable> [<argv 1> <argv 2> ... <argv n>]`
      */
     
     /**
      From `xcrun simctl spawn help`:
      `simctl spawn [-w | --wait-for-debugger] [-s | --standalone] [-a <arch> | --arch=<arch>] <device> <path to executable> [<argv 1> <argv 2> ... <argv n>]`
      */
-    NSString *executablePath = @"/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest";
-    NSString *xctestPath = @"/Users/lthrockm/ios/bluepill/work_dir/BPLogicTests.xctest";
+    NSString *executablePath = [[NSString alloc] initWithFormat:
+                                @"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest",
+                                self.config.xcodePath];
+    NSString *xctestPath = @"/Users/lthrockm/Library/Developer/Xcode/DerivedData/Bluepill-bzfbmrywvaiilwcxmhvmpqnjsiso/Build/Products/Debug-iphonesimulator/BPLogicTests.xctest";
+//    NSString *xctestPath = @"/Users/lthrockm/ios/bluepill/work_dir/BPLogicTests.xctest";
+//    NSString *xctestPath = self.config.testBundlePath;
+    
 
     
     // Arguments:
     NSArray *arguments = @[
-                @"-s",
-                @"-XCTest",
-                @"BPLogicTests/testPassingLogicTest",
-                xctestPath,
-//                @"log stream"
+        @"-XCTest",
+//        @"BPLogicTests/testPassingLogicTest",
+        @"All",
+        xctestPath,
+        @"log stream --level=debug",
     ];
     // Environment:
     NSMutableDictionary *environment = [[SimulatorHelper logicTestEvironmentWithDevice:self.device config:self.config] mutableCopy];
@@ -512,33 +513,36 @@
     NSString *simStdoutRelativePath = [simStdoutPath substringFromIndex:((NSString *)self.device.dataPath).length];
 
     self.appOutput = [NSFileHandle fileHandleForReadingAtPath:simStdoutPath];
-    [environment setObject:simStdoutRelativePath forKey:kOptionsStdoutKey];
-    [environment setObject:simStdoutRelativePath forKey:kOptionsStderrKey];
-
-    NSLog(@"LTHROCKM DEBUG - stdout: %@", simStdoutRelativePath);
-    NSLog(@"LTHROCKM DEBUG - stderr: %@", simStdoutRelativePath);
-
-    // There's a discrepency here. The below path matches what we use in @c launchApplicationAndExecuteTestsWithParser: , but in @c SimulatorHelper's @c appLaunchEnvironmentWithBundleID, this is
-    // derrived in part from the host app.
+    
+    // There's a discrepency here. The below path matches what we use in @c launchApplicationAndExecuteTestsWithParser: ,
+    // but in @c SimulatorHelper's @c appLaunchEnvironmentWithBundleID, this is derrived in part from the host app.
+    //
     // TODO: Verify this path works when spawning logic tests on the sim.
     NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib", self.config.xcodePath];
+    
     // Generally copied from hosted unit tests.
-    [environment setObject:insertLibraryPath forKey:@"DYLD_INSERT_LIBRARIES"];
-    [environment setObject:insertLibraryPath forKey:@"XCInjectBundleInto"];
     // Hosted unit tests derrive this path from the app host (removing the actual app component at the end), while we can just use the sim path directly here,
     // at least for the time being.
-    [environment setObject:self.config.simulatorPath forKey:@"__XPC_DYLD_FRAMEWORK_PATH"]; // TODO: sim path must be nonnull
-    [environment setObject:self.config.simulatorPath forKey:@"__XPC_DYLD_LIBRARY_PATH"]; // TODO: sim path must be nonnull
-    [environment setObject:self.config.simulatorPath forKey:@"__XCODE_BUILT_PRODUCTS_DIR_PATHS"]; // TODO: sim path must be nonnull
-    // From XCTestRunner
-    [environment setObject:@"YES" forKey:@"NSUnbufferedIO"];
-        
+    // TODO: fail if sim path is null
+    [environment addEntriesFromDictionary: @{
+//        kOptionsStdoutKey: simStdoutRelativePath,
+//        kOptionsStderrKey: simStdoutRelativePath,
+        @"DYLD_INSERT_LIBRARIES": insertLibraryPath,
+        @"XCInjectBundleInto": insertLibraryPath,
+        @"__XPC_DYLD_FRAMEWORK_PATH": self.config.simulatorPath,
+        @"__XPC_DYLD_LIBRARY_PATH": self.config.simulatorPath,
+        @"__XCODE_BUILT_PRODUCTS_DIR_PATHS": self.config.simulatorPath,
+        @"NSUnbufferedIO": @"YES"
+    }];
+            
     NSDictionary *options = @{
         kOptionsArgumentsKey: arguments,
-        kOptionsEnvironmentKey: environment,
+        kOptionsEnvironmentKey: [environment copy],
         kOptionsStdoutKey: simStdoutRelativePath,
         kOptionsStderrKey: simStdoutRelativePath,
-        kOptionsWaitForDebuggerKey: @"0",
+        kOptionsWaitForDebuggerKey: @(0),           // -w
+        @"standalone": @(1),                        // -s
+        // others: -a <arch>
     };
     
     // Set up monitor
@@ -552,7 +556,7 @@
     
         
     // Save the process ID to the monitor
-//    self.monitor.appPID = pid;
+    self.monitor.appPID = getpid();
     self.monitor.appState = Running;
 
 
@@ -563,12 +567,14 @@
     };
     
     // TODO: move to async after debugging issues
+    NSLog(@"output: %@", simStdoutPath);
     NSError *error;
     [self.device spawnWithPath:executablePath options:options terminationHandler:^{
-        NSLog(@"UDID: %@", self.device.UDID.UUIDString);
         NSLog(@"terminated.");
     } error:&error];
+    NSLog(@"UDID: %@", self.device.UDID.UUIDString);
     NSLog(@"completed.");
+    completion(error, self.monitor.appPID);
 }
 
 + (NSMutableArray<NSString *> *)commandLineArgsFromConfig:(BPConfiguration *)config {

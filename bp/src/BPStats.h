@@ -16,6 +16,7 @@
 #define INSTALL_APPLICATION(x)   [NSString stringWithFormat:@"[Attempt %lu] Install Application", (x)]
 #define UNINSTALL_APPLICATION(x) [NSString stringWithFormat:@"[Attempt %lu] Uninstall Application", (x)]
 #define LAUNCH_APPLICATION(x)    [NSString stringWithFormat:@"[Attempt %lu] Launch Application", (x)]
+#define SPAWN_LOGIC_TEST(x)      [NSString stringWithFormat:@"[Attempt %lu] Spawn Logic Tests", (x)]
 #define DELETE_SIMULATOR(x)      [NSString stringWithFormat:@"[Attempt %lu] Delete Simulator", (x)]
 #define DELETE_SIMULATOR_CB(x)   [NSString stringWithFormat:@"[Attempt %lu] Delete Simulator due to BAD STATE", (x)]
 

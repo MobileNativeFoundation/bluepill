@@ -402,9 +402,41 @@ static void onInterrupt(int ignore) {
 }
 
 - (void)executeLogicTestsWithContext:(BPExecutionContext *)context {
-    [self.context.runner executeLogicTestsWithParser:context.parser andCompletion:^(NSError *, pid_t) {
-            NSLog(@"completion");
-    }];
+
+    NSString *stepName = SPAWN_LOGIC_TEST(context.attemptNumber);
+    [BPUtils printInfo:INFO withString:@"%@", stepName];
+
+    // Set Up Timer
+    [[BPStats sharedStats] startTimer:stepName];
+    BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[self.config.launchTimeout doubleValue]];
+    [timer start];
+
+    BPApplicationLaunchHandler *handler = [BPApplicationLaunchHandler handlerWithTimer:timer];
+    __weak typeof(self) __self = self;
+    __weak typeof(handler) __handler = handler;
+
+    handler.beginWith = ^{
+        [BPUtils printInfo:((__handler.pid > -1) ? INFO : ERROR) withString:@"Completed: %@", stepName];
+    };
+
+    handler.onSuccess = ^{
+        context.pid = __handler.pid;
+        NEXT([__self connectTestBundleAndTestDaemonWithContext:context]);
+    };
+
+    handler.onError = ^(NSError *error) {
+        [[BPStats sharedStats] endTimer:stepName withResult:@"ERROR"];
+        [BPUtils printInfo:ERROR withString:@"Could not spawn logic test execution: %@", [error localizedDescription]];
+        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
+    };
+
+    handler.onTimeout = ^{
+        [[BPStats sharedStats] addSimulatorLaunchFailure];
+        [[BPStats sharedStats] endTimer:stepName withResult:@"TIMEOUT"];
+        [BPUtils printInfo:FAILED withString:@"Timeout: %@", stepName];
+    };
+
+    [self.context.runner executeLogicTestsWithParser:context.parser andCompletion:handler.defaultHandlerBlock];
 }
 
 - (void)launchApplicationWithContext:(BPExecutionContext *)context {
@@ -484,7 +516,7 @@ static void onInterrupt(int ignore) {
     // If it's not running and we passed the above checks (e.g., the tests are not yet completed)
     // then it must mean the app has crashed.
     // However, we have a short-circuit for tests because those may not actually run any app
-    if (!isRunning && context.pid > 0 && [context.runner isApplicationLaunched] && !self.config.testing_NoAppWillRun) {
+    if (!isRunning && context.pid > 0 && ([context.runner isApplicationLaunched] || context.config.isLogicTestTarget) && !self.config.testing_NoAppWillRun) {
         // The tests ended before they even got started or the process is gone for some other reason
         [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:@"APP CRASHED"];
         [BPUtils printInfo:ERROR withString:@"Application crashed!"];
