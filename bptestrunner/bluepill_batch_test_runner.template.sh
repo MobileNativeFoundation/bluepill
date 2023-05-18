@@ -64,8 +64,9 @@ if [ -f "$BP_TEST_ESTIMATE_JSON" ]; then
     TIME_ESTIMATE_ARG="--test-time-estimates-json $(basename "$BP_TEST_ESTIMATE_JSON")"
 fi
 
-# Copy rule-generated test plan file to working folder
-cp "$BP_TEST_PLAN" $BP_WORKING_FOLDER
+# Expand $TEST_UNDECLARED_OUTPUTS_DIR in rule-generated test plan file
+# And copy it to working folder
+sed 's/$TEST_UNDECLARED_OUTPUTS_DIR/'"${TEST_UNDECLARED_OUTPUTS_DIR//\//\\/}"'/g' $BP_TEST_PLAN > $BP_WORKING_FOLDER/$BP_TEST_PLAN
 BP_TEST_PLAN_ARG="$(basename "$BP_TEST_PLAN")"
 
 # Copy bluepill and bp executables to working folder
