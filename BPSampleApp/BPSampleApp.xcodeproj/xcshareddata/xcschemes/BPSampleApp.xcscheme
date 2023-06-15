@@ -104,6 +104,34 @@
                ReferencedContainer = "container:BPSampleApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FBBBD8F229A06B54002B9115"
+               BuildableName = "BPLogicTests.xctest"
+               BlueprintName = "BPLogicTests"
+               ReferencedContainer = "container:BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FBD772B32A33E15D0098CEFD"
+               BuildableName = "BPPassingLogicTests.xctest"
+               BlueprintName = "BPPassingLogicTests"
+               ReferencedContainer = "container:BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -224,6 +252,16 @@
                BlueprintIdentifier = "FBBBD8F229A06B54002B9115"
                BuildableName = "BPLogicTests.xctest"
                BlueprintName = "BPLogicTests"
+               ReferencedContainer = "container:BPSampleApp.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "FBD772B32A33E15D0098CEFD"
+               BuildableName = "BPPassingLogicTests.xctest"
+               BlueprintName = "BPPassingLogicTests"
                ReferencedContainer = "container:BPSampleApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
