@@ -85,6 +85,32 @@
     XCTAssert([runner busySwimlaneCount] == 0);
 }
 
+- (void)testTwoBPInstancesWithLogicTestPlanJson {
+    [self writeLogicTestPlan];
+    BPConfiguration *config = [BPTestUtils makeUnhostedTestConfiguration];
+    config.numSims = @2;
+    config.testBundlePath = nil;
+    config.testRunnerAppPath = nil;
+    config.appBundlePath = nil;
+    config.testPlanPath = [BPTestHelper testPlanPath];
+
+    NSError *err;
+    [config validateConfigWithError:&err];
+    BPApp *app = [BPApp appWithConfig:config withError:&err];
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
+    XCTAssert(runner != nil);
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc != 0); // this runs tests that fail
+    XCTAssertEqual(app.testBundles.count, 2);
+    XCTAssertTrue([app.testBundles[0].name isEqualToString:@"BPLogicTests"]);
+    XCTAssertEqual(app.testBundles[0].numTests, 10);
+    XCTAssertEqual(app.testBundles[0].skipTestIdentifiers.count, 0);
+    XCTAssertTrue([app.testBundles[1].name isEqualToString:@"BPPassingLogicTests"]);
+    XCTAssertEqual(app.testBundles[1].numTests, 207);
+    XCTAssertEqual(app.testBundles[1].skipTestIdentifiers.count, 0);
+}
+
 - (void)testOneBPInstance {
     BPConfiguration *config = [self generateConfig];
     config.numSims = @1;
@@ -241,6 +267,25 @@
                 @"test_host": [BPTestHelper sampleAppPath],
                 @"test_host_bundle_identifier": @"identifier",
                 @"test_bundle_path": [BPTestHelper sampleAppNegativeTestsBundlePath],
+                @"environment": @{},
+                @"arguments": @{}
+            }
+        }
+    };
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:testPlan options:0 error:nil];
+    [jsonData writeToFile:[BPTestHelper testPlanPath] atomically:YES];
+}
+
+- (void)writeLogicTestPlan {
+    NSDictionary *testPlan = @{
+        @"tests": @{
+            @"BPLogicTests": @{
+                @"test_bundle_path": [BPTestHelper logicTestBundlePath],
+                @"environment": @{},
+                @"arguments": @{}
+            },
+            @"BPPassingLogicTests": @{
+                @"test_bundle_path": [BPTestHelper passingLogicTestBundlePath],
                 @"environment": @{},
                 @"arguments": @{}
             }
