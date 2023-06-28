@@ -197,10 +197,9 @@
         return nil;
     }
     NSMutableArray<NSString *> *formattedTests = [NSMutableArray array];
-    NSString *bundleName = [[config.testBundlePath lastPathComponent] stringByDeletingPathExtension];
     for (NSString *testName in tests) {
         if ([BPUtils isTestSwiftTest:testName]) {
-            [formattedTests addObject:[BPUtils formatSwiftTestForXCTest:testName withBundleName:bundleName]];
+            [formattedTests addObject:config.standardizedSwiftTestNames[testName]];
         } else {
             [formattedTests addObject:testName];
         }

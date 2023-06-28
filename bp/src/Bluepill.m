@@ -220,11 +220,11 @@ static void onInterrupt(int ignore) {
     NSAssert(xctTestFile != nil, @"Failed to load testcases from: %@; Error: %@", context.config.testBundlePath, [error localizedDescription]);
     context.config.allTestCases = [[NSArray alloc] initWithArray: xctTestFile.allTestCases];
 
-    // Right now, logic tests need to be able to make stronger assumptions around test exclusivity
-    // in the `allTests`, `testCasesToRun`, and `testCasesToSkip` lists.
     if (context.config.isLogicTestTarget) {
-        // For estimating how long this will take (and setting an appropriate timeout), we need to remove any skipped tests
-        // that aren't actually a part of this bundle.
+        // XCTest is stricter about how swift test names are formatted
+        context.config.standardizedSwiftTestNames = xctTestFile.standardizedSwiftTestNames;
+        // For estimating how long this will take (and setting an appropriate timeout), we need to
+        // remove any skipped tests that aren't actually a part of this bundle.
         NSMutableSet<NSString *> *allTests = [NSMutableSet setWithArray:context.config.allTestCases];
         NSMutableSet<NSString *> *allSkippedTests = [NSMutableSet setWithArray:self.config.testCasesToSkip];
         [allSkippedTests intersectSet:allTests];
@@ -409,11 +409,21 @@ static void onInterrupt(int ignore) {
 }
 
 - (void)executeLogicTestsWithContext:(BPExecutionContext *)context {
+    // First we need to make sure the archs are consistent between the xctest executable + the test bundle.
+    NSString *originalXCTestPath = [[NSString alloc] initWithFormat:
+                                    @"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest",
+                                    context.config.xcodePath];
+    NSString *newXCTestPath = [BPUtils lipoExecutableAtPath:originalXCTestPath withContext:context];
+    if (newXCTestPath) {
+        context.config.dyldFrameworkPath = [BPUtils correctedDYLDFrameworkPathFromBinary:originalXCTestPath];
+    }
+    context.config.xctestBinaryPath = newXCTestPath ?: originalXCTestPath;
+
     // We get two callbacks after trying to spawn an execution. They happen when:
     //   1) Immediately after the process is spawned.
     //   2) Once the process completes.
     // This method sets up those two handlers, and then passes them to the runner.
-    
+
     // 1) Handle process spawn
     NSString *spawnStepName = SPAWN_LOGIC_TEST(context.attemptNumber);
     NSString *executeTestsStepName = EXECUTE_LOGIC_TEST(context.attemptNumber);
@@ -469,7 +479,14 @@ static void onInterrupt(int ignore) {
     completionHandler.onError = ^(NSError *error) {
         [[BPStats sharedStats] endTimer:executeTestsStepName withResult:@"ERROR"];
         [BPUtils printInfo:ERROR withString:@"Spawned logic test execution failed: %@", [error localizedDescription]];
-        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusAppCrashed]);
+        
+        BPExitStatus exitStatus = BPExitStatusAppCrashed;
+        BOOL didhanderTimeout = error.domain == BPErrorDomain && error.code == BPHandler.timeoutErrorCode;
+        BOOL wasprocessKilledAfterTimeout = error.domain == BPErrorDomain && error.code == SIGKILL;
+        if (didhanderTimeout || wasprocessKilledAfterTimeout) {
+            exitStatus = BPExitStatusTestTimeout;
+        }
+        NEXT([__self deleteSimulatorWithContext:context andStatus:exitStatus]);
     };
 
     completionHandler.onTimeout = ^{
@@ -817,6 +834,7 @@ NSString *__from;
 }
 
 #pragma mark - BPTestBundleConnectionDelegate
+
 - (void)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment {
     self.context.isTestRunnerContext = YES;
     [self installApplicationWithContext:self.context];

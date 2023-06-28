@@ -57,14 +57,55 @@
     [super tearDown];
 }
 
+- (void)testArchitecture_x86_64 {
+    NSString *bundlePath = BPTestHelper.logicTestBundlePath_x86_64;
+
+    BPConfiguration *config = [BPTestUtils makeUnhostedTestConfiguration];
+    config.stuckTimeout = @(2);
+    config.testCaseTimeout = @(10);
+    // Test multiple test bundles, while skipping any failing tests so that we
+    // can still validate that we get a success code..
+    config.testBundlePath = bundlePath;
+
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
+    NSError *error;
+    BPApp *app = [BPApp appWithConfig:config withError:&error];
+
+    XCTAssert(runner != nil);
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc == 0, @"Wanted 0, got %d", rc);
+    XCTAssert([runner busySwimlaneCount] == 0);
+}
+
+- (void)testArchitecture_arm64 {
+    NSString *bundlePath = BPTestHelper.logicTestBundlePath_arm64;
+    
+    BPConfiguration *config = [BPTestUtils makeUnhostedTestConfiguration];
+    config.stuckTimeout = @(2);
+    config.testCaseTimeout = @(10);
+    // Test multiple test bundles, while skipping any failing tests so that we
+    // can still validate that we get a success code..
+    config.testBundlePath = bundlePath;
+
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
+    NSError *error;
+    BPApp *app = [BPApp appWithConfig:config withError:&error];
+
+    XCTAssert(runner != nil);
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc == 0, @"Wanted 0, got %d", rc);
+    XCTAssert([runner busySwimlaneCount] == 0);
+}
+
 - (void)testLogicTestBundles {
     BPConfiguration *config = [BPTestUtils makeUnhostedTestConfiguration];
     config.stuckTimeout = @(2);
     config.testCaseTimeout = @(10);
-    
     // Test multiple test bundles, while skipping any failing tests so that we
     // can still validate that we get a success code..
-    config.testBundlePath = BPTestHelper.passingLogicTestBundlePath;
+    config.testBundlePath = BPTestHelper.logicTestBundlePath;
     config.additionalUnitTestBundles = @[BPTestHelper.logicTestBundlePath];
     config.testCasesToSkip = @[
         @"BPLogicTests/testFailingLogicTest",

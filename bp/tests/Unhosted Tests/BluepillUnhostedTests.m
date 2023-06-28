@@ -42,8 +42,12 @@
 #pragma mark - Passing Tests
 
 - (void)testSinglePassingLogicTests {
+//    NSString *testBundlePath = @"/Users/lthrockm/Library/Developer/Xcode/DerivedData/Voyager-atlqmombeaxwfzfctrysmxtzoywo/Build/Products/Debug-iphonesimulator/Infra-Unit-Tests.xctest";
+//    self.config.testBundlePath = testBundlePath;
+//    self.config.testCasesToRun = @[@"AppConfigurationManagerTests/testPassingLogicTest()"];
+    
     self.config.testCasesToRun = @[@"BPLogicTests/testPassingLogicTest1"];
-    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
     [BPTestUtils assertExitStatus:exitCode matchesExpected:BPExitStatusAllTestsPassed];
 }
 
@@ -106,7 +110,7 @@
  */
 - (void)testStuckLogicTest {
     self.config.testCasesToRun = @[@"BPLogicTests/testStuckLogicTest"];
-    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
     [BPTestUtils assertExitStatus:exitCode matchesExpected:BPExitStatusTestTimeout];
 }
 
@@ -121,7 +125,7 @@
     self.config.testCaseTimeout = @3;
     self.config.testCasesToRun = @[@"BPLogicTests/testSlowLogicTest"];
 
-    BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
+    BPExitStatus exitCode = [[[Bluepill alloc] initWithConfiguration:self.config] run];
     [BPTestUtils assertExitStatus:exitCode matchesExpected:BPExitStatusTestTimeout];
 }
 

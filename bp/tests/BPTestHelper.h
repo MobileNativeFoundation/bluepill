@@ -24,6 +24,12 @@
 // This particular bundle will only have passing tests to make certain functionalities easier to test.
 + (NSString *)passingLogicTestBundlePath;
 
+// A pre-built test bundle that will always be in x86_64
++ (NSString *)logicTestBundlePath_x86_64;
+
+// A pre-built test bundle that will always be in arm64
++ (NSString *)logicTestBundlePath_arm64;
+
 // Return the path to the sample app's xctest with new test cases
 + (NSString *)sampleAppNewTestsBundlePath;
 

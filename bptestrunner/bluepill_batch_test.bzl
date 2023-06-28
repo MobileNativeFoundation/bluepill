@@ -28,15 +28,21 @@ def _bluepill_batch_test_impl(ctx):
             runfiles.append(test_host)
 
         #test_plan
-        test_plan = struct(
-            if test_host != None:
+        if test_host:
+            test_plan = struct(
                 test_host = test_host.basename.split(
                     "." + test_host.extension,
                 )[0] + ".app",
-            environment = test_env,
-            arguments = test_env,
-            test_bundle_path = bundle_info.bundle_name + bundle_info.bundle_extension,
-        )
+                environment = test_env,
+                arguments = test_env,
+                test_bundle_path = bundle_info.bundle_name + bundle_info.bundle_extension,
+            )
+        else:
+            test_plan = struct(
+                environment = test_env,
+                arguments = test_env,
+                test_bundle_path = bundle_info.bundle_name + bundle_info.bundle_extension,
+            )
         test_plans[test_target.label.name] = test_plan
 
     # Write test plan json.
@@ -46,16 +52,20 @@ def _bluepill_batch_test_impl(ctx):
         content = struct(tests = test_plans).to_json(),
     )
     runfiles.append(test_plan_file)
+    print("lthrockm debug - " + str(struct(tests = test_plans).to_json()))
 
     # Write the shell script.
     substitutions = {
         "test_bundle_paths": " ".join(test_bundle_paths),
-        "test_host_paths": " ".join(test_host_paths),
         "bp_test_plan": test_plan_file.short_path,
         "bp_path": ctx.executable._bp_exec.short_path,
         "bluepill_path": ctx.executable._bluepill_exec.short_path,
         "target_name": ctx.attr.name,
     }
+    if len(test_host_paths) > 0:
+        substitutions["test_host_paths"] = " ".join(test_host_paths) 
+
+
     if ctx.attr.config_file:
         runfiles.append(ctx.file.config_file)
         substitutions["bp_config_file"] = ctx.file.config_file.path

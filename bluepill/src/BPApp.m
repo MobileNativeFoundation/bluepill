@@ -140,7 +140,7 @@
                                                     andTestBundlePath:config.testBundlePath
                                                    andUITargetAppPath:config.testRunnerAppPath
                                                             withError:errPtr]];
-    } else if (config.isLogicTestTarget) {
+    } else if (config.isLogicTestTarget && config.testBundlePath) {
         BPXCTestFile *testFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:config.testBundlePath
                                                            andHostAppBundle:nil
                                                          andUITargetAppPath:nil

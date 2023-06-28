@@ -37,6 +37,8 @@
 		C4D6861A2267ABEF007D4237 /* bplib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D686192267ABEF007D4237 /* bplib.framework */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
 		E49235FF22EA847700395D98 /* times.json in Resources */ = {isa = PBXBuildFile; fileRef = E49235FE22EA847700395D98 /* times.json */; };
+		FBA69FA72A45F889003BADBF /* BPLogicTestFixture_arm64.xctest in Resources */ = {isa = PBXBuildFile; fileRef = FBA69FA52A45F889003BADBF /* BPLogicTestFixture_arm64.xctest */; };
+		FBA69FA82A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest in Resources */ = {isa = PBXBuildFile; fileRef = FBA69FA62A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +87,8 @@
 		C4FD8C561DB6E09B000ED28C /* BPPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPPacker.h; sourceTree = "<group>"; };
 		C4FD8C571DB6E09B000ED28C /* BPPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPacker.m; sourceTree = "<group>"; };
 		E49235FE22EA847700395D98 /* times.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = times.json; sourceTree = "<group>"; };
+		FBA69FA52A45F889003BADBF /* BPLogicTestFixture_arm64.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPLogicTestFixture_arm64.xctest; sourceTree = "<group>"; };
+		FBA69FA62A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPLogicTestFixture_x86_64.xctest; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +146,8 @@
 				0173521223679E87008BFA4E /* TEST-FinalReport.xml */,
 				E49235FE22EA847700395D98 /* times.json */,
 				BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */,
+				FBA69FA52A45F889003BADBF /* BPLogicTestFixture_arm64.xctest */,
+				FBA69FA62A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest */,
 				BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */,
 				C415174C273AE3CE00646740 /* Expected-TEST-FinalReport-for-invalid-xml.xml */,
 			);
@@ -272,8 +278,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBA69FA72A45F889003BADBF /* BPLogicTestFixture_arm64.xctest in Resources */,
 				BA9C2DB11DD67B66007CB967 /* testScheme.xcscheme in Resources */,
 				BA9C2DAF1DD674AD007CB967 /* BPSampleAppTests.xctest in Resources */,
+				FBA69FA82A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest in Resources */,
 				E49235FF22EA847700395D98 /* times.json in Resources */,
 				C415174F273AEAC400646740 /* simulator in Resources */,
 				0173521323679E87008BFA4E /* TEST-FinalReport.xml in Resources */,

@@ -132,6 +132,10 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) SimDeviceType *simDeviceType;
 @property (nonatomic, strong) SimRuntime *simRuntime;
 
+@property (nonatomic, strong) NSString *xctestBinaryPath;
+@property (nonatomic, strong) NSString *dyldFrameworkPath;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *standardizedSwiftTestNames;
+
 
 /**
  Return a structure suitable for passing to `getopt()`'s long options.

@@ -141,7 +141,12 @@
                                                                                                    andXCTestFiles:xcTestFiles];
 
     NSMutableArray<BPXCTestFile *> *bundles = [[NSMutableArray alloc] init];
+    
+    NSInteger counter = 0;
     for (BPXCTestFile *xctFile in xcTestFiles) {
+        counter += 1;
+        [BPUtils printInfo:INFO withString:@"%@: Looping through... counter = %@", xctFile.testBundlePath, @(counter)];
+        
         NSArray *bundleTestsToRun = [[testsToRunByFilePath[xctFile.testBundlePath] allObjects] sortedArrayUsingSelector:@selector(compare:)];
         NSNumber *estimatedBundleTime = testEstimatesByFilePath[xctFile.testBundlePath];
         // If the bundle is small enough, do not split. Also do not split if the bundle is in no_split list.

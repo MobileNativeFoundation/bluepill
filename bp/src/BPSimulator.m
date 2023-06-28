@@ -468,7 +468,6 @@
      - options:
         - -s                                    // "standalone" option
         - -w                                    // "wait_for_debugger" option
-        - -a                                    // "arch" option
      - args:
         - /Applications/.../Xcode/Agents/xctest                         // Yes, spawn redundantly requires this both the path param + an arg :)
         - -XCTest
@@ -478,14 +477,9 @@
      From `xcrun simctl spawn help`:
      `simctl spawn [-w | --wait-for-debugger] [-s | --standalone] [-a <arch> | --arch=<arch>] <device> <path to executable> [<argv 1> <argv 2> ... <argv n>]`
      */
-
-    NSString *executablePath = [[NSString alloc] initWithFormat:
-                                @"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest",
-                                self.config.xcodePath];
     NSString *xctestPath = self.config.testBundlePath;
-    NSLog(@"%@", testsToRunArg);
     NSArray *arguments = @[
-        executablePath,
+        self.config.xctestBinaryPath,
         @"-XCTest",
         testsToRunArg,
         xctestPath,
@@ -495,10 +489,15 @@
     NSString *simStdoutPath = [SimulatorHelper makeStdoutFileOnDevice:self.device];
     NSString *simStdoutRelativePath = [simStdoutPath substringFromIndex:self.device.dataPath.length];
     // Environment
-    NSDictionary *environment = @{
+    NSMutableDictionary *environment = [@{
         kOptionsStdoutKey: simStdoutRelativePath,
         kOptionsStderrKey: simStdoutRelativePath,
-    };
+    } mutableCopy];
+    if (self.config.dyldFrameworkPath) {
+        environment[@"DYLD_FRAMEWORK_PATH"] = self.config.dyldFrameworkPath;
+    }
+    [environment addEntriesFromDictionary:self.config.environmentVariables];
+    
     self.appOutput = [NSFileHandle fileHandleForReadingAtPath:simStdoutPath];
     
     NSFileHandle *outputFileHandle = [NSFileHandle fileHandleForWritingAtPath:simStdoutPath];
@@ -510,6 +509,8 @@
         @"standalone": @(1),
         @"stdout": stdoutFileDescriptor,
         @"stderr": stdoutFileDescriptor,
+//        @"stdout": @(1),
+//        @"stderr": @(2),
     };
 
     // Set up monitor
@@ -528,7 +529,7 @@
     // To see more on how to debug the expected format/inputs of the options array,
     // see the in-depth documentation in SimDevice.h.
     __block typeof(self) blockSelf = self;
-    [self.device spawnAsyncWithPath:executablePath
+    [self.device spawnAsyncWithPath:self.config.xctestBinaryPath
                             options:options
                  terminationHandler:^(int stat_loc) {
         // The naming here is confusing, but this `terminationHandler` is called once
@@ -554,10 +555,11 @@
                 [BPUtils printInfo:DEBUGINFO withString: @"Spawned XCTest execution failed with error code: %@", @(exitCode)];
             }
         }
-        [blockSelf cleanUpParser:parser fileHandle:outputFileHandle];
+        if (error) {
+            [blockSelf signalCloseToParser:parser fileHandle:outputFileHandle];
+        }
+        [blockSelf cleanUpParser:parser];
         completionBlock(error, blockSelf.monitor.appPID);
-
-        [outputFileHandle closeFile];
     } completionHandler:^(NSError *error, pid_t pid) {
         // Again, this `completionHandler` is called once the process is done SPAWNING,
         // as opposed to happening after the process itself has finished.
@@ -567,13 +569,16 @@
     }];
 }
 
-- (void)cleanUpParser:(BPTreeParser *)parser fileHandle:(NSFileHandle *)fileHandle {
-    self.monitor.appState = Completed;
-    [parser.delegate setParserStateCompleted];
-    // Post a APPCLOSED signal to the parser
+// Posts a APPCLOSED signal to the parser, indicating a crash/kill
+- (void)signalCloseToParser:(BPTreeParser *)parser fileHandle:(NSFileHandle *)fileHandle {
     [fileHandle seekToEndOfFile];
     [fileHandle writeData:[@"\nBP_APP_PROC_ENDED\n" dataUsingEncoding:NSUTF8StringEncoding]];
     [fileHandle closeFile];
+}
+
+- (void)cleanUpParser:(BPTreeParser *)parser {
+    self.monitor.appState = Completed;
+    [parser.delegate setParserStateCompleted];
 }
 
 + (NSMutableArray<NSString *> *)commandLineArgsFromConfig:(BPConfiguration *)config {
@@ -678,7 +683,8 @@
                 dispatch_source_cancel(source);
             });
             dispatch_source_set_cancel_handler(source, ^{
-                [blockSelf cleanUpParser:parser fileHandle:[NSFileHandle fileHandleForWritingAtPath:simStdoutPath]];
+                [blockSelf signalCloseToParser:parser fileHandle:[NSFileHandle fileHandleForWritingAtPath:simStdoutPath]];
+                [blockSelf cleanUpParser:parser];
             });
             dispatch_resume(source);
             self.appOutput.readabilityHandler = ^(NSFileHandle *handle) {

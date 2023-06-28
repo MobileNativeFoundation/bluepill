@@ -29,6 +29,7 @@ typedef NS_ENUM(int, BPKind) {
 };
 
 @class BPConfiguration;
+@class BPExecutionContext;
 
 @interface BPUtils : NSObject
 
@@ -273,5 +274,25 @@ typedef BOOL (^BPRunBlock)(void);
 + (NSDictionary<NSString *,NSNumber *> *)getTestEstimatesByFilePathWithConfig:(BPConfiguration *)config
                                                                     testTimes:(NSDictionary<NSString *,NSNumber *> *)testTimes
                                                                andXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles;
+
+#pragma mark - Logic Test Architecture Helpers
+
+/**
+ We can isolate a single architecture out of a universal binary using the `lipo -extract` command. By doing so, we can
+ force an executable (such as XCTest) to always run w/ the architecture we expect. This is to avoid some funny business where
+ the architecture selected can be unexpected depending on multiple factors, such as Rosetta, xcode version, etc.
+ 
+ @return the path of the new executable if possible + required, nil otherwise. In nil case, original executable should be used instead.
+ */
++ (NSString *)lipoExecutableAtPath:(NSString *)path withContext:(BPExecutionContext *)context;
+
+/**
+ Lipo'ing the universal binary alone to isolate the desired architecture will result in errors.
+ Specifically, the newly lipo'ed binary won't be able to find any of the required frameworks
+ from within the original binary. So, we need to set up the `DYLD_FRAMEWORK_PATH`
+ in the environment to include the paths to these frameworks within the original universal
+ executable's binary.
+ */
++ (NSString *)correctedDYLDFrameworkPathFromBinary:(NSString *)binaryPath;
 
 @end

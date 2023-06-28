@@ -31,6 +31,14 @@
     return [[self sampleAppPath] stringByAppendingPathComponent:@"/../BPPassingLogicTests.xctest"];
 }
 
++ (NSString *)logicTestBundlePath_x86_64 {
+    return [[NSBundle bundleWithIdentifier:@"LI.BluepillRunnerTests"] pathForResource:@"BPLogicTestFixture_x86_64" ofType:@"xctest"];
+}
+
++ (NSString *)logicTestBundlePath_arm64 {
+    return [[NSBundle bundleWithIdentifier:@"LI.BluepillRunnerTests"] pathForResource:@"BPLogicTestFixture_arm64" ofType:@"xctest"];
+}
+
 // Return the path to the sample app's xctest with new test cases
 + (NSString *)sampleAppNewTestsBundlePath {
     return [[self sampleAppPath] stringByAppendingString:@"/PlugIns/BPSampleAppNewTests.xctest"];
