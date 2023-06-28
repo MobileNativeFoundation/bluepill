@@ -509,8 +509,6 @@
         @"standalone": @(1),
         @"stdout": stdoutFileDescriptor,
         @"stderr": stdoutFileDescriptor,
-//        @"stdout": @(1),
-//        @"stderr": @(2),
     };
 
     // Set up monitor

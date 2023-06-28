@@ -27,6 +27,7 @@ def _bluepill_batch_test_impl(ctx):
             test_host_paths.append("\"{}\"".format(test_host.short_path))
             runfiles.append(test_host)
 
+
         #test_plan
         if test_host:
             test_plan = struct(
@@ -52,7 +53,6 @@ def _bluepill_batch_test_impl(ctx):
         content = struct(tests = test_plans).to_json(),
     )
     runfiles.append(test_plan_file)
-    print("lthrockm debug - " + str(struct(tests = test_plans).to_json()))
 
     # Write the shell script.
     substitutions = {

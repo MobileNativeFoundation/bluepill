@@ -51,7 +51,6 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     NSMutableDictionary *testClassesDict = [[NSMutableDictionary alloc] init];
     NSMutableArray *allClasses = [[NSMutableArray alloc] init];
     NSMutableDictionary<NSString *, NSString *> *standardizedSwiftTestNames = [NSMutableDictionary dictionary];
-    
 
     for (NSString *testName in testsArray) {
         NSArray *parts = [testName componentsSeparatedByString:@"."];
@@ -59,9 +58,6 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
             continue;
         }
         BPTestClass *testClass = testClassesDict[parts[1]];
-        if ([testClass isEqual:@"AppConfigurationManagerTests"]) {
-            NSLog(@"HERE");
-        }
         if (!testClass) {
             testClass = [[BPTestClass alloc] initWithName:parts[1]];
             testClassesDict[parts[1]] = testClass;

@@ -482,8 +482,8 @@ static void onInterrupt(int ignore) {
         
         BPExitStatus exitStatus = BPExitStatusAppCrashed;
         BOOL didhanderTimeout = error.domain == BPErrorDomain && error.code == BPHandler.timeoutErrorCode;
-        BOOL wasprocessKilledAfterTimeout = error.domain == BPErrorDomain && error.code == SIGKILL;
-        if (didhanderTimeout || wasprocessKilledAfterTimeout) {
+        BOOL wasProcessKilledAfterTimeout = error.domain == BPErrorDomain && error.code == SIGKILL;
+        if (didhanderTimeout || wasProcessKilledAfterTimeout) {
             exitStatus = BPExitStatusTestTimeout;
         }
         NEXT([__self deleteSimulatorWithContext:context andStatus:exitStatus]);

@@ -438,7 +438,6 @@ static BOOL quiet = NO;
             [bundleTestsToRun minusSet:[[NSSet alloc] initWithArray:config.testCasesToSkip]];
         }
         [BPUtils printInfo:INFO withString:@"Bundle: %@; All Tests count: %lu; bundleTestsToRun count: %lu", xctFile.testBundlePath, (unsigned long)[xctFile.allTestCases count], (unsigned long)[bundleTestsToRun count]];
-        [BPUtils printInfo:INFO withString:@"Bundle: %@; All Tests cases: %@", xctFile.testBundlePath, xctFile.allTestCases];
         if (bundleTestsToRun.count > 0) {
             testsToRunByFilePath[xctFile.testBundlePath] = bundleTestsToRun;
         }
