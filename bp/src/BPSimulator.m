@@ -495,6 +495,9 @@
     } mutableCopy];
     if (self.config.dyldFrameworkPath) {
         environment[@"DYLD_FRAMEWORK_PATH"] = self.config.dyldFrameworkPath;
+        environment[@"DYLD_LIBRARY_PATH"] = self.config.dyldFrameworkPath;
+        [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] set DYLD_FRAMEWORK_PATH = %@", environment[@"DYLD_FRAMEWORK_PATH"]];
+
     }
     [environment addEntriesFromDictionary:self.config.environmentVariables];
     
@@ -523,6 +526,9 @@
         NSData *chunk = [handle availableData];
         [parser handleChunkData:chunk];
     };
+    
+    
+    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] options = %@", options];
 
     // To see more on how to debug the expected format/inputs of the options array,
     // see the in-depth documentation in SimDevice.h.

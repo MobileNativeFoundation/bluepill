@@ -166,7 +166,11 @@
                 i++;
             }
             // Make a bundle out of current xctFile
-            BPXCTestFile *bundle = [self makeBundle:xctFile withTests:bundleTestsToRun startAt:startIndex numTests:(i-startIndex) estimatedTime:[NSNumber numberWithDouble:splitExecTime]];
+            NSInteger numTests = i - startIndex;
+            if (numTests <= 0) {
+                break;
+            }
+            BPXCTestFile *bundle = [self makeBundle:xctFile withTests:bundleTestsToRun startAt:startIndex numTests:numTests estimatedTime:[NSNumber numberWithDouble:splitExecTime]];
             [bundles addObject:bundle];
         }
     }

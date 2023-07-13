@@ -17,15 +17,18 @@
 // Return the path to the test plan json file. The json is packed into the app bundle as resource
 + (NSString *)testPlanPath;
 
-// Return the path to logic tests, that are run unhosted rather than on the Sampple App
+// Return the path to logic tests, that are run unhosted rather than on the Sample App
 + (NSString *)logicTestBundlePath;
 
-// Return the path to logic tests, that are run unhosted rather than on the Sampple App
+// Return the path to logic tests, that are run unhosted rather than on the Sample App
 // This particular bundle will only have passing tests to make certain functionalities easier to test.
 + (NSString *)passingLogicTestBundlePath;
 
 // A pre-built test bundle that will always be in x86_64
 + (NSString *)logicTestBundlePath_x86_64;
+
+// A pre-built test bundle containing swift tests that will always be in x86_64.
++ (NSString *)logicTestBundlePath_swift_x86_64;
 
 // A pre-built test bundle that will always be in arm64
 + (NSString *)logicTestBundlePath_arm64;

@@ -514,6 +514,7 @@ static BOOL quiet = NO;
     NSArray<NSString *> *executableArchitectures = [self availableArchitecturesForPath:path];
     BOOL isUniversalExecutable = [executableArchitectures containsObject:self.x86_64] && [executableArchitectures containsObject:self.arm64];
     if (!isUniversalExecutable) {
+        [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] !isUniversalExecutable"];
         return nil;
     }
     // Now, get the test bundle's architecture.
@@ -526,12 +527,14 @@ static BOOL quiet = NO;
     // If the test bundle is a univeral binary, no need to lipo... xctest (regardless of the arch it's in)
     // should be able to handle it.
     if (isUniversalTestBundle) {
+        [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] !isUniversalTestBundle"];
         return nil;
     }
 
     // If the test bundle's arch isn't supported by the sim, we're in an error state
     NSArray<NSString *> *simArchitectures = [self architecturesSupportedByDevice:context.runner.device];
     if (![simArchitectures containsObject:testBundleArchitectures.firstObject]) {
+        [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] ![simArchitectures containsObject:testBundleArchitectures.firstObject]"];
         return nil;
     }
     
@@ -550,6 +553,10 @@ static BOOL quiet = NO;
     //   1b) no-op.     ... x86 will get handled automatically, and we have to fail if test bundle is arm64.
     //   1c) no-op.     ... arm64 will get handled automatically, and we have to fail if test bundle is x86.
     BOOL isRosetta = [self.currentArchitecture isEqual:self.x86_64] && isUniversalExecutable;
+    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] currentArchitecture = %@", self.currentArchitecture];
+    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] isUniversalExecutable = %@", @(isUniversalExecutable)];
+    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] testBundleArchitectures = %@", testBundleArchitectures];
+    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] isRosetta = %@", @(isRosetta)];
     if (!isRosetta || ![testBundleArchitectures.firstObject isEqual:self.x86_64]) {
         return nil;
     }
@@ -573,6 +580,9 @@ static BOOL quiet = NO;
 + (NSString *)correctedDYLDFrameworkPathFromBinary:(NSString *)binaryPath {
     NSString *otoolCommand = [NSString stringWithFormat:@"/usr/bin/otool -l %@", binaryPath];
     NSString *otoolInfo = [BPUtils runShell:otoolCommand];
+    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] otoolInfo = %@", otoolInfo];
+
+    // /usr/bin/otool -l  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest
     /**
      Example output looks something like this:
      
@@ -613,6 +623,9 @@ static BOOL quiet = NO;
         NSLog(@"Error creating regular expression: %@", error);
     }
     
+    
+    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] dyldFrameworkPath = %@", [paths componentsJoinedByString:@":"]];
+
     return [paths componentsJoinedByString:@":"];
 }
 

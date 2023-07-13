@@ -37,8 +37,8 @@ for test_bundle in ${TEST_BUNDLE_PATHS[@]}; do
     fi
 done
 
-# Clone and extract test hosts
-if [[-n "$TEST_HOST_PATHS"]] then
+# Clone and extract test hosts (won't be set for logic tests)
+if [ ! -z ${test_host_paths+x} ]; then 
     for test_host in ${TEST_HOST_PATHS[@]}; do
         if [[ "$test_host" == *.ipa ]]; then
             TEST_HOST_NAME=$(basename_without_extension "${test_host}")
