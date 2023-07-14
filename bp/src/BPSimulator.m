@@ -18,6 +18,8 @@
 #import "BPWaitTimer.h"
 #import "PrivateHeaders/CoreSimulator/CoreSimulator.h"
 #import "SimulatorHelper.h"
+#import <BPXCTestWrapper/BPXCTestWrapperConstants.h>
+#import <BPXCTestWrapper/BPTestCaseInfo.h>
 
 @interface BPSimulator()
 
@@ -441,6 +443,7 @@
 - (void)executeLogicTestsWithParser:(BPTreeParser *)parser
                             onSpawn:(void (^)(NSError *, pid_t))spawnBlock
                       andCompletion:(void (^)(NSError *, pid_t))completionBlock {
+    [self collectTestSuiteInfo];
     /*
      Grab all test cases so that we can:
        1) create a timeout for the full test execution
@@ -542,23 +545,7 @@
         
         // Check the location where the status code is stored;
         // Handle error if there is a signal or non-zero exit code.
-        NSError *error;
-        if (WIFSIGNALED(stat_loc)) {
-            int signalCode = WTERMSIG(stat_loc);
-            // Ignore if the process was killed -- this occurs when we're killing
-            // a timed-out test, and shouldn't be treated as a crash.
-            if (signalCode != SIGKILL) {
-                [BPUtils printInfo:DEBUGINFO withString: @"Spawned XCTest execution failed with signal code: %@", @(signalCode)];
-                error = [BPUtils errorWithSignalCode:signalCode];
-            }
-        } else {
-            // A non-zero exit code could mean a failed test or something more serious, but we can't tell the difference here.
-            // The best we can do is log the error code as debug info.
-            int exitCode = WEXITSTATUS(stat_loc);
-            if (exitCode) {
-                [BPUtils printInfo:DEBUGINFO withString: @"Spawned XCTest execution failed with error code: %@", @(exitCode)];
-            }
-        }
+        NSError *error = [BPSimulator errorFromStatusLocation:stat_loc];
         if (error) {
             [blockSelf signalCloseToParser:parser fileHandle:outputFileHandle];
         }
@@ -571,6 +558,81 @@
         blockSelf.monitor.appState = Running;
         spawnBlock(error, pid);
     }];
+}
+
+- (void)collectTestSuiteInfo {
+    NSString *xctestPath = self.config.testBundlePath;
+    NSArray *arguments = @[
+        self.config.xctestBinaryPath,
+        @"-XCTest",
+        @"All",
+        xctestPath,
+    ];
+
+    NSString *testSuiteInfoOutputPath = [SimulatorHelper makeTestWrapperOutputFileOnDevice:self.device];
+    // Intercept stdout, stderr and post as simulator-output events
+    NSString *simStdoutPath = [SimulatorHelper makeStdoutFileOnDevice:self.device];
+    NSString *simStdoutRelativePath = [simStdoutPath substringFromIndex:self.device.dataPath.length];
+
+    // Environment
+    NSMutableDictionary *environment = [[SimulatorHelper logicTestEnvironmentWithConfig:self.config stdoutRelativePath:simStdoutRelativePath] mutableCopy];
+    
+    environment[@"DYLD_INSERT_LIBRARIES"] = [BPUtils findBPXCTestWrapperDYLIB];
+    environment[BPXCTestWrapperConstants.outputPathEnvironmentKey] = testSuiteInfoOutputPath;
+    
+    NSFileHandle *outputFileHandle = [NSFileHandle fileHandleForWritingAtPath:simStdoutPath];
+    NSNumber *stdoutFileDescriptor = @(outputFileHandle.fileDescriptor);
+
+    NSDictionary *options = @{
+        kOptionsArgumentsKey: arguments,
+        kOptionsEnvironmentKey: environment,
+        @"standalone": @(1),
+        @"stdout": @(0), // stdoutFileDescriptor,
+        @"stderr": @(1), // stdoutFileDescriptor,
+    };
+
+    // To see more on how to debug the expected format/inputs of the options array,
+    // see the in-depth documentation in SimDevice.h.
+    __block typeof(self) blockSelf = self;
+    [self.device spawnAsyncWithPath:self.config.xctestBinaryPath
+                            options:options
+                 terminationHandler:^(int stat_loc) {
+        NSError *error = [BPSimulator errorFromStatusLocation:stat_loc];
+        if (error) {
+            // LTHROCKM - TODO: Handle error
+        }
+        NSError *unarchiveError;
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:testSuiteInfoOutputPath];
+        NSData *testData = [fileHandle readDataToEndOfFile];
+        NSArray<BPTestCaseInfo *> *testCaseInfo = [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:BPTestCaseInfo.class
+                                                                                            fromData:testData
+                                                                                               error:&unarchiveError];
+        [fileHandle closeFile];
+        // LTHROCKM - TODO: Call completion w/ enumerated test cases...
+    } completionHandler:^(NSError *error, pid_t pid) {
+        // LTHROCKM - TODO: Anything here? Maybe an execution timer, etc.
+    }];
+}
+
++ (NSError *)errorFromStatusLocation:(int)stat_loc {
+    NSError *error;
+    if (WIFSIGNALED(stat_loc)) {
+        int signalCode = WTERMSIG(stat_loc);
+        // Ignore if the process was killed -- this occurs when we're killing
+        // a timed-out test, and shouldn't be treated as a crash.
+        if (signalCode != SIGKILL) {
+            [BPUtils printInfo:DEBUGINFO withString: @"Spawned XCTest execution failed with signal code: %@", @(signalCode)];
+            return [BPUtils errorWithSignalCode:signalCode];
+        }
+    } else {
+        // A non-zero exit code could mean a failed test or something more serious, but we can't tell the difference here.
+        // The best we can do is log the error code as debug info.
+        int exitCode = WEXITSTATUS(stat_loc);
+        if (exitCode) {
+            [BPUtils printInfo:DEBUGINFO withString: @"Spawned XCTest execution failed with error code: %@", @(exitCode)];
+        }
+    }
+    return nil;
 }
 
 // Posts a APPCLOSED signal to the parser, indicating a crash/kill

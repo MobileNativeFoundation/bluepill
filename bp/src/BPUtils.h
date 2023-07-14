@@ -51,6 +51,8 @@ typedef NS_ENUM(int, BPKind) {
  */
 + (BOOL)isBuildScript;
 
++ (NSString *)findBPXCTestWrapperDYLIB;
+
 + (NSString *)findExecutablePath:(NSString *)execName;
 
 /*!

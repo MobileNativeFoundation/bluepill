@@ -114,6 +114,9 @@
 		FBD772BF2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD772BE2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m */; };
 		FBD772C12A3452240098CEFD /* BPTestUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = FBBBD8EE29A06AF6002B9115 /* BPTestUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBD772C22A3453010098CEFD /* BPTestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */; };
+		FBF6B1BB2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF6B1BA2A61CE4800D7A64B /* libBPXCTestWrapper.dylib */; };
+		FBF6B1BC2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF6B1BA2A61CE4800D7A64B /* libBPXCTestWrapper.dylib */; };
+		FBF6B1BD2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF6B1BA2A61CE4800D7A64B /* libBPXCTestWrapper.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -176,7 +179,6 @@
 		7A7901821D5CB679004D4325 /* bp */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = bp; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A7901851D5CB679004D4325 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7A79018C1D5CF113004D4325 /* bp.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = bp.xcconfig; sourceTree = "<group>"; };
-		7A79018E1D5D136F004D4325 /* CoreSimulator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreSimulator.framework; path = Library/PrivateFrameworks/CoreSimulator.framework; sourceTree = DEVELOPER_DIR; };
 		7A7D66001DB679820015C937 /* BPStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPStats.h; sourceTree = "<group>"; };
 		7A7D66011DB679820015C937 /* BPStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPStats.m; sourceTree = "<group>"; };
 		7A7E7BAE1DF2066B007928F3 /* BPHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPHandler.h; sourceTree = "<group>"; };
@@ -216,7 +218,6 @@
 		BA180A081DBB00FA00D7D130 /* BPUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPUtilsTests.m; sourceTree = "<group>"; };
 		BA180A0B1DBB011200D7D130 /* testConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = testConfig.json; sourceTree = "<group>"; };
 		BA180A131DBB088100D7D130 /* testScheme.xcscheme */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = testScheme.xcscheme; sourceTree = "<group>"; };
-		BA1896B321791683000CEC36 /* CoreSimulator */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = CoreSimulator; path = ../../../../../Library/Developer/PrivateFrameworks/CoreSimulator.framework/Versions/A/CoreSimulator; sourceTree = "<group>"; };
 		BA1896B6217916F8000CEC36 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/MacOSX.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		BA1949341E4AF82F00881887 /* BPTMDRunnerConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTMDRunnerConnection.h; sourceTree = "<group>"; };
 		BA1949351E4AF82F00881887 /* BPTMDRunnerConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTMDRunnerConnection.m; sourceTree = "<group>"; };
@@ -330,12 +331,10 @@
 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 		C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "simulator-preferences.plist"; sourceTree = "<group>"; };
 		FB1C695529A6E58500BFDFB4 /* BluepillUnhostedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BluepillUnhostedTests.m; sourceTree = "<group>"; };
-		FB9F19302A32E97B00C894D3 /* libBPXCTestWrapper.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = libBPXCTestWrapper.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestUtils.m; sourceTree = "<group>"; };
 		FBBBD8EE29A06AF6002B9115 /* BPTestUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestUtils.h; sourceTree = "<group>"; };
-		FBD772AA2A32F2300098CEFD /* BPTestCaseInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = BPTestCaseInfo.m; path = ../BPXCTestWrapper/BPTestCaseInfo.m; sourceTree = "<group>"; };
-		FBD772AB2A32F2300098CEFD /* BPTestCaseInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BPTestCaseInfo.h; path = ../BPXCTestWrapper/BPTestCaseInfo.h; sourceTree = "<group>"; };
 		FBD772BE2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BluepillUnhostedBatchingTests.m; sourceTree = "<group>"; };
+		FBF6B1BA2A61CE4800D7A64B /* libBPXCTestWrapper.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libBPXCTestWrapper.dylib; path = "../../../../Library/Developer/Xcode/DerivedData/Bluepill-bzfbmrywvaiilwcxmhvmpqnjsiso/Build/Products/Debug/libBPXCTestWrapper.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -347,6 +346,7 @@
 				B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */,
 				7AB913001D5E209800621608 /* AppKit.framework in Frameworks */,
 				7AB913011D5E209800621608 /* Foundation.framework in Frameworks */,
+				FBF6B1BB2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,6 +355,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA1896B5217916A5000CEC36 /* CoreSimulator.framework in Frameworks */,
+				FBF6B1BD2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -362,6 +363,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBF6B1BC2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,16 +459,12 @@
 		7A79018D1D5D136F004D4325 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FBD772AB2A32F2300098CEFD /* BPTestCaseInfo.h */,
-				FBD772AA2A32F2300098CEFD /* BPTestCaseInfo.m */,
-				FB9F19302A32E97B00C894D3 /* libBPXCTestWrapper.dylib */,
+				FBF6B1BA2A61CE4800D7A64B /* libBPXCTestWrapper.dylib */,
 				C47411F7264F4C3F000F84D1 /* XcodeKit.framework */,
 				BA1896B6217916F8000CEC36 /* XCTest.framework */,
-				BA1896B321791683000CEC36 /* CoreSimulator */,
 				B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */,
 				BA1809BC1DB89B8B00D7D130 /* AppKit.framework */,
 				7AB912FE1D5E209800621608 /* AppKit.framework */,
-				7A79018E1D5D136F004D4325 /* CoreSimulator.framework */,
 				7A58D2E51D62689B002F6B6D /* DVTFoundation.framework */,
 				7AB912FF1D5E209800621608 /* Foundation.framework */,
 			);
@@ -1079,6 +1077,10 @@
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
@@ -1118,6 +1120,10 @@
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
@@ -1163,6 +1169,10 @@
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_LDFLAGS = "";
@@ -1200,6 +1210,10 @@
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_LDFLAGS = "";

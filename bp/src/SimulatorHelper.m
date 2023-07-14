@@ -62,6 +62,22 @@
     return YES;
 }
 
++ (NSDictionary *)logicTestEnvironmentWithConfig:(BPConfiguration *)config
+                              stdoutRelativePath:(NSString *)path {
+    NSMutableDictionary<NSString *, id> *environment = [@{
+        kOptionsStdoutKey: path,
+        kOptionsStderrKey: path,
+    } mutableCopy];
+    if (config.dyldFrameworkPath) {
+        environment[@"DYLD_FRAMEWORK_PATH"] = config.dyldFrameworkPath;
+        // DYLD_LIBRARY_PATH is required specifically for swift tests, which require libXCTestSwiftSupport,
+        // which must be findable in the library path.
+        environment[@"DYLD_LIBRARY_PATH"] = config.dyldFrameworkPath;
+    }
+    [environment addEntriesFromDictionary:config.environmentVariables];
+    return [environment copy];
+}
+
 + (NSDictionary *)appLaunchEnvironmentWithBundleID:(NSString *)hostBundleID
                                             device:(SimDevice *)device
                                             config:(BPConfiguration *)config {
@@ -210,16 +226,25 @@
 // Intercept stdout, stderr and post as simulator-output events
 + (NSString *)makeStdoutFileOnDevice:(SimDevice *)device {
     NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/stdout_stderr_%@", device.dataPath, [[device UDID] UUIDString]];
-    NSString *simStdoutPath = [BPUtils mkstemp:stdout_stderr withError:nil];
-    assert(simStdoutPath != nil);
+    return [self createFileWithPathTemplate:stdout_stderr];
+}
 
-    [[NSFileManager defaultManager] removeItemAtPath:simStdoutPath error:nil];
++ (NSString *)makeTestWrapperOutputFileOnDevice:(SimDevice *)device {
+    NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/BPXCTestWrapper_testInfo_%@", device.dataPath, [[device UDID] UUIDString]];
+    return [self createFileWithPathTemplate:stdout_stderr];
+}
+
++ (NSString *)createFileWithPathTemplate:(NSString *)pathTemplate {
+    NSString *fullPath = [BPUtils mkstemp:pathTemplate withError:nil];
+    assert(fullPath != nil);
+
+    [[NSFileManager defaultManager] removeItemAtPath:fullPath error:nil];
 
     // Create empty file so we can tail it and the app can write to it
-    [[NSFileManager defaultManager] createFileAtPath:simStdoutPath
+    [[NSFileManager defaultManager] createFileAtPath:fullPath
                                             contents:nil
                                           attributes:nil];
-    return simStdoutPath;
+    return fullPath;
 }
 
 + (NSString *)executablePathforPath:(NSString *)path {
