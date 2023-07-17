@@ -1,6 +1,6 @@
 //
-//  BPXCTestWrapperConstants.h
-//  BPXCTestWrapper
+//  BPTestInspectorConstants.h
+//  BPTestInspector
 //
 //  Created by Lucas Throckmorton on 7/13/23.
 //
@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BPXCTestWrapperConstants : NSObject
+@interface BPTestInspectorConstants : NSObject
 
 + (NSString *)dylibName;
 + (NSString *)testBundleEnvironmentKey;

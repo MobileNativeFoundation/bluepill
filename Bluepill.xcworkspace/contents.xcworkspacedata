@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:BPXCTestWrapper/BPXCTestWrapper.xcodeproj">
+      location = "group:BPTestInspector/BPTestInspector.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:BPSampleApp/BPSampleApp.xcodeproj">

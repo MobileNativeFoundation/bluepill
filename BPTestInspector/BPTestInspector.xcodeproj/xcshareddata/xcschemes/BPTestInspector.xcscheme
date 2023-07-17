@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "FB019E972A25609F00F25BE5"
-               BuildableName = "libBPXCTestWrapper.dylib"
-               BlueprintName = "BPXCTestWrapper"
-               ReferencedContainer = "container:BPXCTestWrapper.xcodeproj">
+               BlueprintIdentifier = "AA017F401BD7776B00F45E9D"
+               BuildableName = "libBPTestInspector.dylib"
+               BlueprintName = "BPTestInspector"
+               ReferencedContainer = "container:BPTestInspector.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -50,10 +50,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "FB019E972A25609F00F25BE5"
-            BuildableName = "libBPXCTestWrapper.dylib"
-            BlueprintName = "BPXCTestWrapper"
-            ReferencedContainer = "container:BPXCTestWrapper.xcodeproj">
+            BlueprintIdentifier = "AA017F401BD7776B00F45E9D"
+            BuildableName = "libBPTestInspector.dylib"
+            BlueprintName = "BPTestInspector"
+            ReferencedContainer = "container:BPTestInspector.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -1,11 +1,11 @@
 //
 //  BPTestCaseInfo+Internal.h
-//  BPXCTestWrapper
+//  BPTestInspector
 //
 //  Created by Lucas Throckmorton on 7/14/23.
 //
 
-#import <BPXCTestWrapper/BPTestCaseInfo.h>
+#import <BPTestInspector/BPTestCaseInfo.h>
 #import "XCTestCase.h"
 
 NS_ASSUME_NONNULL_BEGIN

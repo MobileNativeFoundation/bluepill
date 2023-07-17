@@ -1,6 +1,6 @@
 //
 //  BPTestCaseInfo.h
-//  BPXCTestWrapper
+//  BPTestInspector
 //
 //  Created by Lucas Throckmorton on 6/8/23.
 //

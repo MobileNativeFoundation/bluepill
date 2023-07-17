@@ -18,8 +18,8 @@
 #import "BPWaitTimer.h"
 #import "PrivateHeaders/CoreSimulator/CoreSimulator.h"
 #import "SimulatorHelper.h"
-#import <BPXCTestWrapper/BPXCTestWrapperConstants.h>
-#import <BPXCTestWrapper/BPTestCaseInfo.h>
+#import <BPTestInspector/BPTestInspectorConstants.h>
+#import <BPTestInspector/BPTestCaseInfo.h>
 
 @interface BPSimulator()
 
@@ -444,6 +444,8 @@
                             onSpawn:(void (^)(NSError *, pid_t))spawnBlock
                       andCompletion:(void (^)(NSError *, pid_t))completionBlock {
     [self collectTestSuiteInfo];
+    return;
+    
     /*
      Grab all test cases so that we can:
        1) create a timeout for the full test execution
@@ -577,8 +579,9 @@
     // Environment
     NSMutableDictionary *environment = [[SimulatorHelper logicTestEnvironmentWithConfig:self.config stdoutRelativePath:simStdoutRelativePath] mutableCopy];
     
-    environment[@"DYLD_INSERT_LIBRARIES"] = [BPUtils findBPXCTestWrapperDYLIB];
-    environment[BPXCTestWrapperConstants.outputPathEnvironmentKey] = testSuiteInfoOutputPath;
+    environment[@"DYLD_INSERT_LIBRARIES"] = [BPUtils findBPTestInspectorDYLIB];
+    environment[BPTestInspectorConstants.outputPathEnvironmentKey] = testSuiteInfoOutputPath;
+    environment[BPTestInspectorConstants.testBundleEnvironmentKey] = xctestPath;
     
     NSFileHandle *outputFileHandle = [NSFileHandle fileHandleForWritingAtPath:simStdoutPath];
     NSNumber *stdoutFileDescriptor = @(outputFileHandle.fileDescriptor);
@@ -587,8 +590,10 @@
         kOptionsArgumentsKey: arguments,
         kOptionsEnvironmentKey: environment,
         @"standalone": @(1),
-        @"stdout": @(0), // stdoutFileDescriptor,
-        @"stderr": @(1), // stdoutFileDescriptor,
+        @"stdout": @(0),
+        @"stderr": @(1),
+//        @"stdout": stdoutFileDescriptor,
+//        @"stderr": stdoutFileDescriptor,
     };
 
     // To see more on how to debug the expected format/inputs of the options array,
@@ -601,13 +606,17 @@
         if (error) {
             // LTHROCKM - TODO: Handle error
         }
-        NSError *unarchiveError;
-        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:testSuiteInfoOutputPath];
-        NSData *testData = [fileHandle readDataToEndOfFile];
-        NSArray<BPTestCaseInfo *> *testCaseInfo = [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:BPTestCaseInfo.class
-                                                                                            fromData:testData
-                                                                                               error:&unarchiveError];
-        [fileHandle closeFile];
+        NSString *content = [NSString stringWithContentsOfFile:testSuiteInfoOutputPath encoding:NSUTF8StringEncoding error:nil];
+        NSLog(@"[LTHROCKM DEBUG] testCaseInfo: %@", content);
+        
+//        NSError *unarchiveError;
+//        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:testSuiteInfoOutputPath];
+//        NSData *testData = [fileHandle readDataToEndOfFile];
+//        NSArray<BPTestCaseInfo *> *testCaseInfo = [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:BPTestCaseInfo.class
+//                                                                                            fromData:testData
+//                                                                                               error:&unarchiveError];
+//        [fileHandle closeFile];
+//        NSLog(@"[LTHROCKM DEBUG] testCaseInfo: %@", testCaseInfo);
         // LTHROCKM - TODO: Call completion w/ enumerated test cases...
     } completionHandler:^(NSError *error, pid_t pid) {
         // LTHROCKM - TODO: Anything here? Maybe an execution timer, etc.

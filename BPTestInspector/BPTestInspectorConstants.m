@@ -1,16 +1,16 @@
 //
-//  BPXCTestWrapperConstants.m
-//  BPXCTestWrapper
+//  BPTestInspectorConstants.m
+//  BPTestInspector
 //
 //  Created by Lucas Throckmorton on 7/13/23.
 //
 
-#import "BPXCTestWrapperConstants.h"
+#import "BPTestInspectorConstants.h"
 
-@implementation BPXCTestWrapperConstants
+@implementation BPTestInspectorConstants
 
 + (NSString *)dylibName {
-    return @"libBPXCTestWrapper.dylib";
+    return @"libBPTestInspector.dylib";
 }
 
 + (NSString *)testBundleEnvironmentKey {

@@ -1,6 +1,6 @@
 //
 //  BPLoggingUtils.m
-//  BPXCTestWrapper
+//  BPTestInspector
 //
 //  Created by Lucas Throckmorton on 6/8/23.
 //
@@ -10,11 +10,11 @@
 @implementation BPLoggingUtils
 
 + (void)log:(NSString *)message {
-    NSLog(@"[BPXCTestWrapper] %@", message);
+    NSLog(@"[BPTestInspector] %@", message);
 }
 
 + (void)logError:(NSString *)errorMessage {
-    NSLog(@"[BPXCTestWrapper] Error: %@", errorMessage);
+    NSLog(@"[BPTestInspector] Error: %@", errorMessage);
 }
 
 @end

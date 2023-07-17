@@ -110,13 +110,13 @@
 		C4FAC2951E5E67ED00ACC5D9 /* testConfig-busted.json in Resources */ = {isa = PBXBuildFile; fileRef = C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */; };
 		C94DE0BB4360016D3D3061D9 /* simulator-preferences.plist in Resources */ = {isa = PBXBuildFile; fileRef = C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */; };
 		FB1C695629A6E58500BFDFB4 /* BluepillUnhostedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB1C695529A6E58500BFDFB4 /* BluepillUnhostedTests.m */; };
+		FB21F0BB2A622FF600682AC7 /* libBPMacTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB21F0BA2A622FF600682AC7 /* libBPMacTestInspector.dylib */; };
+		FB21F0BC2A622FF600682AC7 /* libBPMacTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB21F0BA2A622FF600682AC7 /* libBPMacTestInspector.dylib */; };
+		FB21F0BD2A622FF600682AC7 /* libBPMacTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB21F0BA2A622FF600682AC7 /* libBPMacTestInspector.dylib */; };
 		FBBBD8EF29A06AF6002B9115 /* BPTestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */; };
 		FBD772BF2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD772BE2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m */; };
 		FBD772C12A3452240098CEFD /* BPTestUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = FBBBD8EE29A06AF6002B9115 /* BPTestUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FBD772C22A3453010098CEFD /* BPTestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */; };
-		FBF6B1BB2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF6B1BA2A61CE4800D7A64B /* libBPXCTestWrapper.dylib */; };
-		FBF6B1BC2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF6B1BA2A61CE4800D7A64B /* libBPXCTestWrapper.dylib */; };
-		FBF6B1BD2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBF6B1BA2A61CE4800D7A64B /* libBPXCTestWrapper.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -331,10 +331,10 @@
 		C4FAC2941E5E67ED00ACC5D9 /* testConfig-busted.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "testConfig-busted.json"; sourceTree = "<group>"; };
 		C94DEF7F8BCA7AB3C9114467 /* simulator-preferences.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "simulator-preferences.plist"; sourceTree = "<group>"; };
 		FB1C695529A6E58500BFDFB4 /* BluepillUnhostedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BluepillUnhostedTests.m; sourceTree = "<group>"; };
+		FB21F0BA2A622FF600682AC7 /* libBPMacTestInspector.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libBPMacTestInspector.dylib; sourceTree = "<group>"; };
 		FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestUtils.m; sourceTree = "<group>"; };
 		FBBBD8EE29A06AF6002B9115 /* BPTestUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestUtils.h; sourceTree = "<group>"; };
 		FBD772BE2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BluepillUnhostedBatchingTests.m; sourceTree = "<group>"; };
-		FBF6B1BA2A61CE4800D7A64B /* libBPXCTestWrapper.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libBPXCTestWrapper.dylib; path = "../../../../Library/Developer/Xcode/DerivedData/Bluepill-bzfbmrywvaiilwcxmhvmpqnjsiso/Build/Products/Debug/libBPXCTestWrapper.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -342,11 +342,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB21F0BB2A622FF600682AC7 /* libBPMacTestInspector.dylib in Frameworks */,
 				C487CB1C226A663C00CC5BC2 /* bplib.framework in Frameworks */,
 				B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */,
 				7AB913001D5E209800621608 /* AppKit.framework in Frameworks */,
 				7AB913011D5E209800621608 /* Foundation.framework in Frameworks */,
-				FBF6B1BB2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,8 +354,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB21F0BD2A622FF600682AC7 /* libBPMacTestInspector.dylib in Frameworks */,
 				BA1896B5217916A5000CEC36 /* CoreSimulator.framework in Frameworks */,
-				FBF6B1BD2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,7 +363,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBF6B1BC2A61CE4800D7A64B /* libBPXCTestWrapper.dylib in Frameworks */,
+				FB21F0BC2A622FF600682AC7 /* libBPMacTestInspector.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,7 +459,7 @@
 		7A79018D1D5D136F004D4325 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				FBF6B1BA2A61CE4800D7A64B /* libBPXCTestWrapper.dylib */,
+				FB21F0BA2A622FF600682AC7 /* libBPMacTestInspector.dylib */,
 				C47411F7264F4C3F000F84D1 /* XcodeKit.framework */,
 				BA1896B6217916F8000CEC36 /* XCTest.framework */,
 				B324B91C1F280AD100AAE2BC /* CoreSimulator.framework */,
@@ -1237,6 +1237,10 @@
 				);
 				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
@@ -1269,6 +1273,10 @@
 				);
 				INFOPLIST_FILE = tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (

@@ -1,6 +1,6 @@
 //
 //  BPXCTestUtils.m
-//  BPXCTestWrapper
+//  BPTestInspector
 //
 //  Created by Lucas Throckmorton on 6/8/23.
 //
@@ -22,8 +22,8 @@
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:testCases requiringSecureCoding:NO error:&encodingError];
     // Write to file.
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:outputPath];
-    [fileHandle writeData:data];
-//    [testCases.description writeToFile:outputPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+//    [fileHandle writeData:data];
+    [testCases.description writeToFile:outputPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
     [fileHandle closeFile];
     
     NSString *output = [NSString stringWithFormat:@"Wrote to file: %@.", outputPath];
@@ -63,6 +63,9 @@
      */
     if (dlopen(bundle.executablePath.UTF8String, RTLD_LAZY) == NULL) {
         [BPLoggingUtils logError:[NSString stringWithFormat:@"Unable to open test bundle's executable path - %@", bundle.executablePath]];
+        
+        [BPLoggingUtils logError:@"What's the error???"];
+        fprintf(stderr, "%s\n", dlerror());
         return @[];
     }
 

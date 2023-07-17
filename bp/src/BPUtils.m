@@ -16,7 +16,7 @@
 #import "SimDeviceType.h"
 #import "BPExecutionContext.h"
 #import "BPSimulator.h"
-#import <BPXCTestWrapper/BPXCTestWrapperConstants.h>
+#import <BPTestInspector/BPTestInspectorConstants.h>
 
 @implementation BPUtils
 
@@ -127,16 +127,16 @@ static BOOL quiet = NO;
     return execPath;
 }
 
-+ (NSString *)findBPXCTestWrapperDYLIB {
++ (NSString *)findBPTestInspectorDYLIB {
     NSString *argv0 = [[[NSProcessInfo processInfo] arguments] objectAtIndex:0];
-    NSString *path = [[argv0 stringByDeletingLastPathComponent] stringByAppendingPathComponent:BPXCTestWrapperConstants.dylibName];
+    NSString *path = [[argv0 stringByDeletingLastPathComponent] stringByAppendingPathComponent:BPTestInspectorConstants.dylibName];
     if ([[NSFileManager defaultManager] isReadableFileAtPath:path]) {
         return path;
     }
     // The executable may also be in derived data, accessible from the app's current working directory.
     NSString *buildProductsDir = [NSFileManager.defaultManager.currentDirectoryPath stringByDeletingLastPathComponent];
     NSString *iPhoneSimDir = [buildProductsDir stringByAppendingPathComponent:@"Debug-iphonesimulator"];
-    path = [iPhoneSimDir stringByAppendingPathComponent:BPXCTestWrapperConstants.dylibName];
+    path = [iPhoneSimDir stringByAppendingPathComponent:BPTestInspectorConstants.dylibName];
     if ([[NSFileManager defaultManager] isReadableFileAtPath:path]) {
         return path;
     }

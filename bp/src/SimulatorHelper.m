@@ -230,7 +230,7 @@
 }
 
 + (NSString *)makeTestWrapperOutputFileOnDevice:(SimDevice *)device {
-    NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/BPXCTestWrapper_testInfo_%@", device.dataPath, [[device UDID] UUIDString]];
+    NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/BPTestInspector_testInfo_%@", device.dataPath, [[device UDID] UUIDString]];
     return [self createFileWithPathTemplate:stdout_stderr];
 }
 

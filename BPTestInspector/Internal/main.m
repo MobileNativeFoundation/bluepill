@@ -1,6 +1,6 @@
 //
 //  main.m
-//  BPXCTestWrapper
+//  BPTestInspector
 //
 //  Created by Lucas Throckmorton on 5/29/23.
 //
@@ -11,7 +11,7 @@
 
 #import "BPXCTestUtils.h"
 #import "BPLoggingUtils.h"
-#import "BPXCTestWrapperConstants.h"
+#import "BPTestInspectorConstants.h"
 
 //void tearDown(int signal) {
 //}
@@ -37,14 +37,14 @@ static void didLoad() {
     [BPLoggingUtils log:@"Returning."];
     return;
     #endif
-    
+
     // Grab relavent info from environment
-    NSString *bundlePath = NSProcessInfo.processInfo.environment[BPXCTestWrapperConstants.testBundleEnvironmentKey];
-    NSString *outputPath = NSProcessInfo.processInfo.environment[BPXCTestWrapperConstants.outputPathEnvironmentKey];
+    NSString *bundlePath = NSProcessInfo.processInfo.environment[BPTestInspectorConstants.testBundleEnvironmentKey];
+    NSString *outputPath = NSProcessInfo.processInfo.environment[BPTestInspectorConstants.outputPathEnvironmentKey];
     // Reset DYLD_INSERT_LIBRARIES and other env variables to avoid impacting future processes
     unsetenv("DYLD_INSERT_LIBRARIES");
-    unsetenv(BPXCTestWrapperConstants.testBundleEnvironmentKey.UTF8String);
-    unsetenv(BPXCTestWrapperConstants.outputPathEnvironmentKey.UTF8String);
+    unsetenv(BPTestInspectorConstants.testBundleEnvironmentKey.UTF8String);
+    unsetenv(BPTestInspectorConstants.outputPathEnvironmentKey.UTF8String);
 
     if (!bundlePath || !outputPath) {
         return;
