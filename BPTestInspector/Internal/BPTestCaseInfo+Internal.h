@@ -6,13 +6,19 @@
 //
 
 #import <BPTestInspector/BPTestCaseInfo.h>
-#import "XCTestCase.h"
+
+@class XCTestCase;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface BPTestCaseInfo (Internal)
 
 + (instancetype)infoFromTestCase:(XCTestCase *)testCase;
+
+#pragma mark - Testing
+
+- (instancetype)initWithClassName:(NSString *)className
+                       methodName:(NSString *)methodName;
 
 @end
 

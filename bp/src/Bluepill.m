@@ -21,6 +21,7 @@
 #import <libproc.h>
 #import "BPTMDControlConnection.h"
 #import "BPTMDRunnerConnection.h"
+#import "BPTestInspectionHandler.h"
 #import "BPXCTestFile.h"
 #import <objc/runtime.h>
 
@@ -312,15 +313,7 @@ static void onInterrupt(int ignore) {
             [context.runner runScriptFile:self.config.scriptFilePath];
         }
 
-        if (self.config.isLogicTestTarget) {
-            NEXT([__self executeLogicTestsWithContext:context])
-        } else if (self.config.cloneSimulator) {
-            // launch application directly when clone simulator
-            NEXT([__self launchApplicationWithContext:context]);
-        } else {
-            // Install application when test without clone
-            NEXT([__self installApplicationWithContext:context]);
-        };
+        NEXT([__self enumerateTestsWithContext:context]);
     };
 
     handler.onError = ^(NSError *error) {
@@ -408,7 +401,7 @@ static void onInterrupt(int ignore) {
     }
 }
 
-- (void)executeLogicTestsWithContext:(BPExecutionContext *)context {
+- (void)adaptXCTestIfRequiredWithContext:(BPExecutionContext *)context {
     // First we need to make sure the archs are consistent between the xctest executable + the test bundle.
     NSString *originalXCTestPath = [[NSString alloc] initWithFormat:
                                     @"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest",
@@ -418,6 +411,70 @@ static void onInterrupt(int ignore) {
         context.config.dyldFrameworkPath = [BPUtils correctedDYLDFrameworkPathFromBinary:originalXCTestPath];
     }
     context.config.xctestBinaryPath = newXCTestPath ?: originalXCTestPath;
+}
+
+- (void)enumerateTestsWithContext:(BPExecutionContext *)context {
+    NSString *stepName = TEST_INSPECTION(context.attemptNumber);
+    [BPUtils printInfo:INFO withString:@"%@", stepName];
+
+    // Now create handler for when the process completes
+
+    [[BPStats sharedStats] startTimer:stepName];
+    BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[context.config.launchTimeout doubleValue]];
+    [timer start];
+
+    // Set up completion handler for when we load the tests.
+    BPHandler *completionHandler = [BPTestInspectionHandler handlerWithTimer:timer];
+    __weak typeof(self) __self = self;
+    completionHandler.onSuccess = ^{
+        // Note, we can't actually handle the tests themselves here... that will
+        // need to be handled in a wrapping block below.
+        [BPUtils printInfo:DEBUGINFO withString:@"Test bundle inspected for tests."];
+        [[BPStats sharedStats] endTimer:stepName withResult:@"INFO"];
+        
+        if (self.config.isLogicTestTarget) {
+            NEXT([__self executeLogicTestsWithContext:context])
+        } else if (self.config.cloneSimulator) {
+            // launch application directly when clone simulator
+            NEXT([__self launchApplicationWithContext:context]);
+        } else {
+            // Install application when test without clone
+            NEXT([__self installApplicationWithContext:context]);
+        };
+    };
+
+    completionHandler.onError = ^(NSError *error) {
+        [[BPStats sharedStats] endTimer:stepName withResult:@"ERROR"];
+        [BPUtils printInfo:ERROR withString:@"Spawned logic test execution failed: %@", [error localizedDescription]];
+
+        BPExitStatus exitStatus = BPExitStatusLaunchAppFailed;
+        NEXT([__self deleteSimulatorWithContext:context andStatus:exitStatus]);
+    };
+
+    completionHandler.onTimeout = ^{
+        [[BPStats sharedStats] endTimer:stepName withResult:@"TIMEOUT"];
+        [BPUtils printInfo:FAILED withString:@"Timeout: %@", stepName];
+    };
+
+    // If test cases are already enumerated, skip straight to executing tests.
+    if (context.config.allTestCases) {
+        completionHandler.defaultHandlerBlock(nil);
+        return;
+    }
+
+    // Otherwise, make sure XCTest binary is formatted correctly for current arch. Then get test info.
+    [self adaptXCTestIfRequiredWithContext:context];
+    [context.runner collectTestSuiteInfoWithCompletion:^(NSArray<BPTestCaseInfo *> *testBundleInfo, NSError *error) {
+        if (testBundleInfo) {
+            __self.config.allTests = testBundleInfo;
+            context.config.allTests = testBundleInfo;
+        }
+        completionHandler.defaultHandlerBlock(error);
+    }];
+}
+
+- (void)executeLogicTestsWithContext:(BPExecutionContext *)context {
+    [self adaptXCTestIfRequiredWithContext:context];
 
     // We get two callbacks after trying to spawn an execution. They happen when:
     //   1) Immediately after the process is spawned.

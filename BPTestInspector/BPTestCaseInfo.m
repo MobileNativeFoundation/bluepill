@@ -6,43 +6,73 @@
 //
 
 #import "BPTestCaseInfo+Internal.h"
+#import "XCTestCase.h"
 
 @implementation BPTestCaseInfo
 
-- (instancetype)initWithModuleName:(NSString *)moduleName
-                         className:(NSString *)className
-                        methodName:(NSString *)methodName {
+#pragma mark - Initializers
+
+- (instancetype)initWithClassName:(NSString *)className
+                       methodName:(NSString *)methodName {
     if (self = [super init]) {
-        _moduleName = moduleName;
-        _className = className;
-        _methodName = methodName;
-        _fullNamespace = [NSString stringWithFormat:@"%@.%@/%@", moduleName, className, methodName];
+        _className = [className copy];
+        _methodName = [methodName copy];
     }
     return self;
 }
 
-
 + (instancetype)infoFromTestCase:(XCTestCase *)testCase {
-    NSString *moduleName = @"LTHROCKM - TODO";
     NSString *className = NSStringFromClass(testCase.class);
     NSString *methodName = [testCase respondsToSelector:@selector(languageAgnosticTestMethodName)] ? [testCase languageAgnosticTestMethodName] : NSStringFromSelector([testCase.invocation selector]);
-    return [[BPTestCaseInfo alloc] initWithModuleName: moduleName className:className methodName:methodName];
-
+    return [[BPTestCaseInfo alloc] initWithClassName:className methodName:methodName];
 }
 
-#pragma mark - NSCoding
+#pragma mark - Properties
+
+- (NSString *)standardizedFullName {
+    return [NSString stringWithFormat:@"%@/%@", self.className, self.methodName];
+}
+
+- (NSString *)prettifiedFullName {
+    /*
+     If the class name contains a `.`, this is a Swift test case, and needs extra formatting.
+     Otherwise, we in Obj-C, it's unchanged from the `standardizedFullName`
+     */
+    NSArray<NSString *> *classComponents = [self.className componentsSeparatedByString:@"."];
+    if (classComponents.count < 2) {
+        return self.standardizedFullName;
+    }
+    return [NSString stringWithFormat:@"%@/%@()", classComponents[1], self.methodName];
+}
+
+#pragma mark - Overrides
+
+- (NSString *)description {
+    return self.standardizedFullName;
+}
+
+- (BOOL)isEqual:(id)object {
+    if (!object || ![object isMemberOfClass:BPTestCaseInfo.class]) {
+        return NO;
+    }
+    BPTestCaseInfo *other = (BPTestCaseInfo *)object;
+    return [self.className isEqual:other.className] && [self.methodName isEqual:other.methodName];
+}
+
+#pragma mark - NSSecureCoding
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
 
 - (void)encodeWithCoder:(nonnull NSCoder *)coder {
-    [coder encodeObject:self.moduleName forKey:@"moduleName"];
     [coder encodeObject:self.className forKey:@"className"];
     [coder encodeObject:self.methodName forKey:@"methodName"];
-    [coder encodeObject:self.fullNamespace forKey:@"fullNamespace"];
 }
 
 - (nullable instancetype)initWithCoder:(nonnull NSCoder *)coder {
-    return [self initWithModuleName:[coder decodeObjectForKey:@"moduleName"]
-                          className:[coder decodeObjectForKey:@"className"]
-                        methodName:[coder decodeObjectForKey:@"methodName"]];
+    return [self initWithClassName:[coder decodeObjectOfClass:NSString.class forKey:@"className"]
+                        methodName:[coder decodeObjectOfClass:NSString.class forKey:@"methodName"]];
 
 }
 

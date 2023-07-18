@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		FB21F07F2A62286400682AC7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FB21F07E2A62286400682AC7 /* main.m */; };
 		FB21F0862A62297F00682AC7 /* BPLoggingUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0812A62297F00682AC7 /* BPLoggingUtils.h */; };
-		FB21F0872A62297F00682AC7 /* BPTestCaseInfo+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0822A62297F00682AC7 /* BPTestCaseInfo+Internal.h */; };
+		FB21F0872A62297F00682AC7 /* BPTestCaseInfo+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0822A62297F00682AC7 /* BPTestCaseInfo+Internal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB21F0882A62297F00682AC7 /* BPXCTestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FB21F0832A62297F00682AC7 /* BPXCTestUtils.m */; };
 		FB21F0892A62297F00682AC7 /* BPLoggingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FB21F0842A62297F00682AC7 /* BPLoggingUtils.m */; };
 		FB21F08A2A62297F00682AC7 /* BPXCTestUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0852A62297F00682AC7 /* BPXCTestUtils.h */; };
@@ -37,6 +37,7 @@
 		FB21F0B52A622A0200682AC7 /* NSObject-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0A62A622A0200682AC7 /* NSObject-Protocol.h */; };
 		FB21F0B62A622A0200682AC7 /* _XCTestObservationInternal-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0A72A622A0200682AC7 /* _XCTestObservationInternal-Protocol.h */; };
 		FB21F0B92A622AA000682AC7 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB21F0B82A622AA000682AC7 /* XCTest.framework */; };
+		FB21F0DF2A65106E00682AC7 /* BPTestCaseInfo+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0822A62297F00682AC7 /* BPTestCaseInfo+Internal.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -210,6 +211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB21F0942A62298B00682AC7 /* BPTestCaseInfo.h in Headers */,
+				FB21F0DF2A65106E00682AC7 /* BPTestCaseInfo+Internal.h in Headers */,
 				FB21F0922A62298B00682AC7 /* BPTestInspectorConstants.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -341,6 +343,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "-";
+				GCC_OPTIMIZATION_LEVEL = 0;
 			};
 			name = Debug;
 		};
@@ -349,6 +352,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "-";
+				GCC_OPTIMIZATION_LEVEL = 0;
 			};
 			name = Release;
 		};

@@ -15,6 +15,7 @@
 @class BPConfiguration;
 @class BPTreeParser;
 @class SimDevice;
+@class BPTestCaseInfo;
 
 @interface BPSimulator : NSObject
 
@@ -41,6 +42,15 @@
 - (BOOL)installApplicationWithError:(NSError *__autoreleasing *)errPtr;
 
 - (void)launchApplicationAndExecuteTestsWithParser:(BPTreeParser *)parser andCompletion:(void (^)(NSError *, pid_t))completion;
+
+/**
+ Launches a process which inspects a test bundle, and calls a completion block with a list of all tests in the bundle.
+
+ @discussion The only way to do this is to actually launch a test execution with an injected Bluepill module. This module
+ then checks what test cases exist at runtime, and writes these cases to a file before ending the process (such that no tests are actually run).
+ We then read that file, and pass the results to the completion handler provided.
+ */
+- (void)collectTestSuiteInfoWithCompletion:(void (^)(NSArray<BPTestCaseInfo *> *, NSError *))completionBlock;
 
 /**
  Executes logic tests for the provided context, providing two callbacks as the execution starts and finishes.

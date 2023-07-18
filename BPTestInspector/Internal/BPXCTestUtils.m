@@ -19,15 +19,13 @@
     NSArray<BPTestCaseInfo *> *testCases = [self enumerateTestCasesInBundleWithPath:bundlePath];
     // Encode the test data
     NSError *encodingError;
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:testCases requiringSecureCoding:NO error:&encodingError];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:testCases requiringSecureCoding:YES error:&encodingError];
     // Write to file.
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:outputPath];
-//    [fileHandle writeData:data];
-    [testCases.description writeToFile:outputPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    [fileHandle writeData:data];
     [fileHandle closeFile];
-    
-    NSString *output = [NSString stringWithFormat:@"Wrote to file: %@.", outputPath];
-    [BPLoggingUtils log:output];
+
+    [BPLoggingUtils log:[NSString stringWithFormat:@"Wrote to file: %@.", outputPath]];
 }
 
 + (NSArray<BPTestCaseInfo *> *)enumerateTestCasesInBundleWithPath:(NSString *)bundlePath {
@@ -39,7 +37,6 @@
     }
     return [self enumerateTestCasesInBundle:bundle];
 }
-
 
 //static void listBundle(NSString *testBundlePath, NSString *outputFile)
 + (NSArray<BPTestCaseInfo *> *)enumerateTestCasesInBundle:(NSBundle *)bundle {

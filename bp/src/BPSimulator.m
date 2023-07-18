@@ -443,8 +443,11 @@
 - (void)executeLogicTestsWithParser:(BPTreeParser *)parser
                             onSpawn:(void (^)(NSError *, pid_t))spawnBlock
                       andCompletion:(void (^)(NSError *, pid_t))completionBlock {
-    [self collectTestSuiteInfo];
-    return;
+//    NSError *error;
+//    [self collectTestSuiteInfoWithCompletion:^(NSArray<BPTestCaseInfo *> *testCases) {
+//        <#code#>
+//    } error:&error];
+//    return;
     
     /*
      Grab all test cases so that we can:
@@ -562,7 +565,7 @@
     }];
 }
 
-- (void)collectTestSuiteInfo {
+- (void)collectTestSuiteInfoWithCompletion:(void (^)(NSArray<BPTestCaseInfo *> *, NSError *))completionBlock {
     NSString *xctestPath = self.config.testBundlePath;
     NSArray *arguments = @[
         self.config.xctestBinaryPath,
@@ -590,11 +593,13 @@
         kOptionsArgumentsKey: arguments,
         kOptionsEnvironmentKey: environment,
         @"standalone": @(1),
-        @"stdout": @(0),
-        @"stderr": @(1),
+//        @"stdout": @(1),
+//        @"stderr": @(2),
 //        @"stdout": stdoutFileDescriptor,
 //        @"stderr": stdoutFileDescriptor,
     };
+
+    NSLog(@"[LTHROCKM DEBUG] simStdoutPath: %@", simStdoutPath);
 
     // To see more on how to debug the expected format/inputs of the options array,
     // see the in-depth documentation in SimDevice.h.
@@ -604,22 +609,24 @@
                  terminationHandler:^(int stat_loc) {
         NSError *error = [BPSimulator errorFromStatusLocation:stat_loc];
         if (error) {
-            // LTHROCKM - TODO: Handle error
+            completionBlock(nil, error);
+            return;
         }
-        NSString *content = [NSString stringWithContentsOfFile:testSuiteInfoOutputPath encoding:NSUTF8StringEncoding error:nil];
-        NSLog(@"[LTHROCKM DEBUG] testCaseInfo: %@", content);
-        
-//        NSError *unarchiveError;
-//        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:testSuiteInfoOutputPath];
-//        NSData *testData = [fileHandle readDataToEndOfFile];
-//        NSArray<BPTestCaseInfo *> *testCaseInfo = [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:BPTestCaseInfo.class
-//                                                                                            fromData:testData
-//                                                                                               error:&unarchiveError];
-//        [fileHandle closeFile];
-//        NSLog(@"[LTHROCKM DEBUG] testCaseInfo: %@", testCaseInfo);
-        // LTHROCKM - TODO: Call completion w/ enumerated test cases...
+        // Retrieve test data
+        NSError *unarchiveError;
+        NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:testSuiteInfoOutputPath];
+        NSData *testData = [fileHandle readDataToEndOfFile];
+        NSArray<BPTestCaseInfo *> *testBundleInfo = [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:BPTestCaseInfo.class
+                                                                                              fromData:testData
+                                                                                                 error:&unarchiveError];
+        [fileHandle closeFile];
+        // Cleanup + Completion
+        [NSFileManager.defaultManager removeItemAtPath:testSuiteInfoOutputPath error:nil];
+        completionBlock(testBundleInfo, unarchiveError);
     } completionHandler:^(NSError *error, pid_t pid) {
-        // LTHROCKM - TODO: Anything here? Maybe an execution timer, etc.
+        if (error) {
+            completionBlock(nil, error);
+        }
     }];
 }
 
