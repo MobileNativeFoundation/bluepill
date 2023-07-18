@@ -443,12 +443,6 @@
 - (void)executeLogicTestsWithParser:(BPTreeParser *)parser
                             onSpawn:(void (^)(NSError *, pid_t))spawnBlock
                       andCompletion:(void (^)(NSError *, pid_t))completionBlock {
-//    NSError *error;
-//    [self collectTestSuiteInfoWithCompletion:^(NSArray<BPTestCaseInfo *> *testCases) {
-//        <#code#>
-//    } error:&error];
-//    return;
-    
     /*
      Grab all test cases so that we can:
        1) create a timeout for the full test execution

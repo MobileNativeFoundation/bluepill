@@ -133,7 +133,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) SimDeviceType *simDeviceType;
 @property (nonatomic, strong) SimRuntime *simRuntime;
 
-@property (nonatomic, strong) NSArray <BPTestCaseInfo *> *allTests;
+@property (nonatomic, strong) NSDictionary<NSString *, BPTestCaseInfo *> *allTests;
 @property (nonatomic, strong) NSString *xctestBinaryPath;
 @property (nonatomic, strong) NSString *dyldFrameworkPath;
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *standardizedSwiftTestNames;

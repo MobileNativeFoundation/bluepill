@@ -24,6 +24,7 @@
 #import "BPTestInspectionHandler.h"
 #import "BPXCTestFile.h"
 #import <objc/runtime.h>
+#import <BPTestInspector/BPTestCaseInfo.h>
 
 // CoreSimulator
 #import "PrivateHeaders/CoreSimulator/SimDevice.h"
@@ -401,7 +402,7 @@ static void onInterrupt(int ignore) {
     }
 }
 
-- (void)adaptXCTestIfRequiredWithContext:(BPExecutionContext *)context {
+- (void)adaptXCTestExecutableIfRequiredWithContext:(BPExecutionContext *)context {
     // First we need to make sure the archs are consistent between the xctest executable + the test bundle.
     NSString *originalXCTestPath = [[NSString alloc] initWithFormat:
                                     @"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest",
@@ -424,13 +425,23 @@ static void onInterrupt(int ignore) {
     [timer start];
 
     // Set up completion handler for when we load the tests.
-    BPHandler *completionHandler = [BPTestInspectionHandler handlerWithTimer:timer];
+    BPTestInspectionHandler *completionHandler = [BPTestInspectionHandler handlerWithTimer:timer];
     __weak typeof(self) __self = self;
-    completionHandler.onSuccess = ^{
+    completionHandler.onSuccess = ^(NSArray<BPTestCaseInfo *> *testBundleInfo) {
         // Note, we can't actually handle the tests themselves here... that will
         // need to be handled in a wrapping block below.
         [BPUtils printInfo:DEBUGINFO withString:@"Test bundle inspected for tests."];
         [[BPStats sharedStats] endTimer:stepName withResult:@"INFO"];
+
+        // Save the test info.
+        if (testBundleInfo) {
+            NSMutableDictionary<NSString *, BPTestCaseInfo *> *dictionary = [NSMutableDictionary dictionary];
+            for (BPTestCaseInfo *info in testBundleInfo) {
+                dictionary[info.prettifiedFullName] = info;
+            }
+            __self.config.allTests = [dictionary copy];
+            context.config.allTests = [dictionary copy];
+        }
         
         if (self.config.isLogicTestTarget) {
             NEXT([__self executeLogicTestsWithContext:context])
@@ -457,24 +468,20 @@ static void onInterrupt(int ignore) {
     };
 
     // If test cases are already enumerated, skip straight to executing tests.
-    if (context.config.allTestCases) {
-        completionHandler.defaultHandlerBlock(nil);
+    if (context.config.allTests) {
+        completionHandler.defaultHandlerBlock(context.config.allTests.allValues, nil);
         return;
     }
 
     // Otherwise, make sure XCTest binary is formatted correctly for current arch. Then get test info.
-    [self adaptXCTestIfRequiredWithContext:context];
+    [self adaptXCTestExecutableIfRequiredWithContext:context];
     [context.runner collectTestSuiteInfoWithCompletion:^(NSArray<BPTestCaseInfo *> *testBundleInfo, NSError *error) {
-        if (testBundleInfo) {
-            __self.config.allTests = testBundleInfo;
-            context.config.allTests = testBundleInfo;
-        }
-        completionHandler.defaultHandlerBlock(error);
+        completionHandler.defaultHandlerBlock(testBundleInfo, error);
     }];
 }
 
 - (void)executeLogicTestsWithContext:(BPExecutionContext *)context {
-    [self adaptXCTestIfRequiredWithContext:context];
+    [self adaptXCTestExecutableIfRequiredWithContext:context];
 
     // We get two callbacks after trying to spawn an execution. They happen when:
     //   1) Immediately after the process is spawned.

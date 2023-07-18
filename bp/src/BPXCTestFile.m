@@ -50,7 +50,7 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
     NSArray<NSString *>* testsArray = [output componentsSeparatedByString:@"\n"];
     NSMutableDictionary *testClassesDict = [[NSMutableDictionary alloc] init];
     NSMutableArray *allClasses = [[NSMutableArray alloc] init];
-    NSMutableDictionary<NSString *, NSString *> *standardizedSwiftTestNames = [NSMutableDictionary dictionary];
+//    NSMutableDictionary<NSString *, NSString *> *standardizedSwiftTestNames = [NSMutableDictionary dictionary];
 
     for (NSString *testName in testsArray) {
         NSArray *parts = [testName componentsSeparatedByString:@"."];
@@ -72,13 +72,13 @@ NSString *objcNmCmdline = @"nm -U '%@' | grep ' t ' | cut -d' ' -f3,4 | cut -d'-
              Note that this module name isn't necessarily the same as the bundle name, and that this is the only
              time we have access to the original module name. So, we save it here for later.
              */
-            NSString *standardizedTestCaseName = [NSString stringWithFormat:@"%@/%@", testClass.name, trimmedTestName];
-            NSString *standardizedTestName = [BPUtils formatSwiftTestForXCTest:standardizedTestCaseName withBundleName:parts[0]];
-            
-            standardizedSwiftTestNames[standardizedTestCaseName] = standardizedTestName;
+//            NSString *standardizedTestCaseName = [NSString stringWithFormat:@"%@/%@", testClass.name, trimmedTestName];
+//            NSString *standardizedTestName = [BPUtils formatSwiftTestForXCTest:standardizedTestCaseName withBundleName:parts[0]];
+//
+//            standardizedSwiftTestNames[standardizedTestCaseName] = standardizedTestName;
         }
     }
-    xcTestFile.standardizedSwiftTestNames = [standardizedSwiftTestNames copy];
+//    xcTestFile.standardizedSwiftTestNames = [standardizedSwiftTestNames copy];
 
     cmd = [NSString stringWithFormat:objcNmCmdline, path];
     output = [BPUtils runShell:cmd];

@@ -15,6 +15,7 @@
 #import "PrivateHeaders/XCTest/XCTestConfiguration.h"
 #import "PrivateHeaders/XCTest/XCTTestIdentifier.h"
 #import "PrivateHeaders/XCTest/XCTTestIdentifierSet.h"
+#import <BPTestInspector/BPTestCaseInfo.h>
 
 
 @implementation SimulatorHelper
@@ -214,11 +215,8 @@
     }
     NSMutableArray<NSString *> *formattedTests = [NSMutableArray array];
     for (NSString *testName in tests) {
-        if ([BPUtils isTestSwiftTest:testName]) {
-            [formattedTests addObject:config.standardizedSwiftTestNames[testName]];
-        } else {
-            [formattedTests addObject:testName];
-        }
+        BPTestCaseInfo *info = config.allTests[testName];
+        [formattedTests addObject:info.standardizedFullName];
     }
     return formattedTests;
 }
