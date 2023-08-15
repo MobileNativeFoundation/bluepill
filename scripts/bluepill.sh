@@ -57,7 +57,7 @@ bluepill_build()
   TAG=$(git describe --always --tags)
   DST="Bluepill-$TAG"
   mkdir -p "build/$DST/bin"
-  cp build/Build/Products/Release/{bp,bluepill} "build/$DST/bin"
+  cp build/Build/Products/Release/{bp,bluepill,libBPMacTestInspector.dylib} "build/$DST/bin"
   ## build the man page
   mkdir -p "build/$DST/man/man1"
   /usr/bin/python scripts/man.py "build/$DST/man/man1/bluepill.1"

@@ -117,6 +117,8 @@
 		FB53751F2A66288300496432 /* BPTestInspectionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = FB53751D2A66288300496432 /* BPTestInspectionHandler.h */; };
 		FB5375202A66288300496432 /* BPTestInspectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = FB53751E2A66288300496432 /* BPTestInspectionHandler.m */; };
 		FB5375212A66288300496432 /* BPTestInspectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = FB53751E2A66288300496432 /* BPTestInspectionHandler.m */; };
+		FB5375232A66494100496432 /* libBPTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB5375222A66494000496432 /* libBPTestInspector.dylib */; };
+		FB5375242A66494100496432 /* libBPTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB5375222A66494000496432 /* libBPTestInspector.dylib */; };
 		FBBBD8EF29A06AF6002B9115 /* BPTestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */; };
 		FBD772BF2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD772BE2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m */; };
 		FBD772C12A3452240098CEFD /* BPTestUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = FBBBD8EE29A06AF6002B9115 /* BPTestUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -339,6 +341,7 @@
 		FB21F0DD2A65103F00682AC7 /* BPTestCaseInfoTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestCaseInfoTests.m; sourceTree = "<group>"; };
 		FB53751D2A66288300496432 /* BPTestInspectionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPTestInspectionHandler.h; sourceTree = "<group>"; };
 		FB53751E2A66288300496432 /* BPTestInspectionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPTestInspectionHandler.m; sourceTree = "<group>"; };
+		FB5375222A66494000496432 /* libBPTestInspector.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libBPTestInspector.dylib; sourceTree = "<group>"; };
 		FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestUtils.m; sourceTree = "<group>"; };
 		FBBBD8EE29A06AF6002B9115 /* BPTestUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestUtils.h; sourceTree = "<group>"; };
 		FBD772BE2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BluepillUnhostedBatchingTests.m; sourceTree = "<group>"; };
@@ -351,6 +354,7 @@
 			files = (
 				FB21F0BB2A622FF600682AC7 /* libBPMacTestInspector.dylib in Frameworks */,
 				C487CB1C226A663C00CC5BC2 /* bplib.framework in Frameworks */,
+				FB5375232A66494100496432 /* libBPTestInspector.dylib in Frameworks */,
 				B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */,
 				7AB913001D5E209800621608 /* AppKit.framework in Frameworks */,
 				7AB913011D5E209800621608 /* Foundation.framework in Frameworks */,
@@ -363,6 +367,7 @@
 			files = (
 				FB21F0BD2A622FF600682AC7 /* libBPMacTestInspector.dylib in Frameworks */,
 				BA1896B5217916A5000CEC36 /* CoreSimulator.framework in Frameworks */,
+				FB5375242A66494100496432 /* libBPTestInspector.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -468,6 +473,7 @@
 		7A79018D1D5D136F004D4325 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FB5375222A66494000496432 /* libBPTestInspector.dylib */,
 				FB21F0BA2A622FF600682AC7 /* libBPMacTestInspector.dylib */,
 				C47411F7264F4C3F000F84D1 /* XcodeKit.framework */,
 				BA1896B6217916F8000CEC36 /* XCTest.framework */,
