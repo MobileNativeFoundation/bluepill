@@ -127,7 +127,6 @@
         }];
         return nil;
     } else {
-//        [simDevice shutdownWithError:errPtr];
         [self shutdownSimulatorWithError:errPtr];
         if(*errPtr) {
             [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [*errPtr localizedDescription]];
@@ -308,47 +307,6 @@
     return YES;
 }
 
-- (void)eraseSimulator:(SimDevice *)device withError:(id *) error{
-    NSLog(@"Erasing Simulator %@", device.UDID.UUIDString);
-    [device eraseContentsAndSettingsWithError:error];
-    if (*error) {
-        NSLog(@"Error erasing simulator: %@", *error);
-    } else {
-        NSLog(@"Simulator erased successfully.");
-    }
-}
-
-- (BOOL)waitForSimulatorShutdown:(SimDevice *)device {
-    NSDate *startTime = [NSDate date];
-    NSTimeInterval timeoutInterval = 30.0;
-
-    while (![device.stateString isEqualToString:@"Shutdown"]) {
-        NSTimeInterval elapsedTime = -[startTime timeIntervalSinceNow];
-        if (elapsedTime >= timeoutInterval) {
-            return NO; // Timeout
-        }
-
-        // You might need to add some delay here to avoid busy-waiting
-        [NSThread sleepForTimeInterval:1.0];
-    }
-
-    return YES; // Successfully shutdown
-}
-
-- (void)eraseAndShutdownSimulator:(SimDevice *)device withError: (id *)error {
-    // Wait for Shutdown
-    BOOL didShutdown = [self waitForSimulatorShutdown:device];
-
-    if (didShutdown) {
-        NSLog(@"Simulator has been successfully shutdown.");
-    } else {
-        NSLog(@"Failed to shutdown simulator within the timeout, erase it.");
-        // Erase Simulator
-        [self eraseSimulator:device withError:error];
-    }
-}
-
-
 - (BOOL)shutdownSimulatorWithError:(id *)error {
     [BPUtils printInfo:INFO withString:@"Starting Safe Shutdown of %@", self.device.UDID.UUIDString];
 
@@ -359,15 +317,6 @@
         return YES;
     }
 
-    // Xcode 7 has a 'Creating' step that we should wait on before confirming the simulator is ready.
-    // On many occasions this is the case as we wait for the Simulator to be usable.
-    if ([self.device.stateString isEqualToString:@"Creating"]) {
-        [self eraseAndShutdownSimulator:self.device withError:error];
-        return YES;
-    }
-
-    // The error code for 'Unable to shutdown device in current state: Shutdown'
-    // can be safely ignored since these codes confirm that the simulator is already shutdown.
     return [self.device shutdownWithError:error];
 }
 
@@ -384,7 +333,6 @@
     [self.device bootAsyncWithOptions:options completionHandler:^(NSError *bootError){
         NSError *error = [self waitForDeviceReady];
         if (error) {
-//            [self.device shutdownWithError:&error];
             [self shutdownSimulatorWithError:&error];
             if (error) {
                 [BPUtils printInfo:ERROR withString:@"Shutting down Simulator failed: %@", [error localizedDescription]];
@@ -636,7 +584,6 @@
     }
     if (self.device) {
         [BPUtils printInfo:INFO withString:@"Shutting down Simulator"];
-//        [self.device shutdownWithError:&error];
         [self shutdownSimulatorWithError:&error];
         if (error) {
             [BPUtils printInfo:ERROR withString:@"Shutting down Simulator failed: %@", [error localizedDescription]];
