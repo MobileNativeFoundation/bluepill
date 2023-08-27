@@ -72,4 +72,5 @@
 - (BOOL)needsRetry;
 - (BPExitStatus)exitStatus;
 - (BOOL)isApplicationLaunched;
+- (BOOL)shutdownSimulatorWithError:(id *)error;
 @end
