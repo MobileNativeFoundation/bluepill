@@ -127,7 +127,7 @@
         }];
         return nil;
     } else {
-        [simDevice shutdownWithError:errPtr];
+        [self shutdownSimulatorWithError:errPtr];
         if(*errPtr) {
             [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [*errPtr localizedDescription]];
             [deviceSet deleteDeviceAsync:simDevice completionHandler:^(NSError *error) {
@@ -307,6 +307,19 @@
     return YES;
 }
 
+- (BOOL)shutdownSimulatorWithError:(id *)error {
+    [BPUtils printInfo:INFO withString:@"Starting Safe Shutdown of %@", self.device.UDID.UUIDString];
+
+    // Calling shutdown when already shutdown should be avoided (if detected).
+    if ([self.device.stateString isEqualToString:@"Shutdown"]) {
+        [BPUtils printInfo:INFO withString:@"Shutdown of %@ succeeded as it is already shutdown", self.device];
+        *error = nil;
+        return YES;
+    }
+
+    return [self.device shutdownWithError:error];
+}
+
 - (void)bootWithCompletion:(void (^)(NSError *error))completion {
     // Now boot it.
     [BPUtils printInfo:INFO withString:@"Booting a simulator without launching Simulator app"];
@@ -320,7 +333,7 @@
     [self.device bootAsyncWithOptions:options completionHandler:^(NSError *bootError){
         NSError *error = [self waitForDeviceReady];
         if (error) {
-            [self.device shutdownWithError:&error];
+            [self shutdownSimulatorWithError:&error];
             if (error) {
                 [BPUtils printInfo:ERROR withString:@"Shutting down Simulator failed: %@", [error localizedDescription]];
             }
@@ -571,7 +584,7 @@
     }
     if (self.device) {
         [BPUtils printInfo:INFO withString:@"Shutting down Simulator"];
-        [self.device shutdownWithError:&error];
+        [self shutdownSimulatorWithError:&error];
         if (error) {
             [BPUtils printInfo:ERROR withString:@"Shutting down Simulator failed: %@", [error localizedDescription]];
             completion(error, NO);
