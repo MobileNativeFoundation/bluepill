@@ -13,15 +13,14 @@ jobs:
     name: Instance Test 1
     runs-on: macos-12
     steps:
-      # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
-      - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
+      - uses: actions/checkout@v3
       - name: Select Xcode 14.0
         run: sudo xcode-select -s /Applications/Xcode_14.0.app
       - name: Run Bluepill tests
         run: ./scripts/bluepill.sh instance_tests1
       - name: Capture xcresult files
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: xcresults-bp-tests1
           path: build/**/*.xcresult
@@ -32,15 +31,14 @@ jobs:
     name: Instance Test 2
     runs-on: macos-12
     steps:
-      # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
-      - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
+      - uses: actions/checkout@v3
       - name: Select Xcode 14.0
         run: sudo xcode-select -s /Applications/Xcode_14.0.app
       - name: Run Bluepill tests
         run: ./scripts/bluepill.sh instance_tests2
       - name: Capture xcresult files
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: xcresults-bp-tests2
           path: build/**/*.xcresult
@@ -51,15 +49,14 @@ jobs:
     name: Bluepill Test and build
     runs-on: macos-12
     steps:
-      # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
-      - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
+      - uses: actions/checkout@v3
       - name: Select Xcode 14.0
         run: sudo xcode-select -s /Applications/Xcode_14.0.app
       - name: Run Bluepill tests
         run: ./scripts/bluepill.sh runner_tests
       - name: Capture xcresult files
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: xcresults-bluepill-tests
           path: build/**/*.xcresult
