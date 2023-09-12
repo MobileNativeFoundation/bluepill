@@ -10,11 +10,11 @@
 #import <Foundation/Foundation.h>
 
 #pragma mark - Version Constants
-#define BP_DEFAULT_XCODE_VERSION "14.0"
-#define BP_DEFAULT_RUNTIME "iOS 16.0"
-#define BP_DEFAULT_BASE_SDK "16.0"
+#define BP_DEFAULT_XCODE_VERSION "15.0"
+#define BP_DEFAULT_RUNTIME "iOS 17.0"
+#define BP_DEFAULT_BASE_SDK "17.0"
 
-#define BP_DEFAULT_DEVICE_TYPE "iPhone 8"
+#define BP_DEFAULT_DEVICE_TYPE "iPhone 11"
 
 #define BP_DAEMON_PROTOCOL_VERSION 26
 #define BP_MAX_PROCESSES_PERCENT 0.75
