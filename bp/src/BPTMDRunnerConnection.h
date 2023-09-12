@@ -17,6 +17,7 @@
 @end
 
 @interface BPTMDRunnerConnection : NSObject
+@property (nonatomic, assign) BOOL disconnected;
 @property (nonatomic, strong) BPExecutionContext *context;
 @property (nonatomic, strong) BPSimulator *simulator;
 @property (nonatomic, copy) void (^completionBlock)(NSError *, pid_t);

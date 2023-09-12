@@ -18,6 +18,7 @@
 #import "BPWaitTimer.h"
 #import "PrivateHeaders/CoreSimulator/CoreSimulator.h"
 #import "SimulatorHelper.h"
+#import "PrivateHeaders/CoreSimulator/SimDeviceBootInfo.h"
 
 @interface BPSimulator()
 
@@ -127,6 +128,8 @@
         }];
         return nil;
     } else {
+        // wait for few seconds to make sure the app is being installed correctly
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 15, NO);
         [self shutdownSimulator:simDevice withError:errPtr];
         if(*errPtr) {
             [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [*errPtr localizedDescription]];
@@ -319,7 +322,6 @@
         *error = nil;
         return YES;
     }
-
     return [simDevice shutdownWithError:error];
 }
 
@@ -336,10 +338,12 @@
     [self.device bootAsyncWithOptions:options completionHandler:^(NSError *bootError){
         NSError *error = [self waitForDeviceReady];
         if (error) {
-            [self shutdownSimulator:self.device withError:&error];
-            if (error) {
+            NSError *shutdownError;
+            [self shutdownSimulator:self.device withError:&shutdownError];
+            if (shutdownError) {
                 [BPUtils printInfo:ERROR withString:@"Shutting down Simulator failed: %@", [error localizedDescription]];
             }
+            bootError = error;
         }
         completion(bootError);
     }];
@@ -347,7 +351,11 @@
 
 - (NSError *)waitForDeviceReady {
     int attempts = 1200;
-    while (attempts > 0 && ![self.device.stateString isEqualToString:@"Booted"]) {
+    while (attempts > 0) {
+        SimDeviceBootInfo *bootStatus = self.device.bootStatus;
+        if (bootStatus.status == SimDeviceBootInfoStatusFinished) {
+            break;
+        }
         [NSThread sleepForTimeInterval:0.1];
         --attempts;
     }
@@ -477,7 +485,7 @@
     [commandLineArgs addObjectsFromArray:@[
                                            @"-NSTreatUnknownArgumentsAsOpen", @"NO",
                                            @"-ApplePersistenceIgnoreState", @"YES",
-                                           @"-XCTIDEConnectionTimeout", @"180"
+                                           @"-XCTIDEConnectionTimeout", @"600"
                                            ]];
 
     argsAndEnv[@"args"] = [commandLineArgs copy];
@@ -598,6 +606,11 @@
     int attempts = 300;
     while (attempts > 0 && ![self.device.stateString isEqualToString:@"Shutdown"]) {
         [NSThread sleepForTimeInterval:1.0];
+        if (!self.app && !self.device) {
+            [BPUtils printInfo:ERROR withString:@"device has been deleted already"];
+            completion(nil, NO);
+            return;
+        }
         --attempts;
     }
     if (![self.device.stateString isEqualToString:@"Shutdown"]) {
