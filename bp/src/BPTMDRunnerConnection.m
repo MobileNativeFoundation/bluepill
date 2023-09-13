@@ -21,6 +21,7 @@
 #import "PrivateHeaders/XCTest/XCTMessagingChannel_RunnerToIDE-Protocol.h"
 #import "PrivateHeaders/XCTest/XCTMessagingChannel_DaemonToIDE-Protocol.h"
 #import "PrivateHeaders/XCTest/XCTMessagingChannel_IDEToDaemon-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTTestIdentifier.h"
 
 
 // DTX framework
@@ -77,14 +78,14 @@
 
     // Pool connection status till it passes.
     [BPUtils runWithTimeOut:timeout until:^BOOL{
-        return self.connected && self.testBundleReady;
+        return self.connected;
     }];
     if (!self.connected) {
         [BPUtils printInfo:ERROR withString:@"Timeout establishing a runner session!"];
     }
-    if (!self.testBundleReady) {
-        [BPUtils printInfo:ERROR withString:@"Timeout connecting to the test bundle!"];
-    }
+//    if (!self.testBundleReady) {
+//        [BPUtils printInfo:ERROR withString:@"Timeout connecting to the test bundle!"];
+//    }
 }
 
 - (void)connect {
@@ -225,7 +226,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
 #pragma mark XCTMessagingRole_TestReporting
 
 - (id)_XCT_testCaseWithIdentifier:(XCTTestIdentifier *)arg1 didFinishWithStatus:(NSString *)arg2 duration:(NSNumber *)arg3 {
-    return nil;
+    return [self _XCT_testCaseDidFinishForTestClass:arg1.firstComponent method:arg1.lastComponent withStatus:arg2 duration:arg3];
 }
 
 
@@ -268,6 +269,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
 
 
 - (id)_XCT_testSuiteWithIdentifier:(XCTTestIdentifier *)arg1 didStartAt:(NSString *)arg2 {
+    [self _XCT_testSuite:[arg1 _identifierString] didStartAt:arg2];
     return nil;
 }
 
