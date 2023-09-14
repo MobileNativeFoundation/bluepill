@@ -146,10 +146,10 @@
         [xctConfig setTestsToRun:[[XCTTestIdentifierSet alloc] initWithSet:xctTests]];
     }
 
-    XCTCapabilitiesBuilder *capabilitiesBuilder = [objc_lookUpClass("XCTCapabilitiesBuilder") new];
-    [capabilitiesBuilder registerCapability:@"XCTIssue capability"];
-    [capabilitiesBuilder registerCapability:@"ubiquitous test identifiers"];
-    xctConfig.IDECapabilities = [capabilitiesBuilder capabilities];
+//    XCTCapabilitiesBuilder *capabilitiesBuilder = [objc_lookUpClass("XCTCapabilitiesBuilder") new];
+//    [capabilitiesBuilder registerCapability:@"XCTIssue capability"];
+//    [capabilitiesBuilder registerCapability:@"ubiquitous test identifiers"];
+//    xctConfig.IDECapabilities = [capabilitiesBuilder capabilities];
 
     NSString *XCTestConfigurationFilename = [NSString stringWithFormat:@"%@/%@-%@",
                                              NSTemporaryDirectory(),
