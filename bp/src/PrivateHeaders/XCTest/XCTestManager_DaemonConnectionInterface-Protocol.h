@@ -4,6 +4,9 @@
 //  Copyright (C) 1997-2019 Steve Nygard.
 //
 
-@protocol XCTestManager_DaemonConnectionInterface
-@end
+@class NSArray, NSDictionary, NSNumber, NSString, NSUUID, DTXRemoteInvocationReceipt;
 
+@protocol XCTestManager_DaemonConnectionInterface
+
+- (DTXRemoteInvocationReceipt *)_IDE_initiateSessionWithIdentifier:(NSUUID *)arg1 forClient:(NSString *)arg2 atPath:(NSString *)arg3 protocolVersion:(NSNumber *)arg4;
+@end

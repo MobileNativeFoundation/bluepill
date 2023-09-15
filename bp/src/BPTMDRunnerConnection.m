@@ -22,6 +22,8 @@
 #import "PrivateHeaders/XCTest/XCTMessagingChannel_DaemonToIDE-Protocol.h"
 #import "PrivateHeaders/XCTest/XCTMessagingChannel_IDEToDaemon-Protocol.h"
 #import "PrivateHeaders/XCTest/XCTTestIdentifier.h"
+#import "PrivateHeaders/XCTest/XCTestManager_DaemonConnectionInterface-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTMessagingRole_RunnerSessionInitiation-Protocol.h"
 
 
 // DTX framework
@@ -57,6 +59,7 @@
 @property (nonatomic, nullable) NSString *videoFileName;
 
 
+
 @end
 
 @implementation BPTMDRunnerConnection
@@ -70,6 +73,86 @@
         self.queue = dispatch_queue_create("com.linkedin.bluepill.connection.queue", DISPATCH_QUEUE_PRIORITY_DEFAULT);
     }
     return self;
+}
+
++ (NSString *)clientProcessDisplayPath
+{
+  static dispatch_once_t onceToken;
+  static NSString *_clientProcessDisplayPath;
+  dispatch_once(&onceToken, ^{
+    NSString *path = NSBundle.mainBundle.bundlePath;
+    if (![path.pathExtension isEqualToString:@"app"]) {
+      path = NSBundle.mainBundle.executablePath;
+    }
+    _clientProcessDisplayPath = path;
+  });
+  return _clientProcessDisplayPath;
+}
+
+- (void)connectAndRun {
+    // start testmanagerd connection
+    DTXConnection *connection = connectToTestManager(self.context.runner.device);
+    [connection registerDisconnectHandler:^{
+        [BPUtils printInfo:INFO withString:@"Daemon connection Disconnected."];
+    }];
+    [connection resume];
+
+    // start session request connection
+    BOOL __block startSessionResolved = NO;
+    BOOL __block bundleConnected = NO;
+    DTXProxyChannel *proxyChannel = [connection
+                                xct_makeProxyChannelWithRemoteInterface:@protocol(XCTMessagingChannel_IDEToDaemon)
+                                exportedInterface:@protocol(XCTMessagingChannel_DaemonToIDE)];
+    [proxyChannel xct_setAllowedClassesForTestingProtocols];
+    [proxyChannel setExportedObject:self queue:dispatch_get_main_queue()];
+    id<XCTMessagingChannel_IDEToDaemon> daemonProxy = (id<XCTMessagingChannel_IDEToDaemon>)proxyChannel.remoteObjectProxy;
+    // connect to testmanaged
+    DTXRemoteInvocationReceipt *dreceipt = [daemonProxy _IDE_initiateControlSessionForTestProcessID:@(self.context.pid) protocolVersion:@(BP_TM_PROTOCOL_VERSION)];
+    [dreceipt handleCompletion:^(NSNumber *version, NSError *error) {
+        if (error) {
+            [BPUtils printInfo:ERROR withString:@"Error with daemon connection: %@", error];
+            return;
+        }
+        NSInteger daemonProtocolVersion = version.integerValue;
+        [BPUtils printInfo:INFO withString:@"Test manager daemon control session started (%ld)", (long)daemonProtocolVersion];
+        bundleConnected = YES;
+    }];
+    // start test session
+    DTXRemoteInvocationReceipt *receipt =  [daemonProxy
+                                            _IDE_initiateSessionWithIdentifier:self.context.config.sessionIdentifier
+                                            forClient:[self clientProcessUniqueIdentifier]
+                                            atPath:self.class.clientProcessDisplayPath
+                                            protocolVersion:@(BP_DAEMON_PROTOCOL_VERSION)];
+    [receipt handleCompletion:^(NSNumber *version, NSError *error) {
+        [proxyChannel cancel];
+        startSessionResolved = YES;
+        if (error) {
+            [BPUtils printInfo:ERROR withString:@"Error with daemon connection: %@", error];
+            return;
+        }
+        NSInteger daemonProtocolVersion = version.integerValue;
+        [BPUtils printInfo:INFO withString:@"Test manager daemon control session started (%ld)", (long)daemonProtocolVersion];
+    }];
+
+    [connection
+     xct_handleProxyRequestForInterface:@protocol(XCTMessagingChannel_RunnerToIDE)
+     peerInterface:@protocol(XCTMessagingChannel_IDEToRunner)
+     handler:^(DTXProxyChannel *channel){
+         [BPUtils printInfo:INFO withString:@"Got proxy channel request from test bundle"];
+         [channel setExportedObject:self queue:dispatch_get_main_queue()];
+         self.testRunnerProxy = (id<XCTMessagingChannel_IDEToRunner>)channel.remoteObjectProxy;
+        //2
+        bundleConnected = YES;
+     }];
+
+    [BPUtils runWithTimeOut:180 until:^BOOL{
+        return startSessionResolved && bundleConnected;
+    }];
+
+    if (bundleConnected && startSessionResolved) {
+        [BPUtils printInfo:INFO withString:@"Test plan started!"];
+        [self.testRunnerProxy _IDE_startExecutingTestPlanWithProtocolVersion:@(BP_TM_PROTOCOL_VERSION)];
+    }
 }
 
 - (void)connectWithTimeout:(NSTimeInterval)timeout {
