@@ -441,11 +441,11 @@ static void onInterrupt(int ignore) {
     BPTMDControlConnection *controlConnection = [[BPTMDControlConnection alloc] initWithSimDevice:context.runner.device andTestRunnerPID:context.pid];
     BPTMDRunnerConnection *runnerConnection = [[BPTMDRunnerConnection alloc] initWithContext:context andInterface:self];
 
-//    [controlConnection connectWithTimeout:180];
-//    [runnerConnection connectWithTimeout:180];
+    [controlConnection connectWithTimeout:180];
+    [runnerConnection connectWithTimeout:180];
     
-//    [runnerConnection startTestPlan];
-    [runnerConnection connectAndRun];
+    [runnerConnection startTestPlan];
+//    [runnerConnection connectAndRun];
     NEXT([self checkProcessWithContext:context conenction:runnerConnection]);
 
 }
