@@ -85,13 +85,13 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     DTXRemoteInvocationReceipt *receipt = [daemonProxy _IDE_initiateControlSessionForTestProcessID:@(self.testRunnerPid) protocolVersion:@(BP_TM_PROTOCOL_VERSION)];
     
     [receipt handleCompletion:^(NSNumber *version, NSError *error) {
+        self.connected = TRUE;
         if (error) {
             [BPUtils printInfo:ERROR withString:@"Error with daemon connection: %@", error];
             return;
         }
         NSInteger daemonProtocolVersion = version.integerValue;
         [BPUtils printInfo:INFO withString:@"Test manager daemon control session started (%ld)", (long)daemonProtocolVersion];
-        self.connected = TRUE;
     }];
 }
 

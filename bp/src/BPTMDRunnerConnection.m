@@ -184,6 +184,7 @@
             // This is called when the task is abruptly terminated (e.g. if the test times out)
             [self stopVideoRecording:YES];
             [BPUtils printInfo:INFO withString:@"DTXConnection disconnected."];
+            self.disconnected = YES;
         }];
         
         [connection
@@ -215,13 +216,13 @@
                                                            atPath:path
                                                            protocolVersion:@(BP_DAEMON_PROTOCOL_VERSION)];
             [receipt handleCompletion:^(NSNumber *version, NSError *error){
+                self.connected = TRUE;
                 if (error || !version) {
                     [BPUtils printInfo:ERROR withString:@"Error starting session: %@", error];
                     return;
                 }
                 [BPUtils printInfo:DEBUGINFO withString:@"Session started"];
                 [channel cancel];
-                self.connected = TRUE;
             }];
 
         });
