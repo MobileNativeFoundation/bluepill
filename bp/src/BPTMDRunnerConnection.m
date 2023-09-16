@@ -94,6 +94,10 @@
     DTXConnection *connection = connectToTestManager(self.context.runner.device);
     [connection registerDisconnectHandler:^{
         [BPUtils printInfo:INFO withString:@"Daemon connection Disconnected."];
+//        [self.simulator deleteSimulatorWithCompletion:^(NSError *error, BOOL success) {
+//
+//        }];
+        self.disconnected = YES;
     }];
     [connection resume];
 

@@ -319,7 +319,6 @@
         *error = nil;
         return YES;
     }
-
     return [simDevice shutdownWithError:error];
 }
 

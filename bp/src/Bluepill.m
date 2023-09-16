@@ -446,10 +446,10 @@ static void onInterrupt(int ignore) {
     
 //    [runnerConnection startTestPlan];
     [runnerConnection connectAndRun];
-    NEXT([self checkProcessWithContext:context]);
+    NEXT([self checkProcessWithContext:context conenction:runnerConnection]);
 
 }
-- (void)checkProcessWithContext:(BPExecutionContext *)context {
+- (void)checkProcessWithContext:(BPExecutionContext *)context conenction:(BPTMDRunnerConnection*)connection {
     BOOL isRunning = [self isProcessRunningWithContext:context];
     if (!isRunning && [context.runner isFinished]) {
         [BPUtils printInfo:INFO withString:@"Finished"];
@@ -480,7 +480,12 @@ static void onInterrupt(int ignore) {
         return;
     }
 
-    NEXT_AFTER(1, [self checkProcessWithContext:context]);
+    if (connection.disconnected) {
+        [BPUtils printInfo:INFO withString:@"Connection disconnected, deleteing simulator"];
+        [self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed];
+        return;
+    }
+    NEXT_AFTER(1, [self checkProcessWithContext:context conenction:connection]);
 }
 
 - (BOOL)isProcessRunningWithContext:(BPExecutionContext *)context {
