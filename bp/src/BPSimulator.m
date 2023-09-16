@@ -597,6 +597,11 @@
     int attempts = 300;
     while (attempts > 0 && ![self.device.stateString isEqualToString:@"Shutdown"]) {
         [NSThread sleepForTimeInterval:1.0];
+        if (!self.app && !self.device) {
+            [BPUtils printInfo:ERROR withString:@"device has been deleted already"];
+            completion(nil, NO);
+            return;
+        }
         --attempts;
     }
     if (![self.device.stateString isEqualToString:@"Shutdown"]) {

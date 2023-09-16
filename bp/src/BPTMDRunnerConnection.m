@@ -113,13 +113,13 @@
     // connect to testmanaged
     DTXRemoteInvocationReceipt *dreceipt = [daemonProxy _IDE_initiateControlSessionForTestProcessID:@(self.context.pid) protocolVersion:@(BP_TM_PROTOCOL_VERSION)];
     [dreceipt handleCompletion:^(NSNumber *version, NSError *error) {
+        bundleConnected = YES;
         if (error) {
             [BPUtils printInfo:ERROR withString:@"Error with daemon connection: %@", error];
             return;
         }
         NSInteger daemonProtocolVersion = version.integerValue;
         [BPUtils printInfo:INFO withString:@"Test manager daemon control session started (%ld)", (long)daemonProtocolVersion];
-        bundleConnected = YES;
     }];
     // start test session
     DTXRemoteInvocationReceipt *receipt =  [daemonProxy
