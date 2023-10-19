@@ -480,6 +480,14 @@ static void onInterrupt(int ignore) {
     }
 
     if (connection.disconnected) {
+        // wait for 10 seconds to see if it can be finished
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 10, NO);
+        if (!isRunning && [context.runner isFinished]) {
+            [BPUtils printInfo:INFO withString:@"Finished"];
+            [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:[BPExitStatusHelper stringFromExitStatus:context.exitStatus]];
+            [self runnerCompletedWithContext:context];
+            return;
+        }
         [BPUtils printInfo:INFO withString:@"Connection disconnected, deleteing simulator"];
         [self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed];
         return;
