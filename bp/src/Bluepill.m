@@ -445,7 +445,6 @@ static void onInterrupt(int ignore) {
     [runnerConnection connectWithTimeout:180];
     
     [runnerConnection startTestPlan];
-//    [runnerConnection connectAndRun];
     NEXT([self checkProcessWithContext:context conenction:runnerConnection]);
 
 }
