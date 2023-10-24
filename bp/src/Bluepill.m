@@ -481,7 +481,7 @@ static void onInterrupt(int ignore) {
 
     if (connection.disconnected) {
         // wait for 10 seconds to see if it can be finished
-        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 10, NO);
+        [NSThread sleepForTimeInterval:10];
         if (!isRunning && [context.runner isFinished]) {
             [BPUtils printInfo:INFO withString:@"Finished"];
             [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:[BPExitStatusHelper stringFromExitStatus:context.exitStatus]];
