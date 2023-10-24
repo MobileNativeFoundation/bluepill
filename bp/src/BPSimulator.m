@@ -127,6 +127,8 @@
         }];
         return nil;
     } else {
+        // wait for few seconds to make sure the app is being installed correctly
+        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 15, NO);
         [self shutdownSimulator:simDevice withError:errPtr];
         if(*errPtr) {
             [BPUtils printInfo:ERROR withString:@"Shutdown simulator failed with error: %@", [*errPtr localizedDescription]];
