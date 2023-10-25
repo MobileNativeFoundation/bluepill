@@ -301,7 +301,7 @@ static void onInterrupt(int ignore) {
         }
         if (self.config.cloneSimulator) {
             // launch application directly when clone simulator
-            NEXT([__self launchApplicationWithContext:context]);
+            NEXT_AFTER(5, [__self launchApplicationWithContext:context]);
         } else {
             // Install application when test without clone
             NEXT([__self installApplicationWithContext:context]);
