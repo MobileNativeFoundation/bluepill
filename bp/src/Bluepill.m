@@ -480,14 +480,19 @@ static void onInterrupt(int ignore) {
     }
 
     if (connection.disconnected) {
-        // wait for 10 seconds to see if it can be finished
-        [NSThread sleepForTimeInterval:10];
-        if (!isRunning && [context.runner isFinished]) {
-            [BPUtils printInfo:INFO withString:@"Finished"];
-            [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:[BPExitStatusHelper stringFromExitStatus:context.exitStatus]];
-            [self runnerCompletedWithContext:context];
-            return;
+        // wait for 30 seconds to see if it can be finished
+        int attempts = 300;
+        while (attempts > 0) {
+            [NSThread sleepForTimeInterval:0.1];
+            --attempts;
+            if (!isRunning && [context.runner isFinished]) {
+                [BPUtils printInfo:INFO withString:@"Finished"];
+                [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:[BPExitStatusHelper stringFromExitStatus:context.exitStatus]];
+                [self runnerCompletedWithContext:context];
+                return;
+            }
         }
+
         [BPUtils printInfo:INFO withString:@"Connection disconnected, deleteing simulator"];
         [self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed];
         return;
