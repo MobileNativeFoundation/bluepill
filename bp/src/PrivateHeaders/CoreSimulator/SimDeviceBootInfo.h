@@ -4,9 +4,17 @@
 //     class-dump is Copyright (C) 1997-1998, 2000-2001, 2004-2013 by Steve Nygard.
 //
 
-#import "NSObject.h"
+#import <Foundation/Foundation.h>
 
-#import "NSSecureCoding.h"
+
+typedef NS_ENUM(NSUInteger, SimDeviceBootInfoStatus) {
+  SimDeviceBootInfoStatusBooting = 0,
+  SimDeviceBootInfoStatusWaitingOnBackboard = 1,
+  SimDeviceBootInfoStatusWaitingOnDataMigration = 2,
+  SimDeviceBootInfoStatusDataMigrationFailed = 3,
+  SimDeviceBootInfoStatusWaitingOnSystemApp = 4,
+  SimDeviceBootInfoStatusFinished = 4294967295,
+};
 
 @class NSDictionary, NSString;
 
@@ -23,7 +31,6 @@
 @property(nonatomic) BOOL isTerminalStatus; // @synthesize isTerminalStatus=_isTerminalStatus;
 @property(nonatomic) double bootElapsedTime; // @synthesize bootElapsedTime=_bootElapsedTime;
 @property(nonatomic) unsigned int status; // @synthesize status=_status;
-- (void).cxx_destruct;
 @property(readonly, nonatomic) double migrationElapsedTime;
 @property(readonly, nonatomic) NSString *migrationPhaseDescription;
 - (void)encodeWithCoder:(id)arg1;

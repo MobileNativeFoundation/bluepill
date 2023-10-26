@@ -309,6 +309,7 @@ static void onInterrupt(int ignore) {
     };
 
     handler.onError = ^(NSError *error) {
+        [[BPStats sharedStats] startTimer:SIMULATOR_LIFETIME(context.runner.UDID) atTime:simStart];
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [BPUtils printInfo:ERROR withString:@"%@", [error localizedDescription]];
         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
@@ -445,7 +446,6 @@ static void onInterrupt(int ignore) {
     [runnerConnection connectWithTimeout:180];
     
     [runnerConnection startTestPlan];
-//    [runnerConnection connectAndRun];
     NEXT([self checkProcessWithContext:context conenction:runnerConnection]);
 
 }
@@ -481,6 +481,19 @@ static void onInterrupt(int ignore) {
     }
 
     if (connection.disconnected) {
+        // wait for 30 seconds to see if it can be finished
+        int attempts = 300;
+        while (attempts > 0) {
+            [NSThread sleepForTimeInterval:0.1];
+            --attempts;
+            if (!isRunning && [context.runner isFinished]) {
+                [BPUtils printInfo:INFO withString:@"Finished"];
+                [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:[BPExitStatusHelper stringFromExitStatus:context.exitStatus]];
+                [self runnerCompletedWithContext:context];
+                return;
+            }
+        }
+
         [BPUtils printInfo:INFO withString:@"Connection disconnected, deleteing simulator"];
         [self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed];
         return;
