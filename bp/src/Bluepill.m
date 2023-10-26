@@ -309,6 +309,7 @@ static void onInterrupt(int ignore) {
     };
 
     handler.onError = ^(NSError *error) {
+        [[BPStats sharedStats] startTimer:SIMULATOR_LIFETIME(context.runner.UDID) atTime:simStart];
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [BPUtils printInfo:ERROR withString:@"%@", [error localizedDescription]];
         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
