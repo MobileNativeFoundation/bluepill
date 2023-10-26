@@ -18,6 +18,7 @@
 #import "BPWaitTimer.h"
 #import "PrivateHeaders/CoreSimulator/CoreSimulator.h"
 #import "SimulatorHelper.h"
+#import "PrivateHeaders/CoreSimulator/SimDeviceBootInfo.h"
 
 @interface BPSimulator()
 
@@ -348,7 +349,11 @@
 
 - (NSError *)waitForDeviceReady {
     int attempts = 1200;
-    while (attempts > 0 && ![self.device.stateString isEqualToString:@"Booted"]) {
+    while (attempts > 0) {
+        SimDeviceBootInfo *bootStatus = self.device.bootStatus;
+        if (bootStatus.status == SimDeviceBootInfoStatusFinished) {
+            break;
+        }
         [NSThread sleepForTimeInterval:0.1];
         --attempts;
     }

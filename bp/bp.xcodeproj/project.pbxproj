@@ -132,6 +132,7 @@
 		018D5C1025B4FF4200B0314B /* BPIntTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPIntTestCase.h; sourceTree = "<group>"; };
 		018D5C1125B4FF4200B0314B /* BPIntTestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPIntTestCase.m; sourceTree = "<group>"; };
 		018D5C1C25B6696000B0314B /* BPReportTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPReportTests.m; sourceTree = "<group>"; };
+		71D4D0F82AEA1B4F00859482 /* SimDeviceBootInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceBootInfo.h; sourceTree = "<group>"; };
 		7A202A3D1DAED04900D935E3 /* BPExitStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPExitStatus.h; sourceTree = "<group>"; };
 		7A202A3F1DB0066100D935E3 /* BPWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPWriter.h; sourceTree = "<group>"; };
 		7A202A401DB0066100D935E3 /* BPWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPWriter.m; sourceTree = "<group>"; };
@@ -527,6 +528,7 @@
 				BA954F651D6D1AB3007D011D /* NSString-SIMPackedVersion.h */,
 				BA954F671D6D1AB3007D011D /* NSUserDefaults-SimDefaults.h */,
 				BA954F681D6D1AB3007D011D /* SimDevice.h */,
+				71D4D0F82AEA1B4F00859482 /* SimDeviceBootInfo.h */,
 				BA954F691D6D1AB3007D011D /* SimDeviceIO.h */,
 				BA954F6A1D6D1AB3007D011D /* SimDeviceIOClient.h */,
 				BA954F6B1D6D1AB3007D011D /* SimDeviceIOInterface-Protocol.h */,
