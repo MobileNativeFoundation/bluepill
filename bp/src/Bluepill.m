@@ -449,7 +449,7 @@ static int checkDisconnectDelay = 0;
     
     [runnerConnection startTestPlan];
 
-    checkDisconnectDelay = 1200;
+    checkDisconnectDelay = [self.config.testBundleDisconnectTimeout intValue];
     NEXT([self checkProcessWithContext:context conenction:runnerConnection]);
 
 }
@@ -485,7 +485,7 @@ static int checkDisconnectDelay = 0;
     }
 
     if (connection.disconnected) {
-        // wait for xx seconds to see if it can be finished
+        // break early if possible
         if (checkDisconnectDelay > 0) {
             checkDisconnectDelay --;
         } else {

@@ -150,6 +150,8 @@ struct BPOptions {
         "Directory where videos of test runs will be saved. If not provided, videos are not recorded."},
     {368, "keep-passing-videos", BLUEPILL_BINARY | BP_BINARY, NO, NO, no_argument, "Off", BP_VALUE | BP_BOOL, "keepPassingVideos",
         "Whether recorded videos should be kept if the test passed. They are deleted by default."},
+    {369, "test-bundle-disconnect-timeout", BLUEPILL_BINARY | BP_BINARY, NO, NO, required_argument, "60", BP_VALUE | BP_INTEGER, "testBundleDisconnectTimeout",
+        "The maximum amount of time, in seconds, to wait while a test bundle is disconnected but might still generate output."},
     {0, 0, 0, 0, 0, 0, 0}
 };
 

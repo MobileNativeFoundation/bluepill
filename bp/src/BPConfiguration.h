@@ -107,6 +107,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 @property (nonatomic, strong) NSNumber *launchTimeout;
 @property (nonatomic, strong) NSNumber *deleteTimeout;
 @property (nonatomic) BOOL keepIndividualTestReports;
+@property (nonatomic, strong) NSNumber *testBundleDisconnectTimeout;
 
 @property (nonatomic, strong) NSArray<NSString *> *commandLineArguments; // command line arguments for the app
 @property (nonatomic, strong) NSDictionary<NSString *, NSString *> *environmentVariables;
