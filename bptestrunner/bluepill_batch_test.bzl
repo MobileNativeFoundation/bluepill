@@ -5,7 +5,7 @@ load(
 )
 
 def _bluepill_batch_test_impl(ctx):
-    runfiles = [ctx.file._bp_exec, ctx.file._bluepill_exec]
+    runfiles = [ctx.file._bp_exec, ctx.file._bluepill_exec, ctx.file._libBPTestInspector_dylib, ctx.file._libBPMacTestInspector_dylib]
     test_bundle_paths = []
     test_host_paths = []
 
@@ -60,6 +60,8 @@ def _bluepill_batch_test_impl(ctx):
         "bp_test_plan": test_plan_file.short_path,
         "bp_path": ctx.executable._bp_exec.short_path,
         "bluepill_path": ctx.executable._bluepill_exec.short_path,
+        "testInspector_path": ctx.file._libBPTestInspector_dylib.short_path,
+        "macTestInspector_path": ctx.file._libBPMacTestInspector_dylib.short_path,
         "target_name": ctx.attr.name,
     }
     if len(test_host_paths) > 0:
@@ -124,6 +126,18 @@ as possible between simulators.
             allow_single_file = True,
             executable = True,
             cfg = "host",
+        ),
+        "_libBPTestInspector_dylib": attr.label(
+            default = Label(
+                "//:libBPTestInspector.dylib",
+            ),
+            allow_single_file = True,
+        ),
+        "_libBPMacTestInspector_dylib": attr.label(
+            default = Label(
+                "//:libBPMacTestInspector.dylib",
+            ),
+            allow_single_file = True,
         ),
         "_xcode_config": attr.label(
             default = configuration_field(

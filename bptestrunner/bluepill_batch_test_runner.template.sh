@@ -18,6 +18,8 @@ BP_TEST_ESTIMATE_JSON="bp_test_time_estimates_json"
 BP_TEST_PLAN="bp_test_plan"
 BP_PATH="bp_path"
 BLUEPILL_PATH="bluepill_path"
+TEST_INSPECTOR_PATH="testInspector_path"
+MAC_TEST_INSPECTOR_PATH="macTestInspector_path"
 
 # Remove existing working folder for a clean state
 rm -rf $BP_WORKING_FOLDER
@@ -71,9 +73,18 @@ fi
 cp "$BP_TEST_PLAN" $BP_WORKING_FOLDER
 BP_TEST_PLAN_ARG="$(basename "$BP_TEST_PLAN")"
 
-# Copy bluepill and bp executables to working folder
+# Copy bluepill and bp executables to working folder, along with testInspector dylib.
 cp "$BP_PATH" $BP_WORKING_FOLDER
 cp "$BLUEPILL_PATH" $BP_WORKING_FOLDER
+cp "$TEST_INSPECTOR_PATH" $BP_WORKING_FOLDER
+cp "$MAC_TEST_INSPECTOR_PATH" $BP_WORKING_FOLDER
+
+echo "pwd"
+pwd
+echo "LTHROCKM DEBUG - TEST_INSPECTOR_PATH: $TEST_INSPECTOR_PATH"
+echo "LTHROCKM DEBUG - BP_WORKING_FOLDER: $BP_WORKING_FOLDER"
+
+export "DYLD_LIBRARY_PATH=.:$BP_WORKING_FOLDER/libBPMacTestInspector.dylib"
 
 # Run bluepill
 # NOTE: we override output folder here and disregard the one in the config file.

@@ -213,10 +213,16 @@
     if (!tests) {
         return nil;
     }
+    [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - formatting test names"];
+    [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - config.allTests: %@", config.allTests];
     NSMutableArray<NSString *> *formattedTests = [NSMutableArray array];
     for (NSString *testName in tests) {
+        [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - bout to add test with name: %@", testName];
+        
         BPTestCaseInfo *info = config.allTests[testName];
-        [formattedTests addObject:info.standardizedFullName];
+        if (info) {
+            [formattedTests addObject:info.standardizedFullName];
+        }
     }
     return formattedTests;
 }

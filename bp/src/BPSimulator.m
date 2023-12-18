@@ -572,9 +572,15 @@
     // Intercept stdout, stderr and post as simulator-output events
     NSString *simStdoutPath = [SimulatorHelper makeStdoutFileOnDevice:self.device];
     NSString *simStdoutRelativePath = [simStdoutPath substringFromIndex:self.device.dataPath.length];
+    
+    
+    [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] inspecting tests. gonna put em in path: %@", simStdoutPath];
 
     // Environment
     NSMutableDictionary *environment = [[SimulatorHelper logicTestEnvironmentWithConfig:self.config stdoutRelativePath:simStdoutRelativePath] mutableCopy];
+    
+    
+    [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] going to try to find dylib"];
     
     environment[@"DYLD_INSERT_LIBRARIES"] = [BPUtils findBPTestInspectorDYLIB];
     environment[BPTestInspectorConstants.outputPathEnvironmentKey] = testSuiteInfoOutputPath;
@@ -592,8 +598,8 @@
 //        @"stdout": stdoutFileDescriptor,
 //        @"stderr": stdoutFileDescriptor,
     };
-
-    NSLog(@"[LTHROCKM DEBUG] simStdoutPath: %@", simStdoutPath);
+    
+    [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] simStdoutPath: %@", simStdoutPath];
 
     // To see more on how to debug the expected format/inputs of the options array,
     // see the in-depth documentation in SimDevice.h.

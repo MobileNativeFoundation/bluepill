@@ -117,7 +117,6 @@
 		FB53751F2A66288300496432 /* BPTestInspectionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = FB53751D2A66288300496432 /* BPTestInspectionHandler.h */; };
 		FB5375202A66288300496432 /* BPTestInspectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = FB53751E2A66288300496432 /* BPTestInspectionHandler.m */; };
 		FB5375212A66288300496432 /* BPTestInspectionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = FB53751E2A66288300496432 /* BPTestInspectionHandler.m */; };
-		FB5375232A66494100496432 /* libBPTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB5375222A66494000496432 /* libBPTestInspector.dylib */; };
 		FB5375242A66494100496432 /* libBPTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB5375222A66494000496432 /* libBPTestInspector.dylib */; };
 		FBBBD8EF29A06AF6002B9115 /* BPTestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBBD8ED29A06AF6002B9115 /* BPTestUtils.m */; };
 		FBD772BF2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD772BE2A33E1DA0098CEFD /* BluepillUnhostedBatchingTests.m */; };
@@ -354,7 +353,6 @@
 			files = (
 				FB21F0BB2A622FF600682AC7 /* libBPMacTestInspector.dylib in Frameworks */,
 				C487CB1C226A663C00CC5BC2 /* bplib.framework in Frameworks */,
-				FB5375232A66494100496432 /* libBPTestInspector.dylib in Frameworks */,
 				B324B91D1F280AD100AAE2BC /* CoreSimulator.framework in Frameworks */,
 				7AB913001D5E209800621608 /* AppKit.framework in Frameworks */,
 				7AB913011D5E209800621608 /* Foundation.framework in Frameworks */,

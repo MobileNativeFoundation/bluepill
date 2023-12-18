@@ -11,6 +11,7 @@
 
 + (NSString *)dylibName {
     return @"libBPTestInspector.dylib";
+//    return @"libBPMacTestInspector.dylib";
 }
 
 + (NSString *)testBundleEnvironmentKey {

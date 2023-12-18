@@ -128,9 +128,11 @@ static BOOL quiet = NO;
 }
 
 + (NSString *)findBPTestInspectorDYLIB {
+    [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - looking for dylib"];
     NSString *argv0 = [[[NSProcessInfo processInfo] arguments] objectAtIndex:0];
     NSString *path = [[argv0 stringByDeletingLastPathComponent] stringByAppendingPathComponent:BPTestInspectorConstants.dylibName];
     if ([[NSFileManager defaultManager] isReadableFileAtPath:path]) {
+        [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - fount at path: %@", path];
         return path;
     }
     // The executable may also be in derived data, accessible from the app's current working directory.
@@ -138,8 +140,10 @@ static BOOL quiet = NO;
     NSString *iPhoneSimDir = [buildProductsDir stringByAppendingPathComponent:@"Debug-iphonesimulator"];
     path = [iPhoneSimDir stringByAppendingPathComponent:BPTestInspectorConstants.dylibName];
     if ([[NSFileManager defaultManager] isReadableFileAtPath:path]) {
+        [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - fount at path: %@", path];
         return path;
     }
+    [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - did not find :("];
     return nil;
 }
 

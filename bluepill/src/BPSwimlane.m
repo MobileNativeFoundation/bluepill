@@ -102,6 +102,7 @@
 
     [task launch];
     self.task = task;
+    [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] gettin ready. vroom vroom."];
     [BPUtils printInfo:INFO withString:@"Started BP-%lu (PID %d).", number, [task processIdentifier]];
 }
 
