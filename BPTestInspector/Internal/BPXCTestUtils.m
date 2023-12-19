@@ -18,7 +18,7 @@
 + (void)logAllTestsInBundleWithPath:(NSString *)bundlePath toFile:(NSString *)outputPath {
     NSArray<BPTestCaseInfo *> *testCases = [self enumerateTestCasesInBundleWithPath:bundlePath];
 
-    testCases = @[[[BPTestCaseInfo alloc] initWithClassName:@"BPPassingLogicTests" methodName:@"testPassingLogicTest4"]];
+//    testCases = @[[[BPTestCaseInfo alloc] initWithClassName:@"BPPassingLogicTests" methodName:@"testPassingLogicTest4"]];
     // Encode the test data
     NSError *encodingError;
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:testCases requiringSecureCoding:YES error:&encodingError];

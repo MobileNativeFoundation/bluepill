@@ -40,9 +40,8 @@
 		FB21F0C02A622FFE00682AC7 /* libBPMacTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB21F0BE2A622FFD00682AC7 /* libBPMacTestInspector.dylib */; };
 		FB940A432B3032430071F2FA /* libBPMacTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB940A422B3032430071F2FA /* libBPMacTestInspector.dylib */; };
 		FB940A442B3032430071F2FA /* libBPMacTestInspector.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = FB940A422B3032430071F2FA /* libBPMacTestInspector.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		FBA69FA72A45F889003BADBF /* BPLogicTestFixture_arm64.xctest in Resources */ = {isa = PBXBuildFile; fileRef = FBA69FA52A45F889003BADBF /* BPLogicTestFixture_arm64.xctest */; };
 		FBA69FA82A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest in Resources */ = {isa = PBXBuildFile; fileRef = FBA69FA62A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest */; };
-		FBF6B19D2A5F272500D7A64B /* BPLogicTestFixture_swift_x86_64.xctest in Resources */ = {isa = PBXBuildFile; fileRef = FBF6B19C2A5F272500D7A64B /* BPLogicTestFixture_swift_x86_64.xctest */; };
+		FBC6553A2B3194130083E1BF /* BPLogicTestFixture_swift_x86_64.xctest in Resources */ = {isa = PBXBuildFile; fileRef = FBC655392B3194130083E1BF /* BPLogicTestFixture_swift_x86_64.xctest */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,9 +107,8 @@
 		FB21F0BE2A622FFD00682AC7 /* libBPMacTestInspector.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libBPMacTestInspector.dylib; sourceTree = "<group>"; };
 		FB940A3D2B3028DD0071F2FA /* libBPTestInspector.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = libBPTestInspector.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB940A422B3032430071F2FA /* libBPMacTestInspector.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = libBPMacTestInspector.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		FBA69FA52A45F889003BADBF /* BPLogicTestFixture_arm64.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPLogicTestFixture_arm64.xctest; sourceTree = "<group>"; };
 		FBA69FA62A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPLogicTestFixture_x86_64.xctest; sourceTree = "<group>"; };
-		FBF6B19C2A5F272500D7A64B /* BPLogicTestFixture_swift_x86_64.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPLogicTestFixture_swift_x86_64.xctest; sourceTree = "<group>"; };
+		FBC655392B3194130083E1BF /* BPLogicTestFixture_swift_x86_64.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPLogicTestFixture_swift_x86_64.xctest; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,9 +171,8 @@
 				0173521223679E87008BFA4E /* TEST-FinalReport.xml */,
 				E49235FE22EA847700395D98 /* times.json */,
 				BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */,
-				FBA69FA52A45F889003BADBF /* BPLogicTestFixture_arm64.xctest */,
+				FBC655392B3194130083E1BF /* BPLogicTestFixture_swift_x86_64.xctest */,
 				FBA69FA62A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest */,
-				FBF6B19C2A5F272500D7A64B /* BPLogicTestFixture_swift_x86_64.xctest */,
 				BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */,
 				C415174C273AE3CE00646740 /* Expected-TEST-FinalReport-for-invalid-xml.xml */,
 			);
@@ -307,11 +304,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBA69FA72A45F889003BADBF /* BPLogicTestFixture_arm64.xctest in Resources */,
 				BA9C2DB11DD67B66007CB967 /* testScheme.xcscheme in Resources */,
 				BA9C2DAF1DD674AD007CB967 /* BPSampleAppTests.xctest in Resources */,
 				FBA69FA82A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest in Resources */,
-				FBF6B19D2A5F272500D7A64B /* BPLogicTestFixture_swift_x86_64.xctest in Resources */,
+				FBC6553A2B3194130083E1BF /* BPLogicTestFixture_swift_x86_64.xctest in Resources */,
 				E49235FF22EA847700395D98 /* times.json in Resources */,
 				C415174F273AEAC400646740 /* simulator in Resources */,
 				0173521323679E87008BFA4E /* TEST-FinalReport.xml in Resources */,

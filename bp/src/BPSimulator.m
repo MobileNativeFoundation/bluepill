@@ -498,8 +498,6 @@
     if (self.config.dyldFrameworkPath) {
         environment[@"DYLD_FRAMEWORK_PATH"] = self.config.dyldFrameworkPath;
         environment[@"DYLD_LIBRARY_PATH"] = self.config.dyldFrameworkPath;
-        [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] set DYLD_FRAMEWORK_PATH = %@", environment[@"DYLD_FRAMEWORK_PATH"]];
-
     }
     [environment addEntriesFromDictionary:self.config.environmentVariables];
     
@@ -580,9 +578,10 @@
     NSMutableDictionary *environment = [[SimulatorHelper logicTestEnvironmentWithConfig:self.config stdoutRelativePath:simStdoutRelativePath] mutableCopy];
     
     
-    [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] going to try to find dylib"];
+    NSString *testInspectorPath = [BPUtils findBPTestInspectorDYLIB];
+    [BPUtils printInfo:INFO withString: @"Injecting libBPTestInspector.dylib at path: %@", testInspectorPath];
     
-    environment[@"DYLD_INSERT_LIBRARIES"] = [BPUtils findBPTestInspectorDYLIB];
+    environment[@"DYLD_INSERT_LIBRARIES"] = testInspectorPath;
     environment[BPTestInspectorConstants.outputPathEnvironmentKey] = testSuiteInfoOutputPath;
     environment[BPTestInspectorConstants.testBundleEnvironmentKey] = xctestPath;
     
@@ -593,13 +592,7 @@
         kOptionsArgumentsKey: arguments,
         kOptionsEnvironmentKey: environment,
         @"standalone": @(1),
-//        @"stdout": @(1),
-//        @"stderr": @(2),
-//        @"stdout": stdoutFileDescriptor,
-//        @"stderr": stdoutFileDescriptor,
     };
-    
-    [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] simStdoutPath: %@", simStdoutPath];
 
     // To see more on how to debug the expected format/inputs of the options array,
     // see the in-depth documentation in SimDevice.h.
@@ -613,20 +606,9 @@
             return;
         }
         // Retrieve test data
-        
-        [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] about to read test inspector output"];
+        [BPUtils printInfo:INFO withString: @"Test inspector execution completed successfully"];
         
         NSError *unarchiveError;
-        
-//        NSError *readError;
-//        NSString* content = [NSString stringWithContentsOfFile:testSuiteInfoOutputPath
-//                                                      encoding:NSUTF8StringEncoding
-//                                                         error:&readError];
-//        if (readError) {
-//            [BPUtils printInfo:ERROR withString: @"[LTHROCKM DEBUG] readError: %@", readError.userInfo];
-//        } else {
-//            [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] content: %@", content];
-//        }
         
         NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:testSuiteInfoOutputPath];
         NSData *testData = [fileHandle readDataToEndOfFile];
@@ -634,14 +616,14 @@
         NSArray<BPTestCaseInfo *> *testBundleInfo = [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:BPTestCaseInfo.class
                                                                                               fromData:testData
                                                                                                  error:&unarchiveError];
-        if (unarchiveError) {
-            [BPUtils printInfo:ERROR withString: @"[LTHROCKM DEBUG] unarchiver error: %@", unarchiveError.userInfo];
-        } else {
-            [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] testBundleInfo: %@", testBundleInfo];
-        }
         [fileHandle closeFile];
         // Cleanup + Completion
         [NSFileManager.defaultManager removeItemAtPath:testSuiteInfoOutputPath error:nil];
+        if (unarchiveError) {
+            [BPUtils printInfo:ERROR withString: @"BPTestInspector failed with unarchiver error: %@", unarchiveError.userInfo];
+        } else {
+            [BPUtils printInfo:INFO withString: @"BPTestInspector returned list of tests of size: %@", @(testBundleInfo.count)];
+        }
         completionBlock(testBundleInfo, unarchiveError);
     } completionHandler:^(NSError *error, pid_t pid) {
         if (error) {

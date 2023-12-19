@@ -128,11 +128,9 @@ static BOOL quiet = NO;
 }
 
 + (NSString *)findBPTestInspectorDYLIB {
-    [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - looking for dylib"];
     NSString *argv0 = [[[NSProcessInfo processInfo] arguments] objectAtIndex:0];
     NSString *path = [[argv0 stringByDeletingLastPathComponent] stringByAppendingPathComponent:BPTestInspectorConstants.dylibName];
     if ([[NSFileManager defaultManager] isReadableFileAtPath:path]) {
-        [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - fount at path: %@", path];
         return path;
     }
     // The executable may also be in derived data, accessible from the app's current working directory.
@@ -140,10 +138,8 @@ static BOOL quiet = NO;
     NSString *iPhoneSimDir = [buildProductsDir stringByAppendingPathComponent:@"Debug-iphonesimulator"];
     path = [iPhoneSimDir stringByAppendingPathComponent:BPTestInspectorConstants.dylibName];
     if ([[NSFileManager defaultManager] isReadableFileAtPath:path]) {
-        [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - fount at path: %@", path];
         return path;
     }
-    [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - did not find :("];
     return nil;
 }
 
@@ -530,12 +526,13 @@ static BOOL quiet = NO;
  @return the path of the new executable if possible + required, nil otherwise. In nil case, original executable should be used instead.
  */
 + (NSString *)lipoExecutableAtPath:(NSString *)path withContext:(BPExecutionContext *)context {
+    [BPUtils printInfo:INFO withString:@"Preparing to extrat xctest executable into required architecture."];
     // If the executable isn't a universal binary, there's nothing we can do. If we don't
     // support the test bundle type, we'll let it fail later naturally.
     NSArray<NSString *> *executableArchitectures = [self availableArchitecturesForPath:path];
     BOOL isUniversalExecutable = [executableArchitectures containsObject:self.x86_64] && [executableArchitectures containsObject:self.arm64];
     if (!isUniversalExecutable) {
-        [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] !isUniversalExecutable"];
+        [BPUtils printInfo:INFO withString:@"xctest executable was not a universal binary. No extraction possible."];
         return nil;
     }
     // Now, get the test bundle's architecture.
@@ -548,14 +545,14 @@ static BOOL quiet = NO;
     // If the test bundle is a univeral binary, no need to lipo... xctest (regardless of the arch it's in)
     // should be able to handle it.
     if (isUniversalTestBundle) {
-        [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] !isUniversalTestBundle"];
+        [BPUtils printInfo:INFO withString:@"Test bundle is a universal binary -- no architecture extraction required."];
         return nil;
     }
 
     // If the test bundle's arch isn't supported by the sim, we're in an error state
     NSArray<NSString *> *simArchitectures = [self architecturesSupportedByDevice:context.runner.device];
     if (![simArchitectures containsObject:testBundleArchitectures.firstObject]) {
-        [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] ![simArchitectures containsObject:testBundleArchitectures.firstObject]"];
+        [BPUtils printInfo:ERROR withString:@"The simulator being run does not support the test bundle's arch (%@)", testBundleArchitectures.firstObject];
         return nil;
     }
     
@@ -572,17 +569,19 @@ static BOOL quiet = NO;
     // We handle these accordingly:
     //   1a) we lipo if the test bundle is an x86_64 binary
     //   1b) no-op.     ... x86 will get handled automatically, and we have to fail if test bundle is arm64.
-    //   1c) no-op.     ... arm64 will get handled automatically, and we have to fail if test bundle is x86.
+    //    2) no-op.     ... arm64 will get handled automatically, and we have to fail if test bundle is x86.
     BOOL isRosetta = [self.currentArchitecture isEqual:self.x86_64] && isUniversalExecutable;
-    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] currentArchitecture = %@", self.currentArchitecture];
-    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] isUniversalExecutable = %@", @(isUniversalExecutable)];
-    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] testBundleArchitectures = %@", testBundleArchitectures];
-    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] isRosetta = %@", @(isRosetta)];
+    [BPUtils printInfo:DEBUGINFO withString:@"lipo: currentArchitecture = %@", self.currentArchitecture];
+    [BPUtils printInfo:DEBUGINFO withString:@"lipo: isUniversalExecutable = %@", @(isUniversalExecutable)];
+    [BPUtils printInfo:DEBUGINFO withString:@"lipo: testBundleArchitectures = %@", testBundleArchitectures];
+    [BPUtils printInfo:DEBUGINFO withString:@"lipo: isRosetta = %@", @(isRosetta)];
     if (!isRosetta || ![testBundleArchitectures.firstObject isEqual:self.x86_64]) {
+        [BPUtils printInfo:INFO withString:@"The test bundle matches the expected xctest architecture, so no arch extraction is required"];
         return nil;
     }
 
     // Now we lipo.
+    [BPUtils printInfo:INFO withString:@"We are in Rosetta, but xctest will default to arm64. Extracting xctest x86_64 binary"];
     NSError *error;
     NSString *fileName = [NSString stringWithFormat:@"%@xctest", NSTemporaryDirectory()];
     NSString *thinnedExecutablePath = [BPUtils mkstemp:fileName withError:&error];
@@ -601,10 +600,11 @@ static BOOL quiet = NO;
 + (NSString *)correctedDYLDFrameworkPathFromBinary:(NSString *)binaryPath {
     NSString *otoolCommand = [NSString stringWithFormat:@"/usr/bin/otool -l %@", binaryPath];
     NSString *otoolInfo = [BPUtils runShell:otoolCommand];
-//    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] otoolInfo = %@", otoolInfo];
 
-    // /usr/bin/otool -l  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest
     /**
+     Example command:
+     `/usr/bin/otool -l  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest`
+
      Example output looks something like this:
      
      ```
@@ -641,7 +641,7 @@ static BOOL quiet = NO;
             [paths addObject:path];
         }
     } else {
-        NSLog(@"Error creating regular expression: %@", error);
+        [BPUtils printInfo:ERROR withString:@"Error creating regular expression: %@", error];
     }
     return [paths componentsJoinedByString:@":"];
 }
