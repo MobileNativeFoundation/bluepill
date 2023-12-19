@@ -122,7 +122,7 @@
 		FBBBD8F129A06B47002B9115 /* BPLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPLogicTests.m; sourceTree = "<group>"; };
 		FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBD772B12A33E0620098CEFD /* BPPassingLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPPassingLogicTests.m; sourceTree = "<group>"; };
-		FBD772BC2A33E15D0098CEFD /* BPLogicTestFixture_arm64.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPLogicTestFixture_arm64.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBD772BC2A33E15D0098CEFD /* BPPassingLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPPassingLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBD772BD2A33E15D0098CEFD /* BPLogicTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "BPLogicTests-Info.plist"; path = "/Users/lthrockm/ios/bluepill/bluepill/BPSampleApp/BPLogicTests-Info.plist"; sourceTree = "<absolute>"; };
 		FBD772C32A34832D0098CEFD /* SwiftLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLogicTests.swift; sourceTree = "<group>"; };
 		FBD772C62A378F440098CEFD /* BPBulkLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPBulkLogicTests.m; sourceTree = "<group>"; };
@@ -259,7 +259,7 @@
 				BAFCCA5D1E36DC2000E33C31 /* BPSampleAppUITests.xctest */,
 				E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */,
 				FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */,
-				FBD772BC2A33E15D0098CEFD /* BPLogicTestFixture_arm64.xctest */,
+				FBD772BC2A33E15D0098CEFD /* BPPassingLogicTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -510,9 +510,9 @@
 			productReference = FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		FBD772B32A33E15D0098CEFD /* BPLogicTestFixture_arm64 */ = {
+		FBD772B32A33E15D0098CEFD /* BPPassingLogicTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FBD772B92A33E15D0098CEFD /* Build configuration list for PBXNativeTarget "BPLogicTestFixture_arm64" */;
+			buildConfigurationList = FBD772B92A33E15D0098CEFD /* Build configuration list for PBXNativeTarget "BPPassingLogicTests" */;
 			buildPhases = (
 				FBD772B42A33E15D0098CEFD /* Sources */,
 				FBD772B72A33E15D0098CEFD /* Frameworks */,
@@ -522,9 +522,9 @@
 			);
 			dependencies = (
 			);
-			name = BPLogicTestFixture_arm64;
+			name = BPPassingLogicTests;
 			productName = BPSampleAppTests;
-			productReference = FBD772BC2A33E15D0098CEFD /* BPLogicTestFixture_arm64.xctest */;
+			productReference = FBD772BC2A33E15D0098CEFD /* BPPassingLogicTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -611,7 +611,7 @@
 				BAFCCA5C1E36DC2000E33C31 /* BPSampleAppUITests */,
 				E4F8A33D26F3B1AD00FE1267 /* BPSampleAppNewTests */,
 				FBBBD8F229A06B54002B9115 /* BPLogicTests */,
-				FBD772B32A33E15D0098CEFD /* BPLogicTestFixture_arm64 */,
+				FBD772B32A33E15D0098CEFD /* BPPassingLogicTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1345,7 +1345,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		FBD772B92A33E15D0098CEFD /* Build configuration list for PBXNativeTarget "BPLogicTestFixture_arm64" */ = {
+		FBD772B92A33E15D0098CEFD /* Build configuration list for PBXNativeTarget "BPPassingLogicTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FBD772BA2A33E15D0098CEFD /* Debug */,

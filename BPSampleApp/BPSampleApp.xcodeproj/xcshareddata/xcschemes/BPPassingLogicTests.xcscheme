@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "FBD772B32A33E15D0098CEFD"
-               BuildableName = "BPLogicTestFixture_arm64.xctest"
-               BlueprintName = "BPLogicTestFixture_arm64"
+               BuildableName = "BPPassingLogicTests.xctest"
+               BlueprintName = "BPPassingLogicTests"
                ReferencedContainer = "container:BPSampleApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "FBD772B32A33E15D0098CEFD"
-               BuildableName = "BPLogicTestFixture_arm64.xctest"
-               BlueprintName = "BPLogicTestFixture_arm64"
+               BuildableName = "BPPassingLogicTests.xctest"
+               BlueprintName = "BPPassingLogicTests"
                ReferencedContainer = "container:BPSampleApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FBD772B32A33E15D0098CEFD"
-            BuildableName = "BPLogicTestFixture_arm64.xctest"
-            BlueprintName = "BPLogicTestFixture_arm64"
+            BuildableName = "BPPassingLogicTests.xctest"
+            BlueprintName = "BPPassingLogicTests"
             ReferencedContainer = "container:BPSampleApp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
