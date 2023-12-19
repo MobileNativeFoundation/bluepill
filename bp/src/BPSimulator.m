@@ -557,6 +557,10 @@
     }];
 }
 
+/**
+ Spawns a child xctest process (which we cause to not actually run tests), injecting the BPTestInspector
+ to pipe out test information instead.
+ */
 - (void)collectTestSuiteInfoWithCompletion:(void (^)(NSArray<BPTestCaseInfo *> *, NSError *))completionBlock {
     NSString *xctestPath = self.config.testBundlePath;
     NSArray *arguments = @[
@@ -633,13 +637,12 @@
 }
 
 + (NSError *)errorFromStatusLocation:(int)stat_loc {
-    NSError *error;
     if (WIFSIGNALED(stat_loc)) {
         int signalCode = WTERMSIG(stat_loc);
         // Ignore if the process was killed -- this occurs when we're killing
         // a timed-out test, and shouldn't be treated as a crash.
         if (signalCode != SIGKILL) {
-            [BPUtils printInfo:DEBUGINFO withString: @"Spawned XCTest execution failed with signal code: %@", @(signalCode)];
+            [BPUtils printInfo:WARNING withString: @"Spawned XCTest execution failed with signal code: %@", @(signalCode)];
             return [BPUtils errorWithSignalCode:signalCode];
         }
     } else {
@@ -647,7 +650,7 @@
         // The best we can do is log the error code as debug info.
         int exitCode = WEXITSTATUS(stat_loc);
         if (exitCode) {
-            [BPUtils printInfo:DEBUGINFO withString: @"Spawned XCTest execution failed with error code: %@", @(exitCode)];
+            [BPUtils printInfo:INFO withString: @"Spawned XCTest execution failed with error code: %@", @(exitCode)];
         }
     }
     return nil;

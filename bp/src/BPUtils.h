@@ -200,21 +200,6 @@ typedef BOOL (^BPRunBlock)(void);
 + (NSString *)removeSwiftArgumentsFromTestName:(NSString *)testName;
 
 /*!
- * @discussion Checks for indicators that a test name is a swift test's name, i.e. has `<bundle>.` or `()`
- * @param testName the name of the test to check
- * @return `YES` if swift, `NO` if objc
- */
-+ (BOOL)isTestSwiftTest:(NSString *)testName;
-
-/*!
- * @discussion Strips the test's bundle name if present, and adds in parenthesis. This is
- * the format that consumers of Bluepill expect to provide + see in test reports.
- * @param testName the name of the test to format
- * @return trimmed test name
- */
-+ (NSString *)formatSwiftTestForReport:(NSString *)testName;
-
-/*!
  * @discussion XCTest requires that swift test names are fully namespaced, and don't include parens,
  * contrary to what Bluepill consumers provide.
  *

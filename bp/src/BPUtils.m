@@ -307,45 +307,12 @@ static BOOL quiet = NO;
   [BPUtils runShell:cmd];
 }
 
-+ (BOOL)isTestSwiftTest:(NSString *)testName {
-    return [testName containsString:@"."] || [testName containsString:@"()"];
-}
-
 + (NSString *)removeSwiftArgumentsFromTestName:(NSString *)testName {
     NSRange range = [testName rangeOfString:@"("];
     if (range.location == NSNotFound) {
         return testName;
     }
     return [NSString stringWithFormat:@"%@()", [testName substringToIndex:range.location]];
-}
-
-+ (NSString *)formatSwiftTestForReport:(NSString *)testName {
-    NSString *formattedName = testName;
-    // Remove prefix of `<bundleName>.`
-    NSRange range = [testName rangeOfString:@"."];
-    if (range.location != NSNotFound) {
-        formattedName = [formattedName substringFromIndex:range.location + 1];
-    }
-    // Add parentheses
-    if (![testName hasSuffix:@"()"]) {
-        formattedName = [formattedName stringByAppendingString:@"()"];
-    }
-    return formattedName;
-}
-
-+ (NSString *)formatSwiftTestForXCTest:(NSString *)testName withBundleName:(NSString *)bundleName {
-    NSString *formattedName = testName;
-    // Remove parentheses
-    NSRange range = [formattedName rangeOfString:@"()"];
-    if (range.location != NSNotFound) {
-        formattedName = [formattedName substringToIndex:range.location];
-    }
-    // Add `<bundleName>.`
-    NSString *bundlePrefix = [bundleName stringByAppendingString:@"."];
-    if (![formattedName containsString:bundlePrefix]) {
-        formattedName = [NSString stringWithFormat:@"%@.%@", bundleName, formattedName];
-    }
-    return formattedName;
 }
 
 + (char *)version {

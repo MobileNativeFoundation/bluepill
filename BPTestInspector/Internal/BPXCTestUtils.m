@@ -1,9 +1,11 @@
+//  Copyright 2016 LinkedIn Corporation
+//  Licensed under the BSD 2-Clause License (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at https://opensource.org/licenses/BSD-2-Clause
 //
-//  BPXCTestUtils.m
-//  BPTestInspector
-//
-//  Created by Lucas Throckmorton on 6/8/23.
-//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import "BPXCTestUtils.h"
 
@@ -18,7 +20,6 @@
 + (void)logAllTestsInBundleWithPath:(NSString *)bundlePath toFile:(NSString *)outputPath {
     NSArray<BPTestCaseInfo *> *testCases = [self enumerateTestCasesInBundleWithPath:bundlePath];
 
-//    testCases = @[[[BPTestCaseInfo alloc] initWithClassName:@"BPPassingLogicTests" methodName:@"testPassingLogicTest4"]];
     // Encode the test data
     NSError *encodingError;
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:testCases requiringSecureCoding:YES error:&encodingError];
@@ -34,14 +35,12 @@
 + (NSArray<BPTestCaseInfo *> *)enumerateTestCasesInBundleWithPath:(NSString *)bundlePath {
     NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
     if (!bundle || !bundle.executablePath) {
-        // Log error...
         [BPLoggingUtils logError:[NSString stringWithFormat:@"Unable to get executable path from bundle: %@", bundle]];
         return @[];
     }
     return [self enumerateTestCasesInBundle:bundle];
 }
 
-//static void listBundle(NSString *testBundlePath, NSString *outputFile)
 + (NSArray<BPTestCaseInfo *> *)enumerateTestCasesInBundle:(NSBundle *)bundle {
     /**
      We need to remove the XCTest preference before continuing so that
@@ -53,7 +52,6 @@
      and start running the tests.
      */
     
-//    NSLog(@"INJECTION - %@", [NSUserDefaults.standardUserDefaults objectForKey:@"XCTest"]);
     [NSUserDefaults.standardUserDefaults removeObjectForKey:@"XCTest"];
     [NSUserDefaults.standardUserDefaults synchronize];
 

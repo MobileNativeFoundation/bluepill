@@ -130,7 +130,7 @@
     xctConfig.reportResultsToIDE = YES;
     xctConfig.automationFrameworkPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/XCTAutomationSupport.framework", config.xcodePath];
     testHostPath = config.appBundlePath;
-    
+
     NSString *bundleID = [self bundleIdForPath:config.appBundlePath];
     xctConfig.testApplicationDependencies = config.dependencies.count > 0 ? config.dependencies : @{bundleID: config.appBundlePath};
 

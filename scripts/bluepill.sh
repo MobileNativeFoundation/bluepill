@@ -52,7 +52,7 @@ bluepill_build()
           cat result_bptestinspector.txt
           exit 1
   }
-  test -x build/Build/Products/Release/bluepill || {
+  test -x build/Build/Products/Release-iphonesimulator/libBPTestInspector.dylib || {
           echo No bp built
           exit 1
   }

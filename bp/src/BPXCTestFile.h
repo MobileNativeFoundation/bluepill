@@ -20,7 +20,6 @@
 @property (nonatomic, strong) NSString *testBundlePath;
 @property (nonatomic, strong) NSString *UITargetAppPath;
 @property (nonatomic, strong) NSArray<NSString *> *skipTestIdentifiers;
-@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *standardizedSwiftTestNames;
 @property (nonatomic, strong) NSNumber *estimatedExecutionTime;
 @property (nonatomic, strong) NSDictionary <NSString *, NSString *> *dependencies;
 

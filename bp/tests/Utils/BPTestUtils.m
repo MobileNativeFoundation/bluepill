@@ -82,9 +82,28 @@
               [BPExitStatusHelper stringFromExitStatus:exitStatus]);
 }
 
++ (BOOL)isTestSwiftTest:(NSString *)testName {
+    return [testName containsString:@"."] || [testName containsString:@"()"];
+}
+
++ (NSString *)formatSwiftTestForXCTest:(NSString *)testName withBundleName:(NSString *)bundleName {
+    NSString *formattedName = testName;
+    // Remove parentheses
+    NSRange range = [formattedName rangeOfString:@"()"];
+    if (range.location != NSNotFound) {
+        formattedName = [formattedName substringToIndex:range.location];
+    }
+    // Add `<bundleName>.`
+    NSString *bundlePrefix = [bundleName stringByAppendingString:@"."];
+    if (![formattedName containsString:bundlePrefix]) {
+        formattedName = [NSString stringWithFormat:@"%@.%@", bundleName, formattedName];
+    }
+    return formattedName;
+}
+
 + (BOOL)checkIfTestCase:(NSString *)testCase bundleName:(NSString *)bundleName wasRunInLog:(NSString *)logPath {
     NSString *testName = testCase;
-    if ([BPUtils isTestSwiftTest:testName]) {
+    if ([self isTestSwiftTest:testName]) {
         testName = [BPUtils formatSwiftTestForXCTest:testName withBundleName:bundleName];
     }
     NSArray *testComponents = [testName componentsSeparatedByString:@"/"];

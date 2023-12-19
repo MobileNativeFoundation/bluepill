@@ -1,9 +1,11 @@
+//  Copyright 2016 LinkedIn Corporation
+//  Licensed under the BSD 2-Clause License (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at https://opensource.org/licenses/BSD-2-Clause
 //
-//  main.m
-//  BPTestInspector
-//
-//  Created by Lucas Throckmorton on 5/29/23.
-//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
@@ -12,9 +14,6 @@
 #import "BPXCTestUtils.h"
 #import "BPLoggingUtils.h"
 #import "BPTestInspectorConstants.h"
-
-//void tearDown(int signal) {
-//}
 
 /**
  This wrapper around XCTest hijacks the process when two key env variables are set, hooking into the xctest process to
@@ -54,7 +53,3 @@ static void didLoad() {
     // Once tests are logged, we want the process to end.
     exit(0);
 }
-
-//__attribute__((destructor)) static void pluginDidUnload() {
-//    tearDown(0);
-//}

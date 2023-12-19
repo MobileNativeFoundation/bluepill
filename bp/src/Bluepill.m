@@ -223,8 +223,6 @@ static void onInterrupt(int ignore) {
     context.config.allTestCases = [[NSArray alloc] initWithArray: xctTestFile.allTestCases];
 
     if (context.config.isLogicTestTarget) {
-        // XCTest is stricter about how swift test names are formatted
-        context.config.standardizedSwiftTestNames = xctTestFile.standardizedSwiftTestNames;
         // For estimating how long this will take (and setting an appropriate timeout), we need to
         // remove any skipped tests that aren't actually a part of this bundle.
         NSMutableSet<NSString *> *allTests = [NSMutableSet setWithArray:context.config.allTestCases];
@@ -402,6 +400,12 @@ static void onInterrupt(int ignore) {
     }
 }
 
+/**
+ On Apple Silicon machines, the xctest executable is likely to be a universal binary. Strangely, however, this can cause issues when
+ Xcode is being run in Rosetta mode with an `x86_64` test bundle. While it would seem those would be compatible, the simulator
+ won't naturally respect that it was launched from a Rosetta process, and will try to boot using the `arm64` binary by default.
+ As a result, in such a scenario we need to do some work on our side to get a modified xctest binary that will boot using x86.
+ */
 - (void)adaptXCTestExecutableIfRequiredWithContext:(BPExecutionContext *)context {
     // First we need to make sure the archs are consistent between the xctest executable + the test bundle.
     NSString *originalXCTestPath = [[NSString alloc] initWithFormat:
@@ -414,6 +418,10 @@ static void onInterrupt(int ignore) {
     context.config.xctestBinaryPath = newXCTestPath ?: originalXCTestPath;
 }
 
+/**
+ Will spawn a child xctest execution with an injected dylib to pipe out information about all the tests in a test bundle.
+ No tests will be run.
+ */
 - (void)enumerateTestsWithContext:(BPExecutionContext *)context {
     NSString *stepName = TEST_INSPECTION(context.attemptNumber);
     [BPUtils printInfo:INFO withString:@"%@", stepName];

@@ -108,10 +108,10 @@
 
 + (instancetype)appWithConfig:(BPConfiguration *)config
                     withError:(NSError *__autoreleasing *)errPtr {
-    
+
     BPApp *app = [[BPApp alloc] init];
     NSMutableArray<BPXCTestFile *> *allXCTestFiles = [[NSMutableArray alloc] init];
-    
+
     if (config.tests != nil && config.tests.count != 0) {
         [BPUtils printInfo:INFO withString:@"Using test bundles"];
         app.testBundles = [self testsFromConfig:config withError:errPtr];
@@ -120,7 +120,7 @@
         }
         return app;
     }
-    
+
     if (config.xcTestRunDict) {
         NSAssert(config.xcTestRunPath, @"");
         [BPUtils printInfo:INFO withString:@"Using xctestrun configuration"];
@@ -131,7 +131,7 @@
         if (loadedTests == nil) {
             return nil;
         }
-        
+
         [allXCTestFiles addObjectsFromArray:loadedTests];
     } else if (config.appBundlePath) {
         NSAssert(config.appBundlePath, @"no app bundle and no xctestrun file");
