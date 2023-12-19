@@ -528,7 +528,7 @@
     };
     
     
-    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] options = %@", options];
+    [BPUtils printInfo:DEBUGINFO withString:@"Spawning xctest execution with options: %@", options];
 
     // To see more on how to debug the expected format/inputs of the options array,
     // see the in-depth documentation in SimDevice.h.
@@ -574,9 +574,6 @@
     // Intercept stdout, stderr and post as simulator-output events
     NSString *simStdoutPath = [SimulatorHelper makeStdoutFileOnDevice:self.device];
     NSString *simStdoutRelativePath = [simStdoutPath substringFromIndex:self.device.dataPath.length];
-    
-    
-    [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] inspecting tests. gonna put em in path: %@", simStdoutPath];
 
     // Environment
     NSMutableDictionary *environment = [[SimulatorHelper logicTestEnvironmentWithConfig:self.config stdoutRelativePath:simStdoutRelativePath] mutableCopy];
@@ -616,7 +613,6 @@
         
         NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:testSuiteInfoOutputPath];
         NSData *testData = [fileHandle readDataToEndOfFile];
-        [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] testData: %@", testData];
         NSArray<BPTestCaseInfo *> *testBundleInfo = [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:BPTestCaseInfo.class
                                                                                               fromData:testData
                                                                                                  error:&unarchiveError];
