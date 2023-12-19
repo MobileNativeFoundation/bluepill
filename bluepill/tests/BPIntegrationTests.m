@@ -87,6 +87,7 @@
     // Test multiple test bundles, while skipping any failing tests so that we
     // can still validate that we get a success code..
     config.testBundlePath = bundlePath;
+    config.numSims = @(1);
 
     NSString *bpPath = [BPTestHelper bpExecutablePath];
     BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
@@ -105,6 +106,7 @@
     BPConfiguration *config = [BPTestUtils makeUnhostedTestConfiguration];
     config.stuckTimeout = @(2);
     config.testCaseTimeout = @(10);
+    config.numSims = @(1);
     // Test multiple test bundles, while skipping any failing tests so that we
     // can still validate that we get a success code..
     config.testBundlePath = bundlePath;

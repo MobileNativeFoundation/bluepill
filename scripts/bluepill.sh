@@ -52,7 +52,7 @@ bluepill_build()
           cat result_bptestinspector.txt
           exit 1
   }
-  test -x build/Build/Products/Release-iphonesimulator/libBPTestInspector.dylib || {
+  test -x build/Build/Products/Release/bluepill || {
           echo No bp built
           exit 1
   }
@@ -81,10 +81,6 @@ bluepill_build()
   mkdir -p "build/$DST/bin"
   cp build/Build/Products/Release/{bp,bluepill,libBPMacTestInspector.dylib,libBPTestInspector.dylib} "build/$DST/bin"
   cp build/Build/Products/Release-iphonesimulator/libBPTestInspector.dylib "build/$DST/bin"
-
-  echo "LUCAS IS TRYING REALLY HARD"
-  echo "build/$DST/bin"
-  ls "build/$DST/bin"
 
   ## build the man page
   mkdir -p "build/$DST/man/man1"

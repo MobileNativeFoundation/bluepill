@@ -601,7 +601,7 @@ static BOOL quiet = NO;
 + (NSString *)correctedDYLDFrameworkPathFromBinary:(NSString *)binaryPath {
     NSString *otoolCommand = [NSString stringWithFormat:@"/usr/bin/otool -l %@", binaryPath];
     NSString *otoolInfo = [BPUtils runShell:otoolCommand];
-    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] otoolInfo = %@", otoolInfo];
+//    [BPUtils printInfo:INFO withString:@"[LTHROCKM DEBUG] otoolInfo = %@", otoolInfo];
 
     // /usr/bin/otool -l  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest
     /**

@@ -222,6 +222,8 @@
         BPTestCaseInfo *info = config.allTests[testName];
         if (info) {
             [formattedTests addObject:info.standardizedFullName];
+        } else {
+            [BPUtils printInfo:INFO withString:@"LTHROCKM DEBUG - omitted test with name: %@", testName];
         }
     }
     return formattedTests;

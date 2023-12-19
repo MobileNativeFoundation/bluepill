@@ -20,6 +20,14 @@
     // Encode the test data
     NSError *encodingError;
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:testCases requiringSecureCoding:YES error:&encodingError];
+    
+//    NSError *writeError;
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:testCases options:NSJSONWritingPrettyPrinted error:&writeError];
+//    NSString *result = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//    [result writeToFile:outputPath atomically:YES encoding: NSUTF8StringEncoding error: NULL];
+
+    
+    
     // Write to file.
     NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:outputPath];
     [fileHandle writeData:data];

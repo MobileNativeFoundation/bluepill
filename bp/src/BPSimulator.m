@@ -613,12 +613,32 @@
             return;
         }
         // Retrieve test data
+        
+        [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] about to read test inspector output"];
+        
         NSError *unarchiveError;
+        
+//        NSError *readError;
+//        NSString* content = [NSString stringWithContentsOfFile:testSuiteInfoOutputPath
+//                                                      encoding:NSUTF8StringEncoding
+//                                                         error:&readError];
+//        if (readError) {
+//            [BPUtils printInfo:ERROR withString: @"[LTHROCKM DEBUG] readError: %@", readError.userInfo];
+//        } else {
+//            [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] content: %@", content];
+//        }
+        
         NSFileHandle *fileHandle = [NSFileHandle fileHandleForReadingAtPath:testSuiteInfoOutputPath];
         NSData *testData = [fileHandle readDataToEndOfFile];
+        [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] testData: %@", testData];
         NSArray<BPTestCaseInfo *> *testBundleInfo = [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:BPTestCaseInfo.class
                                                                                               fromData:testData
                                                                                                  error:&unarchiveError];
+        if (unarchiveError) {
+            [BPUtils printInfo:ERROR withString: @"[LTHROCKM DEBUG] unarchiver error: %@", unarchiveError.userInfo];
+        } else {
+            [BPUtils printInfo:INFO withString: @"[LTHROCKM DEBUG] testBundleInfo: %@", testBundleInfo];
+        }
         [fileHandle closeFile];
         // Cleanup + Completion
         [NSFileManager.defaultManager removeItemAtPath:testSuiteInfoOutputPath error:nil];
