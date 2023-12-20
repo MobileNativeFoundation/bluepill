@@ -10,9 +10,9 @@
 #import <Foundation/Foundation.h>
 
 #pragma mark - Version Constants
-#define BP_DEFAULT_XCODE_VERSION "15.0"
-#define BP_DEFAULT_RUNTIME "iOS 17.0"
-#define BP_DEFAULT_BASE_SDK "17.0"
+#define BP_DEFAULT_XCODE_VERSION "15.1"
+#define BP_DEFAULT_RUNTIME "iOS 17.2"
+#define BP_DEFAULT_BASE_SDK "17.2"
 
 #define BP_DEFAULT_DEVICE_TYPE "iPhone SE (3rd generation)"
 
