@@ -104,7 +104,7 @@
 + (BOOL)checkIfTestCase:(NSString *)testCase bundleName:(NSString *)bundleName wasRunInLog:(NSString *)logPath {
     NSString *testName = testCase;
     if ([self isTestSwiftTest:testName]) {
-        testName = [BPUtils formatSwiftTestForXCTest:testName withBundleName:bundleName];
+        testName = [BPTestUtils formatSwiftTestForXCTest:testName withBundleName:bundleName];
     }
     NSArray *testComponents = [testName componentsSeparatedByString:@"/"];
     NSString *expectedString = [NSString stringWithFormat:@"Test Case '-[%@ %@]' started.", testComponents[0], testComponents[1]];

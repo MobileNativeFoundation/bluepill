@@ -200,16 +200,6 @@ typedef BOOL (^BPRunBlock)(void);
 + (NSString *)removeSwiftArgumentsFromTestName:(NSString *)testName;
 
 /*!
- * @discussion XCTest requires that swift test names are fully namespaced, and don't include parens,
- * contrary to what Bluepill consumers provide.
- *
- * @param testName the name of the test to format
- * @param bundleName The name of the test's bundle
- * @return trimmed test name
- */
-+ (NSString *)formatSwiftTestForXCTest:(NSString *)testName withBundleName:(NSString *)bundleName;
-
-/*!
  * @discussion setup the environment for weak linked frameworks
  * @param argc the number of arguments to the command
  * @param argv the arguments to the command

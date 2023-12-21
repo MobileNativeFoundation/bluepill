@@ -207,6 +207,8 @@
     XCTAssert([runner busySwimlaneCount] == 0);
 }
 
+// Note: If this is failing for you locally, try resetting all of your
+// sims with `sudo rm -rf /private/tmp/com.apple.CoreSimulator.SimDevice.*`
 - (void)testClonedSimulators {
     BPConfiguration *config = [self generateConfig];
     config.numSims = @2;
@@ -266,13 +268,23 @@
     BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
     XCTAssert(runner != nil);
     int rc = [runner runWithBPXCTestFiles:app.testBundles];
+
+    // Set this once we learn how many tests are in the BPSampleAppTests bundle.
+    NSInteger sampleAppTestsRemaining = NSNotFound;
     for (BPXCTestFile *testBundle in app.testBundles) {
+        // BPSampleAppTests is a huge bundle and will be broken into multiple batches
+        // Across all of these batches, the NOT skipped tests should add up to the total
+        // test count.
         if ([testBundle.name isEqualToString:@"BPSampleAppTests"]) {
-            XCTAssertEqual(testBundle.skipTestIdentifiers.count, 8);
+            if (sampleAppTestsRemaining == NSNotFound) {
+                sampleAppTestsRemaining = testBundle.allTestCases.count;
+            }
+            sampleAppTestsRemaining -= (testBundle.allTestCases.count - testBundle.skipTestIdentifiers.count);
         } else {
             XCTAssertEqual(testBundle.skipTestIdentifiers.count, 0);
         }
     }
+    XCTAssertEqual(sampleAppTestsRemaining, 0);
     XCTAssert(rc != 0); // this runs tests that fail
 }
 
