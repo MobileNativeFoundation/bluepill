@@ -25,6 +25,7 @@
 		E492360122EF61F300395D98 /* BPSampleAppMoarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E492360022EF61F300395D98 /* BPSampleAppMoarTests.m */; };
 		E4F8A34326F3B1AD00FE1267 /* BPSampleAppNewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F8A33B26F3B12F00FE1267 /* BPSampleAppNewTests.m */; };
 		FBBBD90029A06B7B002B9115 /* BPLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBBD8F129A06B47002B9115 /* BPLogicTests.m */; };
+		FBC526962B341A6400EECA73 /* libBPTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC526952B341A6400EECA73 /* libBPTestInspector.dylib */; };
 		FBD772B52A33E15D0098CEFD /* BPPassingLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD772B12A33E0620098CEFD /* BPPassingLogicTests.m */; };
 		FBD772C52A3483310098CEFD /* SwiftLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD772C32A34832D0098CEFD /* SwiftLogicTests.swift */; };
 		FBD772C72A378F440098CEFD /* BPBulkLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD772C62A378F440098CEFD /* BPBulkLogicTests.m */; };
@@ -121,6 +122,7 @@
 		E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppNewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBBBD8F129A06B47002B9115 /* BPLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPLogicTests.m; sourceTree = "<group>"; };
 		FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBC526952B341A6400EECA73 /* libBPTestInspector.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = libBPTestInspector.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBD772B12A33E0620098CEFD /* BPPassingLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPPassingLogicTests.m; sourceTree = "<group>"; };
 		FBD772BC2A33E15D0098CEFD /* BPPassingLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPPassingLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBD772BD2A33E15D0098CEFD /* BPLogicTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "BPLogicTests-Info.plist"; path = "/Users/lthrockm/ios/bluepill/bluepill/BPSampleApp/BPLogicTests-Info.plist"; sourceTree = "<absolute>"; };
@@ -154,6 +156,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBC526962B341A6400EECA73 /* libBPTestInspector.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +247,7 @@
 				BAFCCA5E1E36DC2000E33C31 /* BPSampleAppUITests */,
 				BAB24F2F1DB5D45E00867756 /* Products */,
 				FBD772BD2A33E15D0098CEFD /* BPLogicTests-Info.plist */,
+				FBC526942B341A6400EECA73 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -327,6 +331,14 @@
 				FBD772C92A378F7E0098CEFD /* BPPassingLogicTests */,
 			);
 			path = LogicTests;
+			sourceTree = "<group>";
+		};
+		FBC526942B341A6400EECA73 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FBC526952B341A6400EECA73 /* libBPTestInspector.dylib */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		FBD772C82A378F6F0098CEFD /* BPLogicTests */ = {
