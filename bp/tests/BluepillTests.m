@@ -29,8 +29,6 @@
 
 @implementation BluepillTests
 
-
-
 - (void)tearDown {
     [super tearDown];
 }
@@ -300,6 +298,7 @@
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.keepSimulator = YES;
+    self.config.errorRetriesCount = @1;
 
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
