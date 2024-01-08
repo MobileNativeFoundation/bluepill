@@ -41,7 +41,26 @@ jobs:
           path: build/**/*.xcresult
           retention-days: 14
 
-  # Third machine, runs Bluepill tests and makes release build
+  # Third machine, runs BP tests batch 3
+  integration_tests3:
+    name: Instance Test 3
+    runs-on: macos-13
+    steps:
+      # actions/checkout@v2 but we use the SHA1 because tags can be re-written in git
+      - uses: actions/checkout@722adc63f1aa60a57ec37892e133b1d319cae598
+      - name: Select Xcode 15.1
+        run: sudo xcode-select -s /Applications/Xcode_15.1.app
+      - name: Run Bluepill tests
+        run: ./scripts/bluepill.sh instance_tests3
+      - name: Capture xcresult files
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: xcresults-bp-tests2
+          path: build/**/*.xcresult
+          retention-days: 14
+
+  # Fourth machine, runs Bluepill tests and makes release build
   build:
     name: Bluepill Test and build
     runs-on: macos-13

@@ -107,12 +107,17 @@ run_tests() {
 
 bluepill_instance_tests1()
 {
-  run_tests bp "-skip-testing bp-tests/BPReportTests"
+  run_tests bp "-skip-testing bp-tests/BPReportTests1 -skip-testing bp-tests/BPReportTests2"
 }
 
 bluepill_instance_tests2()
 {
-  run_tests bp "-only-testing bp-tests/BPReportTests"
+  run_tests bp "-only-testing bp-tests/BPReportTests1"
+}
+
+bluepill_instance_tests3()
+{
+  run_tests bp "-only-testing bp-tests/BPReportTests2"
 }
 
 bluepill_runner_tests()
