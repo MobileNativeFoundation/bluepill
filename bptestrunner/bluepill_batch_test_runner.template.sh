@@ -80,8 +80,14 @@ echo "Running ./bluepill --test-plan-path "${BP_TEST_PLAN_ARG}" -o "outputs" ${C
 
 cd $BP_WORKING_FOLDER
 RC=0
+
+echo "Working directory: $(pwd)"
+echo "Hostname: $(hostname)"
+
 (./bluepill --test-plan-path "${BP_TEST_PLAN_ARG}" -o "outputs" ${CONFIG_ARG} ${TIME_ESTIMATE_ARG}) || RC=$?
 # Move Bluepill output to bazel-testlogs
 ditto "outputs" "$TEST_UNDECLARED_OUTPUTS_DIR"
 rm -rf "outputs"
+
+echo "Exit code: $RC"
 exit $RC
