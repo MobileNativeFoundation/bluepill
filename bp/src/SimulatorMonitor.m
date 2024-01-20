@@ -86,7 +86,10 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.maxTestExecutionTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if ([__self.currentTestName isEqualToString:testName] && [__self.currentClassName isEqualToString:testClass] && __self.testsState == Running) {
             [BPUtils printInfo:TIMEOUT withString:@"%10.6fs %@/%@", __self.maxTestExecutionTime, testClass, testName];
-            [__self stopTestsWithErrorMessage:@"Test took too long to execute and was aborted." forTestName:testName inClass:testClass];
+            [__self stopTestsWithErrorMessage:@"Test took too long to execute and was aborted."
+                                  forTestName:testName
+                                      inClass:testClass
+                              shouldRetryTest:YES];
             __self.exitStatus = BPExitStatusTestTimeout;
             [[BPStats sharedStats] endTimer:[NSString stringWithFormat:TEST_CASE_FORMAT, [BPStats sharedStats].attemptNumber, testClass, testName] withResult:@"ERROR"];
             [[BPStats sharedStats] addTestRuntimeTimeout];
@@ -100,6 +103,9 @@
     [BPUtils printInfo:PASSED withString:@"%10.6fs %@/%@",
                                           [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
                                           testClass, testName];
+    NSLog(@"%10.6fs %@/%@",
+          [currentTime timeIntervalSinceDate:self.lastTestCaseStartDate],
+          testClass, testName);
 
     // Passing or failing means that if the simulator crashes later, we shouldn't rerun this test.
     [self updateExecutedTestCaseList:testName inClass:testClass];
@@ -189,7 +195,7 @@
     __block NSUInteger previousOutputId = self.currentOutputId;
     __weak typeof(self) __self = self;
 
-    // App crashed
+    // App or logic test's XCTest execution crashed.
     if ([output isEqualToString:@"BP_APP_PROC_ENDED"]) {
         if (__self.testsState == Running || __self.testsState == Idle) {
             NSString *testClass = (__self.currentClassName ?: __self.previousClassName);
@@ -208,7 +214,8 @@
             }
             [self stopTestsWithErrorMessage:@"App Crashed"
                                 forTestName:(self.currentTestName ?: self.previousTestName)
-                                    inClass:(self.currentClassName ?: self.previousClassName)];
+                                    inClass:(self.currentClassName ?: self.previousClassName)
+                            shouldRetryTest:self.config.retryAppCrashTests];
             self.exitStatus = BPExitStatusAppCrashed;
             [[BPStats sharedStats] addApplicationCrash];
         }
@@ -231,17 +238,18 @@
             __self.exitStatus = testsReallyStarted ? BPExitStatusTestTimeout : BPExitStatusSimulatorCrashed;
             [__self stopTestsWithErrorMessage:@"Timed out waiting for the test to produce output. Test was aborted."
                                   forTestName:testName
-                                      inClass:testClass];
+                                      inClass:testClass
+                              shouldRetryTest:YES];
             [[BPStats sharedStats] addTestOutputTimeout];
         }
     });
     self.lastOutput = currentTime;
 }
 
-- (void)stopTestsWithErrorMessage:(NSString *)message forTestName:(NSString *)testName inClass:(NSString *)testClass {
+- (void)stopTestsWithErrorMessage:(NSString *)message forTestName:(NSString *)testName inClass:(NSString *)testClass shouldRetryTest:(BOOL)shouldRetryTest {
 
     // Timeout or crash on a test means we should skip it when we rerun the tests, unless we've enabled re-running failed tests
-    if (!self.config.onlyRetryFailed) {
+    if (!shouldRetryTest) {
         [self updateExecutedTestCaseList:testName inClass:testClass];
     }
     if (self.appState == Running && !self.config.testing_NoAppWillRun) {

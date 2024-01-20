@@ -21,8 +21,10 @@
 #import <libproc.h>
 #import "BPTMDControlConnection.h"
 #import "BPTMDRunnerConnection.h"
+#import "BPTestInspectionHandler.h"
 #import "BPXCTestFile.h"
 #import <objc/runtime.h>
+#import <BPTestInspector/BPTestCaseInfo.h>
 
 // CoreSimulator
 #import "PrivateHeaders/CoreSimulator/SimDevice.h"
@@ -220,6 +222,16 @@ static void onInterrupt(int ignore) {
     NSAssert(xctTestFile != nil, @"Failed to load testcases from: %@; Error: %@", context.config.testBundlePath, [error localizedDescription]);
     context.config.allTestCases = [[NSArray alloc] initWithArray: xctTestFile.allTestCases];
 
+    if (context.config.isLogicTestTarget) {
+        // For estimating how long this will take (and setting an appropriate timeout), we need to
+        // remove any skipped tests that aren't actually a part of this bundle.
+        NSMutableSet<NSString *> *allTests = [NSMutableSet setWithArray:context.config.allTestCases];
+        NSMutableSet<NSString *> *allSkippedTests = [NSMutableSet setWithArray:self.config.testCasesToSkip];
+        [allSkippedTests intersectSet:allTests];
+        context.config.testCasesToSkip = allSkippedTests.allObjects;
+    }
+    
+
     context.attemptNumber = self.retries + 1;
     self.context = context; // Store the context on self so that it's accessible to the interrupt handler in the loop
 }
@@ -256,7 +268,7 @@ static void onInterrupt(int ignore) {
     // Set up retry counts.
     self.maxCreateTries = [self.config.maxCreateTries integerValue];
     self.maxInstallTries = [self.config.maxInstallTries integerValue];
-    
+
     if (context.config.deleteSimUDID) {
         NEXT([self deleteSimulatorOnlyTaskWithContext:context]);
     } else {
@@ -299,13 +311,8 @@ static void onInterrupt(int ignore) {
         if (self.config.scriptFilePath) {
             [context.runner runScriptFile:self.config.scriptFilePath];
         }
-        if (self.config.cloneSimulator) {
-            // launch application directly when clone simulator
-            NEXT([__self launchApplicationWithContext:context]);
-        } else {
-            // Install application when test without clone
-            NEXT([__self installApplicationWithContext:context]);
-        };
+
+        NEXT([__self enumerateTestsWithContext:context]);
     };
 
     handler.onError = ^(NSError *error) {
@@ -393,6 +400,178 @@ static void onInterrupt(int ignore) {
     }
 }
 
+/**
+ On Apple Silicon machines, the xctest executable is likely to be a universal binary. Strangely, however, this can cause issues when
+ Xcode is being run in Rosetta mode with an `x86_64` test bundle. While it would seem those would be compatible, the simulator
+ won't naturally respect that it was launched from a Rosetta process, and will try to boot using the `arm64` binary by default.
+ As a result, in such a scenario we need to do some work on our side to get a modified xctest binary that will boot using x86.
+ */
+- (void)adaptXCTestExecutableIfRequiredWithContext:(BPExecutionContext *)context {
+    // First we need to make sure the archs are consistent between the xctest executable + the test bundle.
+    NSString *originalXCTestPath = [[NSString alloc] initWithFormat:
+                                    @"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Xcode/Agents/xctest",
+                                    context.config.xcodePath];
+    NSString *newXCTestPath = [BPUtils lipoExecutableAtPath:originalXCTestPath withContext:context];
+    if (newXCTestPath) {
+        context.config.dyldFrameworkPath = [BPUtils correctedDYLDFrameworkPathFromBinary:originalXCTestPath];
+    }
+    context.config.xctestBinaryPath = newXCTestPath ?: originalXCTestPath;
+}
+
+/**
+ Will spawn a child xctest execution with an injected dylib to pipe out information about all the tests in a test bundle.
+ No tests will be run.
+ */
+- (void)enumerateTestsWithContext:(BPExecutionContext *)context {
+    NSString *stepName = TEST_INSPECTION(context.attemptNumber);
+    [BPUtils printInfo:INFO withString:@"%@", stepName];
+
+    // Now create handler for when the process completes
+
+    [[BPStats sharedStats] startTimer:stepName];
+    BPWaitTimer *timer = [BPWaitTimer timerWithInterval:[context.config.launchTimeout doubleValue]];
+    [timer start];
+
+    // Set up completion handler for when we load the tests.
+    BPTestInspectionHandler *completionHandler = [BPTestInspectionHandler handlerWithTimer:timer];
+    __weak typeof(self) __self = self;
+    completionHandler.onSuccess = ^(NSArray<BPTestCaseInfo *> *testBundleInfo) {
+        // Note, we can't actually handle the tests themselves here... that will
+        // need to be handled in a wrapping block below.
+        [BPUtils printInfo:DEBUGINFO withString:@"Test bundle inspected for tests."];
+        [[BPStats sharedStats] endTimer:stepName withResult:@"INFO"];
+
+        // Save the test info.
+        if (testBundleInfo) {
+            NSMutableDictionary<NSString *, BPTestCaseInfo *> *dictionary = [NSMutableDictionary dictionary];
+            for (BPTestCaseInfo *info in testBundleInfo) {
+                dictionary[info.prettifiedFullName] = info;
+            }
+            __self.config.allTests = [dictionary copy];
+            context.config.allTests = [dictionary copy];
+        }
+        
+        if (self.config.isLogicTestTarget) {
+            NEXT([__self executeLogicTestsWithContext:context])
+        } else if (self.config.cloneSimulator) {
+            // launch application directly when clone simulator
+            NEXT([__self launchApplicationWithContext:context]);
+        } else {
+            // Install application when test without clone
+            NEXT([__self installApplicationWithContext:context]);
+        };
+    };
+
+    completionHandler.onError = ^(NSError *error) {
+        [[BPStats sharedStats] endTimer:stepName withResult:@"ERROR"];
+        [BPUtils printInfo:ERROR withString:@"Spawned logic test execution failed: %@", [error localizedDescription]];
+
+        BPExitStatus exitStatus = BPExitStatusLaunchAppFailed;
+        NEXT([__self deleteSimulatorWithContext:context andStatus:exitStatus]);
+    };
+
+    completionHandler.onTimeout = ^{
+        [[BPStats sharedStats] endTimer:stepName withResult:@"TIMEOUT"];
+        [BPUtils printInfo:FAILED withString:@"Timeout: %@", stepName];
+    };
+
+    // If test cases are already enumerated, skip straight to executing tests.
+    if (context.config.allTests) {
+        completionHandler.defaultHandlerBlock(context.config.allTests.allValues, nil);
+        return;
+    }
+
+    // Otherwise, make sure XCTest binary is formatted correctly for current arch. Then get test info.
+    [self adaptXCTestExecutableIfRequiredWithContext:context];
+    [context.runner collectTestSuiteInfoWithCompletion:^(NSArray<BPTestCaseInfo *> *testBundleInfo, NSError *error) {
+        completionHandler.defaultHandlerBlock(testBundleInfo, error);
+    }];
+}
+
+- (void)executeLogicTestsWithContext:(BPExecutionContext *)context {
+    [self adaptXCTestExecutableIfRequiredWithContext:context];
+
+    // We get two callbacks after trying to spawn an execution. They happen when:
+    //   1) Immediately after the process is spawned.
+    //   2) Once the process completes.
+    // This method sets up those two handlers, and then passes them to the runner.
+
+    // 1) Handle process spawn
+    NSString *spawnStepName = SPAWN_LOGIC_TEST(context.attemptNumber);
+    NSString *executeTestsStepName = EXECUTE_LOGIC_TEST(context.attemptNumber);
+    [BPUtils printInfo:INFO withString:@"%@", spawnStepName];
+    
+    // Now create handler for when the process completes
+    
+    [[BPStats sharedStats] startTimer:spawnStepName];
+    BPWaitTimer *spawnTimer = [BPWaitTimer timerWithInterval:[context.config.launchTimeout doubleValue]];
+    __block BPWaitTimer *executionTimer = [BPWaitTimer timerWithInterval:[BPUtils timeoutForAllTestsWithConfiguration:context.config]];
+    // Start spawn timer; save execution timer for the spawn handler.
+    [spawnTimer start];
+    BPApplicationLaunchHandler *spawnHandler = [BPApplicationLaunchHandler handlerWithTimer:spawnTimer];
+
+    __weak typeof(self) __self = self;
+    __weak typeof(spawnHandler) __spawnHandler = spawnHandler;
+    spawnHandler.beginWith = ^{
+        [BPUtils printInfo:((__spawnHandler.pid > -1) ? INFO : ERROR) withString:@"Completed: %@", spawnStepName];
+    };
+    spawnHandler.onSuccess = ^{
+        context.pid = __spawnHandler.pid;
+        
+        // At this point, we know that the execution itself has started.
+        [BPUtils printInfo:DEBUGINFO withString:@"XCTest execution spawned; waiting for execution to complete."];
+        [[BPStats sharedStats] endTimer:spawnStepName withResult:@"INFO"];
+
+        // Start timer for actual xctest execution.
+        [BPUtils printInfo:INFO withString:@"%@", executeTestsStepName];
+        [[BPStats sharedStats] startTimer:executeTestsStepName];
+        [executionTimer start];
+    };
+    spawnHandler.onError = ^(NSError *error) {
+        [[BPStats sharedStats] endTimer:spawnStepName withResult:@"ERROR"];
+        [BPUtils printInfo:ERROR withString:@"Could not spawn logic test execution: %@", [error localizedDescription]];
+        NEXT([__self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed]);
+    };
+    spawnHandler.onTimeout = ^{
+        [[BPStats sharedStats] addSimulatorLaunchFailure];
+        [[BPStats sharedStats] endTimer:spawnStepName withResult:@"TIMEOUT"];
+        [BPUtils printInfo:FAILED withString:@"Timeout: %@", spawnStepName];
+    };
+
+    // 2) Handle execution finished
+
+    // Now the handler for when the execution actually completes.
+    BPApplicationLaunchHandler *completionHandler = [BPApplicationLaunchHandler handlerWithTimer:executionTimer];
+    completionHandler.onSuccess = ^{
+        [BPUtils printInfo:DEBUGINFO withString:@"XCTest execution completed. Results must now be parsed."];
+        [[BPStats sharedStats] endTimer:executeTestsStepName withResult:@"INFO"];
+        NEXT([__self checkUnhostedProcessWithContext:context]);
+    };
+
+    completionHandler.onError = ^(NSError *error) {
+        [[BPStats sharedStats] endTimer:executeTestsStepName withResult:@"ERROR"];
+        [BPUtils printInfo:ERROR withString:@"Spawned logic test execution failed: %@", [error localizedDescription]];
+        
+        BPExitStatus exitStatus = BPExitStatusAppCrashed;
+        BOOL didhanderTimeout = error.domain == BPErrorDomain && error.code == BPHandler.timeoutErrorCode;
+        BOOL wasProcessKilledAfterTimeout = error.domain == BPErrorDomain && error.code == SIGKILL;
+        if (didhanderTimeout || wasProcessKilledAfterTimeout) {
+            exitStatus = BPExitStatusTestTimeout;
+        }
+        NEXT([__self deleteSimulatorWithContext:context andStatus:exitStatus]);
+    };
+
+    completionHandler.onTimeout = ^{
+        [[BPStats sharedStats] addTestRuntimeTimeout];
+        [[BPStats sharedStats] endTimer:executeTestsStepName withResult:@"TIMEOUT"];
+        [BPUtils printInfo:FAILED withString:@"Timeout: %@", executeTestsStepName];
+    };
+
+    [context.runner executeLogicTestsWithParser:context.parser
+                                        onSpawn:spawnHandler.defaultHandlerBlock
+                                  andCompletion:completionHandler.defaultHandlerBlock];
+}
+
 - (void)launchApplicationWithContext:(BPExecutionContext *)context {
     NSString *stepName = LAUNCH_APPLICATION(context.attemptNumber);
     [BPUtils printInfo:INFO withString:@"%@", stepName];
@@ -448,6 +627,7 @@ static void onInterrupt(int ignore) {
     NEXT([self checkProcessWithContext:context]);
 
 }
+
 - (void)checkProcessWithContext:(BPExecutionContext *)context {
     BOOL isRunning = [self isProcessRunningWithContext:context];
     if (!isRunning && [context.runner isFinished]) {
@@ -470,7 +650,7 @@ static void onInterrupt(int ignore) {
     // If it's not running and we passed the above checks (e.g., the tests are not yet completed)
     // then it must mean the app has crashed.
     // However, we have a short-circuit for tests because those may not actually run any app
-    if (!isRunning && context.pid > 0 && [context.runner isApplicationLaunched] && !self.config.testing_NoAppWillRun) {
+    if (!isRunning && context.pid > 0 && ([context.runner isApplicationLaunched] || context.config.isLogicTestTarget) && !self.config.testing_NoAppWillRun) {
         // The tests ended before they even got started or the process is gone for some other reason
         [[BPStats sharedStats] endTimer:LAUNCH_APPLICATION(context.attemptNumber) withResult:@"APP CRASHED"];
         [BPUtils printInfo:ERROR withString:@"Application crashed!"];
@@ -480,6 +660,30 @@ static void onInterrupt(int ignore) {
     }
 
     NEXT_AFTER(1, [self checkProcessWithContext:context]);
+}
+
+- (void)checkUnhostedProcessWithContext:(BPExecutionContext *)context {
+    // Handle tests + parsing is complete
+    BOOL isRunning = [self isProcessRunningWithContext:context];
+    if (!isRunning && [context.runner isFinished]) {
+        [BPUtils printInfo:INFO withString:@"Finished test execution."];
+        [[BPStats sharedStats] endTimer:EXECUTE_LOGIC_TEST(context.attemptNumber) withResult:[BPExitStatusHelper stringFromExitStatus:context.exitStatus]];
+        [self runnerCompletedWithContext:context];
+        return;
+    }
+    // Handle Simulator Crash
+    if (![context.runner isSimulatorRunning]) {
+        [[BPStats sharedStats] endTimer:EXECUTE_LOGIC_TEST(context.attemptNumber) withResult:@"SIMULATOR CRASHED"];
+        [BPUtils printInfo:ERROR withString:@"SIMULATOR CRASHED!!!"];
+        context.simulatorCrashed = YES;
+        [[BPStats sharedStats] addSimulatorCrash];
+        [self deleteSimulatorWithContext:context andStatus:BPExitStatusSimulatorCrashed];
+        return;
+    }
+    
+    // Even though the execution has completed, the parser may not be done yet.
+    // If we're here, that's the case... so try again in a second.
+    NEXT_AFTER(1, [self checkUnhostedProcessWithContext:context]);
 }
 
 - (BOOL)isProcessRunningWithContext:(BPExecutionContext *)context {
@@ -520,7 +724,7 @@ static void onInterrupt(int ignore) {
         [BPUtils printInfo:INFO withString:@"Saving Diagnostics for Debugging"];
         [BPUtils saveDebuggingDiagnostics:_config.outputDirectory];
       }
-      
+
       [self deleteSimulatorWithContext:context andStatus:[context.runner exitStatus]];
     }
 }
@@ -702,6 +906,7 @@ NSString *__from;
 }
 
 #pragma mark - BPTestBundleConnectionDelegate
+
 - (void)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment {
     self.context.isTestRunnerContext = YES;
     [self installApplicationWithContext:self.context];

@@ -8,9 +8,7 @@
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
 #import "BPApp.h"
-#import "bp/src/BPConstants.h"
-#import "bp/src/BPConfiguration.h"
-#import "bp/src/BPUtils.h"
+#import <bplib/bplib.h>
 
 @implementation BPApp
 
@@ -94,6 +92,20 @@
     return allXCTestFiles;
 }
 
++ (NSArray <BPXCTestFile *>*)testsFromConfig:(BPConfiguration *)config
+                                   withError:(NSError *__autoreleasing *)errPtr {
+    NSMutableArray<BPXCTestFile *> *loadedTests = [[NSMutableArray alloc] initWithCapacity:config.tests.count];
+    for (NSString *testName in config.tests) {
+        BPTestPlan *testPlan = [config.tests objectForKey:testName];
+        BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromBPTestPlan:testPlan withName:testName andError:errPtr];
+        if (*errPtr) {
+            return nil;
+        }
+        [loadedTests addObject:xcTestFile];
+    }
+    return loadedTests;
+}
+
 + (instancetype)appWithConfig:(BPConfiguration *)config
                     withError:(NSError *__autoreleasing *)errPtr {
 
@@ -102,17 +114,10 @@
 
     if (config.tests != nil && config.tests.count != 0) {
         [BPUtils printInfo:INFO withString:@"Using test bundles"];
-        NSMutableArray<BPXCTestFile *> *loadedTests = [[NSMutableArray alloc] initWithCapacity:config.tests.count];
-        for (NSString *testName in config.tests) {
-            BPTestPlan *testPlan = [config.tests objectForKey:testName];
-            BPXCTestFile *xcTestFile = [BPXCTestFile BPXCTestFileFromBPTestPlan:testPlan withName:testName andError:errPtr];
-            if (*errPtr)
-                return nil;
-            [loadedTests addObject:xcTestFile];
+        app.testBundles = [self testsFromConfig:config withError:errPtr];
+        if (*errPtr) {
+            return nil;
         }
-
-        app.testBundles = loadedTests;
-
         return app;
     }
 
@@ -135,6 +140,12 @@
                                                     andTestBundlePath:config.testBundlePath
                                                    andUITargetAppPath:config.testRunnerAppPath
                                                             withError:errPtr]];
+    } else if (config.isLogicTestTarget && config.testBundlePath) {
+        BPXCTestFile *testFile = [BPXCTestFile BPXCTestFileFromXCTestBundle:config.testBundlePath
+                                                           andHostAppBundle:nil
+                                                         andUITargetAppPath:nil
+                                                                  withError:errPtr];
+        [allXCTestFiles addObject:testFile];
     } else {
         BP_SET_ERROR(errPtr, @"xctestrun file must be given, see usage.");
         return nil;

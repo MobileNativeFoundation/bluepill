@@ -24,6 +24,11 @@
 		BAFCCA601E36DC2000E33C31 /* BPSampleAppUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BAFCCA5F1E36DC2000E33C31 /* BPSampleAppUITests.m */; };
 		E492360122EF61F300395D98 /* BPSampleAppMoarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E492360022EF61F300395D98 /* BPSampleAppMoarTests.m */; };
 		E4F8A34326F3B1AD00FE1267 /* BPSampleAppNewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E4F8A33B26F3B12F00FE1267 /* BPSampleAppNewTests.m */; };
+		FBBBD90029A06B7B002B9115 /* BPLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBBBD8F129A06B47002B9115 /* BPLogicTests.m */; };
+		FBC526962B341A6400EECA73 /* libBPTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC526952B341A6400EECA73 /* libBPTestInspector.dylib */; };
+		FBD772B52A33E15D0098CEFD /* BPPassingLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD772B12A33E0620098CEFD /* BPPassingLogicTests.m */; };
+		FBD772C52A3483310098CEFD /* SwiftLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD772C32A34832D0098CEFD /* SwiftLogicTests.swift */; };
+		FBD772C72A378F440098CEFD /* BPBulkLogicTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD772C62A378F440098CEFD /* BPBulkLogicTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +120,14 @@
 		E492360022EF61F300395D98 /* BPSampleAppMoarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppMoarTests.m; sourceTree = "<group>"; };
 		E4F8A33B26F3B12F00FE1267 /* BPSampleAppNewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPSampleAppNewTests.m; sourceTree = "<group>"; };
 		E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPSampleAppNewTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBBBD8F129A06B47002B9115 /* BPLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPLogicTests.m; sourceTree = "<group>"; };
+		FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBC526952B341A6400EECA73 /* libBPTestInspector.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = libBPTestInspector.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBD772B12A33E0620098CEFD /* BPPassingLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPPassingLogicTests.m; sourceTree = "<group>"; };
+		FBD772BC2A33E15D0098CEFD /* BPPassingLogicTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BPPassingLogicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBD772BD2A33E15D0098CEFD /* BPLogicTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "BPLogicTests-Info.plist"; path = "/Users/lthrockm/ios/bluepill/bluepill/BPSampleApp/BPLogicTests-Info.plist"; sourceTree = "<absolute>"; };
+		FBD772C32A34832D0098CEFD /* SwiftLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftLogicTests.swift; sourceTree = "<group>"; };
+		FBD772C62A378F440098CEFD /* BPBulkLogicTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPBulkLogicTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +156,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBC526962B341A6400EECA73 /* libBPTestInspector.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,6 +182,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E4F8A34526F3B1AD00FE1267 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBBBD8F929A06B54002B9115 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBD772B72A33E15D0098CEFD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -210,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				BAB24F301DB5D45E00867756 /* BPSampleApp */,
+				FBBBD8F029A06B47002B9115 /* LogicTests */,
 				BAB24F4A1DB5D45E00867756 /* BPSampleAppTests */,
 				BAB24F5B1DB5D83C00867756 /* BPAppNegativeTests */,
 				BAA4DA381DC3C02B00A58BCC /* BPSampleAppCrashingTests */,
@@ -217,6 +246,8 @@
 				BA9C2DD31DD7F182007CB967 /* BPSampleAppFatalErrorTests */,
 				BAFCCA5E1E36DC2000E33C31 /* BPSampleAppUITests */,
 				BAB24F2F1DB5D45E00867756 /* Products */,
+				FBD772BD2A33E15D0098CEFD /* BPLogicTests-Info.plist */,
+				FBC526942B341A6400EECA73 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -231,6 +262,8 @@
 				BA9C2DD21DD7F182007CB967 /* BPSampleAppFatalErrorTests.xctest */,
 				BAFCCA5D1E36DC2000E33C31 /* BPSampleAppUITests.xctest */,
 				E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */,
+				FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */,
+				FBD772BC2A33E15D0098CEFD /* BPPassingLogicTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -289,6 +322,41 @@
 				BAFCCA611E36DC2000E33C31 /* Info.plist */,
 			);
 			path = BPSampleAppUITests;
+			sourceTree = "<group>";
+		};
+		FBBBD8F029A06B47002B9115 /* LogicTests */ = {
+			isa = PBXGroup;
+			children = (
+				FBD772C82A378F6F0098CEFD /* BPLogicTests */,
+				FBD772C92A378F7E0098CEFD /* BPPassingLogicTests */,
+			);
+			path = LogicTests;
+			sourceTree = "<group>";
+		};
+		FBC526942B341A6400EECA73 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FBC526952B341A6400EECA73 /* libBPTestInspector.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FBD772C82A378F6F0098CEFD /* BPLogicTests */ = {
+			isa = PBXGroup;
+			children = (
+				FBBBD8F129A06B47002B9115 /* BPLogicTests.m */,
+			);
+			path = BPLogicTests;
+			sourceTree = "<group>";
+		};
+		FBD772C92A378F7E0098CEFD /* BPPassingLogicTests */ = {
+			isa = PBXGroup;
+			children = (
+				FBD772B12A33E0620098CEFD /* BPPassingLogicTests.m */,
+				FBD772C62A378F440098CEFD /* BPBulkLogicTests.m */,
+				FBD772C32A34832D0098CEFD /* SwiftLogicTests.swift */,
+			);
+			path = BPPassingLogicTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -437,6 +505,40 @@
 			productReference = E4F8A34A26F3B1AD00FE1267 /* BPSampleAppNewTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		FBBBD8F229A06B54002B9115 /* BPLogicTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FBBBD8FB29A06B54002B9115 /* Build configuration list for PBXNativeTarget "BPLogicTests" */;
+			buildPhases = (
+				FBBBD8F529A06B54002B9115 /* Sources */,
+				FBBBD8F929A06B54002B9115 /* Frameworks */,
+				FBBBD8FA29A06B54002B9115 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BPLogicTests;
+			productName = BPSampleAppTests;
+			productReference = FBBBD8FE29A06B54002B9115 /* BPLogicTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FBD772B32A33E15D0098CEFD /* BPPassingLogicTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FBD772B92A33E15D0098CEFD /* Build configuration list for PBXNativeTarget "BPPassingLogicTests" */;
+			buildPhases = (
+				FBD772B42A33E15D0098CEFD /* Sources */,
+				FBD772B72A33E15D0098CEFD /* Frameworks */,
+				FBD772B82A33E15D0098CEFD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BPPassingLogicTests;
+			productName = BPSampleAppTests;
+			productReference = FBD772BC2A33E15D0098CEFD /* BPPassingLogicTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -491,6 +593,12 @@
 					E4F8A33D26F3B1AD00FE1267 = {
 						DevelopmentTeam = 57Y47U492U;
 					};
+					FBBBD8F229A06B54002B9115 = {
+						DevelopmentTeam = 57Y47U492U;
+					};
+					FBD772B32A33E15D0098CEFD = {
+						DevelopmentTeam = 57Y47U492U;
+					};
 				};
 			};
 			buildConfigurationList = BAB24F291DB5D45E00867756 /* Build configuration list for PBXProject "BPSampleApp" */;
@@ -514,6 +622,8 @@
 				BA9C2DD11DD7F182007CB967 /* BPSampleAppFatalErrorTests */,
 				BAFCCA5C1E36DC2000E33C31 /* BPSampleAppUITests */,
 				E4F8A33D26F3B1AD00FE1267 /* BPSampleAppNewTests */,
+				FBBBD8F229A06B54002B9115 /* BPLogicTests */,
+				FBD772B32A33E15D0098CEFD /* BPPassingLogicTests */,
 			);
 		};
 /* End PBXProject section */
@@ -573,6 +683,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E4F8A34626F3B1AD00FE1267 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBBBD8FA29A06B54002B9115 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBD772B82A33E15D0098CEFD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -648,6 +772,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4F8A34326F3B1AD00FE1267 /* BPSampleAppNewTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBBBD8F529A06B54002B9115 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBBBD90029A06B7B002B9115 /* BPLogicTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBD772B42A33E15D0098CEFD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FBD772C52A3483310098CEFD /* SwiftLogicTests.swift in Sources */,
+				FBD772B52A33E15D0098CEFD /* BPPassingLogicTests.m in Sources */,
+				FBD772C72A378F440098CEFD /* BPBulkLogicTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -891,6 +1033,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=*]" = arm64;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1057,6 +1200,70 @@
 			};
 			name = Release;
 		};
+		FBBBD8FC29A06B54002B9115 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				INFOPLIST_FILE = "BPSampleAppTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		FBBBD8FD29A06B54002B9115 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				INFOPLIST_FILE = "BPSampleAppTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
+		FBD772BA2A33E15D0098CEFD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				INFOPLIST_FILE = "BPLogicTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
+			};
+			name = Debug;
+		};
+		FBD772BB2A33E15D0098CEFD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = 57Y47U492U;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				INFOPLIST_FILE = "BPLogicTests-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = LI.BPSampleAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "BPSampleAppTests/BPSampleAppTests-Bridging-Header.h";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.2;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1137,6 +1344,24 @@
 			buildConfigurations = (
 				E4F8A34826F3B1AD00FE1267 /* Debug */,
 				E4F8A34926F3B1AD00FE1267 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FBBBD8FB29A06B54002B9115 /* Build configuration list for PBXNativeTarget "BPLogicTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBBBD8FC29A06B54002B9115 /* Debug */,
+				FBBBD8FD29A06B54002B9115 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FBD772B92A33E15D0098CEFD /* Build configuration list for PBXNativeTarget "BPPassingLogicTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FBD772BA2A33E15D0098CEFD /* Debug */,
+				FBD772BB2A33E15D0098CEFD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -11,9 +11,11 @@
 #import "BPConfiguration.h"
 #import "BPUtils.h"
 #import "BPXCTestFile.h"
+#import "SimDevice.h"
 #import "PrivateHeaders/XCTest/XCTestConfiguration.h"
 #import "PrivateHeaders/XCTest/XCTTestIdentifier.h"
 #import "PrivateHeaders/XCTest/XCTTestIdentifierSet.h"
+#import <BPTestInspector/BPTestCaseInfo.h>
 
 
 @implementation SimulatorHelper
@@ -59,6 +61,22 @@
         }
     }
     return YES;
+}
+
++ (NSDictionary *)logicTestEnvironmentWithConfig:(BPConfiguration *)config
+                              stdoutRelativePath:(NSString *)path {
+    NSMutableDictionary<NSString *, id> *environment = [@{
+        kOptionsStdoutKey: path,
+        kOptionsStderrKey: path,
+    } mutableCopy];
+    if (config.dyldFrameworkPath) {
+        environment[@"DYLD_FRAMEWORK_PATH"] = config.dyldFrameworkPath;
+        // DYLD_LIBRARY_PATH is required specifically for swift tests, which require libXCTestSwiftSupport,
+        // which must be findable in the library path.
+        environment[@"DYLD_LIBRARY_PATH"] = config.dyldFrameworkPath;
+    }
+    [environment addEntriesFromDictionary:config.environmentVariables];
+    return [environment copy];
 }
 
 + (NSDictionary *)appLaunchEnvironmentWithBundleID:(NSString *)hostBundleID
@@ -166,6 +184,70 @@
         [BPUtils printInfo:ERROR withString:@"Could not extract bundleID: %@", dic];
     }
     return bundleId;
+}
+
++ (NSArray<NSString *> *)testsToRunWithConfig:(BPConfiguration *)config {
+    // First, standardize all swift test names:
+    NSMutableArray<NSString *> *allTests = [self formatTestNamesForXCTest:config.allTestCases withConfig:config];
+    NSMutableArray<NSString *> *testsToRun = [self formatTestNamesForXCTest:config.testCasesToRun withConfig:config];
+    NSArray<NSString *> *testsToSkip = [self formatTestNamesForXCTest:config.testCasesToSkip withConfig:config];
+
+    // If there's no tests to skip, we can return these back otherwise unaltered.
+    // Otherwise, we'll need to remove any tests from `testsToRun` that are in our skip list.
+    if (testsToSkip.count == 0) {
+        return [(testsToRun ?: allTests) copy];
+    }
+    
+    // If testCasesToRun was empty/nil, we default to all tests
+    if (testsToRun.count == 0) {
+        testsToRun = allTests;
+    }
+    [testsToRun filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(NSString *testName, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return ![testsToSkip containsObject:testName];
+    }]];
+    return [testsToRun copy];
+}
+
++ (nullable NSMutableArray<NSString *> *)formatTestNamesForXCTest:(nullable NSArray<NSString *> *)tests
+                                                       withConfig:(BPConfiguration *)config {
+    if (!tests) {
+        return nil;
+    }
+    [BPUtils printInfo:DEBUGINFO withString:@"Formatting test names. config.allTests: %@", config.allTests];
+    NSMutableArray<NSString *> *formattedTests = [NSMutableArray array];
+    for (NSString *testName in tests) {
+        BPTestCaseInfo *info = config.allTests[testName];
+        if (info) {
+            [formattedTests addObject:info.standardizedFullName];
+        } else {
+            [BPUtils printInfo:DEBUGINFO withString:@"Omitting false positive test method from test list: %@", testName];
+        }
+    }
+    return formattedTests;
+}
+
+// Intercept stdout, stderr and post as simulator-output events
++ (NSString *)makeStdoutFileOnDevice:(SimDevice *)device {
+    NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/stdout_stderr_%@", device.dataPath, [[device UDID] UUIDString]];
+    return [self createFileWithPathTemplate:stdout_stderr];
+}
+
++ (NSString *)makeTestWrapperOutputFileOnDevice:(SimDevice *)device {
+    NSString *stdout_stderr = [NSString stringWithFormat:@"%@/tmp/BPTestInspector_testInfo_%@", device.dataPath, [[device UDID] UUIDString]];
+    return [self createFileWithPathTemplate:stdout_stderr];
+}
+
++ (NSString *)createFileWithPathTemplate:(NSString *)pathTemplate {
+    NSString *fullPath = [BPUtils mkstemp:pathTemplate withError:nil];
+    assert(fullPath != nil);
+
+    [[NSFileManager defaultManager] removeItemAtPath:fullPath error:nil];
+
+    // Create empty file so we can tail it and the app can write to it
+    [[NSFileManager defaultManager] createFileAtPath:fullPath
+                                            contents:nil
+                                          attributes:nil];
+    return fullPath;
 }
 
 + (NSString *)executablePathforPath:(NSString *)path {

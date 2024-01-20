@@ -18,12 +18,15 @@ BP_TEST_ESTIMATE_JSON="bp_test_time_estimates_json"
 BP_TEST_PLAN="bp_test_plan"
 BP_PATH="bp_path"
 BLUEPILL_PATH="bluepill_path"
+TEST_INSPECTOR_PATH="testInspector_path"
+MAC_TEST_INSPECTOR_PATH="macTestInspector_path"
 
 # Remove existing working folder for a clean state
 rm -rf $BP_WORKING_FOLDER
 mkdir $BP_WORKING_FOLDER
 
 # Extract test bundles
+
 for test_bundle in ${TEST_BUNDLE_PATHS[@]}; do
     if [[ $test_bundle == *.zip ]]; then
         tar -C $BP_WORKING_FOLDER -xzf $test_bundle
@@ -36,20 +39,22 @@ for test_bundle in ${TEST_BUNDLE_PATHS[@]}; do
     fi
 done
 
-# Clone and extract test hosts
-for test_host in ${TEST_HOST_PATHS[@]}; do
-    if [[ "$test_host" == *.ipa ]]; then
-        TEST_HOST_NAME=$(basename_without_extension "${test_host}")
-        unzip -qq -d "$BP_WORKING_FOLDER" "$test_host"
-        cp -cr "${BP_WORKING_FOLDER}/Payload/${TEST_HOST_NAME}.app" ${BP_WORKING_FOLDER}
-    elif [[ $test_host == *.app ]]; then
-        cp -cr $test_host $BP_WORKING_FOLDER
-        chmod -R ug+w "$BP_WORKING_FOLDER/$(basename "$test_host")"
-    else
-        echo "$test_host is not an ipa file or app bundle."
-        exit 1
-    fi
-done
+# Clone and extract test hosts (won't be set for logic tests)
+if [ ! -z ${test_host_paths+x} ]; then 
+    for test_host in ${TEST_HOST_PATHS[@]}; do
+        if [[ "$test_host" == *.ipa ]]; then
+            TEST_HOST_NAME=$(basename_without_extension "${test_host}")
+            unzip -qq -d "$BP_WORKING_FOLDER" "$test_host"
+            cp -cr "${BP_WORKING_FOLDER}/Payload/${TEST_HOST_NAME}.app" ${BP_WORKING_FOLDER}
+        elif [[ $test_host == *.app ]]; then
+            cp -cr $test_host $BP_WORKING_FOLDER
+            chmod -R ug+w "$BP_WORKING_FOLDER/$(basename "$test_host")"
+        else
+            echo "$test_host is not an ipa file or app bundle."
+            exit 1
+        fi
+    done
+fi
 
 # Copy config file to bp working folder
 if [ -f "$BP_CONFIG_FILE" ]; then
@@ -69,9 +74,18 @@ fi
 sed 's/$TEST_UNDECLARED_OUTPUTS_DIR/'"${TEST_UNDECLARED_OUTPUTS_DIR//\//\\/}"'/g' $BP_TEST_PLAN > $BP_WORKING_FOLDER/$BP_TEST_PLAN
 BP_TEST_PLAN_ARG="$(basename "$BP_TEST_PLAN")"
 
-# Copy bluepill and bp executables to working folder
+# Copy bluepill and bp executables to working folder, along with testInspector dylib.
 cp "$BP_PATH" $BP_WORKING_FOLDER
 cp "$BLUEPILL_PATH" $BP_WORKING_FOLDER
+cp "$TEST_INSPECTOR_PATH" $BP_WORKING_FOLDER
+cp "$MAC_TEST_INSPECTOR_PATH" $BP_WORKING_FOLDER
+
+echo "pwd"
+pwd
+echo "LTHROCKM DEBUG - TEST_INSPECTOR_PATH: $TEST_INSPECTOR_PATH"
+echo "LTHROCKM DEBUG - BP_WORKING_FOLDER: $BP_WORKING_FOLDER"
+
+export "DYLD_LIBRARY_PATH=.:$BP_WORKING_FOLDER/libBPMacTestInspector.dylib"
 
 # Run bluepill
 # NOTE: we override output folder here and disregard the one in the config file.

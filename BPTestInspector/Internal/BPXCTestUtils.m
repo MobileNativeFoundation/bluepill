@@ -1,0 +1,98 @@
+//  Copyright 2016 LinkedIn Corporation
+//  Licensed under the BSD 2-Clause License (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at https://opensource.org/licenses/BSD-2-Clause
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
+
+#import "BPXCTestUtils.h"
+
+#import <dlfcn.h>
+#import "XCTestSuite.h"
+#import "XCTestCase.h"
+#import "BPLoggingUtils.h"
+#import "BPTestCaseInfo+Internal.h"
+
+@implementation BPXCTestUtils
+
++ (void)logAllTestsInBundleWithPath:(NSString *)bundlePath toFile:(NSString *)outputPath {
+    NSArray<BPTestCaseInfo *> *testCases = [self enumerateTestCasesInBundleWithPath:bundlePath];
+
+    // Encode the test data
+    NSError *encodingError;
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:testCases requiringSecureCoding:YES error:&encodingError];
+
+    // Write to file.
+    NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:outputPath];
+    [fileHandle writeData:data];
+    [fileHandle closeFile];
+
+    [BPLoggingUtils log:[NSString stringWithFormat:@"Wrote to file: %@.", outputPath]];
+}
+
++ (NSArray<BPTestCaseInfo *> *)enumerateTestCasesInBundleWithPath:(NSString *)bundlePath {
+    NSBundle *bundle = [NSBundle bundleWithPath:bundlePath];
+    if (!bundle || !bundle.executablePath) {
+        [BPLoggingUtils logError:[NSString stringWithFormat:@"Unable to get executable path from bundle: %@", bundle]];
+        return @[];
+    }
+    return [self enumerateTestCasesInBundle:bundle];
+}
+
++ (NSArray<BPTestCaseInfo *> *)enumerateTestCasesInBundle:(NSBundle *)bundle {
+    /**
+     We need to remove the XCTest preference before continuing so that
+     we can open the bundle without actually executing it. If you start
+     to see logs resembling test output, it means this hasn't been done.
+     
+     TLDR: opening an .xctest file will normally cause the linker to load
+     the XCTest framework, which will trigger `XCTestSuite.initialize`
+     and start running the tests.
+     */
+    
+    [NSUserDefaults.standardUserDefaults removeObjectForKey:@"XCTest"];
+    [NSUserDefaults.standardUserDefaults synchronize];
+
+    /**
+     We must actually open the test bundle so that all of the test cases are loaded into memory.
+     We use `dlopen` here instead of `NSBundle.loadAndReturnError` for more informative messages on error.
+     */
+    if (dlopen(bundle.executablePath.UTF8String, RTLD_LAZY) == NULL) {
+        [BPLoggingUtils logError:[NSString stringWithFormat:@"Unable to open test bundle's executable path - %@", bundle.executablePath]];
+        
+        [BPLoggingUtils logError:@"What's the error???"];
+        fprintf(stderr, "%s\n", dlerror());
+        return @[];
+    }
+
+    [NSUserDefaults.standardUserDefaults setObject:@"None" forKey:@"XCTest"];
+
+    /**
+     Note that `XCTestSuite`, `XCTestCase`, etc all subclass `XCTest`, so to enumerate all tests in the current
+     bundle, we'll want to start `XCTestSuite.allTests`, and expand out all nested `XCTestSuite`s, adding
+     the suite's `<testSuite>.tests` to our array.
+     */
+    NSMutableArray<BPTestCaseInfo *> *testList = [NSMutableArray array];
+    NSMutableArray<XCTest *> *queue = [@[XCTestSuite.allTests] mutableCopy];
+    while (queue.count) {
+        XCTest *test = queue.firstObject;
+        [queue removeObjectAtIndex:0];
+        // If it's another nested XCTestSuite, keep going deeper!
+        // If it's an XCTestCase, we've hit a leaf and can just add it to our `testList`.
+        if ([test isKindOfClass:XCTestSuite.class]) {
+            XCTestSuite *testSuite = (XCTestSuite *)test;
+            [queue addObjectsFromArray:testSuite.tests];
+        } else if ([test isKindOfClass:XCTestCase.class]) {
+            XCTestCase *testCase = (XCTestCase *)test;
+            [BPLoggingUtils log:[NSString stringWithFormat:@"testCase: %@", testCase]];
+            [testList addObject:[BPTestCaseInfo infoFromTestCase:testCase]];
+        } else {
+            [BPLoggingUtils logError:@"Found a currently unhandled XCTest type while enumerating tests"];
+        }
+    }
+    return testList;
+}
+
+@end

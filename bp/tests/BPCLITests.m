@@ -43,6 +43,7 @@
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"foo"]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"bar"]];
     [config saveOpt:[NSNumber numberWithInt:'N'] withArg:[NSString stringWithUTF8String:"baz"]];
+    [config saveOpt:[NSNumber numberWithInt:369] withArg:@"YES"];
 
     NSError *err;
     BOOL result;
@@ -54,6 +55,7 @@
     XCTAssertEqualObjects(config.errorRetriesCount, @2);
     XCTAssertEqualObjects(config.failureTolerance, @1);
     XCTAssertEqualObjects(config.numSims, @5);
+    XCTAssert(config.isLogicTestTarget);
 }
 
 - (void)testIgnoringAdditionalTestBundles {
