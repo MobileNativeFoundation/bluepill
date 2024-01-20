@@ -1,0 +1,422 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FB21F07F2A62286400682AC7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FB21F07E2A62286400682AC7 /* main.m */; };
+		FB21F0862A62297F00682AC7 /* BPLoggingUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0812A62297F00682AC7 /* BPLoggingUtils.h */; };
+		FB21F0872A62297F00682AC7 /* BPTestCaseInfo+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0822A62297F00682AC7 /* BPTestCaseInfo+Internal.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB21F0882A62297F00682AC7 /* BPXCTestUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FB21F0832A62297F00682AC7 /* BPXCTestUtils.m */; };
+		FB21F0892A62297F00682AC7 /* BPLoggingUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FB21F0842A62297F00682AC7 /* BPLoggingUtils.m */; };
+		FB21F08A2A62297F00682AC7 /* BPXCTestUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0852A62297F00682AC7 /* BPXCTestUtils.h */; };
+		FB21F08F2A62298B00682AC7 /* BPTestCaseInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = FB21F08B2A62298A00682AC7 /* BPTestCaseInfo.m */; };
+		FB21F0902A62298B00682AC7 /* BPTestCaseInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = FB21F08B2A62298A00682AC7 /* BPTestCaseInfo.m */; };
+		FB21F0912A62298B00682AC7 /* BPTestInspectorConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F08C2A62298A00682AC7 /* BPTestInspectorConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB21F0922A62298B00682AC7 /* BPTestInspectorConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F08C2A62298A00682AC7 /* BPTestInspectorConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB21F0932A62298B00682AC7 /* BPTestCaseInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F08D2A62298B00682AC7 /* BPTestCaseInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB21F0942A62298B00682AC7 /* BPTestCaseInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F08D2A62298B00682AC7 /* BPTestCaseInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FB21F0952A62298B00682AC7 /* BPTestInspectorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FB21F08E2A62298B00682AC7 /* BPTestInspectorConstants.m */; };
+		FB21F0962A62298B00682AC7 /* BPTestInspectorConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FB21F08E2A62298B00682AC7 /* BPTestInspectorConstants.m */; };
+		FB21F0A82A622A0200682AC7 /* XCTestObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0982A622A0200682AC7 /* XCTestObserver.h */; };
+		FB21F0A92A622A0200682AC7 /* XCTestSuiteRun.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0992A622A0200682AC7 /* XCTestSuiteRun.h */; };
+		FB21F0AA2A622A0200682AC7 /* XCTestSuite.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F09A2A622A0200682AC7 /* XCTestSuite.h */; };
+		FB21F0AB2A622A0200682AC7 /* CDStructures.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F09B2A622A0200682AC7 /* CDStructures.h */; };
+		FB21F0AC2A622A0200682AC7 /* XCTestLog.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F09C2A622A0200682AC7 /* XCTestLog.h */; };
+		FB21F0AD2A622A0200682AC7 /* XCTest.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F09D2A622A0200682AC7 /* XCTest.h */; };
+		FB21F0AE2A622A0200682AC7 /* XCTestRun.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F09E2A622A0200682AC7 /* XCTestRun.h */; };
+		FB21F0AF2A622A0200682AC7 /* XCTestCase.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F09F2A622A0200682AC7 /* XCTestCase.h */; };
+		FB21F0B02A622A0200682AC7 /* XCTActivity-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0A12A622A0200682AC7 /* XCTActivity-Protocol.h */; };
+		FB21F0B12A622A0200682AC7 /* XCTIssueHandling-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0A22A622A0200682AC7 /* XCTIssueHandling-Protocol.h */; };
+		FB21F0B22A622A0200682AC7 /* XCTestObservation-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0A32A622A0200682AC7 /* XCTestObservation-Protocol.h */; };
+		FB21F0B32A622A0200682AC7 /* _XCTestObservationPrivate-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0A42A622A0200682AC7 /* _XCTestObservationPrivate-Protocol.h */; };
+		FB21F0B42A622A0200682AC7 /* XCTWaiterDelegate-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0A52A622A0200682AC7 /* XCTWaiterDelegate-Protocol.h */; };
+		FB21F0B52A622A0200682AC7 /* NSObject-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0A62A622A0200682AC7 /* NSObject-Protocol.h */; };
+		FB21F0B62A622A0200682AC7 /* _XCTestObservationInternal-Protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0A72A622A0200682AC7 /* _XCTestObservationInternal-Protocol.h */; };
+		FB21F0B92A622AA000682AC7 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB21F0B82A622AA000682AC7 /* XCTest.framework */; };
+		FB21F0DF2A65106E00682AC7 /* BPTestCaseInfo+Internal.h in Headers */ = {isa = PBXBuildFile; fileRef = FB21F0822A62297F00682AC7 /* BPTestCaseInfo+Internal.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		AA017F411BD7776B00F45E9D /* libBPTestInspector.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libBPTestInspector.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA56EAE21EEF08720062C2BC /* libBPMacTestInspector.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libBPMacTestInspector.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		EED62ED820D12209006E86E5 /* BPMacTestInspector.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BPMacTestInspector.xcconfig; sourceTree = "<group>"; };
+		EED62ED920D12209006E86E5 /* BPTestInspector.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BPTestInspector.xcconfig; sourceTree = "<group>"; };
+		FB21F07E2A62286400682AC7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		FB21F0812A62297F00682AC7 /* BPLoggingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPLoggingUtils.h; sourceTree = "<group>"; };
+		FB21F0822A62297F00682AC7 /* BPTestCaseInfo+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "BPTestCaseInfo+Internal.h"; sourceTree = "<group>"; };
+		FB21F0832A62297F00682AC7 /* BPXCTestUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPXCTestUtils.m; sourceTree = "<group>"; };
+		FB21F0842A62297F00682AC7 /* BPLoggingUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPLoggingUtils.m; sourceTree = "<group>"; };
+		FB21F0852A62297F00682AC7 /* BPXCTestUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPXCTestUtils.h; sourceTree = "<group>"; };
+		FB21F08B2A62298A00682AC7 /* BPTestCaseInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestCaseInfo.m; sourceTree = "<group>"; };
+		FB21F08C2A62298A00682AC7 /* BPTestInspectorConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestInspectorConstants.h; sourceTree = "<group>"; };
+		FB21F08D2A62298B00682AC7 /* BPTestCaseInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPTestCaseInfo.h; sourceTree = "<group>"; };
+		FB21F08E2A62298B00682AC7 /* BPTestInspectorConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPTestInspectorConstants.m; sourceTree = "<group>"; };
+		FB21F0982A622A0200682AC7 /* XCTestObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCTestObserver.h; sourceTree = "<group>"; };
+		FB21F0992A622A0200682AC7 /* XCTestSuiteRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCTestSuiteRun.h; sourceTree = "<group>"; };
+		FB21F09A2A622A0200682AC7 /* XCTestSuite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCTestSuite.h; sourceTree = "<group>"; };
+		FB21F09B2A622A0200682AC7 /* CDStructures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDStructures.h; sourceTree = "<group>"; };
+		FB21F09C2A622A0200682AC7 /* XCTestLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCTestLog.h; sourceTree = "<group>"; };
+		FB21F09D2A622A0200682AC7 /* XCTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCTest.h; sourceTree = "<group>"; };
+		FB21F09E2A622A0200682AC7 /* XCTestRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCTestRun.h; sourceTree = "<group>"; };
+		FB21F09F2A622A0200682AC7 /* XCTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCTestCase.h; sourceTree = "<group>"; };
+		FB21F0A12A622A0200682AC7 /* XCTActivity-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTActivity-Protocol.h"; sourceTree = "<group>"; };
+		FB21F0A22A622A0200682AC7 /* XCTIssueHandling-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTIssueHandling-Protocol.h"; sourceTree = "<group>"; };
+		FB21F0A32A622A0200682AC7 /* XCTestObservation-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTestObservation-Protocol.h"; sourceTree = "<group>"; };
+		FB21F0A42A622A0200682AC7 /* _XCTestObservationPrivate-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "_XCTestObservationPrivate-Protocol.h"; sourceTree = "<group>"; };
+		FB21F0A52A622A0200682AC7 /* XCTWaiterDelegate-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XCTWaiterDelegate-Protocol.h"; sourceTree = "<group>"; };
+		FB21F0A62A622A0200682AC7 /* NSObject-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject-Protocol.h"; sourceTree = "<group>"; };
+		FB21F0A72A622A0200682AC7 /* _XCTestObservationInternal-Protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "_XCTestObservationInternal-Protocol.h"; sourceTree = "<group>"; };
+		FB21F0B82A622AA000682AC7 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AA017F3E1BD7776B00F45E9D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB21F0B92A622AA000682AC7 /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA56EADF1EEF08720062C2BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AA017F381BD7776B00F45E9D = {
+			isa = PBXGroup;
+			children = (
+				FB21F08D2A62298B00682AC7 /* BPTestCaseInfo.h */,
+				FB21F08B2A62298A00682AC7 /* BPTestCaseInfo.m */,
+				FB21F08C2A62298A00682AC7 /* BPTestInspectorConstants.h */,
+				FB21F08E2A62298B00682AC7 /* BPTestInspectorConstants.m */,
+				FB21F0802A62296A00682AC7 /* Internal */,
+				EED62ED420D1212D006E86E5 /* Configs */,
+				AA017F421BD7776B00F45E9D /* Products */,
+				FB21F0B72A622AA000682AC7 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		AA017F421BD7776B00F45E9D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA017F411BD7776B00F45E9D /* libBPTestInspector.dylib */,
+				AA56EAE21EEF08720062C2BC /* libBPMacTestInspector.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EED62ED420D1212D006E86E5 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				EED62ED820D12209006E86E5 /* BPMacTestInspector.xcconfig */,
+				EED62ED920D12209006E86E5 /* BPTestInspector.xcconfig */,
+			);
+			path = Configs;
+			sourceTree = "<group>";
+		};
+		FB21F0802A62296A00682AC7 /* Internal */ = {
+			isa = PBXGroup;
+			children = (
+				FB21F07E2A62286400682AC7 /* main.m */,
+				FB21F0812A62297F00682AC7 /* BPLoggingUtils.h */,
+				FB21F0842A62297F00682AC7 /* BPLoggingUtils.m */,
+				FB21F0822A62297F00682AC7 /* BPTestCaseInfo+Internal.h */,
+				FB21F0852A62297F00682AC7 /* BPXCTestUtils.h */,
+				FB21F0832A62297F00682AC7 /* BPXCTestUtils.m */,
+				FB21F0972A622A0200682AC7 /* PrivateHeaders */,
+			);
+			path = Internal;
+			sourceTree = "<group>";
+		};
+		FB21F0972A622A0200682AC7 /* PrivateHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				FB21F0982A622A0200682AC7 /* XCTestObserver.h */,
+				FB21F0992A622A0200682AC7 /* XCTestSuiteRun.h */,
+				FB21F09A2A622A0200682AC7 /* XCTestSuite.h */,
+				FB21F09B2A622A0200682AC7 /* CDStructures.h */,
+				FB21F09C2A622A0200682AC7 /* XCTestLog.h */,
+				FB21F09D2A622A0200682AC7 /* XCTest.h */,
+				FB21F09E2A622A0200682AC7 /* XCTestRun.h */,
+				FB21F09F2A622A0200682AC7 /* XCTestCase.h */,
+				FB21F0A02A622A0200682AC7 /* Protocols */,
+			);
+			path = PrivateHeaders;
+			sourceTree = "<group>";
+		};
+		FB21F0A02A622A0200682AC7 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				FB21F0A12A622A0200682AC7 /* XCTActivity-Protocol.h */,
+				FB21F0A22A622A0200682AC7 /* XCTIssueHandling-Protocol.h */,
+				FB21F0A32A622A0200682AC7 /* XCTestObservation-Protocol.h */,
+				FB21F0A42A622A0200682AC7 /* _XCTestObservationPrivate-Protocol.h */,
+				FB21F0A52A622A0200682AC7 /* XCTWaiterDelegate-Protocol.h */,
+				FB21F0A62A622A0200682AC7 /* NSObject-Protocol.h */,
+				FB21F0A72A622A0200682AC7 /* _XCTestObservationInternal-Protocol.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		FB21F0B72A622AA000682AC7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FB21F0B82A622AA000682AC7 /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		AA017F3F1BD7776B00F45E9D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB21F0B12A622A0200682AC7 /* XCTIssueHandling-Protocol.h in Headers */,
+				FB21F0AA2A622A0200682AC7 /* XCTestSuite.h in Headers */,
+				FB21F0AB2A622A0200682AC7 /* CDStructures.h in Headers */,
+				FB21F0B42A622A0200682AC7 /* XCTWaiterDelegate-Protocol.h in Headers */,
+				FB21F08A2A62297F00682AC7 /* BPXCTestUtils.h in Headers */,
+				FB21F0A92A622A0200682AC7 /* XCTestSuiteRun.h in Headers */,
+				FB21F0A82A622A0200682AC7 /* XCTestObserver.h in Headers */,
+				FB21F0AE2A622A0200682AC7 /* XCTestRun.h in Headers */,
+				FB21F0862A62297F00682AC7 /* BPLoggingUtils.h in Headers */,
+				FB21F0B22A622A0200682AC7 /* XCTestObservation-Protocol.h in Headers */,
+				FB21F0AC2A622A0200682AC7 /* XCTestLog.h in Headers */,
+				FB21F0B52A622A0200682AC7 /* NSObject-Protocol.h in Headers */,
+				FB21F0B32A622A0200682AC7 /* _XCTestObservationPrivate-Protocol.h in Headers */,
+				FB21F0B62A622A0200682AC7 /* _XCTestObservationInternal-Protocol.h in Headers */,
+				FB21F0AF2A622A0200682AC7 /* XCTestCase.h in Headers */,
+				FB21F0932A62298B00682AC7 /* BPTestCaseInfo.h in Headers */,
+				FB21F0AD2A622A0200682AC7 /* XCTest.h in Headers */,
+				FB21F0B02A622A0200682AC7 /* XCTActivity-Protocol.h in Headers */,
+				FB21F0872A62297F00682AC7 /* BPTestCaseInfo+Internal.h in Headers */,
+				FB21F0912A62298B00682AC7 /* BPTestInspectorConstants.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA56EAE01EEF08720062C2BC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB21F0942A62298B00682AC7 /* BPTestCaseInfo.h in Headers */,
+				FB21F0DF2A65106E00682AC7 /* BPTestCaseInfo+Internal.h in Headers */,
+				FB21F0922A62298B00682AC7 /* BPTestInspectorConstants.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		AA017F401BD7776B00F45E9D /* BPTestInspector */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA017F451BD7776B00F45E9D /* Build configuration list for PBXNativeTarget "BPTestInspector" */;
+			buildPhases = (
+				AA017F3D1BD7776B00F45E9D /* Sources */,
+				AA017F3E1BD7776B00F45E9D /* Frameworks */,
+				AA017F3F1BD7776B00F45E9D /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BPTestInspector;
+			productName = Shimulator;
+			productReference = AA017F411BD7776B00F45E9D /* libBPTestInspector.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		AA56EAE11EEF08720062C2BC /* BPMacTestInspector */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA56EAEA1EEF08720062C2BC /* Build configuration list for PBXNativeTarget "BPMacTestInspector" */;
+			buildPhases = (
+				AA56EADE1EEF08720062C2BC /* Sources */,
+				AA56EADF1EEF08720062C2BC /* Frameworks */,
+				AA56EAE01EEF08720062C2BC /* Headers */,
+				71B9E0DC268C7A4600D40A91 /* Print Shim Path */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BPMacTestInspector;
+			productName = Maculator;
+			productReference = AA56EAE21EEF08720062C2BC /* libBPMacTestInspector.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AA017F391BD7776B00F45E9D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = Facebook;
+				TargetAttributes = {
+					AA017F401BD7776B00F45E9D = {
+						CreatedOnToolsVersion = 7.0.1;
+					};
+					AA56EAE11EEF08720062C2BC = {
+						CreatedOnToolsVersion = 9.0;
+					};
+				};
+			};
+			buildConfigurationList = AA017F3C1BD7776B00F45E9D /* Build configuration list for PBXProject "BPTestInspector" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AA017F381BD7776B00F45E9D;
+			productRefGroup = AA017F421BD7776B00F45E9D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA017F401BD7776B00F45E9D /* BPTestInspector */,
+				AA56EAE11EEF08720062C2BC /* BPMacTestInspector */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		71B9E0DC268C7A4600D40A91 /* Print Shim Path */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Print Shim Path";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo SHIM_DYLIB_PATH=$BUILT_PRODUCTS_DIR/$FULL_PRODUCT_NAME\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA017F3D1BD7776B00F45E9D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB21F0882A62297F00682AC7 /* BPXCTestUtils.m in Sources */,
+				FB21F08F2A62298B00682AC7 /* BPTestCaseInfo.m in Sources */,
+				FB21F07F2A62286400682AC7 /* main.m in Sources */,
+				FB21F0892A62297F00682AC7 /* BPLoggingUtils.m in Sources */,
+				FB21F0952A62298B00682AC7 /* BPTestInspectorConstants.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA56EADE1EEF08720062C2BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB21F0962A62298B00682AC7 /* BPTestInspectorConstants.m in Sources */,
+				FB21F0902A62298B00682AC7 /* BPTestCaseInfo.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AA017F431BD7776B00F45E9D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				GCC_OPTIMIZATION_LEVEL = 0;
+			};
+			name = Debug;
+		};
+		AA017F441BD7776B00F45E9D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				GCC_OPTIMIZATION_LEVEL = 0;
+			};
+			name = Release;
+		};
+		AA017F461BD7776B00F45E9D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EED62ED920D12209006E86E5 /* BPTestInspector.xcconfig */;
+			buildSettings = {
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+			};
+			name = Debug;
+		};
+		AA017F471BD7776B00F45E9D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EED62ED920D12209006E86E5 /* BPTestInspector.xcconfig */;
+			buildSettings = {
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+			};
+			name = Release;
+		};
+		AA56EAE81EEF08720062C2BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EED62ED820D12209006E86E5 /* BPMacTestInspector.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		AA56EAE91EEF08720062C2BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EED62ED820D12209006E86E5 /* BPMacTestInspector.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA017F3C1BD7776B00F45E9D /* Build configuration list for PBXProject "BPTestInspector" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA017F431BD7776B00F45E9D /* Debug */,
+				AA017F441BD7776B00F45E9D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA017F451BD7776B00F45E9D /* Build configuration list for PBXNativeTarget "BPTestInspector" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA017F461BD7776B00F45E9D /* Debug */,
+				AA017F471BD7776B00F45E9D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA56EAEA1EEF08720062C2BC /* Build configuration list for PBXNativeTarget "BPMacTestInspector" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA56EAE81EEF08720062C2BC /* Debug */,
+				AA56EAE91EEF08720062C2BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AA017F391BD7776B00F45E9D /* Project object */;
+}

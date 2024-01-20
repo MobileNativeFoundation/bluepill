@@ -11,6 +11,36 @@ typedef void (^CDUnknownBlockType)(void);
 typedef void (*CDUnknownFunctionPointerType)(void);
 @class NSArray, NSDate, NSDictionary, NSMachPort, NSMutableArray, NSMutableDictionary, NSObject, SimDeviceIO, NSString, NSUUID, SimDeviceBootInfo, SimDeviceNotificationManager, SimDevicePasteboard, SimDeviceSet, SimDeviceType, SimRuntime;
 
+/**
+ A note on how to investigate expected usage for these private, class-dumped Apple APIs:
+ 
+ It is often easier to get the below commands running in their commandline, `simctl` form first, in particular because
+ this is a public API that is (somewhat) documented. Fortunately for us, `simctl` uses `CoreSimulator` as well
+ as the APIs defined here in `SimDevice.h` under the hood, which we can use to our advantage to learn more about
+ expected usage.
+ 
+ As an example, the below steps were used to learn more about the expected usage for the various `spawn...` methods
+ defined in this class, leveraging lldb:
+ 
+ 1. Load lldb with a process such as `xcrun simctl spawn -s booted <xctest_path> -XCTest All <.xctest_file>`
+ 2. It should pause the process before starting. Then add breakpoints to all variants of `spawn` from `SimDevice.h`, including:
+     a) `breakpoint set --selector spawnWithPath:options:terminationQueue:terminationHandler:pid:error:`
+     b) `breakpoint set --selector spawnWithPath:options:terminationQueue:terminationHandler:error:`
+     c) `breakpoint set --selector spawnWithPath:options:terminationHandler:error:`
+     d) `breakpoint set --selector _spawnFromSelfWithPath:options:terminationQueue:terminationHandler:error:`
+     e) `breakpoint set --selector _spawnFromLaunchdWithPath:options:terminationQueue:terminationHandler:error:`
+     f) `breakpoint set --selector _onBootstrapQueue_spawnWithPath:options:terminationQueue:terminationHandler:erro`
+     g) `breakpoint set --selector spawnWithPath:options:terminationQueue:terminationHandler:pid:error:`
+     h) `breakpoint set --selector spawnWithPath:options:terminationQueue:terminationHandler:error:`
+ 3. These breakpoints should be `pending`, as CoreSimulator won't have been loaded yet. Hit `c` to continue and unpause the process,
+   and continue to `c` through automatically triggered pauses as additional dylibs are loaded.
+ 4. Eventually you'll hit one of the above selectors' breakpoint. Use `register read` to print out all the registers to find what all's in frame.
+ 5. Then use `po <register address>` for the register values to see what all objc classes are stored.
+ 6. Eventually, you'll find the values for the `path` and `options` arguments, or whatever other parameters you want to inspect.
+ 
+ With this information, you can learn more how a given `simctl` command maps onto its corresponding `SimDevice` method :)
+ */
+
 @interface SimDevice : NSObject <SimDeviceNotifier>
 {
     unsigned long long _state;
@@ -192,7 +222,7 @@ typedef void (*CDUnknownFunctionPointerType)(void);
 - (void)triggerCloudSyncWithCompletionHandler:(CDUnknownBlockType)arg1;
 - (void)launchApplicationAsyncWithID:(id)arg1 options:(id)arg2 completionHandler:(void (^)(NSError *, pid_t pid))arg3;
 - (int)spawnWithPath:(id)arg1 options:(id)arg2 terminationHandler:(CDUnknownBlockType)arg3 error:(id *)arg4;
-- (void)spawnAsyncWithPath:(id)arg1 options:(id)arg2 terminationHandler:(CDUnknownBlockType)arg3 completionHandler:(CDUnknownBlockType)arg4;
+- (void)spawnAsyncWithPath:(id)arg1 options:(id)arg2 terminationHandler:(void (^)(int))arg3 completionHandler:(void (^)(NSError *, pid_t pid))arg4;
 - (void)restoreContentsAndSettingsAsyncFromDevice:(id)arg1 completionHandler:(CDUnknownBlockType)arg2;
 - (void)eraseContentsAndSettingsAsyncWithCompletionHandler:(CDUnknownBlockType)arg1;
 - (void)renameAsync:(id)arg1 completionHandler:(CDUnknownBlockType)arg2;

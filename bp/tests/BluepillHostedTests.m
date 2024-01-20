@@ -16,6 +16,7 @@
 #import "BPTestHelper.h"
 #import "BPUtils.h"
 #import "BPSimulator.h"
+#import "BPTestUtils.h"
 
 #import "SimDevice.h"
 
@@ -24,15 +25,14 @@
  * - Exit code testing
  * - Report validation
  */
-@interface BluepillTests : BPIntTestCase
+@interface BluepillHostedTests : BPIntTestCase
 @end
 
-@implementation BluepillTests
+@implementation BluepillHostedTests
 
-
-
-- (void)tearDown {
-    [super tearDown];
+- (void)setUp {
+    [super setUp];
+    self.config = [BPTestUtils makeHostedTestConfiguration];
 }
 
 - (void)testAppThatCrashesOnLaunch {

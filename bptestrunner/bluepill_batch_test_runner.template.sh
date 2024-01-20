@@ -24,6 +24,7 @@ rm -rf $BP_WORKING_FOLDER
 mkdir $BP_WORKING_FOLDER
 
 # Extract test bundles
+
 for test_bundle in ${TEST_BUNDLE_PATHS[@]}; do
     if [[ $test_bundle == *.zip ]]; then
         tar -C $BP_WORKING_FOLDER -xzf $test_bundle
@@ -36,20 +37,22 @@ for test_bundle in ${TEST_BUNDLE_PATHS[@]}; do
     fi
 done
 
-# Clone and extract test hosts
-for test_host in ${TEST_HOST_PATHS[@]}; do
-    if [[ "$test_host" == *.ipa ]]; then
-        TEST_HOST_NAME=$(basename_without_extension "${test_host}")
-        unzip -qq -d "$BP_WORKING_FOLDER" "$test_host"
-        cp -cr "${BP_WORKING_FOLDER}/Payload/${TEST_HOST_NAME}.app" ${BP_WORKING_FOLDER}
-    elif [[ $test_host == *.app ]]; then
-        cp -cr $test_host $BP_WORKING_FOLDER
-        chmod -R ug+w "$BP_WORKING_FOLDER/$(basename "$test_host")"
-    else
-        echo "$test_host is not an ipa file or app bundle."
-        exit 1
-    fi
-done
+# Clone and extract test hosts (won't be set for logic tests)
+if [ ! -z ${test_host_paths+x} ]; then 
+    for test_host in ${TEST_HOST_PATHS[@]}; do
+        if [[ "$test_host" == *.ipa ]]; then
+            TEST_HOST_NAME=$(basename_without_extension "${test_host}")
+            unzip -qq -d "$BP_WORKING_FOLDER" "$test_host"
+            cp -cr "${BP_WORKING_FOLDER}/Payload/${TEST_HOST_NAME}.app" ${BP_WORKING_FOLDER}
+        elif [[ $test_host == *.app ]]; then
+            cp -cr $test_host $BP_WORKING_FOLDER
+            chmod -R ug+w "$BP_WORKING_FOLDER/$(basename "$test_host")"
+        else
+            echo "$test_host is not an ipa file or app bundle."
+            exit 1
+        fi
+    done
+fi
 
 # Copy config file to bp working folder
 if [ -f "$BP_CONFIG_FILE" ]; then

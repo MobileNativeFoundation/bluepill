@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 
 #pragma mark - Version Constants
-#define BP_DEFAULT_XCODE_VERSION "14.0"
+#define BP_DEFAULT_XCODE_VERSION "14.1"
 #define BP_DEFAULT_RUNTIME "iOS 16.0"
 #define BP_DEFAULT_BASE_SDK "16.0"
 

@@ -18,6 +18,8 @@
 typedef void (^BasicHandlerBlock)(void);
 typedef void (^BasicErrorBlock)(NSError *error);
 
+@property (nonatomic, assign, class) NSInteger timeoutErrorCode;
+
 @property (nonatomic, strong) BPWaitTimer *timer;
 
 @property (nonatomic, copy) BasicHandlerBlock beginWith;

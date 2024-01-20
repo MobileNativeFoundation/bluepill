@@ -31,7 +31,7 @@
                 }
                 // call timeout block first and then execute the onError block
                 if (__self.onError) {
-                    NSError *error = [NSError errorWithDomain:BPErrorDomain code:-1 userInfo:nil];
+                    NSError *error = [NSError errorWithDomain:BPErrorDomain code:BPHandler.timeoutErrorCode userInfo:nil];
                     __self.onError(error);
                 }
             });
@@ -61,6 +61,10 @@
             }
         });
     };
+}
+
++ (NSInteger)timeoutErrorCode {
+    return 8;
 }
 
 @end

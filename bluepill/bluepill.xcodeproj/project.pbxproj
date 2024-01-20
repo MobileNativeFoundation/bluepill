@@ -37,6 +37,11 @@
 		C4D6861A2267ABEF007D4237 /* bplib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D686192267ABEF007D4237 /* bplib.framework */; };
 		C4FD8C581DB6E09B000ED28C /* BPPacker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4FD8C571DB6E09B000ED28C /* BPPacker.m */; };
 		E49235FF22EA847700395D98 /* times.json in Resources */ = {isa = PBXBuildFile; fileRef = E49235FE22EA847700395D98 /* times.json */; };
+		FB21F0BF2A622FFE00682AC7 /* libBPMacTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB21F0BE2A622FFD00682AC7 /* libBPMacTestInspector.dylib */; };
+		FB21F0C02A622FFE00682AC7 /* libBPMacTestInspector.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FB21F0BE2A622FFD00682AC7 /* libBPMacTestInspector.dylib */; };
+		FBA69FA72A45F889003BADBF /* BPLogicTestFixture_arm64.xctest in Resources */ = {isa = PBXBuildFile; fileRef = FBA69FA52A45F889003BADBF /* BPLogicTestFixture_arm64.xctest */; };
+		FBA69FA82A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest in Resources */ = {isa = PBXBuildFile; fileRef = FBA69FA62A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest */; };
+		FBF6B19D2A5F272500D7A64B /* BPLogicTestFixture_swift_x86_64.xctest in Resources */ = {isa = PBXBuildFile; fileRef = FBF6B19C2A5F272500D7A64B /* BPLogicTestFixture_swift_x86_64.xctest */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +90,10 @@
 		C4FD8C561DB6E09B000ED28C /* BPPacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPPacker.h; sourceTree = "<group>"; };
 		C4FD8C571DB6E09B000ED28C /* BPPacker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPPacker.m; sourceTree = "<group>"; };
 		E49235FE22EA847700395D98 /* times.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = times.json; sourceTree = "<group>"; };
+		FB21F0BE2A622FFD00682AC7 /* libBPMacTestInspector.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libBPMacTestInspector.dylib; sourceTree = "<group>"; };
+		FBA69FA52A45F889003BADBF /* BPLogicTestFixture_arm64.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPLogicTestFixture_arm64.xctest; sourceTree = "<group>"; };
+		FBA69FA62A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPLogicTestFixture_x86_64.xctest; sourceTree = "<group>"; };
+		FBF6B19C2A5F272500D7A64B /* BPLogicTestFixture_swift_x86_64.xctest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BPLogicTestFixture_swift_x86_64.xctest; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +103,7 @@
 			files = (
 				C4D6861A2267ABEF007D4237 /* bplib.framework in Frameworks */,
 				B3109F792151F72F00B9309C /* CoreSimulator.framework in Frameworks */,
+				FB21F0C02A622FFE00682AC7 /* libBPMacTestInspector.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +111,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB21F0BF2A622FFE00682AC7 /* libBPMacTestInspector.dylib in Frameworks */,
 				C45F9E82267E8A8800969CC3 /* bplib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +122,7 @@
 		B3380AED2150BD8600752E1B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FB21F0BE2A622FFD00682AC7 /* libBPMacTestInspector.dylib */,
 				C4D686192267ABEF007D4237 /* bplib.framework */,
 				B3380AEE2150BD8700752E1B /* CoreSimulator.framework */,
 				BA1896B821791A14000CEC36 /* XCTest.framework */,
@@ -142,6 +154,9 @@
 				0173521223679E87008BFA4E /* TEST-FinalReport.xml */,
 				E49235FE22EA847700395D98 /* times.json */,
 				BA9C2DB01DD67B66007CB967 /* testScheme.xcscheme */,
+				FBA69FA52A45F889003BADBF /* BPLogicTestFixture_arm64.xctest */,
+				FBA69FA62A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest */,
+				FBF6B19C2A5F272500D7A64B /* BPLogicTestFixture_swift_x86_64.xctest */,
 				BA9C2DAE1DD674AD007CB967 /* BPSampleAppTests.xctest */,
 				C415174C273AE3CE00646740 /* Expected-TEST-FinalReport-for-invalid-xml.xml */,
 			);
@@ -272,8 +287,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBA69FA72A45F889003BADBF /* BPLogicTestFixture_arm64.xctest in Resources */,
 				BA9C2DB11DD67B66007CB967 /* testScheme.xcscheme in Resources */,
 				BA9C2DAF1DD674AD007CB967 /* BPSampleAppTests.xctest in Resources */,
+				FBA69FA82A45F889003BADBF /* BPLogicTestFixture_x86_64.xctest in Resources */,
+				FBF6B19D2A5F272500D7A64B /* BPLogicTestFixture_swift_x86_64.xctest in Resources */,
 				E49235FF22EA847700395D98 /* times.json in Resources */,
 				C415174F273AEAC400646740 /* simulator in Resources */,
 				0173521323679E87008BFA4E /* TEST-FinalReport.xml in Resources */,
@@ -363,6 +381,10 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/..\"";
 				INFOPLIST_FILE = tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BluepillRunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -380,6 +402,10 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/..\"";
 				INFOPLIST_FILE = tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = LI.BluepillRunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -509,6 +535,10 @@
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/..\"";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
@@ -531,6 +561,10 @@
 				DEVELOPER_PRIVATE_FRAMEWORKS_DIR = "";
 				DEVELOPMENT_TEAM = 57Y47U492U;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/..\"";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				OTHER_LDFLAGS = (
 					"-weak_framework",
