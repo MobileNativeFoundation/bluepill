@@ -33,7 +33,8 @@
 
 + (void)collectReportsFromPath:(NSString *)reportsPath
                deleteCollected:(BOOL)deleteCollected
-               withOutputAtDir:(NSString *)finalReportsDir {
+               withOutputAtDir:(NSString *)finalReportsDir
+       keepingOnlyLatestResult:(BOOL)latestResultOnly {
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     NSString *finalReportPath = [finalReportsDir stringByAppendingPathComponent:@"TEST-FinalReport.xml"];
@@ -97,7 +98,8 @@
     }
     NSXMLDocument *jUnitReport = [self collateReports:reports
                                     andDeleteCollated:deleteCollected
-                                         withOutputAt:finalReportPath];
+                                         withOutputAt:finalReportPath
+                              keepingOnlyLatestResult:latestResultOnly];
 
     // write a html report
     [[BPHTMLReportWriter new] writeHTMLReportWithJUnitReport:jUnitReport
@@ -106,7 +108,10 @@
 
 + (NSXMLDocument *)collateReports:(NSMutableArray <BPXMLReport *> *)reports
      andDeleteCollated:(BOOL)deleteCollated
-          withOutputAt:(NSString *)finalReportPath {
+          withOutputAt:(NSString *)finalReportPath
+          keepingOnlyLatestResult: (BOOL)latestResultOnly {
+    NSError *err;
+
     // sort them by modification date, newer reports trump old reports
     NSMutableArray *sortedReports;
     sortedReports = [NSMutableArray arrayWithArray:[reports sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
@@ -133,7 +138,7 @@
                 [BPUtils printInfo:DEBUGINFO withString:@"TestSuite: %@", testSuiteName];
                 NSXMLElement *targetTestSuite = [[targetReport nodesForXPath:[NSString stringWithFormat:@"//testsuite[@name='%@']", testSuiteName] error:nil] firstObject];
                 if (targetTestSuite) {
-                    [self collateTestSuite:testSuite into:targetTestSuite];
+                    [self collateTestSuite:testSuite into:targetTestSuite keepingOnlyLatestResult:latestResultOnly];
                 } else {
                     NSXMLElement *testSuites = [[targetReport nodesForXPath:@"/testsuites" error:nil] firstObject];
                     [testSuites addChild:[testSuite copy]];
@@ -174,28 +179,28 @@
     return doc;
 }
 
-+ (void) collateTestSuite:(NSXMLElement *)testSuite into:(NSXMLElement *)targetTestSuite {
++ (void) collateTestSuite:(NSXMLElement *)testSuite into:(NSXMLElement *)targetTestSuite keepingOnlyLatestResult:(BOOL)latestResultOnly {
     [BPUtils printInfo:DEBUGINFO withString:@"Collating '%@' into '%@'", [[testSuite attributeForName:@"name"] stringValue], [[targetTestSuite attributeForName:@"name"] stringValue]];
     // testsuite elements must have either all testsuite children or all testcase children
     NSString *firstChild = [[[testSuite children] firstObject] name];
     if ([firstChild isEqualToString:@"testsuite"]) {
-        [self collateTestSuiteTestSuites:testSuite into:targetTestSuite];
+        [self collateTestSuiteTestSuites:testSuite into:targetTestSuite keepingOnlyLatestResult:latestResultOnly];
     } else if ([firstChild isEqualToString:@"testcase"]) {
-        [self collateTestSuiteTestCases:testSuite into:targetTestSuite];
+        [self collateTestSuiteTestCases:testSuite into:targetTestSuite keepingOnlyLatestResult:latestResultOnly];
     } else if (firstChild) { // empty
         [BPUtils printInfo:ERROR withString:@"Unknown child node in '%@': %@", [[testSuite attributeForName:@"name"] stringValue],  firstChild];
         assert(false);
     }
 }
 
-+ (void)collateTestSuiteTestSuites:(NSXMLElement *)testSuite into:(NSXMLElement *)targetTestSuite {
++ (void)collateTestSuiteTestSuites:(NSXMLElement *)testSuite into:(NSXMLElement *)targetTestSuite keepingOnlyLatestResult:(BOOL)latestResultOnly {
     [BPUtils printInfo:DEBUGINFO withString:@"Collating TestSuites under: %@", [[testSuite attributeForName:@"name"]stringValue]];
     for (NSXMLElement *ts in [testSuite nodesForXPath:@"testsuite" error:nil]) {
         NSXMLElement *tts = [[targetTestSuite nodesForXPath:[NSString stringWithFormat:@"testsuite[@name='%@']", [[ts attributeForName:@"name"] stringValue]]
                                                       error:nil] firstObject];
         if (tts) {
             [BPUtils printInfo:DEBUGINFO withString:@"match: %@", [[tts attributeForName:@"name"] stringValue]];
-            [self collateTestSuiteTestCases:ts into:tts];
+            [self collateTestSuiteTestCases:ts into:tts keepingOnlyLatestResult:latestResultOnly];
         } else {
             [BPUtils printInfo:DEBUGINFO withString:@"inserting: %@", [[ts attributeForName:@"name"] stringValue]];
             [targetTestSuite addChild:[ts copy]];
@@ -203,7 +208,7 @@
     }
 }
 
-+ (void)collateTestSuiteTestCases:(NSXMLElement *)testSuite into:(NSXMLElement *)targetTestSuite {
++ (void)collateTestSuiteTestCases:(NSXMLElement *)testSuite into:(NSXMLElement *)targetTestSuite keepingOnlyLatestResult:(BOOL)latestResultOnly {
     [BPUtils printInfo:DEBUGINFO withString:@"Collating TestCases under: %@", [[testSuite attributeForName:@"name"] stringValue]];
     int testCaseCount = 0;
     for (NSXMLElement *testCase in [testSuite nodesForXPath:@"testcase" error:nil]) {
@@ -211,10 +216,15 @@
         NSString *name = [[testCase attributeForName:@"name"] stringValue];
         NSXMLElement *targetTestCase = [[targetTestSuite nodesForXPath:[NSString stringWithFormat:@"testcase[@name='%@' and @classname='%@']", name, className]
                                                                  error:nil] firstObject];
-        NSXMLElement *parent;
+        NSXMLElement *parent = (NSXMLElement *)[targetTestCase parent];
+
+        if (latestResultOnly) {
+            [parent removeChildAtIndex:[targetTestCase index]];
+            testCaseCount--;
+        }
+
         if (targetTestCase) {
             [BPUtils printInfo:DEBUGINFO withString:@"testcase match: %@", [[targetTestCase attributeForName:@"name"] stringValue]];
-            parent = (NSXMLElement *)[targetTestCase parent];
             // append the latest result at the end
             NSUInteger insertIndex;
             for (insertIndex = [targetTestCase index]; insertIndex < [[parent children] count]; insertIndex++) {
