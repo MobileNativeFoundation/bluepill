@@ -7,14 +7,12 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "bp/tests/BPTestHelper.h"
-#import "bp/src/BPConfiguration.h"
-#import "bp/src/BPUtils.h"
 #import "bluepill/src/BPRunner.h"
 #import "bluepill/src/BPApp.h"
 #import "bluepill/src/BPPacker.h"
-#import "bp/src/BPXCTestFile.h"
-#import "bp/src/BPConstants.h"
+
+#import <bplib/bplib.h>
+#import <bplib/BPTestUtils.h>
 
 @interface BPIntegrationTests : XCTestCase
 @end
@@ -57,6 +55,101 @@
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
+}
+
+- (void)testArchitecture_x86_64 {
+    NSString *bundlePath = BPTestHelper.logicTestBundlePath_x86_64;
+
+    BPConfiguration *config = [BPTestUtils makeUnhostedTestConfiguration];
+    config.stuckTimeout = @(2);
+    config.testCaseTimeout = @(10);
+    // Test multiple test bundles, while skipping any failing tests so that we
+    // can still validate that we get a success code..
+    config.testBundlePath = bundlePath;
+
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
+    NSError *error;
+    BPApp *app = [BPApp appWithConfig:config withError:&error];
+
+    XCTAssert(runner != nil);
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc == 0, @"Wanted 0, got %d", rc);
+    XCTAssert([runner busySwimlaneCount] == 0);
+}
+
+- (void)testArchitecture_arm64 {
+    NSString *bundlePath = BPTestHelper.logicTestBundlePath_arm64;
+    
+    BPConfiguration *config = [BPTestUtils makeUnhostedTestConfiguration];
+    config.stuckTimeout = @(2);
+    config.testCaseTimeout = @(10);
+    // Test multiple test bundles, while skipping any failing tests so that we
+    // can still validate that we get a success code..
+    config.testBundlePath = bundlePath;
+
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
+    NSError *error;
+    BPApp *app = [BPApp appWithConfig:config withError:&error];
+
+    XCTAssert(runner != nil);
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc == 0, @"Wanted 0, got %d", rc);
+    XCTAssert([runner busySwimlaneCount] == 0);
+}
+
+- (void)testLogicTestBundles {
+    BPConfiguration *config = [BPTestUtils makeUnhostedTestConfiguration];
+    config.stuckTimeout = @(2);
+    config.testCaseTimeout = @(10);
+    // Test multiple test bundles, while skipping any failing tests so that we
+    // can still validate that we get a success code..
+    config.testBundlePath = BPTestHelper.logicTestBundlePath;
+    config.additionalUnitTestBundles = @[BPTestHelper.logicTestBundlePath];
+    config.testCasesToSkip = @[
+        @"BPLogicTests/testFailingLogicTest",
+        @"BPLogicTests/testCrashTestCaseLogicTest",
+        @"BPLogicTests/testCrashExecutionLogicTest",
+        @"BPLogicTests/testStuckLogicTest",
+        @"BPLogicTests/testSlowLogicTest",
+    ];
+
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
+    NSError *error;
+    BPApp *app = [BPApp appWithConfig:config withError:&error];
+
+    XCTAssert(runner != nil);
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc == 0, @"Wanted 0, got %d", rc);
+    XCTAssert([runner busySwimlaneCount] == 0);
+}
+
+- (void)testTwoBPInstancesWithLogicTestPlanJson {
+    [self writeLogicTestPlan];
+    BPConfiguration *config = [BPTestUtils makeUnhostedTestConfiguration];
+    config.numSims = @2;
+    config.testBundlePath = nil;
+    config.testRunnerAppPath = nil;
+    config.appBundlePath = nil;
+    config.testPlanPath = [BPTestHelper testPlanPath];
+
+    NSError *err;
+    [config validateConfigWithError:&err];
+    BPApp *app = [BPApp appWithConfig:config withError:&err];
+    NSString *bpPath = [BPTestHelper bpExecutablePath];
+    BPRunner *runner = [BPRunner BPRunnerWithConfig:config withBpPath:bpPath];
+    XCTAssert(runner != nil);
+    int rc = [runner runWithBPXCTestFiles:app.testBundles];
+    XCTAssert(rc != 0); // this runs tests that fail
+    XCTAssertEqual(app.testBundles.count, 2);
+    XCTAssertTrue([app.testBundles[0].name isEqualToString:@"BPLogicTests"]);
+    XCTAssertEqual(app.testBundles[0].numTests, 10);
+    XCTAssertEqual(app.testBundles[0].skipTestIdentifiers.count, 0);
+    XCTAssertTrue([app.testBundles[1].name isEqualToString:@"BPPassingLogicTests"]);
+    XCTAssertEqual(app.testBundles[1].numTests, 207);
+    XCTAssertEqual(app.testBundles[1].skipTestIdentifiers.count, 0);
 }
 
 - (void)testOneBPInstance {
@@ -215,6 +308,25 @@
                 @"test_host": [BPTestHelper sampleAppPath],
                 @"test_host_bundle_identifier": @"identifier",
                 @"test_bundle_path": [BPTestHelper sampleAppNegativeTestsBundlePath],
+                @"environment": @{},
+                @"arguments": @{}
+            }
+        }
+    };
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:testPlan options:0 error:nil];
+    [jsonData writeToFile:[BPTestHelper testPlanPath] atomically:YES];
+}
+
+- (void)writeLogicTestPlan {
+    NSDictionary *testPlan = @{
+        @"tests": @{
+            @"BPLogicTests": @{
+                @"test_bundle_path": [BPTestHelper logicTestBundlePath],
+                @"environment": @{},
+                @"arguments": @{}
+            },
+            @"BPPassingLogicTests": @{
+                @"test_bundle_path": [BPTestHelper passingLogicTestBundlePath],
                 @"environment": @{},
                 @"arguments": @{}
             }

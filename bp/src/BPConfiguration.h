@@ -53,6 +53,7 @@ typedef NS_ENUM(NSInteger, BPProgram) {
  */
 
 @property (nonatomic, strong) NSUUID *sessionIdentifier;
+@property (nonatomic) BOOL isLogicTestTarget;
 @property (nonatomic, strong) NSString *appBundlePath;
 
 // XCUITest sector
@@ -130,6 +131,10 @@ typedef NS_ENUM(NSInteger, BPProgram) {
 
 @property (nonatomic, strong) SimDeviceType *simDeviceType;
 @property (nonatomic, strong) SimRuntime *simRuntime;
+
+@property (nonatomic, strong) NSString *xctestBinaryPath;
+@property (nonatomic, strong) NSString *dyldFrameworkPath;
+@property (nonatomic, strong) NSDictionary<NSString *, NSString *> *standardizedSwiftTestNames;
 
 
 /**

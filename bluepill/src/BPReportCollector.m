@@ -9,7 +9,7 @@
 
 #import "BPHTMLReportWriter.h"
 #import "BPReportCollector.h"
-#import "bp/src/BPUtils.h"
+#import <bplib/bplib.h>
 
 // Save path and mtime for reports (sort by mtime)
 @interface BPXMLReport:NSObject

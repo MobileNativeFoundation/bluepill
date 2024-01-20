@@ -7,8 +7,7 @@
 //  distributed under the License is distributed on an "AS IS" BASIS,
 //  WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
-#import "bp/src/BPXCTestFile.h"
-#import "bp/src/BPUtils.h"
+#import <bplib/bplib.h>
 #import "BPPacker.h"
 
 @implementation BPPacker
@@ -142,6 +141,7 @@
                                                                                                    andXCTestFiles:xcTestFiles];
 
     NSMutableArray<BPXCTestFile *> *bundles = [[NSMutableArray alloc] init];
+    
     for (BPXCTestFile *xctFile in xcTestFiles) {
         NSArray *bundleTestsToRun = [[testsToRunByFilePath[xctFile.testBundlePath] allObjects] sortedArrayUsingSelector:@selector(compare:)];
         NSNumber *estimatedBundleTime = testEstimatesByFilePath[xctFile.testBundlePath];

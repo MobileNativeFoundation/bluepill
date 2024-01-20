@@ -12,6 +12,10 @@
 #import "BPConstants.h"
 #import "BPXCTestFile.h"
 #import "BPConfiguration.h"
+#import "SimDevice.h"
+#import "SimDeviceType.h"
+#import "BPExecutionContext.h"
+#import "BPSimulator.h"
 
 @implementation BPUtils
 
@@ -111,16 +115,6 @@ static BOOL quiet = NO;
         fprintf(fd, "{%d} %s [%s] %s%s%s", getpid(), ts, message.text, [simNum UTF8String], [txt UTF8String], nl);
     }
     fflush(fd);
-}
-
-+ (NSError *)BPError:(const char *)function andLine:(int)line withFormat:(NSString *)fmt, ... {
-    va_list args;
-    va_start(args, fmt);
-    NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:args];
-    va_end(args);
-    return [NSError errorWithDomain:BPErrorDomain
-                               code:-1
-                           userInfo:@{NSLocalizedDescriptionKey: msg}];
 }
 
 + (NSString *)findExecutablePath:(NSString *)execName {
@@ -296,12 +290,45 @@ static BOOL quiet = NO;
   [BPUtils runShell:cmd];
 }
 
++ (BOOL)isTestSwiftTest:(NSString *)testName {
+    return [testName containsString:@"."] || [testName containsString:@"()"];
+}
+
 + (NSString *)removeSwiftArgumentsFromTestName:(NSString *)testName {
     NSRange range = [testName rangeOfString:@"("];
     if (range.location == NSNotFound) {
         return testName;
     }
     return [NSString stringWithFormat:@"%@()", [testName substringToIndex:range.location]];
+}
+
++ (NSString *)formatSwiftTestForReport:(NSString *)testName {
+    NSString *formattedName = testName;
+    // Remove prefix of `<bundleName>.`
+    NSRange range = [testName rangeOfString:@"."];
+    if (range.location != NSNotFound) {
+        formattedName = [formattedName substringFromIndex:range.location + 1];
+    }
+    // Add parentheses
+    if (![testName hasSuffix:@"()"]) {
+        formattedName = [formattedName stringByAppendingString:@"()"];
+    }
+    return formattedName;
+}
+
++ (NSString *)formatSwiftTestForXCTest:(NSString *)testName withBundleName:(NSString *)bundleName {
+    NSString *formattedName = testName;
+    // Remove parentheses
+    NSRange range = [formattedName rangeOfString:@"()"];
+    if (range.location != NSNotFound) {
+        formattedName = [formattedName substringToIndex:range.location];
+    }
+    // Add `<bundleName>.`
+    NSString *bundlePrefix = [bundleName stringByAppendingString:@"."];
+    if (![formattedName containsString:bundlePrefix]) {
+        formattedName = [NSString stringWithFormat:@"%@.%@", bundleName, formattedName];
+    }
+    return formattedName;
 }
 
 + (char *)version {
@@ -418,6 +445,13 @@ static BOOL quiet = NO;
     return testsToRunByFilePath;
 }
 
++ (double)timeoutForAllTestsWithConfiguration:(BPConfiguration *)config {
+    // Add 1 second per test
+    double buffer = 1.0;
+    NSInteger testCount = (config.testCasesToRun.count == 0 ? config.allTestCases.count : config.testCasesToRun.count) - config.testCasesToSkip.count;
+    return testCount * (config.testCaseTimeout.doubleValue + buffer);
+}
+
 + (double)getTotalTimeWithConfig:(BPConfiguration *)config
                        testTimes:(NSDictionary<NSString *,NSNumber *> *)testTimes
                   andXCTestFiles:(NSArray<BPXCTestFile *> *)xcTestFiles {
@@ -436,6 +470,191 @@ static BOOL quiet = NO;
         totalTime += testBundleExecutionTime;
     }
     return totalTime;
+}
+
+#pragma mark - Errors
+
++ (NSError *)errorWithSignalCode:(NSInteger)signalCode {
+    NSString *description = [NSString stringWithFormat:@"Process failed signal code: %@", @(signalCode)];
+    return [self errorWithCode:signalCode description:description];
+}
+
++ (NSError *)errorWithExitCode:(NSInteger)exitCode {
+    NSString *description = [NSString stringWithFormat:@"Process failed exit code: %@", @(exitCode)];
+    return [self errorWithCode:exitCode description:description];
+}
+
++ (NSError *)BPError:(const char *)function andLine:(int)line withFormat:(NSString *)fmt, ... {
+    va_list args;
+    va_start(args, fmt);
+    NSString *msg = [[NSString alloc] initWithFormat:fmt arguments:args];
+    va_end(args);
+    return [self errorWithCode:-1 description:msg];
+}
+
++ (NSError *)errorWithCode:(NSInteger)code description:(NSString *)description {
+    NSDictionary<NSString *, NSString *> *userInfo = @{
+        NSLocalizedDescriptionKey: description
+    };
+    return [NSError errorWithDomain:BPErrorDomain code:code userInfo:userInfo];
+}
+
+#pragma mark - Architecture Helpers
+
+/**
+ We can isolate a single architecture out of a universal binary using the `lipo -extract` command. By doing so, we can
+ force an executable (such as XCTest) to always run w/ the architecture we expect. This is to avoid some funny business where
+ the architecture selected can be unexpected depending on multiple factors, such as Rosetta, xcode version, etc.
+ 
+ @return the path of the new executable if possible + required, nil otherwise. In nil case, original executable should be used instead.
+ */
++ (NSString *)lipoExecutableAtPath:(NSString *)path withContext:(BPExecutionContext *)context {
+    // If the executable isn't a universal binary, there's nothing we can do. If we don't
+    // support the test bundle type, we'll let it fail later naturally.
+    NSArray<NSString *> *executableArchitectures = [self availableArchitecturesForPath:path];
+    BOOL isUniversalExecutable = [executableArchitectures containsObject:self.x86_64] && [executableArchitectures containsObject:self.arm64];
+    if (!isUniversalExecutable) {
+        return nil;
+    }
+    // Now, get the test bundle's architecture.
+    NSString *bundlePath =  context.config.testBundlePath;
+    NSString *testBundleName = [[bundlePath pathComponents].lastObject componentsSeparatedByString:@"."][0];
+    NSString *testBundleBinaryPath = [bundlePath stringByAppendingPathComponent:testBundleName];
+    NSArray<NSString *> *testBundleArchitectures = [self availableArchitecturesForPath:testBundleBinaryPath];
+    BOOL isUniversalTestBundle = [testBundleArchitectures containsObject:self.x86_64] && [testBundleArchitectures containsObject:self.arm64];
+
+    // If the test bundle is a univeral binary, no need to lipo... xctest (regardless of the arch it's in)
+    // should be able to handle it.
+    if (isUniversalTestBundle) {
+        return nil;
+    }
+
+    // If the test bundle's arch isn't supported by the sim, we're in an error state
+    NSArray<NSString *> *simArchitectures = [self architecturesSupportedByDevice:context.runner.device];
+    if (![simArchitectures containsObject:testBundleArchitectures.firstObject]) {
+        return nil;
+    }
+    
+    // Now that we've done any error checking, we can handle our real cases,
+    // based on what xctest would default to vs. what we need it to do.
+    // Note that the universal binary will launch in the same arch as the machine,
+    // rather than defaulting to the arch of the parent process.
+    //
+    //   1) The current arch is x86_64
+    //        a) We are in Rosetta       -> xctest will default to arm64
+    //        b) We are not in Rosetta   -> xctest will default to x86
+    //   2) The current arch is arm64    -> xctest will default to arm64
+    //
+    // We handle these accordingly:
+    //   1a) we lipo if the test bundle is an x86_64 binary
+    //   1b) no-op.     ... x86 will get handled automatically, and we have to fail if test bundle is arm64.
+    //   1c) no-op.     ... arm64 will get handled automatically, and we have to fail if test bundle is x86.
+    BOOL isRosetta = [self.currentArchitecture isEqual:self.x86_64] && isUniversalExecutable;
+    if (!isRosetta || ![testBundleArchitectures.firstObject isEqual:self.x86_64]) {
+        return nil;
+    }
+
+    // Now we lipo.
+    NSError *error;
+    NSString *fileName = [NSString stringWithFormat:@"%@xctest", NSTemporaryDirectory()];
+    NSString *thinnedExecutablePath = [BPUtils mkstemp:fileName withError:&error];
+    NSString *cmd = [NSString stringWithFormat:@"/usr/bin/lipo %@ -extract %@ -output %@", path, testBundleArchitectures.firstObject, thinnedExecutablePath];
+    NSString *__unused output = [BPUtils runShell:cmd];
+    return thinnedExecutablePath;
+}
+
+/**
+ Lipo'ing the universal binary alone to isolate the desired architecture will result in errors.
+ Specifically, the newly lipo'ed binary won't be able to find any of the required frameworks
+ from within the original binary. So, we need to set up the `DYLD_FRAMEWORK_PATH`
+ in the environment to include the paths to these frameworks within the original universal
+ executable's binary.
+ */
++ (NSString *)correctedDYLDFrameworkPathFromBinary:(NSString *)binaryPath {
+    NSString *otoolCommand = [NSString stringWithFormat:@"/usr/bin/otool -l %@", binaryPath];
+    NSString *otoolInfo = [BPUtils runShell:otoolCommand];
+    /**
+     Example output looks something like this:
+     
+     ```
+     // Lots of stuff we don't care about, followed by a list of `LC_RPATH` entries
+     Load command 18
+               cmd LC_RPATH
+           cmdsize 48
+              path @executable_path/path/to/frameworks/ (offset 12)
+     // Lots more stuff we don't care about...
+     ```
+     
+     We want to use a regex to extract out each of the `@executable_path/path/to/frameworks/`,
+     and then replace `@executable_path` with our original executable's parent directory.
+     */
+    NSString *pattern = @"(?:^Load command \\d+\n"
+    "\\s*cmd LC_RPATH\n"
+    "\\s*cmdsize \\d+\n"
+    "\\s*path (@executable_path\\/.*) \\(offset \\d+\\))+";
+    NSError *error;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                           options:NSRegularExpressionAnchorsMatchLines
+                                                                             error:&error];
+
+    NSMutableArray<NSString *> *paths = [NSMutableArray array];
+    NSString *parentDirectory = [[binaryPath stringByResolvingSymlinksInPath] stringByDeletingLastPathComponent];
+    if (regex) {
+        NSArray<NSTextCheckingResult *> *matches = [regex matchesInString:otoolInfo
+                                                                  options:0
+                                                                    range:NSMakeRange(0, otoolInfo.length)];
+        for (NSTextCheckingResult *match in matches) {
+            // Extract the substring from the input string based on the matched range
+            NSString *relativePath = [otoolInfo substringWithRange:[match rangeAtIndex:1]];
+            NSString *path = [relativePath stringByReplacingOccurrencesOfString:@"@executable_path" withString:parentDirectory];
+            [paths addObject:path];
+        }
+    } else {
+        NSLog(@"Error creating regular expression: %@", error);
+    }
+    
+    return [paths componentsJoinedByString:@":"];
+}
+
++ (NSArray<NSString *> *)availableArchitecturesForPath:(NSString *)path {
+    NSString *cmd = [NSString stringWithFormat:@"/usr/bin/lipo -archs %@", path];
+    return [[BPUtils runShell:cmd] componentsSeparatedByString:@" "];
+}
+
++ (NSArray<NSString *> *)architecturesSupportedByDevice:(SimDevice *)device {
+    NSArray<NSNumber *> *simSupportedArchitectures = device.deviceType.supportedArchs;
+    NSMutableArray<NSString *> *simArchitectures = [NSMutableArray array];
+    for (NSNumber *supportedArchitecture in simSupportedArchitectures) {
+        [simArchitectures addObject:[self architectureName:supportedArchitecture.intValue]];
+    }
+    return [simArchitectures copy];
+}
+
++ (NSString *)arm64 {
+    return [self architectureName:CPU_TYPE_ARM64];
+}
+
++ (NSString *)x86_64 {
+    return [self architectureName:CPU_TYPE_X86_64];
+}
+
++ (NSString *)architectureName:(integer_t)architecture {
+    if (architecture == CPU_TYPE_X86_64) {
+        return @"x86_64";
+    } else if (architecture == CPU_TYPE_ARM64) {
+        return @"arm64";
+    }
+    return nil;
+}
+
++ (NSString *)currentArchitecture {
+    #if TARGET_CPU_ARM64
+        return [self architectureName:CPU_TYPE_ARM64];
+    #elif TARGET_CPU_X86_64
+        return [self architectureName:CPU_TYPE_X86_64];
+    #else
+        return nil;
+    #endif
 }
 
 @end

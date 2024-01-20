@@ -10,13 +10,10 @@
 #import <Foundation/Foundation.h>
 #import <getopt.h>
 #import <libgen.h>
-#import "bp/src/BPConfiguration.h"
-#import "bp/src/BPStats.h"
-#import "bp/src/BPUtils.h"
-#import "bp/src/BPWriter.h"
 #import "BPApp.h"
 #import "BPReportCollector.h"
 #import "BPRunner.h"
+#import <bplib/bplib.h>
 
 #include <sys/ioctl.h>
 #include <string.h>
