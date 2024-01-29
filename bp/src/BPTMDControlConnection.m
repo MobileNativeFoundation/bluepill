@@ -85,13 +85,13 @@ static const NSString * const testManagerEnv = @"TESTMANAGERD_SIM_SOCK";
     DTXRemoteInvocationReceipt *receipt = [daemonProxy _IDE_initiateControlSessionForTestProcessID:@(self.testRunnerPid) protocolVersion:@(BP_TM_PROTOCOL_VERSION)];
     
     [receipt handleCompletion:^(NSNumber *version, NSError *error) {
+        self.connected = TRUE;
         if (error) {
             [BPUtils printInfo:ERROR withString:@"Error with daemon connection: %@", error];
             return;
         }
         NSInteger daemonProtocolVersion = version.integerValue;
         [BPUtils printInfo:INFO withString:@"Test manager daemon control session started (%ld)", (long)daemonProtocolVersion];
-        self.connected = TRUE;
     }];
 }
 
@@ -118,6 +118,7 @@ DTXConnection* connectToTestManager(SimDevice *device) {
     socklen_t length = (socklen_t)(strnlen(remote.sun_path, 1024) + sizeof(remote.sun_family) + sizeof(remote.sun_len));
     if (connect(socketFD, (struct sockaddr *)&remote, length) == -1) {
         [BPUtils printInfo:ERROR withString:@"ERROR connecting socket"];
+        close(socketFD);
     }
     DTXTransport *transport = [[objc_lookUpClass("DTXSocketTransport") alloc] initWithConnectedSocket:socketFD disconnectAction:^{
         [BPUtils printInfo:INFO withString:@"DTXSocketTransport disconnected"];

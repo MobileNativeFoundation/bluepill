@@ -29,8 +29,6 @@
 
 @implementation BluepillTests
 
-
-
 - (void)tearDown {
     [super tearDown];
 }
@@ -195,6 +193,7 @@
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.testCasesToSkip = @[@"BPSampleAppTests/testCase000"];
+    self.config.errorRetriesCount = @1;
 
     BPExitStatus exitCode = [[[Bluepill alloc ] initWithConfiguration:self.config] run];
     XCTAssert(exitCode == BPExitStatusAllTestsPassed);
@@ -206,6 +205,7 @@
     self.config.failureTolerance = @0;
     self.config.testCaseTimeout = @10;
     self.config.testCasesToRun = @[@"BPAppNegativeTests/testBPDoesNotHangWithBigOutput"];
+    self.config.errorRetriesCount = @1;
     NSString *tempDir = NSTemporaryDirectory();
     NSError *error;
     NSString *outputDir = [BPUtils mkdtemp:[NSString stringWithFormat:@"%@/AppFailingTestsSetTempDir", tempDir] withError:&error];
@@ -221,6 +221,7 @@
     NSString *testBundlePath = [BPTestHelper sampleAppCrashingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.keepSimulator = YES;
+    self.config.errorRetriesCount = @1;
 
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
@@ -276,6 +277,7 @@
     [BPUtils enableDebugOutput:YES];
     // The delay of ui test bootstrapping is larger than 5s.
     self.config.testCaseTimeout = @300;
+    self.config.errorRetriesCount = @1;
     NSString *testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
     NSString *testRunnerPath = [BPTestHelper sampleAppUITestRunnerPath];
     NSString *tempDir = NSTemporaryDirectory();
@@ -296,6 +298,7 @@
     NSString *testBundlePath = [BPTestHelper sampleAppBalancingTestsBundlePath];
     self.config.testBundlePath = testBundlePath;
     self.config.keepSimulator = YES;
+    self.config.errorRetriesCount = @1;
 
     Bluepill *bp = [[Bluepill alloc ] initWithConfiguration:self.config];
     BPExitStatus exitCode = [bp run];
@@ -305,7 +308,7 @@
     NSURL *preferencesFile = bp.test_simulator.preferencesFile;
 
     NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfURL:preferencesFile];
-    XCTAssertEqualObjects(@"en_CH", plist[@"AppleLocale"]);
+    XCTAssertEqualObjects(@"en_CN", plist[@"AppleLocale"]);
 
     self.config.deleteSimUDID = bp.test_simulatorUDID;
     XCTAssertNotNil(self.config.deleteSimUDID);

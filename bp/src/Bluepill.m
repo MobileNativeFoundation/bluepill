@@ -40,6 +40,8 @@ static void onInterrupt(int ignore) {
     interrupted = 1;
 }
 
+static int checkDisconnectDelay = 0;
+
 @interface Bluepill()<BPTestBundleConnectionDelegate>
 
 @property (nonatomic, strong) BPConfiguration *config;
@@ -309,6 +311,7 @@ static void onInterrupt(int ignore) {
     };
 
     handler.onError = ^(NSError *error) {
+        [[BPStats sharedStats] startTimer:SIMULATOR_LIFETIME(context.runner.UDID) atTime:simStart];
         [[BPStats sharedStats] addSimulatorCreateFailure];
         [BPUtils printInfo:ERROR withString:@"%@", [error localizedDescription]];
         // If we failed to create the simulator, there's no reason for us to try to delete it, which can just cause more issues
@@ -445,10 +448,12 @@ static void onInterrupt(int ignore) {
     [runnerConnection connectWithTimeout:180];
     
     [runnerConnection startTestPlan];
-    NEXT([self checkProcessWithContext:context]);
+
+    checkDisconnectDelay = [self.config.testBundleDisconnectTimeout intValue];
+    NEXT([self checkProcessWithContext:context conenction:runnerConnection]);
 
 }
-- (void)checkProcessWithContext:(BPExecutionContext *)context {
+- (void)checkProcessWithContext:(BPExecutionContext *)context conenction:(BPTMDRunnerConnection*)connection {
     BOOL isRunning = [self isProcessRunningWithContext:context];
     if (!isRunning && [context.runner isFinished]) {
         [BPUtils printInfo:INFO withString:@"Finished"];
@@ -479,7 +484,17 @@ static void onInterrupt(int ignore) {
         return;
     }
 
-    NEXT_AFTER(1, [self checkProcessWithContext:context]);
+    if (connection.disconnected) {
+        // break early if possible
+        if (checkDisconnectDelay > 0) {
+            checkDisconnectDelay --;
+        } else {
+            [BPUtils printInfo:INFO withString:@"Connection disconnected, deleteing simulator"];
+            [self deleteSimulatorWithContext:context andStatus:BPExitStatusLaunchAppFailed];
+            return;
+        }
+    }
+    NEXT_AFTER(1, [self checkProcessWithContext:context conenction:connection]);
 }
 
 - (BOOL)isProcessRunningWithContext:(BPExecutionContext *)context {

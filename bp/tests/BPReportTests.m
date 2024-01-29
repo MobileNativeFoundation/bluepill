@@ -16,10 +16,61 @@
 #import "BPUtils.h"
 
 @interface BPReportTests : BPIntTestCase
+- (NSString *)sanitizeXMLFile:(NSString *)atPath;
+- (void)assertGotReport:(NSString *)Got isEqualToWantReport:(NSString *)Want;
 @end
 
 @implementation BPReportTests
 
+#pragma mark - Test helpers
+
+- (NSString *)sanitizeXMLFile:(NSString *)atPath {
+    NSString *XSLTemplate = @" \
+    <xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"> \
+    <!--empty template suppresses these attributes --> \
+    <xsl:template match=\"@time\" /> \
+    <xsl:template match=\"@timestamp\" /> \
+    <!--empty template suppresses these elements --> \
+    <xsl:template match=\"system-out/text()\"/> \
+    <xsl:template match=\"failure/text()\"/> \
+    <xsl:template match=\"error/text()\"/> \
+    <!--identity template copies everything forward by default--> \
+    <xsl:template match=\"@*|node()\"> \
+    <xsl:copy> \
+    <xsl:apply-templates select=\"@*|node()\"/> \
+    </xsl:copy> \
+    </xsl:template> \
+    </xsl:stylesheet> \
+    ";
+    NSError *error;
+    NSURL *sourceURL = [NSURL fileURLWithPath:atPath];
+    NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:sourceURL options:0 error:&error];
+    XCTAssert(xmlDoc != nil, @"%@", [error localizedDescription]);
+    NSData *XSLTransform = [XSLTemplate dataUsingEncoding:NSUTF8StringEncoding];
+    NSXMLDocument *sanitizedXMLDoc = [xmlDoc objectByApplyingXSLT:XSLTransform arguments:nil error:&error];
+    XCTAssert(sanitizedXMLDoc != nil, @"%@", [error localizedDescription]);
+    NSString *outFile = [BPUtils mkstemp:@"outXXX.xslt" withError:&error];
+    XCTAssert(outFile != nil, @"%@", [error localizedDescription]);
+    NSData *outData = [sanitizedXMLDoc XMLDataWithOptions:NSXMLNodePrettyPrint];
+    if (![outData writeToFile:outFile atomically:YES]) {
+        XCTAssert(false, @"Failed to write file: %@", outFile);
+    }
+    return outFile;
+}
+
+- (void)assertGotReport:(NSString *)Got isEqualToWantReport:(NSString *)Want {
+    NSString *sanitizedGot = [self sanitizeXMLFile:Got];
+    NSString *sanitizedWant = [self sanitizeXMLFile:Want];
+    // we ignore white space (-b) just as a convenience to test writers
+    NSString *diffOutput = [BPUtils runShell:[NSString stringWithFormat:@"diff -u -b '%@' '%@'", sanitizedWant, sanitizedGot]];
+    XCTAssert(diffOutput != nil && [diffOutput isEqualToString:@""], @"\ndiff -u -b '%@' '%@':\n%@", sanitizedWant, sanitizedGot, diffOutput);
+}
+@end
+
+@interface BPReportTests1 : BPReportTests
+@end
+
+@implementation BPReportTests1
 
 
 - (void)testReportWithAppCrashingTestsSet {
@@ -261,6 +312,13 @@
     XCTAssertTrue(exitCode == BPExitStatusAllTestsPassed);
 }
 
+@end
+
+@interface BPReportTests2 : BPReportTests
+@end
+
+@implementation BPReportTests2
+
 /**
  Execution plan: One test CRASHes and another one keeps timing out
  */
@@ -462,50 +520,6 @@
     BOOL dfFileFound = [fm fileExistsAtPath:[NSString stringWithFormat:@"%@/df-h.log", outputDir]];
     XCTAssert(dfFileFound);
     XCTAssertTrue(exitCode == BPExitStatusAppCrashed);
-}
-
-#pragma mark - Test helpers
-
-- (NSString *)sanitizeXMLFile:(NSString *)atPath {
-    NSString *XSLTemplate = @" \
-    <xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"> \
-    <!--empty template suppresses these attributes --> \
-    <xsl:template match=\"@time\" /> \
-    <xsl:template match=\"@timestamp\" /> \
-    <!--empty template suppresses these elements --> \
-    <xsl:template match=\"system-out/text()\"/> \
-    <xsl:template match=\"failure/text()\"/> \
-    <xsl:template match=\"error/text()\"/> \
-    <!--identity template copies everything forward by default--> \
-    <xsl:template match=\"@*|node()\"> \
-    <xsl:copy> \
-    <xsl:apply-templates select=\"@*|node()\"/> \
-    </xsl:copy> \
-    </xsl:template> \
-    </xsl:stylesheet> \
-    ";
-    NSError *error;
-    NSURL *sourceURL = [NSURL fileURLWithPath:atPath];
-    NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:sourceURL options:0 error:&error];
-    XCTAssert(xmlDoc != nil, @"%@", [error localizedDescription]);
-    NSData *XSLTransform = [XSLTemplate dataUsingEncoding:NSUTF8StringEncoding];
-    NSXMLDocument *sanitizedXMLDoc = [xmlDoc objectByApplyingXSLT:XSLTransform arguments:nil error:&error];
-    XCTAssert(sanitizedXMLDoc != nil, @"%@", [error localizedDescription]);
-    NSString *outFile = [BPUtils mkstemp:@"outXXX.xslt" withError:&error];
-    XCTAssert(outFile != nil, @"%@", [error localizedDescription]);
-    NSData *outData = [sanitizedXMLDoc XMLDataWithOptions:NSXMLNodePrettyPrint];
-    if (![outData writeToFile:outFile atomically:YES]) {
-        XCTAssert(false, @"Failed to write file: %@", outFile);
-    }
-    return outFile;
-}
-
-- (void)assertGotReport:(NSString *)Got isEqualToWantReport:(NSString *)Want {
-    NSString *sanitizedGot = [self sanitizeXMLFile:Got];
-    NSString *sanitizedWant = [self sanitizeXMLFile:Want];
-    // we ignore white space (-b) just as a convenience to test writers
-    NSString *diffOutput = [BPUtils runShell:[NSString stringWithFormat:@"diff -u -b '%@' '%@'", sanitizedWant, sanitizedGot]];
-    XCTAssert(diffOutput != nil && [diffOutput isEqualToString:@""], @"\ndiff -u -b '%@' '%@':\n%@", sanitizedWant, sanitizedGot, diffOutput);
 }
 
 @end

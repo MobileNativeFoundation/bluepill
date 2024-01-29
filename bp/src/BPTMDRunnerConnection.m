@@ -21,6 +21,7 @@
 #import "PrivateHeaders/XCTest/XCTMessagingChannel_RunnerToIDE-Protocol.h"
 #import "PrivateHeaders/XCTest/XCTMessagingChannel_DaemonToIDE-Protocol.h"
 #import "PrivateHeaders/XCTest/XCTMessagingChannel_IDEToDaemon-Protocol.h"
+#import "PrivateHeaders/XCTest/XCTTestIdentifier.h"
 
 
 // DTX framework
@@ -56,6 +57,7 @@
 @property (nonatomic, nullable) NSString *videoFileName;
 
 
+
 @end
 
 @implementation BPTMDRunnerConnection
@@ -77,13 +79,10 @@
 
     // Pool connection status till it passes.
     [BPUtils runWithTimeOut:timeout until:^BOOL{
-        return self.connected && self.testBundleReady;
+        return self.connected;
     }];
     if (!self.connected) {
         [BPUtils printInfo:ERROR withString:@"Timeout establishing a runner session!"];
-    }
-    if (!self.testBundleReady) {
-        [BPUtils printInfo:ERROR withString:@"Timeout connecting to the test bundle!"];
     }
 }
 
@@ -96,6 +95,7 @@
             // This is called when the task is abruptly terminated (e.g. if the test times out)
             [self stopVideoRecording:YES];
             [BPUtils printInfo:INFO withString:@"DTXConnection disconnected."];
+            self.disconnected = YES;
         }];
         
         [connection
@@ -127,13 +127,13 @@
                                                            atPath:path
                                                            protocolVersion:@(BP_DAEMON_PROTOCOL_VERSION)];
             [receipt handleCompletion:^(NSNumber *version, NSError *error){
+                self.connected = TRUE;
                 if (error || !version) {
                     [BPUtils printInfo:ERROR withString:@"Error starting session: %@", error];
                     return;
                 }
                 [BPUtils printInfo:DEBUGINFO withString:@"Session started"];
                 [channel cancel];
-                self.connected = TRUE;
             }];
 
         });
@@ -225,7 +225,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
 #pragma mark XCTMessagingRole_TestReporting
 
 - (id)_XCT_testCaseWithIdentifier:(XCTTestIdentifier *)arg1 didFinishWithStatus:(NSString *)arg2 duration:(NSNumber *)arg3 {
-    return nil;
+    return [self _XCT_testCaseDidFinishForTestClass:arg1.firstComponent method:arg1.lastComponent withStatus:arg2 duration:arg3];
 }
 
 
@@ -268,6 +268,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
 
 
 - (id)_XCT_testSuiteWithIdentifier:(XCTTestIdentifier *)arg1 didStartAt:(NSString *)arg2 {
+    [self _XCT_testSuite:[arg1 _identifierString] didStartAt:arg2];
     return nil;
 }
 

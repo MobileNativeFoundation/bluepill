@@ -132,6 +132,7 @@
 		018D5C1025B4FF4200B0314B /* BPIntTestCase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPIntTestCase.h; sourceTree = "<group>"; };
 		018D5C1125B4FF4200B0314B /* BPIntTestCase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPIntTestCase.m; sourceTree = "<group>"; };
 		018D5C1C25B6696000B0314B /* BPReportTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BPReportTests.m; sourceTree = "<group>"; };
+		71D4D0F82AEA1B4F00859482 /* SimDeviceBootInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimDeviceBootInfo.h; sourceTree = "<group>"; };
 		7A202A3D1DAED04900D935E3 /* BPExitStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BPExitStatus.h; sourceTree = "<group>"; };
 		7A202A3F1DB0066100D935E3 /* BPWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BPWriter.h; sourceTree = "<group>"; };
 		7A202A401DB0066100D935E3 /* BPWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BPWriter.m; sourceTree = "<group>"; };
@@ -527,6 +528,7 @@
 				BA954F651D6D1AB3007D011D /* NSString-SIMPackedVersion.h */,
 				BA954F671D6D1AB3007D011D /* NSUserDefaults-SimDefaults.h */,
 				BA954F681D6D1AB3007D011D /* SimDevice.h */,
+				71D4D0F82AEA1B4F00859482 /* SimDeviceBootInfo.h */,
 				BA954F691D6D1AB3007D011D /* SimDeviceIO.h */,
 				BA954F6A1D6D1AB3007D011D /* SimDeviceIOClient.h */,
 				BA954F6B1D6D1AB3007D011D /* SimDeviceIOInterface-Protocol.h */,
@@ -1017,6 +1019,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
+				DSTROOT = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"/Library/Developer/PrivateFrameworks\"",
 					"\"$(PRIVATE_FRAMEWORKS_DIR)\"",
@@ -1031,6 +1034,7 @@
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
+				INSTALL_ROOT = /;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
@@ -1056,6 +1060,7 @@
 			buildSettings = {
 				DEPLOYMENT_LOCATION = NO;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks/;
+				DSTROOT = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"/Library/Developer/PrivateFrameworks\"",
 					"\"$(PRIVATE_FRAMEWORKS_DIR)\"",
@@ -1070,6 +1075,7 @@
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
+				INSTALL_ROOT = /;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
@@ -1106,6 +1112,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
+				DSTROOT = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
@@ -1115,6 +1122,7 @@
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
+				INSTALL_ROOT = /;
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_LDFLAGS = "";
@@ -1143,6 +1151,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				"DEVELOPER_PRIVATE_FRAMEWORKS_DIR[arch=*]" = /Library/Developer/PrivateFrameworks;
+				DSTROOT = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
@@ -1152,6 +1161,7 @@
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/src/Info.plist";
+				INSTALL_ROOT = /;
 				MACH_O_TYPE = staticlib;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_LDFLAGS = "";
@@ -1169,17 +1179,17 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				DSTROOT = "";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/..",
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = tests/Info.plist;
+				INSTALL_ROOT = /;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
-					"-weak_framework",
-					DVTFoundation,
 					"-weak_framework",
 					CoreSimulator,
 					"-weak_framework",
@@ -1201,17 +1211,17 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 57Y47U492U;
+				DSTROOT = "";
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/..",
 					"$(SRCROOT)/src",
 				);
 				INFOPLIST_FILE = tests/Info.plist;
+				INSTALL_ROOT = /;
 				LD_RUNPATH_SEARCH_PATHS = "\"$(DEVELOPER_DIR)/Library/PrivateFrameworks\"";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_CFLAGS = "-DBP_USE_PRIVATE_FRAMEWORKS";
 				OTHER_LDFLAGS = (
-					"-weak_framework",
-					DVTFoundation,
 					"-weak_framework",
 					CoreSimulator,
 					"-weak_framework",
