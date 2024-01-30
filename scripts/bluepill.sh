@@ -8,6 +8,8 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OF ANY KIND, either express or implied.  See the License for the specific language governing permissions and limitations under the License.
 
+# DON'T COMMIT - Just want a diff to run GH checks on.
+
 XCPRETTY='xcpretty --report junit'
 command -v "$XCPRETTY" >/dev/null 2>&1 || {
         XCPRETTY="cat"
