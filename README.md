@@ -90,6 +90,7 @@ A full list supported options are listed here.
 |   keep-passing-videos  |           n/a          | Whether to keep the recorded video for passing tests. Deleted by default.           |     N    | false            |
 |       video-paths      |           -V           | A list of videos that will be saved in the simulators.                              |     N    | n/a              |
 |       image-paths      |           -I           | A list of images that will be saved in the simulators.                              |     N    | n/a              |
+|test-time-estimates-json|           -j           | Path of the input file with test execution time estimates                           |     N    | n/a              |
 | unsafe-skip-xcode-version-check |               | Skip Xcode version check                                                            |     N    | NO               |
 |  retry-app-crash-tests |                        | Retry tests that crashed app and consider it non-fatal if it passes on retry.       |     N    | false            |
 
