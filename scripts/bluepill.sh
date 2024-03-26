@@ -70,23 +70,23 @@ bluepill_build()
   echo Release in "build/$DST.zip"
 }
 
-# bluepill_build_sample_app()
-# {
-#   set -o pipefail
-#   xcodebuild build-for-testing \
-#     -workspace Bluepill.xcworkspace \
-#     -arch x86_64 \
-#     -scheme BPSampleApp \
-#     -sdk iphonesimulator \
-#     -derivedDataPath "$DerivedDataPath" 2>&1 | tee result.txt | $XCPRETTY
+bluepill_build_sample_app()
+{
+  set -o pipefail
+  xcodebuild build-for-testing \
+    -workspace Bluepill.xcworkspace \
+    -arch x86_64 \
+    -scheme BPSampleApp \
+    -sdk iphonesimulator \
+    -derivedDataPath "$DerivedDataPath" 2>&1 | tee result.txt | $XCPRETTY
 
-#   test $? == 0 || {
-#           echo Build failed
-#           cat result.txt
-#           exit 1
-#   }
-#   set +o pipefail
-# }
+  test $? == 0 || {
+          echo Build failed
+          cat result.txt
+          exit 1
+  }
+  set +o pipefail
+}
 
 # $1 scheme, $2 extra args for xcodebuild
 run_tests() {
