@@ -506,11 +506,8 @@
 
     self.appOutput = [NSFileHandle fileHandleForReadingAtPath:simStdoutPath];
 
-    NSDictionary *appLaunchEnvironment = [SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId device:self.device config:self.config];
+    NSDictionary *appLaunchEnvironment = [SimulatorHelper appLaunchEnvironmentWithBundleID:hostBundleId injectDylib:(self.config.testRunnerAppPath == nil) device:self.device config:self.config];
     NSMutableDictionary *mutableAppLaunchEnv = [appLaunchEnvironment mutableCopy];
-    NSString *insertLibraryPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib", self.config.xcodePath];
-    [mutableAppLaunchEnv setObject:insertLibraryPath forKey:@"DYLD_INSERT_LIBRARIES"];
-    [mutableAppLaunchEnv setObject:insertLibraryPath forKey:@"XCInjectBundleInto"];
     [mutableAppLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStdoutKey];
     [mutableAppLaunchEnv setObject:simStdoutRelativePath forKey:kOptionsStderrKey];
     [mutableAppLaunchEnv addEntriesFromDictionary:argsAndEnv[@"env"]];

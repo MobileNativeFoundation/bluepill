@@ -28,6 +28,7 @@
  * @return returns the app launch environment as a dictionary
  */
 + (NSDictionary *)appLaunchEnvironmentWithBundleID:(NSString *)hostBundleID
+                                            injectDylib:(Boolean)injectDylib
                                             device:(SimDevice *)device
                                             config:(BPConfiguration *)config;
 

@@ -397,7 +397,7 @@ static inline NSString* getVideoPath(NSString *directory, NSString *testClass, N
 - (id)_XCT_launchProcessWithPath:(NSString *)path bundleID:(NSString *)bundleID arguments:(NSArray *)arguments environmentVariables:(NSDictionary *)environment
 {
     NSMutableDictionary<NSString *, NSString *> *env = [[NSMutableDictionary alloc] init];
-    [env addEntriesFromDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:bundleID device:nil config:_context.config]];
+    [env addEntriesFromDictionary:[SimulatorHelper appLaunchEnvironmentWithBundleID:bundleID injectDylib:true device:nil config:_context.config]];
     [env addEntriesFromDictionary:environment];
     NSDictionary *options = @{
         @"arguments": arguments,

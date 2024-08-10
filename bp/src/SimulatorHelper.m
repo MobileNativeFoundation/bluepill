@@ -62,21 +62,25 @@
 }
 
 + (NSDictionary *)appLaunchEnvironmentWithBundleID:(NSString *)hostBundleID
+                                       injectDylib:(Boolean)injectDylib
                                             device:(SimDevice *)device
                                             config:(BPConfiguration *)config {
     NSString *hostAppExecPath = [SimulatorHelper executablePathforPath:config.appBundlePath];
     NSString *hostAppPath = [hostAppExecPath stringByDeletingLastPathComponent];
     NSString *testSimulatorFrameworkPath = [hostAppPath stringByDeletingLastPathComponent];
-    NSString *libXCTestBundleInjectPath = [[hostAppPath stringByAppendingPathComponent:@"Frameworks"] stringByAppendingPathComponent:@"libXCTestBundleInject.dylib"];
-    NSString *libXCTestBundleInjectValue = libXCTestBundleInjectPath;
-    if (![NSFileManager.defaultManager fileExistsAtPath:libXCTestBundleInjectPath]) {
-        [BPUtils printInfo:DEBUGINFO withString:@"Not injecting libXCTestBundleInject dylib because it was not found in the app host bundle at path: %@", libXCTestBundleInjectValue];
-        libXCTestBundleInjectValue = @"";
-    }
     NSMutableDictionary<NSString *, NSString *> *environment = [[NSMutableDictionary alloc] init];
     environment[@"DYLD_FALLBACK_FRAMEWORK_PATH"] = [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath];
     environment[@"DYLD_FALLBACK_LIBRARY_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib", config.xcodePath];
-    environment[@"DYLD_INSERT_LIBRARIES"] = libXCTestBundleInjectValue;
+    if (injectDylib) {
+        NSString *libXCTestBundleInjectPath = [[hostAppPath stringByAppendingPathComponent:@"Frameworks"] stringByAppendingPathComponent:@"libXCTestBundleInject.dylib"];
+        NSString *libXCTestBundleInjectValue = libXCTestBundleInjectPath;
+        if (![NSFileManager.defaultManager fileExistsAtPath:libXCTestBundleInjectPath]) {
+            [BPUtils printInfo:DEBUGINFO withString:@"Not injecting libXCTestBundleInject dylib because it was not found in the app host bundle at path: %@", libXCTestBundleInjectValue];
+            libXCTestBundleInjectValue = @"";
+        } else {
+            environment[@"DYLD_INSERT_LIBRARIES"] = libXCTestBundleInjectValue;
+        }
+    }
     environment[@"DYLD_LIBRARY_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath];
     environment[@"DYLD_ROOT_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime/Contents/Resources/RuntimeRoot", config.xcodePath];
     environment[@"NSUnbufferedIO"] = @"1";
