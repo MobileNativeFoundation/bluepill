@@ -49,6 +49,7 @@
     if (!sc) { NSLog(@"Failed to initialize SimServiceContext: %@", err); }
 
     for (SimDeviceType *type in [sc supportedDeviceTypes]) {
+        [BPUtils printInfo:DEBUGINFO withString:@"Runtime Found: %@", [type name]];
         if ([[type name] isEqualToString:self.config.deviceType]) {
             self.config.simDeviceType = type;
             break;

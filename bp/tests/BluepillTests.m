@@ -277,7 +277,7 @@
     [BPUtils enableDebugOutput:YES];
     // The delay of ui test bootstrapping is larger than 5s.
     self.config.testCaseTimeout = @300;
-    self.config.errorRetriesCount = @1;
+    self.config.errorRetriesCount = @0;
     NSString *testBundlePath = [BPTestHelper sampleAppUITestBundlePath];
     NSString *testRunnerPath = [BPTestHelper sampleAppUITestRunnerPath];
     NSString *tempDir = NSTemporaryDirectory();
