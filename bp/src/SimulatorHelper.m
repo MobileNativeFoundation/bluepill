@@ -72,13 +72,12 @@
     environment[@"DYLD_FALLBACK_FRAMEWORK_PATH"] = [NSString stringWithFormat:@"%@/Library/Frameworks:%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath, config.xcodePath];
     environment[@"DYLD_FALLBACK_LIBRARY_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib", config.xcodePath];
     if (injectDylib) {
-        NSString *libXCTestBundleInjectPath = [[hostAppPath stringByAppendingPathComponent:@"Frameworks"] stringByAppendingPathComponent:@"libXCTestBundleInject.dylib"];
-        NSString *libXCTestBundleInjectValue = libXCTestBundleInjectPath;
+        NSString *libXCTestBundleInjectPath = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/usr/lib/libXCTestBundleInject.dylib", config.xcodePath];
+        // NSString *libXCTestBundleInjectPath = [[hostAppPath stringByAppendingPathComponent:@"Frameworks"] stringByAppendingPathComponent:@"libXCTestBundleInject.dylib"];
         if (![NSFileManager.defaultManager fileExistsAtPath:libXCTestBundleInjectPath]) {
-            [BPUtils printInfo:DEBUGINFO withString:@"Not injecting libXCTestBundleInject dylib because it was not found in the app host bundle at path: %@", libXCTestBundleInjectValue];
-            libXCTestBundleInjectValue = @"";
+            [BPUtils printInfo:ERROR withString:@"Not injecting libXCTestBundleInject dylib because it was not found in the app host bundle at path: %@", libXCTestBundleInjectPath];
         } else {
-            environment[@"DYLD_INSERT_LIBRARIES"] = libXCTestBundleInjectValue;
+            environment[@"DYLD_INSERT_LIBRARIES"] = libXCTestBundleInjectPath;
         }
     }
     environment[@"DYLD_LIBRARY_PATH"] = [NSString stringWithFormat:@"%@/Platforms/iPhoneSimulator.platform/Developer/Library/Frameworks", config.xcodePath];
